@@ -3801,7 +3801,7 @@
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg17" onclick='buyBigRipUpg(17)'>Reactivate the first upgrade, and make its effect <span id="bigripupg17current">3</span>x stronger.<br>Cost: <span id="bigripupg17cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg18" onclick='buyBigRipUpg(18)'>Space Shards boost quark spin production.<br>Currently: <span id="bigripupg18current"></span>x<br>Cost: <span id="bigripupg18cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg19" onclick='buyBigRipUpg(19)'>Time Shards speed up Branches.<br>Currently: <span id="bigripupg19current"></span>x<br>Cost: <span id="bigripupg19cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>You gain Tachyon particles without dilating time.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
+							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>In Big Rip, you gain Tachyon particles without dilating time.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
 						</tr>
 					</table>
 				</div>
@@ -4905,7 +4905,7 @@
 				</td><td>
 					You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
 					<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()'></button><br>
-					<button class='storebtn' id='buyMaxQuantumFood' onclick='buyMaxQuantumFood()' style="width: 190px">Buy maximum quantum food</button>
+					<button class='storebtn' id='buyMaxQuantumFood' onclick='buyMaxQuantumFood()' style="width: 210px">Buy maximum quantum food</button>
 				</td><td id="eggonsCell">
 					You have <span id="eggonAmount" style="font-size:35px">0</span> eggons. <span id="hatchProgress" style="font-size:15px">0.0%</span><br>
 					<button class='storebtn' id='reduceHatchSpeed' style='width: 240px; height: 80px' onclick='reduceHatchSpeed()'></button><br>
@@ -4982,7 +4982,7 @@
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)'>All branches are faster based on your best-ever meta-antimatter.<br>Level: <span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)'>Emperor Dimensions produce faster.<br>Level: <span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)'>Replicantis boost dilated time production.<br>Level: <span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)'>Your best-in-this-quantum meta-antimatter makes the meta-antimatter effect stronger.<br>Level: <span id='treeupg8lvl'>?</span><br>Currently: +<span id='treeupg8current'>?</span> to exponent<br><span id="treeupg8cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:7px'>Your best-in-this-quantum meta-antimatter makes the meta-antimatter effect stronger.<br>Level: <span id='treeupg8lvl'>?</span><br>Currently: +<span id='treeupg8current'>?</span> to exponent<br><span id="treeupg8cost"></span></button></td>
 					</tr></table>
 					<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
 				</div>
@@ -5447,23 +5447,23 @@
 								<td></td>
 								<td>
 									You have <span id="zb" style="font-size:35px"></span> Z Bosons.<br>
-									Translated to <span id="zbSpeed" style="font-size:35px"></span>x faster decay speed of W Quark and faster conversion speed of W- to W+.
+									Translated to <span id="zbSpeed" style="font-size:35px"></span>x faster decay speed of W Boson and faster conversion speed of W- to W+.
 								</td>
 							</tr>
 							<tr><td colspan=3>
 									You have <span id="ap" style="font-size:35px"></span> Anti-Preons. <span id="apProduction" style="font-size:25px"></span><br>
 									<span id="apUse"></span><br>
-									<button class="storebtn" style="width:150px" onclick="useAntiPreon(0)">Gain Anti-Preons</button> <button class="storebtn" onclick="useAntiPreon(1)">Decay W Quark</button> <button class="storebtn" style="width:150px" onclick="useAntiPreon(3)">Convert W- to W+</button> <button class="storebtn" style="width:180px" onclick="useAntiPreon(2)">Oscillate Z Neutrino</button>
+									<button class="storebtn" style="width:150px" onclick="useAntiPreon(0)">Gain Anti-Preons</button> <button class="storebtn" onclick="useAntiPreon(1)">Decay W Boson</button> <button class="storebtn" style="width:150px" onclick="useAntiPreon(3)">Convert W- to W+</button> <button class="storebtn" style="width:180px" onclick="useAntiPreon(2)">Oscillate Z Boson</button>
 							</td></tr>
 							<tr>
 								<td>
-									W Quark is currently <span id="wQkType"></span>.<br>
+									W Boson is currently <span id="wQkType"></span>.<br>
 									<span id="wQkProgress"></span><br>
 									<div id="wQk"><span id="wQkSymbol"></span></div>
 								</td>
 								<td></td>
 								<td>
-									Z Neutrino is currently <span id="zNeGen">electron</span>.<br>
+									Z Boson is currently <span id="zNeGen">electron</span>.<br>
 									<span id="zNeProgress"></span><br>
 									<span id="zNeReq"></span><br>
 									<span id="zbGain"></span><br>
@@ -5682,7 +5682,6 @@
 <script type="text/javascript" src="javascripts/core/prestige_handler.js"></script>
 <script type="text/javascript" src="javascripts/core/polyfill.js"></script>
 <script type="text/javascript" src="javascripts/core/format.js"></script>
-<script type="text/javascript" src="javascripts/core/achievements.js"></script>
 <script type="text/javascript" src="javascripts/core/chart.js"></script>
 <script type="text/javascript" src="javascripts/core/tickspeed.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngmm.js"></script>
@@ -5701,7 +5700,10 @@
 <script type="text/javascript" src="javascripts/core/galaxy.js"></script>
 <script type="text/javascript" src="javascripts/core/replicanti.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
-<script type="text/javascript" src="javascripts/core/achieve_check.js"></script>
+<script type="text/javascript" src="javascripts/core/auto_eternity.js"></script>
+<script type="text/javascript" src="javascripts/core/ach/achieve_check.js"></script>
+<script type="text/javascript" src="javascripts/core/ach/achievements.js"></script>
+<script type="text/javascript" src="javascripts/core/ach/ach-tooltips.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/big_rip.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/bosonic_lab.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/electrons.js"></script>
@@ -5718,7 +5720,7 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/tod.js"></script>
 <script type="text/javascript" src="javascripts/mods/ers.js"></script>
 <script type="text/javascript" src="javascripts/mods/meta.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngpp.js"></script>
+<script type="text/javascript" src="javascripts/mods/quantum.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngppp.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngmmm.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngud.js"></script>

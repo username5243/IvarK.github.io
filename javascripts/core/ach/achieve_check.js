@@ -19,6 +19,16 @@ function antitablesHaveTurnedCheck(){
 	getDimensionFinalMultiplier(7).lt(getDimensionFinalMultiplier(8))) giveAchievement("How the antitables have turned")
 }
 
+function checkUniversalHarmony() {
+	if (player.achievements.includes("ngpp18")) return
+	if (player.meta != undefined) {
+		if (player.galaxies < 700 || player.replicanti.galaxies + extraReplGalaxies < 700 || player.dilation.freeGalaxies < 700) return
+	} else if (player.exdilation != undefined) {
+		if (player.galaxies != player.replicanti.galaxies || player.galaxies != player.dilation.freeGalaxies || player.galaxies < 300) return
+	} else return
+	giveAchievement("Universal harmony")
+}
+
 function checkEPReqAchieve(){
 	if (player.eternityPoints.gte(Number.MAX_VALUE)) giveAchievement("But I wanted another prestige layer...")
 	if (player.eternityPoints.gte("1e40000")) giveAchievement("In the grim darkness of the far endgame")
@@ -60,7 +70,7 @@ function checkReplicantiBasedReqAchieve(){
 
 function checkResetCountReqAchieve(){
 	if (getEternitied() >= 1e12) giveAchievement("The cap is a million, not a trillion")
-	if (player.infinitied > 2e6) giveAchievement("2 Million Infinities")
+	if (player.infinitied >= 2e6) giveAchievement("2 Million Infinities")
 }
 
 function checkMatterAMNDReqAchieve(){
@@ -88,7 +98,7 @@ function checkTickspeedReqAchieve(){
 
 function checkOtherPreNGp3Achieve(){
 	var ableToGetRid2 = player.timestudy.studies.length < 1 && player.dilation.active 
-	if (tmp.ngp3) for (id=0;id<player.masterystudies.length;id++) {
+	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) ableToGetRid2 = false
 	}
 	if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
@@ -103,11 +113,15 @@ function checkOtherPreNGp3Achieve(){
 	if (infchallengeTimes < 7.5) giveAchievement("Never again")
 	if (player.totalTimePlayed >= 10 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
 	if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
+	if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??")
+	if (player.galaxies >= 2) giveAchievement("Double Galaxy");
+	if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
+	if (player.galaxies >= 540 && player.replicanti.galaxies == 0) giveAchievement("Unique snowflakes")
 }
 
 function ngP3AchieveCheck(){
 	let checkEmpty = player.timestudy.studies.length < 1
-	if (tmp.ngp3) for (id=0;id<player.masterystudies.length;id++) {
+	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) checkEmpty = false
 	}
 	let ableToGetRid2 = checkEmpty && player.dilation.active
@@ -126,7 +140,7 @@ function ngP3AchieveCheck(){
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 	if (player.meta.resets == 8) if (player.meta.antimatter.e >= 1500) giveAchievement("We are not going squared.")
-	if (player.eightBought >= 4e6 && getTotalRG() + player.dilation.freeGalaxies<1) giveAchievement("Intergalactic")
+	if (player.eightBought >= 4e6 && (getTotalRG() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
 	if (player.old && player.meta.antimatter.e>1699) giveAchievement("Old memories come true")
 	if (player.infinityPoints.e >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.antimatter.e > 332 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")

@@ -1,90 +1,3 @@
-// v2.2
-function updateAutoEterMode() {
-	var modeText = ""
-	var modeCond = ""
-	document.getElementById("priority13").disabled = false
-	document.getElementById("autoEterValue").disabled = false
-	if (player.autoEterMode == "time") {
-		modeText = "time"
-		modeCond = "Seconds between eternities:"
-	} else if (player.autoEterMode == "relative") {
-		modeText = "X times last eternity"
-		modeCond = modeText + ":"
-	} else if (player.autoEterMode == "relativebest") {
-		modeText = "X times best of last 10"
-		modeCond = modeText + " eternities:"
-	} else if (player.autoEterMode == "replicanti") {
-		modeText = "replicanti"
-		modeCond = "Amount of replicanti to wait until reset:"
-	} else if (player.autoEterMode == "peak") {
-		modeText = "peak"
-		modeCond = "Seconds to wait after latest peak gain:"
-	} else if (player.autoEterMode == "eternitied") {
-		modeText = "X times eternitied"
-		modeCond = modeText + ":"
-	} else if (player.autoEterMode == "manual") {
-		modeText = "dilate only"
-		modeCond = "Does nothing to eternity"
-		document.getElementById("priority13").disabled = true
-		document.getElementById("autoEterValue").disabled = true
-	} else {
-		modeText = "amount"
-		modeCond = "Amount of EP to wait until reset:"
-	}
-	document.getElementById("toggleautoetermode").textContent = "Auto eternity mode: " + modeText
-	document.getElementById("eterlimittext").textContent = modeCond
-	if (player.achievements.includes("ng3p52")) {
-		document.getElementById("autoEterMode").textContent = "Mode: " + modeText
-		document.getElementById("autoEterCond").textContent = modeCond
-	}
-}
-
-function toggleAutoEterMode() {
-	if (player.autoEterMode == "amount") player.autoEterMode = "time"
-	else if (player.autoEterMode == "time") player.autoEterMode = "relative"
-	else if (player.autoEterMode == "relative") player.autoEterMode = "relativebest"
-	else if (player.autoEterMode == "relativebest" && player.dilation.upgrades.includes("ngpp3") && getEternitied() >= 4e11 && player.aarexModifications.newGame3PlusVersion) player.autoEterMode = "replicanti"
-	else if (player.autoEterMode == "replicanti" && getEternitied() >= 1e13) player.autoEterMode = "peak"
-	else if (player.autoEterMode == "peak" && player.achievements.includes("ng3p51")) player.autoEterMode = "eternitied"
-	else if ((player.autoEterMode == "peak" || player.autoEterMode == "eternitied") && speedrunMilestonesReached > 24) player.autoEterMode = "manual"
-	else if (player.autoEterMode) player.autoEterMode = "amount"
-	updateAutoEterMode()
-}
-
-// v2.3
-function toggleAutoEter(id) {
-	player.autoEterOptions[id] = !player.autoEterOptions[id]
-	document.getElementById(id + 'auto').textContent = (id == "dilUpgs" ? "Auto-buy dilation upgrades" : (id == "rebuyupg" ? "Rebuyable upgrade a" : id == "metaboost" ? "Meta-boost a" : "A") + "uto") + ": " + (player.autoEterOptions[id] ? "ON" : "OFF")
-	if (id.slice(0,2) == "td") {
-		var removeMaxAll = false
-		for (var d = 1; d < 9; d++) {
-			if (player.autoEterOptions["td" + d]) {
-				if (d > 7) removeMaxAll = true
-			} else break
-		}
-		document.getElementById("maxTimeDimensions").style.display = removeMaxAll ? "none" : ""
-	}
-}
-
-function doAutoEterTick() {
-	if (!player.meta) return
-	if (player.achievements.includes("ngpp17")) {
-		if (player.masterystudies == undefined || tmp.be || !tmp.qu.bigRip.active) for (var d = 1; d < 9; d++) if (player.autoEterOptions["td" + d]) buyMaxTimeDimension(d)
-		if (player.autoEterOptions.epmult) buyMaxEPMult()
-		if (player.autoEterOptions.blackhole) {
-			buyMaxBlackholeDimensions()
-			feedBlackholeMax()
-		}
-	}
-	if (player.autoEterOptions.tt && !player.dilation.upgrades.includes(10) && speedrunMilestonesReached > 1) maxTheorems()
-}
-
-// v2.301
-function replicantiGalaxyBulkModeToggle() {
-	player.galaxyMaxBulk = !player.galaxyMaxBulk
-	document.getElementById('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
-}
-
 // v2.9
 quantumed = false
 function quantum(auto, force, challid, bigRip = false, quick) {
@@ -195,11 +108,34 @@ function getQCtoQKEffect(){
 	return ret
 }
 
-let quarkGain = function () {
+function getEPtoQKExp(){
+	let exp = 0.6
+	if (tmp.newNGP3E) exp += 0.05
+	if (player.achievements.includes("ng3p28")) exp *= 1.01
+	return exp
+}
+
+function getEPtoQKMult(){
+	var EPBonus = Math.pow(Math.max(player.eternityPoints.log10() / 1e6, 1), getEPtoQKExp()) - 1
+	EPBonus = softcap(EPBonus, "EPtoQK")
+	return EPBonus 
+}
+
+function getNGP3p1totalQKMult(){
+	let log = 0
+	if (player.achievements.includes("ng3p16")) log += getEPtoQKMult()
+	if (player.achievements.includes("ng3p33")) log += Math.log10(getQCtoQKEffect())
+	if (player.achievements.includes("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
+	if (player.achievements.includes("ng3p65")) log += getTotalRadioactiveDecays()
+	if (player.achievements.includes("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
+	return log
+}
+
+function quarkGain() {
 	let ma = player.meta.antimatter.max(1)
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 	
-	if (!tmp.qu.times && !player.ghostify.milestones) return new Decimal(1)
+	if (!quantumed) return new Decimal(1)
 	if (player.ghostify.milestones) ma = player.meta.bestAntimatter.max(1)
 
 	let log = (ma.log10() - 379.4) / (player.achievements.includes("ng3p63") ? 279.8 : 280)
@@ -207,22 +143,7 @@ let quarkGain = function () {
 	let logBoostExp = tmp.ngp3l ? 2 : 1.5
 	if (log > logBoost) log = Math.pow(log / logBoost, logBoostExp) * logBoost
 	if (log > 738 && !hasNU(8)) log = Math.sqrt(log * 738)
-	if (!tmp.ngp3l) {
-		if (player.achievements.includes("ng3p16")) {
-			let exp = 0.6
-			if (tmp.newNGP3E) exp += 0.05
-			if (player.achievements.includes("ng3p28")) exp *= 1.01
-
-			var EPBonus = Math.pow(Math.max(player.eternityPoints.log10() / 1e6, 1), exp) - 1
-			if (EPBonus > 1e4) EPBonus = 1e4 * Math.sqrt(EPBonus / 1e4)
-			if (EPBonus > 1e5) EPBonus = 1e5 * Math.sqrt(EPBonus / 1e5)
-			log += EPBonus 
-		}
-		if (player.achievements.includes("ng3p33")) log += Math.log10(getQCtoQKEffect())
-		if (player.achievements.includes("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
-		if (player.achievements.includes("ng3p65")) log += getTotalRadioactiveDecays()
-		if (player.achievements.includes("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2) 
-	}
+	if (!tmp.ngp3l) log += getNGP3p1totalQKMult()
 
 	var dlog = Math.log10(log)
 	let start = 5
@@ -237,7 +158,7 @@ let quarkGain = function () {
 	return Decimal.pow(10, log).floor()
 }
 
-let getQuarkMult = function () {
+function getQuarkMult() {
 	x = Decimal.pow(2, tmp.qu.multPower.total)
 	if (player.achievements.includes("ng3p93")) x = x.times(500)
 	return x
@@ -346,17 +267,6 @@ function doQuantumProgress() {
 		document.getElementById("progresspercent").textContent = percentage
 		document.getElementById("progresspercent").setAttribute('ach-tooltip', "Percentage to Ghostly Photons")
 	}
-}
-
-//v2.90141
-function checkUniversalHarmony() {
-	if (player.achievements.includes("ngpp18")) return
-	if (player.meta != undefined) {
-		if (player.galaxies < 700 || player.replicanti.galaxies + extraReplGalaxies < 700 || player.dilation.freeGalaxies < 700) return
-	} else if (player.exdilation != undefined) {
-		if (player.galaxies != player.replicanti.galaxies || player.galaxies != player.dilation.freeGalaxies || player.galaxies < 300) return
-	} else return
-	giveAchievement("Universal harmony")
 }
 
 //v2.90142
@@ -569,6 +479,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 				var qc1st = Math.min(qc1, qc2)
 				var qc2st = Math.max(qc1, qc2)
 				if (qc1st == qc2st) console.log("There is an issue, you have assigned a QC twice (QC" + qc1st + ")")
+				//them being the same should do something lol, not just this
 				var pcid = qc1st * 10 + qc2st
 				if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
 					tmp.qu.challenges[qc1] = 2
@@ -703,7 +614,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		if (!bigRip && !tmp.qu.breakEternity.unlocked && document.getElementById("breakEternity").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display!="block")
 		document.getElementById("breakEternityTabbtn").style.display = bigRip || tmp.qu.breakEternity.unlocked ? "" : "none"
 		delete tmp.qu.autoECN
-	}
+	} // bounds if tmp.ngp3
 	if (speedrunMilestonesReached < 1 && !bigRip) {
 		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF"
 		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"

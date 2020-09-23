@@ -8,6 +8,11 @@ function unlockReplicantis() {
 	}
 }
 
+function replicantiGalaxyBulkModeToggle() {
+	player.galaxyMaxBulk = !player.galaxyMaxBulk
+	document.getElementById('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
+}
+
 function getReplMult(next) {
 	let exp = 2
 	if (player.galacticSacrifice !== undefined) exp = Math.max(2, Math.pow(player.galaxies, .4))
@@ -37,19 +42,18 @@ function isChanceAffordable() {
 }
 
 function upgradeReplicantiInterval() {
-	if (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable() && player.eterc8repl !== 0) {
-		player.infinityPoints = player.infinityPoints.minus(player.replicanti.intervalCost)
-		player.replicanti.interval *= 0.9
-		if (player.replicanti.interval < 1) {
-			let x = 1 / player.replicanti.interval
-			if (x > 1e10) x = Math.pow(x / 1e5, 2)
-			player.replicanti.intervalCost = Decimal.pow("1e800", x)
-		}
-		else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
-		if (!isIntervalAffordable()) player.replicanti.interval = (player.timestudy.studies.includes(22) || player.boughtDims ? 1 : 50)
-		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-		document.getElementById("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+	if (!(player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable() && player.eterc8repl !== 0)) return 
+	player.infinityPoints = player.infinityPoints.minus(player.replicanti.intervalCost)
+	player.replicanti.interval *= 0.9
+	if (player.replicanti.interval < 1) {
+		let x = 1 / player.replicanti.interval
+		if (x > 1e10) x = Math.pow(x / 1e5, 2)
+		player.replicanti.intervalCost = Decimal.pow("1e800", x)
 	}
+	else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
+	if (!isIntervalAffordable()) player.replicanti.interval = (player.timestudy.studies.includes(22) || player.boughtDims ? 1 : 50)
+	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
+	document.getElementById("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 }
 
 function getReplicantiLimit() {
@@ -91,25 +95,6 @@ function getRGCost(offset = 0, costChange) {
 				}
 			}
 			ret = ret.times(Decimal.pow(10, increase))
-			if (tmp.ngp3 && !tmp.ngp3l) {
-				if (player.replicanti.gal + offset >= 400000) ret = ret.pow((player.replicanti.gal + offset) / 400000)
-				/*
-				if (player.replicanti.gal + offset >= 450000) ret = ret.pow((player.replicanti.gal + offset) / 5000 - 89)
-				if (player.replicanti.gal + offset >= 500000) ret = ret.pow((player.replicanti.gal + offset) / 500 - 999)
-				if (player.replicanti.gal + offset >= 550000) ret = ret.pow((player.replicanti.gal + offset) / 100 - 5499)
-				if (player.replicanti.gal + offset >= 600000) ret = ret.pow((player.replicanti.gal + offset) / 50 - 11999)
-				if (player.replicanti.gal + offset >= 650000) ret = ret.pow((player.replicanti.gal + offset) / 10 - 64999)
-				if (player.replicanti.gal + offset >= 700000) ret = ret.pow((player.replicanti.gal + offset) / 5 - 139999)
-				if (player.replicanti.gal + offset >= 750000) ret = ret.pow((player.replicanti.gal + offset) / 1 - 749999)
-				if (player.replicanti.gal + offset >= 800000) ret = ret.pow(Math.pow(player.replicanti.gal + offset, 2) / 64e5    - 1e5 + 1)
-				if (player.replicanti.gal + offset >= 850000) ret = ret.pow(Math.pow(player.replicanti.gal + offset, 2) / 72.25e4 - 1e6 + 1)
-				if (player.replicanti.gal + offset >= 900000) ret = ret.pow(Math.pow(player.replicanti.gal + offset, 2) / 81e3    - 1e7 + 1)
-				if (player.replicanti.gal + offset >= 950000) ret = ret.pow(Math.pow(player.replicanti.gal + offset, 2) / 90.25e2 - 1e8 + 1)
-				if (player.replicanti.gal + offset >= 1e6)    ret = ret.pow(Decimal.pow(1.01, (player.replicanti.gal + offset) / 100 - 9900 ))
-				//yeah that scaling is rough, but you shouldnt be able to get more than about 1.72e6 RGs now
-				//also I checked, it just makes the cost Infinite which isnt an issue 
-				// and yeah these can be removed once we confirm its not them which causes inflation + bugs */
-			}
 		}
 	}
 	if (player.timestudy.studies.includes(233) && !costChange) ret = ret.dividedBy(player.replicanti.amount.pow(0.3))
@@ -131,7 +116,7 @@ function upgradeReplicantiGalaxy() {
 
 var extraReplGalaxies = 0
 function replicantiGalaxy() {
-	var maxGal=getMaxRG()
+	var maxGal = getMaxRG()
 	if (!canGetReplicatedGalaxy()) return
 	if (player.galaxyMaxBulk) player.replicanti.galaxies=maxGal
 	else player.replicanti.galaxies++
@@ -238,4 +223,69 @@ function getReplSpeed() {
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	return {inc: inc, exp: exp}
+}
+
+function getReplicantiInterval() {
+	let interval = player.replicanti.interval
+	if (player.aarexModifications.ngexV) interval *= .8
+	if (player.timestudy.studies.includes(62)) interval /= tsMults[62]()
+	if (player.replicanti.amount.gt(Number.MAX_VALUE)||player.timestudy.studies.includes(133)) interval *= 10
+	if (player.timestudy.studies.includes(213)) interval /= tsMults[213]()
+	if (GUBought("gb1")) interval /= getGB1Effect()
+	if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
+	if (isBigRipUpgradeActive(4)) interval /= 10
+
+	interval = new Decimal(interval)
+	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
+	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
+	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
+	if (tmp.ngp3) if (player.masterystudies.includes("t332")) interval = interval.div(getMTSMult(332))
+	return interval
+}
+
+function getReplicantiFinalInterval() {
+	let x = getReplicantiInterval()
+	if (player.replicanti.amount.gt(Number.MAX_VALUE)) x = player.boughtDims ? Math.pow(player.achievements.includes("r107") ? Math.max(player.replicanti.amount.log(2)/1024,1) : 1, -.25) * x.toNumber() : Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0)/tmp.rep.speeds.exp).times(x)
+	return x
+}
+
+function runRandomReplicanti(chance){
+	if (Decimal.gte(chance, 1)) {
+		player.replicanti.amount = player.replicanti.amount.times(2)
+		return
+	}
+	var temp = player.replicanti.amount
+	if (typeof(chance) == "object") chance = chance.toNumber()
+	for (var i = 0; temp.gt(i); i++) {
+		if (chance > Math.random()) player.replicanti.amount = player.replicanti.amount.plus(1)
+		if (i >= 99) return
+	}
+}
+
+function notContinuousReplicantiUpdating() {
+	var chance = tmp.rep.chance
+	var interval = Decimal.div(tmp.rep.interval, 100)
+	if (typeof(chance) !== "number") chance = chance.toNumber()
+
+	if (interval <= replicantiTicks && player.replicanti.unl) {
+		if (player.replicanti.amount.lte(100)) runRandomReplicanti(chance) //chance should be a decimal
+		else if (player.replicanti.amount.lt(getReplicantiLimit())) {
+			var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
+			if (chance < 1) {
+				let counter = 0
+				for (var i=0; i<100; i++) if (chance > Math.random()) counter++;
+				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
+				counter = 0
+			} else player.replicanti.amount = player.replicanti.amount.times(2)
+			if (!player.timestudy.studies.includes(192)) player.replicanti.amount = player.replicanti.amount.min(getReplicantiLimit())
+		}
+		replicantiTicks -= interval
+	}
+}
+
+function continuousReplicantiUpdating(diff){
+	if (player.timestudy.studies.includes(192) && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
+	else if (player.timestudy.studies.includes(192)) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
+	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiLimit())
+	replicantiTicks = 0
 }
