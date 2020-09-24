@@ -10,11 +10,11 @@ function getDTMultPostBRU11(){
 	gain = gain.times(getTreeUpgradeEffect(7))
 	gain = gain.times(colorBoosts.b)
 	if (GUBought("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
-	if (player.achievements.includes("r136") && !tmp.ngp3l) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
+	if (player.achievements.includes("r137") && !tmp.ngp3l) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
 	return gain
 }
 
-function getDilTimeGainPerSecond() {
+function getBaseDTProduction(){
 	let tp = player.dilation.tachyonParticles
 	let exp = getDTGainExp()
 	let gain = tp.pow(exp)
@@ -30,6 +30,11 @@ function getDilTimeGainPerSecond() {
 	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	if (tmp.newNGP3E && player.achievements.includes("r138") && gain.lt(1e100)) gain = gain.times(3).min(1e100)
 	if (!tmp.ngp3l && (tmp.ngp3 || tmp.newNGP3E) && player.achievements.includes("ngpp13")) gain = gain.times(2)
+	return gain
+}
+
+function getDilTimeGainPerSecond() {
+	let gain = getBaseDTProduction()
 	
 	var lgain = gain.log10()
 	if (!tmp.ngp3l) lgain = softcap(lgain, "dt_log")
@@ -510,4 +515,36 @@ function resetDilationGalaxies() {
 	player.dilation.nextThreshold = getFreeGalaxyThresholdStart()
 	player.dilation.freeGalaxies = 0
 	gainDilationGalaxies()
+}
+
+var failsafeDilateTime = false
+function startDilatedEternity(auto, shortcut) {
+	if (shortcut && player.dilation.active) return
+	if (failsafeDilateTime) return
+	if (!player.dilation.studies.includes(1)) return
+	failsafeDilateTime = true
+	var onActive = player.dilation.active
+	if (!onActive && player.aarexModifications.dilationConf && !auto) if (!confirm("Dilating time will start a new Eternity where all of your Normal/Infinity/Time Dimension multiplier's exponents and the Tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can Eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) return
+	if (tmp.ngp3) {
+		if (onActive) player.eternityBuyer.statBeforeDilation++
+		else player.eternityBuyer.statBeforeDilation = 0
+		player.eternityBuyer.tpUpgraded = false
+	}
+	eternity(true, true, undefined, true)
+	if (!onActive) player.dilation.active = true;
+	resetUP()
+	if (tmp.ngp3 && quantumed) {
+		updateColorCharge()
+		updateColorDimPowers()
+	}
+}
+
+function updateDilationDisplay() {
+	if (document.getElementById("dilation").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
+		document.getElementById("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
+		document.getElementById("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
+		document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
+		document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
+		document.getElementById("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
+	}
 }
