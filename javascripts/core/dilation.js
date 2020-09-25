@@ -37,7 +37,7 @@ function getDilTimeGainPerSecond() {
 	let gain = getBaseDTProduction()
 	
 	var lgain = gain.log10()
-	if (!tmp.ngp3l) lgain = softcap(lgain, "dt_log")
+	if (!tmp.ngp3l && !player.aarexModifications.newGameMult) lgain = softcap(lgain, "dt_log")
 	gain = Decimal.pow(10, lgain)
 	
 	return gain.times(Decimal.pow(2, getDilUpgPower(1)))	

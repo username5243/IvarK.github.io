@@ -452,6 +452,13 @@ function do_softcap(x, data, num) {
 	/*
 	for (let i = 0; i < 3; i++) if (typeof vars[i] == "function") vars[i] = vars[i]()
 	This isn't needed for now...
+	Aarex this will not work and will in fact break things because you are overwriting vars[i]
+	fix is below:
+	let v = [data[vars[0]], data[vars[1]], data[vars[2]]]
+	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
+	return softcap_funcs[func](x, v[0], v[1], v[2])
+	the difference is that we are just resetting the elemenet of a list (vars immutible) 
+	versus of a dict (a=something, b=a change b ==> change in a too if something is a dict)
 	*/
 	return softcap_funcs[func](x, data[vars[0]], data[vars[1]], data[vars[2]])
 }

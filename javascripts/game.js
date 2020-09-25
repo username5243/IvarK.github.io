@@ -2877,7 +2877,6 @@ function sacrifice(auto = false) {
 		if (!player.achievements.includes("r118")) resetDimensions();
 		player.money = new Decimal(100)
 	}
-	if (!alwaysCalcDimPowers) player.eightPow = player.eightPow.times(sacGain)
 	tmp.sacPow = tmp.sacPow.times(sacGain)
 }
 

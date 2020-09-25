@@ -40,7 +40,8 @@ let GDs = {
 		if (!this.unlocked()) return
 
 		data.gdm = Decimal.max(tmp.bl.speed, 1).log10() + 1 //Determine the initial multiplier for Gravity Dimensions.
-		data.gp = this.save.gv.max(1).log10() / Math.sqrt(this.save.gr.max(1).log10() + 1) // Determines Gravity Power, which...
+		data.gp = this.save.gv.max(1).log10() / Math.sqrt(this.save.gr.max(1).log10() + 1) 
+		// Determines Gravity Power, which...
 
 		data.rep = data.gp + 1 // Boosts Replicate Interval.
 		data.nf = data.gp + 1 // Boosts Nanospeed.
@@ -48,7 +49,7 @@ let GDs = {
 		data.bl = data.gp + 1 // Boosts Bosonic Speed.
 	},
 	can() {
-		return player.money.e >= 1e18 && player.ghostify.hb.higgs >= 20
+		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 20
 	},
 	reqText() {
 		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(20) + " Higgs Bosons"
