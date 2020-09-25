@@ -324,6 +324,7 @@ function getExtractTime() {
 	let data = player.ghostify.bl
 	let r = new Decimal(br.scalings[data.typeToExtract] || 1/0)
 	r = r.div(tmp.wzb.wbt)
+	if (!tmp.ngp3l) if (player.achievements.includes("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
 	return r
 }
 

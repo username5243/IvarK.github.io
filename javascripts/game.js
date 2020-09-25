@@ -2873,7 +2873,7 @@ function sacrifice(auto = false) {
 		if ((inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined) && !player.achievements.includes("r118")) clearDimensions(6);
 		else if (!player.achievements.includes("r118")) clearDimensions(7);
 	} else {
-		player.chall11Pow = player.chall11Pow.times(calcSacrificeBoost())
+		player.chall11Pow = player.chall11Pow.times(sacGain)
 		if (!player.achievements.includes("r118")) resetDimensions();
 		player.money = new Decimal(100)
 	}

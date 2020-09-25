@@ -545,6 +545,7 @@ function updateBRU14Temp() {
 function updateBRU15Temp() {
 	let r = Math.sqrt(player.eternityPoints.add(1).log10()) * 3.55
 	if (r > 1e4 && !tmp.ngp3l) r = Math.sqrt(r * 1e4)
+	if (!player.quantum.bigRip.active) r = 0
 	tmp.bru[15] = r
 }
 

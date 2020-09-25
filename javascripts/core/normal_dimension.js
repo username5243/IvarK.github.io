@@ -9,7 +9,6 @@ function resetDimensions() {
 		player[name + "Bought"] = 0
 		player[name + "Cost"] = new Decimal(costs[d - 1])
 		player.costMultipliers[d - 1] = new Decimal(costMults[d - 1])
-		if (!alwaysCalcDimPowers) player[name + "Pow"] = getStartingNDMult(i)
 	}
 }
 
@@ -111,7 +110,6 @@ function getPostBreakInfNDMult(){
 	return mult
 }
 
-let alwaysCalcDimPowers = true
 function getStartingNDMult(tier) {
 	let mPerTen = getDimensionPowerMultiplier()
 	let mPerDB = getDimensionBoostPower()
@@ -126,16 +124,8 @@ function getStartingNDMult(tier) {
 	return mult
 }
 
-function increasePowerFromMPTD(dim, pow, times = 1) {
-	if (!alwaysCalcDimPowers) player[TIER_NAMES[dim] + "Pow"] = player[TIER_NAMES[dim] + "Pow"].times(Decimal.pow(pow || getDimensionPowerMultiplier(), times))
-}
-
 function getDimensionFinalMultiplier(tier) {
-	let mult = player[TIER_NAMES[tier] + "Pow"]
-	if (alwaysCalcDimPowers) {
-		mult = getStartingNDMult(tier)
-		if (tier == 8) mult = mult.times(tmp.sacPow)
-	} else if (tier == 1) console.log(mult)
+	let mult = getStartingNDMult(tier)
 
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
@@ -395,7 +385,6 @@ function buyOneDimension(tier) {
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 
 		let pow = getDimensionPowerMultiplier()
-		increasePowerFromMPTD(tier, pow)
 		floatText("D" + tier, "x" + shortenMoney(pow))
 	}
 	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
@@ -420,7 +409,6 @@ function buyManyDimension(tier, quick) {
 	else player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
 	if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 	let pow = getDimensionPowerMultiplier()
-	increasePowerFromMPTD(tier, pow)
 	if (!quick) {
 		floatText("D" + tier, "x" + shortenMoney(pow))
 		onBuyDimension(tier)
@@ -491,7 +479,6 @@ function buyBulkDimension(tier, bulk, auto) {
 	}
 
 	let pow = getDimensionPowerMultiplier()
-	increasePowerFromMPTD(tier, pow, bought)
 	if (!auto) floatText("D" + tier, "x" + shortenMoney(Decimal.pow(pow, bought)))
 	onBuyDimension(tier)
 }
