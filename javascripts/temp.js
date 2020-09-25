@@ -316,6 +316,7 @@ function updatePPTITemp(){
 }
 
 function updateGhostifyTempStuff(){
+	GDs.updateTmp()
 	updateBosonicLabTemp()
 	tmp.apgw = tmp.qu.nanofield.apgWoke || getAntiPreonGhostWake()
 	updatePPTITemp() //preon power threshold increase
@@ -665,12 +666,18 @@ function updateNanoRewardEffects() {
 	}
 }
 
+function updateNanoRewardScaling() {
+	let d = nanoRewards.scaling
+	for (let s = 0; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
+}
+
 function updateNanoRewardTemp() {
 	tmp.nf = {}
 
 	if (!tmp.ngp3) return
 	if (!player.masterystudies.includes("d11")) return
 
+	updateNanoRewardScaling()
 	updateNanoEffectUsages()
 	//The rest is calculated by updateTemp().
 }

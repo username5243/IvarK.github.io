@@ -26,15 +26,15 @@ function updateTreeOfDecayTab(){
 		var color = colors[c]
 		var shorthand = shorthands[c]
 		var branch = tmp.qu.tod[shorthand]
-		var name = color + " " + getUQName(shorthand) + " quarks"
+		var name = color + " " + getUQNameFromBranch(shorthand) + " quarks"
 		var rate = getDecayRate(shorthand)
 		var linear = Decimal.pow(2, getRDPower(shorthand))
-		document.getElementById(color + "UnstableGain").className = tmp.qu.usedQuarks[shorthand].gt(0) && getUnstableGain(shorthand).gt(branch.quarks) ? "storebtn" : "unavailablebtn"
+		document.getElementById(color + "UnstableGain").className = canUnstable(shorthand) ? "storebtn" : "unavailablebtn"
 		document.getElementById(color + "UnstableGain").textContent = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
 		document.getElementById(color + "QuarkSpin").textContent = shortenMoney(branch.spin)
 		document.getElementById(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
 		document.getElementById(color + "QuarksDecayRate").textContent = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10,rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
-		document.getElementById(color + "QuarksDecayTime").textContent = timeDisplayShort(Decimal.div(10, rate).times(branch.quarks.gt(linear) ? branch.quarks.div(linear).log(2) + 1 : branch.quarks.div(linear)))
+		document.getElementById(color + "QuarksDecayTime").textContent = timeDisplayShort(Decimal.div(10, rate).times(getDecayLifetime(branch.quarks.div(linear))))
 		let ret = getQuarkSpinProduction(shorthand)
 		document.getElementById(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(ret) + "/s"
 		if (branchNum == c + 1) {
@@ -48,7 +48,7 @@ function updateTreeOfDecayTab(){
 			else eff = "4"
 			document.getElementById(color + "UpgEffDesc").textContent =  " " + eff + "x"
 			for (var u = 1; u < 4; u++) document.getElementById(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
-			if (ghostified) document.getElementById(shorthand+"RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
+			if (ghostified) document.getElementById(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
 		}
 	} //for loop
 	if (!branchNum) {
@@ -90,7 +90,7 @@ function updateTODStuff() {
 		var color = colors[c]
 		var shorthand = shorthands[c]
 		var branch = tmp.qu.tod[shorthand]
-		var name = getUQName(shorthand)
+		var name = getUQNameFromBranch(shorthand)
 		document.getElementById(shorthand+"UQName").textContent = name
 		extra = branch.spin.log10() > 200
 		start = extra ? "" : "Cost: "
@@ -102,7 +102,7 @@ function updateTODStuff() {
 		}
 		if (ghostified) {
 			document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
-			document.getElementById(shorthand+"RDReq").textContent = "(requires "+shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + getUQName(shorthand) + " quarks)"
+			document.getElementById(shorthand+"RDReq").textContent = "(requires "+shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + getUQNameFromBranch(shorthand) + " quarks)"
 			document.getElementById(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
 		} else document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = "none"
 	}
@@ -129,15 +129,19 @@ function showBranchTab(tabName) {
 function getUnstableGain(branch) {
 	let ret = tmp.qu.usedQuarks[branch].div("1e420").add(1).log10()
 	if (ret < 2) ret = Math.max(tmp.qu.usedQuarks[branch].div("1e300").div(99).log10() / 60,0)
+
 	let power = getBranchUpgLevel(branch, 2) - getRDPower(branch)
 	ret = Decimal.pow(2, power).times(ret)
 	if (ret.gt(1)) ret = Decimal.pow(ret, Math.pow(2, power + 1))
 	return ret.times(Decimal.pow(2, getRDPower(branch) + 1)).min(Decimal.pow(10, Math.pow(2, 51)))
 }
 
+function canUnstable(branch) {
+	return tmp.qu.usedQuarks[branch].gt(0) && getUnstableGain(branch).gt(tmp.qu.tod[branch].quarks)
+}
 
 function unstableQuarks(branch) {
-	if (tmp.qu.usedQuarks[branch].eq(0) || getUnstableGain(branch).lte(tmp.qu.tod[branch].quarks)) return
+	if (!canUnstable(branch)) return
 	tmp.qu.tod[branch].quarks = tmp.qu.tod[branch].quarks.max(getUnstableGain(branch))
 	if (player.ghostify.milestones < 4) tmp.qu.usedQuarks[branch] = new Decimal(0)
 	if (player.ghostify.reference > 0) player.ghostify.reference--
@@ -154,9 +158,10 @@ function getBranchSpeedText(){
 	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2]) + "x, "
 	if (!tmp.ngp3l) if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
+	if (GDs.unlocked()) text += "Graviton Power: ^" + shorten(GDs.tmp.tod)
 	if (todspeed) if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
 	if (text == "") return "No multipliers currently"
-	return text.slice(0, text.length-2)
+	return text.slice(0, text.length - 2)
 }
 
 function getBranchSpeed() { // idea: when you hold shift you can see where the multipliers of branch speed are
@@ -164,10 +169,9 @@ function getBranchSpeed() { // idea: when you hold shift you can see where the m
 	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[2])
-	if (!tmp.ngp3l) {
-		if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
-	}
+	if (!tmp.ngp3l && player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
+	if (GDs.unlocked()) x = x.pow(GDs.tmp.tod)
 	return x
 }
 
@@ -186,14 +190,17 @@ function getDecayRate(branch) {
 	if (branch == "b") {
 		if (GUBought("br8")) ret = ret.div(getGU8Effect("br"))
 	}
-	ret = ret.times(getBranchFinalSpeed())
-	return ret.min(Math.pow(2, 40)).times(todspeed)
+	ret = ret.times(tmp.branchSpeed)
+	return ret.min(Math.pow(2, 40))
+}
+
+function getDecayLifetime(qk) {
+	if (qk.gt(1)) return qk.log(2) + 1
+	return qk.toNumber()
 }
 
 function getMilestone14SpinMult(){
-	var logSpin = getLogTotalSpin() - Math.log10(3) //so at e25 of each it is 10x, not slight over
-	if (logSpin <= 25 || tmp.ngp3l) return 10
-	return Math.pow(logSpin, 2) / 625 * 10
+	return Math.max(Math.pow(getLogTotalSpin(), 2) / 625, 1) * 10
 }
 
 function getQuarkSpinProduction(branch) {
@@ -202,10 +209,9 @@ function getQuarkSpinProduction(branch) {
 	if (player.achievements.includes("ng3p74")) if (tmp.qu.tod[branch].decays) ret = ret.times(1 + tmp.qu.tod[branch].decays)
 	if (tmp.qu.bigRip.active) {
 		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
-		if (isBigRipUpgradeActive(19)) ret = ret.times(tmp.bru[19])
 		if (hasNU(12)) ret = ret.times(tmp.nu[4].normal)
 	}
-	if (!tmp.ngp3l) ret = ret.times(Decimal.pow(1.1, player.quantum.nanofield.rewards - 12))
+	if (!tmp.ngp3l) ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
 	ret = ret.times(todspeed)
 	return ret
 }
@@ -248,11 +254,13 @@ function getTreeUpgradeLevel(upg) {
 
 function getEffectiveTreeUpgLevel(upg){
 	lvl = getTreeUpgradeLevel(upg) * tmp.tue
-	if (upg == 1) if (lvl >= 500) lvl = 500 * Math.pow(lvl / 500,.9)
 	if (upg == 2) if (lvl > 64) lvl = (lvl + 128) / 3
 	if (upg == 5) if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
+	/*
+	if (upg == 1) if (lvl >= 500) lvl = 500 * Math.pow(lvl / 500, .9)
 	if (upg == 7) if (lvl > 100) lvl -= Math.sqrt(lvl) - 10
 	if (upg == 8) if (lvl > 1111) lvl = 1111 + (lvl - 1111) / 2
+	*/
 	return lvl
 }
 
@@ -339,7 +347,7 @@ function unstableAll() {
 	var colors = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
 		var bData = tmp.qu.tod[colors[c]]
-		if (tmp.qu.usedQuarks[colors[c]].gt(0) && getUnstableGain(colors[c]).gt(bData.quarks)) {
+		if (canUnstable(colors[c])) {
 			bData.quarks = bData.quarks.max(getUnstableGain(colors[c]))
 			if (player.ghostify.milestones < 4) tmp.qu.usedQuarks[colors[c]] = new Decimal(0)
 		}
@@ -349,26 +357,62 @@ function unstableAll() {
 	updateQuantumWorth()
 }
 
-function getUQName(shorthand) {
-	let ret = "unstable"
-	if (tmp.qu.tod[shorthand].decays !== undefined) {
-		let amt = tmp.qu.tod[shorthand].decays
-		if (amt < 55) {
-			if (amt > 4) ret = "ghostly" + (amt > 9 ? "^" + Math.floor(amt / 5) : "") + " " + ret
-			if (amt % 5) ret = (["radioactive", "infinity", "eternal", "quantum"])[amt % 5 - 1] + " " + ret
-		} else if (amt < 110) {
-			amt -= 50
-			if (amt > 4) ret = "disappearing" + (amt > 9 ? "^" + Math.floor(amt / 5) : "") + " " + ret
-			if (amt % 5) ret = (["radioactive", "infinity", "eternal", "quantum"])[amt % 5 - 1] + " " + ret
-		} else if (amt < 165) {
-			amt -= 105
-			if (amt > 4) ret = "reappearing" + (amt > 9 ? "^" + Math.floor(amt / 5) : "") + " " + ret
-			if (amt % 5) ret = (["radioactive", "infinity", "eternal", "quantum"])[amt % 5 - 1] + " " + ret
-		} else {
-			ret = "unstable^" + amt
+var uq_names = {
+	standard(rds) {
+		let x = "unstable"
+		let roots_1 = ["", "radioactive", "infinity", "eternal", "quantum"]
+		let roots_2 = ["", "ghostly", "disappearing", "reappearing", "ethereal"]
+
+		let a = rds % 5
+		if (a > 0) x = roots_1[a] + " " + x
+
+		let b = Math.floor((rds - 5) / 50 + 1)
+		if (b >= 1) {
+			if (b >= roots_2.length) return this.exponents(rds)
+
+			let c = Math.floor((rds - 5) / 5) % 10 + 1
+			x = roots_2[b] + (c > 1 ? "^" + getFullExpansion(c) : "") + " " + x
 		}
+
+		return x
+	},
+	abbreviated(rds) {
+		let x = ""
+		let roots_1 = ["", "r", "i", "e", "q"]
+		let roots_2 = ["", "g", "d", "ra", "er"]
+
+		let a = rds % 5
+		if (a > 0) x = roots_1[a] + "."
+
+		let b = Math.floor((rds - 5) / 50 + 1)
+		if (b >= 1) {
+			if (b >= roots_2.length) return this.exponents(rds)
+
+			let c = Math.floor((rds - 5) / 5) % 10 + 1
+			x = roots_2[b] + (c > 1 ? getFullExpansion(c) : "") + "." + x
+		}
+
+		if (x !== "") x = x + " unstable" 
+		else x = "unstable"
+
+		return x
+	},
+	exponents(rds) {
+		if (rds == 0) return "unstable"
+		return "unstable^" + getFullExpansion(rds + 1)
+	},
+	mixed(rds) {
+		if (rds > 5) return this.exponents(rds)
+		return this.standard(rds)
 	}
-	return ret
+}
+
+function getUQName(rds) {
+	return uq_names[player.aarexModifications.uq_notation || "exponents"](rds)
+}
+
+function getUQNameFromBranch(shorthand) {
+	return getUQName(tmp.qu.tod[shorthand].decays || 0)
 }
 
 function maxTreeUpg() {
@@ -451,9 +495,7 @@ function radioactiveDecay(shorthand) {
 	data.spin = new Decimal(0)
 	data.upgrades = {}
 	if (player.ghostify.milestones > 3) data.upgrades[1] = 5
-	data.decays = data.decays === undefined ? 1 : data.decays + 1
-	let sum = 0
-	for (var c = 0; c < 3; c++) sum += getRadioactiveDecays((['r', 'g', 'b'])[c])
+	data.decays = (data.decays || 0) + 1
 	updateTODStuff()
 }
 
@@ -495,6 +537,7 @@ function getTreeUpgradeEfficiencyText(){
 	if (!tmp.ngp3l) {
 		if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 		if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
+		if (hasBosonicUpg(52)) text += "Bosonic Lab Upgrade 22: " + shorten(tmp.blu[52]) + "x, "
 	}
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
@@ -506,6 +549,7 @@ function getTreeUpgradeEfficiency(mod) {
 	if (!tmp.ngp3l) {
 		if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r += 0.1
 		if (hasBosonicUpg(43)) r *= tmp.blu[43]
+		if (hasBosonicUpg(52)) r *= tmp.blu[52]
 	}
 	return r
 }
@@ -513,14 +557,14 @@ function getTreeUpgradeEfficiency(mod) {
 function getRDPower(branch) {
 	let x = getRadioactiveDecays(branch)
 	let y = Math.max(x - 5, 0)
-	return x * 25 + (Math.pow(y, 2) + y) * 1.25
+	let r = x * 25 + (Math.pow(y, 2) + y) * 1.25
+	return r
 }
 
-
 function getBU1Power(branch) {
-	let x = getBranchUpgLevel(branch,1)
+	let x = getBranchUpgLevel(branch, 1)
 	let s = Math.floor(Math.sqrt(0.25 + 2 * x / 120) - 0.5)
-	return s * 120 + (x - s * (s + 1) * 60)/(s + 1)
+	return s * 120 + (x - s * (s + 1) * 60) / (s + 1)
 }
 
 function getBU2Power(branch) {

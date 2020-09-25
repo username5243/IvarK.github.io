@@ -189,6 +189,22 @@ const allAchievements = {
   ng3p96 : "Not-so-very-challenging",
   ng3p97 : "The Ghostliest Side",
   ng3p98 : "Meta-Quintillion",
+  ng3p101 : "ng3p101",
+  ng3p102 : "ng3p102",
+  ng3p103 : "ng3p103",
+  ng3p104 : "ng3p104",
+  ng3p105 : "ng3p105",
+  ng3p106 : "ng3p106",
+  ng3p107 : "ng3p107",
+  ng3p108 : "ng3p108",
+  ng3p111 : "ng3p111",
+  ng3p112 : "ng3p112",
+  ng3p113 : "ng3p113",
+  ng3p114 : "ng3p114",
+  ng3p115 : "ng3p115",
+  ng3p116 : "ng3p116",
+  ng3p117 : "ng3p117",
+  ng3p118 : "ng3p118",
   s11 : "The first one's always free",
   s12 : "Just in case",
   s13 : "It pays to have respect",
@@ -386,7 +402,7 @@ function updateAchievements() {
 	var amount = 0
 	var rowsShown = 0
 	var rowsNum = 0
-	for (var i = 1; i < 25; i++) {
+	for (var i = 1; i <= 26; i++) {
 		var shown=true
 		var rowid = i
 		var rownum = i

@@ -1098,48 +1098,24 @@
 					<button id="maxBlackholeDimensions" class="storebtn" style="font-size: 12px; width: 230px;" onclick="buyMaxBlackholeDimensions()">Max all black hole dimensions</Button>
 					<table class="table">
 						<tr style="font-size: 17px" id="blackholeRow1">
-							<td id="blackholeD1" width="43%">
-								First Black Hole Dimension x1
-							</td>
-							<td>
-								<div id="blackholeAmount1">0 (0)</div>
-							</td>
-							<td align="right" width="10%">
-								<button id="blackholeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(1)">Cost: 1e4000 EP</button>
-							</td>
+							<td id="blackholeD1" width="43%"></td>
+							<td><div id="blackholeAmount1"></div></td>
+							<td align="right" width="10%"><button id="blackholeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(1)"></button></td>
 						</tr>
 						<tr style="font-size: 17px" id="blackholeRow2">
-							<td id="blackholeD2" width="43%">
-								Second Black Hole Dimension x1
-							</td>
-							<td>
-								<div id="blackholeAmount2">0 (0)</div>
-							</td>
-							<td align="right" width="10%">
-								<button id="blackholeMax2" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(2)">Cost: 1e8000 EP</button>
-							</td>
+							<td id="blackholeD2" width="43%"></td>
+							<td><div id="blackholeAmount2"></div></td>
+							<td align="right" width="10%"><button id="blackholeMax2" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(2)"></button></td>
 						</tr>
 						<tr style="font-size: 17px" id="blackholeRow3">
-							<td id="blackholeD3" width="43%">
-								Third Black Hole Dimension x1
-							</td>
-							<td>
-								<div id="blackholeAmount3">0 (0)</div>
-							</td>
-							<td align="right" width="10%">
-								<button id="blackholeMax3" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(3)">Cost: 1e12000 EP</button>
-							</td>
+							<td id="blackholeD3" width="43%"></td>
+							<td><div id="blackholeAmount3"></div></td>
+							<td align="right" width="10%"><button id="blackholeMax3" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(3)"></button></td>
 						</tr>
 						<tr style="font-size: 17px" id="blackholeRow4">
-							<td id="blackholeD4" width="43%">
-								Fourth Black Hole Dimension x1
-							</td>
-							<td>
-								<div id="blackholeAmount4">0 (0)</div>
-							</td>
-							<td align="right" width="10%">
-								<button id="blackholeMax4" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(4)">Cost: 1e20000 EP</button>
-							</td>
+							<td id="blackholeD4" width="43%"></td>
+							<td><div id="blackholeAmount4"></div></td>
+							<td align="right" width="10%"><button id="blackholeMax4" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyBlackholeDimension(4)"></button></td>
 						</tr>
 						<tr style="font-size: 17px" id="blackholeRow5">
 							<td id="blackholeD5" width="43%"></td>
@@ -1250,6 +1226,7 @@
 					<td id="pdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('pdims')">Paradox Dimensions</button></td>
 					<td id="mdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('metadimensions')">Meta Dimensions</button></td>
 					<td id="edtabbtn"><button class="secondarytabbtn" onclick="showDimTab('emperordimensions')">Emperor Dimensions</button></td>
+					<td id="gdtabbtn"><button class="secondarytabbtn" onclick="showDimTab('gdims')">Gravity Dimensions</button></td>
 					<td id="prodtabbtn"><button class="secondarytabbtn" onclick="showDimTab('production')">Production</button></td>
 				</tr>
 			</table>
@@ -1721,6 +1698,9 @@
 				<button id='breakLimitED' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
 				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button><br><br><br>
 			</div>
+			<div id="gdims" class="dimtab">
+				U.I. is coming soon...
+			</div>
 			<div id="production" class="dimtab">
 				<b>seconds of history:</b>
 				<input type="number" value="10" onchange="updateChartValues()" id="chartDurationInput"></input>
@@ -1826,7 +1806,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 0)</span>
+				<span class="warning">(Test server: Beta 1)</span>
 			</p>
 			<div id="footercontainer">
 				<table id="footer" style="display: table !important">
@@ -2706,6 +2686,58 @@
 							</td>
 							<td>
 								<div id="Meta-Quintillion" class="achievement achievementlocked" style="background-image: url(images/182.png)"></div>
+							</td>
+						</tr>
+						<tr id="achRowng3p10">
+							<td>
+								<div id="ng3p101" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p102" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p103" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p104" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p105" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p106" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p107" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p108" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+						</tr>
+						<tr id="achRowng3p11">
+							<td>
+								<div id="ng3p111" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p112" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p113" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p114" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p115" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p116" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p117" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+							</td>
+							<td>
+								<div id="ng3p118" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
 							</td>
 						</tr>
 				</table>
@@ -4934,7 +4966,7 @@
 						You have <span id="quarkAntienergy" style="font-size:35px"></span> preon anti-energy. At <span id="quarkChargeProductionCap" style="font-size:35px"></span>, your preon charge will stop producing energy and anti-energy.<br>
 						You are getting <span id="quarkAntienergyRate"></span> preon anti-energy per second.
 					</td></tr></table>
-					You have <span id="rewards" style="font-size:35px"></span> rewards.
+					You have <span id="rewards" style="font-size:35px"></span> <span id="nfRewardScaling"></span>.
 					<table class="table" align=center style="margin: auto" id="nfRewards"></table>
 					<br><br>
 				</div>
@@ -5072,7 +5104,7 @@
 					<tr id="gphRow">
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg13" onclick="buyNeutrinoUpg(13)">100 RG upgrade doesn't nerf the 100 BR upgrade.<br>Cost: <span id="neutrinoUpg13Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg14" onclick="buyNeutrinoUpg(14)" style="font-size: 10px">Gain more neutrinos based on your GhP and color powers.<br>Currently: <span id="neutrinoUpg14Pow"></span>x<br>Cost: <span id="neutrinoUpg14Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanofield rewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanorewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
 					</tr>
 				</table>
 			</div>
@@ -5243,7 +5275,7 @@
 						<td><div id="braveMilestone10" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with 10 of each one of the first 4 Emperor Dimensions."></div></td>
 						<td><div id="braveMilestone11" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with 10 of each one of the first 6 Emperor Dimensions."></div></td>
 						<td><div id="braveMilestone12" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with 10 of each Emperor Dimension."></div></td>
-						<td><div id="braveMilestone13" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with 16 Nanofield rewards."></div></td>
+						<td><div id="braveMilestone13" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with 16 Nanorewards."></div></td>
 						<td><div id="braveMilestone14" class="achievement achievementlocked"></div></td>
 						<td><div id="braveMilestone15" class="achievement achievementlocked" ach-tooltip="Reward: Start Ghostifies with Break Eternity unlocked, you keep Break Eternity upgrades, and you produce 1% of Eternal Matter gained on Eternity per second."></div></td>
 						<td><div id="braveMilestone16" class="achievement achievementlocked" ach-tooltip="Reward: You produce 1% of quarks gained on Quantum per second, and you keep Tachyon particles except when Big Ripping an universe."></div></td>
@@ -5710,10 +5742,12 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/electrons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/expert_mode.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/ghostly_photons.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/gravity_dimensions.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/higgs_bosons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/mastery_studies.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/nanofield.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/neutrinos.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/planck.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_challenges.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_speedruns.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quarks_gluons.js"></script>

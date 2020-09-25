@@ -321,7 +321,7 @@ function setupBraveMilestones(){
 
 function setupBosonicExtraction(){
 	var ben = document.getElementById("enchants")
-	for (var g2 = 2; g2 <= br.maxLimit; g2++) {
+	for (var g2 = 2; g2 <= br.limits[maxBLLvl]; g2++) {
 		var row = ben.insertRow(g2 - 2)
 		row.id = "bEnRow" + (g2 - 1)
 		for (var g1 = 1; g1 < g2; g1++) {
@@ -335,14 +335,14 @@ function setupBosonicExtraction(){
 		}
 	}
 	var toeDiv = ""
-	for (var g = 1; g <= br.maxLimit; g++) toeDiv += ' <button id="typeToExtract' + g + '" class="storebtn" onclick="changeTypeToExtract(' + g + ')" style="width: 25px; font-size: 12px"><div class="bRune" type="' + g + '"></div></button>'
+	for (var g = 1; g <= br.limits[maxBLLvl]; g++) toeDiv += ' <button id="typeToExtract' + g + '" class="storebtn" onclick="changeTypeToExtract(' + g + ')" style="width: 25px; font-size: 12px"><div class="bRune" type="' + g + '"></div></button>'
 	document.getElementById("typeToExtract").innerHTML=toeDiv
 }
 
 function setupBosonicUpgrades(){
 	setupBosonicUpgReqData()
 	var buTable=document.getElementById("bUpgs")
-	for (r = 1; r <= bu.maxRows; r++) {
+	for (r = 1; r <= bu.limits[maxBLLvl]; r++) {
 		var row = buTable.insertRow(r - 1)
 		row.id = "bUpgRow" + r
 		for (c = 1; c < 6; c++) {
@@ -358,7 +358,7 @@ function setupBosonicUpgrades(){
 
 function setupBosonicRunes(){
 	var brTable=document.getElementById("bRunes")
-	for (var g = 1; g <= br.maxLimit; g++) {
+	for (var g = 1; g <= br.limits[maxBLLvl]; g++) {
 		var col = brTable.rows[0].insertCell(g - 1)
 		col.id = "bRuneCol" + g
 		col.innerHTML = '<div class="bRune" type="' + g + '"></div>: <span id="bRune' + g + '"></span>'
@@ -367,7 +367,7 @@ function setupBosonicRunes(){
 	for (var g = 0 ; g < glyphs.length; g++) {
 		var glyph = glyphs[g]
 		var type = glyph.getAttribute("type")
-		if (type > 0 && type <= br.maxLimit) {
+		if (type > 0 && type <= br.limits[maxBLLvl]) {
 			glyph.className = "bRune " + br.names[type]
 			glyph.setAttribute("ach-tooltip", br.names[type] + " Bosonic Rune")
 		}
@@ -1038,7 +1038,7 @@ function doNGPlusThreeNewPlayer(){
 	player.meta.bestOverGhostifies = 0
 	player.ghostify = getBrandNewGhostifyData()
 	tmp.bl = player.ghostify.bl
-	for (var g = 1; g < br.maxLimit; g++) player.ghostify.bl.glyphs.push(0)
+	for (var g = 1; g < br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(0)
 	player.options.animations.ghostify = true
 	player.aarexModifications.ghostifyConf = true
 }
@@ -2641,7 +2641,7 @@ function onNotationChange() {
 		updateBosonicStuffCosts()
 		if (!player.ghostify.ghostlyPhotons.unl) document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
-		else if (!tmp.ngp3l && !tmp.hb.unl) updateHiggsUnlockDisplay()
+		else if (!tmp.ngp3l) updateBosonUnlockDisplay()
 	}
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
@@ -4986,7 +4986,7 @@ function ghostifyAutomationUpdating(){
 	if (ghostified && isAutoGhostsSafe) {
 		var colorShorthands=["r", "g", "b"]
 		for (var c = 1; c <= 3; c++) {
-			var shorthand=colorShorthands[c - 1]
+			var shorthand = colorShorthands[c - 1]
 			if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
 			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
 				unstableQuarks(shorthand)
@@ -5026,13 +5026,13 @@ function ghostifyAutomationUpdating(){
 
 function WZBosonsUpdating(diff){
 	var data = player.ghostify.bl
-	var wattGained = Math.max(getBosonicWattGain(), data.watt)
-	data.speed = Math.max(Math.min(wattGained + (data.watt - data.speed) * 2, wattGained), data.speed)
-	data.watt = wattGained
+	var wattGained = Decimal.max(getBosonicWattGain(), data.watt).sub(data.watt)
+	data.watt = wattGained.add(data.watt)
+	data.speed = wattGained.times(tmp.ngp3l ? 2 : 10).add(data.speed).min(data.watt)
 	if (data.speed > 0) {
-		var limitDiff = Math.min(diff,data.speed * 14400)
-		bosonicTick((data.speed-limitDiff / 28800) * limitDiff)
-		data.speed = Math.max(data.speed-limitDiff/ 14400, 0)
+		var limitDiff = data.speed.times(14400).min(diff).toNumber()
+		bosonicTick(data.speed.sub(limitDiff / 28800).times(limitDiff))
+		data.speed = data.speed.max(limitDiff / 14400).sub(limitDiff / 14400)
 	}
 }
 
@@ -5080,6 +5080,7 @@ function nanofieldUpdating(diff){
 				showQuantumTab("nanofield")
 				showNFTab("antipreon")
 			}
+			updateNanoRewardScaling()
 		}
 	}
 }
@@ -5089,17 +5090,19 @@ function treeOfDecayUpdating(diff){
 	for (var c = 0; c < 3; c++) {
 		var shorthand = colorShorthands[c]
 		var branch = tmp.qu.tod[shorthand]
-		var decayRate = getDecayRate(shorthand)
-		var decayPower = getRDPower(shorthand)
-				
-		var mult = Decimal.pow(2,decayPower)
-		var power = Decimal.div(branch.quarks.gt(mult)?branch.quarks.div(mult).log(2)+1:branch.quarks.div(mult),decayRate)
-		var decayed = power.min(diff)
-		power = power.sub(decayed).times(decayRate)
+		if (branch.quarks.gt(0)) {
+			var decayRate = getDecayRate(shorthand)
+			var decayPower = getRDPower(shorthand)
 
-		var sProd = getQuarkSpinProduction(shorthand)
-		branch.quarks = power.gt(1) ? Decimal.pow(2,power-1).times(mult) : power.times(mult)	
-		branch.spin = branch.spin.add(sProd.times(decayed))	
+			var mult = Decimal.pow(2, decayPower)
+			var power = Decimal.div(getDecayLifetime(branch.quarks.div(mult)), decayRate)
+			var decayed = power.min(diff)
+			power = power.sub(decayed).times(decayRate)
+
+			var sProd = getQuarkSpinProduction(shorthand)
+			branch.quarks = power.gt(1) ? Decimal.pow(2, power - 1).times(mult) : power.times(mult)
+			branch.spin = branch.spin.add(sProd.times(decayed))	
+		}
 	}
 }
 

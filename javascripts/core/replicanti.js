@@ -240,6 +240,7 @@ function getReplicantiInterval() {
 	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (tmp.ngp3) if (player.masterystudies.includes("t332")) interval = interval.div(getMTSMult(332))
+	if (GDs.unlocked()) interval = interval.pow(GDs.tmp.rep)
 	return interval
 }
 

@@ -292,36 +292,40 @@ function buyMaxTickSpeed() {
 	tmp.tickUpdate = true
 }
 
-function getWorkingTickspeed(){
-	var log = -player.tickspeed.log10()
-	if (tmp.ngp3) log = softcap(log, "working_ts")
-	tick = Decimal.pow(10, -log)
+function getTickspeed() {
+	var tick = player.tickspeed
+	if (player.infinityUpgradesRespecced != undefined) {
+		tick = Decimal.div(1000, tick)
+		if (tick.gt(1e25)) tick = Decimal.pow(10, Math.sqrt(tick.log10()) * 5)
+		if (player.singularity != undefined) tick = tick.times(getDarkMatterMult())
+		tick = Decimal.div(1000, tick)
+	}
+	if (tmp.ngp3) {
+		var log = -tick.log10()
+		log = softcap(log, "working_ts")
+		tick = Decimal.pow(10, -log)
+	}
 	return tick
 }
 
-function getTickspeed() {
-	if (player.infinityUpgradesRespecced != undefined) {
-		var ret = Decimal.div(1000, player.tickspeed)
-		if (ret.gt(1e25)) ret = Decimal.pow(10, Math.sqrt(ret.log10()) * 5)
-		if (player.singularity != undefined) ret = ret.times(getDarkMatterMult())
-		return Decimal.div(1000, ret)
-	}
-	return getWorkingTickspeed()
+function getTickspeedText(ts) {
+	var exp = ts.e
+	if (isNaN(exp)) return 'Infinite'
+	if (exp > 1) return ts.toFixed(0)
+
+	var expExp = Math.max(Math.min(Math.ceil(15 - Math.log10(2 - exp)), 3), 0)
+	if (expExp == 0) return shortenCosts(Decimal.div(1000, ts)) + "/s"
+	return Math.min(ts.m * Math.pow(10, expExp - 1), Math.pow(10, expExp) - 1).toFixed(0) + ' / ' + shortenCosts(Decimal.pow(10, 2 - exp))
 }
 
 function updateTickspeed() {
 	var showTickspeed = player.tickspeed.lt(1e3) || (player.currentChallenge != "postc3" && !isIC3Trapped()) || player.currentChallenge == "postcngmm_3" || (player.challenges.includes("postcngmm_3") && player.tickspeedBoosts === undefined) || tmp.be
 	var label = ""
 	if (showTickspeed) {
-		var tickspeed = getTickspeed()
-		var exp = tickspeed.e;
-		if (isNaN(exp)) label = 'Tickspeed: Infinite'
-		else if (exp > 1) label = 'Tickspeed: ' + tickspeed.toFixed(0)
-		else {
-			var expExp = Math.max(Math.min(Math.ceil(15 - Math.log10(2 - exp)), 3), 0)
-			if (expExp == 0) label = 'Tickspeed: ' + shortenCosts(Decimal.div(1000, tickspeed)) + "/s"
-			else label = 'Tickspeed: ' + Math.min(tickspeed.m * Math.pow(10, expExp - 1), Math.pow(10, expExp) - 1).toFixed(0) + ' / ' + shortenCosts(Decimal.pow(10,2 - exp))
-		}
+		var tick = getTickspeed()
+		var name = tick.e <= -1e15 ? "Ticks" : "Tickspeed"
+		if (tick.gt(player.tickspeed)) name = "Working " + name
+		label = name + ": " + getTickspeedText(tick)
 	}
 	if (player.galacticSacrifice || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 	if (gameSpeed != 1) label += ", Game speed: " + (gameSpeed < 1 ? shorten(1 / gameSpeed) + "x slower" : shorten(tmp.gameSpeed) + "x faster")

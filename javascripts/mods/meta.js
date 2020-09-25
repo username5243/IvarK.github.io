@@ -318,7 +318,7 @@ function getMetaDimensionProduction(tier) {
 function getExtraDimensionBoostPower() {
 	if (player.currentEternityChall=="eterc14" || inQC(7)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
-	r = Decimal.pow(r, getExtraDimensionBoostPowerExponent(r)).max(1)
+	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (!inQC(3)) r = r.add(1)
 	if (player.aarexModifications.nguspV) {
 		let l = r.log(2)
@@ -332,11 +332,11 @@ function getExtraDimensionBoostPowerUse() {
 	return player.meta.bestAntimatter
 }
 
-function getMADimBoostPowerExp(ma = player.meta.antimatter){
-	getExtraDimensionBoostPowerExponent(ma)
+function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
+	return getMADimBoostPowerExp(ma)
 }
 
-function getExtraDimensionBoostPowerExponent(ma) {
+function getMADimBoostPowerExp(ma) {
 	let power = 8
 	if (inQC(3)) {
 		power = Math.pow(ma.log10() / 8, 2)
@@ -364,7 +364,7 @@ function updateOverallMetaDimensionsStuff(){
 	document.getElementById("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	document.getElementById("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
 	document.getElementById("bestAntimatterQuantum").textContent = player.masterystudies && quantumed ? "Your best" + (ghostified ? "" : "-ever") + " meta-antimatter" + (ghostified ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	document.getElementById("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && player.currentEternityChall != "eterc14" && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? 'Raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getExtraDimensionBoostPowerExponent(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, t' : "T"
+	document.getElementById("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && player.currentEternityChall != "eterc14" && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? 'Raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, t' : "T"
 	setAndMaybeShow("bestMAOverGhostifies", ghostified, '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 	document.getElementById("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	document.getElementById("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'

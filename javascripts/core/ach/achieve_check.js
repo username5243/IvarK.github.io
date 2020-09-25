@@ -160,20 +160,12 @@ function newDimension() {
 	if (req.tier == 8) giveAchievement("0 degrees from infinity")
 }
 
-function checkOtherPreNGp3Achieve(){
+function checkOtherPreNGp3Achieve() {
 	var ableToGetRid2 = player.timestudy.studies.length < 1 && player.dilation.active 
 	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) ableToGetRid2 = false
 	}
 	if (player.why >= 1e6) giveAchievement("Should we tell them about buy max...")
-	if (player.exdilation !== undefined) {
-		let ableToGetRid3 = ableToGetRid2 && player.dilation.upgrades.length === 0 && player.dilation.rebuyables[1] === 0 && player.dilation.rebuyables[2] === 0 && player.dilation.rebuyables[3] === 0
-		if (player.blackhole.power.gt(0)) giveAchievement("A newer beginning.")
-		if (player.blackhole.power.gt(1e6)) giveAchievement("1 million is still a lot")
-		if (player.exdilation.unspent.gt(1e5)) giveAchievement("Finally I'm out of that channel");
-		if (ableToGetRid2 && player.infinityPoints.log10() >= 20000) giveAchievement("I already got rid of you.")
-	}
-	checkUniversalHarmony()
 	if (infchallengeTimes < 7.5) giveAchievement("Never again")
 	if (player.totalTimePlayed >= 10 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
 	if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
@@ -188,7 +180,6 @@ function checkOtherPreNGp3Achieve(){
 	if (player.spreadingCancer >= 1000000) giveAchievement("Cancer = Spread")
 	if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
 	if (player.break) giveAchievement("Limit Break")
-	if (player.meta.resets >= 10) giveAchievement("Meta-boosting to the max")
 	if (tmp.sacPow >= 600) giveAchievement("The Gods are pleased");
 	if (tmp.sacPow.gte(Number.MAX_VALUE)) giveAchievement("Yet another infinity reference")
 	if (tmp.sacPow.gte(Decimal.pow(10, 9000)) && !inNC(11)) giveAchievement("IT'S OVER 9000")
@@ -198,6 +189,22 @@ function checkOtherPreNGp3Achieve(){
 	if (getEternitied() >= 100) giveAchievement("This mile took an Eternity")
 	if (player.bestEternity < 300) giveAchievement("That wasn't an eternity");
 	if (player.bestEternity <= 0.01) giveAchievement("Less than or equal to 0.001");
+}
+
+function checkNGUdAchieve() {
+	var ableToGetRid2 = player.timestudy.studies.length < 1 && player.dilation.active 
+	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
+		if (player.masterystudies[id].split("t")[1]) ableToGetRid2 = false
+	}
+	let ableToGetRid3 = ableToGetRid2 && player.dilation.upgrades.length === 0 && player.dilation.rebuyables[1] === 0 && player.dilation.rebuyables[2] === 0 && player.dilation.rebuyables[3] === 0
+	if (player.blackhole.power.gt(0)) giveAchievement("A newer beginning.")
+	if (player.blackhole.power.gt(1e6)) giveAchievement("1 million is still a lot")
+	if (player.exdilation.unspent.gt(1e5)) giveAchievement("Finally I'm out of that channel");
+	if (ableToGetRid2 && player.infinityPoints.log10() >= 20000) giveAchievement("I already got rid of you.")
+}
+
+function checkNGp2Achieve() {
+	if (player.meta.resets >= 10) giveAchievement("Meta-boosting to the max")
 }
 
 function getTwoDecaysBool(){
@@ -282,8 +289,12 @@ function ngP3AchieveCheck(){
 	if (getTotalRadioactiveDecays >= 10) giveAchievement("Radioactive Decaying to the max!")
 	if (quantumed) giveAchievement("Sub-atomic")
 
-	if (tmp.ngp3l) return // NG+3.1 achievements from this point on
+	// NG+3.1 achievements from this point on
+	if (!tmp.ngp3l) ngP31AchieveCheck()
+}
 
+function ngP31AchieveCheck(){
+	let minUQ = getMinimumUnstableQuarks()
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (player.quantum.quarks.log10() >= 66666) giveAchievement("Are these another...")
@@ -303,7 +314,10 @@ function ALLACHIEVECHECK(){
 	checkMatterAMNDReqAchieve() //AM/ND/Matter Req
 	checkInfPowerReqAchieve() //IPo Req
 	checkTickspeedReqAchieve() //Tickspeed/tick upgs based
-	checkOtherPreNGp3Achieve() //Other
-	
+	checkOtherPreNGp3Achieve()
+
+	if (player.exdilation) checkNGUdAchieve()
+	if (player.meta) checkNGp2Achieve()
+	if (player.exdilation || player.meta) checkUniversalHarmony()
 	if (tmp.ngp3) ngP3AchieveCheck()
 }

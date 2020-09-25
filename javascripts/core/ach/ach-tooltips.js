@@ -373,7 +373,7 @@ function setR18Tooltip(){
 	let dying = document.getElementById("Are you currently dying?")
 
 	//ACHIEVEMENT ROW 18
-	notrelative.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 411))+" dilated time without gaining tachyon particles." + (tmp.ngp3l ? "" : " Reward: You gain more DT based on the amount of Nanofield rewards."))
+	notrelative.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 411))+" dilated time without gaining tachyon particles." + (tmp.ngp3l ? "" : " Reward: You gain more DT based on the amount of Nanorewards."))
 	error404.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 1.6e12))+" antimatter while having only the 1st Dimensions of each type of Dimension and at least 2 normal galaxies.")
 	ie.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 8e6)) + " antimatter in a paired challenge with the PC6+8 combination." + (tmp.ngp3l ? "" : " Reward: Automatically buy the Quark multiplier to dimensions every second."))
 	wasted.setAttribute('ach-tooltip', "Get " + shorten(1.1e7) + " TT without having TT generation, keeping your previous TT, and respeccing studies. Reward: While you have less than 1 hour worth of TT production, you gain 10x as much TT.")
@@ -476,7 +476,7 @@ function setR22Tooltip(){
 	//ACHIEVEMENT ROW 22
 	ghostierthanbefore.setAttribute("ach-tooltip", "Unlock Bosonic Lab." + (tmp.ngp3l ? "" : " Reward: The meta-antimatter effect uses your best meta-antimatter in your current Ghostify instead of your best in the current Quantum, and unlock all achievements prior to Ghostly Photons."))
 	ee.setAttribute('ach-tooltip', "Get "+shorten(Number.MAX_VALUE)+" eternities." + (tmp.ngp3l ? "" : " Reward: Boost quark gain by 10 per Light Empowerment squared."))
-	oc.setAttribute('ach-tooltip', "Become a ghost with at least "+shortenCosts(Decimal.pow(10, 3.75e5)) + " EP while Big Ripped with the Anti-Dilation modifier." + (tmp.ngp3l ? "" : " Reward: Remove the second nanofield reward scaling."))
+	oc.setAttribute('ach-tooltip', "Become a ghost with at least "+shortenCosts(Decimal.pow(10, 3.75e5)) + " EP while Big Ripped with the Anti-Dilation modifier." + (tmp.ngp3l ? "" : " Reward: Remove the Further Nanofield scaling."))
 	btco.setAttribute('ach-tooltip', "Complete Paired Challenge 1 after getting "+shortenCosts(Decimal.pow(10, 1.65e9)) + " antimatter in Quantum Challenges 6 and 8." + (tmp.ngp3l ? "" : " Reward: Ghostifies only makes you lose 25% of your radiocative decays."))
 	tdc.setAttribute('ach-tooltip', "Complete Eternity Challenge 11 with "+shortenCosts(Decimal.pow(10, 15500)) + " IP in a Paired Challenge with the Quantum Challenges 6 and 8 combination and the Anti-Dilation modifier." + (tmp.ngp3l ? "" : " Reward: Remove the quadratic cost scaling and the level softcap of fifth Tree of Decay upgrade and make it based on best meta-antimatter over Ghostifies, instead of over quantums."))
 	igu.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 2.25e4)) + " IP while dilated and Big Ripped with Anti-Dilation modifier and without having studies, EP mult upgrades, Tree Upgrades, and Break Eternity within this Ghostify.")
@@ -500,6 +500,34 @@ function setR23Tooltip(){
 	aretheseanother.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 66666)) + " Quarks. Reward: Gain 500x more Quarks and Ghost Particles.")
 }
 
+function setR24Tooltip(){
+	// Row 24 (ng3p10) (0/8)
+	//ng3p101/////
+	//ng3p102/////
+	//ng3p103/////
+	//ng3p104/////
+	//ng3p105/////
+	//ng3p106/////
+	//ng3p107/////
+	//ng3p108/////
+
+	//ACHIEVEMENT ROW 24
+}
+
+function setR25Tooltip(){
+	// Row 25 (ng3p11) (0/8)
+	//ng3p111/////
+	//ng3p112/////
+	//ng3p113/////
+	//ng3p114/////
+	//ng3p115/////
+	//ng3p116/////
+	//ng3p117/////
+	//ng3p118/////
+
+	//ACHIEVEMENT ROW 25
+}
+
 function setPreNGP3AchievementTooltip(){
 	setR1Tooltip()
 	setR2Tooltip()
@@ -518,7 +546,7 @@ function setPreNGP3AchievementTooltip(){
 	setR14Tooltip()
 }
 
-function setPreNGP3p1AchievementTooltip(){
+function setNGP3AchievementTooltip(){
 	// ng+3 achievements
 	setBMTooltip()
 	setQSRTooltip()
@@ -530,14 +558,18 @@ function setPreNGP3p1AchievementTooltip(){
 	setR20Tooltip()
 	setR21Tooltip()
 	setR22Tooltip()
+
+	// NG+3.1 achievements from this point on
+	if (!tmp.ngp3l) setNGP3p1AchievementTooltip()
 }
 
 function setNGP3p1AchievementTooltip(){
 	setR23Tooltip()
+	setR24Tooltip()
+	setR25Tooltip()
 }
 
 function setAchieveTooltip() { 
 	setPreNGP3AchievementTooltip()
-	if (tmp.ngp3) setPreNGP3p1AchievementTooltip()
-	if (!tmp.ngp3l) setNGP3p1AchievementTooltip()
+	if (tmp.ngp3) setNGP3AchievementTooltip()
 }

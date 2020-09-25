@@ -18,6 +18,7 @@ function updateNanoverseTab(){
 	document.getElementById("quarkAntienergyRate").textContent = shortenMoney(getQuarkAntienergyProduction())
 	document.getElementById("quarkChargeProductionCap").textContent = shortenMoney(getQuarkChargeProductionCap())
 	document.getElementById("rewards").textContent = getFullExpansion(rewards)
+	document.getElementById("nfRewardScaling").textContent = getGalaxyScaleName(tmp.nf.scale) + "Nanorewards"
 
 	for (var reward = 1; reward < 9; reward++) {
 		document.getElementById("nfReward" + reward).className = reward > rewards ? "nfRewardlocked" : "nfReward"
@@ -90,6 +91,42 @@ function getQuarkChargeProductionCap() {
 }
 
 var nanoRewards = {
+	scaling: {
+		max: 2,
+		0: {
+			start: 0,
+			mult(diff) {
+				return Decimal.pow(4.0, diff)
+			}
+		},
+		1: {
+			start: 16,
+			mult(diff) {
+				return Decimal.pow(2.0, diff * (diff + 3))
+			}
+		},
+		2: {
+			start: 125,
+			active() {
+				return !player.achievements.includes("ng3p82")
+			},
+			mult(diff) {
+				return Decimal.pow(2.0, diff * (diff + 1))
+			}
+		},
+		3: {
+			start: 150,
+			mult(diff) {
+				return Decimal.pow(1.1, diff * (diff + 1) * (diff + 2) / 3 + diff * (diff + 1) / 2 * 19)
+			}
+		},
+		4: {
+			start: 1e3,
+			mult(diff) {
+				return Decimal.pow(2, Math.pow(diff + 1, diff / 100 + 3))
+			}
+		}
+	},
 	effects: {
 		hatch_speed: function(x) {
 			return Decimal.pow(30, x)
@@ -201,6 +238,7 @@ function getNanofieldSpeedText(){
 	if (ghostified) text += "Ghostify Bonus: " + shorten(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)) + "x, "
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[6]) + "x, "
+	if (GDs.unlocked()) text += "Graviton Power: ^" + shorten(GDs.tmp.nf)
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
@@ -210,6 +248,7 @@ function getNanofieldSpeed() {
 	if (ghostified) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[6].times(x)
+	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.nf)
 	return x
 }
 
@@ -234,34 +273,20 @@ function getNanoRewardPowerEff() {
 	return x
 }
 
-function getNanoRewardReq(additional){
+function getNanoRewardReq(additional) {
 	return getNanoRewardReqFixed(additional - 1 + tmp.qu.nanofield.power)
 }
 
-function getActiveNanoScalings(){
-	ret = [true, true, true, true, true, true, true] 
-	//there are seven total scalings and they all start active
-	if (player.achievements.includes("ng3p82")) ret[2] = false 
-	return ret
+function isNanoScalingActive(x) {
+	if (!player.ghostify.ghostlyPhotons.unl) return false
+	return nanoRewards.scaling[x].active === undefined || nanoRewards.scaling[x].active()
 }
 
-function getNanoScalingsStart(){
-	ret = [0, 15, 125, 150, 160, 170, 180]
-	return ret
-}
-
-function getNanoRewardReqFixed(n){
+function getNanoRewardReqFixed(n) {
+	//6 total Nanoreward scalings
 	let x = new Decimal(50)
-	let a = getActiveNanoScalings()
-	let s = getNanoScalingsStart()
-	if (n >= s[0] && a[0]) x = x.times(Decimal.pow(4.0, (n - s[0])))
-	if (n >= s[1] && a[1]) x = x.times(Decimal.pow(2.0, (n - s[1]) * (n - s[1] + 3)))
-	if (n >= s[2] && a[2]) x = x.times(Decimal.pow(2.0, (n - s[2]) * (n - s[2] + 1)))
-	if (n >= s[3] && a[3]) x = x.times(Decimal.pow(1.1, (n - s[3]) * (n - s[3] + 1) * (n - s[3] + 2) / 3 + (n - s[3]) * (n - s[3] + 1) / 2 * 19))
-	if (n >= s[4] && a[4]) x = x.times(Decimal.pow(1.3, (n - s[4]) * (n - s[4] + 1) * (n - s[4] + 2) / 3 + (n - s[4]) * (n - s[4] + 1) / 2 * 39))
-	if (n >= s[5] && a[5]) x = x.times(Decimal.pow(1.6, (n - s[5]) * (n - s[5] + 1) * (n - s[5] + 2) / 3 + (n - s[5]) * (n - s[5] + 1) / 2 * 59))
-	if (n >= s[6] && a[6]) x = x.times(Decimal.pow(2.0, (n - s[6]) * (n - s[6] + 1) * (n - s[6] + 2) / 3 + (n - s[6]) * (n - s[6] + 1) / 2 * 79))
-	if (!player.ghostify.ghostlyPhotons.unl) return x
+	let d = nanoRewards.scaling
+	for (let s = 0; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && n >= d[s].start) x = x.times(d[s].mult(n - d[s].start))
 	return x.pow(tmp.ppti || 1)
 }
 

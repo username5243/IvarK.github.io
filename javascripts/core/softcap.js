@@ -26,7 +26,7 @@ var softcap_data = {
 		},
 		5: {
 			func: "pow",
-			start: 10e3,
+			start: 1e4,
 			pow: 0.5,
 			derv: false
 		}
@@ -41,7 +41,7 @@ var softcap_data = {
 		2: {
 			func: "pow",
 			start: 2e6,
-			pow: 0.70,
+			pow: 0.7,
 			derv: false
 		},
 		3: {
@@ -53,7 +53,7 @@ var softcap_data = {
 		4: {
 			func: "pow",
 			start: 4e6,
-			pow: 0.60,
+			pow: 0.6,
 			derv: false
 		},
 		5: {
@@ -414,10 +414,7 @@ var softcap_vars = {
 }
 
 var softcap_funcs = {
-	pow: function(x, start, pow, derv = false) {
-		if (typeof start == "function") start = start()
-		if (typeof pow == "function") pow = pow()
-		if (typeof derv == "function") derv = derv()
+	pow(x, start, pow, derv = false) {
 		if (x > start) {
 			x = Math.pow(x / start, pow)
 			if (derv) x = (x - 1) / pow + 1
@@ -426,10 +423,7 @@ var softcap_funcs = {
 		} 
 		return x
 	},
-	pow_decimal: function(x, start, pow, derv = false) {
-		if (typeof start == "function") start = start()
-		if (typeof pow == "function") pow = pow()
-		if (typeof derv == "function") derv = derv()
+	pow_decimal(x, start, pow, derv = false) {
 		if (Decimal.gt(x, start)) {
 			x = Decimal.div(x, start).pow(pow)
 			if (derv) x = x.sub(1).div(pow).add(1)
@@ -438,17 +432,11 @@ var softcap_funcs = {
 		}
 		return x
 	},
-	log: function(x, pow = 1, mul = 1, add = 0) {
-		if (typeof pow == "function") pow = pow()
-		if (typeof mul == "function") mul = mul()
-		if (typeof add == "function") add = add()
+	log(x, pow = 1, mul = 1, add = 0) {
 		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
 	},
 	logshift: function (x, shift, pow, add = 0){
-		if (typeof pow == "function") pow = pow()
-		if (typeof shift == "function") shift = shift()
-		if (typeof add == "function") add = add()
 		var x2 = Math.pow(Math.log10(x * shift), pow) + add
 		return Math.min(x, x2)
 	}
@@ -461,6 +449,10 @@ function do_softcap(x, data, num) {
 	if (func == "log" && data["start"]) if (x < data["start"]) return x
 	var vars = softcap_vars[func]
 	if (x + 0 != x) func += "_decimal"
+	/*
+	for (let i = 0; i < 3; i++) if (typeof vars[i] == "function") vars[i] = vars[i]()
+	This isn't needed for now...
+	*/
 	return softcap_funcs[func](x, data[vars[0]], data[vars[1]], data[vars[2]])
 }
 

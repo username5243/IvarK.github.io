@@ -763,7 +763,7 @@ function doNGP3NewPlayerStuff(){
         }
         player.ghostify = getGhostifyOnNewNGP3Data()
         tmp.bl=player.ghostify.bl
-        for (var g=1;g<=br.maxLimit;g++) tmp.bl.glyphs.push(0)
+        for (var g=1;g<=br.limits[maxBLLvl];g++) tmp.bl.glyphs.push(0)
         player.options.animations.ghostify = true
         player.aarexModifications.ghostifyConf = true
 }
@@ -1786,7 +1786,7 @@ function doNGp3Init2(){
                 if (player.ghostify.neutrinos.boosts == undefined|| !player.ghostify.times) player.ghostify.neutrinos.boosts = 0
                 if (player.ghostify.ghostlyPhotons.maxRed == undefined) player.ghostify.ghostlyPhotons.maxRed = 0
                 if (player.ghostify.wzb.unl) giveAchievement("Even Ghostlier than before")
-                for (var g = tmp.bl.glyphs.length + 1; g <= br.maxLimit; g++) tmp.bl.glyphs.push(0)
+                for (var g = tmp.bl.glyphs.length + 1; g <= br.limits[maxBLLvl]; g++) tmp.bl.glyphs.push(0)
                 if (!tmp.bl.usedEnchants.length) tmp.bl.usedEnchants=[]
                 if (player.ghostify.wzb.dPUse === undefined) {
                         player.ghostify.wzb.dPUse = 0
@@ -2247,6 +2247,7 @@ function onLoad(noOffline) {
         document.getElementById("metaMaxAllDiv").style.display=removeMaxMD?"none":""
         document.getElementById("edtabbtn").style.display=!player.masterystudies?"none":player.masterystudies.includes("d11")?"":"none"
         document.getElementById("ghostifyAnimBtn").style.display=ghostified?"inline-block":"none"
+		GDs.unlDisplay()
         var removeMaxTD=false
         var removeMaxMD=false
         if (player.achievements.includes("ngpp17")) {
@@ -2323,7 +2324,6 @@ END OF ONLOAD
 function setupNGP31Versions() {
 	if (player.aarexModifications.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
 		player.ghostify.hb = setupHiggsSave()
-		player.aarexModifications.newGame3PlusVersion = 2.3
 	} else {
 		tmp.hb = player.ghostify.hb
 
@@ -2331,6 +2331,17 @@ function setupNGP31Versions() {
 		delete tmp.hb.particlesUnlocked
 		delete tmp.hb.field
 	}
+	if (player.aarexModifications.newGame3PlusVersion < 3) {
+		player.ghostify.gds = GDs.setup()
+		player.pl = pl.setup()
+	} else {
+		tmp.hb = player.ghostify.hb
+
+		delete tmp.hb.higgsUnspent
+		delete tmp.hb.particlesUnlocked
+		delete tmp.hb.field
+	}
+	player.aarexModifications.newGame3PlusVersion = 3
 }
 
 function checkNGM(imported) {
@@ -2879,54 +2890,60 @@ function conToDeciMS(){
 }
 
 function conToDeciGhostify(){
-        if (player.ghostify) {
-                player.dilation.bestTPOverGhostifies = Decimal.max(player.dilation.bestTPOverGhostifies, player.dilation.bestTP)
-                player.meta.bestOverGhostifies = Decimal.max(player.meta.bestOverGhostifies, player.meta.bestOverQuantums)
-                tmp.qu.pairedChallenges.pc68best = new Decimal(tmp.qu.pairedChallenges.pc68best)
-                tmp.qu.bigRip.bestThisRun = new Decimal(tmp.qu.bigRip.bestThisRun)
-                tmp.qu.bigRip.totalAntimatter = new Decimal(tmp.qu.bigRip.totalAntimatter)
-                tmp.qu.bigRip.spaceShards = new Decimal(tmp.qu.bigRip.spaceShards)
-                tmp.qu.breakEternity.eternalMatter = new Decimal(tmp.qu.breakEternity.eternalMatter)
-                player.ghostify.times = nP(player.ghostify.times)
-                player.ghostify.ghostParticles = new Decimal(player.ghostify.ghostParticles)
-                for (var r=0;r<10;r++) player.ghostify.last10[r][1] = new Decimal(player.ghostify.last10[r][1])
-                player.ghostify.neutrinos.electron = new Decimal(player.ghostify.neutrinos.electron)
-                player.ghostify.neutrinos.mu = new Decimal(player.ghostify.neutrinos.mu)
-                player.ghostify.neutrinos.tau = new Decimal(player.ghostify.neutrinos.tau)
-                if (player.ghostify.automatorGhosts!==undefined) player.ghostify.automatorGhosts[15].a=new Decimal(player.ghostify.automatorGhosts[15].a)
-                if (player.ghostify.ghostlyPhotons) {
-                        player.ghostify.ghostlyPhotons.amount=new Decimal(player.ghostify.ghostlyPhotons.amount)
-                        player.ghostify.ghostlyPhotons.ghostlyRays=new Decimal(player.ghostify.ghostlyPhotons.ghostlyRays)
-                        player.ghostify.ghostlyPhotons.darkMatter=new Decimal(player.ghostify.ghostlyPhotons.darkMatter)
-                }
-                if (tmp.bl && player.ghostify.wzb) {
-                        tmp.bl.ticks=new Decimal(tmp.bl.ticks)
-                        tmp.bl.am=new Decimal(tmp.bl.am)
-                        tmp.bl.extractProgress=new Decimal(tmp.bl.extractProgress)
-                        tmp.bl.autoExtract=new Decimal(tmp.bl.autoExtract)
-                        for (var t=0;t<=br.maxLimit-1;t++) tmp.bl.glyphs[t]=new Decimal(tmp.bl.glyphs[t]||0)
-                        tmp.bl.battery=new Decimal(tmp.bl.battery)
-                        for (var g2=2;g2<=br.maxLimit;g2++) for (var g1=1;g1<g2;g1++) if (tmp.bl.enchants[g1*10+g2]!==undefined) tmp.bl.enchants[g1*10+g2]=new Decimal(tmp.bl.enchants[g1*10+g2])
+	if (player.ghostify) {
+		player.dilation.bestTPOverGhostifies = Decimal.max(player.dilation.bestTPOverGhostifies, player.dilation.bestTP)
+		player.meta.bestOverGhostifies = Decimal.max(player.meta.bestOverGhostifies, player.meta.bestOverQuantums)
+		tmp.qu.pairedChallenges.pc68best = new Decimal(tmp.qu.pairedChallenges.pc68best)
+		tmp.qu.bigRip.bestThisRun = new Decimal(tmp.qu.bigRip.bestThisRun)
+		tmp.qu.bigRip.totalAntimatter = new Decimal(tmp.qu.bigRip.totalAntimatter)
+		tmp.qu.bigRip.spaceShards = new Decimal(tmp.qu.bigRip.spaceShards)
+		tmp.qu.breakEternity.eternalMatter = new Decimal(tmp.qu.breakEternity.eternalMatter)
+		player.ghostify.times = nP(player.ghostify.times)
+		player.ghostify.ghostParticles = new Decimal(player.ghostify.ghostParticles)
+		for (var r=0;r<10;r++) player.ghostify.last10[r][1] = new Decimal(player.ghostify.last10[r][1])
+		player.ghostify.neutrinos.electron = new Decimal(player.ghostify.neutrinos.electron)
+		player.ghostify.neutrinos.mu = new Decimal(player.ghostify.neutrinos.mu)
+		player.ghostify.neutrinos.tau = new Decimal(player.ghostify.neutrinos.tau)
+		if (player.ghostify.automatorGhosts!==undefined) player.ghostify.automatorGhosts[15].a=new Decimal(player.ghostify.automatorGhosts[15].a)
+		if (player.ghostify.ghostlyPhotons) {
+			player.ghostify.ghostlyPhotons.amount=new Decimal(player.ghostify.ghostlyPhotons.amount)
+			player.ghostify.ghostlyPhotons.ghostlyRays=new Decimal(player.ghostify.ghostlyPhotons.ghostlyRays)
+			player.ghostify.ghostlyPhotons.darkMatter=new Decimal(player.ghostify.ghostlyPhotons.darkMatter)
+		}
+		if (tmp.bl && player.ghostify.wzb) {
+			tmp.bl.ticks=new Decimal(tmp.bl.ticks)
+			tmp.bl.am=new Decimal(tmp.bl.am)
+			tmp.bl.extractProgress=new Decimal(tmp.bl.extractProgress)
+			tmp.bl.autoExtract=new Decimal(tmp.bl.autoExtract)
+			for (var t=0;t<=br.limits[maxBLLvl]-1;t++) tmp.bl.glyphs[t]=new Decimal(tmp.bl.glyphs[t]||0)
+			tmp.bl.battery=new Decimal(tmp.bl.battery)
+			for (var g2=2;g2<=br.limits[maxBLLvl];g2++) for (var g1=1;g1<g2;g1++) if (tmp.bl.enchants[g1*10+g2]!==undefined) tmp.bl.enchants[g1*10+g2]=new Decimal(tmp.bl.enchants[g1*10+g2])
 
-                        player.ghostify.wzb.dP=new Decimal(player.ghostify.wzb.dP)
-                        player.ghostify.wzb.wQkProgress=new Decimal(player.ghostify.wzb.wQkProgress)
-                        player.ghostify.wzb.zNeProgress=new Decimal(player.ghostify.wzb.zNeProgress)
-                        player.ghostify.wzb.zNeReq=new Decimal(player.ghostify.wzb.zNeReq)
-                        player.ghostify.wzb.wpb=new Decimal(player.ghostify.wzb.wpb)
-                        player.ghostify.wzb.wnb=new Decimal(player.ghostify.wzb.wnb)
-                        player.ghostify.wzb.zb=new Decimal(player.ghostify.wzb.zb)
-                }
-        }
+			player.ghostify.wzb.dP=new Decimal(player.ghostify.wzb.dP)
+			player.ghostify.wzb.wQkProgress=new Decimal(player.ghostify.wzb.wQkProgress)
+			player.ghostify.wzb.zNeProgress=new Decimal(player.ghostify.wzb.zNeProgress)
+			player.ghostify.wzb.zNeReq=new Decimal(player.ghostify.wzb.zNeReq)
+			player.ghostify.wzb.wpb=new Decimal(player.ghostify.wzb.wpb)
+			player.ghostify.wzb.wnb=new Decimal(player.ghostify.wzb.wnb)
+			player.ghostify.wzb.zb=new Decimal(player.ghostify.wzb.zb)
+		}
+	}
+	GDs.compile()
+}
+
+function conToDeciPlanck() {
+	if (player.pl !== undefined) pl.compile()
 }
 
 function transformSaveToDecimal() {
-        conToDeciPreEter()
-        player.eternities = nP(player.eternities)
-        if (player.eternitiesBank !== undefined) player.eternitiesBank = nP(player.eternitiesBank)
-        conToDeciTD()
-        conToDeciLateEter()
-        conToDeciMS()
-        conToDeciGhostify()
+	conToDeciPreEter()
+	player.eternities = nP(player.eternities)
+	if (player.eternitiesBank !== undefined) player.eternitiesBank = nP(player.eternitiesBank)
+	conToDeciTD()
+	conToDeciLateEter()
+	conToDeciMS()
+	conToDeciGhostify()
+	conToDeciPlanck()
 }
 
 

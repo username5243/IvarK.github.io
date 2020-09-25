@@ -85,7 +85,7 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (over >= 1) {
 			if (over >= 3) {
 				div /= Math.pow(over, 6) / 729
-				scaling = 6
+				scaling = Math.max(scaling, 6)
 			}
 			if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
 			tmp.grd.speed = Math.pow(2, (tmp.grd.galaxies + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)

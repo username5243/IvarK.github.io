@@ -5,6 +5,7 @@ function updateLightEmpowermentReq() {
 function getLightEmpowermentBoost() {
 	let r = player.ghostify.ghostlyPhotons.enpowerments
 	if (hasBosonicUpg(13)) r *= tmp.blu[13]
+	if (hasBosonicUpg(51)) r *= tmp.blu[51].str
 	return r
 }
 
@@ -216,6 +217,7 @@ function getLightEmpowermentReq(le) {
 		}
 	}
 	if (player.achievements.includes("ng3p95")) x--
+	if (hasBosonicUpg(51)) x /= tmp.blu[51].req
 	tmp.leReqScale = scale
 	return Math.floor(x)
 }
