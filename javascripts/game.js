@@ -2639,7 +2639,7 @@ function onNotationChange() {
 		updateBreakEternity()
 		onNotationChangeNeutrinos()
 		updateBosonicStuffCosts()
-		if (!player.ghostify.ghostlyPhotons.unl) document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
+		if (!player.ghostify.ghostlyPhotons.unl) document.getElementById("gphUnl").textContent = "To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else if (!tmp.ngp3l) updateBosonUnlockDisplay()
 	}
@@ -2810,20 +2810,6 @@ document.getElementById("newsbtn").onclick = function(force) {
 	if (!player.options.newsHidden) scrollNextMessage()
 }
 
-function resetDimensions() {
-	var costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
-	var costMults = [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
-	if (inNC(10) || player.currentChallenge == "postc1") costs = [10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
-	if (inNC(10)) costMults = [1e3, 5e3, 1e4, 1.2e4, 1.8e4, 2.6e4, 3.2e4, 4.2e4]
-	for (var d=1;d<9;d++) {
-		var name=TIER_NAMES[d]
-		player[name+"Amount"] = new Decimal(0)
-		player[name+"Bought"] = 0
-		player[name+"Cost"] = new Decimal(costs[d-1])
-	}
-	player.eightPow = new Decimal(player.chall11Pow)
-}
-
 function getSacrificeBoost(){
 	return calcSacrificeBoost()
 }
@@ -2891,6 +2877,7 @@ function sacrifice(auto = false) {
 		if (!player.achievements.includes("r118")) resetDimensions();
 		player.money = new Decimal(100)
 	}
+	if (!alwaysCalcDimPowers) player.eightPow = player.eightPow.times(sacGain)
 	tmp.sacPow = tmp.sacPow.times(sacGain)
 }
 
@@ -3614,7 +3601,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	resetPSac()
 	resetTDs()
 	reduceDimCosts()
-	setInitialDimensionPower();
+	setInitialResetPower();
 	doDefaultTickspeedReduction()
 	checkSecondSetOnCrunchAchievements()
 	updateAutobuyers();
@@ -3908,7 +3895,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	resetPSac()
 	resetTDs()
 	reduceDimCosts()
-	setInitialDimensionPower()
+	setInitialResetPower()
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
@@ -4323,7 +4310,7 @@ function startEternityChallenge(n) {
 	resetPSac()
 	resetTDs()
 	reduceDimCosts()
-	setInitialDimensionPower()
+	setInitialResetPower()
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
@@ -4631,7 +4618,10 @@ function doNGP3UnlockStuff(){
 	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (player.money.gte(Decimal.pow(10, 6e9)) && tmp.qu.bigRip.active && !player.ghostify.ghostlyPhotons.unl) doPhotonsUnlockStuff()
 	if (canUnlockBosonicLab() && !player.ghostify.wzb.unl) doBosonsUnlockStuff()
-	unlockHiggs()
+	if (!tmp.ngp3l) {
+		unlockHiggs()
+		GDs.unl()
+	}
 }
 
 function updateResetTierButtons(){

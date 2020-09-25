@@ -189,7 +189,7 @@ const allAchievements = {
   ng3p96 : "Not-so-very-challenging",
   ng3p97 : "The Ghostliest Side",
   ng3p98 : "Meta-Quintillion",
-  ng3p101 : "ng3p101",
+  ng3p101 : "The Gravitational Well",
   ng3p102 : "ng3p102",
   ng3p103 : "ng3p103",
   ng3p104 : "ng3p104",

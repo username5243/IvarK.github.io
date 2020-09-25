@@ -1,4 +1,4 @@
-function setR1Tooltip(){
+function setR1Tooltip() {
 	// Row 1 (1/8)
 	//r11/////
 	let alot = document.getElementById("100 antimatter is a lot")
@@ -13,7 +13,7 @@ function setR1Tooltip(){
 	alot.setAttribute('ach-tooltip', "Buy a single Second Dimension." + (player.aarexModifications.ngmX > 3 ? " Reward: You gain 100x more Time Shards." : ""))
 }
 
-function setR2Tooltip(){
+function setR2Tooltip() {
 	// Row 2 (6/8)
 	let infinity = document.getElementById("To infinity!")
 	//r22/////
@@ -33,7 +33,7 @@ function setR2Tooltip(){
 	infinity.setAttribute('ach-tooltip', "Big Crunch for the first time. Reward: Start with 100 antimatter" + (player.galacticSacrifice ? " and always have at least 10x lower Dimension costs." : "."));
 }
 
-function setR3Tooltip(){
+function setR3Tooltip() {
 	// Row 3 (5/8)
 	let nerf = document.getElementById("I forgot to nerf that")
 	//r32/////
@@ -52,7 +52,7 @@ function setR3Tooltip(){
 	lot.setAttribute('ach-tooltip', "Get at least 10 Infinities." + (player.galacticSacrifice ? " Reward: " + (player.tickspeedBoosts == undefined ? "Start Infinities with Galaxy points based on your infinities (x^2/100)." : " Keep Galaxy upgrades on Infinity.") : ""));
 }
 
-function setR4Tooltip(){
+function setR4Tooltip() {
 	// Row 4 (6/8)
 	let cancer = document.getElementById("Spreading Cancer");
 	let sanic = document.getElementById("Supersanic")
@@ -72,7 +72,7 @@ function setR4Tooltip(){
 	anti.setAttribute('ach-tooltip', "Complete all the challenges. Reward: All Normal Dimensions are 10% stronger"+(player.galacticSacrifice && player.tickspeedBoosts==undefined?", and the tickspeed cost is also reduced based on your Dimension cost reduction." : "."))
 }
 
-function setR5Tooltip(){
+function setR5Tooltip() {
 	// Row 5 (4/8)
 	let limitBreak = document.getElementById("Limit Break")
 	//r52/////
@@ -90,7 +90,7 @@ function setR5Tooltip(){
 	limitBreak.setAttribute('ach-tooltip', "Break Infinity."+(player.galacticSacrifice&&player.tickspeedBoosts==undefined?" Reward: Gain a multiplier to IP based on galaxies.":""))
 }
 
-function setR6Tooltip(){
+function setR6Tooltip() {
 	// Row 6 (6/8)
 	//r61/////
 	let oh = document.getElementById("Oh hey, you're still here")
@@ -110,7 +110,7 @@ function setR6Tooltip(){
 	begin.setAttribute('ach-tooltip', "Begin generation of infinity power." + (player.aarexModifications.ngmX >= 4 ? " Reward: Each galaxy upgrade boosts g32 by 1%." : ""))
 }
 
-function setR7Tooltip(){
+function setR7Tooltip() {
 	// Row 7 (5/8)
 	let not = document.getElementById("ERROR 909: Dimension not found")
 	let cant = document.getElementById("Can't hold all these infinities")
@@ -129,7 +129,7 @@ function setR7Tooltip(){
 	tables.setAttribute('ach-tooltip', "Get 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc. Reward: Each dimension gains a boost proportional to their tier (8th dimension gets 8"+(player.galacticSacrifice?"0":"")+"%, 7th gets 7"+(player.galacticSacrifice?"0":"")+"%, etc.)")
 }
 
-function setR8Tooltip(){
+function setR8Tooltip() {
 	// Row 8 (5/8)
 	let hevipelledidnothing = document.getElementById("Hevipelle did nothing wrong")
 	//r82/////
@@ -148,7 +148,7 @@ function setR8Tooltip(){
 	hevipelledidnothing.setAttribute('ach-tooltip', "Beat Infinity Challenge " + (player.galacticSacrifice ? (player.tickspeedBoosts != undefined ? 13 : 7 ) : 5) + " in 10 seconds or less" + (player.galacticSacrifice == undefined ? "" : " Reward: g13's effect is more powerful when outside of Eternity Challenges") + ".")
 }
 
-function setR9Tooltip(){
+function setR9Tooltip() {
 	// Row 9 (7/8)
 	let speed = document.getElementById("Ludicrous Speed")
 	let speed2 = document.getElementById("I brake for nobody")
@@ -169,7 +169,7 @@ function setR9Tooltip(){
 	isthissafe.setAttribute('ach-tooltip', "Gain Infinite replicanti in 30 minutes. Reward: Infinity doesn't reset your replicanti amount" + (player.tickspeedBoosts != undefined ? ", each replicanti galaxy multiplies GP gain by your Eighth Dimensions, and multiply IP by the squared amount of Eighth Dimensions if you have more than 5,000" : "") + ".")
 }
 
-function setR10Tooltip(){
+function setR10Tooltip() {
 	// Row 10 (6/8)
 	let costco = document.getElementById("Costco sells dimboosts now")
 	let mile = document.getElementById("This mile took an Eternity")
@@ -189,7 +189,7 @@ function setR10Tooltip(){
 	nine.setAttribute('ach-tooltip', "Eternity with exactly 9 replicanti." + (player.boughtDims ? " Reward: The replicanti multiplier to ID is 9% stronger (after time studies)." : ""))
 }
 
-function setR11Tooltip(){
+function setR11Tooltip() {
 	// Row 11 (3/8)
 	let dawg = document.getElementById("Yo dawg, I heard you liked infinities...")
 	//r112/////
@@ -206,7 +206,7 @@ function setR11Tooltip(){
 	nobodygottime.setAttribute('ach-tooltip', "Eternity while only buying 8th Normal Dimensions. " + (player.galacticSacrifice == undefined ? "" : "Reward: Boost g13 based on your Dimension Boosts and the square root of g13's effect."))
 }
 
-function setR12Tooltip(){
+function setR12Tooltip() {
 	// Row 12 (7/8)
 	let infiniteIP = document.getElementById("Can you get infinite IP?")
 	//r122/////
@@ -227,7 +227,7 @@ function setR12Tooltip(){
 	minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus replicanti galaxies than normal galaxies. Reward: Replicanti galaxies divide your replicanti by "+shortenMoney(Number.MAX_VALUE)+" instead of resetting them to 1.")
 }
 
-function setR13Tooltip(){
+function setR13Tooltip() {
 	// Row 13 (5/8)
 	//r131/////
 	//r132/////
@@ -253,7 +253,7 @@ function setR13Tooltip(){
 	thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e20000'))+" IP without any time studies while dilated."+(thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
 }
 
-function setR13p5Tooltip(){
+function setR13p5Tooltip() {
 	// Row 13.5 (NGUD) (3/6)
 	//ngud11/////
 	let stillamil = document.getElementById("1 million is still a lot")
@@ -268,7 +268,7 @@ function setR13p5Tooltip(){
 	ridNGud.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e20000"))+" IP without any time studies or dilation upgrades while dilated.")
 }
 
-function setR14Tooltip(){
+function setR14Tooltip() {
 	// Row 14 (4/8)
 	//ngpp11/////
 	//ngpp12/////
@@ -291,7 +291,7 @@ function setR14Tooltip(){
 	harmony.setAttribute('ach-tooltip', player.meta?"Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger.":"Get the same amount (at least 300) of normal, replicanti, and free galaxies.")
 }
 
-function setR15Tooltip(){
+function setR15Tooltip() {
 	// Row 15 (ng3p1) (5/8)
 	let notenough = document.getElementById("I don't have enough fuel!")
 	//ng3p12/////
@@ -310,7 +310,7 @@ function setR15Tooltip(){
 	winner.setAttribute('ach-tooltip', "Quantum in under 30 seconds." + (tmp.ngp3l ? "" : " Reward: Your EP multiplies Quark gain."))
 }
 
-function setR16Tooltip(){
+function setR16Tooltip() {
 	// Row 16 (ng3p2) (5/8)
 	let special = document.getElementById("Special Relativity")
 	let squared = document.getElementById("We are not going squared.")
@@ -329,7 +329,7 @@ function setR16Tooltip(){
 	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2." + (tmp.ngp3l ? "" : " Reward: The Eternity Points boost to Quark gain is 1% stronger."))
 }
 
-function setQSRTooltip(){
+function setQSRTooltip() {
 	// Quantum Speedruns (3/28)
 	let tfms = document.getElementById("speedrunMilestone18")
 	let tms = document.getElementById("speedrunMilestone19")
@@ -341,7 +341,7 @@ function setQSRTooltip(){
 	tfms2.setAttribute('ach-tooltip', "Reward: Start with " + shortenCosts(1e100) + " dilated time, and dilated time only resets on Quantum.")
 }
 
-function setR17Tooltip(){
+function setR17Tooltip() {
 	// Row 17 (ng3p3) (6/8)
 	let internal = document.getElementById("ERROR 500: INTERNAL DIMENSION ERROR")
 	let truth = document.getElementById("The truth of anti-challenged")
@@ -361,7 +361,7 @@ function setR17Tooltip(){
 	noparadox.setAttribute('ach-tooltip', "Quantum without any dilation upgrades." + (tmp.ngp3l ? "" : " Reward: The sum of your best Quantum Challenge times boosts Quark gain."))
 }
 
-function setR18Tooltip(){
+function setR18Tooltip() {
 	// Row 18 (ng3p4) (7/8)
 	let notrelative = document.getElementById("Time is not relative")
 	let error404 = document.getElementById("ERROR 404: DIMENSIONS NOT FOUND")
@@ -382,7 +382,7 @@ function setR18Tooltip(){
 	dying.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(10, 2.75e5)) + " IP while dilated, in PC6+8, and without having time studies." + (tmp.ngp3l ? "" : " Reward: Branches are faster based on your Meta-Dimension Boosts."))
 }
 
-function setR19Tooltip(){
+function setR19Tooltip() {
 	// Row 19 (ng3p5) (5/8)
 	//ng3p51/////
 	//ng3p52/////
@@ -401,7 +401,7 @@ function setR19Tooltip(){
 	soLife.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 3.5e5)) + " IP in Big Rip while dilated, with no EP multiplier upgrades and time studies." + (tmp.ngp3l ? "" : " Reward: Square the Ghost Particle gain, with a hardcap at " + shortenCosts(1e10) + "x, and the hardcap is further lowered if you have more than " + shortenCosts(1e60) + " Ghost Particles."))
 }
 
-function setR20Tooltip(){
+function setR20Tooltip() {
 	// Row 20 (ng3p6) (7/8)
 	let keeheehee = document.getElementById("Kee-hee-hee!")
 	let finite = document.getElementById("Finite Time")
@@ -431,7 +431,7 @@ function setR20Tooltip(){
 	keeheehee.setAttribute('ach-tooltip', "Become a ghost. Reward: Multiply Eternities gained by 100x (weakens as you have more), all quantum mechanic unlocks only require Time Theorems, assignation options are kept permanently, Nanofield is 3x faster until you reach 16 rewards, " + (tmp.ngp3l ? "" : " get all achievements prior to Paired Challenges, ") + "and start with 1 Eighth Time Dimension in Big Rips.")
 }
 
-function setBMTooltip(){
+function setBMTooltip() {
 	// Brave Milestones (3/16)
 	let bm1 = document.getElementById("braveMilestone1")
 	let bm10 = document.getElementById("braveMilestone10")
@@ -443,7 +443,7 @@ function setBMTooltip(){
 	bm14.setAttribute('ach-tooltip', "Reward: Start Ghostifies with " + shortenCosts(1e25) + " Quark Spins and Branches are faster based on spins (at least 10x).")
 }
 
-function setR21Tooltip(){
+function setR21Tooltip() {
 	// Row 21 (ng3p7) (5/8)
 	//ng3p71/////
 	let uc = document.getElementById("Underchallenged")
@@ -462,7 +462,7 @@ function setR21Tooltip(){
 	arent.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1.8e6)) + " IP while dilated and Big Ripped and without having studies, EP mult upgrades, Tree Upgrades, and Break Eternity within this Ghostify." + (tmp.ngp3l ? "" : " Reward: Your 8th Tree Upgrade's level speeds up Nanofield."))
 }
 
-function setR22Tooltip(){
+function setR22Tooltip() {
 	// Row 22 (ng3p8) (7/8)
 	let ghostierthanbefore = document.getElementById("Even Ghostlier than before")
 	let oc = document.getElementById("Overchallenged")
@@ -483,7 +483,7 @@ function setR22Tooltip(){
 	isnotenough.setAttribute('ach-tooltip', "Complete a Paired Challenge with Quantum Challenges 6 and 8 combinations." + (tmp.ngp3l ? "" : " Reward: Remove the hardcap reduction of 'And so your life?'."))
 }
 
-function setR23Tooltip(){
+function setR23Tooltip() {
 	// Row 23 (ng3p9) (3/8)
 	//ng3p91/////
 	//ng3p92/////
@@ -497,10 +497,10 @@ function setR23Tooltip(){
 	//ACHIEVEMENT ROW 23
 	ghostliest.setAttribute('ach-tooltip', "Get " + shorten(Math.pow(Number.MAX_VALUE, 1/4)) + " Ghostifies. Reward: Ghostifies boost the gain of Ghost Particles at a reduced rate.")
 	metae18.setAttribute('ach-tooltip', "Get " + shortenCosts(Decimal.pow(10, 1e18)) + " antimatter. Reward: Distant Antimatter Galaxies scaling is 10% weaker and Higgs Bosons produce Bosonic Antimatter at a linear rate.")
-	aretheseanother.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 66666)) + " Quarks. Reward: Gain 500x more Quarks and Ghost Particles.")
+	aretheseanother.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 55555)) + " Quarks. Reward: Gain 500x more Quarks and Ghost Particles.")
 }
 
-function setR24Tooltip(){
+function setR24Tooltip() {
 	// Row 24 (ng3p10) (0/8)
 	//ng3p101/////
 	//ng3p102/////
@@ -514,7 +514,7 @@ function setR24Tooltip(){
 	//ACHIEVEMENT ROW 24
 }
 
-function setR25Tooltip(){
+function setR25Tooltip() {
 	// Row 25 (ng3p11) (0/8)
 	//ng3p111/////
 	//ng3p112/////
@@ -528,7 +528,7 @@ function setR25Tooltip(){
 	//ACHIEVEMENT ROW 25
 }
 
-function setPreNGP3AchievementTooltip(){
+function setPreNGP3AchievementTooltip() {
 	setR1Tooltip()
 	setR2Tooltip()
 	setR3Tooltip()
@@ -546,7 +546,7 @@ function setPreNGP3AchievementTooltip(){
 	setR14Tooltip()
 }
 
-function setNGP3AchievementTooltip(){
+function setNGP3AchievementTooltip() {
 	// ng+3 achievements
 	setBMTooltip()
 	setQSRTooltip()
@@ -563,7 +563,7 @@ function setNGP3AchievementTooltip(){
 	if (!tmp.ngp3l) setNGP3p1AchievementTooltip()
 }
 
-function setNGP3p1AchievementTooltip(){
+function setNGP3p1AchievementTooltip() {
 	setR23Tooltip()
 	setR24Tooltip()
 	setR25Tooltip()

@@ -34,17 +34,7 @@ function softReset(bulk, tier=1) {
 		player.dbPower = getDimensionBoostPower()
 		return
 	}
-	var costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
-	var costMults = [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
-	if (inNC(10) || player.currentChallenge == "postc1") costs = [10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
-	if (inNC(10)) costMults = [1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
-	for (var d = 1; d < 9; d++) {
-		var name = TIER_NAMES[d]
-		player[name + "Amount"] = new Decimal(0)
-		player[name + "Bought"] = 0
-		player[name + "Cost"] = new Decimal(costs[d - 1])
-		player.costMultipliers[d - 1] = new Decimal(costMults[d - 1])
-	}
+	resetDimensions()
 	player.totalBoughtDims = resetTotalBought()
 	player.tickspeed = new Decimal(player.aarexModifications.newGameExpVersion ? 500 : 1000)
 	player.tickSpeedCost = new Decimal(1e3)
@@ -66,7 +56,7 @@ function softReset(bulk, tier=1) {
 		player.eightAmount = new Decimal(1);
 		player.eightBought = 1;
 	}
-	setInitialDimensionPower();
+	setInitialResetPower();
 
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
@@ -100,14 +90,14 @@ function setInitialMoney() {
 	player.money = new Decimal(x)
 }
 
-function setInitialDimensionPower() {
+function setInitialResetPower() {
 	var dimensionBoostPower = getDimensionBoostPower()
 	if (tmp.ngp3 && getEternitied() >= 1e9 && player.dilation.upgrades.includes("ngpp6")) player.dbPower = dimensionBoostPower
 
 	var tickspeedPower = player.totalTickGained
 	if (player.infinityUpgradesRespecced!=undefined) tickspeedPower += player.infinityUpgradesRespecced[1] * 10
 	player.tickspeed = Decimal.pow(getTickSpeedMultiplier(), tickspeedPower).times(player.aarexModifications.newGameExpVersion ? 500 : 1e3)
-	
+
 	var ic3Power = player.totalTickGained * getECReward(14)
 	if (player.tickspeedBoosts != undefined && player.currentChallenge != "postc5") {
 		let mult = 30

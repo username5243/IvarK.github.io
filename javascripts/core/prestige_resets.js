@@ -404,30 +404,7 @@ function completelyResetInfinityDimensions(){
 }
 
 function completelyResetNormalDimensions(){
-	player.firstCost = new Decimal(10)
-	player.secondCost = new Decimal(100)
-	player.thirdCost = new Decimal(10000)
-	player.fourthCost = new Decimal(1000000)
-	player.fifthCost = new Decimal(1e9)
-	player.sixthCost = new Decimal(1e13)
-	player.seventhCost = new Decimal(1e18)
-	player.eightCost = new Decimal(1e24)
-	player.firstAmount = new Decimal(0)
-	player.secondAmount = new Decimal(0)
-	player.thirdAmount = new Decimal(0)
-	player.fourthAmount = new Decimal(0)
-	player.firstBought = 0
-	player.secondBought = 0
-	player.thirdBought = 0
-	player.fourthBought = 0
-	player.fifthAmount = new Decimal(0)
-	player.sixthAmount = new Decimal(0)
-	player.seventhAmount = new Decimal(0)
-	player.eightAmount = new Decimal(0)
-	player.fifthBought = 0
-	player.sixthBought = 0
-	player.seventhBought = 0
-	player.eightBought = 0
+	resetDimensions()
 }
 
 function checkOnCrunchAchievements(){
@@ -877,7 +854,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 
 function doPreInfinityGhostifyResetStuff(implode){
 	setInitialMoney()
-	setInitialDimensionPower()
+	setInitialResetPower()
 	GPminpeak = new Decimal(0)
 	if (implode) showTab("dimensions")
 	document.getElementById("tickSpeed").style.visibility = "hidden"

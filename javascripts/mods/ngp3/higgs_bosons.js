@@ -8,7 +8,6 @@ function setupHiggsSave() {
 }
 
 function unlockHiggs() {
-	if (tmp.ngp3l) return //higgs isnt a thing in legacy mode
 	if (player.ghostify.hb.unl) return
 	if (!player.ghostify.wzb.unl) return
 	if (!canUnlockHiggs()) return
@@ -29,8 +28,10 @@ function updateHiggsUnlocks() {
 
 function updateBosonUnlockDisplay() {
 	let txt = ""
-	if (!player.ghostify.hb.unl) txt = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
-	else if (!GDs.unlocked()) txt = "To unlock the next type of Dimensions (Gravity Dimensions), which contains Gravitons, you need to get " + GDs.reqText() + " first."
+	if (!tmp.ngp3l) {
+		if (!player.ghostify.hb.unl) txt = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
+		else if (!GDs.unlocked()) txt = "To unlock the next type of Dimensions (Gravity Dimensions), which contains Gravitons, you need to get " + GDs.reqText() + " first."
+	}
 
 	document.getElementById("nextParticle").textContent = txt
 }

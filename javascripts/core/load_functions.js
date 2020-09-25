@@ -918,12 +918,7 @@ function doNGP2v2tov2302(){
                 if (metaAchCheck||noD9AchCheck||metaBoostCheck) giveAchievement("I'm so meta")
                 player.galaxyMaxBulk = false
         }
-        if (player.aarexModifications.newGamePlusPlusVersion < 2.302){
-                for (let i = 1; i <= 8; i++){
-                        delete player[TIER_NAMES[i]+"Pow"]
-                }
-                player.aarexModifications.newGamePlusPlusVersion = 2.302
-        }
+        if (player.aarexModifications.newGamePlusPlusVersion < 2.303) player.aarexModifications.newGamePlusPlusVersion = 2.303
 }
 
 function doQuantumRestore(){
@@ -2057,10 +2052,7 @@ function updateNGp3DisplayStuff(){
         updateGPHUnlocks()
         updateBLUnlocks()
         updateBosonicStuffCosts()
-        if (!tmp.ngp3l) {
-                document.getElementById("nextParticle").textContent = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
-                updateHiggsUnlocks()
-        }
+        updateHiggsUnlocks()
 }
 
 function setSomeQuantumAutomationDisplay(){
@@ -2655,27 +2647,33 @@ I guess we shoudln't but ew its laggy, maybe a variable that says if we have don
 */
 
 function conToDeciPreInf(){
-        player.money = new Decimal(player.money)
-        player.tickSpeedCost = new Decimal(player.tickSpeedCost)
-        player.tickspeed = new Decimal(player.tickspeed)
-        player.firstAmount = new Decimal(player.firstAmount)
-        player.secondAmount = new Decimal(player.secondAmount)
-        player.thirdAmount = new Decimal(player.thirdAmount)
-        player.fourthAmount = new Decimal(player.fourthAmount)
-        player.fifthAmount = new Decimal(player.fifthAmount)
-        player.sixthAmount = new Decimal(player.sixthAmount)
-        player.seventhAmount = new Decimal(player.seventhAmount)
-        player.eightAmount = new Decimal(player.eightAmount)
-        player.firstCost = new Decimal(player.firstCost)
-        player.secondCost = new Decimal(player.secondCost)
-        player.thirdCost = new Decimal(player.thirdCost)
-        player.fourthCost = new Decimal(player.fourthCost)
-        player.fifthCost = new Decimal(player.fifthCost)
-        player.sixthCost = new Decimal(player.sixthCost)
-        player.seventhCost = new Decimal(player.seventhCost)
-        player.eightCost = new Decimal(player.eightCost)
-        player.sacrificed = new Decimal(player.sacrificed)
-        player.totalmoney = new Decimal(player.totalmoney)
+	player.money = new Decimal(player.money)
+	player.tickSpeedCost = new Decimal(player.tickSpeedCost)
+	player.tickspeed = new Decimal(player.tickspeed)
+	player.firstAmount = new Decimal(player.firstAmount)
+	player.secondAmount = new Decimal(player.secondAmount)
+	player.thirdAmount = new Decimal(player.thirdAmount)
+	player.fourthAmount = new Decimal(player.fourthAmount)
+	player.fifthAmount = new Decimal(player.fifthAmount)
+	player.sixthAmount = new Decimal(player.sixthAmount)
+	player.seventhAmount = new Decimal(player.seventhAmount)
+	player.eightAmount = new Decimal(player.eightAmount)
+	player.firstCost = new Decimal(player.firstCost)
+	player.secondCost = new Decimal(player.secondCost)
+	player.thirdCost = new Decimal(player.thirdCost)
+	player.fourthCost = new Decimal(player.fourthCost)
+	player.fifthCost = new Decimal(player.fifthCost)
+	player.sixthCost = new Decimal(player.sixthCost)
+	player.seventhCost = new Decimal(player.seventhCost)
+	player.eightCost = new Decimal(player.eightCost)
+	player.sacrificed = new Decimal(player.sacrificed)
+	player.totalmoney = new Decimal(player.totalmoney)
+
+	//Don't remove vanilla compatibility, please?
+	for (let i = 1; i <= 8; i++) {
+		if (alwaysCalcDimPowers) delete player[TIER_NAMES[i] + "Pow"]
+		else player[TIER_NAMES[i] + "Pow"] = getStartingNDMult(i)
+	}
 }
 
 function conToDeciTD(){

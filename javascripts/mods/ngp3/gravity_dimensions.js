@@ -54,12 +54,13 @@ let GDs = {
 		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(20) + " Higgs Bosons"
 	},
 	unl() {
-		if (!this.save.unl) return
+		if (this.unlocked()) return
 		if (!this.can()) return
 
 		this.save.unl = true
 		$.notify("Congratulations! You have unlocked Gravity Dimensions!", "success")
-		giveAchievement("ng3p101")
+		giveAchievement("The Gravitational Well")
+		updateBosonUnlockDisplay()
 		this.unlDisplay()
 	},
 	unlDisplay() {

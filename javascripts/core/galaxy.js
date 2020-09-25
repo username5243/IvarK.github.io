@@ -19,7 +19,7 @@ function galaxyReset(bulk) {
 		player.eightBought = 1;
 		player.resets = 4;
 	}
-	setInitialDimensionPower();
+	setInitialResetPower();
 	
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
@@ -101,7 +101,8 @@ function getGalaxyRequirement(offset = 0, display) {
 			if (ghostified && player.ghostify.neutrinos.boosts > 5) speed /= tmp.nb[6]
 			if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 			if (player.achievements.includes("ng3p98")) speed *= 0.9
-			amount += getDistantAdd(tmp.grd.galaxies-distantStart+1)*speed
+			if (player.achievements.includes("ng3p101")) speed *= 0.5
+			amount += getDistantAdd(tmp.grd.galaxies - distantStart + 1) * speed
 			if (tmp.grd.galaxies >= distantStart * 2.5 && player.galacticSacrifice != undefined) {
 				// 5 times worse scaling
 				amount += 4 * speed * getDistantAdd(tmp.grd.galaxies-distantStart * 2.5 + 1)
@@ -113,8 +114,8 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (tmp.grd.galaxies >= remoteStart && !tmp.be && !hasNU(6)) {
 			let speed2 = tmp.grd.speed
 			if (GUBought("rg7")) speed2 *= 0.9
-			if (GUBought("gb7")) speed2 /= 1+Math.log10(1+player.infinityPoints.max(1).log10())/100
-			if (GUBought("br7")) speed2 /= 1+Math.log10(1+player.eternityPoints.max(1).log10())/80
+			if (GUBought("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100
+			if (GUBought("br7")) speed2 /= 1 + Math.log10(1 + player.eternityPoints.max(1).log10()) / 80
 			amount *= Math.pow(1 + (GUBought("rg1") ? 1 : 2) / (player.aarexModifications.ngmX > 3 ? 10 : 1e3), (tmp.grd.galaxies - remoteStart + 1) * speed2)
 			scaling = Math.max(scaling, 3)
 		}

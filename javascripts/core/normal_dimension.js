@@ -1,3 +1,18 @@
+function resetDimensions() {
+	var costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
+	var costMults = [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
+	if (inNC(10) || player.currentChallenge == "postc1") costs = [10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
+	if (inNC(10)) costMults = [1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
+	for (var d = 1; d < 9; d++) {
+		var name = TIER_NAMES[d]
+		player[name + "Amount"] = new Decimal(0)
+		player[name + "Bought"] = 0
+		player[name + "Cost"] = new Decimal(costs[d - 1])
+		player.costMultipliers[d - 1] = new Decimal(costMults[d - 1])
+		if (!alwaysCalcDimPowers) player[name + "Pow"] = getStartingNDMult(i)
+	}
+}
+
 function getR84or73Mult(){
 	var mult = new Decimal(1)
 	if (player.achievements.includes("r84")) mult = player.money.pow(player.galacticSacrifice?0.0002:0.00004).plus(1);
@@ -96,18 +111,32 @@ function getPostBreakInfNDMult(){
 	return mult
 }
 
-function getStartingNDMult(tier){
+let alwaysCalcDimPowers = true
+function getStartingNDMult(tier) {
 	let mPerTen = getDimensionPowerMultiplier()
 	let mPerDB = getDimensionBoostPower()
 	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
 	let mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
-	return mptMult.times(dbMult)
+
+	let mult = mptMult.times(dbMult)
+	if (tier == 8) {
+		if (inNC(11)) mult = mult.times(player.chall11Pow)
+		else mult = mult.times(tmp.sacPow)
+	}
+	return mult
+}
+
+function increasePowerFromMPTD(dim, pow, times = 1) {
+	if (!alwaysCalcDimPowers) player[TIER_NAMES[dim] + "Pow"] = player[TIER_NAMES[dim] + "Pow"].times(Decimal.pow(pow || getDimensionPowerMultiplier(), times))
 }
 
 function getDimensionFinalMultiplier(tier) {
-	let mult = getStartingNDMult(tier)
-	if (tier == 8) mult = mult.times(getTotalSacrificeBoost())
-	
+	let mult = player[TIER_NAMES[tier] + "Pow"]
+	if (alwaysCalcDimPowers) {
+		mult = getStartingNDMult(tier)
+		if (tier == 8) mult = mult.times(tmp.sacPow)
+	} else if (tier == 1) console.log(mult)
+
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
@@ -364,7 +393,10 @@ function buyOneDimension(tier) {
 		else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
 		else player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
-		floatText("D" + tier, "x" + shortenMoney(getDimensionPowerMultiplier()))
+
+		let pow = getDimensionPowerMultiplier()
+		increasePowerFromMPTD(tier, pow)
+		floatText("D" + tier, "x" + shortenMoney(pow))
 	}
 	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
 	if (getAmount(8) == 99) giveAchievement("The 9th Dimension is a lie");
@@ -387,8 +419,10 @@ function buyManyDimension(tier, quick) {
 	else if (inNC(5) && player.tickspeedBoosts == undefined) multiplySameCosts(player[name + 'Cost'])
 	else player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
 	if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
+	let pow = getDimensionPowerMultiplier()
+	increasePowerFromMPTD(tier, pow)
 	if (!quick) {
-		floatText("D" + tier, "x" + shortenMoney(getDimensionPowerMultiplier()))
+		floatText("D" + tier, "x" + shortenMoney(pow))
 		onBuyDimension(tier)
 	}
 	reduceMatter(toBuy)
@@ -455,7 +489,10 @@ function buyBulkDimension(tier, bulk, auto) {
 		bought += toBuy
 		reduceMatter(toBuy * 10)
 	}
-	if (!auto) floatText("D" + tier, "x" + shortenMoney(Decimal.pow(getDimensionPowerMultiplier(), bought)))
+
+	let pow = getDimensionPowerMultiplier()
+	increasePowerFromMPTD(tier, pow, bought)
+	if (!auto) floatText("D" + tier, "x" + shortenMoney(Decimal.pow(pow, bought)))
 	onBuyDimension(tier)
 }
 
