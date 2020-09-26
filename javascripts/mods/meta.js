@@ -99,7 +99,12 @@ function getMetaBoostPower() {
 
 function getMetaDimensionDescription(tier) {
 	if (tier > Math.min(7, player.meta.resets + 3) - (inQC(4) ? 1 : 0)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
-	else return shortenDimensions(player.meta[tier].amount) + ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMetaDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
+	else {
+		let a = shortenDimensions(player.meta[tier].amount)
+		if (player.meta.bestOverGhostifies.log10() > 1e4) return a
+		let b = ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMetaDimensionRateOfChange(tier), 2, 2) + dimDescEnd
+		return a+b
+	}
 }
 
 function getMetaDimensionRateOfChange(tier) {

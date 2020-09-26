@@ -86,10 +86,10 @@ let GDs = {
 		document.getElementById("gvToBl").textContent = this.tmp.bl.toFixed(2)
 	},
 	can() {
-		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 20
+		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 25
 	},
 	reqText() {
-		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(20) + " Higgs Bosons"
+		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(25) + " Higgs Bosons"
 	},
 	unl() {
 		if (this.unlocked()) return
