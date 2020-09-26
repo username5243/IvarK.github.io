@@ -855,15 +855,4 @@ function toggleLEConf() {
 	document.getElementById("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (player.aarexModifications.leNoConf ? "FF" : "N")
 }
 
-//Anti-Preontius' Lair
-function getAntiPreonGhostWake() {
-	return 104
-}
-
-//v2.21: NG+3.1
-function getOldAgeRequirement() {
-	let year = new Date().getFullYear()
-	return Decimal.pow(10, 3 * 86400 * 365.2425 * year)
-}
-
 

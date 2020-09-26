@@ -447,10 +447,11 @@ function do_softcap(x, data, num) {
 	/*
 	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
 	*/
+	//note from pg: this will work now
 
-	var decimal = 0
+	var decimal = false
 	if (x + 0 != x) {
-		decimal = 1
+		decimal = true
 		if (x.lt(data["start"])) return x
 	} else if (x < data["start"]) return x
 

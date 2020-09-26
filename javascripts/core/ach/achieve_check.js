@@ -23,6 +23,12 @@ function bendTimeCheck(){
 	if (tmp.tsReduce < 0.001) giveAchievement("Do you even bend time bro?")
 }
 
+function getOldAgeRequirement() {
+	let sec = Math.floor(new Date().getTime() / 1000 * 3) / 3
+	sec += 1970 * 365.24 * 24 * 3600
+	return Decimal.pow(10, 3 * sec)
+}
+
 function checkMarathon(){
 	if (getDimensionProductionPerSecond(1).gt(player.money) && !player.achievements.includes("r44")) {
 		Marathon += player.options.updateRate/1000;

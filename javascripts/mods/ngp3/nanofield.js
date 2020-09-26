@@ -306,3 +306,7 @@ function updateNextPreonEnergyThreshold(){
 	tmp.qu.nanofield.power += toSkip
 	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
 }
+
+function getAntiPreonGhostWake() {
+	return 104
+}
