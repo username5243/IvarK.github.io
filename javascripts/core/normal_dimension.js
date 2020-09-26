@@ -118,7 +118,8 @@ let dCurrentC7 = [null, 0, 0, 0, 0,
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()
 	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
-	
+
+	let mptMult = new Decimal(1)
 	if (inNC(9) || player.currentChallenge === "postc1") {
 		base = Math.pow(10 / 0.30, Math.random()) * 0.30
 		total = Math.floor(player[TIER_NAMES[tier] + "Bought"] / 10)
@@ -133,7 +134,7 @@ function getStartingNDMult(tier) {
 		mptMult = dMultsC7[tier]
 	} else {
 		let mPerTen = getDimensionPowerMultiplier()
-		let mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
+		mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
 	}
 
 
