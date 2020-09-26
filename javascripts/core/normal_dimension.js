@@ -111,11 +111,31 @@ function getPostBreakInfNDMult(){
 }
 
 let alwaysCalcDimPowers = true
+let dMultsC7 = [null, new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
+	      new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
+let dCurrentC7 = [null, 0, 0, 0, 0
+		  0, 0, 0, 0]
 function getStartingNDMult(tier) {
-	let mPerTen = getDimensionPowerMultiplier()
 	let mPerDB = getDimensionBoostPower()
 	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
-	let mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
+	
+	if (inNC(9) || player.currentChallenge === "postc1") {
+		base = Math.pow(10 / 0.30, Math.random()) * 0.30
+		total = Math.floor(player[TIER_NAMES[tier] + "Bought"] / 10)
+		diff = total - dCurrentC7[tier]
+		if (diff < 0) {
+			dCurrentC7[tier] = 0
+			dMultsC7[tier] = new Decimal(1)
+			diff = total
+		}
+		dMultsC7[tier] = dMultsC7[tier].times(Decimal.pow(base, diff))
+		dCurrentC7[tier] = total
+		mptMult = dMultsC7[tier]
+	} else {
+		let mPerTen = getDimensionPowerMultiplier()
+		let mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
+	}
+
 
 	let mult = mptMult.times(dbMult)
 	if (tier == 8) {
@@ -278,7 +298,6 @@ function getMPTBase(focusOn) {
 	if (player.aarexModifications.newGameExpVersion) ret *= 10
 	if (player.aarexModifications.newGameMult) ret *= 2.1
 	if (player.infinityUpgrades.includes("dimMult")) ret *= infUpg12Pow()
-	if ((inNC(9) || player.currentChallenge === "postc1") && !focusOn) ret = Math.pow(10 / 0.30, Math.random()) * 0.30
 	if (player.achievements.includes("r58")) {
 		if (player.galacticSacrifice !== undefined) {
 			let exp = 1.0666
