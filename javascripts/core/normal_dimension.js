@@ -113,7 +113,7 @@ function getPostBreakInfNDMult(){
 let alwaysCalcDimPowers = true
 let dMultsC7 = [null, new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1),
 	      new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
-let dCurrentC7 = [null, 0, 0, 0, 0
+let dCurrentC7 = [null, 0, 0, 0, 0,
 		  0, 0, 0, 0]
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()

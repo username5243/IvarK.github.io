@@ -17,7 +17,7 @@ var leBoosts = {
 		//Boost #1
 		function() {
 			var le1exp = 0.75
-			else if (tmp.newNGP3E) {
+			if (tmp.newNGP3E) {
 				le1exp += 0.2
 				if (player.ghostify.ghostlyPhotons.unl) le1exp += .15
 				if (player.ghostify.wzb.unl) le1exp += .15

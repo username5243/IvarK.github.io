@@ -224,7 +224,7 @@ function updateColorPowers(log) {
 
 	//Blue
 	var bLog = log.b
-	else bLog = Math.sqrt(log.b + 1.5) - 1.5
+	bLog = Math.sqrt(log.b + 1.5) - 1.5
 
 	let softcapStartLog = 3
 	let softcapPower = 1
