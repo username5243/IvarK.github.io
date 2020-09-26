@@ -2655,12 +2655,6 @@ function conToDeciPreInf(){
 	player.eightCost = new Decimal(player.eightCost)
 	player.sacrificed = new Decimal(player.sacrificed)
 	player.totalmoney = new Decimal(player.totalmoney)
-
-	//Don't remove vanilla compatibility, please?
-	for (let i = 1; i <= 8; i++) {
-		if (alwaysCalcDimPowers) delete player[TIER_NAMES[i] + "Pow"]
-		else player[TIER_NAMES[i] + "Pow"] = getStartingNDMult(i)
-	}
 }
 
 function conToDeciTD(){
