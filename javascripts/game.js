@@ -2326,7 +2326,7 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngp: ["OFF", "ON", "NG++++"],
-	ngpp: ["OFF", "ON", "NG+++"/*, "NG+++ Legacy"*/], // creation of legacy is disabled, will be retired.
+	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"],
 	rs: ["NONE", "Eternity", "Infinity"],
@@ -4190,7 +4190,6 @@ var ecExpData = {
 		eterc10_ngmm: 2205,
 		eterc11_ngmm: 35000,
 		eterc12_ngmm: 17000,
-		eterc13_legacy: 38000000,
 	},
 	increases: {
 		eterc1: 200,
@@ -4218,8 +4217,6 @@ var ecExpData = {
 		eterc10_ngmm: 175,
 		eterc11_ngmm: 3250,
 		eterc12_ngmm: 1500,
-		eterc13_legacy: 1200000,
-		eterc14_legacy: 250000
 	}
 }
 function getECGoal(x) {
@@ -4229,10 +4226,6 @@ function getECGoal(x) {
 	if (player.galacticSacrifice != undefined) {
 		expInit = ecExpData.inits[x + "_ngmm"] || expInit
 		expIncrease = ecExpData.increases[x + "_ngmm"] || expIncrease
-	}
-	if (tmp.ngp3l) {
-		expInit = ecExpData.inits[x + "_legacy"] || expInit
-		expIncrease = ecExpData.increases[x + "_legacy"] || expIncrease
 	}
 	let exp = expInit + expIncrease * completions
 	if (x == "ec13" && !tmp.ngp3l) exp += 600000 * Math.max(completions - 2, 0) * (completions - 3, 0)
@@ -5084,9 +5077,9 @@ function treeOfDecayUpdating(diff){
 			var decayPower = getRDPower(shorthand)
 
 			var mult = Decimal.pow(2, decayPower)
-			var power = Decimal.div(getDecayLifetime(branch.quarks.div(mult)), decayRate)
-			var decayed = power.min(diff)
-			power = power.sub(decayed).times(decayRate)
+			var power = getDecayLifetime(branch.quarks.div(mult))
+			var decayed = power.div(decayRate).min(diff)
+			power = power.sub(decayed.times(decayRate))
 
 			var sProd = getQuarkSpinProduction(shorthand)
 			branch.quarks = power.gt(1) ? Decimal.pow(2, power - 1).times(mult) : power.times(mult)

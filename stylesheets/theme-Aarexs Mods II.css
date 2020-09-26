@@ -733,13 +733,21 @@ button, div.storebtn {
 }
 
 #gdtabbtn button {
-	background-color: #3f6fff !important;
-	color: #191919 !important
+	background-color: #0b298d !important;
+	color: #0f1529 !important
 }
 
 #gdtabbtn button:hover {
-	background-color: #6f93ff !important;
-	color: #191919 !important
+	background-color: #485faa !important;
+	color: #1d2951 !important
+}
+
+#gvPow, #gvEne, #gvEneMult {
+	color: #485faa !important
+}
+
+#gvRadioPow {
+	color: #5c8340 !important
 }
 
 @keyframes rg {

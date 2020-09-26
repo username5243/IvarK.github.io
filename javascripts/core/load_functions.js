@@ -442,12 +442,10 @@ function setAarexModIfUndefined(){
 }
 
 function doNGp3Init1(){
-        if (player.aarexModifications.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
-	tmp.ngp3=player.masterystudies!==undefined
-	tmp.ngp3l=player.aarexModifications.ngp3lV!==undefined
-	tmp.ngex=player.aarexModifications.ngexV!==undefined
-	tmp.newNGP3E=player.aarexModifications.newGameExpVersion!==undefined&&!tmp.ngp3l
-	setNonlegacyStuff()
+	if (player.aarexModifications.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
+	tmp.ngp3 = player.masterystudies !== undefined
+	tmp.ngex = player.aarexModifications.ngexV !== undefined
+	tmp.newNGP3E = tmp.ngp3 && player.aarexModifications.newGameExpVersion !== undefined
 
 	transformSaveToDecimal();
 	tmp.tickUpdate = true;
@@ -1314,16 +1312,12 @@ function doNGp3v21tov221(){
                 tmp.bl=player.ghostify.bl
         }
         if (player.aarexModifications.newGame3PlusVersion < 2.21) {
-                if (prompt("Welcome to the NG+3.1 update! You are receiving this message because this save has been made before the update. This update changes and rebalances NG+3 significantly. It is recommended to migrate your save as NG+3.1 is the better rebalanced experience, but if you don't want to start playing NG+3.1 on this save yet, type 'legacy' on the input box. You can proceed to migrate later on.") == "legacy") {
-                        alert("WARNING: There are some boosts that work the same as in NG+3.1, not in the Bosonic Update. Have any questions or suggestions about these changes? Give feedback in the Discord server!")
-                        player.aarexModifications.ngp3lV = 1
-                        tmp.ngp3l = true
-                }
+                alert("Welcome to the NG+3.1 update! You are receiving this message because this save has been made before the update. This update changes and rebalances NG+3 significantly. The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
                 var oldBRUpg20Bought = tmp.qu.bigRip.upgrades.pop()
                 if (oldBRUpg20Bought != 20) tmp.qu.bigRip.upgrades.push(oldBRUpg20Bought)
                 player.aarexModifications.newGame3PlusVersion = 2.21 // Keep that line forever due to NG+3.1 / NG+3L compatibility
         }
-        if (tmp.ngp3 && !tmp.ngp3l) setupNGP31Versions()
+        if (tmp.ngp3) setupNGP31Versions()
         if (player.aarexModifications.newGameMinusMinusVersion === undefined && !player.meta) {
                 if (player.exdilation == undefined && player.version == 13) player.version = 12
                 if (player.galacticSacrifice) {
@@ -1995,7 +1989,6 @@ function setTSDisplay(){
 }
 
 function updateNGp3DisplayStuff(){
-        displayNonlegacyStuff()
         for (var i=0;i<masteryStudies.timeStudies.length;i++) {
                 var t=masteryStudies.timeStudies[i]
                 var d=masteryStudies.timeStudyDescs[t]
@@ -2032,9 +2025,7 @@ function updateNGp3DisplayStuff(){
                 if (u%3==1) document.getElementById("neutrinoUpg"+u).parentElement.parentElement.style.display=u>player.ghostify.times+2?"none":""
                 else document.getElementById("neutrinoUpg"+u).style.display=u>player.ghostify.times+2?"none":""
         }
-        document.getElementById("neutrinoBoost3Effect").textContent = tmp.ngp3l ? "They increase the limit of 14th dilation upgrade from 3.00x to" : "They remove the limit of 14th dilation upgrade and then boost that upgrade by "
         document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
-        document.getElementById("lightBoost4Type").textContent=tmp.ngp3l?"preon":"total green power"
         updateBLUnlockDisplay()
         document.getElementById("bpc68").textContent=shortenMoney(tmp.qu.pairedChallenges.pc68best)
         document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
@@ -2069,17 +2060,13 @@ function setSomeQuantumAutomationDisplay(){
                 for (i=1;i<9;i++) document.getElementById("td"+i+'auto').textContent="Auto: O"+(player.autoEterOptions["td"+i]?"N":"FF")
         }
         document.getElementById('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
-        document.getElementById('versionMod').textContent = tmp.ngp3l ? "NG+3: Legacy" : "New Game Plus 3"
         document.getElementById('versionDesc').style.display = tmp.ngp3 ? "" : "none"
         document.getElementById('sacrificeAuto').style.display=speedrunMilestonesReached>24?"":"none"
         document.getElementById('toggleautoquantummode').style.display=(player.masterystudies?tmp.qu.reachedInfQK||player.achievements.includes("ng3p25"):false)?"":"none"
         var autoAssignUnl = tmp.ngp3 && (ghostified || tmp.qu.reachedInfQK)
-        document.getElementById('assignAll').style.display = !tmp.ngp3l || autoAssignUnl ? "" : "none"
         document.getElementById('autoAssign').style.display = autoAssignUnl ? "" : "none"
         document.getElementById('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
         document.getElementById('autoReset').style.display=player.achievements.includes("ng3p47")?"":"none"
-        document.getElementById('assortSettings').style.display = tmp.ngp3l ? "none" : ""
-        document.getElementById('ratioSettings').style.display = !tmp.ngp3l || autoAssignUnl ? "" : "none"
         document.getElementById('aftereternity').style.display=player.achievements.includes("ng3p52")?"":"none"
 }
 
@@ -2314,6 +2301,10 @@ END OF ONLOAD
 */
 
 function setupNGP31Versions() {
+	if (player.aarexModifications.ngp3lV) {
+		alert("The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
+		delete player.aarexModifications.ngp3lV
+	}
 	if (player.aarexModifications.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
 		player.ghostify.hb = setupHiggsSave()
 	} else {
@@ -2327,11 +2318,7 @@ function setupNGP31Versions() {
 		player.ghostify.gds = GDs.setup()
 		player.pl = pl.setup()
 	} else {
-		tmp.hb = player.ghostify.hb
-
-		delete tmp.hb.higgsUnspent
-		delete tmp.hb.particlesUnlocked
-		delete tmp.hb.field
+		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
 	}
 	player.aarexModifications.newGame3PlusVersion = 3
 }
@@ -2883,7 +2870,7 @@ function conToDeciMS(){
                         tmp.qu.tod.b.quarks = new Decimal(tmp.qu.tod.b.quarks)
                         tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
                 }
-                if (!tmp.ngp3l && tmp.qu) tmp.qu.quarkEnergy = new Decimal(tmp.qu.quarkEnergy)
+                if (tmp.qu) tmp.qu.quarkEnergy = new Decimal(tmp.qu.quarkEnergy)
         }
 }
 

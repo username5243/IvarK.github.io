@@ -624,7 +624,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
 		document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
 	}
-	setInitialDimensionPower()
+	setInitialResetPower()
 	resetUP()
 	if (oheHeadstart) player.replicanti.amount = new Decimal(1)
 	player.replicanti.galaxies = 0

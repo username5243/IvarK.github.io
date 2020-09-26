@@ -33,7 +33,7 @@ function updateTreeOfDecayTab(){
 		document.getElementById(color + "UnstableGain").textContent = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
 		document.getElementById(color + "QuarkSpin").textContent = shortenMoney(branch.spin)
 		document.getElementById(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
-		document.getElementById(color + "QuarksDecayRate").textContent = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10,rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
+		document.getElementById(color + "QuarksDecayRate").textContent = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
 		document.getElementById(color + "QuarksDecayTime").textContent = timeDisplayShort(Decimal.div(10, rate).times(getDecayLifetime(branch.quarks.div(linear))))
 		let ret = getQuarkSpinProduction(shorthand)
 		document.getElementById(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(ret) + "/s"
@@ -158,7 +158,7 @@ function getBranchSpeedText(){
 	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2]) + "x, "
 	if (!tmp.ngp3l) if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
-	if (GDs.unlocked()) text += "Graviton Power: ^" + shorten(GDs.tmp.tod)
+	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
 	if (todspeed) if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length - 2)
@@ -195,8 +195,8 @@ function getDecayRate(branch) {
 }
 
 function getDecayLifetime(qk) {
-	if (qk.gt(1)) return qk.log(2) + 1
-	return qk.toNumber()
+	if (qk.gt(1)) return new Decimal(qk.log(2) + 1)
+	return qk
 }
 
 function getMilestone14SpinMult(){

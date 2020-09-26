@@ -716,12 +716,12 @@ strong { color: #0072e5 }
 	box-shadow: 0px 0px 12px #e5e500, inset 0px 0px 24px #e5e500
 }
 #gdtabbtn button {
-	border-color: #3f6fff !important;
+	border-color: #0b298d !important;
 	animation: none
 }
 #gdtabbtn button:hover {
-	border-color: #3f6fff !important;
-	animation: none
+	background-color: #0b298d !important;
+	color: #0f1529 !important
 }
 .notifyjs-bootstrap-info {
     background-color: #0072e5;

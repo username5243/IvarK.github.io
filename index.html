@@ -1699,7 +1699,110 @@
 				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button><br><br><br>
 			</div>
 			<div id="gdims" class="dimtab">
-				U.I. is coming soon...
+				<table style="font-size: 15px; width: 100%">
+					<tr>
+						<td id="gvCell" colspan=3 style="text-align: center; width: 75%">
+							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
+							You have <span id="gdWatt" style="font-size: 25px">1.00</span> Bosonic Watts, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
+						</td>
+						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 25%">
+							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
+							<span id="gvRadio"><br>(Due to Radioactive Power, it has a Radioactivity<span id="gvRadioExp"></span> of <span id="gvRadioPow" style="font-size: 25px"></span>)</span>
+							<br><br>
+							Multiplied by <span id="gvEneMult" style="font-size: 25px"></span>, it currently contains <span id="gvEne" style="font-size: 25px"></span> Energy, which are translated to:
+							<br>
+							x<span class="gvBoost" id="gvToRep">1.00</span> OoMs to replicate interval increase<br>
+							^<span class="gvBoost" id="gvToNf">1.00</span> to Nanospeed<br>
+							^<span class="gvBoost" id="gvToTod">1.00</span> to Branch Speed<br>
+							^<span class="gvBoost" id="gvToBl">1.00</span> to Bosonic Watts and Overdrive Speed<br>
+						</td>
+					</tr>
+					<tr id="gd1Row">
+						<td id="gd1">
+							First Gravity Dimension ^1.00
+						</td>
+						<td id="gd1Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="gd2Row">
+						<td id="gd2">
+							Second Gravity Dimension ^1.00
+						</td>
+						<td id="gd2Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="gd3Row">
+						<td id="gd3">
+							Third Gravity Dimension ^1.00
+						</td>
+						<td id="gd3Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="gd4Row">
+						<td id="gd4">
+							Fourth Gravity Dimension ^1.00
+						</td>
+						<td id="gd4Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr>
+						<td id="gdShift">
+							Gravity Dimension Shift (0): Requires 0 Gravitons and First Radiation Dimension
+						</td>
+						<td style="text-align: right">
+							<button class="storebtn" style="width: 240px">Unlock a new Dimension</button>
+						</td>
+					</tr>
+					<tr>
+						<td id="grCell" colspan=3 style="text-align: center">
+							You have <span id="gr" style="font-size: 25px">0.0</span> Gravity Radiation.
+						</td>
+					</tr>
+					<tr id="rd1Row">
+						<td id="rd1">
+							First Radiation Dimension
+						</td>
+						<td id="rd1Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="rd2Row">
+						<td id="rd2">
+							Second Radiation Dimension
+						</td>
+						<td id="rd2Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="rd3Row">
+						<td id="rd3">
+							Third Radiation Dimension
+						</td>
+						<td id="rd3Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr id="rd4Row">
+						<td id="rd4">
+							Fourth Radiation Dimension
+						</td>
+						<td id="rd4Amount" style="text-align: right">
+							0
+						</td>
+					</tr>
+					<tr>
+						<td id="rdShift">
+							Radiation Dimension Shift (0): Requires 0 Higgs Bosons
+						</td>
+						<td style="text-align: right">
+							<button class="storebtn" style="width: 240px">Reset for a new Dimension</button>
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div id="production" class="dimtab">
 				<b>seconds of history:</b>
@@ -1799,14 +1902,14 @@
 			<p id='hotkeysDesc'></p>
 			<br>
 			<p id='versionDesc'>
-				You are playing <span id='versionMod'></span>.
+				You are playing New Game Plus 3.
 				<br>
 				Created by Aarex with help from pg132 and usavictor.
 				<br>
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 2)</span>
+				<span class="warning">(Test server: Beta 3)</span>
 			</p>
 			<div id="footercontainer">
 				<table id="footer" style="display: table !important">
@@ -5059,7 +5162,7 @@
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow1">
 						<td>They increase TP gain formula exponent from <span id="preNeutrinoBoost1"></span> to <span class="neutrinos" id="neutrinoBoost1">1.0</span>.</td>
 						<td id="neutrinoBoostCell2">They strengthen the effect of "replicate chance boosts itself" stronger from <span id="preNeutrinoBoost2"></span> to <span class="neutrinos" id="neutrinoBoost2">1.0</span>.<br>(The effect exponent is increased from <span id="preNeutrinoBoost2Exp"></span> to <span class="neutrinos" id="neutrinoBoost2Exp" style="font-size:25px"></span>)</td>
-						<td id="neutrinoBoostCell3"><span id="neutrinoBoost3Effect"></span> <span class="neutrinos" id="neutrinoBoost3">3.00</span>x.</td>
+						<td id="neutrinoBoostCell3">They remove the limit of 14th dilation upgrade and then boost that upgrade by <span class="neutrinos" id="neutrinoBoost3">3.00</span>x.</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow2">
 						<td>They make Infinite Time reward stronger by <span class="neutrinos" id="neutrinoBoost4">0.0</span>%.</td>
@@ -5338,7 +5441,7 @@
 							They boost orange Light strength by <span class="yellow" id="lightStrength2" style="font-size:35px"></span>x and make electrons effect softcap starts <span class="yellow" id="lightBoost3" style="font-size:35px"></span> later.
 						</td>
 						<td>
-							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost <span id="lightBoost4Type">preon</span> boost by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
+							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost the total green power effect by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
 						</td>
 					</tr><tr>
 						<td id="le3">

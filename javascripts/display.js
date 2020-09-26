@@ -652,6 +652,7 @@ function updateDimensionsDisplay() {
 		if (document.getElementById("pdims").style.display == "block") paradoxDimDisplay()
 		if (document.getElementById("metadimensions").style.display == "block") updateMetaDimensions()
 		if (document.getElementById("emperordimensions").style.display == "block") updateEmperorDimensions()
+		if (document.getElementById("gdims").style.display == "block") GDs.updateDisplay()
 	}
 	tickspeedDisplay()
 	if (document.getElementById("stats").style.display == "block" && document.getElementById("statistics").style.display == "block") STATSDisplay()

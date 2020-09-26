@@ -415,21 +415,15 @@ var softcap_vars = {
 
 var softcap_funcs = {
 	pow(x, start, pow, derv = false) {
-		if (x > start) {
-			x = Math.pow(x / start, pow)
-			if (derv) x = (x - 1) / pow + 1
-			x *= start
-			return x
-		} 
+		x = Math.pow(x / start, pow)
+		if (derv) x = (x - 1) / pow + 1
+		x *= start
 		return x
 	},
 	pow_decimal(x, start, pow, derv = false) {
-		if (Decimal.gt(x, start)) {
-			x = Decimal.div(x, start).pow(pow)
-			if (derv) x = x.sub(1).div(pow).add(1)
-			x = x.times(start)
-			return x
-		}
+		x = Decimal.div(x, start).pow(pow)
+		if (derv) x = x.sub(1).div(pow).add(1)
+		x = x.times(start)
 		return x
 	},
 	log(x, pow = 1, mul = 1, add = 0) {
@@ -445,22 +439,22 @@ var softcap_funcs = {
 function do_softcap(x, data, num) {
 	var data = data[num]
 	if (data === undefined) return
+
 	var func = data.func
-	if (func == "log" && data["start"]) if (x < data["start"]) return x
 	var vars = softcap_vars[func]
-	if (x + 0 != x) func += "_decimal"
+
+	var v = [data[vars[0]], data[vars[1]], data[vars[2]]]
 	/*
-	for (let i = 0; i < 3; i++) if (typeof vars[i] == "function") vars[i] = vars[i]()
-	This isn't needed for now...
-	Aarex this will not work and will in fact break things because you are overwriting vars[i]
-	fix is below:
-	let v = [data[vars[0]], data[vars[1]], data[vars[2]]]
 	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
-	return softcap_funcs[func](x, v[0], v[1], v[2])
-	the difference is that we are just resetting the elemenet of a list (vars immutible) 
-	versus of a dict (a=something, b=a change b ==> change in a too if something is a dict)
 	*/
-	return softcap_funcs[func](x, data[vars[0]], data[vars[1]], data[vars[2]])
+
+	var decimal = 0
+	if (x + 0 != x) {
+		decimal = 1
+		if (x.lt(data["start"])) return x
+	} else if (x < data["start"]) return x
+
+	return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
 }
 
 function softcap(x, id, max = 1/0) {

@@ -1,7 +1,7 @@
 //Bosonic Lab
 function canUnlockBosonicLab() {
 	let max = getMaximumUnstableQuarks()
-	return (max.decays > 5 || max.quarks.e >= (tmp.ngp3l ? 1e10 : 5e10)) && max.decays > 4 && (tmp.ngp3l || player.ghostify.ghostlyPhotons.enpowerments >= 3)
+	return (max.decays > 5 || max.quarks.e >= 5e10) && max.decays >= 5 && player.ghostify.ghostlyPhotons.enpowerments >= 3
 }
   
 function updateBLUnlocks() {
@@ -13,7 +13,7 @@ function updateBLUnlocks() {
 }
 
 function updateBLUnlockDisplay() {
-	document.getElementById("blUnl").textContent = "To unlock Bosonic Lab, you need to get " + shortenCosts(Decimal.pow(10, tmp.ngp3l ? 1e10 : 5e10)) + " " + getUQName(5) + " quarks" + (tmp.ngp3l ? "" : " and 3 Light Empowerments") + " first."
+	document.getElementById("blUnl").textContent = "To unlock Bosonic Lab, you need to get " + shortenCosts(Decimal.pow(10, 5e10)) + " " + getUQName(5) + " quarks and 3 Light Empowerments first."
 }
 
 function getBosonicWattGain() {
@@ -140,18 +140,15 @@ function bosonicTick(diff) {
 	//Bosonic Antimatter production
 	var newBA = data.am
 	var baAdded = getBosonicAMProduction().times(diff)
-	if (tmp.ngp3l) newBA = newBA.add(baAdded)
-	else {
-		if (tmp.badm.start !== undefined && data.am.gt(tmp.badm.start) && tmp.badm.postDim <= Number.MAX_VALUE) data.am = tmp.badm.preDim.times(tmp.badm.start)
-		updateBosonicAMDimReturnsTemp()
-		newBA = data.am.add(baAdded)
-		if (newBA.gt(tmp.badm.start)) {
-			newBA = newBA.div(tmp.badm.start)
-			tmp.badm.preDim = newBA
-			newBA = newBA.sub(-tmp.badm.offset).ln() / Math.log(tmp.badm.base) + tmp.badm.offset2
-			tmp.badm.postDim = newBA
-			newBA = tmp.badm.start.times(newBA)
-		}
+	if (tmp.badm.start !== undefined && data.am.gt(tmp.badm.start) && tmp.badm.postDim <= Number.MAX_VALUE) data.am = tmp.badm.preDim.times(tmp.badm.start)
+	updateBosonicAMDimReturnsTemp()
+	newBA = data.am.add(baAdded)
+	if (newBA.gt(tmp.badm.start)) {
+		newBA = newBA.div(tmp.badm.start)
+		tmp.badm.preDim = newBA
+		newBA = newBA.sub(-tmp.badm.offset).ln() / Math.log(tmp.badm.base) + tmp.badm.offset2
+		tmp.badm.postDim = newBA
+		newBA = tmp.badm.start.times(newBA)
 	}
 	data.am = newBA
 }
@@ -182,7 +179,6 @@ function getBosonicAMProduction() {
 
 function getBosonicAMFinalProduction() {
 	let r = getBosonicAMProduction()
-	if (tmp.ngp3l) return r
 	if (player.ghostify.bl.am.gt(tmp.badm.start)) r = r.div(tmp.badm.preDim)
 	return r
 }
@@ -193,7 +189,7 @@ function updateBosonicLimits() {
 
 	//Bosonic Level?
 	let lvl = maxBLLvl
-	if (tmp.ngp3l || player.ghostify.hb.higgs == 0) lvl = 1
+	if (player.ghostify.hb.higgs == 0) lvl = 1
 	else if (!GDs.blExpanded()) lvl = 2
 
 	//Bosonic Lab
@@ -249,7 +245,7 @@ function updateBosonicLabTab(){
 	document.getElementById("bTicks").textContent = shorten(data.ticks)
 	document.getElementById("bAM").textContent = shorten(data.am)
 	document.getElementById("bAMProduction").textContent = "+" + shorten(getBosonicAMFinalProduction().times(speed)) + "/s"
-	document.getElementById("bAMProductionReduced").style.display = !tmp.ngp3l && data.am.gt(tmp.badm.start) ? "" : "none"
+	document.getElementById("bAMProductionReduced").style.display = data.am.gt(tmp.badm.start) ? "" : "none"
 	document.getElementById("bAMProductionReduced").textContent = "(reduced by " + shorten(tmp.badm.preDim) + "x)"
 	document.getElementById("bBt").textContent = shorten(data.battery)
 	let x = getEstimatedNetBatteryGain()
@@ -263,14 +259,12 @@ function updateBosonicLabTab(){
 	if (document.getElementById("bextab").style.display=="block") updateBosonExtractorTab()
 	if (document.getElementById("butab").style.display=="block") updateBosonicUpgradeDescs()
 	if (document.getElementById("wzbtab").style.display=="block") updateWZBosonsTab()
-	if (!tmp.ngp3l) {
-		if (player.ghostify.hb.unl) {
-			var req = getHiggsRequirement()
-			document.getElementById("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
-			document.getElementById("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
-			document.getElementById("hbResetReq").textContent = shorten(req)
-			document.getElementById("hbResetGain").textContent = getFullExpansion(getHiggsGain())
-		}
+	if (player.ghostify.hb.unl) {
+		var req = getHiggsRequirement()
+		document.getElementById("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
+		document.getElementById("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
+		document.getElementById("hbResetReq").textContent = shorten(req)
+		document.getElementById("hbResetGain").textContent = getFullExpansion(getHiggsGain())
 	}
 }
 
@@ -324,7 +318,7 @@ function getExtractTime() {
 	let data = player.ghostify.bl
 	let r = new Decimal(br.scalings[data.typeToExtract] || 1/0)
 	r = r.div(tmp.wzb.wbt)
-	if (!tmp.ngp3l) if (player.achievements.includes("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
+	if (player.achievements.includes("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
 	return r
 }
 
@@ -566,7 +560,7 @@ function buyBosonicUpgrade(id, quick) {
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
 	if (id == 32) tmp.updateLights = true
-	if (!tmp.ngp3l) delete player.ghostify.hb.bosonicSemipowerment
+	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
 
@@ -584,7 +578,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return ghostified && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id)
+	return ghostified && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limit
 }
 
 function updateBosonicUpgradeDescs() {
@@ -754,7 +748,7 @@ var bu = {
 			let x = Math.pow(Math.max(player.dilation.freeGalaxies / 20 - 1800, 0), 1.5)
 			let y = tmp.qu.electrons.sacGals
 			let z = Math.max(y, player.galaxies)
-			if (!tmp.ngp3l && x > y) x = (x + y * 2) / 3
+			if (x > y) x = (x + y * 2) / 3
 			if (x > z) x = Math.pow((x - z + 1e5) * 1e10, 1/3) + z - 1e5
 			return Math.round(x)
 		},
@@ -780,7 +774,7 @@ var bu = {
 			if (tmp.newNGP3E){
 				div = 2e3
 				add = 1.5
-			} else if (tmp.ngp3l) exp = 0.5
+			}
 			return Math.pow(tmp.qu.electrons.amount + 1, exp) / div + add
 		},
 		31() {

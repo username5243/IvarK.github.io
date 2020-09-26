@@ -861,17 +861,8 @@ function getAntiPreonGhostWake() {
 }
 
 //v2.21: NG+3.1
-function setNonlegacyStuff() {
-}
-
-function displayNonlegacyStuff() {
-	//QC Modifiers
-	for (var m = 1; m < qcm.modifiers.length; m++) document.getElementById("qcm_" + qcm.modifiers[m]).style.display = tmp.ngp3l ? "none" : ""
-}
-
 function getOldAgeRequirement() {
-	let year = new Date().getFullYear() || 2020
-	if (tmp.ngp3l) year = 2019
+	let year = new Date().getFullYear()
 	return Decimal.pow(10, 3 * 86400 * 365.2425 * year)
 }
 

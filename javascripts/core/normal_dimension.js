@@ -110,6 +110,7 @@ function getPostBreakInfNDMult(){
 	return mult
 }
 
+let alwaysCalcDimPowers = true
 function getStartingNDMult(tier) {
 	let mPerTen = getDimensionPowerMultiplier()
 	let mPerDB = getDimensionBoostPower()

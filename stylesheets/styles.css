@@ -2669,6 +2669,32 @@ td.lEp {
 	cursor: pointer
 }
 
+#gvCell {
+	background-color: rgba(29, 41, 81, 0.25);
+	color: #485faa
+}
+
+#grCell {
+	background-color: rgba(53, 74, 33, 0.25);
+	color: #5c8340
+}
+
+#gv {
+	color: #0b298d;
+	text-shadow: 0px -3px 6px #485faa, 0px 3px 6px #1d2951
+}
+
+#gr {
+	color: #265a00;
+	text-shadow: 0px -3px 6px #5c8340, 0px 3px 6px #354a21
+}
+
+.gvBoost {
+	color: #485faa;
+	font-size: 25px;
+	text-shadow: 0px 0px 6px #485faa, 0px -6px 12px #0b298d, 0px 6px 12px #1d2951
+}
+
 .subFactorA {
 	color: #c73415
 }

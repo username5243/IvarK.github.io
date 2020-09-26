@@ -17,7 +17,7 @@ function unlockHiggs() {
 }
 
 function canUnlockHiggs() {
-	return player.money.gte(Decimal.pow(10, 2e17)) && player.ghostify.bl.am.gte(getHiggsRequirement()) && !tmp.ngp3l
+	return player.money.gte(Decimal.pow(10, 2e17)) && player.ghostify.bl.am.gte(getHiggsRequirement())
 }
 
 function updateHiggsUnlocks() {
@@ -28,10 +28,8 @@ function updateHiggsUnlocks() {
 
 function updateBosonUnlockDisplay() {
 	let txt = ""
-	if (!tmp.ngp3l) {
-		if (!player.ghostify.hb.unl) txt = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
-		else if (!GDs.unlocked()) txt = "To unlock the next type of Dimensions (Gravity Dimensions), which contains Gravitons, you need to get " + GDs.reqText() + " first."
-	}
+	if (!player.ghostify.hb.unl) txt = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
+	else if (!GDs.unlocked()) txt = "To unlock the next type of Dimensions (Gravity Dimensions), which contains Gravitons, you need to get " + GDs.reqText() + " first."
 
 	document.getElementById("nextParticle").textContent = txt
 }
@@ -50,7 +48,7 @@ function bosonicLabReset() {
 	player.ghostify.bl = {
 		watt: new Decimal(0),
 		ticks: player.ghostify.bl.ticks,
-		speed: 0,
+		speed: new Decimal(0),
 		am: new Decimal(0),
 		typeToExtract: player.ghostify.bl.typeToExtract,
 		extracting: false,
@@ -90,7 +88,6 @@ function bosonicLabReset() {
 }
 
 function higgsReset() {
-	if (tmp.ngp3l) return
 	var oldHiggs = player.ghostify.hb.higgs
 	if (!player.ghostify.bl.am.gte(getHiggsRequirement())) return
 	if (!player.aarexModifications.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
