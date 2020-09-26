@@ -156,7 +156,7 @@ function getBranchSpeedText(){
 	if (player.masterystudies.includes("t431")) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2]) + "x, "
-	if (!tmp.ngp3l) if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
+	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
 	if (todspeed) if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
@@ -169,7 +169,7 @@ function getBranchSpeed() { // idea: when you hold shift you can see where the m
 	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[2])
-	if (!tmp.ngp3l && player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
+	if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
 	if (GDs.unlocked()) x = x.pow(GDs.tmp.tod)
 	return x
@@ -211,7 +211,7 @@ function getQuarkSpinProduction(branch) {
 		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
 		if (hasNU(12)) ret = ret.times(tmp.nu[4].normal)
 	}
-	if (!tmp.ngp3l) ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
+	ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
 	ret = ret.times(todspeed)
 	return ret
 }
@@ -534,11 +534,9 @@ function getMaximumUnstableQuarks() {
 function getTreeUpgradeEfficiencyText(){
 	let text = ""
 	if (player.ghostify.neutrinos.boosts >= 7) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
-	if (!tmp.ngp3l) {
-		if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
-		if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
-		if (hasBosonicUpg(52)) text += "Bosonic Lab Upgrade 22: " + shorten(tmp.blu[52]) + "x, "
-	}
+	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
+	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
+	if (hasBosonicUpg(52)) text += "Bosonic Lab Upgrade 22: " + shorten(tmp.blu[52]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
@@ -546,11 +544,9 @@ function getTreeUpgradeEfficiencyText(){
 function getTreeUpgradeEfficiency(mod) {
 	let r = 1
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || mod == "br") && mod != "noNB") r += tmp.nb[7]
-	if (!tmp.ngp3l) {
-		if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r += 0.1
-		if (hasBosonicUpg(43)) r *= tmp.blu[43]
-		if (hasBosonicUpg(52)) r *= tmp.blu[52]
-	}
+	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r += 0.1
+	if (hasBosonicUpg(43)) r *= tmp.blu[43]
+	if (hasBosonicUpg(52)) r *= tmp.blu[52]
 	return r
 }
 

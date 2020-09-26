@@ -120,7 +120,7 @@ function replicantiGalaxy() {
 	if (!canGetReplicatedGalaxy()) return
 	if (player.galaxyMaxBulk) player.replicanti.galaxies=maxGal
 	else player.replicanti.galaxies++
-	if (tmp.ngp3l||!player.achievements.includes("ng3p67")) player.replicanti.amount=Decimal.div(player.achievements.includes("r126")?player.replicanti.amount:1,Number.MAX_VALUE).max(1)
+	if (!player.achievements.includes("ng3p67")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126")?player.replicanti.amount:1,Number.MAX_VALUE).max(1)
 	galaxyReset(0)
 }
 
@@ -185,13 +185,13 @@ function updateExtraReplGalaxies() {
 			legacy: 0.25,
 			ts362legacy: 0.35
 		}
-		let expVarName=(player.masterystudies.includes("t362")?"ts362":"")+(tmp.ngp3l?"legacy":"")
-		if (expVarName=="") expVarName="normal"
+		let expVarName = player.masterystudies.includes("t362") ? "ts362" : ""
+		if (expVarName == "") expVarName = "normal"
 		let exp=expData[expVarName]
-		if (!tmp.ngp3l&&player.masterystudies.includes("t412")) exp=.5
+		if (player.masterystudies.includes("t412")) exp=.5
 
-		tmp.pe=Math.pow(tmp.qu.replicants.quarks.add(1).log10(),exp)
-		tmp.pe*=tmp.ngp3l?0.67*(player.masterystudies.includes("t412")?1.25:1):0.8
+		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(),exp)
+		tmp.pe *= 0.67 * (player.masterystudies.includes("t412") ? 1.25 : 1)
 		if (player.ghostify.ghostlyPhotons.unl) tmp.pe*=tmp.le[3]
 		extraReplGalaxies*=colorBoosts.g+tmp.pe
 	}
@@ -212,7 +212,7 @@ function getReplSpeed() {
 	let exp = 308
 	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
 		let expDiv = 10
-		if (tmp.ngp3 && !tmp.ngp3l) expDiv = 9
+		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
 		inc /= Math.min(x, 200)
 		if (x > 200) exp += x / 10 - 20

@@ -296,10 +296,10 @@ function ngP3AchieveCheck(){
 	if (quantumed) giveAchievement("Sub-atomic")
 
 	// NG+3.1 achievements from this point on
-	if (!tmp.ngp3l) ngP31AchieveCheck()
+	beyondHiggsAchieveCheck()
 }
 
-function ngP31AchieveCheck(){
+function beyondHiggsAchieveCheck(){
 	let minUQ = getMinimumUnstableQuarks()
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")

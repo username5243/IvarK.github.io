@@ -161,8 +161,7 @@ function getEmperorDimensionMultiplier(dim) {
 	if (player.currentEternityChall == "eterc11") return ret
 	ret = tmp.edgm //Global multiplier of all Emperor Dimensions
 	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[3])
-	//player.quantum.emperorDimensions[8].perm-10 
-	if (!tmp.ngp3l && dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 8))))
+	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 8))))
 	return dilates(ret, 1)
 }
 
@@ -325,7 +324,7 @@ function maxReduceHatchSpeed() {
 function replicantReset(bulk = false) {
 	if (player.replicanti.amount.lt(tmp.qu.replicants.requirement)) return
 	if (!player.achievements.includes("ng3p47")) player.replicanti.amount = new Decimal(1)
-	if ((player.achievements.includes("ng3p74") && !tmp.ngp3l) && bulk) {
+	if (player.achievements.includes("ng3p74") && bulk) {
 		let x = Math.floor(player.replicanti.amount.div(tmp.qu.replicants.requirement).log10() / 1e5) + 1
 		tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(x)
 		tmp.qu.replicants.requirement = tmp.qu.replicants.requirement.times(Decimal.pow(10, x * 1e5))

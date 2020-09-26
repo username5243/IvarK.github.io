@@ -208,6 +208,6 @@ function maxBuyBEEPMult() {
 }
 
 function getMaxBigRipUpgrades() {
-	if (player.ghostify.ghostlyPhotons.unl) return tmp.ngp3l ? 19 : 20
+	if (player.ghostify.ghostlyPhotons.unl) return 20
 	return 17
 }

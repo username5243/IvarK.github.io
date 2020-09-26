@@ -122,7 +122,7 @@ function getGalaxyTickSpeedMultiplier() {
 	let perGalaxy = player.infinityUpgradesRespecced != undefined ? 0.98 : 0.965
 
 	var log = Math.log10(perGalaxy)*(galaxies-linearGalaxies)+Math.log10(baseMultiplier)
-	if (!tmp.ngp3l && log < 0) log = -softcap(-log, "ts_reduce_log")
+	if (log < 0) log = -softcap(-log, "ts_reduce_log")
 	return Decimal.pow(10, log)
 }
 

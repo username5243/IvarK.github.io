@@ -99,7 +99,7 @@ function buyElectronUpg(u, quick) {
 	if (u == 1) player.timestudy.theorem -= cost
 	else if (u == 2) player.dilation.dilatedTime = player.dilation.dilatedTime.sub(cost)
 	else if (u == 3) player.meta.antimatter = player.meta.antimatter.sub(cost)
-	else if (u == 4 && (tmp.ngp3l || !player.achievements.includes("ng3p64"))) {
+	else if (u == 4 && !player.achievements.includes("ng3p64")) {
 		player.meta.resets -= cost
 		player.meta.antimatter = getMetaAntimatterStart()
 		clearMetaDimensions()
@@ -108,7 +108,7 @@ function buyElectronUpg(u, quick) {
 	tmp.qu.electrons.rebuyables[u - 1]++
 	if (quick) return true
 	tmp.qu.electrons.mult += getElectronUpgIncrease(u)
-	updateElectrons(!tmp.ngp3l)
+	updateElectrons(true)
 }
 
 function canBuyElectronUpg(id) {

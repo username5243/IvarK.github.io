@@ -369,23 +369,19 @@ function giveAchievement(name, noUpdate) {
 	}
 	if (name == "Kee-hee-hee!" && (player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37"))) {
                 setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
-                if (!tmp.ngp3l) {
-                        dev.giveAllNGAchievements()
-                        for (let i = 1; i <= 8; i++){
-                                if (!player.achievements.includes("ngpp1" + i)) player.achievements.push("ngpp1" + i)
-                                if (!player.achievements.includes("ng3p1" + i)) player.achievements.push("ng3p1" + i)
-                                if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
-                        }
+                dev.giveAllNGAchievements()
+                for (let i = 1; i <= 8; i++){
+                        if (!player.achievements.includes("ngpp1" + i)) player.achievements.push("ngpp1" + i)
+                        if (!player.achievements.includes("ng3p1" + i)) player.achievements.push("ng3p1" + i)
+                        if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
                 }
         }
         if (name == "Even Ghostlier than before") {
-                if (!tmp.ngp3l) {
-                        for (let i = 1; i <= 8; i++){
-                                if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
-                                if (!player.achievements.includes("ng3p4" + i)) player.achievements.push("ng3p4" + i)
-                                if (!player.achievements.includes("ng3p5" + i)) player.achievements.push("ng3p5" + i)
-                                if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
-                        }
+                for (let i = 1; i <= 8; i++){
+                        if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
+                        if (!player.achievements.includes("ng3p4" + i)) player.achievements.push("ng3p4" + i)
+                        if (!player.achievements.includes("ng3p5" + i)) player.achievements.push("ng3p5" + i)
+                        if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
                 }
         }
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
@@ -409,7 +405,7 @@ function updateAchievements() {
 		if (i > 15) {
 			shown =! (!player.masterystudies)
 			rownum = i - 15
-			if (rownum > 8) shown = shown && !tmp.ngp3l
+			if (rownum > 8) shown = shown
 			rowid = "ng3p" + rownum
 		} else if (i > 14) {
 			shown = player.meta
@@ -475,7 +471,7 @@ function updateAchievements() {
 		var rowid = "secretAchRow" + i
 		if (i > 3) {
 			shown = tmp.ngp3
-			if (shown && i > 4) shown = !tmp.ngp3l
+			if (shown && i > 4) shown = true
 			rowid = "secretAchRowng3p" + (i - 3)
 		}
 		var n = 0

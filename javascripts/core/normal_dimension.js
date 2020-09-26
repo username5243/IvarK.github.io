@@ -175,10 +175,10 @@ function getDimensionFinalMultiplier(tier) {
 
 	if (mult.gt(10)) mult = dilates(mult.max(1), 1)
 	if (player.dilation.upgrades.includes(6)) mult = mult.times(player.dilation.dilatedTime.max(1).pow(308))
-	if (tier == 1 && !tmp.ngp3l && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
+	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
 	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : player.masterystudies.includes("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.r)
+	if (quantumed) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
 

@@ -8,7 +8,7 @@ function getBreakEternityTDMult(tier){
 	if (tmp.qu.bigRip.upgrades.includes(13)) ret = ret.times(player.replicanti.amount.max(1).pow(1e-6))
 	if (tier == 6 && player.ghostify.ghostlyPhotons.unl) ret = ret.times(tmp.le[6])
 	if (tier == 7 && tmp.qu.bigRip.upgrades.includes(16)) ret = ret.times(tmp.bru[16])
-	if (tier == 8 && player.achievements.includes("ng3p62") && !tmp.ngp3l) ret = ret.pow(Math.log10(player.ghostify.time/10+1)/100+1)
+	if (tier == 8 && player.achievements.includes("ng3p62")) ret = ret.pow(Math.log10(player.ghostify.time/10+1)/100+1)
 	if (ret.lt(0)) ret = new Decimal(0)
 	return dilates(ret)
 }
@@ -97,7 +97,7 @@ function getTimeDimensionPower(tier) {
 	if (player.galacticSacrifice !== undefined) ret = ret.times(ret2)
 
 	ret = dilates(ret, 1)
-	if (quantumed && !tmp.ngp3l) ret = ret.times(colorBoosts.dim.b)
+	if (quantumed) ret = ret.times(colorBoosts.dim.b)
 	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
 
@@ -124,7 +124,7 @@ function getIC3EffFromFreeUpgs() {
 	if (tmp.ngp3) {
 		if (player.currentEternityChall=='eterc14') x = 5
 		else {
-			x = ECTimesCompleted("eterc14") * (tmp.ngp3l ? 2 : 4)
+			x = ECTimesCompleted("eterc14") * 4
 			if (hasNU(12)) if (tmp.qu.bigRip.active) x *= tmp.nu[4].replicated
 		}
 	}

@@ -125,7 +125,7 @@ function unlockNeutrinoBoost() {
 function getMaxUnlockedNeutrinoBoosts() {
 	let x = 9
 	if (player.ghostify.wzb.unl) x++
-	if (!tmp.ngp3l && player.ghostify.hb.higgs > 0) x++
+	if (player.ghostify.hb.higgs > 0) x++
 	return x
 }
 
@@ -168,25 +168,18 @@ var neutrinoBoosts = {
 			return nb2 
 		},
 		3: function(nt) {
-			if (tmp.ngp3l) { //NG+3L
-				let nb3Neutrinos = Math.pow(Math.log10(Math.max(nt[0].max(1).log10()-5,1))/Math.log10(5),2)+Math.pow(Math.log10(Math.max(nt[1].max(1).log10()-5,1))/Math.log10(5),2)+Math.pow(Math.log10(Math.max(nt[2].max(1).log10()-5,1))/Math.log10(5),2)
-				let nb3 = Math.pow(nb3Neutrinos / 3, .25) + 3
-				if (nb3 > 6) nb3 = 3 + Math.log2(nb3 + 2)
-				return nb3
-			} else { //NG+3
-				let nb3neutrinos = Math.sqrt(
-					Math.pow(nt[0].max(1).log10(), 2) +
-					Math.pow(nt[1].max(1).log10(), 2) +
-					Math.pow(nt[2].max(1).log10(), 2)
-				)
-				let nb3 = Math.sqrt(nb3neutrinos + 625) / 25
-				return nb3
-			}
+			//NG+3
+			let nb3neutrinos = Math.sqrt(
+				Math.pow(nt[0].max(1).log10(), 2) +
+				Math.pow(nt[1].max(1).log10(), 2) +
+				Math.pow(nt[2].max(1).log10(), 2)
+			)
+			let nb3 = Math.sqrt(nb3neutrinos + 625) / 25
+			return nb3
 		},
 		4: function(nt) {
 			var nb4neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			var nb4 = Math.pow(nb4neutrinos, .25) * 0.07 + 1
-			if (tmp.ngp3l && nb4 > 10) nb4 = 6 + Math.log2(nb4 + 6)
 			return nb4
 		},
 		5: function(nt) {
@@ -206,10 +199,8 @@ var neutrinoBoosts = {
 			if (tmp.newNGP3E) nb7exp = .6
 			let nb7neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp)*2.35
-			if (!tmp.ngp3l) {
-				if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
-				if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
-			}
+			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
+			if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
 			return nb7
 		},
 		8: function(nt) {
@@ -222,14 +213,13 @@ var neutrinoBoosts = {
 		},
 		9: function(nt) {
 			var nb9 = (nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10())/10
-			if (tmp.ngp3l && nb9 > 4096) nb9 = Math.pow(Math.log2(nb9) + 4, 3)
 			if (isLEBoostUnlocked(9)) nb9 *= tmp.leBonus[7]
 			return nb9
 		},
 		10: function(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
-			if (!tmp.ngp3l && nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
+			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
 			return nb10
 		},
 		11: function(nt) {

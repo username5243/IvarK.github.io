@@ -107,7 +107,7 @@ function getQCGoal(num, bigRip) {
 	if (cs.includes(1) && cs.includes(3)) mult *= 1.6
 	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
 	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
-	if (!tmp.ngp3l && cs.includes(3) && cs.includes(6)) mult *= 3
+	if (cs.includes(3) && cs.includes(6)) mult *= 3
 	return quantumChallenges.goals[c1] * quantumChallenges.goals[c2] / 1e11 * mult
 }
 

@@ -536,7 +536,7 @@ function breakNGm2UpgradeRow6Display(){
 	if (player.infinityUpgrades.includes("postinfi63")) document.getElementById("postinfi63").className = "infinistorebtnbought"
 	else if (player.infinityPoints.gte("1e2000")) document.getElementById("postinfi63").className = "infinistorebtn1"
 	else document.getElementById("postinfi63").className = "infinistorebtnlocked"
-	document.getElementById("postinfi60").innerHTML = "You gain more " + (player.tickspeedBoosts ? "Galaxy Points" : tmp.ngp3l ? "Infinity Points" : "antimatter") + " based on your galaxies." + (player.tickspeedBoosts ? "" : "<br>Currently: " + shorten(getNewB60Mult()) + "x") + "<br>Cost: " + shortenCosts(1e50) + " IP"
+	document.getElementById("postinfi60").innerHTML = "You gain more " + (player.tickspeedBoosts ? "Galaxy Points" : "antimatter") + " based on your galaxies." + (player.tickspeedBoosts ? "" : "<br>Currently: " + shorten(getNewB60Mult()) + "x") + "<br>Cost: " + shortenCosts(1e50) + " IP"
 	document.getElementById("postinfi61").innerHTML = "g11 formula is better.<br>Cost: " + shortenCosts(new Decimal("1e450")) + " IP"
 	document.getElementById("postinfi62").innerHTML = "Dimension Boosts make g13 stronger.<br>Cost: " + shortenCosts(new Decimal("1e700")) + " IP"
 	document.getElementById("postinfi63").innerHTML = "Unlock 2 new rows of Galaxy Point upgrades.<br>Cost: " + shortenCosts(new Decimal("1e2000")) + " IP"
@@ -675,7 +675,7 @@ function replicantiDisplay() {
 		var replGalName = player.replicanti.gal < 3e3 ? "Max Replicanti galaxies" : (player.replicanti.gal < 58200 ? "Distant" : "Further") + " Replicated Galaxies"
 		var replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		document.getElementById("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(player.replicanti.gal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
-		document.getElementById("replicantireset").innerHTML = (!tmp.ngp3l && player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16") ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ")+"1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
+		document.getElementById("replicantireset").innerHTML = (player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16") ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ") + "1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 		document.getElementById("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
@@ -686,7 +686,7 @@ function replicantiDisplay() {
 		document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
-		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (tmp.ngp3l || !player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (!player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
 	} else {
 		document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140) + " IP"
 		document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140)) ? "storebtn" : "unavailablebtn"

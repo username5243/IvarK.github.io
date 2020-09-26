@@ -72,7 +72,7 @@ function quantum(auto, force, challid, bigRip = false, quick) {
 }
 
 function getQuantumReq() {
-	return Decimal.pow(Number.MAX_VALUE, tmp.ngp3l ? 1.45 : tmp.ngp3 ? 1.4 : 1)
+	return Decimal.pow(Number.MAX_VALUE, tmp.ngp3 ? 1.4 : 1)
 }
 
 function isQuantumReached() {
@@ -101,7 +101,6 @@ function getQCtotalTime(){
 }
 
 function getQCtoQKEffect(){
-	if (tmp.ngp3l) return 1
 	var time = getQCtotalTime()
 	var ret = 1 + 192 * 3600 * 10 / time
 	if (ret > 999) ret = 333 * Math.log10(ret + 1)
@@ -121,7 +120,7 @@ function getEPtoQKMult(){
 	return EPBonus 
 }
 
-function getNGP3p1totalQKMult(){
+function getAchBonusQKPreSoftcapMult(){
 	let log = 0
 	if (player.achievements.includes("ng3p16")) log += getEPtoQKMult()
 	if (player.achievements.includes("ng3p33")) log += Math.log10(getQCtoQKEffect())
@@ -139,11 +138,11 @@ function quarkGain() {
 	if (player.ghostify.milestones) ma = player.meta.bestAntimatter.max(1)
 
 	let log = (ma.log10() - 379.4) / (player.achievements.includes("ng3p63") ? 279.8 : 280)
-	let logBoost = tmp.ngp3l ? 1.2 : 2
-	let logBoostExp = tmp.ngp3l ? 2 : 1.5
+	let logBoost = 2
+	let logBoostExp = 1.5
 	if (log > logBoost) log = Math.pow(log / logBoost, logBoostExp) * logBoost
 	if (log > 738 && !hasNU(8)) log = Math.sqrt(log * 738)
-	if (!tmp.ngp3l) log += getNGP3p1totalQKMult()
+	log += getAchBonusQKPreSoftcapMult()
 
 	var dlog = Math.log10(log)
 	let start = 5
@@ -323,7 +322,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			updateSpeedruns()
 		}
 		tmp.qu.times++
-		if (!tmp.ngp3l && tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
+		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
 		if (!inQC(6)) {
 			tmp.qu.quarks = tmp.qu.quarks.add(qkGain)
 			if (!tmp.ngp3 || player.ghostify.milestones < 8) tmp.qu.quarks = tmp.qu.quarks.round()

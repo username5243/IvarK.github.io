@@ -160,7 +160,7 @@ function DimensionPower(tier) {
   	if (player.galacticSacrifice !== undefined) mult = mult.times(ec9)
 
   	mult = dilates(mult, 1)
-  	if (quantumed && !tmp.ngp3l) mult = mult.times(colorBoosts.dim.g)
+  	if (quantumed) mult = mult.times(colorBoosts.dim.g)
   	return mult
 }
 

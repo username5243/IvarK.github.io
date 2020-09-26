@@ -281,9 +281,7 @@ var masteryStudies = {
 		344: "Replicated galaxies are more effective based on your preons.",
 		351: "Time Shards boost all Meta Dimensions.",
 		361: "Hatch speed is faster based on your tachyon particles.",
-		362() {
-			return "Reduce the softcap for the preon boost"+(player.aarexModifications.ngumuV?", but preons reduce the green power effect.":".")
-		},
+		362: "Reduce the softcap for the preon boost.",
 		371: "Hatch speed is faster based on your extra replicated galaxies.",
 		372: "Hatch speed is faster based on your time shards.",
 		373: "You get more preons based on your galaxies.",

@@ -17,14 +17,12 @@ var leBoosts = {
 		//Boost #1
 		function() {
 			var le1exp = 0.75
-			if (tmp.ngp3l) le1exp = 1
 			else if (tmp.newNGP3E) {
 				le1exp += 0.2
 				if (player.ghostify.ghostlyPhotons.unl) le1exp += .15
 				if (player.ghostify.wzb.unl) le1exp += .15
 			}
 			var le1mult = 500
-			if (tmp.ngp3l) le1mult = 300
 			if (tmp.newNGP3E) le1mult *= 2
 			var eff = Math.pow(Math.log10(tmp.effL[3] + 1), le1exp) * le1mult
 			return eff
@@ -206,16 +204,15 @@ function getLightEmpowermentReq(le) {
 	if (le === undefined) le = player.ghostify.ghostlyPhotons.enpowerments
 	let x = le * 2.4 + 1
 	let scale = 0
-	if (!tmp.ngp3l) {
-		if (le > 19) {
-			x += Math.pow(le - 19, 2) / 3
-			scale = 1
-		}
-		if (le > 49) {
-			x += Math.pow(1.2, le - 49) - 1
-			scale = 2
-		}
+	if (le >= 20) {
+		x += Math.pow(le - 19, 2) / 3
+		scale = 1
 	}
+	if (le >= 50) {
+		x += Math.pow(1.2, le - 49) - 1
+		scale = 2
+	}
+	
 	if (player.achievements.includes("ng3p95")) x--
 	if (hasBosonicUpg(51)) x /= tmp.blu[51].req
 	tmp.leReqScale = scale

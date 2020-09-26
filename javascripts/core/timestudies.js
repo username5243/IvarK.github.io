@@ -769,8 +769,7 @@ let tsMults = {
 		else if (player.galacticSacrifice === undefined) log = Math.min(log, 2500)
 		if (log < 0) log = 0
 		
-		if (player.galacticSacrifice) return Decimal.pow(10, log)
-		if (tmp.ngp3l || !bigRipped) return Decimal.pow(10, log)
+		if (player.galacticSacrifice || !bigRipped) return Decimal.pow(10, log)
 		log = softcap(log, "ts11_log_big_rip", 1)
 		
 		return Decimal.pow(10, log)
@@ -793,7 +792,7 @@ let tsMults = {
 		return r
 	},
 	211: function() {
-		return player.galacticSacrifice === undefined ? 5 : tmp.ngp3l ? 0 : 1
+		return player.galacticSacrifice === undefined ? 5 :  1
 	},
 	212: function() {
 		let r = player.timeShards.max(2).log2()
@@ -804,6 +803,6 @@ let tsMults = {
 		return tmp.ngex ? 10 : 20
 	},
 	222: function() {
-		return player.galacticSacrifice === undefined ? 2 : tmp.ngp3l ? 0 : .5
+		return player.galacticSacrifice === undefined ? 2 : .5
 	}
 }

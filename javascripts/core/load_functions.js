@@ -1980,7 +1980,7 @@ function setTSDisplay(){
         document.getElementById("61desc").innerHTML=tsMults[61]()
         document.getElementById("62desc").textContent=tsMults[62]()
         document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
-        document.getElementById("181desc").textContent = player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined && !tmp.ngp3l ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch"
+        document.getElementById("181desc").textContent = player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch"
         document.getElementById("211desc").textContent=tsMults[211]()
         document.getElementById("213desc").textContent=tsMults[213]()
         document.getElementById("221").style["font-size"] = tmp.ngp3 ? "0.45rem" : "0.55rem"
@@ -2006,9 +2006,9 @@ function updateNGp3DisplayStuff(){
         document.getElementById('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
         document.getElementById('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
         document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
-        document.getElementById("gluonCharger1").style.display = tmp.ngp3l ? "none" : ""
-        document.getElementById("gluonCharger2").style.display = tmp.ngp3l ? "none" : ""
-        document.getElementById('rg4toggle').style.display=(!tmp.ngp3l||inQC(1)||QCIntensity(1))?"none":""
+        document.getElementById("gluonCharger1").style.display = ""
+        document.getElementById("gluonCharger2").style.display = ""
+        document.getElementById('rg4toggle').style.display="none"
         document.getElementById('rg4toggle').textContent="Toggle: O"+(tmp.qu.rg4?"N":"FF")
         document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
         document.getElementById('sacrificeAuto').textContent="Auto: O"+(tmp.qu.autoOptions.sacrifice?"N":"FF")
@@ -2099,10 +2099,7 @@ function updateNGModeMessage(){
         if (player.meta!==undefined||player.exdilation!==undefined) {
                 if (!player.aarexModifications.newGamePlusVersion) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
                 if (player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+4 by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
-                if (player.aarexModifications.ngp3lV) {
-                ngModeMessages.push("WARNING: There are some boosts that work the same as in NG+3.1, not in the Bosonic Update. Found one? Give feedback in the Discord server!")
-                ngModeMessages.push("Welcome to NG+3 Legacy, made by Aarex! This is the last version of NG+3 before the NG+3.1 update. All mods are affected to be updated prior to NG+3.1's release. This is much more unbalanced than the current update, so you will experience balancing problems. Good luck.")
-                }
+
                 if (player.exdilation!==undefined) {
                 if (player.aarexModifications.nguspV) ngModeMessages.push("Welcome to NG Update Semiprime, made by Aarex! This is like NGUd', but with balancing changes implemented. Good luck! :)")
                 if (player.aarexModifications.ngumuV||player.aarexModifications.nguepV) {
@@ -2112,7 +2109,7 @@ function updateNGModeMessage(){
                 else if (player.aarexModifications.ngudpV) ngModeMessages.push("Welcome to NG Update Prime, made by pg132! NGUd' is like NGUd+, but you can't reverse dilation. Good luck for beating this mod. >:)")
                 else if (player.meta!==undefined) ngModeMessages.push("Welcome to NG Update+, a combination made by Soul147 (Sigma)! This is a combination of dan-simon's NG Update and Aarex's NG+++, which can end up unbalancing the game because of some mechanics.")
                 else ngModeMessages.push("Welcome to NG Update, made by dan-simon! In this mod, Black Hole and Ex-Dilation are available after the endgame of the vanilla Antimatter Dimensions.")
-                } else if (player.masterystudies&&!player.aarexModifications.ngp3lV&&!player.aarexModifications.ngp3mpV&&!player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+++ mode, the extension of dan-simon's NG++, made by Aarex! There is a lot of content in this mod, so good luck!")
+                } else if (player.masterystudies && !player.aarexModifications.ngp3mpV && !player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+++ mode, the extension of dan-simon's NG++, made by Aarex! There is a lot of content in this mod, so good luck!")
                 else if (!player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG++, made by dan-simon! In this mode, more Dilation upgrades and Meta Dimensions are added to push the endgame further. Disclaimer: This is not NG+3, there is no Quantum content available.")
         } else if (player.aarexModifications.newGamePlusVersion) ngModeMessages.push("Welcome to NG+ v2, made by usavictor and Aarex! You start with many things unlocked and given to you immediately to get through the early game faster.")
         if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')

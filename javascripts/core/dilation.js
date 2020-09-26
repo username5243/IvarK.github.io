@@ -1,7 +1,7 @@
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
-	if (player.achievements.includes("ng3p11") && !tmp.ngp3l) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
-	if (player.achievements.includes("ng3p41") && !tmp.ngp3l) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
+	if (player.achievements.includes("ng3p11")) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
+	if (player.achievements.includes("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
 	if (player.masterystudies.includes("t263")) gain = gain.times(getMTSMult(263))
 	if (player.masterystudies.includes("t281")) gain = gain.times(getMTSMult(281))
 	gain = gain.times(tmp.qcRewards[1])
@@ -10,7 +10,7 @@ function getDTMultPostBRU11(){
 	gain = gain.times(getTreeUpgradeEffect(7))
 	gain = gain.times(colorBoosts.b)
 	if (GUBought("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
-	if (player.achievements.includes("r137") && !tmp.ngp3l) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
+	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
 	return gain
 }
 
@@ -29,7 +29,7 @@ function getBaseDTProduction(){
 	}
 	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	if (tmp.newNGP3E && player.achievements.includes("r138") && gain.lt(1e100)) gain = gain.times(3).min(1e100)
-	if (!tmp.ngp3l && (tmp.ngp3 || tmp.newNGP3E) && player.achievements.includes("ngpp13")) gain = gain.times(2)
+	if ((tmp.ngp3 || tmp.newNGP3E) && player.achievements.includes("ngpp13")) gain = gain.times(2)
 	return gain
 }
 
@@ -37,7 +37,7 @@ function getDilTimeGainPerSecond() {
 	let gain = getBaseDTProduction()
 	
 	var lgain = gain.log10()
-	if (!tmp.ngp3l && !player.aarexModifications.newGameMult) lgain = softcap(lgain, "dt_log")
+	if (!player.aarexModifications.newGameMult) lgain = softcap(lgain, "dt_log")
 	gain = Decimal.pow(10, lgain)
 	
 	return gain.times(Decimal.pow(2, getDilUpgPower(1)))	
@@ -61,7 +61,7 @@ function getDilPower() {
 	var ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
 	if (player.dilation.upgrades.includes("ngud1")) ret = getD18Bonus().times(ret)
 	if (tmp.ngp3) {
-		if (player.achievements.includes("ng3p11") && !tmp.ngp3l) ret = ret.times(Math.max(getTotalRG() / 125, 1))
+		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
 		if (player.masterystudies.includes("t264")) ret = ret.times(getMTSMult(264))
 		if (GUBought("br1")) ret = ret.times(getBR1Effect())
 		if (player.masterystudies.includes("t341")) ret = ret.times(getMTSMult(341))
@@ -294,9 +294,9 @@ function isDilUpgUnlocked(id) {
 	let ngpp = id.split("ngpp")[1]
 	let ngmm = id.split("ngmm")[1]
 	if (id == "r4") return player.meta !== undefined
-	if (id == "r5") return player.galacticSacrifice !== undefined && !tmp.ngp3l
+	if (id == "r5") return player.galacticSacrifice !== undefined 
 	if (ngmm) {
-		let r = player.galacticSacrifice !== undefined && !tmp.ngp3l
+		let r = player.galacticSacrifice !== undefined 
 		if (ngmm == 6) r = r && player.meta !== undefined
 		if (ngmm >= 7) r = r && player.dilation.studies.includes(6)
 		return r
@@ -334,7 +334,7 @@ function getDilUpgCost(id) {
 
 function getRebuyableDilUpgCost(id) {
 	var costGroup = DIL_UPG_COSTS["r"+id]
-	if (id == 4 && player.galacticSacrifice !== undefined && !tmp.ngp3l) costGroup = DIL_UPG_COSTS.r4_ngmm
+	if (id == 4 && player.galacticSacrifice !== undefined) costGroup = DIL_UPG_COSTS.r4_ngmm
 	var amount = player.dilation.rebuyables[id] || 0
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1],amount))
 	if (player.aarexModifications.nguspV) {
@@ -477,7 +477,7 @@ function getFreeGalaxyThresholdIncrease(){
 	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : !canBuyGalaxyThresholdUpg() ? 1.35 : 1.35 + 3.65 * Math.pow(0.8, getDilUpgPower(2))
 	if (hasBosonicUpg(12)) {
 		thresholdMult -= tmp.blu[12]
-		if (!tmp.ngp3l && thresholdMult < 1.2) thresholdMult = 1.1 + 0.1 / Math.sqrt(2.2 - thresholdMult)
+		if (thresholdMult < 1.2) thresholdMult = 1.1 + 0.1 / Math.sqrt(2.2 - thresholdMult)
 		else if (thresholdMult < 1.15) thresholdMult = 1.05 + 0.1 / (2.15 - thresholdMult)
 	}
 	if (player.exdilation != undefined) thresholdMult -= Math.min(.1 * exDilationUpgradeStrength(2), 0.2)

@@ -1573,7 +1573,7 @@ function updateCoinPerSec() {
 var clickedAntimatter
 function onAntimatterClick() {
 	clickedAntimatter++
-	if (!tmp.ngp3l && clickedAntimatter >= 10) giveAchievement("This is NOT a clicker game!")
+	if (clickedAntimatter >= 10) giveAchievement("This is NOT a clicker game!")
 }
 
 function getInfinitiedStat(){
@@ -2463,7 +2463,7 @@ function import_save(type) {
 		setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 5000)
 	}
 	if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274") giveAchievement("So do I");
-	if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "8aaff3cdcf68f6392b172ee9924a22918451e511c8e60b120f09e2c16d4e26ac" && !tmp.ngp3l) giveAchievement("The Forbidden Layer");
+	if (sha512_256(save_data.replace(/\s/g, '').toUpperCase()) === "8aaff3cdcf68f6392b172ee9924a22918451e511c8e60b120f09e2c16d4e26ac") giveAchievement("The Forbidden Layer");
 	if (sha512_256(save_data) === "de24687ee7ba1acd8f5dc8f71d41a3d4b7f14432fff53a4d4166e7eea48a88c0") {
 		player.options.theme = "S1";
 		player.options.secretThemeKey = save_data;
@@ -2641,7 +2641,7 @@ function onNotationChange() {
 		updateBosonicStuffCosts()
 		if (!player.ghostify.ghostlyPhotons.unl) document.getElementById("gphUnl").textContent = "To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
-		else if (!tmp.ngp3l) updateBosonUnlockDisplay()
+		else updateBosonUnlockDisplay()
 	}
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
@@ -3595,7 +3595,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
-	if (speedrunMilestonesReached < 28 && (tmp.ngp3l || !player.achievements.includes("ng3p67"))) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDs()
@@ -3889,7 +3889,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	if (player.replicanti.unl && speedrunMilestonesReached < 22) player.replicanti.amount = new Decimal(1)
 	player.replicanti.galaxies = 0
 	extraReplGalaxies = 0
-	if (dilated || tmp.ngp3l || !player.achievements.includes("ng3p67")) resetReplicantiUpgrades()
+	if (dilated || !player.achievements.includes("ng3p67")) resetReplicantiUpgrades()
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDs()
@@ -4228,7 +4228,7 @@ function getECGoal(x) {
 		expIncrease = ecExpData.increases[x + "_ngmm"] || expIncrease
 	}
 	let exp = expInit + expIncrease * completions
-	if (x == "ec13" && !tmp.ngp3l) exp += 600000 * Math.max(completions - 2, 0) * (completions - 3, 0)
+	if (x == "ec13") exp += 600000 * Math.max(completions - 2, 0) * (completions - 3, 0)
 	return Decimal.pow(10, exp)
 }
 
@@ -4266,7 +4266,7 @@ function getECReward(x) {
 			main:[0, 0.25, 0.5, 0.7, 0.85, 1],
 			legacy:[0, 0.2, 0.4, 0.6, 0.8, 1]
 		}
-		var dataUsed = data[tmp.ngp3l ? "legacy" : "main"]
+		var dataUsed = data.main
 		return dataUsed[c]
 	}
 	if (x == 14) return getIC3EffFromFreeUpgs()
@@ -4610,10 +4610,8 @@ function doNGP3UnlockStuff(){
 	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (player.money.gte(Decimal.pow(10, 6e9)) && tmp.qu.bigRip.active && !player.ghostify.ghostlyPhotons.unl) doPhotonsUnlockStuff()
 	if (canUnlockBosonicLab() && !player.ghostify.wzb.unl) doBosonsUnlockStuff()
-	if (!tmp.ngp3l) {
-		unlockHiggs()
-		GDs.unl()
-	}
+	unlockHiggs()
+	GDs.unl()
 }
 
 function updateResetTierButtons(){
@@ -4669,7 +4667,7 @@ function updateReplicantiGalaxyToggels(){
 }
 
 function givePerSecondNeuts(){
-	if (!player.achievements.includes("ng3p75") || tmp.ngp3l) return
+	if (!player.achievements.includes("ng3p75")) return
 	var mult = 1 //in case you want to buff in the future
 	var n = getNeutrinoGain().times(mult)
 	player.ghostify.neutrinos.electron = player.ghostify.neutrinos.electron.plus(n)
@@ -4701,8 +4699,6 @@ function doPerSecondNGP3Stuff(){
 	notifyGhostifyMilestones()
 	if (tmp.qu.autoOptions.assignQK && player.ghostify.milestones > 7) assignAll(true) 
 	
-	if (tmp.ngp3l) return 
-
 	if (player.achievements.includes("ng3p43")) if (player.ghostify.milestones >= 8) maxUpgradeColorDimPower()
 	givePerSecondNeuts()
 }
@@ -4988,7 +4984,6 @@ function ghostifyAutomationUpdating(){
 			} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10) bigRip(true)
 		}
 		if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
-		if (tmp.ngp3l) return
 		if (isAutoGhostActive(16)) maxNeutrinoMult()
 		if (isAutoGhostActive(18)) {
 			var added = 0
@@ -5010,7 +5005,7 @@ function WZBosonsUpdating(diff){
 	var data = player.ghostify.bl
 	var wattGained = Decimal.max(getBosonicWattGain(), data.watt).sub(data.watt)
 	data.watt = wattGained.add(data.watt)
-	data.speed = wattGained.times(tmp.ngp3l ? 2 : 10).add(data.speed).min(data.watt)
+	data.speed = wattGained.times(10).add(data.speed).min(data.watt)
 	if (data.speed > 0) {
 		var limitDiff = data.speed.times(14400).min(diff).toNumber()
 		bosonicTick(data.speed.sub(limitDiff / 28800).times(limitDiff))
@@ -5183,7 +5178,7 @@ function quantumOverallUpdating(diff){
 function metaDimsUpdating(diff){
 	player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
 	if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
-	if (tmp.ngp3 && !tmp.ngp3l && inQC(0)) gainQuarkEnergy(player.meta.bestAntimatter, player.meta.antimatter)
+	if (tmp.ngp3 && inQC(0)) gainQuarkEnergy(player.meta.bestAntimatter, player.meta.antimatter)
 	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
 	if (tmp.ngp3) {
 		player.meta.bestOverQuantums = player.meta.bestOverQuantums.max(player.meta.antimatter)
@@ -5349,7 +5344,7 @@ function IPMultBuyUpdating() {
 		if (dif > 0) {
 			player.infMult = player.infMult.times(Decimal.pow(getIPMultPower(), dif))
 			player.infMultCost = player.infMultCost.times(Decimal.pow(ipMultCostIncrease, dif))
-			if (tmp.ngp3l || player.infinityPoints.lte(Decimal.pow(10, 1e9))) {
+			if (player.infinityPoints.lte(Decimal.pow(10, 1e9))) {
 				if (ghostified) {
 					if (player.ghostify.milestones < 11) player.infinityPoints = player.infinityPoints.minus(player.infMultCost.dividedBy(player.aarexModifications.newGameExpVersion?4:10).min(player.infinityPoints))
 				}
@@ -5452,7 +5447,7 @@ function tickspeedButtonDisplay(){
 function passiveGPGen(diff){
 	let passiveGPGen = false
 	if (player.tickspeedBoosts != undefined) passiveGPGen = player.achievements.includes("r56")
-	else if (player.galacticSacrifice) passiveGPGen = !tmp.ngp3l && player.timestudy.studies.includes(181)
+	else if (player.galacticSacrifice) passiveGPGen = player.timestudy.studies.includes(181)
 	var mult = 1
 	if (player.aarexModifications.ngmX >= 4){
 		if (player.achievements.includes("r43")){
@@ -6467,7 +6462,7 @@ window.addEventListener('keydown', function(event) {
 	if (keySequence2 == 0 && event.keyCode == 49) keySequence2++
 	else if (keySequence2 == 1 && event.keyCode == 55) keySequence2++
 	else if (keySequence2 == 2 && event.keyCode == 55) keySequence2++
-	else if (keySequence2 == 3 && event.keyCode == 54) if (!tmp.ngp3l) giveAchievement("Revolution, when?")
+	else if (keySequence2 == 3 && event.keyCode == 54) giveAchievement("Revolution, when?")
 	else keySequence2 = 0
 	
 	if (event.keyCode == 17) controlDown = true;
@@ -6571,7 +6566,7 @@ window.addEventListener('keyup', function(event) {
 		$.notify("Paying respects", "info")
 		giveAchievement("It pays to have respect")
 	}
-		if (!tmp.ngp3l && Math.random() <= 1e-6) giveAchievement("keyboard broke?")
+		if (Math.random() <= 1e-6) giveAchievement("keyboard broke?")
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
 	switch (event.keyCode) {
 		case 67: // C

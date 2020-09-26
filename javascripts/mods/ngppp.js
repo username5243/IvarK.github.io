@@ -61,7 +61,6 @@ function doAutoMetaTick() {
 	}
 	for (var d = 1; d <= 8; d++) {
 		var dim = d
-		if (tmp.ngp3l) dim = 9 - d
 		if (player.autoEterOptions["md" + dim] && speedrunMilestonesReached >= 6 + dim) buyMaxMetaDimension(dim)
 	}
 	if (player.autoEterOptions.metaboost && speedrunMilestonesReached > 14) metaBoost()
@@ -469,12 +468,10 @@ function switchAB() {
 
 function getGHPGain() {
 	if (!tmp.ngp3 || !tmp.qu.bigRip.active) return new Decimal(0)
-	if (!tmp.ngp3l && !ghostified) return new Decimal(1)
+	if (!ghostified) return new Decimal(1)
 	let log = tmp.qu.bigRip.bestThisRun.log10() / getQCGoal(undefined,true) - 1
 	if (log < 0) return new Decimal(0)
-	if (tmp.ngp3l) {
-		log *= 2
-	} else if (player.achievements.includes("ng3p58")) { 
+	if (player.achievements.includes("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
 		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
 		y = player.ghostify.ghostParticles.plus(Decimal.pow(10, log)).plus(10).log10()
@@ -528,13 +525,13 @@ function ghostify(auto, force) {
 var ghostifyDenied
 function denyGhostify() {
 	ghostifyDenied++
-	if (!tmp.ngp3l && ghostifyDenied >= 15) giveAchievement("You are supposed to become a ghost!")
+	if (ghostifyDenied >= 15) giveAchievement("You are supposed to become a ghost!")
 }
 
 function ghostifyReset(implode, gain, amount, force) {
 	var bulk = getGhostifiedGain()
 	if (!force) {
-		if (!tmp.ngp3l && tmp.qu.times >= 1e3 && player.ghostify.milestones >= 16) giveAchievement("Scared of ghosts?")
+		if (tmp.qu.times >= 1e3 && player.ghostify.milestones >= 16) giveAchievement("Scared of ghosts?")
 		if (!implode) {
 			var gain = getGHPGain()
 			player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(gain).round()
@@ -802,7 +799,7 @@ function rotateAutoUnstable() {
 }
 
 function getMaxAutoGhosts() {
-	return tmp.ngp3l ? 15 : 21
+	return 21
 }
 
 //v2.1
