@@ -579,7 +579,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limit
+	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limits[maxBLLvl]
 }
 
 function updateBosonicUpgradeDescs() {

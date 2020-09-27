@@ -158,7 +158,7 @@ function getBranchSpeedText(){
 	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2]) + "x, "
 	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
-	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
+	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + GDs.tmp.tod.toFixed(3) + ", "
 	if (todspeed != undefined) if (todspeed != 1) {
 		if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
 		if (todspeed < 1) text += "ToD Speed: /" + shorten(1/todspeed) + ", "

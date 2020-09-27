@@ -451,10 +451,11 @@ function do_softcap(x, data, num) {
 
 	var decimal = false
 	var canSoftcap = false
-	if (x.l || x.e) decimal = true
+	if (x.l != undefined || x.e != undefined) decimal = true
 	if (decimal ? x.gt(data["start"]) : x > data["start"]) canSoftcap = true
 
 	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
+	return x
 }
 
 function softcap(x, id, max = 1/0) {
