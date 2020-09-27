@@ -1010,6 +1010,7 @@ function doQuantumGhostifyResetStuff(implode, bm){
 		document.getElementById("edtabbtn").style.display = "none"
 	}
 	document.getElementById('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
+	document.getElementById("quantumbtn").style.display = "none"
 	updateLastTenQuantums()
 	updateSpeedruns()
 	updateColorCharge()

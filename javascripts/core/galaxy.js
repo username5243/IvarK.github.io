@@ -156,7 +156,7 @@ function getDistantScalingStart() {
 	var n = 100 + getECReward(5)
 	if (player.timestudy.studies.includes(223)) n += 7
 	if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
-	if (tmp.ngp3) if (tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
+	if (tmp.ngp3 && tmp.qu.bigRip !== undefined && tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
 
 	if (tmp.grd.galaxies >= tmp.grd.darkStart) {

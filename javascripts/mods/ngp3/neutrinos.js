@@ -130,7 +130,7 @@ function getMaxUnlockedNeutrinoBoosts() {
 }
 
 function hasNU(id) {
-	return ghostified ? player.ghostify.neutrinos.upgrades.includes(id) : false
+	return ph.did("ghostify") ? player.ghostify.neutrinos.upgrades.includes(id) : false
 }
 
 function buyNeutrinoMult() {

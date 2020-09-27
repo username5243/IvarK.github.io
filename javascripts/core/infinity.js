@@ -181,7 +181,7 @@ function startChallenge(name) {
 	player.replicanti.galaxies = 0
 
 	// even if we're in a challenge, apparently if it's challenge 2 we might have four resets anyway.
-	setInitialDimensionPower();
+	setInitialResetPower();
 
 	GPminpeak = new Decimal(0)
 	IPminpeak = new Decimal(0)

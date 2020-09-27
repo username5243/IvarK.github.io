@@ -124,6 +124,7 @@ function galacticSacrifice(auto, force, chall) {
 	if (!force) {
 		player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.plus(getGSAmount())
 		player.galacticSacrifice.times++
+		ph.onPrestige("galaxy")
 	}
 	if (chall) {
 		player.galacticSacrifice.chall = chall

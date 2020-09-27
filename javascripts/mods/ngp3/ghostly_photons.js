@@ -67,7 +67,7 @@ var leBoosts = {
 
 function isLEBoostUnlocked(x) {
 	if (!tmp.ngp3) return false
-	if (!ghostified) return false
+	if (!ph.did("ghostify")) return false
 	if (!player.ghostify.ghostlyPhotons.unl) return false
 	if (x >= 4 && !hasBosonicUpg(32)) return false
 	return player.ghostify.ghostlyPhotons.enpowerments >= leBoosts.reqs[x]

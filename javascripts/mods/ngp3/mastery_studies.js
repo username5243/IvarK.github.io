@@ -87,15 +87,15 @@ var masteryStudies = {
 	timeStudies: [],
 	timeStudyEffects: {
 		251(){
-			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
+			if (hasNU(6)) return 0
 			return Math.floor(player.resets / 3e3)
 		},
 		252(){
-			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
+			if (hasNU(6)) return 0
 			return Math.floor(player.dilation.freeGalaxies / 7)
 		},
 		253(){
-			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
+			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG()/4)
 		},
 		262(){
@@ -128,7 +128,7 @@ var masteryStudies = {
 			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
 		},
 		301(){
-			if (player.ghostify.neutrinos.upgrades.includes(6)) return 0
+			if (hasNU(6)) return 0
 			return Math.floor(extraReplGalaxies / 4.15)
 		},
 		303(){

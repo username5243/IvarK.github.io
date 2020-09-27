@@ -31,8 +31,9 @@ function getBatteryGainPerSecond(toSub){
 }
 
 function getBosonicSpeedExp() {
-	if (GDs.unlocked()) return GDs.tmp.bl
-	return 1
+	let x = 1
+	if (GDs.unlocked()) x *= GDs.tmp.bl
+	return x
 }
 
 function getOverdriveFinalSpeed() {
@@ -47,7 +48,7 @@ function getOverdriveSpeedDisplay() {
 }
 
 function getBosonicFinalSpeed() {
-	return tmp.bl.speed.times(getOverdriveSpeedDisplay())
+	return Decimal.times(player.ghostify.bl.speed, getOverdriveSpeedDisplay())
 }
 
 function bosonicTick(diff) {
@@ -578,7 +579,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return ghostified && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limit
+	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limit
 }
 
 function updateBosonicUpgradeDescs() {

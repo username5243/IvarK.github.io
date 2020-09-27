@@ -773,7 +773,7 @@ function ABTypeDisplay(){
 }
 
 function infPoints2Display(){
-	if (player.infinitied > 0 || player.infinityPoints.gt(0) || player.infinityUpgrades.length > 0 || getEternitied() > 0 || quantumed) document.getElementById("infinityPoints2").style.display = "inline-block"
+	if (ph.did("infinity")) document.getElementById("infinityPoints2").style.display = "inline-block"
 	else document.getElementById("infinityPoints2").style.display = "none"
 }
 
@@ -783,10 +783,6 @@ function updateChallTabDisplay(){
 
 function eterPoints2Display(){
 	document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
-}
-
-function eternityBtnDisplayType(){
-	document.getElementById("eternitybtn").style.display = (player.infinityPoints.gte(player.eternityChallGoal) && (player.infDimensionsUnlocked[7] || getEternitied() > 24) && (!player.dilation.active || !inQCModifier("ad"))) ? "inline-block" : "none"
 }
 
 function dimboostABTypeDisplay(){

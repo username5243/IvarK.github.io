@@ -421,101 +421,133 @@ button {
 	font-size: 11px
 }
 
-.infpos {
+.presPos1 {
 	position: absolute;
 	left: 75%;
 	top: 40px;
 }
 
-.eterpos {
+.presPos2 {
 	position: absolute;
 	right: 75%;
 	top: 40px;
 }
 
-.quantumpos {
+.presPos3 {
 	position: absolute;
 	transform: translate(-50%,0);
 	top: 40px;
 }
 
-.sacpos {
-	position: absolute;
-	right: 75%;
-	top: 160px;
-}
-
-.ghostifyPos {
+.presPos4 {
 	position: absolute;
 	left: 75%;
 	top: 160px;
 }
 
-.pSacPos {
+.presPos5 {
+	position: absolute;
+	right: 75%;
+	top: 160px;
+}
+
+.presPos6 {
 	position: absolute;
 	transform: translate(-50%,0);
 	top: 160px;
 }
 
-.postinfcrunch {
-    background: #E0E0E0;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: absolute;
-    left: 75%;
-    top: 40px;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    font-size: 11px
-}
-
-.postinfcrunch br {
-    pointer-events: none;
-}
-
-.postinfcrunch b {
-    pointer-events: none;
-}
-
-.postinfcrunch:hover {
-    color: #FFFFFF;
-    background: #4980CC;
-    border: 2px solid #4980CC;
-    border-radius: 4px;
-}
-
-#IPmin {
-    left: 81.5%;
-    position: absolute;
-    width: 150px
-}
-
-#galaxyPoints2 .GPAmount {
-    font-weight: bold;
-}
-
-.IP {
+.presCurrency1 {
     left: 75%;
     position: absolute;
     font-size: 12px;
     width: 210px;
 }
 
-.IPAmount2 {
-    font-weight: bold;
-}
-
-.EP {
+.presCurrency2 {
     right: 75%;
     position: absolute;
     font-size: 12px;
     width: 210px;
 }
 
+.presCurrency3 {
+	position: absolute;
+	right: 50%;
+	transform: translate(105px, 0);
+	width: 210px;
+	font-size: 12px;
+}
+
+.presCurrency4 {
+    left: 75%;
+	top: 120px;
+    position: absolute;
+    font-size: 12px;
+    width: 210px;
+}
+
+.presCurrency5 {
+    right: 75%;
+	top: 120px;
+    position: absolute;
+    font-size: 12px;
+    width: 210px;
+}
+
+.presCurrency6 {
+	position: absolute;
+	right: 50%;
+	top: 120px;
+	transform: translate(105px, 0);
+	width: 210px;
+	font-size: 12px;
+}
+
+.presBtn {
+    background: #E0E0E0;
+    border: 2px solid #4980CC;
+    border-radius: 4px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    position: absolute;
+    width: 210px;
+    height: 70px;
+    font-family: Typewriter;
+    font-size: 11px
+}
+
+.presBtn br {
+    pointer-events: none;
+}
+
+.presBtn b {
+    pointer-events: none;
+}
+
+.presBtn:hover {
+    color: #FFFFFF;
+    background: #4980CC;
+    border-radius: 4px;
+}
+
+.IPAmount2 {
+    font-weight: bold;
+}
+
 .EPAmount2 {
+    font-weight: bold;
+}
+
+.QKAmount, .SSAmount {
+	font-weight: bold;
+}
+
+.pxAmount, #GHPAmount, #quantumedBMAmount {
+	font-weight: bold;
+}
+
+#galaxyPoints2 .GPAmount {
     font-weight: bold;
 }
 
@@ -524,59 +556,14 @@ button {
 	text-align:center;
 }
 
-.QK {
-	position:absolute;
-	right:50%;
-	transform:translate(105px,0);
-	width:210px;
-	font-size:12px;
+#IPmin {
+    left: 81.5%;
+    position: absolute;
+    width: 150px
 }
 
 .hideEmpty:empty {
    display: none;
-}
-
-#quantumbtn {
-	cursor: pointer;
-	position: absolute;
-	transform: translate(-50%, 0);
-	top: 40px;
-	width: 210px;
-	height: 70px;
-	border-radius: 4px;
-	font-size: 11px
-}
-
-.GHP {
-	position:absolute;
-	left: 75%;
-	top: 120px;
-	width:210px;
-	font-size:12px;
-}
-
-.PX {
-	position:absolute;
-	right:50%;
-	top: 120px;
-	transform:translate(105px,0);
-	width:210px;
-	font-size:12px;
-}
-
-#bigripbtn, #ghostifybtn {
-	cursor: pointer;
-	position: absolute;
-	left: 75%;
-	top: 160px;
-	width: 210px;
-	height: 70px;
-	border-radius: 4px;
-	font-size: 11px
-}
-
-.pxAmount, #GHPAmount, #quantumedBMAmount {
-	font-weight: bold;
 }
 
 .dimtechdiv {
@@ -619,13 +606,10 @@ button {
     z-index: 1;
 }
 
-
-
 .newdim:hover {
     color: #FFF;
     background: #5AC467;
 }
-
 
 .newdimlocked {
     border-radius: 4px;
@@ -648,31 +632,7 @@ button {
     background: #B84B5F;
 }
 
-.eternitybtn {
-    border-radius: 4px;
-    transition-duration: 0.2s;
-    cursor: pointer;
-    position: absolute;
-    right: 75%;
-    top: 40px;
-    width: 210px;
-    height: 70px;
-    font-family: Typewriter;
-    color: #b341e0;
-    background: black;
-    border: 2px solid #b341e0;
-    cursor: pointer;
-    font-size: 11px;
-}
-
-
-
-.eternitybtn:hover {
-    color: #511568;
-    background: white;
-}
-
-#paradoxbtn {
+.paradoxbtn {
 	background: radial-gradient(#7f007f, #ff00ff);
 	border: 2px solid #ff00ff;
 	color: #ff7fff;
@@ -683,7 +643,9 @@ button {
 	transition-duration: 0.2s
 }
 
-#paradoxbtn:hover {
+.paradoxbtn:hover {
+	background: radial-gradient(#7f007f, #ff00ff);
+	border: 2px solid #ff00ff;
 	box-shadow: inset 0px 0px 12px 0px #ff00ff;
 	text-shadow: 0px 0px 6px #000000, 0px 0px 6px #ff00ff;
 	cursor: pointer
@@ -724,7 +686,7 @@ button {
 	transition-duration: 0.2s
 }
 
-#galaxybtn {
+.galaxybtn {
     color: #4169E1;
     background: #000000;
     font-weight: bold;
@@ -734,7 +696,7 @@ button {
     cursor: pointer;
 }
 
-#galaxybtn:hover {
+.galaxybtn:hover {
     color: #FFFFFF;
     background: #1E90FF;
     font-weight: bold;
@@ -758,6 +720,17 @@ button {
     font-weight: bold;
     border: 2px solid #B67F33;
     border-radius: 4px;
+}
+
+.eternitybtn {
+    color: #b341e0;
+    background: black;
+    border: 2px solid #b341e0
+}
+
+.eternitybtn:hover {
+    color: #511568;
+    background: white;
 }
 
 .eternitytabbtn {
@@ -792,7 +765,7 @@ button {
 }
 
 .ghostifybtn {
-	background: linear-gradient(#0c0033, #2e0033);
+	background: linear-gradient(#0c0033, #2e0033) !important;
 	box-shadow: inset 0px 0px 24px 0px black;
 	border: 2px solid;
 	font-family: Typewriter;
@@ -1009,12 +982,14 @@ button {
 
 #welcomeMessage { font-size:12px; }
 
-#footercontainer {
+.footer {
+    left: 0;
     bottom: 0;
     position: fixed;
     width: 100%;
     z-index: 1;
     pointer-events: none;
+	display: var(--footer)
 }
 
 #footer {
@@ -1022,8 +997,7 @@ button {
     margin: auto;
     text-align:center;
     font-size: 15px;
-    font-family: Typewriter;
-	display: var(--footer)
+    font-family: Typewriter
 }
 
 #footer tr td div {
@@ -2253,6 +2227,18 @@ br {
 }
 .bigripbtn:hover {
 	background: #a0e5a6 !important;
+	color: #6b996e
+}
+.quickBigRip {
+	background: #2d7233;
+	border-color: #5be567;
+	cursor: pointer;
+	font-weight: bold;
+	color: #5be567;
+	box-shadow: inset 0px 0px 10px 0px #5be567, inset 0px 0px 20px 0px #5be567, inset 0px 0px 30px 0px #5be567
+}
+.quickBigRip:hover {
+	background: #a0e5a6;
 	color: #6b996e
 }
 .gluonupgrade.bigrip {

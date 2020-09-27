@@ -11,35 +11,7 @@ function updateTemp() {
 	tmp.rg4 = false
 	if (tmp.ngp3) {
 		updateGhostifyTempStuff()
-		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
-		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
-		if (tmp.nrm !== 1 && player.quantum.bigRip.active) {
-			if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
-			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
-		}
-		if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
-		if (player.masterystudies.includes("d9")) {
-			tmp.twr = getTotalWorkers()
-			tmp.tra = getTotalReplicants()
-		}
-		updateMasteryStudyTemp()
-		if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
-		if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
-			var x = getNanoRewardPowerEff()
-			var y = tmp.qu.nanofield.rewards
-			tmp.ns = getNanofieldSpeed()
-			if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
-				tmp.nf.powerEff = x
-				tmp.nf.rewards = y
-
-				updateNanoRewardPowers()
-				updateNanoRewardEffects()
-			}
-		}
-		if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
-		tmp.be = player.quantum.bigRip.active && tmp.qu.breakEternity.break
-		tmp.rg4 = tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || !tmp.ngp3l || inQC(1) || QCIntensity(1))
-		tmp.tue = getTreeUpgradeEfficiency()
+		updateQuantumTempStuff()
 	} else tmp.be = false
 	tmp.sacPow = calcTotalSacrificeBoost()
 	updateQCRewardsTemp()
@@ -315,6 +287,38 @@ function updatePPTITemp(){
 	tmp.ppti = x
 }
 
+function updateQuantumTempStuff() {
+	if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
+	if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
+	if (tmp.nrm !== 1 && player.quantum.bigRip.active) {
+		if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
+		if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
+	}
+	if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
+	if (player.masterystudies.includes("d9")) {
+		tmp.twr = getTotalWorkers()
+		tmp.tra = getTotalReplicants()
+	}
+	updateMasteryStudyTemp()
+	if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
+	if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
+		var x = getNanoRewardPowerEff()
+		var y = tmp.qu.nanofield.rewards
+		tmp.ns = getNanofieldSpeed()
+		if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
+			tmp.nf.powerEff = x
+			tmp.nf.rewards = y
+
+			updateNanoRewardPowers()
+			updateNanoRewardEffects()
+		}
+	}
+	if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
+	tmp.be = player.quantum.bigRip.active && tmp.qu.breakEternity.break
+	tmp.rg4 = tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || !tmp.ngp3l || inQC(1) || QCIntensity(1))
+	tmp.tue = getTreeUpgradeEfficiency()
+}
+
 function updateGhostifyTempStuff(){
 	GDs.updateTmp()
 	updateBosonicLabTemp()
@@ -334,7 +338,7 @@ function updateGhostifyTempStuff(){
 		updateNU14Temp()
 		updateNU15Temp()
 	}
-	if (ghostified) {
+	if (ph.did("ghostify")) {
 		updateNeutrinoUpgradesTemp()
 		updateNeutrinoBoostsTemp()
 	}
@@ -342,9 +346,6 @@ function updateGhostifyTempStuff(){
 
 function updateNeutrinoBoostsTemp() {
 	tmp.nb = {}
-
-	if (!tmp.ngp3) return
-	if (!ghostified) return
 
 	var nt = []
 	for (var g = 0; g < 3; g++) nt[g] = player.ghostify.neutrinos[(["electron","mu","tau"])[g]]

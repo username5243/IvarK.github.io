@@ -71,7 +71,7 @@ function getPxGain() {
 }
 
 function canPSac() {
-	return player.pSac != undefined && !tmp.ri && player.matter.max(player.money).gte(1e3) && player.totalTickGained
+	return ph.can("paradox")
 }
 
 function pSac(chall) {
@@ -92,6 +92,7 @@ function pSacReset(force, chall, pxGain) {
 	resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
+	ph.onPrestige("paradox")
 }
 
 function pSacrificed() {

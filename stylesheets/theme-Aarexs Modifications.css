@@ -529,13 +529,13 @@ strong { color: #0072e5 }
 	color: #e5e5e5 !important;
 	box-shadow: none !important
 }
-.bigripbtn {
+.bigripbtn, .quickBigRip {
 	background-color: #191919 !important;
 	border: 3px solid #5be567 !important;
 	color: #e5e5e5 !important;
 	box-shadow: none !important
 }
-#dilstudy14.dilationupg:hover, #dilstudy14.dilationupgbought, .bigripbtn:hover, .gluonupgrade.bigrip:hover, .gluonupgradebought.bigrip {
+#dilstudy14.dilationupg:hover, #dilstudy14.dilationupgbought, .bigripbtn:hover, .quickBigRip:hover, .gluonupgrade.bigrip:hover, .gluonupgradebought.bigrip {
 	background-color: #5be567 !important;
 	color: #191919 !important;
 	box-shadow: none !important

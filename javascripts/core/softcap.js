@@ -450,12 +450,11 @@ function do_softcap(x, data, num) {
 	//note from pg: this will work now
 
 	var decimal = false
-	if (x + 0 != x) {
-		decimal = true
-		if (x.lt(data["start"])) return x
-	} else if (x < data["start"]) return x
+	var canSoftcap = false
+	if (x.l || x.e) decimal = true
+	if (decimal ? x.gt(data["start"]) : x > data["start"]) canSoftcap = true
 
-	return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
+	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
 }
 
 function softcap(x, id, max = 1/0) {

@@ -25,13 +25,13 @@
 			<div id='news'>.</div>
 		</div>
 		<div style="position: relative">
-			<div class="IP" id="infinityPoints2"></div>
-			<button id="postInfinityButton" class="postinfcrunch" onclick="bigCrunch()">Big Crunch for x Infinity Points</button>
+			<div class="presCurrency1" id="infinityPoints2"></div>
+			<button class="presBtn presPos1" id="postInfinityButton" onclick="bigCrunch()">Big Crunch for x Infinity Points</button>
 		</div>
 		<div style="position: relative">
-			<div class="EP" id="eternityPoints2"></div>
+			<div id="eternityPoints2"></div>
 			<button id="newDimensionButton" class="newdim" onclick="newDimension()">Get x antimatter to unlock a new Dimension.</button>
-			<button id="eternitybtn" class="eternitybtn" onclick="eternity()">
+			<button id="eternitybtn" onclick="eternity()">
 				<div style="font-weight:bold" id="eternitybtnFlavor" class="hideEmpty">Other times await.. I need to become Eternal</div>
 				<div id="eternitybtnEPGain" class="hideEmpty"></div>
 				<div id="eternitybtnRate" class="hideEmpty"></div>
@@ -40,18 +40,18 @@
 		</div>
 		<div style="position: relative">
 			<div id="px">You have <span class='pxAmount'>0</span> Paradoxes.</div>
-			<span id="pSacPos"><button id="pSac" class="storebtn" onclick="pSac()"></button></span>
+			<button id="pSac" class="storebtn" onclick="pSac()"></button>
 		</div>
 		<div style="position: relative">
-			<div class="EP" id="galaxyPoints2">You have <span class='GPAmount'>0</span> Galaxy points.</div>
-			<span id="sacpos" class="eterpos"><button id="sacrificebtn" class="storebtn" onclick="galacticSacrifice()"></button></span>
+			<div id="galaxyPoints2">You have <span class='GPAmount'>0</span> Galaxy points.</div>
+			<button id="sacrificebtn" class="storebtn" onclick="galacticSacrifice()"></button>
 		</div>
 		<div style="position: relative">
-			<div class="QK">
+			<div id="quantumInfo">
 				<div id="quarks"></div>
 				<div id="quantumClock"></div>
 			</div>
-			<button id="quantumbtn" class="quantumbtn" onclick="quantum(false, false, 0)">
+			<button id="quantumbtn" onclick="quantum(false, false, 0)">
 				<div id="quantumbtnFlavor" class="hideEmpty"></div>
 				<div id="quantumbtnQKGain" class="hideEmpty"></div>
 				<div id="quantumbtnRate" class="hideEmpty"></div>
@@ -59,12 +59,12 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div class="GHP" id="ghostparticles">
+			<div id="ghostparticles">
 				You have <span id='GHPAmount'>0</span> Ghost Particles.<br>
 				<div id="quantumedBM">Quantumed <span id='quantumedBMAmount'>0</span> times</div>
 			</div>
-			<button id="bigripbtn" class="bigripbtn" onclick="bigRip()">I want to complete the impossible challenge... I want to Big Rip the universe.</button>
-			<button id="ghostifybtn" class="ghostifybtn" onclick="ghostify()">
+			<button id="bigripbtn" onclick="bigRip()">I want to complete the impossible challenge... I want to Big Rip the universe.</button>
+			<button id="ghostifybtn" onclick="ghostify()">
 				<div id="ghostifybtnFlavor" class="hideEmpty"></div>
 				<div id="GHPGain" class="hideEmpty"></div>
 				<div id="GHPRate" class="hideEmpty"></div>
@@ -99,8 +99,8 @@
 			<button id="achievementsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('achievements')">Achievements</button>
 			<button id="challengesbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('challenges')">Challenges</button>
 			<button id="automationbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick='showTab("autobuyers")'>Automation</button>
-			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn" onclick='showTab("paradox")'>Paradox</button>
-			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")'>Galaxy</button>
+			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn paradoxbtn" onclick='showTab("paradox")'>Paradox</button>
+			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")' class="tabbtn galaxybtn">Galaxy</button>
 			<button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('infinity')">Infinity</button>
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
@@ -655,20 +655,7 @@
 				</table>
 				<div><button class="storebtn" onclick="buyMaxEPMult()" style="height: 25px; width: 190px; font-size:10px; margin-top: -3px;">Max EP mult</button></div>
 				<div><button id="epmultauto" class="storebtn" onclick="toggleAutoEter('epmult')" style="height: 25px; width: 190px; font-size:10px; margin-top: 3px;"></button></div>
-				<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+				<div class="footer"></div>
 			</div>
 			<div class="eternitytab" id="milestones">
 				<table class="table" align="center" style="margin: auto" id="milestones">
@@ -1141,20 +1128,7 @@
 					  <br/>
 					  <canvas id="blackHoleCanvas" width="400" height="400" style="user-select: none;"></canvas>
 				</div>
-				<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+				<div class="footer"></div>
 			</div>
 			<div class="eternitytab" id="autoEternity">
 				<table id="autoEternityTable">
@@ -1201,20 +1175,7 @@
 						</td>
 					</tr>
 				</table>
-				<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+				<div class="footer"></div>
 			</div>
 		</div>
 		<div id="dimensions" class="tab">
@@ -1703,7 +1664,7 @@
 					<tr>
 						<td id="gvCell" colspan=3 style="text-align: center; width: 75%">
 							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
-							You have <span id="gdWatt" style="font-size: 25px">1.00</span> Bosonic Watts, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
+							You have <span id="gdWatt" style="font-size: 25px">1.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
 						</td>
 						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 25%">
 							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
@@ -1722,7 +1683,7 @@
 							First Gravity Dimension ^1.00
 						</td>
 						<td id="gd1Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="gd2Row">
@@ -1730,7 +1691,7 @@
 							Second Gravity Dimension ^1.00
 						</td>
 						<td id="gd2Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="gd3Row">
@@ -1738,7 +1699,7 @@
 							Third Gravity Dimension ^1.00
 						</td>
 						<td id="gd3Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="gd4Row">
@@ -1746,20 +1707,21 @@
 							Fourth Gravity Dimension ^1.00
 						</td>
 						<td id="gd4Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr>
-						<td id="gdShift">
-							Gravity Dimension Shift (0): Requires 0 Gravitons and First Radiation Dimension
+						<td id="gdBoostDesc">
+							Gravity Dimension Shift (0): Requires ??? Gravity Radiation
 						</td>
 						<td style="text-align: right">
-							<button class="storebtn" style="width: 240px">Unlock a new Dimension</button>
+							<button class="storebtn" id="gdBoost" style="width: 240px" onclick="GDs.gdBoost()">Unlock a new Dimension</button>
 						</td>
 					</tr>
 					<tr>
 						<td id="grCell" colspan=3 style="text-align: center">
-							You have <span id="gr" style="font-size: 25px">0.0</span> Gravity Radiation.
+							You have <span id="gr" style="font-size: 25px">0.0</span> Gravity Radiation.<br>
+							You have <span id="rdTick" style="font-size: 25px">0</span> Radiation Ticks. Next at <span id="rdNextTick" style="font-size: 25px">Infinite</span>x Bosonic Speed.
 						</td>
 					</tr>
 					<tr id="rd1Row">
@@ -1767,7 +1729,7 @@
 							First Radiation Dimension
 						</td>
 						<td id="rd1Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="rd2Row">
@@ -1775,7 +1737,7 @@
 							Second Radiation Dimension
 						</td>
 						<td id="rd2Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="rd3Row">
@@ -1783,7 +1745,7 @@
 							Third Radiation Dimension
 						</td>
 						<td id="rd3Amount" style="text-align: right">
-							0
+							1
 						</td>
 					</tr>
 					<tr id="rd4Row">
@@ -1791,15 +1753,7 @@
 							Fourth Radiation Dimension
 						</td>
 						<td id="rd4Amount" style="text-align: right">
-							0
-						</td>
-					</tr>
-					<tr>
-						<td id="rdShift">
-							Radiation Dimension Shift (0): Requires 0 Higgs Bosons
-						</td>
-						<td style="text-align: right">
-							<button class="storebtn" style="width: 240px">Reset for a new Dimension</button>
+							1
 						</td>
 					</tr>
 				</table>
@@ -1816,21 +1770,7 @@
 				<canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
 				<b>Exponents of antimatter per second</b>
 			</div>
-			<div id="footercontainer">
-
-				<table id="footer">
-					<tr>
-						<td>
-							<div style="text-align:center">
-								<a href="howto.html" target="_newtab">How to play</a> |
-								<a href="about.html" target="_newtab">About</a> |
-								<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-								<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<div class="footer"></div>
 		</div>
 		<div id="options" class="tab" align="center">
 			<table class="table" align="center" style="margin: auto">
@@ -1909,22 +1849,9 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 3)</span>
+				<span class="warning">(Test server: Beta 4)</span>
 			</p>
-			<div id="footercontainer">
-				<table id="footer" style="display: table !important">
-					<tr>
-						<td>
-							<div style="text-align:center">
-								<a href="howto.html" target="_newtab">How to play</a> |
-								<a href="about.html" target="_newtab">About</a> |
-								<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-								<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<div class="footer"></div>
 		</div>
 		<div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
 			<div id='statstabs'>
@@ -2143,20 +2070,7 @@
 				<div id="averageGhostifyRun"></div>
 				<br>
 			</div>
-			<div id="footercontainer">
-				<table id="footer">
-					<tr>
-						<td>
-							<div style="text-align:center">
-								<a href="howto.html" target="_newtab">How to play</a> |
-								<a href="about.html" target="_newtab">About</a> |
-								<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-								<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<div class="footer"></div>
 		</div>
 		<div id="achievements" class="tab">
 			<table class="table" align="center" style="margin: auto" id="achTabButtons">
@@ -4673,21 +4587,7 @@
 				  Replicanti needed to get a galaxy: <input type="text" onchange="setReplicantiNewLimit()" id="replLimit"></input>
 				</div>
 			</div>
-			<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-				
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+			<div class="footer"></div>
 		</div>
 		<div id="singularity" class="inftab">
 			<br>
@@ -4700,21 +4600,7 @@
 				You are getting <span id="darkMatterPerSecond" style="font-size:35px; color: black">0</span> dark matter per second.<br>
 				Next 2x dark matter production unlocks at <span id="nextUpgrade"></span> sacrificed IP.
 			</div>
-			<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-				
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+			<div class="footer"></div>
 		</div>
 		<div id="dimtechs" class="inftab">
 			<br>
@@ -4777,20 +4663,7 @@
 					</tr>
 				</table>
 			</div>
-			<div id="footercontainer">
-					<table id="footer">
-						<tr>
-							<td>
-								<div style="text-align:center">
-									<a href="howto.html" target="_newtab">How to play</a> |
-									<a href="about.html" target="_newtab">About</a> |
-									<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-									<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-								</div>
-							</td>
-						</tr>
-					</table>
-				</div>
+			<div class="footer"></div>
 		</div>
 		</div>
 		<div class='tab' id='quantumtab'>
@@ -5125,20 +4998,7 @@
 				<br>
 				<br>
 			</div>
-			<div id="footercontainer">
-				<table id="footer">
-					<tr>
-						<td>
-							<div style="text-align:center">
-								<a href="howto.html" target="_newtab">How to play</a> |
-								<a href="about.html" target="_newtab">About</a> |
-								<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a>  |
-								<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<div class="footer"></div>
 		</div>
 		<div class='tab' id='ghostify'>
 			<table class="table" align="center" style="margin: auto">
@@ -5609,20 +5469,8 @@
 					</div>
 				</div>
 			</div>
-			<div id="footercontainer">
-				<table id="footer">
-					<tr>
-						<td>
-							<div style="text-align:center">
-								<a href="howto.html" target="_newtab">How to play</a> |
-								<a href="about.html" target="_newtab">About</a> |
-								<a href="donate.html" onclick="giveAchievement('A sound financial decision')" target="_newtab">Donate</a> |
-								<a href="http://discord.gg/h9mDese" target="_newtab">Discord</a>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
+			<br><br>
+			<div class="footer"></div>
 		</div>
 	</div>
 	<div class="popup" id="challfail">
@@ -5706,6 +5554,7 @@
 			<button id="hideCompletedAchs" onclick="toggleCompletedAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideSecretAchs" onclick="toggleSecretAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideProductionTab" onclick="toggleProductionTab()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<div id="hideLayers"></div>
 		</div>
 	</div>
 	<div class="popup optionmenu" id="confirmationoptions">

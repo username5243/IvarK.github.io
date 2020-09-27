@@ -468,8 +468,8 @@ function switchAB() {
 
 function getGHPGain() {
 	if (!tmp.ngp3 || !tmp.qu.bigRip.active) return new Decimal(0)
-	if (!ghostified) return new Decimal(1)
-	let log = tmp.qu.bigRip.bestThisRun.log10() / getQCGoal(undefined,true) - 1
+	if (!ph.did("ghostify")) return new Decimal(1)
+	let log = tmp.qu.bigRip.bestThisRun.log10() / getQCGoalLog(undefined, true) - 1
 	if (log < 0) return new Decimal(0)
 	if (player.achievements.includes("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
@@ -489,14 +489,13 @@ function getGHPMult() {
 	return x
 }
 
-ghostified = false
 function ghostify(auto, force) {
 	if (!force&&(!isQuantumReached()||!tmp.qu.bigRip.active||implosionCheck)) return
 	if (!auto && !force && player.aarexModifications.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets your banked stats, best TP & MA, quarks, gluons, electrons, Quantum Challenges, Replicants, Nanofield, and Tree of Decay to gain a Ghost Particle. Are you ready for this?")) {
 		denyGhostify()
 		return
 	}
-	if (!ghostified && (!confirm("Are you sure you want to do this? You will lose everything you have!") || !confirm("ARE YOU REALLY SURE YOU WANT TO DO THAT? YOU CAN'T UNDO THIS AFTER YOU BECAME A GHOST AND PASS THE UNIVERSE EVEN IT IS BIG RIPPED! THIS IS YOUR LAST CHANCE!"))) {
+	if (!ph.did("ghostify") && (!confirm("Are you sure you want to do this? You will lose everything you have!") || !confirm("ARE YOU REALLY SURE YOU WANT TO DO THAT? YOU CAN'T UNDO THIS AFTER YOU BECAME A GHOST AND PASS THE UNIVERSE EVEN IT IS BIG RIPPED! THIS IS YOUR LAST CHANCE!"))) {
 		denyGhostify()
 		return
 	}
@@ -504,7 +503,7 @@ function ghostify(auto, force) {
 	if (implode) {
 		var gain = getGHPGain()
 		var amount = player.ghostify.ghostParticles.add(gain).round()
-		var seconds = ghostified ? 4 : 10
+		var seconds = ph.did("ghostify") ? 4 : 10
 		implosionCheck=1
 		dev.ghostify(gain, amount, seconds)
 		setTimeout(function(){
@@ -541,6 +540,15 @@ function ghostifyReset(implode, gain, amount, force) {
 		player.ghostify.times = nA(player.ghostify.times, bulk)
 		player.ghostify.best = Math.min(player.ghostify.best, player.ghostify.time)
 		while (tmp.qu.times <= tmp.bm[player.ghostify.milestones]) player.ghostify.milestones++
+		if (!ph.did("ghostify")) {
+			ph.onPrestige("ghostify")
+			ph.updateDisplay()
+		}
+	}
+	if (isEmptiness) {
+		showTab("dimensions")
+		isEmptiness = false
+		ph.updateDisplay()
 	}
 	if (tmp.qu.bigRip.active) switchAB()
 	var bm = player.ghostify.milestones
@@ -614,7 +622,7 @@ function updateLastTenGhostifies() {
 }
 
 function updateBraveMilestones() {
-	if (ghostified) {
+	if (ph.did("ghostify")) {
 		for (var m = 1; m < 17;m++) document.getElementById("braveMilestone" + m).className = "achievement achievement" + (player.ghostify.milestones < m ? "" : "un") + "locked"
 		for (var r = 1; r < 3; r++) document.getElementById("braveRow" + r).className = player.ghostify.milestones < r * 8 ? "" : "completedrow"
 	}
@@ -752,7 +760,7 @@ function toggleAutoGhost(id) {
 }
 
 function isAutoGhostActive(id) {
-	if (!ghostified) return
+	if (!ph.did("ghostify")) return
 	return player.ghostify.automatorGhosts[id].on
 }
 
