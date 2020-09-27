@@ -159,7 +159,10 @@ function getBranchSpeedText(){
 	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
-	if (todspeed) if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
+	if (todspeed != undefined) if (todspeed != 1) {
+		if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
+		if (todspeed < 1) text += "ToD Speed: /" + shorten(1/todspeed) + ", "
+	}
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length - 2)
 }
