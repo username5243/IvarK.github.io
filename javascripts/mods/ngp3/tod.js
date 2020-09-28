@@ -608,9 +608,18 @@ function getBranchUpg3SoftcapStart(){
 	return 1000 //maybe later on we can have things buff this
 }
 
+function getBranchUpg2SoftcapStart(){
+	return 1e4 * Math.log2(10)
+}
+
 function getBranchUpgMult(branch, upg) {
 	if (upg == 1) return Decimal.pow(2, getBU1Power(branch) * (getRadioactiveDecays(branch) / 10 + 1))
-	else if (upg == 2) return Decimal.pow(2, getBU2Power(branch))
+	else if (upg == 2) {
+		let x = getBU2Power(branch)
+		let s = getBranchUpg2SoftcapStart()
+		if (x > s) x = Math.pow(x * s, .5)
+		return Decimal.pow(2, x)
+	} 
 	else if (upg == 3) {
 		l = getBranchUpgLevel(branch, 3)
 		let s = getBranchUpg3SoftcapStart()
