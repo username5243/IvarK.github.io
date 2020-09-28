@@ -44,7 +44,7 @@ function bosonicLabReset() {
 	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)
 	player.ghostify.ghostlyPhotons.lights = [0,0,0,0,0,0,0,0]
 	tmp.updateLights = true
-	var startingEnchants = bEn.effects[14](tmp.bl.enchants[14] || 0).bUpgs
+	var startingEnchants = tmp.bEn[14].bUpgs
 	player.ghostify.bl = {
 		watt: new Decimal(0),
 		ticks: player.ghostify.bl.ticks,
@@ -56,7 +56,7 @@ function bosonicLabReset() {
 		autoExtract: new Decimal(0),
 		glyphs: [],
 		enchants: {},
-		usedEnchants: [],
+		usedEnchants: tmp.bl.usedEnchants,
 		upgrades: [],
 		battery: new Decimal(0),
 		odSpeed: player.ghostify.bl.odSpeed
@@ -81,6 +81,10 @@ function bosonicLabReset() {
 		wpb: new Decimal(0),
 		wnb: new Decimal(0),
 		zb: new Decimal(0)
+	}
+	if (player.achievements.includes("ng3p98")) {
+		player.ghostify.wzb.wpb = Decimal.pow(3, player.ghostify.hb.higgs)
+		player.ghostify.wzb.zb = Decimal.pow(9, player.ghostify.hb.higgs)
 	}
 	player.ghostify.hb.bosonicSemipowerment = true
 	GDs.dimReset()
@@ -110,7 +114,7 @@ function restartHiggs() {
 
 function getHiggsRequirementBase() {
 	var div = new Decimal(1)
-	if (player.ghostify.bl.usedEnchants.includes(14)) div = div.times(tmp.bEn[14].higgs || 1)
+	if (isEnchantUsed(14)) div = div.times(tmp.bEn[14].higgs || 1)
 	return new Decimal(1e20).divide(div)
 }
 

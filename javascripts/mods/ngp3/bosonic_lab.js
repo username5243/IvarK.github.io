@@ -24,7 +24,7 @@ function getBosonicWattGain() {
 
 function getBatteryGainPerSecond(toSub){
 	let batteryMult = new Decimal(1)
-	if (player.ghostify.bl.usedEnchants.includes(24)) batteryMult = batteryMult.times(tmp.bEn[24])
+	if (isEnchantUsed(24)) batteryMult = batteryMult.times(tmp.bEn[24])
 	let toAdd = toSub.div(1e6).times(batteryMult)
 	if (toAdd.gt(1e3)) toAdd = Decimal.pow(toAdd.log10() + 7, 3) 
 	return toAdd.div(10)
@@ -170,11 +170,10 @@ function getAchBAMMult(){
 function getBosonicAMProduction() {
 	var exp = player.money.max(1).log10() / 15e15 - 3
 	var ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
-	if (player.ghostify.bl.usedEnchants.includes(34)) ret = ret.times(tmp.bEn[34] || 1)
+	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
 	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
-	if (player.achievements.includes("ng3p98")) ret = ret.plus(Math.pow(player.ghostify.hb.higgs, 2))
 	//maybe softcap at e40 or e50?
-	ret = softcap(ret, "bam")
+	if (!hasBosonicUpg(55)) ret = softcap(ret, "bam")
 	return ret
 }
 
@@ -186,17 +185,18 @@ function getBosonicAMFinalProduction() {
 
 let maxBLLvl = 3
 function updateBosonicLimits() {
-	if (!tmp.ngp3) return
-
 	//Bosonic Level?
 	let lvl = maxBLLvl
-	if (player.ghostify.hb.higgs == 0) lvl = 1
+	if (!tmp.ngp3 || !player.ghostify.wzb.unl) lvl = 0
+	else if (player.ghostify.hb.higgs == 0) lvl = 1
 	else if (!GDs.unlocked()) lvl = 2
 
 	//Bosonic Lab
 	br.limit = br.limits[lvl]
 	bu.rows = bu.limits[lvl]
 	bEn.limit = bEn.limits[lvl]
+
+	if (lvl == 0) return
 
 	var width = 100 / br.limit
 	for (var r = 1; r <= br.limits[maxBLLvl]; r++) {
@@ -267,6 +267,12 @@ function updateBosonicLabTab(){
 		document.getElementById("hbResetReq").textContent = shorten(req)
 		document.getElementById("hbResetGain").textContent = getFullExpansion(getHiggsGain())
 	}
+	if (GDs.unlocked()) document.getElementById("gvBlAmount").textContent = shortenMoney(GDs.save.gv)
+}
+
+function teleportToBL() {
+	showGhostifyTab("bltab")
+	showTab("ghostify")
 }
 
 function updateBosonicStuffCosts() {
@@ -359,46 +365,14 @@ function getMaxEnchantLevelGain(id) {
 }
 
 function canUseEnchant(id) {
-	if (!player.ghostify.bl.enchants[id]) return
-	if (bEn.limit == 1) {
-		if (player.ghostify.bl.usedEnchants.includes(id)) return
-	} else if (!player.ghostify.bl.usedEnchants.includes(id) && player.ghostify.bl.usedEnchants.length >= bEn.limit) return
+	if (isEnchantUsed(id)) return true
+	if (!tmp.bl.enchants[id]) return false
+	if (tmp.bl.usedEnchants.length >= bEn.limit) return false
 	return true
 }
 
 function takeEnchantAction(id) {
-	let data = player.ghostify.bl
-	if (bEn.action == "upgrade") {
-		let costData = bEn.costs[id]
-		let g1 = Math.floor(id / 10)
-		let g2 = id % 10
-		if (!canBuyEnchant(id)) return
-		data.glyphs[g1 - 1] = data.glyphs[g1 - 1].sub(getBosonicFinalCost(costData[0])).round()
-		data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(getBosonicFinalCost(costData[1])).round()
-		if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(1)
-		else data.enchants[id] = data.enchants[id].add(1).round()
-	} else if (bEn.action == "max") {
-		let lvl = getMaxEnchantLevelGain(id)
-		let costData = bEn.costs[id]
-		let g1 = Math.floor(id / 10)
-		let g2 = id % 10
-		if (!canBuyEnchant(id)) return
-		data.glyphs[g1 - 1] = data.glyphs[g1 - 1].sub(lvl.times(getBosonicFinalCost(costData[0])).min(data.glyphs[g1 - 1])).round()
-		data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(lvl.times(getBosonicFinalCost(costData[1])).min(data.glyphs[g2 - 1])).round()
-		if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(lvl)
-		else data.enchants[id] = data.enchants[id].add(lvl).round()
-	} else if (bEn.action == "use") {
-		if (canUseEnchant(id)) {
-			if (bEn.limit == 1) data.usedEnchants = [id]
-			else {
-				if (data.usedEnchants.includes(id)) {
-					var newData = []
-					for (var u = 0; u < data.usedEnchants.length; u++) if (data.usedEnchants[u] != id) newData.push(data.usedEnchants[u])
-					data.usedEnchants = newData
-				} else data.usedEnchants.push(id)
-			}
-		}
-	}
+	bEn.actionFuncs[bEn.action](id)
 }
 
 function changeEnchantAction(id) {
@@ -445,25 +419,48 @@ function updateEnchantDescs() {
 	document.getElementById("usedEnchants").textContent = "You have used " + data.usedEnchants.length + " / " + bEn.limit + " Bosonic Enchants."
 }
 
+function autoMaxEnchant(id, times) {
+	if (!canBuyEnchant(id)) return
+
+	let data = player.ghostify.bl
+	let costData = bEn.costs[id]
+	let g1 = Math.floor(id / 10)
+	let g2 = id % 10
+	let toAdd = getMaxEnchantLevelGain(id).times(times)
+	if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(toAdd)
+	else data.enchants[id] = data.enchants[id].add(toAdd).round()
+}
+
+function autoMaxAllEnchants(times) {
+	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) autoMaxEnchant(g1 * 10 + g2, times)
+}
+
+function isEnchantUsed(x) {
+	return tmp.bEn !== undefined && tmp.bEn[x] !== undefined && tmp.bl.usedEnchants.includes(x)
+}
+
 var br = {
 	names: [null, "Infinity", "Eternity", "Quantum", "Ghostly", "Ethereal", "Sixth", "Seventh", "Eighth", "Ninth"], //Current maximum limit of 9.
-	limits: [null, 3, 4, 5],
+	limits: [0, 3, 4, 5],
 	scalings: {
 		1: 60,
 		2: 120,
 		3: 600,
-		4: 6e7
+		4: 6e7,
+		5: 6e20
 	}
 }
 
 var bEn = {
 	costs: {
-		12: [3,1],
-		13: [20,2],
-		23: [1e4,2e3],
+		12: [3, 1],
+		13: [20, 2],
+		23: [1e4, 2e3],
 		14: [1e6, 2],
 		24: [1e6, 10],
-		34: [1,0]
+		34: [1, 0],
+		15: [1e21, 1],
+		25: [1e25, 1]
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -471,13 +468,18 @@ var bEn = {
 		23: "Bosonic Antimatter boosts oscillate speed.",
 		14: "Divide the requirement of Higgs and start with some Bosonic Upgrades even it is inactive.",
 		24: "You gain more Bosonic Battery.",
-		34: "Higgs Bosons produce more Bosonic Antimatter."
+		34: "Higgs Bosons produce more Bosonic Antimatter.",
+		15: "You gain more Gravity Energy.",
+		25: "Z Bosons are stronger.",
 	},
 	effects: {
 		12(l) {
+			if (isEnchantUsed(15)) l = mult.times(tmp.bEn[15])
+
 			let exp = 0.75
 			if (l.gt(1e10)) exp *= Math.pow(l.log10() / 5 + 79, .25) - 2
 			if (exp > .8) exp = Math.log10(exp * 12.5) * .8
+
 			return Decimal.pow(l, exp).div(bEn.autoScalings[player.ghostify.bl.typeToExtract])
 		},
 		13(l) {
@@ -486,6 +488,7 @@ var bEn = {
 		14(l) {
 			let eff = Decimal.add(l, 9).log10()
 			if (eff > 15) eff = Math.sqrt(eff * 15)
+			if (eff > 20) eff = 20
 			return {
 				bUpgs: Math.floor(eff),
 				higgs: Decimal.add(l, 1).pow(0.4)
@@ -502,6 +505,12 @@ var bEn = {
 		},
 		34(l) {
 			return Decimal.pow(player.ghostify.hb.higgs / 20 + 1, l.add(1).log10() / 5)
+		},
+		15(l) {
+			return Math.log10(l.add(1).log10() + 1) / 2 + 1
+		},
+		25(l) {
+			return 2 - 1 / (l.max(1).log10() / 100 + 1)
 		}
 	},
 	effectDescs: {
@@ -512,11 +521,54 @@ var bEn = {
 		},
 		14(x) {
 			return "/" + shorten(x.higgs) + " to Higgs requirement, " + getFullExpansion(x.bUpgs) + " starting upgrades"
+		},
+		25(x) {
+			return (x * 100 - 100).toFixed(2) + "% stronger"
 		}
 	},
 	action: "upgrade",
 	actions: ["upgrade", "max", "use"],
-	limits: [null, 2, 4, 10],
+	actionFuncs: {
+		upgrade(id) {
+			if (!canBuyEnchant(id)) return
+
+			let data = player.ghostify.bl
+			let costData = bEn.costs[id]
+			let g1 = Math.floor(id / 10)
+			let g2 = id % 10
+			data.glyphs[g1 - 1] = data.glyphs[g1 - 1].sub(getBosonicFinalCost(costData[0])).round()
+			data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(getBosonicFinalCost(costData[1])).round()
+			if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(1)
+			else data.enchants[id] = data.enchants[id].add(1).round()
+		},
+		max(id) {
+			if (!canBuyEnchant(id)) return
+
+			let data = player.ghostify.bl
+			let costData = bEn.costs[id]
+			let g1 = Math.floor(id / 10)
+			let g2 = id % 10
+			let lvl = getMaxEnchantLevelGain(id)
+			data.glyphs[g1 - 1] = data.glyphs[g1 - 1].sub(lvl.times(getBosonicFinalCost(costData[0])).min(data.glyphs[g1 - 1])).round()
+			data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(lvl.times(getBosonicFinalCost(costData[1])).min(data.glyphs[g2 - 1])).round()
+			if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(lvl)
+			else data.enchants[id] = data.enchants[id].add(lvl).round()
+		},
+		use(id) {
+			if (!canUseEnchant(id)) return
+
+			let data = player.ghostify.bl
+			if (bEn.limit == 1) data.usedEnchants = [id]
+			else {
+				if (data.usedEnchants.includes(id)) {
+					var newData = []
+					for (var u = 0; u < data.usedEnchants.length; u++) if (data.usedEnchants[u] != id) newData.push(data.usedEnchants[u])
+					data.usedEnchants = newData
+				} else data.usedEnchants.push(id)
+			}
+		}
+	},
+	limits: [0, 2, 4, 10],
 	autoScalings:{
 		1: 1.5,
 		2: 3,
@@ -560,7 +612,7 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
-	if (id == 32) tmp.updateLights = true
+	if (id == 32 || id == 62) tmp.updateLights = true
 	if (id == 54) updateQuantumChallenges()
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
@@ -580,7 +632,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id <= bu.rows * 10 + 10
+	return id <= bu.rows * 10 + 10 && player.ghostify.bl.upgrades.includes(id)
 }
 
 function updateBosonicUpgradeDescs() {
@@ -592,7 +644,7 @@ function updateBosonicUpgradeDescs() {
 }
 
 var bu = {
-	limits: [null, 2, 4, 7],
+	limits: [0, 2, 4, 7],
 	costs: {
 		11: {
 			am: 200,
@@ -679,20 +731,25 @@ var bu = {
 			g3: 1e12,
 			g4: 1e7
 		},
-		43:{
+		43: {
 			am: 2e50,
 			g1: 4e13,
 			g3: 4e12
 		},
-		44:{
+		44: {
 			am: 2e65,
 			g1: 1e14,
 			g4: 1e8
 		},
-		45:{
-			am: 2e80,
+		45: {
+			am: 2e79,
 			g2: 2e14,
 			g4: 4e8
+		},
+		51: {
+			am: 2e95,
+			g1: 2e17,
+			g3: 2e16
 		}
 	},
 	reqData: {},
@@ -708,7 +765,7 @@ var bu = {
 		24: "You produce 1% of Space Shards on Big Rip per second, but Break Eternity upgrades that boost space shard gain are nerfed.",
 		25: "Electrons boost the per-ten Meta Dimensions multiplier.",
 		31: "Bosonic Antimatter boosts all Nanorewards.",
-		32: "Unlock a new boost until every third LE from LE7 until LE25.",
+		32: "Unlock a new boost until every third LE from LE7 until LE22.",
 		33: "Higgs Bosons reduce the costs of all electron upgrades.",
 		34: "All types of galaxies boost each other.",
 		35: "Replicantis and Emperor Dimensions boost each other.",
@@ -717,10 +774,13 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "Gravitons strengthen Light Empowerments and divide the Light Empowerment requirement.",
-		52: "Radioactive Decays boost Tree Upgrades.",
-		53: "Nanorewards delay the actual softcap of first Bosonic Upgrade.",
-		54: "Unlock Quantum Challenge 9."
+		51: "You automatically produce 1% of preon charge gain.",
+		52: "Unlock Quantum Challenge 9.",
+		53: "Gravitons divide the Light Empowerment requirement.",
+		54: "Radioactive Decays boost Tree Upgrades.",
+		55: "Remove all softcaps of Bosonic Antimatter production.",
+		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
+		62: "Unlock 4 new Light Empowerment boosts."
 	},
 	effects: {
 		11() {
@@ -835,20 +895,13 @@ var bu = {
 			eff = softcap(eff, "bu45")
 			return eff.toNumber()
 		},
-		51() {
+		53() {
 			let gv = GDs.save.gv
-			return {
-				str: Math.pow(gv.max(1).log10() / 10 + 1, 0.75),
-				req: gv.max(1).pow(0.01).toNumber()
-			}
+			return gv.max(1).log10() / 5 + 1
 		},
-		52() {
+		54() {
 			if (!tmp.quActive) return 1
 			return Math.max(getTotalRadioactiveDecays() / 50, 1)
-		},
-		53() {
-			if (!tmp.quActive) return 1
-			return Math.max(tmp.qu.nanofield.rewards / 100, 1)
 		}
 	},
 	effectDescs: {
@@ -894,14 +947,11 @@ var bu = {
 		45(x) {
 			return "/" + shorten(x) + " to efficiency"
 		},
-		51(x) {
-			return (x.str * 100).toFixed(2) + "% strength to Light Empowerments, /" + shorten(x.req) + " to requirement"
-		},
-		52(x) {
-			return (x * 100 - 100).toFixed(1) + "% stronger"
-		},
 		53(x) {
-			return "Starts at " + (x * 100).toFixed(2) + "%"
+			return "/" + shorten(x)
+		},
+		54(x) {
+			return (x * 100 - 100).toFixed(1) + "% stronger"
 		}
 	}
 }
@@ -919,7 +969,7 @@ function changeOverdriveSpeed() {
 //W & Z Bosons
 function getAntiPreonProduction() {
 	let r = new Decimal(0.1)
-	if (player.ghostify.bl.usedEnchants.includes(13)) r = r.times(tmp.bEn[13])
+	if (isEnchantUsed(13)) r = r.times(tmp.bEn[13])
 	return r
 }
 
@@ -932,7 +982,7 @@ var aplScalings = {
 
 function getAntiPreonLoss() {
 	let r = new Decimal(0.05)
-	if (player.ghostify.bl.usedEnchants.includes(13)) r = r.times(tmp.bEn[13])
+	if (isEnchantUsed(13)) r = r.times(tmp.bEn[13])
 	return r
 }
 
@@ -942,7 +992,7 @@ function useAntiPreon(id) {
 
 function getOscillateGainSpeed() {
 	let r = tmp.wzb.wbo
-	if (player.ghostify.bl.usedEnchants.includes(23)) r = r.times(tmp.bEn[23])
+	if (isEnchantUsed(23)) r = r.times(tmp.bEn[23])
 	return Decimal.div(r, player.ghostify.wzb.zNeReq)
 }
 

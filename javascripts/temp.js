@@ -142,7 +142,7 @@ function updateEffectiveLightAmountsTemp(){
 }
 
 function updateFixedLightTemp() {
-	if (isLEBoostUnlocked(5)) tmp.leBonus[5] = leBoosts.effects[5]()
+	if (isLEBoostUnlocked(5)) tmp.leBonus[5] = leBoosts[5].eff()
 	updateLightEmpowermentReq()
 	updateEffectiveLightAmountsTemp()
 	updateRedLightBoostTemp()
@@ -151,13 +151,9 @@ function updateFixedLightTemp() {
 	updateGreenLightBoostTemp()
 	updateBlueLightBoostTemp()
 	updateVioletLightBoostTemp()
-	if (isLEBoostUnlocked(1)) tmp.leBonus[1] = {effect: leBoosts.effects[1]()}
-	for (var b = 2; b <= leBoosts.max; b++) {
+	for (var b = 1; b <= leBoosts.max; b++) {
 		if (!isLEBoostUnlocked(b)) break
-		if (b != 4 && b != 5) {
-			tmp.leBonus[b] = leBoosts.effects[b]()
-			if (b == 8) tmp.apgw += Math.floor(tmp.leBonus[9])
-		}
+		if (b != 4 && b != 5) tmp.leBonus[b] = leBoosts[b].eff()
 	}
 }
 
@@ -538,7 +534,7 @@ function updateBRU1Temp() {
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
 	exp *= player.infinityPoints.max(1).log10()
-	exp = softcap(exp, "bru1_log", tmp.ngp3l ? 1 : 2)
+	exp = softcap(exp, "bru1_log", 2)
 	tmp.bru[1] = Decimal.pow(10, exp) // BRU1
 }
 
@@ -637,7 +633,8 @@ function updateWZBosonsTemp(){
 	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) //W Bosons boost to Bosonic Antimatter production
 
 	var zbslog = player.ghostify.wzb.zb.div(10).add(1).sqrt().log10()
-	if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog)
+	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
+	//if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog)
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }
 

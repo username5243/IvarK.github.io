@@ -2704,12 +2704,12 @@ td.lEp {
 }
 
 #gv {
-	color: #0b298d;
+	color: #485faa;
 	text-shadow: 0px -3px 6px #485faa, 0px 3px 6px #1d2951
 }
 
 #gr {
-	color: #265a00;
+	color: #5c8340;
 	text-shadow: 0px -3px 6px #5c8340, 0px 3px 6px #354a21
 }
 
@@ -2766,6 +2766,19 @@ td.subFactorH {
 
 #apgInfo .warning {
 	color: #bf0000
+}
+
+.gv {
+	border: 2px solid #0b298d;
+	background-color: #485faa;
+	color: #1d2951;
+	cursor: pointer
+}
+
+.gv:hover {
+	border: 2px solid #1d2951;
+	background-color: #0b298d;
+	color: #0f1529
 }
 
 @media print,

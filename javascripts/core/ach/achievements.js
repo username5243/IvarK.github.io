@@ -190,7 +190,7 @@ const allAchievements = {
   ng3p97 : "The Ghostliest Side",
   ng3p98 : "Meta-Quintillion",
   ng3p101 : "The Power of Relativity",
-  ng3p102 : "ng3p102",
+  ng3p102 : "The Forbidden Challenge",
   ng3p103 : "ng3p103",
   ng3p104 : "ng3p104",
   ng3p105 : "ng3p105",
@@ -558,20 +558,26 @@ function toggleSecretAchs() {
 }
 
 function achMultLabelUpdate() {
-        var label = "Normal"
-        if (player.achievements.includes("r75")) label += "/Infinity"
-        if (player.eternityUpgrades.includes(4)) label += "/Time"
-        return label
+	var labels = ["Normal"]
+	if (player.achievements.includes("r75")) labels.push("Infinity")
+	if (player.eternityUpgrades.includes(4)) labels.push("Time")
+	return wordizeList(labels)
 }
 
 function metaAchMultLabelUpdate() {
-    if (!tmp.ngp3) {
-        document.getElementById("metaAchMultLabel").style.display = "none"
-        return
-    }
-    var metaMult = (tmp.qcRewards ? tmp.qcRewards[6] : 1)
-    if (tmp.qu.challenges[6] > 0) {
-        document.getElementById("metaAchMultLabel").style.display = "inline-block"
-        document.getElementById("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(metaMult) + "x"
-    } else document.getElementById("metaAchMultLabel").style.display = "none"
+	if (!isQCRewardActive(6)) {
+		document.getElementById("metaAchMultLabel").style.display = "none"
+		return
+	}
+	document.getElementById("metaAchMultLabel").style.display = ""
+	document.getElementById("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(tmp.qcRewards[6]) + "x"
+}
+
+function bAMAchMultLabelUpdate() {
+	if (!player.achievements.includes("ng3p91")) {
+		document.getElementById("bAMAchMultLabel").style.display = "none"
+		return
+	}
+	document.getElementById("bAMAchMultLabel").style.display = ""
+	document.getElementById("bAMAchMultLabel").textContent = "Achievement multiplier to Bosonic Antimatter: " + shorten(getAchBAMMult()) + "x"
 }

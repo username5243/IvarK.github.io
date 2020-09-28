@@ -42,10 +42,10 @@ let GDs = {
 
 		if (!GDs.unlocked()) return
 
-		data.gdm = Decimal.max(tmp.bl.speed, 1).log10() //Determine the initial multiplier for Gravity Dimensions.
+		data.gdm = tmp.bl.speed.div(10).add(1).log10() //Determine the initial multiplier for Gravity Dimensions.
 
 		//Gravity Power
-		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.add(10).log10(), 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
+		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
 			let layer = Math.floor(Math.log2(gp / 10 + 1))
@@ -74,7 +74,7 @@ let GDs = {
 			let b = GDs.boosts.list[i]
 			html += '<tr>' +
 				'<td>' + GDs.boosts[b].desc.replace('{{x}}', '<span class="gvBoost" id="gvTo_' + b + '">1.00</span>') + '</td>' +
-				'<td style="text-align: right"><button class="storebtn" id="gvCharge_' + b + '" onclick="GDs.chargeBoost(\'' + b + '\')">Charge</button></td>' +
+				'<td style="text-align: right"><button id="gvCharge_' + b + '" onclick="GDs.chargeBoost(\'' + b + '\')">Charge</button></td>' +
 				'</tr>'
 		}
 		document.getElementById("gvBoosts").innerHTML = html
@@ -83,8 +83,9 @@ let GDs = {
 		document.getElementById("gdWatt").textContent = shorten(tmp.bl.speed)
 		document.getElementById("gdMult").textContent = shorten(GDs.tmp.gdm)
 		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
+
 		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (GDs.save.gdBoosts >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
-		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn" : "unavailablebtn"
+		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
 		document.getElementById("gdBoost").textContent = GDs.save.gdBoosts >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
 		document.getElementById("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
 		document.getElementById("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
@@ -102,6 +103,10 @@ let GDs = {
 		document.getElementById("gvPowScaling").textContent = (GDs.tmp.gpr == 0 ? "" : GDs.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(GDs.tmp.gpr) + " ") + "Power"
 		document.getElementById("gvEne").textContent = GDs.tmp.ge.toFixed(2)
 		document.getElementById("gvEneMult").textContent = GDs.tmp.gem.toFixed(2)
+
+		document.getElementById("gvNoPow").style.display = GDs.tmp.gp == 0 ? "" : "none"
+		if (GDs.tmp.gp == 0) document.getElementById("gvPowStart").textContent = shortenMoney(Decimal.pow(10, Math.pow(GDs.save.gr.add(10).log10(), 2/3)))
+
 		document.getElementById("gvRadio").style.display = GDs.tmp.gpr >= 1 ? "" : "none"
 		if (GDs.tmp.gpr >= 1) {
 			document.getElementById("gvRadioExp").textContent = GDs.tmp.gpr >= 2 ? "^" + getFullExpansion(GDs.tmp.gpr) : ""
@@ -115,11 +120,15 @@ let GDs = {
 		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100 - 100).toFixed(2) + "%"
 		//document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100 - 100).toFixed(2) + "%"
 	},
+	teleport() {
+		showDimTab("gdims")
+		showTab("dimensions")
+	},
 	can() {
-		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 25
+		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 40
 	},
 	reqText() {
-		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(25) + " Higgs Bosons"
+		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(40) + " Higgs Bosons"
 	},
 	unl() {
 		if (GDs.unlocked()) return
@@ -134,6 +143,7 @@ let GDs = {
 	unlDisplay() {
 		let unl = GDs.unlocked()
 		document.getElementById("gdtabbtn").style.display = unl ? "" : "none"
+		document.getElementById("gvBlCell").style.display = unl ? "" : "none"
 		if (!unl) return
 
 		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = GDs.save.gdBoosts + 1 >= d ? "" : "hidden"
@@ -158,7 +168,7 @@ let GDs = {
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		return Decimal.pow(10, (Math.pow(x * 2, 2) + 3) * GDs.rdExp() * 2)
+		return Decimal.pow(10, (Math.pow(x * 2, 2) + 5) * GDs.rdExp() * 2)
 	},
 	rdNextTickAt() {
 		return GDs.save.rdTick.add(1).pow(1 / GDs.rdExp()).times(30)
@@ -179,7 +189,7 @@ let GDs = {
 		}
 	},
 	rdExp() {
-		return 0.5
+		return GDs.save.gc ? GDs.boosts[GDs.save.gc].rdExp : 0.5
 	},
 	dimReset() {
 		let data = GDs.save
@@ -202,8 +212,9 @@ let GDs = {
 	},
 	energyMult() {
 		let x = 1
-		if (QCIntensity(9)) x *= tmp.qcRewards[9] || 1
-		return 1
+		if (isEnchantUsed(15)) x = tmp.bEn[15]
+		if (isQCRewardActive(9)) x += tmp.qcRewards[9] || 0
+		return x
 	},
 	charge(ge, id) {
 		if (GDs.save.gc == id) ge *= GDs.tmp.gc
@@ -211,60 +222,69 @@ let GDs = {
 		return ge
 	},
 	chargeMult() {
-		return 2
+		let x = 3
+		return x
 	},
 	superchargeMult() {
 		return 1
 	},
 	chargeBoost(id) {
 		if (GDs.save.gc == id) return
-		if (!confirm("This will do a Higgs reset to charge up one of Gravity Well boosts, but Gravity Radiation scale less. Are you sure?")) return
+		if (!confirm("You will charge up a boost, but this requires a Higgs reset and a reset to all Gravity / Radiation Dimensions. Be warned: You will let Radiation goes up more. Are you sure?")) return
+		this.save.gdBoosts = 0
 		bosonicLabReset()
-		document.getElementById("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn"
+		document.getElementById("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn gv"
 		document.getElementById("gvCharge_" + id).className = "chosenbtn"
+		GDs.unlDisplay()
 		GDs.save.gc = id
 	},
 	unchargeBoost() {
 		if (!GDs.save.gc) return
-		if (!confirm("This requires a Higgs reset because you will have less Gravity Radiation after reset. Are you sure?")) return
+		if (!confirm("This discharges all your boosts, but this will reset everything that charging resets. Are you sure?")) return
+		this.save.gdBoosts = 0
 		bosonicLabReset()
-		document.getElementById("gvCharge_" + GDs.save.gc).className = "storebtn"
+		document.getElementById("gvCharge_" + GDs.save.gc).className = "storebtn gv"
 		document.getElementById("gvUncharge").className = "chosenbtn"
+		GDs.unlDisplay()
 		delete GDs.save.gc
 	},
 	chargeDisplay() {
 		let c = GDs.save.gc
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
-			document.getElementById("gvCharge_" + b).className = c == b ? "chosenbtn" : "storebtn"
+			document.getElementById("gvCharge_" + b).className = c == b ? "chosenbtn" : "storebtn gv"
 		}
-		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn"
+		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
 	},
 	boosts: {
 		list: ["rep", "nf", "tod", "bl"],
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			eff(x) {
-				return Math.sqrt(2 * x + 1)
-			}
+				return Math.sqrt(x + 1)
+			},
+			rdExp: 1.5
 		},
 		nf: {
 			desc: "^{{x}} to Nanospeed",
 			eff(x) {
 				return x + 1
-			}
+			},
+			rdExp: 0.75
 		},
 		tod: {
 			desc: "^{{x}} to Branch speed",
 			eff(x) {
-				return Math.cbrt(3 * x + 1)
-			}
+				return Math.cbrt(x / 2 + 1)
+			},
+			rdExp: 0.5
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return x / 2 + 1
-			}
+				return Math.pow(x / 2 + 1, 0.75)
+			},
+			rdExp: 1
 		},
 	},
 	reset(unl) {

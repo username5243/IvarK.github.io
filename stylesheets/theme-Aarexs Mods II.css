@@ -732,14 +732,14 @@ button, div.storebtn {
 	box-shadow: 0px 0px 12px #e5e500, inset 0px 0px 24px #e5e500, 1px 2px rgba(229,229,229,0.4)
 }
 
-#gdtabbtn button {
-	background-color: #0b298d !important;
-	color: #0f1529 !important
-}
-
-#gdtabbtn button:hover {
+.gv, #gdtabbtn button {
 	background-color: #485faa !important;
 	color: #1d2951 !important
+}
+
+.gv:hover, #gdtabbtn button:hover {
+	background-color: #0b298d !important;
+	color: #0f1529 !important
 }
 
 #gvPow, #gvEne, #gvEneMult {

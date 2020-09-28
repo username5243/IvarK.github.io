@@ -4567,6 +4567,7 @@ function doBosonsUnlockStuff() {
 	updateTemp()
 	updateNeutrinoBoosts()
 	updateBLUnlocks()
+	updateBosonicLimits()
 }
 
 function doPhotonsUnlockStuff(){
@@ -4682,10 +4683,13 @@ function doPerSecondNGP3Stuff(){
 	
 	if (tmp.qu.autoECN !== undefined) {
 		justImported = true
-		if (tmp.qu.autoECN > 12) buyMasteryStudy("ec", tmp.qu.autoECN,true)
+		if (tmp.qu.autoECN > 12) buyMasteryStudy("ec", tmp.qu.autoECN, true)
 		else document.getElementById("ec" + tmp.qu.autoECN + "unl").onclick()
 		justImported = false
 	}
+	if (isAutoGhostActive(19)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+	if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
+	if (isAutoGhostActive(16)) maxNeutrinoMult()
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
 	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
 	if (isAutoGhostActive(10)) maxBuyLimit()
@@ -4696,12 +4700,19 @@ function doPerSecondNGP3Stuff(){
 		} 
 	}
 	if (isAutoGhostActive(8)) buyMaxQuantumFood()
-	if (isAutoGhostActive(7)) maxQuarkMult()
+	if (isAutoGhostActive(18)) {
+		let bought = false
+		for (let u = 1; u <= 4; u++) while (buyElectronUpg(u, true)) bought = true
+		if (bought) updateElectrons()
+	}
+	if (isAutoGhostActive(7)) {
+		maxQuarkMult()
+		maxUpgradeColorDimPower()
+	}
 	doNGP3UnlockStuff()
 	notifyGhostifyMilestones()
 	if (tmp.qu.autoOptions.assignQK && player.ghostify.milestones > 7) assignAll(true) 
-	
-	if (player.achievements.includes("ng3p43")) if (player.ghostify.milestones >= 8) maxUpgradeColorDimPower()
+
 	givePerSecondNeuts()
 }
 
@@ -4727,6 +4738,7 @@ setInterval(function() {
 	ALLACHIEVECHECK()
 	bendTimeCheck()
 	metaAchMultLabelUpdate()
+	bAMAchMultLabelUpdate()
 
 	// AB Stuff
 	updateReplicantiGalaxyToggels()
@@ -4964,7 +4976,7 @@ function dimensionButtonDisplayUpdating(){
 	document.getElementById("mdtabbtn").style.display = player.dilation.studies.includes(6) ? "" : "none"
 }
 
-function ghostifyAutomationUpdating(){
+function ghostifyAutomationUpdating(diff){
 	if (ph.did("ghostify") && isAutoGhostsSafe) {
 		var colorShorthands=["r", "g", "b"]
 		for (var c = 1; c <= 3; c++) {
@@ -4988,20 +5000,16 @@ function ghostifyAutomationUpdating(){
 			} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10) bigRip(true)
 		}
 		if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
-		if (isAutoGhostActive(16)) maxNeutrinoMult()
-		if (isAutoGhostActive(18)) {
-			var added = 0
-			var addedTotal = 0
-			for (var u = 1; u <= 4; u++) {
-				while (buyElectronUpg(u, true)) {
-					added++
-					addedTotal++
-				}
-				if (added > 0) tmp.qu.electrons.mult += added * getElectronUpgIncrease(u)
+		if (isAutoGhostActive(17)) extract()
+		if (isAutoGhostActive(19)) {
+			let ag = player.ghostify.automatorGhosts[19]
+			ag.t = (ag.t || 0) + diff / 2
+			let times = Math.floor(ag.t)
+			if (times > 0) {
+				autoMaxAllEnchants(times)
+				ag.t = ag.t - times
 			}
-			if (addedTotal > 0) updateElectrons(true)
 		}
-		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 	} 
 }
 
@@ -5048,6 +5056,7 @@ function nanofieldUpdating(diff){
 	var AErate = getQuarkAntienergyProduction()
 	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(tmp.qu.nanofield.antienergy))
 	if (tmp.qu.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
+	if (hasBosonicUpg(51)) tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().div(100))
 	if (toAddAE.gt(0)) {
 		tmp.qu.nanofield.antienergy = tmp.qu.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
 		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuarkEnergyProduction()))
@@ -5843,7 +5852,7 @@ function gameLoop(diff) {
 	passiveIPperMUpdating(diff)
 	incrementTimesUpdating(diffStat)
 	dimensionButtonDisplayUpdating()
-	ghostifyAutomationUpdating()
+	ghostifyAutomationUpdating(diff)
 
 	if (player.meta) metaDimsUpdating(diff)
 	infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims

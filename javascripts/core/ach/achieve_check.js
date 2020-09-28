@@ -293,9 +293,8 @@ function ngP3AchieveCheck(){
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays >= 10) giveAchievement("Radioactive Decaying to the max!")
-	if (quantumed) giveAchievement("Sub-atomic")
+	if (tmp.quUnl) giveAchievement("Sub-atomic")
 
-	// NG+3.1 achievements from this point on
 	beyondHiggsAchieveCheck()
 }
 
@@ -303,27 +302,48 @@ function beyondHiggsAchieveCheck(){
 	let minUQ = getMinimumUnstableQuarks()
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
-	if (player.quantum.quarks.log10() >= 55555) giveAchievement("Are these another...")
+	if (player.quantum.quarks.log10() >= 4e4) giveAchievement("Are these another...")
 	if (player.ghostify.reference && minUQ.decays >= 2) giveAchievement("... references to EC8?")
 	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
 	if (player.unstableThisGhostify <= 10 && getTwoDecaysBool()) giveAchievement("... references to EC8?")
+
+	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
+	//
+	//
+	//
+	//
+	//
+	//
+	//
+
+	if (pl.did()) giveAchievement("Quantum-Scale")
+	//
+	//
+	//
+	//
+	//
+	//
+	//
 }
 
 function ALLACHIEVECHECK(){
-	//PRE NG+3 ACHIEVEMENTS ONLY!!!
-	checkIPReqAchieve() //IP Req
-	checkEPReqAchieve() //EP Req
-	checkReplicantiBasedReqAchieve() //Replicanti based Req
-	checkResetCountReqAchieve() //Reset Count Req
-	checkMatterAMNDReqAchieve() //AM/ND/Matter Req
-	checkInfPowerReqAchieve() //IPo Req
-	checkTickspeedReqAchieve() //Tickspeed/tick upgs based
-	checkOtherPreNGp3Achieve()
+	if (!player.achievements.includes("ng3p81")) {
+		//PRE NG+3 ACHIEVEMENTS ONLY!!!
+		checkIPReqAchieve() //IP Req
+		checkEPReqAchieve() //EP Req
+		checkReplicantiBasedReqAchieve() //Replicanti based Req
+		checkResetCountReqAchieve() //Reset Count Req
+		checkMatterAMNDReqAchieve() //AM/ND/Matter Req
+		checkInfPowerReqAchieve() //IPo Req
+		checkTickspeedReqAchieve() //Tickspeed/tick upgs based
+		checkOtherPreNGp3Achieve
 
-	if (player.exdilation) checkNGUdAchieve()
-	if (player.meta) checkNGp2Achieve()
-	if (player.exdilation || player.meta) checkUniversalHarmony()
+		if (player.exdilation) checkNGUdAchieve()
+		if (player.meta) checkNGp2Achieve()
+		if (player.exdilation || player.meta) checkUniversalHarmony()
+	}
+
 	if (tmp.ngp3) ngP3AchieveCheck()
 }

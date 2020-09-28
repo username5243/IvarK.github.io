@@ -535,7 +535,8 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["Ghostify is just Quantum but spooky.", true, "gn56"],
 ["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel... He took over the Barrel!", "tmp.qu.nanofield.apgWoke", "gn57"],
 ["GHOST IS YOU", true, "gn58"],
-["Error 404: Ghost Matter not found", true, "gn59"]
+["Error 404: Ghost Matter not found", true, "gn59"],
+["Ghost scientists have built a quick transportation to the Gravity Well!", true, "gn60"]
 ];}
 
 var ghostlyNewsTickerCache = false

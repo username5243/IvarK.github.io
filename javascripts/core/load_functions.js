@@ -2117,6 +2117,7 @@ function updateNGModeMessage(){
         }
         if (player.aarexModifications.newGameMinusVersion) ngModeMessages.push("Welcome to NG-, created by slabdrill! Originally made as a save file modification, NG- is now ported as a 'mod'. Everything in the original Antimatter Dimensions is nerfed, making the endgame harder to reach.")
         if (player.aarexModifications.aau) ngModeMessages.push("You have applied the AAU 'mod', made by Apeirogon. This will unbalance many areas of the game, as you get all achievements available in your save. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
+        if (player.aarexModifications.ls) ngModeMessages.push("You have applied the Light Speed 'mod', made by Aarex Tiaokhiao. This will unbalance many areas of the game, as you can speed up some mechanics and also, the game. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
         if (inflationCheck) ngModeMessages = ["I'm terribly sorry, but it seems there has been an inflation problem in your save, which is why this save file has been reset."]
         if (infiniteCheck) ngModeMessages = ["I'm terribly sorry, but there has been an Infinite bug detected within your save file, which is why said save file will get reset. Luckily, you can export your save before this reset. Thanks! :)"]
         if (forceToQuantumAndRemove) {

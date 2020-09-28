@@ -1,5 +1,5 @@
 let Prestiges = {
-	order: ["paradox", "galaxy", "infinity", "eternity", "quantum", "ghostify"/*, "planck"*/],
+	order: ["paradox", "galaxy", "infinity", "eternity", "quantum", "ghostify", "planck"],
 	reqs: {
 		paradox() {
 			return player.matter.max(player.money).gte(1e3) && player.totalTickGained && !tmp.ri

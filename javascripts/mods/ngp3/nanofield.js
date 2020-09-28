@@ -333,5 +333,7 @@ function updateNextPreonEnergyThreshold(){
 }
 
 function getAntiPreonGhostWake() {
-	return 104
+	let x = 104
+	if (isLEBoostUnlocked(9)) x += Math.floor(tmp.leBonus[9])
+	return x
 }

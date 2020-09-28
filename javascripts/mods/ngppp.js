@@ -704,24 +704,25 @@ function maxGHPMult() {
 
 function setupAutomaticGhostsData() {
 	var data = {power: 0, ghosts: 3}
-	for (var ghost=1; ghost <= getMaxAutoGhosts(); ghost++) data[ghost] = {on: false}
+	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) data[ghost] = {on: false}
 	data[4].mode = "q"
 	data[4].rotate = "r"
 	data[11].pw = 1
 	data[11].lw = 1
 	data[11].cw = 1
 	data[15].a = 1
+	data[19].t = 0
 	return data
 }
 
-var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,24,28,32,36,40]
+var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,6,3,6,3,9,3]
+var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,10]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
-		for (var x = 1; x <= getMaxAutoGhosts(); x++) if (data[x] === undefined) data[x] = {on: false}
-		if (data.ghosts >= getMaxAutoGhosts()) document.getElementById("nextAutomatorGhost").parentElement.style.display="none"
+		for (var x = 1; x <= MAX_AUTO_GHOSTS; x++) if (data[x] === undefined) data[x] = {on: false}
+		if (data.ghosts >= MAX_AUTO_GHOSTS) document.getElementById("nextAutomatorGhost").parentElement.style.display="none"
 		else {
 			document.getElementById("automatorGhostsAmount").textContent=data.ghosts
 			document.getElementById("nextAutomatorGhost").parentElement.style.display=""
@@ -729,7 +730,7 @@ function updateAutoGhosts(load) {
 		}
 	}
 	powerConsumed=0
-	for (var ghost = 1; ghost <= getMaxAutoGhosts(); ghost++) {
+	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
 		if (ghost>data.ghosts) {
 			if (load) document.getElementById("autoGhost"+ghost).style.display="none"
 		} else {
@@ -795,7 +796,7 @@ function changeAutoGhost(o) {
 
 function rotateAutoUnstable() {
 	var tg=player.ghostify.automatorGhosts[3].on
-	if (player.ghostify.automatorGhosts[4].rotate=="l") {
+	if (player.ghostify.automatorGhosts[4].rotate == "l") {
 		player.ghostify.automatorGhosts[3].on = player.ghostify.automatorGhosts[1].on
 		player.ghostify.automatorGhosts[1].on = player.ghostify.automatorGhosts[2].on
 		player.ghostify.automatorGhosts[2].on = tg
@@ -807,9 +808,7 @@ function rotateAutoUnstable() {
 	for (var g = 1; g < 4; g++) document.getElementById("isAutoGhostOn" + g).checked = player.ghostify.automatorGhosts[g].on
 }
 
-function getMaxAutoGhosts() {
-	return 21
-}
+const MAX_AUTO_GHOSTS = 21
 
 //v2.1
 function startEC10() {
@@ -821,10 +820,11 @@ function startEC10() {
 	startEternityChallenge(10)
 }
 
-function getGHPMultCost(offset=0) {
-	let lvl=player.ghostify.multPower+offset
-	return Decimal.pow(5, lvl * 2 + Math.max(lvl - 85, 0) * (lvl - 84) - 1).times(25e8)
-
+function getGHPMultCost(offset = 0) {
+	let lvl = player.ghostify.multPower + offset
+	let pow5 = lvl * 2 - 1
+	if (lvl > 85) pow5 += Math.max(lvl - 85, 0) * (lvl - 84)
+	return Decimal.pow(5, pow5).times(25e8)
 }
 
 //v2.2

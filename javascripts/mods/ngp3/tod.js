@@ -76,14 +76,16 @@ function updateTreeOfDecayTab(){
 		}
 	} //for loop
 	if (!branchNum) {
-		var start = getLogTotalSpin() > 200 ? "" : "Cost: "
-		var end = getLogTotalSpin() > 200 ? "" : " quark spin"
-		for (var u = 1; u <= 8; u++) {
-			var lvl = getTreeUpgradeLevel(u)
+		let start = getLogTotalSpin() > 200 ? "" : "Cost: "
+		let end = getLogTotalSpin() > 200 ? "" : " quark spin"
+		for (let u = 1; u <= 8; u++) {
+			let cost = getTreeUpgradeCost(u)
+			let lvl = getTreeUpgradeLevel(u)
+			let effLvl = getEffectiveTreeUpgLevel(u)
 			document.getElementById("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
 			document.getElementById("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
-			document.getElementById("treeupg" + u + "lvl").textContent = getFullExpansion(lvl) + (tmp.tue > 1 ? " -> " + getFullExpansion(Math.floor(lvl * tmp.tue)) : "")
-			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(getTreeUpgradeCost(u)) + " " + colors[lvl % 3] + end
+			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(lvl >= 1e4 ? 2 : cost.gte("1e2500") ? 1 : 0) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
+			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
 		/*
 		if (ph.did("ghostify")){
@@ -575,20 +577,20 @@ function getMaximumUnstableQuarks() {
 
 function getTreeUpgradeEfficiencyText(){
 	let text = ""
-	if (player.ghostify.neutrinos.boosts >= 7) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
+	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
-	if (hasBosonicUpg(52)) text += "Bosonic Lab Upgrade 22: " + shorten(tmp.blu[52]) + "x, "
+	if (hasBosonicUpg(54)) text += "Bosonic Lab Upgrade 24: " + shorten(tmp.blu[53]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
 
 function getTreeUpgradeEfficiency(mod) {
 	let r = 1
-	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || mod == "br") && mod != "noNB") r += tmp.nb[7]
-	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r += 0.1
+	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61) || mod == "br") && mod != "noNB") r += tmp.nb[7]
+	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
-	if (hasBosonicUpg(52)) r *= tmp.blu[52]
+	if (hasBosonicUpg(54)) r *= tmp.blu[54]
 	return r
 }
 

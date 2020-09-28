@@ -76,7 +76,7 @@ function updateQCDisplaysSpecifics(){
 
 function isQCUnlocked(x) {
 	if (x == 1) return player.masterystudies.includes("d8")
-	if (x == 9) return hasBosonicUpg(54)
+	if (x == 9) return hasBosonicUpg(52)
 	return QCIntensity(x - 1) >= 1
 }
 
@@ -250,7 +250,7 @@ let qcRewards = {
 		},
 		9: function(comps) {
 			comps = 1
-			return Math.pow(Math.log10(player.replicanti.amount.log10() + 1) * comps + 1, 1/4)
+			return Math.pow(Math.log10(player.replicanti.amount.log10() + 1) * comps + 1, 1/4) - 1
 		}
 	}
 }

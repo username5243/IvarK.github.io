@@ -24,7 +24,7 @@ let pl = {
 		this.tmp = data
 	},
 	can() {
-		return false //GDs.unlocked() && GDs.tmp.ge >= 100
+		return GDs.unlocked() && GDs.tmp.ge >= 1/0
 	},
 	on() {
 		return ph.did("planck") && pl.save.on
@@ -58,13 +58,13 @@ let pl = {
 		player.ghostify.neutrinos = getBrandNewNeutrinoData()
 		player.ghostify.multPower = 1
 		player.ghostify.ghostlyPhotons.unl = false
-		player.ghostify.ghostlyPhotons.empowerments = 0
+		player.ghostify.ghostlyPhotons.enpowerments = 0
 		tmp.bl.time = new Decimal(0)
 		tmp.bl.enchants = {}
 		bosonicLabReset()
 		player.ghostify.wzb.unl = false
 		player.ghostify.hb.unl = false
-		player.ghostify.hb.amount = 0
+		player.ghostify.hb.higgs = 0
 
 		pl.save.best = Math.min(pl.save.best, pl.save.time)
 		pl.save.time = 0

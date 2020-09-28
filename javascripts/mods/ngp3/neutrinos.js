@@ -197,8 +197,9 @@ var neutrinoBoosts = {
 		7: function(nt) {
 			let nb7exp = .5
 			if (tmp.newNGP3E) nb7exp = .6
+			if (!tmp.qu.bigRip.active && hasBosonicUpg(61)) nb7exp /= 2
 			let nb7neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
-			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp)*2.35
+			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp) * 2.35
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
 			if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
 			return nb7

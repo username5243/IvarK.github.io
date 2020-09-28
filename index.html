@@ -71,12 +71,12 @@
 				<div id="GHPPeak" class="hideEmpty"></div>
 			</button>
 		</div>
-		<!--<div style="position: relative">
+		<div style="position: relative">
 			<div id="planckinfo">You have <b id="decayedMatter">0</b> Decayed Matter.</div>
 			<button onclick="pl.reset()" id="planck">
 				<b>It's time to supercharge... I want to reduce the universe to Planck Length.</b>
 			</button>
-		</div>-->
+		</div>
 		<div id='quantumBlock' style='height:120px'></div>
 		<div id="matter"></div>
 		<div id="chall13Mult"></div>
@@ -111,7 +111,7 @@
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
-			<!--<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("planck")'>Planck</button>-->
+			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("planck")'>Planck</button>
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
 			<br>
@@ -1667,6 +1667,8 @@
 				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button><br><br><br>
 			</div>
 			<div id="gdims" class="dimtab">
+				<button class="gluonupgrade bl" onclick="teleportToBL()">Teleport to Bosonic Lab.</button>
+				<br>
 				<table style="font-size: 15px; width: 100%">
 					<tr>
 						<td id="gvCell" colspan=3 style="text-align: center; width: 60%">
@@ -1675,6 +1677,7 @@
 						</td>
 						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 40%">
 							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
+							<span id="gvNoPow"><br>(You will start getting Power at <span id="gvPowStart"></span> Gravitons)</span>
 							<span id="gvRadio" style="display: none"><br>(Due to Radioactive Power, it has a Radioactivity<span id="gvRadioExp"></span> of <span id="gvRadioPow" style="font-size: 25px"></span>)</span>
 							<br><br>
 							Multiplied by <span id="gvEneMult" style="font-size: 25px"></span>, it currently contains <span id="gvEne" style="font-size: 25px"></span> Energy, which are translated to:
@@ -1887,7 +1890,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 5)</span>
+				<span class="warning">(Test server: Beta 6)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2118,8 +2121,9 @@
 				</tr>
 			</table>
 			<div id="normalachievements" class="achtab">
-				<div id="achmultlabel" style="font-size: 140%">Current achievement multiplier on each Dimension: 1x</div>
-				<div id="metaAchMultLabel" style="font-size: 140%">Achievement multiplier to Meta Dimensions: 1x</div>
+				<div id="achmultlabel" style="font-size: 140%"></div>
+				<div id="metaAchMultLabel" style="font-size: 140%"></div>
+				<div id="bAMAchMultLabel" style="font-size: 140%"></div>
 				<table id="achievementtable" style="margin: auto">
 					<tr id="achRow1">
 						<td>
@@ -2719,10 +2723,10 @@
 						</tr>
 						<tr id="achRowng3p9">
 							<td>
-								<div id="The Holy Particle" class="achievement achievementlocked" style="background-image: url(images/175.png)" ach-tooltip="Get a Higgs Boson. Reward: Bosonic Upgrades and Enchants are 2x cheaper, achievement power boosts bosonic antimatter production at a reduced rate and light empowerements no longer reset photons era resources."></div>
+								<div id="The Holy Particle" class="achievement achievementlocked" style="background-image: url(images/175.png)" ach-tooltip="Get a Higgs Boson. Reward: Bosonic Upgrades and Enchants are 2x cheaper, achievement power boosts Bosonic Antimatter production at a reduced rate, and Light Enpowerements do not reset Ghostly Photons."></div>
 							</td>
 							<td>
-								<div id="Bright as the Anti-Sun" class="achievement achievementlocked" style="background-image: url(images/176.png)" ach-tooltip="Reach 25 Light Empowerments. Reward: You always have the 12th Bosonic Upgrade."></div>
+								<div id="Bright as the Anti-Sun" class="achievement achievementlocked" style="background-image: url(images/176.png)" ach-tooltip="Reach 25 Light Empowerments. Reward: You always have the 12th Bosonic Upgrade and you can max Light Empowerments."></div>
 							</td>
 							<td>
 								<div id="Are these another..." class="achievement achievementlocked" style="background-image: url(images/177.png)"></div>
@@ -2745,10 +2749,10 @@
 						</tr>
 						<tr id="achRowng3p10">
 							<td>
-								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%."></div>
+								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%."></div>
 							</td>
 							<td>
-								<div id="ng3p102" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 5 unique PC completions with Quantum Challenge 9."></div>
 							</td>
 							<td>
 								<div id="ng3p103" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
@@ -3789,7 +3793,7 @@
 					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc9div">
-								<span>Replicate interval increase scaling has 90% less OoMs and DT boost to replicate interval increase doesn't work.</span>
+								<span>Replicate interval increase scaling is ^0.1 and 1e20 DT upgrade is useless</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3797,8 +3801,8 @@
 									<br>
 									<span id="qc9cost"></span><br>
 									<span id="qc9goal"></span><br>
-									Reward: Replicantis boost the Gravity Energy gain. (boosted by its unique PC completions, not completing a PC with itself)<br>
-									Currently: <span id="qc9reward"></span>x
+									Reward: Replicantis boost Gravity Energy gain. (Boosted by number of unique PC completions)<br>
+									Currently: +<span id="qc9reward"></span>
 								</div>
 							</div>
 						</td>
@@ -5040,15 +5044,15 @@
 				<div class="branchtab" id="upgradesBranch">
 					<span id="treeUpgradeEff"></span>
 					<table class="table" align="center" style="margin: auto"><tr>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)'>Meta Dimension Boosts are cheaper.<br>Level: <span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)'>The TP gain formula exponent is increased.<br>Level: <span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)'>All branches are faster based on how many Tree upgrades have been bought.<br>Level: <span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)'>Electron effect is increased.<br>Level: <span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span><br><span id="treeupg4cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)'>Electron effect is increased.<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span><br><span id="treeupg4cost"></span></button></td>
 					</tr><tr>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)'>All branches are faster based on your best-ever meta-antimatter.<br>Level: <span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)'>Emperor Dimensions produce faster.<br>Level: <span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)'>Replicantis boost dilated time production.<br>Level: <span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>Your best-in-this-quantum meta-antimatter makes the meta-antimatter effect stronger.<br>Level: <span id='treeupg8lvl'>?</span><br>Currently: +<span id='treeupg8current'>?</span> to exponent<br><span id="treeupg8cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)'>Replicantis boost dilated time production.<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>Your best-in-this-quantum meta-antimatter makes the meta-antimatter effect stronger.<br><span id='treeupg8lvl'>?</span><br>Currently: +<span id='treeupg8current'>?</span> to exponent<br><span id="treeupg8cost"></span></button></td>
 					</tr></table>
 					<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
 				</div>
@@ -5182,7 +5186,7 @@
 					</tr>
 					<tr>
 						<td id="autoGhost7"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-QK Multi Upgrade Ghost</b><br>
+							<b>Auto-QK Upgrade Ghost</b><br>
 							(buys if possible)<br>
 							Power usage: 0.5<br>
 							Is active: <input id="isAutoGhostOn7" type="checkbox" onchange="toggleAutoGhost(7)"></input>
@@ -5242,37 +5246,37 @@
 					<tr>
 						<td id="autoGhost16"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Neutrino Multi Ghost</b><br>
-							Power usage: 6<br>
+							Power usage: 2<br>
 							Is active: <input id="isAutoGhostOn16" type="checkbox" onchange="toggleAutoGhost(16)"></input>
 						</div></td>
 						<td id="autoGhost17"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Extractor Ghost</b><br>
-							(not implemented)<br>
+							(also rotates the type of Bosonic Runes every second)<br>
 							Power usage: 3<br>
 							Is active: <input id="isAutoGhostOn17" type="checkbox" onchange="toggleAutoGhost(17)"></input>
 						</div></td>
 						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Electron Multi Ghost</b><br>
-							Power usage: 6<br>
+							Power usage: 4<br>
 							Is active: <input id="isAutoGhostOn18" type="checkbox" onchange="toggleAutoGhost(18)"></input>
 						</div></td>
 					</tr>
 					<tr>
 						<td id="autoGhost19"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Enchanter Ghost</b><br>
-							(doesn't consume your Bosonic Runes)<br>
-							Power usage: 3<br>
+							(doesn't consume your Bosonic Runes, enchant every 2 seconds)<br>
+							Power usage: 4<br>
 							Is active: <input id="isAutoGhostOn19" type="checkbox" onchange="toggleAutoGhost(19)"></input>
 						</div></td>
 						<td id="autoGhost20"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Bosonic Upgrader Ghost</b><br>
-							Power usage: 9<br>
+							Power usage: 5<br>
 							Is active: <input id="isAutoGhostOn20" type="checkbox" onchange="toggleAutoGhost(20)"></input>
 						</div></td>
 						<td id="autoGhost21"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-W & Z Boson Ghost</b><br>
 							(not implemented)<br>
-							Power usage: 3<br>
+							Power usage: 10<br>
 							Is active: <input id="isAutoGhostOn21" type="checkbox" onchange="toggleAutoGhost(21)"></input>
 						</div></td>
 					</tr>
@@ -5434,14 +5438,18 @@
 							<button class="gluonupgrade gph" id="lightEmpowerment" onclick="lightEmpowerment()">Gain 1 Light Empowerment, but become a ghost and reset this mechanic.<br>(requires <span id="lightEmpowermentReq"></span> ultraviolet light.)</button>
 						</td>
 					</tr><tr>
-						<td></td>
+						<td id="le10">
+							Boost something by <span class="lEp" id="leBoost10" style="font-size:35px"></span>x?
+						</td>
 						<td>
 							Translated to +<span class="lEp" id="lightEmpowermentsEffect" style="font-size:35px"></span>x multiplier to all Light strength boosts.
 						</td>
 						<td id="le5">
 							They make that all Lights boost other Lights from (x+1)^0.5 to <span class="lEp" id="leBoost5" style="font-size:35px"></span>.
 						</td>
-						<td></td>
+						<td id="le11">
+							Boost something by <span class="lEp" id="leBoost11" style="font-size:35px"></span>x?
+						</td>
 					</tr></table>
 				</div>
 			</div>
@@ -5461,11 +5469,17 @@
 							<input id="odSlider" style="width: 180px;" type="range" min="0" max="30" class="slider" oninput="changeOverdriveSpeed()">
 						</td>
 					</tr><tr id="bosonicResets">
-						<td colspan=3>
+						<td>
 							You have <span class="yellow" id="hb" style="font-size:35px">0</span> Higgs Bosons.
 							<br>
 							<button class="gluonupgrade hb" id="hbReset" onclick="higgsReset()">Reset Bosonic Lab for <span id="hbResetGain">1</span> Higgs.<br>(Requires <span id="hbResetReq"></span> Bosonic Antimatter)</button>
 						</td>
+						<td id="gvBlCell">
+							You have <span class="gvBoost" id="gvBlAmount" style="font-size:35px"></span> Gravitons.
+							<br>
+							<button class="gluonupgrade gv" onclick="GDs.teleport()">Teleport to Gravity Dimensions.</button>
+						</td>
+						<td></td>
 					</tr></table>
 					<span id="nextParticle"></span><br>
 					<b style="font-size: 35px">Bosonic Runes</b><br>
@@ -5530,10 +5544,10 @@
 			<br><br>
 			<div class="footer"></div>
 		</div>
-		<!--<div class="tab" id="planck">
+		<div class="tab" id="planck">
 			<br>
 			<button class="gluonupgrade storebtn" onclick="pl.exit()">Enlargen the Universe back to normal.</button>
-		</div>-->
+		</div>
 	</div>
 	<div class="popup" id="challfail">
 		<div id="failPopup">You have failed this challenge. Better luck next time. :(</div>
