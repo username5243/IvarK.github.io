@@ -56,7 +56,12 @@ function updateTreeOfDecayTab(){
 			document.getElementById(color + "UpgSpeed1").textContent = decays > 2 || power > 1 ? shorten(Decimal.pow(2, Math.max(.8 + decays * .1, 1) / power)) : 2
 			lvl = getBranchUpgLevel(shorthand, 3)
 			let s = getBranchUpg3SoftcapStart()
-			if (lvl >= s) eff = Decimal.pow(4, (Math.sqrt((lvl + 1) / s) - Math.sqrt(lvl / s)) * s).toFixed(2)
+			if (lvl >= s) {
+				eff = Decimal.pow(4, (Math.sqrt((lvl + 1) / s) - Math.sqrt(lvl / s)) * s)
+				if (eff < 1.02) eff = eff.toFixed(4)
+				else if (eff < 1.2) eff = eff.toFixed(3)
+				else eff = eff.toFixed(2)
+			}
 			else eff = "4"
 			document.getElementById(color + "UpgEffDesc").textContent =  " " + eff + "x"
 			for (var u = 1; u < 4; u++) document.getElementById(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
@@ -181,7 +186,7 @@ function getBranchSpeedText(){
 	return text.slice(0, text.length - 2)
 }
 
-function getBranchSpeed() { // idea: when you hold shift you can see where the multipliers of branch speed are
+function getBranchSpeed() { 
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
 	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
@@ -238,21 +243,25 @@ function getQuarkSpinProduction(branch) {
 	return ret
 }
 
-function getTreeUpgradeCost(upg,add) {
+function getTreeUpgradeCost(upg, add) {
 	let lvl = getTreeUpgradeLevel(upg)
+	let x = new Decimal(1)
 	if (add !== undefined) lvl += add
-	if (upg == 1) return Decimal.pow(2, lvl * 2 + Math.max(lvl - 35, 0) * (lvl - 34) / 2).times(50)
-	if (upg == 2) return Decimal.pow(4, lvl * (lvl + 3) / 2).times(600)
-	if (upg == 3) return Decimal.pow(32, lvl).times(3e9)
-	if (upg == 4) return Decimal.pow(2, lvl + Math.max(lvl - 37, 0) * (lvl - 36) / 2).times(1e12)
+	if (upg == 1) x = Decimal.pow(2, lvl * 2 + Math.max(lvl - 35, 0) * (lvl - 34) / 2).times(50)
+	if (upg == 2) x = Decimal.pow(4, lvl * (lvl + 3) / 2).times(600)
+	if (upg == 3) x = Decimal.pow(32, lvl).times(3e9)
+	if (upg == 4) x = Decimal.pow(2, lvl + Math.max(lvl - 37, 0) * (lvl - 36) / 2).times(1e12)
 	if (upg == 5) {
-		if (player.achievements.includes("ng3p87")) return Decimal.pow(2, lvl + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
-		return Decimal.pow(2, lvl + Math.max(lvl - 35, 0) * (lvl - 34) / 2 + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
+		if (player.achievements.includes("ng3p87")) x = Decimal.pow(2, lvl + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
+		else x = Decimal.pow(2, lvl + Math.max(lvl - 35, 0) * (lvl - 34) / 2 + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
 	}
-	if (upg == 6) return Decimal.pow(4, lvl * (lvl + 3) / 2).times(6e22)
-	if (upg == 7) return Decimal.pow(16, lvl * lvl).times(4e22)
-	if (upg == 8) return Decimal.pow(2, lvl).times(3e23)
-	return 0
+	if (upg == 6) x = Decimal.pow(4, lvl * (lvl + 3) / 2).times(6e22)
+	if (upg == 7) x = Decimal.pow(16, lvl * lvl).times(4e22)
+	if (upg == 8) x = Decimal.pow(2, lvl).times(3e23)
+	let y = x.log10()
+	if (y > 25e3) y = Math.pow(y, 2) / 25e3
+	if (lvl > 1e4) y *= lvl / 1e4
+	return Decimal.pow(10, y)
 }
 
 function canBuyTreeUpg(upg) {

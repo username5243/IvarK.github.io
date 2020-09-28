@@ -358,8 +358,7 @@ function GUBought(id) {
 function GUActive(id) {
 	if (!tmp.quActive) return false
 	if (id == "rg4") return tmp.rg4
-	if (!GUBought(id)) return false
-	return true
+	return GUBought(id)
 }
 
 function buyQuarkMult(name) {

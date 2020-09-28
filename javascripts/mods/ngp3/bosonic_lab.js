@@ -832,6 +832,7 @@ var bu = {
 		},
 		45() {
 			var eff = player.dilation.dilatedTime.add(1).pow(.0005)
+			eff = softcap(eff, "bu45")
 			return eff.toNumber()
 		},
 		51() {

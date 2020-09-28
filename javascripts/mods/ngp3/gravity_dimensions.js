@@ -245,7 +245,7 @@ let GDs = {
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			eff(x) {
-				return x + 1
+				return Math.sqrt(2 * x + 1)
 			}
 		},
 		nf: {
@@ -257,13 +257,13 @@ let GDs = {
 		tod: {
 			desc: "^{{x}} to Branch speed",
 			eff(x) {
-				return x + 1
+				return Math.cbrt(3 * x + 1)
 			}
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return x + 1
+				return x / 2 + 1
 			}
 		},
 	},
