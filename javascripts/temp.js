@@ -39,8 +39,9 @@ function updateTemp() {
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
 
-	if (tmp.gameSpeed != gameSpeed) {
-		tmp.gameSpeed = gameSpeed
+	let totalSpeed = gameSpeed * ls.mult("game")
+	if (tmp.gameSpeed != totalSpeed) {
+		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
 	}
 }
@@ -66,6 +67,11 @@ let tmp = {
 	ls: [0,0,0,0,0,0,0],
 	le: [0,0,0,0,0,0,0],
 	leBonus: {}
+}
+
+function updateActiveLayers() {
+	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !player.pl.on
+	tmp.quActive = tmp.quUnl && !inQCModifier("ms")
 }
 
 function updateRedLightBoostTemp(){
@@ -293,35 +299,39 @@ function updatePPTITemp(){
 }
 
 function updateQuantumTempStuff() {
-	if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
-	if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
-	if (tmp.nrm !== 1 && player.quantum.bigRip.active) {
-		if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
-		if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
+	if (tmp.quActive) {
+		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
+		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
+		if (tmp.nrm !== 1 && tmp.qu.bigRip.active) {
+			if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
+			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
+		}
 	}
 	if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
-	if (player.masterystudies.includes("d9")) {
+	if (tmp.quActive && player.masterystudies.includes("d9")) {
 		tmp.twr = getTotalWorkers()
 		tmp.tra = getTotalReplicants()
 	}
 	updateMasteryStudyTemp()
-	if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
-	if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
-		var x = getNanoRewardPowerEff()
-		var y = tmp.qu.nanofield.rewards
-		tmp.ns = getNanofieldSpeed()
-		if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
-			tmp.nf.powerEff = x
-			tmp.nf.rewards = y
+	if (tmp.quActive) {
+		if (player.masterystudies.includes("d13")) tmp.branchSpeed = getBranchSpeed()
+		if (player.masterystudies.includes("d12") && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined) {
+			var x = getNanoRewardPowerEff()
+			var y = tmp.qu.nanofield.rewards
+			tmp.ns = getNanofieldSpeed()
+			if (tmp.nf.powerEff !== x || tmp.nf.rewards !== y) {
+				tmp.nf.powerEff = x
+				tmp.nf.rewards = y
 
-			updateNanoRewardPowers()
-			updateNanoRewardEffects()
+				updateNanoRewardPowers()
+				updateNanoRewardEffects()
+			}
 		}
+		if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
+		tmp.be = player.quantum.bigRip.active && tmp.qu.breakEternity.break
+		tmp.tue = getTreeUpgradeEfficiency()
 	}
-	if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
-	tmp.be = player.quantum.bigRip.active && tmp.qu.breakEternity.break
-	tmp.rg4 = tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || !tmp.ngp3l || inQC(1) || QCIntensity(1))
-	tmp.tue = getTreeUpgradeEfficiency()
+	tmp.rg4 = tmp.quActive && tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || inQC(1) || QCIntensity(1))
 }
 
 function updateGhostifyTempStuff(){
@@ -367,7 +377,8 @@ function updateNU3Temp(){
 	let log = tmp.qu.colorPowers.b.log10()
 	let exp = Math.max(log / 1e4 + 1, 2)
 	let x
-	if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
+	if (!tmp.quActive) x = new Decimal(1)
+	else if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
 	else x = Math.pow(Math.max(log / 250 + 1, 1), exp)
 	tmp.nu[1] = x
 }
@@ -380,26 +391,27 @@ function updateNU4Temp(){
 
 function updateNU7Temp(){
 	var nu7 = tmp.qu.colorPowers.g.add(1).log10()/400
-	if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
-	tmp.nu[3] = Decimal.pow(10,nu7) 
+	if (!tmp.quActive) nu7 = 0
+	else if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
+	tmp.nu[3] = Decimal.pow(10, nu7) 
 }
 
 function updateNU12Temp(){
 	tmp.nu[4] = { 
 		normal: Math.sqrt(player.galaxies * .0035 + 1),
 		free: player.dilation.freeGalaxies * .035 + 1,
-		replicated: Math.sqrt(getTotalRG()) * (tmp.ngp3l ? .035 : .0175) + 1 //NU12 
+		replicated: Math.sqrt(getTotalRG()) * .0175 + 1 //NU12 
 	}
 }
 
 function updateNU14Temp(){
 	var base = player.ghostify.ghostParticles.add(1).log10()
 	var colorsPortion = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(),1/3)
-	tmp.nu[5] = Decimal.pow(base, colorsPortion * 0.8 + 1).max(1) //NU14
+	tmp.nu[5] = tmp.quActive ? Decimal.pow(base, colorsPortion * 0.8 + 1).max(1) : new Decimal(1) //NU14
 }
 
 function updateNU15Temp(){
-	tmp.nu[6] = Decimal.pow(2,(tmp.qu.nanofield.rewards>90?Math.sqrt(90*tmp.qu.nanofield.rewards):tmp.qu.nanofield.rewards) / 2.5) 
+	tmp.nu[6] = tmp.quActive ? Decimal.pow(2,(tmp.qu.nanofield.rewards>90?Math.sqrt(90*tmp.qu.nanofield.rewards):tmp.qu.nanofield.rewards) / 2.5) : new Decimal(1)
 	//NU15
 }
 
@@ -688,4 +700,3 @@ function updateNanoRewardTemp() {
 	updateNanoEffectUsages()
 	//The rest is calculated by updateTemp().
 }
-

@@ -169,7 +169,7 @@ function getEmperorDimensionGlobalMultiplier() {
 	let ret = new Decimal(1)
 	if (player.masterystudies.includes("t392")) ret = getMTSMult(392)
 	if (player.masterystudies.includes("t402")) ret = ret.times(30)
-	if (player.masterystudies.includes("d13")) ret = ret.times(getTreeUpgradeEffect(6))
+	if (isTreeUpgActive(6)) ret = ret.times(getTreeUpgradeEffect(6))
 	if (hasBosonicUpg(35)) ret = ret.times(tmp.blu[35].eds)
 	return ret
 }

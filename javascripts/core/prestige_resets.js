@@ -20,9 +20,9 @@ function NC10NDCostsOnReset(){
 	}
 }
 
-function replicantsResetOnQuantum(challid){
+function replicantsResetOnQuantum(isQC){
 	tmp.qu.replicants.requirement = new Decimal("1e3000000")
-	tmp.qu.replicants.quarks = (!(challid > 0) && player.achievements.includes("ng3p45")) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
+	tmp.qu.replicants.quarks = (!isQC && player.achievements.includes("ng3p45")) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
 	tmp.qu.replicants.eggonProgress = new Decimal(0)
 	tmp.qu.replicants.eggons = new Decimal(0)
 	tmp.qu.replicants.babyProgress = new Decimal(0)
@@ -30,7 +30,7 @@ function replicantsResetOnQuantum(challid){
 	tmp.qu.replicants.growupProgress = new Decimal(0)
 	for (let d = 1; d <= 8; d++) {
 		if (d == 8 || tmp.eds[d].perm < 10) tmp.qu.replicants.quantumFood += Math.round(tmp.eds[d].progress.toNumber() * 3) % 3
-		if (d != 1 || !player.achievements.includes("ng3p46") || challid > 0) {
+		if (d != 1 || !player.achievements.includes("ng3p46") || isQC) {
 			tmp.eds[d].workers = new Decimal(tmp.eds[d].perm)
 			tmp.eds[d].progress = new Decimal(0)
 		} else {
@@ -48,7 +48,7 @@ function nanofieldResetOnQuantum(){
 	tmp.qu.nanofield.powerThreshold = new Decimal(50)
 }
 
-function doQuantumResetStuff(bigRip, challid){
+function doQuantumResetStuff(bigRip, isQC){
 	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
 	var oheHeadstart = bigRip ? tmp.qu.bigRip.upgrades.includes(2) : speedrunMilestonesReached > 0
 	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
@@ -164,7 +164,7 @@ function doQuantumResetStuff(bigRip, challid){
 	player.dilation = {
 		studies: bigRip ? (tmp.qu.bigRip.upgrades.includes(12) ? [1,2,3,4,5,6] : tmp.qu.bigRip.upgrades.includes(10) ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
 		active: false,
-		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.qu.bigRip.upgrades.includes(11))) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones > 15 && (!bigRip || player.achievements.includes("ng3p71"))) || (!challid && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
+		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.qu.bigRip.upgrades.includes(11))) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones > 15 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -194,19 +194,19 @@ function doQuantumResetStuff(bigRip, challid){
 		upgrades: {dilatedTime: 0, bankedInfinities: 0, replicanti: 0, total: 0},
 		power: new Decimal(0)
 	}: player.blackhole
-	doMetaDimensionsReset(bigRip, headstart, challid)
+	doMetaDimensionsReset(bigRip, headstart, isQC)
 	player.masterystudies = tmp.ngp3 ? (bigRip && !tmp.qu.bigRip.upgrades.includes(12) ? ["d7", "d8", "d9", "d10", "d11", "d12", "d13", "d14"] : speedrunMilestonesReached > 15 && isRewardEnabled(11) ? player.masterystudies : []) : undefined
 	player.old = tmp.ngp3 ? inQC(0) : undefined
 	player.dontWant = tmp.ngp3 || undefined
 }
 		
-function doMetaDimensionsReset(bigRip, headstart, challid){
+function doMetaDimensionsReset(bigRip, headstart, isQC){
 	player.meta = {
 		antimatter: getMetaAntimatterStart(bigRip),
 		bestAntimatter: headstart ? player.meta.bestAntimatter : getMetaAntimatterStart(bigRip),
 		bestOverQuantums: player.meta.bestOverQuantums,
 		bestOverGhostifies: player.meta.bestOverGhostifies,
-		resets: isRewardEnabled(27) ? (!challid && player.ghostify.milestones > 4 && bigRip == tmp.qu.bigRip.active ? player.meta.resets : 4) : 0,
+		resets: isRewardEnabled(27) ? (!isQC && player.ghostify.milestones > 4 && bigRip == tmp.qu.bigRip.active ? player.meta.resets : 4) : 0,
 		'1': {
 			amount: new Decimal(0),
 			bought: 0,

@@ -51,7 +51,7 @@
 				<div id="quarks"></div>
 				<div id="quantumClock"></div>
 			</div>
-			<button id="quantumbtn" onclick="quantum(false, false, 0)">
+			<button id="quantumbtn" onclick="quantum()">
 				<div id="quantumbtnFlavor" class="hideEmpty"></div>
 				<div id="quantumbtnQKGain" class="hideEmpty"></div>
 				<div id="quantumbtnRate" class="hideEmpty"></div>
@@ -71,6 +71,12 @@
 				<div id="GHPPeak" class="hideEmpty"></div>
 			</button>
 		</div>
+		<!--<div style="position: relative">
+			<div id="planckinfo">You have <b id="decayedMatter">0</b> Decayed Matter.</div>
+			<button onclick="pl.reset()" id="planck">
+				<b>It's time to supercharge... I want to reduce the universe to Planck Length.</b>
+			</button>
+		</div>-->
 		<div id='quantumBlock' style='height:120px'></div>
 		<div id="matter"></div>
 		<div id="chall13Mult"></div>
@@ -105,6 +111,7 @@
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
+			<!--<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("planck")'>Planck</button>-->
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
 			<br>
@@ -1662,20 +1669,31 @@
 			<div id="gdims" class="dimtab">
 				<table style="font-size: 15px; width: 100%">
 					<tr>
-						<td id="gvCell" colspan=3 style="text-align: center; width: 75%">
+						<td id="gvCell" colspan=3 style="text-align: center; width: 60%">
 							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
 							You have <span id="gdWatt" style="font-size: 25px">1.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
 						</td>
-						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 25%">
+						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 40%">
 							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
-							<span id="gvRadio"><br>(Due to Radioactive Power, it has a Radioactivity<span id="gvRadioExp"></span> of <span id="gvRadioPow" style="font-size: 25px"></span>)</span>
+							<span id="gvRadio" style="display: none"><br>(Due to Radioactive Power, it has a Radioactivity<span id="gvRadioExp"></span> of <span id="gvRadioPow" style="font-size: 25px"></span>)</span>
 							<br><br>
 							Multiplied by <span id="gvEneMult" style="font-size: 25px"></span>, it currently contains <span id="gvEne" style="font-size: 25px"></span> Energy, which are translated to:
 							<br>
-							x<span class="gvBoost" id="gvToRep">1.00</span> OoMs to replicate interval increase<br>
-							^<span class="gvBoost" id="gvToNf">1.00</span> to Nanospeed<br>
-							^<span class="gvBoost" id="gvToTod">1.00</span> to Branch Speed<br>
-							^<span class="gvBoost" id="gvToBl">1.00</span> to Bosonic Watts and Overdrive Speed<br>
+							<table id="gvBoosts" style="width: 100%"></table>
+							<table style="width: 100%"><tr>
+								<td>Charge: <span class="gvBoost" id="gvCharge">0.00%</span> stronger</td>
+								<td style="text-align: right"><button class="storebtn" id="gvUncharge" onclick="GDs.unchargeBoost()">Uncharge</button></td>
+							</tr>
+							<!--
+							<tr>
+								<td colspan=2 style="vertical-align: 0">
+									Supercharge: <span class="gvBoost" id="gvSupercharge">0.00%</span> stronger<br>
+									<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Length!</b><br>
+									(requires 100.00 Energy)
+								</td>
+							</tr>
+							-->
+							</table>
 						</td>
 					</tr>
 					<tr id="gd1Row">
@@ -1777,6 +1795,7 @@
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showOptionTab('saving')">Saves</button></td>
 					<td><button class="secondarytabbtn" onclick="showOptionTab('otheroptions')">Options</button></td>
+					<td id="lstabbtn"><button class="secondarytabbtn" onclick="showOptionTab('light_speed')">Light Speed</button></td>
 					<td id="secretoptionsbtn"><button class="secondarytabbtn" onclick="showOptionTab('secrets')">Secrets</button></td>
 				</tr>
 			</table>
@@ -1832,6 +1851,25 @@
 					</tr>
 				</table>
 			</div>
+			<div class='optionstab' id='light_speed' style='display:none'>
+				<table>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('game')"></div>
+					</div></td></tr>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate interval: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('rep')"></div>
+					</div></td></tr>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('nf')"></div>
+					</div></td></tr>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('tod')"></div>
+					</div></td></tr>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('bl')"></div>
+					</div></td></tr>
+				</table>
+			</div>
 			<div class='optionstab' id='secrets' style='display:none'>
 				<table>
 					<tr>
@@ -1849,7 +1887,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 4)</span>
+				<span class="warning">(Test server: Beta 5)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2004,10 +2042,10 @@
 				<br>
 				Lowest PC # done w/ every combination of PCs:
 				<table id="pccompletionstable"></table>
-				<div id="modifiersStats"></div>
-				Best PC w/ QC6 & 8: <span id="bpc68"></span><br>
-				<span id="upcc" style="display: block"></span>
-				<span id="udcc"></span>
+				<span id="bpc68"></span><br>
+				<span id="upcc"></span><br>
+				<span id="udcc"></span><br><br>
+				<div id="modifiersStats"></div><br>
 				Ranking: <span id="pccranking"></span> / <span id="pccrankingMax"></span>
 			</div>
 			<div id="lasttenruns" class="statstab">
@@ -2707,7 +2745,7 @@
 						</tr>
 						<tr id="achRowng3p10">
 							<td>
-								<div id="The Gravitational Well" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%."></div>
+								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%."></div>
 							</td>
 							<td>
 								<div id="ng3p102" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
@@ -2733,7 +2771,7 @@
 						</tr>
 						<tr id="achRowng3p11">
 							<td>
-								<div id="ng3p111" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Quantum-Scale" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
 							</td>
 							<td>
 								<div id="ng3p112" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
@@ -3748,6 +3786,26 @@
 							</div>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							<div class="quantumchallengediv" id="qc9div">
+								<span>Replicate interval increase scaling has 90% less OoMs and DT boost to replicate interval increase doesn't work.</span>
+								<br>
+								<br>
+								<div class="outer">
+									<button id="qc9" class="challengesbtn" onclick="quantum(false, true, 9)">Start</button>
+									<br>
+									<span id="qc9cost"></span><br>
+									<span id="qc9goal"></span><br>
+									Reward: Replicantis boost the Gravity Energy gain. (boosted by its unique PC completions, not completing a PC with itself)<br>
+									Currently: <span id="qc9reward"></span>x
+								</div>
+							</div>
+						</td>
+						<td>
+							<!-- There's no Quantum Challenge 10. There's no 5th pair.-->
+						</td>
+					</tr>
 				</table>
 				<button class="storebtn" onclick="respecTogglePC()" id="respecPC" style="width:150px; height: 40px; font-size: 10px; border-width: 1px; margin: auto">Respec paired challenges on next quantum</button>
 				<table class="table" id="pairedchallenges" style="margin: 0 auto">
@@ -3758,8 +3816,8 @@
 								<br>
 								<br>
 								<div class="outer">
-									<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 9)">Assign</button>
-									<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 9, true)">Big Rip</button>
+									<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 1, true)">Assign</button>
+									<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 1, true, true)">Big Rip</button>
 									<br>
 									<span id="pc1cost"></span><br>
 									<span id="pc1goal"></span><br>
@@ -3773,8 +3831,8 @@
 								<br>
 								<br>
 								<div class="outer">
-									<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 10)">Assign</button>
-									<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 10, true)">Big Rip</button>
+									<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 2, true)">Assign</button>
+									<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 2, true, true)">Big Rip</button>
 									<br>
 									<span id="pc2cost"></span><br>
 									<span id="pc2goal"></span><br>
@@ -3790,8 +3848,8 @@
 								<br>
 								<br>
 								<div class="outer">
-									<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 11)">Assign</button>
-									<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 11, true)">Big Rip</button>
+									<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 3, true)">Assign</button>
+									<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 3, true, true)">Big Rip</button>
 									<br>
 									<span id="pc3cost"></span><br>
 									<span id="pc3goal"></span><br>
@@ -3805,8 +3863,8 @@
 								<br>
 								<br>
 								<div class="outer">
-									<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 12)">Assign</button>
-									<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 12, true)">Big Rip</button>
+									<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 4, true)">Assign</button>
+									<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 4, true, true)">Big Rip</button>
 									<br>
 									<span id="pc4cost"></span><br>
 									<span id="pc4goal"></span><br>
@@ -5202,7 +5260,7 @@
 					<tr>
 						<td id="autoGhost19"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Enchanter Ghost</b><br>
-							(not implemented)<br>
+							(doesn't consume your Bosonic Runes)<br>
 							Power usage: 3<br>
 							Is active: <input id="isAutoGhostOn19" type="checkbox" onchange="toggleAutoGhost(19)"></input>
 						</div></td>
@@ -5472,6 +5530,10 @@
 			<br><br>
 			<div class="footer"></div>
 		</div>
+		<!--<div class="tab" id="planck">
+			<br>
+			<button class="gluonupgrade storebtn" onclick="pl.exit()">Enlargen the Universe back to normal.</button>
+		</div>-->
 	</div>
 	<div class="popup" id="challfail">
 		<div id="failPopup">You have failed this challenge. Better luck next time. :(</div>
@@ -5505,22 +5567,33 @@
 			</table>
 		</div>
 		<div id="modsTab" style="height:300px;overflow-y:auto;display:none">
-			<b>Mods</b><br>
+			<b>Expansion Mods</b><br>
+			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline">NG++: OFF</button>
+			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline">NGUd: OFF</button>
+			<br><br>
+			<b>Hellish Mods</b><br>
+			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline">NG--: OFF</button>
+			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline">Expert Mode: OFF</button>
+			<br><br>
+			<b>Easy Mods</b><br>
 			<button class="storebtn longbtn" id='ngpBtn' style="font-size: 15px" onclick="toggle_mod('ngp')" style="display: inline">NG+: OFF</button>
 			<button class="storebtn longbtn" id='aauBtn' style="font-size: 15px" onclick="toggle_mod('aau')" style="display: inline">AAU: OFF</button>
-			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline">NG++: OFF</button>
-			<button class="storebtn longbtn" id='ngmBtn' style="font-size: 15px" onclick="toggle_mod('ngm')" style="display: inline">NG-: OFF</button>
-			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline">NG--: OFF</button>
-			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline">NGUd: OFF</button>
+			<button class="storebtn longbtn" id='lsBtn' style="font-size: 15px" onclick="toggle_mod('ls')" style="display: inline">Light Speed: OFF</button>
+			<button class="storebtn longbtn" id='ngprwBtn' style="font-size: 15px" onclick="toggle_mod('ngprw')" style="display: inline">NG+ Reworked: OFF</button>
+			<br>
+			Reset Mode #<input id='ngpLayer' type="number" onchange="changeNGPLayer()" min=0 value=0>
+			<br><br>
+			<b>Buffed Mods</b><br>
 			<button class="storebtn longbtn" id='ngmuBtn' style="font-size: 15px" onclick="toggle_mod('ngmu')" style="display: inline">NG*: OFF</button>
 			<button class="storebtn longbtn" id='arrowsBtn' style="font-size: 15px" onclick="toggle_mod('arrows')" style="display: inline">NG↑: Linear (↑⁰)</button>
 			<button class="storebtn longbtn" id='ngumuBtn' style="font-size: 15px" onclick="toggle_mod('ngumu')" style="display: inline">NGUd*': OFF</button>
 			<button class="storebtn longbtn" id='nguepBtn' style="font-size: 15px" onclick="toggle_mod('nguep')" style="display: inline">NGUd↑': Linear' (↑⁰')</button>
+			<br><br>
+			<b>Respecced Mods</b><br>
 			<button class="storebtn longbtn" id='rsBtn' style="font-size: 15px" onclick="toggle_mod('rs')" style="display: inline">Respecced: NONE</button>
-			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline">Expert Mode: OFF</button>
-			<button class="storebtn longbtn" id='ngprwBtn' style="font-size: 15px" onclick="toggle_mod('ngprw')" style="display: inline">NG+ Reworked: OFF</button>
-			<br>
-			Reset Mode #<input id='ngpLayer' type="number" onchange="changeNGPLayer()" min=0 value=0>
+			<br><br>
+			<b>Timewally Mods</b><br>
+			<button class="storebtn longbtn" id='ngmBtn' style="font-size: 15px" onclick="toggle_mod('ngm')" style="display: inline">NG-: OFF</button>
 		</div>
 	</div>
 	<div class="popup loadmenu" id="presetsmenu" style="overflow-y:hidden">
@@ -5706,8 +5779,8 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/replicants.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/tod.js"></script>
 <script type="text/javascript" src="javascripts/mods/ers.js"></script>
+<script type="text/javascript" src="javascripts/mods/light_speed.js"></script>
 <script type="text/javascript" src="javascripts/mods/meta.js"></script>
-<script type="text/javascript" src="javascripts/mods/quantum.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngppp.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngmmm.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngud.js"></script>
@@ -5717,6 +5790,7 @@
 <script type="text/javascript" src="javascripts/mods/ngm5.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngusp.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngprw.js"></script>
+<script type="text/javascript" src="javascripts/mods/quantum.js"></script>
 <script type="text/javascript" src="javascripts/convert.js"></script>
 <script type="text/javascript" src="javascripts/display.js"></script>
 <script type="text/javascript" src="javascripts/temp.js"></script>

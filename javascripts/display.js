@@ -163,13 +163,13 @@ function bestEternityDisplay(){
 			document.getElementById("besteternity").textContent = ""
 		} else document.getElementById("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
 		document.getElementById("thiseternity").textContent = "You have spent " + timeDisplay(player.thisEternity) + " in this Eternity."
-		document.getElementById("eternitied").textContent = "You have Eternitied " + getFullExpansion(player.eternities) + " time" + (player.eternities == 1 ? "" : "s") + (quantumed ? " this Quantum." : ".")
+		document.getElementById("eternitied").textContent = "You have Eternitied " + getFullExpansion(player.eternities) + " time" + (player.eternities == 1 ? "" : "s") + (ph.did("quantum") ? " this Quantum." : ".")
 	}
 	if (player.eternitiesBank > 0) document.getElementById("eternityStatistics").style.display = ""
 }
 
 function bestQuantumDisplay(){
-	if (!quantumed) document.getElementById("quantumStatistics").style.display = "none"
+	if (!ph.did("quantum")) document.getElementById("quantumStatistics").style.display = "none"
 	else {
 		document.getElementById("quantumStatistics").style.display = ""
 		document.getElementById("quantumed").textContent = "You have gone Quantum " + getFullExpansion(tmp.qu.times) + " times."
@@ -179,7 +179,7 @@ function bestQuantumDisplay(){
 }
 
 function bestGhostifyDisplay(){
-	if (!ghostified) document.getElementById("ghostifyStatistics").style.display = "none"
+	if (!ph.did("ghostify")) document.getElementById("ghostifyStatistics").style.display = "none"
 	else {
 		document.getElementById("ghostifyStatistics").style.display = ""
 		document.getElementById("ghostified").textContent = "You have became a ghost and passed Big Ripped universes " + getFullExpansion(player.ghostify.times) + " times."
@@ -548,10 +548,10 @@ function INFINITYUPGRADESDisplay(){
 	} else if (document.getElementById("postinf").style.display == "block" && document.getElementById("breaktable").style.display == "inline-block") {
 		breakInfinityUpgradeDisplay()
 		if (player.galacticSacrifice) breakNGm2UpgradeColumnDisplay()
-		if (player.galacticSacrifice && (player.infinityDimension3.amount.gt(0) || player.eternities > (player.aarexModifications.newGameMinusVersion? -20 : 0) || quantumed)) {
+		if (player.galacticSacrifice && (player.infinityDimension3.amount.gt(0) || player.eternities > (player.aarexModifications.newGameMinusVersion? -20 : 0) || ph.did("quantum"))) {
 			breakNGm2UpgradeRow5Display()
 		} else document.getElementById("postinfir5").style.display = "none"
-		if (player.galacticSacrifice && (player.infinityDimension4.amount.gt(0) || player.eternities > (player.aarexModifications.newGameMinusVersion ? -20 : 0) || quantumed)) {
+		if (player.galacticSacrifice && (player.infinityDimension4.amount.gt(0) || player.eternities > (player.aarexModifications.newGameMinusVersion ? -20 : 0) || ph.did("quantum"))) {
 			breakNGm2UpgradeRow6Display()
 		} else document.getElementById("postinfir6").style.display = "none"
 	} else if (document.getElementById("singularity").style.display == "block" && document.getElementById("singularitydiv").style.display == "") {
@@ -594,7 +594,7 @@ function exdilationDisplay(){
 	document.getElementById("reversedilationdiv").style.display = ""
 	if (canReverseDilation()) {
 		document.getElementById("reversedilation").className = "dilationbtn"
-		document.getElementById("reversedilation").innerHTML = "Reverse dilation."+(player.exdilation.times>0||quantumed?"<br>Gain "+shortenDimensions(getExDilationGain())+" ex-dilation":"")
+		document.getElementById("reversedilation").innerHTML = "Reverse dilation."+(player.exdilation.times>0||ph.did("quantum")?"<br>Gain "+shortenDimensions(getExDilationGain())+" ex-dilation":"")
 	} else {
 		let req = getExdilationReq()
 		document.getElementById("reversedilation").className = "eternityupbtnlocked"
@@ -778,7 +778,7 @@ function infPoints2Display(){
 }
 
 function updateChallTabDisplay(){
-	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0 || quantumed) document.getElementById("challTabButtons").style.display = "table"
+	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0 || ph.did("quantum")) document.getElementById("challTabButtons").style.display = "table"
 }
 
 function eterPoints2Display(){
@@ -814,14 +814,14 @@ function replicantiShopABDisplay(){
 }
 
 function primaryStatsDisplayResetLayers(){
-	if (getEternitied() == 0 && !quantumed) document.getElementById("pasteternities").style.display = "none"
+	if (getEternitied() == 0 && !ph.did("quantum")) document.getElementById("pasteternities").style.display = "none"
 	else document.getElementById("pasteternities").style.display = "inline-block"
-	if (quantumed) document.getElementById("pastquantums").style.display = "inline-block"
+	if (ph.did("quantum")) document.getElementById("pastquantums").style.display = "inline-block"
 	else document.getElementById("pastquantums").style.display = "none"
-	if (ghostified) document.getElementById("pastghostifies").style.display = "inline-block"
+	if (ph.did("ghostify")) document.getElementById("pastghostifies").style.display = "inline-block"
 	else document.getElementById("pastghostifies").style.display = "none"
-	document.getElementById("pastinfs").style.display = player.infinitied > 0 || getEternitied() > 0 || quantumed ? "" : "none"
-	var showStats = player.challenges.length > 1 || player.infinitied > 0 || getEternitied() > 0 || quantumed ? "" : "none"
+	document.getElementById("pastinfs").style.display = ph.did("infinity") ? "" : "none"
+	var showStats = player.challenges.length >= 2 || ph.did("eternity") ? "" : "none"
 	document.getElementById("brfilter").style.display = showStats
 	document.getElementById("statstabs").style.display = showStats
 	var display = player.aarexModifications.hideSecretAchs?"none":""

@@ -1,23 +1,23 @@
 var quantumChallenges = {
-	costs:[0, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600],
-	goals:[0, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10]
+	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
+	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 1/0]
 }
 
-var assigned = []
+var assigned
 var pcFocus = 0
 function updateQuantumChallenges() {
-	if (!tmp.ngp3 || !player.masterystudies.includes("d8")) {
+	if (!tmp.quUnl || !player.masterystudies.includes("d8")) {
 		document.getElementById("qctabbtn").style.display = "none"
 		return
 	} else document.getElementById("qctabbtn").style.display = ""
-	var assigned = []
+	assigned = []
 	var assignedNums = {}
 	document.getElementById("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
 	document.getElementById("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
 	document.getElementById("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
 	for (var pc = 1; pc <= 4; pc++) {
 		var subChalls = tmp.qu.pairedChallenges.order[pc]
-		if (subChalls) for (var sc=0; sc < 2; sc++) {
+		if (subChalls) for (var sc = 0; sc < 2; sc++) {
 			var subChall = subChalls[sc]
 			if (subChall) {
 				assigned.push(subChall)
@@ -29,8 +29,8 @@ function updateQuantumChallenges() {
 			var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
 			var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
 			document.getElementById(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
-			document.getElementById(property+"cost").textContent = "Cost: " + (sc2 ? getFullExpansion(getQCCost(pc + 8)) : "???") + " electrons"
-			document.getElementById(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(pc + 8))) : "???") + " antimatter"
+			document.getElementById(property+"cost").textContent = "Cost: " + (!sc2 && !player.achievements.includes("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
+			document.getElementById(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
 			document.getElementById(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : tmp.qu.pairedChallenges.current == pc ? "Running" : "Start"
 			document.getElementById(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
 
@@ -52,13 +52,17 @@ function updateQuantumChallenges() {
 			document.getElementById("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 		}
 	}
-	for (var qc = 1; qc <= 8; qc++) {
+	for (var qc = 1; qc <= 9; qc++) {
 		var property = "qc" + qc
-		document.getElementById(property + "div").style.display = (qc < 2 || QCIntensity(qc - 1)) ? "inline-block" : "none"
-		document.getElementById(property).textContent = ((!assigned.includes(qc) && pcFocus) ? "Choose" : inQC(qc) ? "Running" : QCIntensity(qc) ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
-		document.getElementById(property).className = (!assigned.includes(qc) && pcFocus) ? "challengesbtn" : inQC(qc) ? "onchallengebtn" : QCIntensity(qc) ? "completedchallengesbtn" : "challengesbtn"
-		document.getElementById(property + "cost").textContent = "Cost: " + getFullExpansion(quantumChallenges.costs[qc]) + " electrons"
-		document.getElementById(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog(qc))) + " antimatter"
+		var unl = isQCUnlocked(qc)
+		var done = QCIntensity(qc) >= 1
+		document.getElementById(property + "div").style.display = unl ? "inline-block" : "none"
+		if (!unl) continue
+
+		document.getElementById(property).textContent = ((!assigned.includes(qc) && pcFocus) ? (done ? "Choose" : "Not completed") : inQC(qc) ? "Running" : done ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
+		document.getElementById(property).className = (!assigned.includes(qc) && pcFocus) ? (done ? "challengesbtn" : "lockedchallengesbtn") : inQC(qc) ? "onchallengebtn" : done ? "completedchallengesbtn" : "challengesbtn"
+		document.getElementById(property + "cost").textContent = "Cost: " + getFullExpansion(getQCCost([qc])) + " electrons"
+		document.getElementById(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog([qc]))) + " antimatter"
 	}
 	updateQCDisplaysSpecifics()
 }
@@ -68,6 +72,12 @@ function updateQCDisplaysSpecifics(){
 	document.getElementById("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
 	document.getElementById("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
 	document.getElementById("qc8reward").textContent = tmp.qcRewards[8]
+}
+
+function isQCUnlocked(x) {
+	if (x == 1) return player.masterystudies.includes("d8")
+	if (x == 9) return hasBosonicUpg(54)
+	return QCIntensity(x - 1) >= 1
 }
 
 function inQC(num) {
@@ -84,31 +94,34 @@ function updateInQCs() {
 	}
 }
 
-function getQCGoalLog(num, bigRip) {
+function getQCGoalLog(QCs, bigRip) {
 	if (player.masterystudies == undefined) return 0
-	var c1 = 0
-	var c2 = 0
-	var mult = 1
-	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
-	if (num == undefined) {
-		var data = tmp.inQCs
+	let mods
+	let mult = 1
+	let c1 = 0
+	let c2 = 0
+	if (QCs == undefined) {
+		let data = tmp.inQCs
 		if (data[0]) c1 = data[0]
 		if (data[1]) c2 = data[1]
-	} else if (num < 9) {
-		c1 = num
-	} else if (tmp.qu.pairedChallenges.order[num - 8]) {
-		c1 = tmp.qu.pairedChallenges.order[num - 8][0]
-		c2 = tmp.qu.pairedChallenges.order[num - 8][1]
+		mods = tmp.qu.qcsMods.current
+	} else {
+		c1 = QCs[0] || 0
+		c2 = QCs[1] || 0
+		mods = qcm.on
 	}
-	if (c1 == 0) return quantumChallenges.goals[0] * mult
-	if (c2 == 0) return quantumChallenges.goals[c1] * mult
-	var cs = [c1, c2]
+	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
+	if (mods.includes("ms")) mult *= 1e3
+	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
+	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
+
+	let cs = [c1, c2]
 	mult *= mult
 	if (cs.includes(1) && cs.includes(3)) mult *= 1.6
 	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
 	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
 	if (cs.includes(3) && cs.includes(6)) mult *= 3
-	return quantumChallenges.goals[c1] * quantumChallenges.goals[c2] / 1e11 * mult
+	return quantumChallenges.goalLogs[c1] * quantumChallenges.goalLogs[c2] / 1e11 * mult
 }
 
 function QCIntensity(num) {
@@ -139,7 +152,7 @@ function updatePCCompletions() {
 	if (!player.masterystudies) return
 	var r = 0
 	tmp.pcc = {} // PC Completion counters
-	for (var c1 = 2; c1 < 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
+	for (var c1 = 2; c1 <= 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
 		var rankingPart = 0
 		if (tmp.qu.pairedChallenges.completions[c2 * 10 + c1]) {
 			rankingPart = 5 - tmp.qu.pairedChallenges.completions[c2 * 10 + c1]
@@ -166,7 +179,7 @@ function updatePCCompletions() {
 	r *= 100 / 56
 	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
 	document.getElementById("pccranking").textContent = r.toFixed(1)
-	document.getElementById("pccrankingMax").textContent = Math.sqrt(1e4 * (2 + qcm.modifiers.length)).toFixed(1)
+	document.getElementById("pccrankingMax").textContent = Math.sqrt(11250 * (2 + qcm.modifiers.length)).toFixed(1)
 	updatePCTable()
 	for (var m = 0; m < qcm.modifiers.length; m++) {
 		var id = qcm.modifiers[m]
@@ -234,19 +247,29 @@ let qcRewards = {
 		8: function(comps) {
 			if (comps == 0) return 1
 			return comps + 2
+		},
+		9: function(comps) {
+			comps = 1
+			return Math.pow(Math.log10(player.replicanti.amount.log10() + 1) * comps + 1, 1/4)
 		}
 	}
 }
 
-function updateQCRewardsTemp() {
-	tmp.qcRewards = {}
-	for (var c = 1; c <= 8; c++) tmp.qcRewards[c] = qcRewards.effects[c](QCIntensity(c))
+function isQCRewardActive(x) {
+	return tmp.quActive && player.masterystudies.includes("d8") && QCIntensity(x)
 }
 
-function getQCCost(num) {
+function updateQCRewardsTemp() {
+	tmp.qcRewards = {}
+	for (var c = 1; c <= 9; c++) tmp.qcRewards[c] = qcRewards.effects[c](QCIntensity(c))
+}
+
+function getQCCost(QCs) {
 	if (player.achievements.includes("ng3p55")) return 0
-	if (num > 8) return quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][0]] + quantumChallenges.costs[tmp.qu.pairedChallenges.order[num - 8][1]]
-	return quantumChallenges.costs[num]
+
+	let x = quantumChallenges.costs[QCs[0]]
+	if (QCs[1]) x += quantumChallenges.costs[QCs[1]]
+	return x
 }
 
 function showQCModifierStats(id) {
@@ -255,12 +278,12 @@ function showQCModifierStats(id) {
 }
 
 function updatePCTable() {
-	var data=tmp.qu.qcsMods[tmp.pct]
-	for (r = 1; r < 9; r++) for (c = 1; c < 9; c++) {
+	var data = tmp.qu.qcsMods[tmp.pct]
+	for (r = 1; r <= 9; r++) for (c = 1; c <= 9; c++) {
 		if (r != c) {
 			var divid = "pc" + (r * 10 + c)
 			var pcid = r * 10 + c
-			if (r > c) pcid = c * 10  +r
+			if (r > c) pcid = c * 10 + r
 			if (tmp.pct == "") {
 				var comp = tmp.qu.pairedChallenges.completions[pcid]
 				if (comp !== undefined) {
@@ -271,7 +294,7 @@ function updatePCTable() {
 					document.getElementById(divid).setAttribute('ach-tooltip', achTooltip)
 					if (divid=="pc38") giveAchievement("Hardly marked")
 					if (divid=="pc68") giveAchievement("Big Rip isn't enough")
-				} else if (pcid == 68 && ghostified) {
+				} else if (pcid == 68 && ph.did("ghostify")) {
 					document.getElementById(divid).textContent = "BR"
 					document.getElementById(divid).className = "brCompleted"
 					document.getElementById(divid).removeAttribute('ach-tooltip')
@@ -293,7 +316,7 @@ function updatePCTable() {
 			}
 		} else { // r == c
 			var divid = "qcC" + r
-			if (tmp.pct == "" || (data && data["qc" + r])) {
+			if ((tmp.pct == "" && QCIntensity(r)) || (data && data["qc" + r])) {
 				document.getElementById(divid).textContent = "QC"+r
 				if (tmp.qu.qcsNoDil["qc" + r] && tmp.pct == "") {
 					document.getElementById(divid).className = "ndcompleted"
@@ -309,24 +332,31 @@ function updatePCTable() {
 			}
 		}
 	}
-	document.getElementById("upcc").textContent = (tmp.pct == "" ? "Unique PC completions" : (qcm.names[tmp.pct] || "???")) + ": " + (tmp.pcc.normal || 0) + " / 28"
-	document.getElementById("udcc").style.display = tmp.pct == "" ? "block" : "none"
-	document.getElementById("udcc").textContent="No dilation: " + (tmp.pcc.noDil || 0) + " / 28"
+	updateBestPC68Display()
+	document.getElementById("upcc").textContent = (qcm.names[tmp.pct] || "Unique PC completions") + ": " + (tmp.pcc[tmp.pct || "normal"] || 0) + " / 36"
+	document.getElementById("udcc").textContent = tmp.pct == "" ?  "No dilation: " + (tmp.pcc.noDil || 0) + " / 36" : ""
+}
+
+function updateBestPC68Display() {
+	document.getElementById("bpc68").textContent = tmp.pct == "" ? "Best PC w/ QC6 & 8: " + shortenMoney(tmp.qu.pairedChallenges.pc68best) : ""
 }
 
 var qcm={
-	modifiers:["ad", "sm"],
-	names:{
+	modifiers: ["ad", "sm", "ms"],
+	names: {
 		ad: "Anti-Dilation",
-		sm: "Supermastery"
+		sm: "Supermastery",
+		ms: "Macroscopic"
 	},
-	reqs:{
+	reqs: {
 		ad: 100,
-		sm: 165
+		sm: 165,
+		ms: 200
 	},
-	descs:{
+	descs: {
 		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
-		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies."
+		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies.",
+		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 1,000. Good luck! :)"
 	},
 	on: []
 }
@@ -338,11 +368,12 @@ function toggleQCModifier(id) {
 		for (var m = 0; m < qcm.on.length; m++) if (qcm.on[m] != id) data.push(qcm.on[m])
 		qcm.on = data
 	} else qcm.on.push(id)
-	document.getElementById("qcm_" + id).className=qcm.on.includes(id) ? "chosenbtn" : "storebtn"
+	document.getElementById("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
+	updateQuantumChallenges()
 }
 
 function inQCModifier(id) {
-	if (player.masterystudies == undefined) return
+	if (!tmp.quUnl) return
 	return tmp.qu.qcsMods.current.includes(id)
 }
 

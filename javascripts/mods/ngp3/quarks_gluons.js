@@ -352,7 +352,14 @@ function buyGluonUpg(color, id) {
 }
 
 function GUBought(id) {
-	return tmp.ngp3 && tmp.qu.upgrades.includes(id)
+	return tmp.qu.upgrades.includes(id)
+}
+
+function GUActive(id) {
+	if (!tmp.quActive) return false
+	if (id == "rg4") return tmp.rg4
+	if (!GUBought(id)) return false
+	return true
 }
 
 function buyQuarkMult(name) {

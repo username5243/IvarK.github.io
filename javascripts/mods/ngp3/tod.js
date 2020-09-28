@@ -5,7 +5,19 @@ function getLogTotalSpin() {
 function updateToDSpeedDisplay(){
 	let t = ''
 	if (shiftDown) t = getBranchSpeedText()
-	else t = "Branch speed: " + (todspeed == 1 ? "" : shorten(tmp.branchSpeed) + " * " + shorten(todspeed) + " = ") + shorten(getBranchFinalSpeed()) + "x" + " (hold shift for details)"
+	else {
+		let speeds = [tmp.branchSpeed]
+		let speedDescs = [""]
+		if (todspeed != 1) {
+			speeds.push(todspeed)
+			speedDescs.push("Dev")
+		}
+		if (ls.mult("tod") != 1) {
+			speeds.push(ls.mult("tod"))
+			speedDescs.push("'Light Speed' mod")
+		}
+		t = "Branch speed: " + factorizeDescs(speeds, speedDescs) + shorten(getBranchFinalSpeed()) + "x" + " (hold shift for details)"
+	}
 	document.getElementById("todspeed").textContent = t
 }
 
@@ -48,7 +60,7 @@ function updateTreeOfDecayTab(){
 			else eff = "4"
 			document.getElementById(color + "UpgEffDesc").textContent =  " " + eff + "x"
 			for (var u = 1; u < 4; u++) document.getElementById(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
-			if (ghostified) document.getElementById(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
+			if (ph.did("ghostify")) document.getElementById(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
 		}
 	} //for loop
 	if (!branchNum) {
@@ -62,7 +74,7 @@ function updateTreeOfDecayTab(){
 			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(getTreeUpgradeCost(u)) + " " + colors[lvl % 3] + end
 		}
 		/*
-		if (ghostified){
+		if (ph.did("ghostify")){
 			document.getElementById("treeUpgradeEff").textContent = getTreeUpgradeEfficiencyDisplayText()
 			document.getElementById("treeUpgradeEff").style.display = ""
 		} else {
@@ -70,20 +82,17 @@ function updateTreeOfDecayTab(){
 		} 
 		// This currently isnt working so hm....
 		*/
-		setAndMaybeShow("treeUpgradeEff", ghostified, '"Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"%"')
+		setAndMaybeShow("treeUpgradeEff", ph.did("ghostify"), '"Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"%"')
 		// I want to make it getTreeUpgradeEfficiencyDisplay(), but that doesnt work, so leaveing it out for now
 	}
 	updateToDSpeedDisplay()
 }
 
 function updateTODStuff() {
-	if (player.masterystudies ? !player.masterystudies.includes("d13") : true) {
+	if (!tmp.ngp3 || !player.masterystudies.includes("d13")) {
 		document.getElementById("todtabbtn").style.display = "none"
 		return
-	} else {
-		document.getElementById("todtabbtn").style.display = ""
-		
-	}
+	} else document.getElementById("todtabbtn").style.display = ""
 	var colors = ["red", "green", "blue"]
 	var shorthands = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
@@ -100,7 +109,7 @@ function updateTODStuff() {
 			document.getElementById(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
 			if (b > 1) document.getElementById(color + "UpgName" + b).textContent=name
 		}
-		if (ghostified) {
+		if (ph.did("ghostify")) {
 			document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
 			document.getElementById(shorthand+"RDReq").textContent = "(requires "+shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + getUQNameFromBranch(shorthand) + " quarks)"
 			document.getElementById(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
@@ -159,9 +168,14 @@ function getBranchSpeedText(){
 	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
-	if (todspeed != undefined) if (todspeed != 1) {
-		if (todspeed > 1) text += "ToD Speed: " + shorten(todspeed) + "x, "
-		if (todspeed < 1) text += "ToD Speed: /" + shorten(1/todspeed) + ", "
+	if (todspeed != 1) {
+		if (todspeed > 1) text += "Dev: " + shorten(todspeed) + "x, "
+		if (todspeed < 1) text += "Dev: /" + shorten(1 / todspeed) + ", "
+	}
+	var lsSpeed = ls.mult("tod")
+	if (lsSpeed != 1) {
+		if (lsSpeed > 1) text += "'Light Speed' mod: " + shorten(lsSpeed) + "x, "
+		if (lsSpeed < 1) text += "'Light Speed' mod: /" + shorten(1 / lsSpeed) + ", "
 	}
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length - 2)
@@ -178,23 +192,28 @@ function getBranchSpeed() { // idea: when you hold shift you can see where the m
 	return x
 }
 
+function getBranchDevSpeed() {
+	return todspeed * ls.mult("tod")
+}
+
 function getBranchFinalSpeed() {
-	return tmp.branchSpeed.times(todspeed)
+	return tmp.branchSpeed.times(getBranchDevSpeed())
 }
 
 function getDecayRate(branch) {
 	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, Math.max(0, getRDPower(branch) - 4)))
 	if (branch == "r") {
-		if (GUBought("rg8")) ret = ret.div(getGU8Effect("rg"))
+		if (GUActive("rg8")) ret = ret.div(getGU8Effect("rg"))
 	}
 	if (branch == "g") {
-		if (GUBought("gb8")) ret = ret.div(getGU8Effect("gb"))
+		if (GUActive("gb8")) ret = ret.div(getGU8Effect("gb"))
 	}
 	if (branch == "b") {
-		if (GUBought("br8")) ret = ret.div(getGU8Effect("br"))
+		if (GUActive("br8")) ret = ret.div(getGU8Effect("br"))
 	}
-	ret = ret.times(tmp.branchSpeed)
-	return ret.min(Math.pow(2, 40))
+	ret = ret.times(tmp.branchSpeed).min(Math.pow(2, 40))
+	ret = ret.times(getBranchDevSpeed())
+	return ret
 }
 
 function getDecayLifetime(qk) {
@@ -215,7 +234,7 @@ function getQuarkSpinProduction(branch) {
 		if (hasNU(12)) ret = ret.times(tmp.nu[4].normal)
 	}
 	ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
-	ret = ret.times(todspeed)
+	ret = ret.times(getBranchDevSpeed())
 	return ret
 }
 
@@ -249,6 +268,10 @@ function buyTreeUpg(upg) {
 	branch.spin = branch.spin.sub(getTreeUpgradeCost(upg))
 	if (!tmp.qu.tod.upgrades[upg]) tmp.qu.tod.upgrades[upg] = 0
 	tmp.qu.tod.upgrades[upg]++
+}
+
+function isTreeUpgActive(upg) {
+	return tmp.quActive && player.masterystudies.includes("d13") && tmp.qu.tod.upgrades[upg] >= 1
 }
 
 function getTreeUpgradeLevel(upg) {

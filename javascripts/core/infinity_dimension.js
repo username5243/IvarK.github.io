@@ -71,7 +71,7 @@ function updateInfinityDimensions() {
 			if (unl) {
 				document.getElementById("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(DimensionPower(tier));
 				document.getElementById("infAmount" + tier).textContent = DimensionDescription(tier);
-				document.getElementById("infMax" + tier).textContent = (quantumed ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
+				document.getElementById("infMax" + tier).textContent = (ph.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
 				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) document.getElementById("infMax"+tier).className = "storebtn"
 				else document.getElementById("infMax" + tier).className = "unavailablebtn"
 				document.getElementById("infRow" + tier).style.visibility = "visible";
@@ -160,7 +160,7 @@ function DimensionPower(tier) {
   	if (player.galacticSacrifice !== undefined) mult = mult.times(ec9)
 
   	mult = dilates(mult, 1)
-  	if (quantumed) mult = mult.times(colorBoosts.dim.g)
+  	if (tmp.quActive) mult = mult.times(colorBoosts.dim.g)
   	return mult
 }
 

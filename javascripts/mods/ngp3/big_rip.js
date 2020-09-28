@@ -27,6 +27,7 @@ function unstoreTT() {
 }
 
 function getSpaceShardsGain() {
+	if (!tmp.quActive) return new Decimal(0)
 	let ret = tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun : player.money
 	ret = Decimal.pow(ret.add(1).log10() / 2000, 1.5).times(player.dilation.dilatedTime.add(1).pow(0.05))
 	if (!tmp.qu.bigRip.active || tmp.be) {
@@ -35,15 +36,19 @@ function getSpaceShardsGain() {
 	}
 	if (hasNU(9)) ret = ret.times(Decimal.max(getEternitied(), 1).pow(0.1))
 
+	/*
+	removed the softcap for now, it can go back in later maybe
+	
 	let log = ret.log10()
 	let log4log = Math.log10(log) / Math.log10(4)
 	let start = 5 //Starts at e1,024.
-	if (log4log > start && false) { //removed the softcap for now, it can go back in later maybe
+	if (log4log > start && false) {
 		let capped=Math.min(Math.floor(Math.log10(Math.max(log4log + 2 - start, 1)) / Math.log10(2)), 10 - start)
 		log4log = (log4log - Math.pow(2, capped) - start + 2) / Math.pow(2, capped) + capped + start - 1
 		log = Math.pow(4, log4log)
 	}
 	ret = Decimal.pow(10, log)
+	*/
 
 	if (isNaN(ret.e)) return new Decimal(0)
 	return ret.floor()
@@ -110,7 +115,7 @@ function tweakBigRip(id, reset) {
 }
 
 function isBigRipUpgradeActive(id, bigRipped) {
-	if (player.masterystudies == undefined) return false
+	if (!tmp.quActive) return false
 	if (bigRipped === undefined ? !tmp.qu.bigRip.active : !bigRipped) return false
 	if (id == 1) if (!tmp.qu.bigRip.upgrades.includes(17)) for (var u = 3; u < 18; u++) if (tmp.qu.bigRip.upgrades.includes(u)) return false
 	if (id > 2 && id != 4 && id < 9) if (tmp.qu.bigRip.upgrades.includes(9) && (id != 8 || !hasNU(11))) return false
@@ -119,11 +124,11 @@ function isBigRipUpgradeActive(id, bigRipped) {
 }
 
 function updateBreakEternity() {
-	if (player.masterystudies === undefined) {
+	if (!tmp.quUnl || !tmp.qu.bigRip.active || !tmp.qu.breakEternity.unlocked) {
 		document.getElementById("breakEternityTabbtn").style.display = "none"
 		return
 	}
-	document.getElementById("breakEternityTabbtn").style.display = tmp.qu.bigRip.active || tmp.qu.breakEternity.unlocked ? "" : "none"
+	document.getElementById("breakEternityTabbtn").style.display = ""
 	if (tmp.qu.breakEternity.unlocked) {
 		document.getElementById("breakEternityReq").style.display = "none"
 		document.getElementById("breakEternityShop").style.display = ""
@@ -146,7 +151,7 @@ function breakEternity() {
 	tmp.qu.breakEternity.did = true
 	document.getElementById("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
 	if (tmp.qu.bigRip.active) {
-		tmp.be = tmp.qu.breakEternity.break
+		tmp.be = tmp.quActive && tmp.qu.breakEternity.break
 		updateTemp()
 		if (!tmp.be && document.getElementById("timedimensions").style.display == "block") showDimTab("antimatterdimensions")
 	}
@@ -158,6 +163,7 @@ function breakEternity() {
 }
 
 function getEMGain() {
+	if (!tmp.quActive) return new Decimal(0)
 	let log = player.timeShards.div(1e9).log10() * 0.25
 	if (log > 15) log = Math.sqrt(log * 15)
 	

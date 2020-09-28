@@ -167,7 +167,8 @@ function autoBuyRG() {
 function updateExtraReplGalaxies() {
 	let ts225Eff = 0
 	let ts226Eff = 0
-	let speed = tmp.qcRewards[8] * 2
+	let speed = 2
+	if (isQCRewardActive(8)) speed *= tmp.qcRewards[8]
 	if (player.timestudy.studies.includes(225)) {
 		ts225Eff = Math.floor(player.replicanti.amount.e / 1e3)
 		if (ts225Eff > 99) ts225Eff = Math.floor(Math.sqrt(0.25 + (ts225Eff - 99) * speed) + 98.5)
@@ -177,23 +178,16 @@ function updateExtraReplGalaxies() {
 		if (ts226Eff > 99) ts226Eff = Math.floor(Math.sqrt(0.25 + (ts226Eff - 99) * speed) + 98.5)
 	}
 	extraReplGalaxies = ts225Eff + ts226Eff
-	if (extraReplGalaxies > 325) extraReplGalaxies = (Math.sqrt(0.9216+0.16*(extraReplGalaxies-324))-0.96)/0.08+324
-	if (tmp.ngp3) {
-		let expData={
-			normal: 1/3,
-			ts362: 0.4,
-			legacy: 0.25,
-			ts362legacy: 0.35
-		}
-		let expVarName = player.masterystudies.includes("t362") ? "ts362" : ""
-		if (expVarName == "") expVarName = "normal"
-		let exp=expData[expVarName]
-		if (player.masterystudies.includes("t412")) exp=.5
+	if (extraReplGalaxies > 325) extraReplGalaxies = (Math.sqrt(0.9216 + 0.16 * (extraReplGalaxies - 324)) - 0.96) / 0.08 + 324
+	if (tmp.quActive) {
+		let exp = 1/3
+		if (player.masterystudies.includes("t362")) exp = .4
+		if (player.masterystudies.includes("t412")) exp = .5
 
 		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(),exp)
 		tmp.pe *= 0.67 * (player.masterystudies.includes("t412") ? 1.25 : 1)
-		if (player.ghostify.ghostlyPhotons.unl) tmp.pe*=tmp.le[3]
-		extraReplGalaxies*=colorBoosts.g+tmp.pe
+		if (player.ghostify.ghostlyPhotons.unl) tmp.pe *= tmp.le[3]
+		extraReplGalaxies *= colorBoosts.g + tmp.pe
 	}
 	extraReplGalaxies = Math.floor(extraReplGalaxies)
 }
@@ -210,7 +204,7 @@ function replicantiGalaxyAutoToggle() {
 function getReplSpeed() {
 	let inc = .2
 	let exp = 308
-	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
+	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) && !inQC(9)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
@@ -219,10 +213,11 @@ function getReplSpeed() {
 	}
 	if (player.dilation.upgrades.includes("ngmm10")) exp += player.dilation.upgrades.length
 	inc = inc + 1
-	if (GUBought("gb2")) exp *= 2
+	if (GUActive("gb2")) exp *= 2
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	if (GDs.unlocked()) exp *= GDs.tmp.rep
+	if (inQC(9)) exp *= 0.1
 	return {inc: inc, exp: exp}
 }
 
@@ -232,9 +227,10 @@ function getReplicantiInterval() {
 	if (player.timestudy.studies.includes(62)) interval /= tsMults[62]()
 	if (player.replicanti.amount.gt(Number.MAX_VALUE)||player.timestudy.studies.includes(133)) interval *= 10
 	if (player.timestudy.studies.includes(213)) interval /= tsMults[213]()
-	if (GUBought("gb1")) interval /= getGB1Effect()
+	if (GUActive("gb1")) interval /= getGB1Effect()
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
+	interval /= ls.mult("rep")
 
 	interval = new Decimal(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))

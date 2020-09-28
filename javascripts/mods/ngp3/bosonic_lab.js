@@ -1,7 +1,7 @@
 //Bosonic Lab
 function canUnlockBosonicLab() {
 	let max = getMaximumUnstableQuarks()
-	return (max.decays >= 6 || max.quarks.e >= 5e10) && max.decays >= 5 && player.ghostify.ghostlyPhotons.enpowerments >= 3
+	return tmp.quActive && (max.decays >= 6 || max.quarks.e >= 5e10) && max.decays >= 5 && player.ghostify.ghostlyPhotons.enpowerments >= 3
 }
   
 function updateBLUnlocks() {
@@ -48,7 +48,7 @@ function getOverdriveSpeedDisplay() {
 }
 
 function getBosonicFinalSpeed() {
-	return Decimal.times(player.ghostify.bl.speed, getOverdriveSpeedDisplay())
+	return Decimal.times(player.ghostify.bl.speed, getOverdriveSpeedDisplay()).times(ls.mult("bl"))
 }
 
 function bosonicTick(diff) {
@@ -191,7 +191,7 @@ function updateBosonicLimits() {
 	//Bosonic Level?
 	let lvl = maxBLLvl
 	if (player.ghostify.hb.higgs == 0) lvl = 1
-	else if (!GDs.blExpanded()) lvl = 2
+	else if (!GDs.unlocked()) lvl = 2
 
 	//Bosonic Lab
 	br.limit = br.limits[lvl]
@@ -561,6 +561,7 @@ function buyBosonicUpgrade(id, quick) {
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
 	if (id == 32) tmp.updateLights = true
+	if (id == 54) updateQuantumChallenges()
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
@@ -579,7 +580,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id / 10 <= bu.limit
+	return ph.did("ghostify") && player.ghostify.wzb.unl && player.ghostify.bl.upgrades.includes(id) && id < bu.rows * 10
 }
 
 function updateBosonicUpgradeDescs() {
@@ -718,7 +719,8 @@ var bu = {
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "Gravitons strengthen Light Empowerments and divide the Light Empowerment requirement.",
 		52: "Radioactive Decays boost Tree Upgrades.",
-		53: "Nanorewards delay the actual softcap of first Bosonic Upgrade."
+		53: "Nanorewards delay the actual softcap of first Bosonic Upgrade.",
+		54: "Unlock Quantum Challenge 9."
 	},
 	effects: {
 		11() {
@@ -734,9 +736,10 @@ var bu = {
 			return ret
 		},
 		12() {
-			return (colorBoosts.g + tmp.pe - 1) * 7e-4
+			return tmp.quActive ? (colorBoosts.g + tmp.pe - 1) * 7e-4 : 0
 		},
 		13() {
+			if (!tmp.quActive) return 1
 			var decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
 			var div = 3
 			if (tmp.newNGP3E){
@@ -746,6 +749,7 @@ var bu = {
 			return Math.max(Math.sqrt(decays) / 3 + .6, 1)
 		},
 		14() {
+			if (!tmp.quActive) return 0
 			let x = Math.pow(Math.max(player.dilation.freeGalaxies / 20 - 1800, 0), 1.5)
 			let y = tmp.qu.electrons.sacGals
 			let z = Math.max(y, player.galaxies)
@@ -802,7 +806,7 @@ var bu = {
 		},
 		35() {
 			return {
-				rep: Math.pow(tmp.qu.replicants.quarks.add(1).log10(), 1/3) * 2,
+				rep: Math.pow(tmp.quActive ? tmp.qu.replicants.quarks.add(1).log10() : 0, 1/3) * 2,
 				eds: Decimal.pow(tmp.newNGP3E ? 10 : 20, Math.pow(player.replicanti.amount.log10(), 2/3) / 15e3)
 			}
 		},
@@ -813,13 +817,16 @@ var bu = {
 			}
 		},
 		42() {
+			if (!tmp.quActive) return 1
 			var exp = tmp.newNGP3E ? 1/3 : 1/4
 			return Math.pow(tmp.qu.colorPowers.r.add(1).log10() / 2e4 + 1, exp)
 		},
 		43() {
+			if (!tmp.quActive) return 1
 			return Math.sqrt(colorBoosts.g + tmp.pe) / (tmp.qu.bigRip.active ? 100 : 40) + 1
 		},
 		44() {
+			if (!tmp.quActive) return 0
 			var exp = tmp.newNGP3E ? .55 : .5
 			return Math.pow(tmp.qu.colorPowers.b.add(1).log10(), exp) * 0.15
 		},
@@ -835,9 +842,11 @@ var bu = {
 			}
 		},
 		52() {
+			if (!tmp.quActive) return 1
 			return Math.max(getTotalRadioactiveDecays() / 50, 1)
 		},
 		53() {
+			if (!tmp.quActive) return 1
 			return Math.max(tmp.qu.nanofield.rewards / 100, 1)
 		}
 	},

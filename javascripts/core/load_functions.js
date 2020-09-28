@@ -1721,12 +1721,13 @@ function updateVersionsONLOAD(){
 
 function doNGp3Init2(){
         tmp.eds = tmp.qu && tmp.qu.emperorDimensions
-        updateBosonicLimits()
         if (tmp.ngp3) {
-                setupMasteryStudies()
-                updateUnlockedMasteryStudies()
-                updateSpentableMasteryStudies()
+			setupMasteryStudies()
+			updateUnlockedMasteryStudies()
+			updateSpentableMasteryStudies()
         }
+		updateActiveLayers()
+        updateBosonicLimits()
         updateTemp()
         updateBosonicAMDimReturnsTemp()
         
@@ -2022,7 +2023,6 @@ function updateNGp3DisplayStuff(){
         }
         document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
         updateBLUnlockDisplay()
-        document.getElementById("bpc68").textContent=shortenMoney(tmp.qu.pairedChallenges.pc68best)
         document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
         for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
         updateAssortPercentage()
@@ -2145,6 +2145,7 @@ function onLoad(noOffline) {
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 
 	ph.reset()
+	ls.reset()
 	updateBoughtTimeStudies()
 	performedTS = false
 	updateVersionsONLOAD()
@@ -2217,7 +2218,7 @@ function onLoad(noOffline) {
 	document.getElementById("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
 	document.getElementById("maxTimeDimensions").style.display=removeMaxTD?"none":""
 	document.getElementById("metaMaxAllDiv").style.display=removeMaxMD?"none":""
-	document.getElementById("edtabbtn").style.display=!player.masterystudies?"none":player.masterystudies.includes("d11")?"":"none"
+	document.getElementById("edtabbtn").style.display=tmp.quUnl&&player.masterystudies.includes("d11")?"":"none"
 	document.getElementById("ghostifyAnimBtn").style.display=ph.did("ghostify")?"inline-block":"none"
 	GDs.unlDisplay()
 	var removeMaxTD=false
@@ -2883,6 +2884,8 @@ function conToDeciGhostify(){
 			player.ghostify.ghostlyPhotons.darkMatter=new Decimal(player.ghostify.ghostlyPhotons.darkMatter)
 		}
 		if (tmp.bl && player.ghostify.wzb) {
+			tmp.bl.watt=new Decimal(tmp.bl.watt)
+			tmp.bl.speed=new Decimal(tmp.bl.speed)
 			tmp.bl.ticks=new Decimal(tmp.bl.ticks)
 			tmp.bl.am=new Decimal(tmp.bl.am)
 			tmp.bl.extractProgress=new Decimal(tmp.bl.extractProgress)

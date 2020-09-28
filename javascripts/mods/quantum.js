@@ -1,54 +1,59 @@
 // v2.9
-function quantum(auto, force, challid, bigRip = false, quick) {
-	if (player.masterystudies !== undefined) if (!auto && !force && tmp.qu.bigRip.active) force = true
+function quantum(auto, force, qc, isPC, bigRip, quick) {
+	if (tmp.ngp3 && tmp.qu.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
 	if (player.aarexModifications.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and "+(headstart?"other things like Dilation":"including Time Studies, Eternity Challenges, Dilation, "+(tmp.ngp3?"Meta Dimensions, and Mastery Studies":"and Meta Dimensions"))+". You will gain a quark and unlock various upgrades.":"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!ph.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
-	var pc = challid - 8
+
+	var QCs = []
+	if (qc !== undefined) QCs = [qc]
+	if (isPC) {
+		var pair = tmp.qu.pairedChallenges.order[qc]
+		if (pair) QCs = [pair[0], pair[1]]
+		else QCs = [undefined, undefined]
+		if (QCs[0] > QCs[1]) QCs = [QCs[1], QCs[0]]
+	}
+	var QCType = QCs.length
+
 	if (tmp.ngp3) {
-		tmp.preQCMods=tmp.qu.qcsMods.current
-		tmp.qu.qcsMods.current=[]
-		if (challid > 0) {
-			var abletostart=false
-			if (pc > 0) {
-				if (tmp.qu.pairedChallenges.order[pc]) if (tmp.qu.pairedChallenges.order[pc].length > 1) abletostart = true
-			} else if (!pcFocus) abletostart = true
+		tmp.preQCMods = tmp.qu.qcsMods.current
+		if (QCType) {
+			var abletostart = QCType == 2 ? QCs[1] !== undefined : !pcFocus
 			if (abletostart) {
-				if (pc > 0) if (tmp.qu.pairedChallenges.completed + 1 < pc) return
-				if (tmp.qu.electrons.amount < getQCCost(challid) || !inQC(0)) return
+				if (!inQC(0)) return
+				if (QCType == 2 && tmp.qu.pairedChallenges.completed + 1 < qc) return
+				if (tmp.qu.electrons.amount < getQCCost(QCs)) return
 				if (bigRip) {
-					var qc1 = tmp.qu.pairedChallenges.order[pc][0]
-					var qc2 = tmp.qu.pairedChallenges.order[pc][1]
-					var qc1st = Math.min(qc1, qc2)
-					var qc2st = Math.max(qc1, qc2)
-					if (qc1st != 6 || qc2st != 8) return
+					if (QCs[0] != 6 || QCs[1] != 8) return
 					if (tmp.qu.bigRip.conf && !auto) if (!confirm("Big Ripping the universe starts PC6+8, however, only dilation upgrades boost dilation except upgrades that multiply TP gain until you buy the eleventh upgrade, certain resources like Time Theorems and Time Studies will be changed, and only certain upgrades work in Big Rip. If you can beat PC6+8, you will be able to unlock the next layer. You can give your Time Theorems and Time Studies back by undoing Big Rip.")) return
-				} else if (pc > 0) {
-					if (player.options.challConf || (tmp.qu.pairedChallenges.completions.length < 1 && !ph.did("ghostify"))) if (!confirm("You will start a Quantum Challenge, but as a Paired Challenge, there will be two challenges at once. Completing it boosts the rewards of the Quantum Challenges that you chose in this Paired Challenge. You will keep electrons & sacrificed galaxies, but they don't work in this Challenge.")) return
-				} else if (player.options.challConf || (QCIntensity(1) == 0 && !ph.did("ghostify"))) if (!confirm("You will do a Quantum reset, but you will not gain quarks, you keep your electrons & sacrificed galaxies, and you can't buy electron upgrades. You have to reach the set goal of antimatter while getting the meta-antimatter requirement to Quantum to complete this challenge. Electrons and banked eternities have no effect in Quantum Challenges and your electrons and sacrificed galaxies don't reset until you end the challenge.")) return
-				tmp.qu.electrons.amount -= getQCCost(challid)
-				if (!quick) for (var m = 0; m < qcm.on.length; m++) if (ranking >= qcm.reqs[qcm.on[m]] || !qcm.reqs[qcm.on[m]]) tmp.qu.qcsMods.current.push(qcm.on[m])
-			} else if (pcFocus && pc < 1) {
-				if (!assigned.includes(challid)) {
-					if (!tmp.qu.pairedChallenges.order[pcFocus]) tmp.qu.pairedChallenges.order[pcFocus]=[challid]
+				} else if (QCType == 2) {
+					if (player.options.qcConf || (tmp.qu.pairedChallenges.completions.length == 0 && !ph.did("ghostify"))) if (!confirm("You will start a Quantum Challenge, but as a Paired Challenge, there will be two qcenges at once. Completing it boosts the rewards of the Quantum Challenges that you chose in this Paired Challenge. You will keep electrons & sacrificed galaxies, but they don't work in this Challenge.")) return
+				} else if (player.options.qcConf || (!QCIntensity(1) && !ph.did("ghostify"))) if (!confirm("You will do a Quantum reset, but you will not gain quarks, you keep your electrons & sacrificed galaxies, and you can't buy electron upgrades. You have to reach the set goal of antimatter while getting the meta-antimatter requirement to Quantum to complete this qcenge. Electrons and banked eternities have no effect in Quantum Challenges and your electrons and sacrificed galaxies don't reset until you end the challenge.")) return
+				tmp.qu.electrons.amount -= getQCCost(QCs)
+			} else if (pcFocus && QCType == 1) {
+				if (QCIntensity(qc) >= 1 && !assigned.includes(qc)) {
+					if (!tmp.qu.pairedChallenges.order[pcFocus]) tmp.qu.pairedChallenges.order[pcFocus] = [qc]
 					else {
-						tmp.qu.pairedChallenges.order[pcFocus].push(challid)
-						pcFocus=0
+						tmp.qu.pairedChallenges.order[pcFocus].push(qc)
+						pcFocus = 0
 					}
+					assigned.push(qc)
 					updateQuantumChallenges()
 				}
 				return
-			} else if (pcFocus != pc) {
-				pcFocus = pc
-				updateQuantumChallenges()
-				return
 			} else {
-				pcFocus = 0
+				if (tmp.qu.pairedChallenges.order[pcFocus] !== undefined) delete tmp.qu.pairedChallenges.order[pcFocus]
+				pcFocus = pcFocus == qc ? 0 : qc
 				updateQuantumChallenges()
 				return
 			}
-		}
+
+			tmp.qu.qcsMods.current = []
+			if (!quick) for (var m = 0; m < qcm.on.length; m++) if (ranking >= qcm.reqs[qcm.on[m]] || !qcm.reqs[qcm.on[m]]) tmp.qu.qcsMods.current.push(qcm.on[m])
+		} else tmp.qu.qcsMods.current = []
+		if (inQCModifier("ms")) ph.updateDisplay()
+
 		if (speedrunMilestonesReached > 3 && !isRewardEnabled(4)) {
 			for (var s = 0; s < player.masterystudies.length; s++) {
 				if (player.masterystudies[s].indexOf("t") >= 0) player.timestudy.theorem += masteryStudies.costs.time[player.masterystudies[s].split("t")[1]]
@@ -56,17 +61,18 @@ function quantum(auto, force, challid, bigRip = false, quick) {
 			}
 		}
 	}
+
 	var implode = !(auto||force)&&speedrunMilestonesReached<23
 	if (implode) {
 		implosionCheck = 1
 		dev.implode()
 		setTimeout(function(){
-			quantumReset(force, auto, challid, bigRip, true)
+			quantumReset(force, auto, QCs, qc, bigRip, true)
 		},1000)
 		setTimeout(function(){
 			implosionCheck = 0
 		},2000)
-	} else quantumReset(force, auto, challid, bigRip)
+	} else quantumReset(force, auto, QCs, qc, bigRip)
 	updateTemp()
 }
 
@@ -268,9 +274,9 @@ function doQuantumProgress() {
 }
 
 //v2.90142
-function quantumReset(force, auto, challid, bigRip, implode = false) {
+function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
-	var pc = challid - 8
+	var isQC = id !== undefined
 	if (implode && speedrunMilestonesReached < 1) {
 		showTab("dimensions")
 		showDimTab("antimatterdimensions")
@@ -415,7 +421,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
 	if (player.aarexModifications.ngudpV) for (var d = 0; d < 4; d++) bhd[d]=Object.assign({}, player["blackholeDimension" + (d + 1)])
 	
-	doQuantumResetStuff(bigRip, challid)
+	doQuantumResetStuff(bigRip, isQC)
 	if (ph.did("ghostify") && bigRip) {
 		player.timeDimension8 = {
 			cost: timeDimCost(8, 1),
@@ -511,7 +517,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 					fastest: tmp.qu.pairedChallenges.fastest,
 					respec: false
 				}
-				for (qc = 1; qc < 9; qc++) tmp.qu.challenges[qc] = 1
+				for (qc = 1; qc <= 9; qc++) if (QCIntensity(qc)) tmp.qu.challenges[qc] = 1
 				document.getElementById("respecPC").className = "storebtn"
 			}
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
@@ -519,19 +525,19 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
 		}//bounds if (!force)
 		tmp.qu.pairedChallenges.current = 0
-		if (challid == 0) {
+		if (!isQC) {
 			tmp.qu.electrons.amount = 0
 			tmp.qu.electrons.sacGals = 0
 			tmp.qu.challenge = []
+			tmp.qu.qcsMods.current = []
 			tmp.aeg = 0
-		} else if (pc < 1) tmp.qu.challenge = [challid]
-		else {
-			tmp.qu.challenge = tmp.qu.pairedChallenges.order[pc]
-			tmp.qu.pairedChallenges.current = pc
-		}
+		} else if (QCs.length == 2) tmp.qu.pairedChallenges.current = id
+		tmp.qu.challenge = QCs
+		updateActiveLayers()
 		updateInQCs()
-		if ((!challid && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)
-		replicantsResetOnQuantum(challid)
+
+		if ((!isQC && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)
+		replicantsResetOnQuantum(isQC)
 		nanofieldResetOnQuantum()
 		player.eternityBuyer.tpUpgraded = false
 		player.eternityBuyer.slowStopped = false
@@ -557,7 +563,7 @@ function quantumReset(force, auto, challid, bigRip, implode = false) {
 		updateColorCharge()
 		updateColorDimPowers()
 		updateGluonsTabOnUpdate()
-		let dontshowrg4 = inQC(1) || QCIntensity(1) > 0 || ph.did("ghostify")
+		let dontshowrg4 = inQC(1) || QCIntensity(1) >= 1 || ph.did("ghostify")
 		document.getElementById('rg4toggle').style.display = dontshowrg4 ? "none" : ""
 		updateElectrons()
 		updateBankedEter()
@@ -718,5 +724,5 @@ function updateQuarkDisplay() {
 
 function metaReset2() {
 	if (tmp.ngp3 && tmp.qu.bigRip.active) ghostify()
-	else quantum(false, false, 0)
+	else quantum()
 }

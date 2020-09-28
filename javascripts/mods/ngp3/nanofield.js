@@ -1,7 +1,22 @@
 function getNanospeedText(){
-	s = getNanofieldSpeedText()
-	if (!shiftDown) s = ghostified || nanospeed != 1 ? "Your Nanofield speed is currently " + (nanospeed == 1 ? "" : shorten(tmp.ns) + " * " + shorten(nanospeed) + " = ") + shorten(getNanofieldFinalSpeed()) + "x (hold shift for details)" : ""
-	return s
+	s = ""
+	let speeds = []
+	let speedDescs = []
+	if (ph.did("ghostify")) {
+		speeds.push(tmp.ns)
+		speedDescs.push("")
+	}
+	if (nanospeed != 1) {
+		speeds.push(nanospeed)
+		speedDescs.push("Dev")
+	}
+	if (ls.mult("nf") != 1) {
+		speeds.push(ls.mult("nf"))
+		speedDescs.push("'Light Speed' mod")
+	}
+	return speeds.length >= 1 ? (shiftDown ? getNanofieldSpeedText() :
+		"Your Nanofield speed is currently " + factorizeDescs(speeds, speedDescs) + shorten(getNanofieldFinalSpeed()) + "x (hold shift for details)"
+		): ""
 }
 
 function updateNanoverseTab(){
@@ -230,22 +245,31 @@ var nanoRewards = {
 }
 
 function isNanoEffectUsed(x) {
-	return tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined && tmp.nf.rewardsUsed.includes(x) && tmp.nf.effects !== undefined
+	return tmp.quActive && tmp.nf !== undefined && tmp.nf.rewardsUsed !== undefined && tmp.nf.rewardsUsed.includes(x) && tmp.nf.effects !== undefined
 }
 
 function getNanofieldSpeedText(){
 	text = ""
-	if (ghostified) text += "Ghostify Bonus: " + shorten(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)) + "x, "
+	if (ph.did("ghostify")) text += "Ghostify Bonus: " + shorten(tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)) + "x, "
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[6]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
+	if (nanospeed != 1) {
+		if (nanospeed > 1) text += "Dev: " + shorten(nanospeed) + "x, "
+		if (nanospeed < 1) text += "Dev: /" + shorten(1 / nanospeed) + ", "
+	}
+	var lsSpeed = ls.mult("nf")
+	if (lsSpeed != 1) {
+		if (lsSpeed > 1) text += "'Light Speed' mod: " + shorten(lsSpeed) + "x, "
+		if (lsSpeed < 1) text += "'Light Speed' mod: /" + shorten(1 / lsSpeed) + ", "
+	}
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
 
 function getNanofieldSpeed() {
 	let x = 1
-	if (ghostified) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
+	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[6].times(x)
 	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.nf)
@@ -253,7 +277,7 @@ function getNanofieldSpeed() {
 }
 
 function getNanofieldFinalSpeed() {
-	return Decimal.times(tmp.ns, nanospeed)
+	return Decimal.times(tmp.ns, nanospeed * ls.mult("nf"))
 }
 
 function getNanoRewardPower(reward, rewards) {
@@ -278,6 +302,7 @@ function getNanoRewardReq(additional) {
 }
 
 function isNanoScalingActive(x) {
+	if (x == 0) return true
 	if (!player.ghostify.ghostlyPhotons.unl) return false
 	return nanoRewards.scaling[x].active === undefined || nanoRewards.scaling[x].active()
 }

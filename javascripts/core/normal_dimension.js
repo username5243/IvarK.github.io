@@ -189,7 +189,6 @@ function getDimensionFinalMultiplier(tier) {
 	
 	if (tier == 8 && player.achievements.includes("ng3p27")) mult = mult.times(tmp.ig)	
 
-	
 	if (mult.gt(10)) mult = dilates(mult.max(1), 2)
 	mult = mult.times(getAfterDefaultDilationLayerAchBonus(tier))
 	if (player.currentChallenge == "postc4" && player.tickspeedBoosts != undefined) mult = mult.sqrt()
@@ -199,7 +198,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
 	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : player.masterystudies.includes("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (quantumed) mult = mult.times(colorBoosts.dim.r)
+	if (tmp.quActive) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
 
@@ -310,7 +309,7 @@ function getMPTBase(focusOn) {
 	if (player.galacticSacrifice !== undefined) if (player.galacticSacrifice.upgrades.includes(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
 	if (focusOn == "no-QC5") return ret
 	if (tmp.ngp3) {
-		ret += tmp.qcRewards[5]
+		if (isQCRewardActive(5)) ret += tmp.qcRewards[5]
 		if (isNanoEffectUsed("per_10_power")) ret += tmp.nf.effects.per_10_power
 	}
 	return ret
@@ -318,7 +317,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (tmp.ngp3 && player.masterystudies.includes("d7")) x = getElectronBoost(focusOn)
+	if (tmp.quActive && player.masterystudies.includes("d7")) x = getElectronBoost(focusOn)
 	return x
 }
 

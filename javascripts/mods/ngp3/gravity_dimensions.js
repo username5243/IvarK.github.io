@@ -8,7 +8,7 @@ let GDs = {
 			gdBoosts: 0,
 			rdTick: new Decimal(0)
 		}
-		this.save = data
+		GDs.save = data
 
 		for (var d = 1; d <= 4; d++) {
 			data["gd" + d] = new Decimal(1)
@@ -17,11 +17,11 @@ let GDs = {
 		return data
 	},
 	compile() {
-		delete this.save
+		delete GDs.save
 		if (!player.ghostify || !player.ghostify.gds) return
 
 		data = player.ghostify.gds
-		this.save = data
+		GDs.save = data
 
 		data.gv = new Decimal(data.gv)
 		data.gr = new Decimal(data.gr)
@@ -33,17 +33,19 @@ let GDs = {
 		}
 		data.gdBoosts = parseInt(data.gdBoosts)
 		delete data.rdBoosts
+
+		GDs.chargeDisplay()
 	},
 	updateTmp() {
 		let data = {}
-		this.tmp = data
+		GDs.tmp = data
 
-		if (!this.unlocked()) return
+		if (!GDs.unlocked()) return
 
-		data.gdm = Decimal.max(tmp.bl.speed, 1).log10() + 1 //Determine the initial multiplier for Gravity Dimensions.
+		data.gdm = Decimal.max(tmp.bl.speed, 1).log10() //Determine the initial multiplier for Gravity Dimensions.
 
 		//Gravity Power
-		let gp = Math.pow(Math.max(Math.pow(this.save.gv.add(10).log10(), 3/2) - this.save.gr.add(10).log10(), 0), 2/3)
+		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.add(10).log10(), 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
 			let layer = Math.floor(Math.log2(gp / 10 + 1))
@@ -53,47 +55,65 @@ let GDs = {
 		data.gp = gp
 
 		//Gravity Energy
-		data.gem = this.energyMult() //Determine GE / GP
+		data.gem = GDs.energyMult() //Determine GE / GP
 		data.ge = data.gem * gp //GP * GE / GP => GE (DO NOT EVER SOFTCAP THiS!)
 
+		//Gravity Charge
+		data.gc = GDs.chargeMult()
+		data.gsc = GDs.superchargeMult()
+
 		//Gravity Energy boosts...
-		data.rep = data.ge + 1 // Boosts Replicate Interval.
-		data.nf = data.ge + 1 // Boosts Nanospeed.
-		data.tod = data.ge + 1 // Boosts Branch Speed.
-		data.bl = data.ge + 1 // Boosts Bosonic Speed.
+		for (let i = 0; i < GDs.boosts.list.length; i++) {
+			let b = GDs.boosts.list[i]
+			data[b] = GDs.boosts[b].eff(GDs.charge(data.ge, b))
+		}
+	},
+	setupHTML() {
+		var html = ""
+		for (let i = 0; i < GDs.boosts.list.length; i++) {
+			let b = GDs.boosts.list[i]
+			html += '<tr>' +
+				'<td>' + GDs.boosts[b].desc.replace('{{x}}', '<span class="gvBoost" id="gvTo_' + b + '">1.00</span>') + '</td>' +
+				'<td style="text-align: right"><button class="storebtn" id="gvCharge_' + b + '" onclick="GDs.chargeBoost(\'' + b + '\')">Charge</button></td>' +
+				'</tr>'
+		}
+		document.getElementById("gvBoosts").innerHTML = html
 	},
 	updateDisplay() {
 		document.getElementById("gdWatt").textContent = shorten(tmp.bl.speed)
-		document.getElementById("gdMult").textContent = shorten(this.tmp.gdm)
-		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(this.tmp.gdm, this.gdExp(1)).times(this.save.gd1)) + "/s"
-		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (this.save.gdBoosts >= 4 ? "Boost" : "Shift") + " (" + getFullExpansion(this.save.gdBoosts) + "): requires " + shortenDimensions(this.gdBoostReq()) + " Gravity Radiation"
-		document.getElementById("gdBoost").className = this.save.gr.gte(this.gdBoostReq()) ? "storebtn" : "unavailablebtn"
-		document.getElementById("rdTick").textContent = shortenDimensions(this.save.rdTick)
-		document.getElementById("rdNextTick").textContent = shorten(this.rdNextTickAt())
+		document.getElementById("gdMult").textContent = shorten(GDs.tmp.gdm)
+		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
+		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (GDs.save.gdBoosts >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
+		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn" : "unavailablebtn"
+		document.getElementById("gdBoost").textContent = GDs.save.gdBoosts >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
+		document.getElementById("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
+		document.getElementById("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
 		for (var d = 1; d <= 4; d++) {
-			if (this.save.gdBoosts + 1 >= d) {
-				document.getElementById("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + this.gdExp(d).toFixed(2)
-				document.getElementById("gd" + d + "Amount").textContent = shortenDimensions(this.save["gd" + d])
+			if (GDs.save.gdBoosts + 1 >= d) {
+				document.getElementById("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
+				document.getElementById("gd" + d + "Amount").textContent = shortenDimensions(GDs.save["gd" + d])
 			}
-			document.getElementById("rd" + d + "Amount").textContent = shortenDimensions(this.save["rd" + d])
+			document.getElementById("rd" + d + "Amount").textContent = shortenDimensions(GDs.save["rd" + d])
 		}
 
-		document.getElementById("gv").textContent = shortenMoney(this.save.gv)
-		document.getElementById("gr").textContent = shortenMoney(this.save.gr)
-		document.getElementById("gvPow").textContent = this.tmp.gp.toFixed(2)
-		document.getElementById("gvPowScaling").textContent = (this.tmp.gpr == 0 ? "" : this.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(this.tmp.gpr) + " ") + "Power"
-		document.getElementById("gvEne").textContent = this.tmp.ge.toFixed(2)
-		document.getElementById("gvEneMult").textContent = this.tmp.gem.toFixed(2)
-		document.getElementById("gvRadio").style.display = this.tmp.gpr >= 1 ? "" : "none"
-		if (this.tmp.gpr >= 1) {
-			document.getElementById("gvRadioExp").textContent = this.tmp.gpr >= 2 ? "^" + getFullExpansion(this.tmp.gpr) : ""
-			document.getElementById("gvRadioPow").textContent = getFullExpansion(Math.floor(this.radioactivity(this.tmp.gpr)))
+		document.getElementById("gv").textContent = shortenMoney(GDs.save.gv)
+		document.getElementById("gr").textContent = shortenMoney(GDs.save.gr)
+		document.getElementById("gvPow").textContent = GDs.tmp.gp.toFixed(2)
+		document.getElementById("gvPowScaling").textContent = (GDs.tmp.gpr == 0 ? "" : GDs.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(GDs.tmp.gpr) + " ") + "Power"
+		document.getElementById("gvEne").textContent = GDs.tmp.ge.toFixed(2)
+		document.getElementById("gvEneMult").textContent = GDs.tmp.gem.toFixed(2)
+		document.getElementById("gvRadio").style.display = GDs.tmp.gpr >= 1 ? "" : "none"
+		if (GDs.tmp.gpr >= 1) {
+			document.getElementById("gvRadioExp").textContent = GDs.tmp.gpr >= 2 ? "^" + getFullExpansion(GDs.tmp.gpr) : ""
+			document.getElementById("gvRadioPow").textContent = getFullExpansion(Math.floor(GDs.radioactivity(GDs.tmp.gpr)))
 		}
 
-		document.getElementById("gvToRep").textContent = this.tmp.rep.toFixed(2)
-		document.getElementById("gvToNf").textContent = this.tmp.nf.toFixed(2)
-		document.getElementById("gvToTod").textContent = this.tmp.tod.toFixed(2)
-		document.getElementById("gvToBl").textContent = this.tmp.bl.toFixed(2)
+		for (let i = 0; i < GDs.boosts.list.length; i++) {
+			let b = GDs.boosts.list[i]
+			document.getElementById("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
+		}
+		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100 - 100).toFixed(2) + "%"
+		//document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100 - 100).toFixed(2) + "%"
 	},
 	can() {
 		return player.totalmoney.log10() >= 1e18 && player.ghostify.hb.higgs >= 25
@@ -102,77 +122,67 @@ let GDs = {
 		return shortenCosts(Decimal.pow(10, 1e18)) + " antimatter and " + getFullExpansion(25) + " Higgs Bosons"
 	},
 	unl() {
-		if (this.unlocked()) return
-		if (!this.can()) return
+		if (GDs.unlocked()) return
+		if (!GDs.can()) return
 
-		this.save.unl = true
+		GDs.save.unl = true
 		$.notify("Congratulations! You have unlocked Gravity Dimensions!", "success")
 		giveAchievement("The Gravitational Well")
 		updateBosonUnlockDisplay()
-		this.unlDisplay()
+		GDs.unlDisplay()
 	},
 	unlDisplay() {
-		let unl = this.unlocked()
+		let unl = GDs.unlocked()
 		document.getElementById("gdtabbtn").style.display = unl ? "" : "none"
 		if (!unl) return
 
-		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = this.save.gdBoosts + 1 >= d ? "" : "hidden"
+		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = GDs.save.gdBoosts + 1 >= d ? "" : "hidden"
 	},
 	unlocked() {
-		return this.save && this.save.unl
-	},
-	blExpanded() {
-		return this.unlocked() && this.save.gd1.bought > 0
-	},
-	isRadioactiveActive(layer) {
-		return this.tmp.gpr >= layer
-	},
-	radioactivity(layer) {
-		if (!this.isRadioactiveActive(layer)) return
-		return (this.tmp.gp - layer * 10) * Math.pow(this.save.gr.max(1).log10(), 2)
-	},
-	energyMult() {
-		return 1
+		return GDs.save && GDs.save.unl
 	},
 	gdTick(diff) {
-		for (var d = Math.min(this.save.gdBoosts + 1, 4); d >= 1; d--) {
-			let add = Decimal.pow(this.tmp.gdm, this.gdExp(d)).times(this.save["gd" + d])
-			if (d == 1) this.save.gv = this.save.gv.add(add.times(diff))
-			else this.save["gd" + (d - 1)] = this.save["gd" + (d - 1)].add(add.times(diff / 10))
+		for (var d = Math.min(GDs.save.gdBoosts + 1, 4); d >= 1; d--) {
+			let add = Decimal.pow(GDs.tmp.gdm, GDs.gdExp(d)).times(GDs.save["gd" + d])
+			if (d == 1) GDs.save.gv = GDs.save.gv.add(add.times(diff))
+			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(diff / 10))
 		}
 	},
 	gdExp(dim) {
-		return 1
+		return (GDs.save.gdBoosts - dim + 1) / Math.sqrt(dim) + 1
 	},
 	gdBoost(x) {
-		if (!this.save.gr.gte(this.gdBoostReq())) return
-		this.save.gdBoosts++
-		this.unlDisplay()
+		if (!GDs.save.gr.gte(GDs.gdBoostReq())) return
+		GDs.save.gdBoosts++
+		if (GDs.save.gdBoosts < 4) GDs.unlDisplay()
 	},
 	gdBoostReq(x) {
-		if (x === undefined) x = this.save.gdBoosts
-		return Decimal.pow(10, x * 3 + 5)
+		if (x === undefined) x = GDs.save.gdBoosts
+		return Decimal.pow(10, (Math.pow(x * 2, 2) + 3) * GDs.rdExp() * 2)
 	},
 	rdNextTickAt() {
-		return this.save.rdTick.add(1).pow(2).times(30)
+		return GDs.save.rdTick.add(1).pow(1 / GDs.rdExp()).times(30)
 	},
 	rdTargetTick() {
-		return Decimal.div(tmp.bl.speed, 30).sqrt().floor()
+		return Decimal.div(tmp.bl.speed, 30).pow(GDs.rdExp()).floor()
 	},
 	gainRDTicks() {
-		let target = this.rdTargetTick()
-		if (this.save.rdTick.gte(target)) return
-		this.rdTick(target.sub(this.save.rdTick))
-		this.save.rdTick = target
+		let target = GDs.rdTargetTick()
+		if (GDs.save.rdTick.gte(target)) return
+		GDs.rdTick(target.sub(GDs.save.rdTick))
+		GDs.save.rdTick = target
 	},
 	rdTick(diff) {
 		for (var d = 4; d >= 1; d--) {
-			if (d == 1) this.save.gr = this.save.gr.add(this.save["rd" + d].times(diff))
-			else this.save["rd" + (d - 1)] = this.save["rd" + (d - 1)].add(this.save["rd" + d].div(10).times(diff))
+			if (d == 1) GDs.save.gr = GDs.save.gr.add(GDs.save["rd" + d].times(diff))
+			else GDs.save["rd" + (d - 1)] = GDs.save["rd" + (d - 1)].add(GDs.save["rd" + d].div(10).times(diff))
 		}
 	},
+	rdExp() {
+		return 0.5
+	},
 	dimReset() {
-		let data = this.save
+		let data = GDs.save
 		if (!GDs.unlocked()) return
 
 		data.gv = new Decimal(0)
@@ -183,10 +193,84 @@ let GDs = {
 			data["rd" + d] = new Decimal(1)
 		}
 	},
+	isRadioactiveActive(layer) {
+		return GDs.tmp.gpr >= layer
+	},
+	radioactivity(layer) {
+		if (!GDs.isRadioactiveActive(layer)) return
+		return (GDs.tmp.gp - layer * 10) * Math.pow(GDs.save.gr.max(1).log10(), 2)
+	},
+	energyMult() {
+		let x = 1
+		if (QCIntensity(9)) x *= tmp.qcRewards[9] || 1
+		return 1
+	},
+	charge(ge, id) {
+		if (GDs.save.gc == id) ge *= GDs.tmp.gc
+		ge *= GDs.tmp.gsc
+		return ge
+	},
+	chargeMult() {
+		return 2
+	},
+	superchargeMult() {
+		return 1
+	},
+	chargeBoost(id) {
+		if (GDs.save.gc == id) return
+		if (!confirm("This will do a Higgs reset to charge up one of Gravity Well boosts, but Gravity Radiation scale less. Are you sure?")) return
+		bosonicLabReset()
+		document.getElementById("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn"
+		document.getElementById("gvCharge_" + id).className = "chosenbtn"
+		GDs.save.gc = id
+	},
+	unchargeBoost() {
+		if (!GDs.save.gc) return
+		if (!confirm("This requires a Higgs reset because you will have less Gravity Radiation after reset. Are you sure?")) return
+		bosonicLabReset()
+		document.getElementById("gvCharge_" + GDs.save.gc).className = "storebtn"
+		document.getElementById("gvUncharge").className = "chosenbtn"
+		delete GDs.save.gc
+	},
+	chargeDisplay() {
+		let c = GDs.save.gc
+		for (let i = 0; i < GDs.boosts.list.length; i++) {
+			let b = GDs.boosts.list[i]
+			document.getElementById("gvCharge_" + b).className = c == b ? "chosenbtn" : "storebtn"
+		}
+		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn"
+	},
+	boosts: {
+		list: ["rep", "nf", "tod", "bl"],
+		rep: {
+			desc: "x{{x}} OoMs to replicate interval increase",
+			eff(x) {
+				return x + 1
+			}
+		},
+		nf: {
+			desc: "^{{x}} to Nanospeed",
+			eff(x) {
+				return x + 1
+			}
+		},
+		tod: {
+			desc: "^{{x}} to Branch speed",
+			eff(x) {
+				return x + 1
+			}
+		},
+		bl: {
+			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
+			eff(x) {
+				return x + 1
+			}
+		},
+	},
 	reset(unl) {
 		if (!unl && document.getElementById("gdims").style.display != "none") showDimTab("antimatterdimensions")
-		player.ghostify.gv = this.setup()
-		this.save.unl = unl
-		this.unlDisplay()
+		player.ghostify.gv = GDs.setup()
+		GDs.save.unl = unl
+		GDs.unlDisplay()
 	}
 }

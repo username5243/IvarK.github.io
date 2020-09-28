@@ -715,6 +715,14 @@ strong { color: #0072e5 }
 	border-color: #e5e500 !important;
 	box-shadow: 0px 0px 12px #e5e500, inset 0px 0px 24px #e5e500
 }
+.planckbtn {
+	border-color: #2f3f00 !important;
+	color: #bfff00 !important;
+}
+.planckbtn:hover {
+	border-color: #5f7f00 !important;
+	color: #efffbf !important;
+}
 #gdtabbtn button {
 	border-color: #0b298d !important;
 	animation: none

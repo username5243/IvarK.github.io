@@ -4,12 +4,12 @@ function getDTMultPostBRU11(){
 	if (player.achievements.includes("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
 	if (player.masterystudies.includes("t263")) gain = gain.times(getMTSMult(263))
 	if (player.masterystudies.includes("t281")) gain = gain.times(getMTSMult(281))
-	gain = gain.times(tmp.qcRewards[1])
+	if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
 	if (player.masterystudies.includes("t322")) gain = gain.times(getMTSMult(322))
 	if (player.masterystudies.includes("t341")) gain = gain.times(getMTSMult(341))
-	gain = gain.times(getTreeUpgradeEffect(7))
-	gain = gain.times(colorBoosts.b)
-	if (GUBought("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
+	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
+	if (tmp.quActive) gain = gain.times(colorBoosts.b)
+	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
 	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
 	return gain
 }
@@ -44,7 +44,7 @@ function getDilTimeGainPerSecond() {
 }
 
 function getDTGainExp(){
-	let exp = GUBought("br3") ? 1.1 : 1
+	let exp = GUActive("br3") ? 1.1 : 1
 	if (ghostified && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 	return exp
 }
@@ -63,7 +63,7 @@ function getDilPower() {
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
 		if (player.masterystudies.includes("t264")) ret = ret.times(getMTSMult(264))
-		if (GUBought("br1")) ret = ret.times(getBR1Effect())
+		if (GUActive("br1")) ret = ret.times(getBR1Effect())
 		if (player.masterystudies.includes("t341")) ret = ret.times(getMTSMult(341))
 	}
 	return ret
@@ -91,7 +91,7 @@ function getDilExp(disable) {
 	if (player.aarexModifications.newGameExpVersion) ret += .001
 	if (player.meta !== undefined && !player.aarexModifications.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
-		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && player.masterystudies.includes("d13") && disable != "TU3") ret += getTreeUpgradeEffect(2)
+		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(3) && disable != "TU3") ret += getTreeUpgradeEffect(2)
 		if (ghostified && player.ghostify.neutrinos.boosts && disable != "neutrinos") ret += tmp.nb[1]
 	}
 	return ret
@@ -500,7 +500,7 @@ function getFreeGalaxyGainMult() {
 	let galaxyMult = player.dilation.upgrades.includes(4) ? 2 : 1
 	if (player.dilation.upgrades.includes("ngmm1")) galaxyMult *= 2
 	if (player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) galaxyMult /= 1.5
-	galaxyMult *= tmp.qcRewards[2]
+	if (isQCRewardActive(2)) galaxyMult *= tmp.qcRewards[2]
 	if (isNanoEffectUsed("dil_gal_gain")) galaxyMult *= tmp.nf.effects.dil_gal_gain
 	return galaxyMult
 }

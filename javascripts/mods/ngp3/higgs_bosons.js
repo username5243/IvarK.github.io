@@ -44,7 +44,7 @@ function bosonicLabReset() {
 	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)
 	player.ghostify.ghostlyPhotons.lights = [0,0,0,0,0,0,0,0]
 	tmp.updateLights = true
-	var startingEnchants = tmp.bEn[14] ? tmp.bEn[14].bUpgs : 0
+	var startingEnchants = bEn.effects[14](tmp.bl.enchants[14] || 0).bUpgs
 	player.ghostify.bl = {
 		watt: new Decimal(0),
 		ticks: player.ghostify.bl.ticks,
@@ -63,8 +63,8 @@ function bosonicLabReset() {
 	}
 	var order = [11, 12, 13, 15, 14, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
 	//tmp.bl.upgrades needs to be updated (also 12 needs to be added)
-	for (let i = 0; i < startingEnchants; i++){
-		if (i == 20) break
+	for (let i = 0; i < startingEnchants; i++) {
+		if (i == order.length) break
 		player.ghostify.bl.upgrades.push(order[i])
 	}
 	if (!player.ghostify.bl.upgrades.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
@@ -82,6 +82,7 @@ function bosonicLabReset() {
 		wnb: new Decimal(0),
 		zb: new Decimal(0)
 	}
+	player.ghostify.hb.bosonicSemipowerment = true
 	GDs.dimReset()
 	updateBosonicAMDimReturnsTemp()
 	ghostify(false, true)
@@ -100,15 +101,11 @@ function higgsReset() {
 		updateBosonicLimits()
 		updateBosonicStuffCosts()
 	}
-	player.ghostify.hb.bosonicSemipowerment = true
-	matchTempPlayerHiggs()
 }
 
 function restartHiggs() {
 	if (!confirm("Restarting will act as a Higgs reset, but you won't gain anything. Are you sure you want to restart?")) return
 	bosonicLabReset()
-	player.ghostify.hb.bosonicSemipowerment = true
-	matchTempPlayerHiggs()
 }
 
 function getHiggsRequirementBase() {

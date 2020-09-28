@@ -32,10 +32,10 @@ function getMetaDimensionMultiplier(tier) {
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier, 0)))
 	ret = ret.times(tmp.mdgm) //Global multiplier of all Meta Dimensions
 	//Quantum upgrades
-	if (tier == 1 && GUBought("rg3")) ret = ret.times(getRG3Effect())
+	if (tier == 1 && GUActive("rg3")) ret = ret.times(getRG3Effect())
 
 	//QC Rewards:
-	if (tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
+	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
 	
 	//Achievements:
 	if (tier == 8 && player.achievements.includes("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
@@ -62,10 +62,10 @@ function getMetaDimensionGlobalMultiplier() {
 		if (player.masterystudies.includes("t383")) ret = ret.times(getMTSMult(383))
 		if (player.masterystudies.includes("t393")) ret = ret.times(getMTSMult(393))
 		//Qunatum Upgrades
-		if (GUBought("br4")) ret = ret.times(Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1))
+		if (GUActive("br4")) ret = ret.times(Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1))
 		//QC Rewards
-		ret = ret.times(tmp.qcRewards[3])
-		ret = ret.times(tmp.qcRewards[6])
+		if (isQCRewardActive(3)) ret = ret.times(tmp.qcRewards[3])
+		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
 		//Achievement Rewards
 		var ng3p13exp = Math.pow(Decimal.plus(quantumWorth, 1).log10(), 0.75)
 		if (ng3p13exp > 1000) ng3p13exp = Math.pow(7 + Math.log10(ng3p13exp), 3)
@@ -140,7 +140,7 @@ function getMetaShiftRequirement() {
 	data.mult = inQC4 ? 5.5 : 15
 	if (tmp.ngp3) if (player.masterystudies.includes("t312")) data.mult -= 1
 	data.amount += data.mult * Math.max(mdb - 4, 0)
-	if (tmp.ngp3) if (player.masterystudies.includes("d13")) data.amount -= getTreeUpgradeEffect(1)
+	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
 	if (ph.did("ghostify")) if (hasNU(1)) data.amount -= tmp.nu[0]
 
 	data.scalingStart = inQC4 ? 55 : 15
@@ -349,7 +349,7 @@ function getMADimBoostPowerExp(ma) {
 	power += getECReward(13)
 	if (tmp.ngp3) {
 		if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
-		if (player.masterystudies.includes("d13")) power += getTreeUpgradeEffect(8)
+		if (isTreeUpgActive(8)) power += getTreeUpgradeEffect(8)
 	}
 	return power
 }
@@ -402,7 +402,7 @@ function updateMetaDimensions () {
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
 	var message = 'Lose all your previous progress, but '
-	document.getElementById("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + ' meta-antimatter ' + (!inQC(0) ? "and " + shortenCosts(Decimal.pow(10, getQCGoal())) + " antimatter" : player.masterystudies ? "and an EC14 completion" : "")
+	document.getElementById("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + ' meta-antimatter ' + (!inQC(0) ? "and " + shortenCosts(Decimal.pow(10, getQCGoalLog())) + " antimatter" : player.masterystudies ? "and an EC14 completion" : "")
 	if (reqGotten && bigRipped && ph.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")

@@ -274,7 +274,7 @@ function toggleAPs() {
 }
 
 function bigRip(auto) {
-	if (!player.masterystudies.includes("d14") || tmp.qu.electrons.amount < 62500 || !inQC(0)) return
+	if (!tmp.quActive || !player.masterystudies.includes("d14") || tmp.qu.electrons.amount < getQCCost([6, 8]) || !inQC(0)) return
 	if (player.ghostify.milestones > 1) {
 		tmp.qu.pairedChallenges.order = {1: [1, 2], 2: [3, 4], 3: [5, 7], 4:[6, 8]}
 		tmp.qu.pairedChallenges.completed = 4
@@ -282,7 +282,7 @@ function bigRip(auto) {
 			tmp.qu.electrons.mult += (2 - tmp.qu.challenges[c]) * 0.25
 			tmp.qu.challenges[c] = 2
 		}
-		quantum(auto, true, 12, true, true)
+		quantum(auto, true, 4, true, true, true)
 	} else {
 		for (var p = 1; p < 5; p++) {
 			var pcData = tmp.qu.pairedChallenges.order[p]
@@ -291,7 +291,7 @@ function bigRip(auto) {
 				var pc2 = Math.max(pcData[0], pcData[1])
 				if (pc1 == 6 && pc2 == 8) {
 					if (p - 1 > tmp.qu.pairedChallenges.completed) return
-					quantum(auto, true, p + 8, true, true)
+					quantum(auto, true, p, true, true)
 				}
 			}
 		}
@@ -490,7 +490,7 @@ function getGHPMult() {
 }
 
 function ghostify(auto, force) {
-	if (!force&&(!isQuantumReached()||!tmp.qu.bigRip.active||implosionCheck)) return
+	if (!force && (implosionCheck || !ph.can("ghostify"))) return
 	if (!auto && !force && player.aarexModifications.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets your banked stats, best TP & MA, quarks, gluons, electrons, Quantum Challenges, Replicants, Nanofield, and Tree of Decay to gain a Ghost Particle. Are you ready for this?")) {
 		denyGhostify()
 		return
@@ -568,6 +568,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
 	tmp.qu = player.quantum
+	updateActiveLayers()
 	updateInQCs()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)

@@ -1,5 +1,5 @@
 let Prestiges = {
-	order: ["paradox", "galaxy", "infinity", "eternity", "quantum", "ghostify"],
+	order: ["paradox", "galaxy", "infinity", "eternity", "quantum", "ghostify"/*, "planck"*/],
 	reqs: {
 		paradox() {
 			return player.matter.max(player.money).gte(1e3) && player.totalTickGained && !tmp.ri
@@ -23,7 +23,10 @@ let Prestiges = {
 				) && (!player.masterystudies || ECTimesCompleted("eterc14")) && quarkGain().gt(0)
 		},
 		ghostify() {
-			return tmp.qu.bigRip.active && this.quantum()
+			return (tmp.qu.bigRip.active && this.quantum()) || pl.on()
+		},
+		planck() {
+			return pl.can()
 		}
 	},
 	modReqs: {
@@ -38,6 +41,9 @@ let Prestiges = {
 		},
 		ghostify() {
 			return player.ghostify !== undefined
+		},
+		planck() {
+			return player.pl !== undefined
 		}
 	},
 	can(id) {
@@ -61,6 +67,9 @@ let Prestiges = {
 		},
 		ghostify() {
 			return player.ghostify.times >= 1
+		},
+		planck() {
+			return player.pl.times >= 1
 		}
 	},
 	did(id) {
@@ -72,9 +81,12 @@ let Prestiges = {
 		infinity: ["postInfinityButton", "infinityPoints2", "infinitybtn"],
 		eternity: ["eternitybtn", "eternityPoints2", "eternitystorebtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
-		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"]
+		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"],
+		planck: ["planck", "planckinfo", "plancktabbtn"],
 	},
 	shown(id) {
+		if (id == "eternity" && pl.on()) return false
+		if (id == "quantum" && !tmp.quUnl) return false
 		return !player.aarexModifications.layerHidden[id]
 	},
 	tmp: {},
@@ -116,7 +128,7 @@ let Prestiges = {
 
 			document.getElementById(d[0]).style.display = prestigeShown ? "" : "none"
 			document.getElementById(d[1]).style.display = tabShown ? "" : "none"
-			document.getElementById(d[2]).style.display = tabShown && !isEmptiness ? "" : "none"
+			document.getElementById(d[2]).style.display = tabShown && !isEmptiness && (p != "quantum" || !inQCModifier("ms")) ? "" : "none"
 
 			document.getElementById(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
 			document.getElementById(d[1]).className = "presCurrency" + ph.tmp.shown

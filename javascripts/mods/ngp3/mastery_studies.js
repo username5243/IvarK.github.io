@@ -96,7 +96,7 @@ var masteryStudies = {
 		},
 		253(){
 			if (hasNU(6)) return 0
-			return Math.floor(getTotalRG()/4)
+			return Math.floor(getTotalRG() / 4)
 		},
 		262(){
 			let r = Math.max(player.resets / 5e4 - 10, 1)
@@ -135,7 +135,7 @@ var masteryStudies = {
 			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(player.galaxies, 1)), 1.5))
 		},
 		322(){
-			let log = Math.sqrt(Math.max(3-getTickspeed().log10(),0))/2e4
+			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
 			if (log > 1e3 && player.aarexModifications.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
 			if (player.aarexModifications.newGameExpVersion) log += Math.pow(Math.log10(log + 10), 4) - 1
@@ -148,12 +148,14 @@ var masteryStudies = {
 			return Math.max(player.galaxies, 1)
 		},
 		341(){
+			if (!tmp.quActive) return new Decimal(1)
 			var exp = Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())
 			if (exp > 150) exp = 150 * Math.pow(exp / 150, .5)
 			if (exp > 200) exp = 200 * Math.pow(exp / 200, .5)
 			return Decimal.pow(tmp.newNGP3E ? 3 : 2, exp)
 		},
 		344(){
+			if (!tmp.quActive) return 1
 			var ret = Math.pow(tmp.qu.replicants.quarks.div(1e7).add(1).log10(), tmp.newNGP3E ? 0.3 : 0.25) * 0.17 + 1
 			if (ret > 3) ret = 1 + Math.log2(ret + 1)
 			if (ret > 4) ret = 3 + Math.log10(ret + 6)
@@ -184,9 +186,11 @@ var masteryStudies = {
 			return player.eightAmount.max(1).pow(Math.PI)
 		},
 		383(){
+			if (!tmp.quActive) return new Decimal(1)
 			var blueExp = 4/21
 			if (tmp.newNGP3E) blueExp = 1/5
 			var bluePortion = Math.pow(getCPLog("b"), blueExp)
+
 			var MAportion = Math.sqrt(player.meta.antimatter.add(10).log10())
 			var exp = MAportion * bluePortion * Math.log10(2)
 
@@ -199,19 +203,21 @@ var masteryStudies = {
 			return player.meta.antimatter.max(1).pow(8e-4)
 		},
 		392(){
+			if (!tmp.quActive) return new Decimal(1)
 			return Decimal.pow(tmp.newNGP3E ? 1.7 : 1.6, Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())).plus(1)
 		},
 		393(){
-			if (!tmp.twr) return new Decimal(1)
+			if (!tmp.twr || !tmp.quActive) return new Decimal(1)
 			return Decimal.pow(4e5, Math.sqrt(tmp.twr.add(1).log10()))
 		},
 		401(){
-			let log=tmp.qu.replicants.quarks.div(1e28).add(1).log10()*0.2
+			if (!tmp.quActive) return new Decimal(1)
+			let log = tmp.qu.replicants.quarks.div(1e28).add(1).log10()*0.2
 			if (log > 5) log = Math.log10(log * 2) * 5
 			return Decimal.pow(tmp.newNGP3E ? 12 : 10, log)
 		},
 		411(){
-			if (!tmp.tra) return new Decimal(1)
+			if (!tmp.tra || !tmp.quActive) return new Decimal(1)
 			var exp = tmp.tra.div(1e24).add(1).pow(0.2).log10()
 			if (tmp.newNGP3E) exp += Math.pow((exp + 9) * 3, .2) * Math.log10(exp + 1)
 			return Decimal.pow(10, exp)
@@ -574,7 +580,7 @@ function buyMasteryStudy(type, id, quick=false) {
 			masteryStudies.costMult *= getMasteryStudyCostMult(id)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow, Math.floor(id / 10))
 		}
-		if (id == 241 && !GUBought("gb3")) {
+		if (id == 241 && !GUActive("gb3")) {
 			var otherMults = 1
 			if (player.achievements.includes("r85")) otherMults *= 4
 			if (player.achievements.includes("r93")) otherMults *= 4

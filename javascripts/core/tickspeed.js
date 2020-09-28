@@ -12,7 +12,7 @@ function initialGalaxies() {
 		g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
 	}
 	if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
-	if (tmp.rg4) g *= 0.4
+	if (GUActive("rg4")) g *= 0.4
 	if ((inNC(15) || player.currentChallenge == "postc1") && player.aarexModifications.ngmX == 3) g = 0
 	return g
 }
@@ -30,7 +30,7 @@ function getGalaxyPower(ng, bi, noDil) {
 	if (player.timestudy.studies.includes(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
 	if (player.timestudy.studies.includes(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
 	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
-	
+
 	let otherGalPower = player.replicanti.galaxies
 	if (player.masterystudies ? player.masterystudies.includes("t342") : false) otherGalPower = (otherGalPower + extraReplGalPower) * replGalEff
 	else otherGalPower += Math.min(player.replicanti.galaxies, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
@@ -43,7 +43,7 @@ function getGalaxyPower(ng, bi, noDil) {
 
 	let galaxyPower = ng
 	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
-	if ((inNC(7) || inQC(4) ) && player.galacticSacrifice) galaxyPower *= galaxyPower
+	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) galaxyPower *= galaxyPower
 	return galaxyPower
 }
 
@@ -72,9 +72,9 @@ function getGalaxyEff(bi) {
 	if (player.timestudy.studies.includes(232) && bi) eff *= tmp.ts232
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
-	if (tmp.ngp3) eff *= colorBoosts.r
-	if (GUBought("rg2")) eff *= Math.pow(player.dilation.freeGalaxies/5e3 + 1, 0.25)
-	if (tmp.rg4) eff *= 1.5
+	if (tmp.quActive) eff *= colorBoosts.r
+	if (GUActive("rg2")) eff *= Math.pow(player.dilation.freeGalaxies/5e3 + 1, 0.25)
+	if (GUActive("rg4")) eff *= 1.5
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }
@@ -186,7 +186,7 @@ function canBuyTickSpeed() {
 function buyTickSpeed() {
 	if (!canBuyTickSpeed()) return false
 	if (player.tickSpeedCost.gt(player.money)) return false
-	if (!quantumed) player.money = player.money.minus(player.tickSpeedCost)
+	if (!ph.did("quantum")) player.money = player.money.minus(player.tickSpeedCost)
 	if ((!inNC(5) && player.currentChallenge != "postc5") || player.tickspeedBoosts != undefined) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	else multiplySameCosts(player.tickSpeedCost)
 	if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
@@ -211,6 +211,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	if (inQC(7)) return Number.MAX_VALUE
 	let ret = player.tickSpeedMultDecrease;
 	let exp = .9 - .02 * ECTimesCompleted("eterc11")
+	if (!tmp.quActive && GUBought("gb4")) ret = 1.65
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)
 	else if (player.challenges.includes('postcngmm_2')) {
 		var galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
@@ -328,7 +329,19 @@ function updateTickspeed() {
 		label = name + ": " + getTickspeedText(tick)
 	}
 	if (player.galacticSacrifice || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
-	if (gameSpeed != 1) label += ", Game speed: " + (gameSpeed < 1 ? shorten(1 / gameSpeed) + "x slower" : shorten(tmp.gameSpeed) + "x faster")
+
+	let speeds = []
+	let speedDescs = []
+	if (gameSpeed != 1) {
+		speeds.push(gameSpeed)
+		speedDescs.push("Dev")
+	}
+	if (ls.mult("game") != 1) {
+		speeds.push(ls.mult("game"))
+		speedDescs.push("'Light Speed' mod")
+	}
+	if (speeds.length >= 1) label += ", Game speed: " + factorizeDescs(speeds, speedDescs) + (tmp.gameSpeed < 1 ? shorten(1 / tmp.gameSpeed) + "x slower" : shorten(tmp.gameSpeed) + "x faster")
+
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && inNC(14)) {
 		label += "<br>You have "+(308-player.tickBoughtThisInf.current)+" tickspeed purchases left."
 		document.getElementById("tickSpeedAmount").innerHTML = label
