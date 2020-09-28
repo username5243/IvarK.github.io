@@ -47,8 +47,15 @@ function updateTreeOfDecayTab(){
 		document.getElementById(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
 		document.getElementById(color + "QuarksDecayRate").textContent = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
 		document.getElementById(color + "QuarksDecayTime").textContent = timeDisplayShort(Decimal.div(10, rate).times(getDecayLifetime(branch.quarks.div(linear))))
-		let ret = getQuarkSpinProduction(shorthand)
-		document.getElementById(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(ret) + "/s"
+
+		let pow = Decimal.pow(2, getRDPower(shorthand))
+		let decayed = getDecayLifetime(branch.quarks.div(pow)).div(getDecayRate(shorthand)).min(1)
+		/* this is taken from when spins are gained (treeOfDecayUpdating in game) 
+		but for some reason isnt correct still */
+
+		let gain = getQuarkSpinProduction(shorthand).times(decayed)
+
+		document.getElementById(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(gain) + "/s"
 		if (branchNum == c + 1) {
 			var decays = getRadioactiveDecays(shorthand)
 			var power = Math.floor(getBU1Power(shorthand) / 120 + 1)			

@@ -637,6 +637,7 @@ function updateWZBosonsTemp(){
 	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) //W Bosons boost to Bosonic Antimatter production
 
 	var zbslog = player.ghostify.wzb.zb.div(10).add(1).sqrt().log10()
+	if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog)
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }
 
