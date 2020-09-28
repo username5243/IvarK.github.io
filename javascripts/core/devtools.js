@@ -218,6 +218,6 @@ dev.addNeutrinos = function(n){
 dev.giveAllEmpowerments = function(){
 	let old = player.ghostify.ghostlyPhotons.enpowerments
 	maxLightEmpowerments()
-	let diff = player.ghostify.ghostlyPhotons.enpowerments - old
+	let diff = player.ghostify.ghostlyPhotons.enpowerments - old > 0
 	$.notify("Gave " + getFullExpansion(diff) + " Light Empowerments.", diff ? "success" : "error")
 }

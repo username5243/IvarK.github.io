@@ -12,6 +12,9 @@ function getLightEmpowermentBoost() {
 var leBoosts = {
 	max: 11,
 	1: {
+		req() {
+			return true
+		},
 		leThreshold: 1,
 		eff() {
 			var le1exp = 0.75
@@ -30,6 +33,9 @@ var leBoosts = {
 		}
 	},
 	2: {
+		req() {
+			return true
+		},
 		leThreshold: 2,
 		eff() {
 			return Math.log10(tmp.effL[4] * 10 + 1) / 4 + 1
@@ -39,6 +45,9 @@ var leBoosts = {
 		}
 	},
 	3: {
+		req() {
+			return true
+		},
 		leThreshold: 3,
 		eff() {
 			return Math.pow(tmp.effL[0].normal + 1, 0.1) * 2 - 1
@@ -242,7 +251,6 @@ function updateLEmpowermentBoosts(){
 		var unlocked = isLEBoostUnlocked(e)
 		if (unlocked) boosts++
 		document.getElementById("le"+e).style.visibility = unlocked ? "visible" : "hidden"
-		if (e >= 9) console.log(e, tmp.leBonus[e])
 		if (unlocked && leBoosts[e].effDesc) document.getElementById("leBoost" + e).textContent = leBoosts[e].effDesc(tmp.leBonus[e])
 	}
 	if (boosts >= 1) document.getElementById("leBoost1Total").textContent = getFullExpansion(Math.floor(tmp.leBonus[1].total))
