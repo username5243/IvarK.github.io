@@ -352,7 +352,7 @@ function buyGluonUpg(color, id) {
 }
 
 function GUBought(id) {
-	return tmp.qu.upgrades.includes(id)
+	return player.quantum && player.quantum.upgrades.includes(id)
 }
 
 function GUActive(id) {
