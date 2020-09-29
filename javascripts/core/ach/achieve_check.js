@@ -338,7 +338,7 @@ function ALLACHIEVECHECK(){
 		checkMatterAMNDReqAchieve() //AM/ND/Matter Req
 		checkInfPowerReqAchieve() //IPo Req
 		checkTickspeedReqAchieve() //Tickspeed/tick upgs based
-		checkOtherPreNGp3Achieve
+		checkOtherPreNGp3Achieve()
 
 		if (player.exdilation) checkNGUdAchieve()
 		if (player.meta) checkNGp2Achieve()
