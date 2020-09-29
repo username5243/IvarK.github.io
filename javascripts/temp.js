@@ -39,6 +39,8 @@ function updateTemp() {
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
 
+	ngC.updateTmp()
+
 	let totalSpeed = gameSpeed * ls.mult("game")
 	if (tmp.gameSpeed != totalSpeed) {
 		tmp.gameSpeed = totalSpeed

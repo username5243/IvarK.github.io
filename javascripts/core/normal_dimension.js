@@ -10,6 +10,7 @@ function resetDimensions() {
 		player[name + "Cost"] = new Decimal(costs[d - 1])
 		player.costMultipliers[d - 1] = new Decimal(costMults[d - 1])
 	}
+	if (tmp.ngC) ngC.resetNDs()
 }
 
 function getR84or73Mult(){
@@ -115,6 +116,7 @@ let dMultsC7 = [null, new Decimal(1), new Decimal(1), new Decimal(1), new Decima
 	      new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)]
 let dCurrentC7 = [null, 0, 0, 0, 0,
 		  0, 0, 0, 0]
+
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()
 	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
@@ -137,9 +139,8 @@ function getStartingNDMult(tier) {
 		mptMult = Decimal.pow(mPerTen, Math.floor(player[TIER_NAMES[tier]+"Bought"] / 10))
 	}
 
-
 	let mult = mptMult.times(dbMult)
-	if (tier == 8) {
+	if (tier == 8 || tmp.ngC) {
 		if (inNC(11)) mult = mult.times(player.chall11Pow)
 		else mult = mult.times(tmp.sacPow)
 	}
@@ -149,6 +150,7 @@ function getStartingNDMult(tier) {
 function getDimensionFinalMultiplier(tier) {
 	let mult = getStartingNDMult(tier)
 
+	if (tmp.ngC && ngC.tmp) mult = mult.times(ngC.tmp.nds[tier])
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
@@ -371,6 +373,7 @@ function recordBought (name, num) {
 }
 
 function costIncreaseActive(cost) {
+	if (tmp.ngC) return true
 	if (inNC(10) || player.currentChallenge == "postc1" || player.infinityUpgradesRespecced != undefined) return false
 	return cost.gte(Number.MAX_VALUE) || player.currentChallenge === 'postcngmm_2';
 }
@@ -562,6 +565,7 @@ function getDimensionProductionPerSecond(tier) {
 		else if (tier == 2) ret = ret.pow(1.5)
 	}
 	ret = ret.times(getDimensionFinalMultiplier(tier))
+	if (tmp.ngC && tier == 1) ret = ret.times(3)
 	if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)

@@ -144,6 +144,7 @@ function getGalaxyReqMultiplier() {
 	if (player.galacticSacrifice !== undefined) if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
 	else if (player.timestudy.studies.includes(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
+	if (tmp.ngC) ret -= 35
 	if (player.infinityUpgrades.includes("galCost")) ret -= 5
 	if (player.infinityUpgrades.includes("postinfi52") && player.tickspeedBoosts == undefined) ret -= 3
 	if (player.dilation.upgrades.includes("ngmm12")) ret -= 10
@@ -153,7 +154,8 @@ function getGalaxyReqMultiplier() {
 
 function getDistantScalingStart() {
 	if (player.currentEternityChall == "eterc5") return 0
-	var n = 100 + getECReward(5)
+	let n = tmp.ngC ? 1 : 100
+	n += getECReward(5)
 	if (player.timestudy.studies.includes(223)) n += 7
 	if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
 	if (tmp.ngp3 && tmp.qu.bigRip !== undefined && tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]

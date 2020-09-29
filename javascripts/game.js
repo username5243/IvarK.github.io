@@ -240,6 +240,7 @@ function setupPCTableHTMLandData(){
 		html += '<td id="A' + d + '"></td>'
 		html += '<td align="right" width="10%"><button id="B' + d + '" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn" onclick="buyOneDimension(' + d + ')"></button></td>'
 		html += '<td align="right" width="10%"><button id="M' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="buyManyDimension(' + d + ')"></button></td>'
+		html += '<td id="CondenseDiv'+d+'" style="display: none;" align="right" width="10%"><button id="Condense' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="ngC.condense.nds.buy(' + d + ')"></button></td>'
 		row.innerHTML = html
 		
 		var row=pdsDiv.insertRow(d-1)
@@ -421,7 +422,8 @@ function updateNewPlayer(reseted) {
 			ngumu: player.aarexModifications.ngumuV !== undefined,
 			ngex: player.aarexModifications.ngexV !== undefined,
 			aau: player.aarexModifications.aau !== undefined,
-			ls: player.aarexModifications.ls !== undefined
+			ls: player.aarexModifications.ls !== undefined,
+			ngc: tmp.ngC
 		}
 	} 
 	else var modesChosen = modes
@@ -739,6 +741,7 @@ function updateNewPlayer(reseted) {
 		dev.giveAllAchievements(true)
 	}
 	if (modesChosen.ls) player.aarexModifications.ls = {}
+	if (modesChosen.ngc) ngC.setup()
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
 }
 
@@ -1701,6 +1704,8 @@ function updateCosts() {
 			document.getElementById('B'+i).textContent = costPart + shortenPreInfCosts(cost)
 			document.getElementById('M'+i).className = cost.times(10 - dimBought(i)).lte(resource) ? 'storebtn' : 'unavailablebtn'
 			document.getElementById('M'+i).textContent = until10CostPart + shortenPreInfCosts(cost.times(10 - dimBought(i)));
+			document.getElementById("CondenseDiv"+i).style.display = tmp.ngC ? "" : "none"
+			if (tmp.ngC) ngC.condense.nds.update(i)
 		}
 	}
 	document.getElementById("tickSpeed").textContent = costPart + shortenPreInfCosts(player.tickSpeedCost);
@@ -1913,6 +1918,7 @@ document.getElementById("maxall").onclick = function () {
 	for (var tier=1; tier<9;tier++) buyBulkDimension(tier, 1/0)
 	if (player.aarexModifications.ngmX>3) buyMaxTimeDimensions()
 	if (player.pSac!=undefined) maxAllIDswithAM()
+	if (tmp.ngC) for (let i=1;i<=8;i++) ngC.condense.nds.max(i)
 }
 
 document.getElementById("challengeconfirmation").onclick = function () {
@@ -2250,6 +2256,7 @@ function changeSaveDesc(saveId, placement) {
 		else if (temp.galacticSacrifice) msg += "--" + (temp.tickspeedBoosts != undefined ? "-" : "")
 		else if (temp.aarexModifications.newGameMinusVersion) msg += "-"
 		var ex=temp.aarexModifications.ngexV
+		if (temp.condensed !== undefined) msg = msg != "" || ex ? msg + "C" : msg + " Condensed"
 		if (temp.boughtDims) msg = msg != "" || ex ? "ER" + msg : "Eternity Respecced"
 		else if (temp.singularity) msg = msg != "" || ex ? "IR" + msg : "Infinity Respecced"
 		else msg = "NG" + msg
@@ -2354,7 +2361,8 @@ var modFullNames = {
 	ngex: "Expert Mode",
 	aau: "AAU",
 	ngprw: "NG+ Reworked",
-	ls: "Light Speed"
+	ls: "Light Speed",
+	ngc: "NG Condensed"
 }
 var modSubNames = {
 	ngp: ["OFF", "ON", "NG++++"],
@@ -2866,6 +2874,7 @@ function calcSacrificeBoost() {
 		ret = Decimal.pow(Math.max(player.firstAmount.e/10.0, 1) / Math.max(player.sacrificed.e/10.0, 1), pow).max(1)
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(player.aarexModifications.ngmX>3?0.05:0.04).max(1)).max(1)
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + player.timestudy.ers_studies[1] / 5)))
+	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
 	return ret
 }
 
@@ -2891,6 +2900,7 @@ function calcTotalSacrificeBoost(next) {
 		ret = Decimal.pow(Math.max(player.sacrificed.e/10.0, 1), pow)
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
+	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
 	return ret
 }
 
@@ -5736,20 +5746,20 @@ function pSacBtnUpdating(){
 	}
 }
 
-function galSacBtnUpdating(){
+function galSacBtnUpdating() {
 	if (document.getElementById("gSacrifice").style.display === "inline-block") {
 		document.getElementById("gSacrifice").innerHTML = "Galactic Sacrifice (" + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP)"
 		document.getElementById("gSacrifice").setAttribute('ach-tooltip', "Gain " + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP")
-		if (getGSAmount().gt(0)) {
-			document.getElementById("gSacrifice").className = "storebtn"
-			document.getElementById("sacrificebtn").style.display = ""
-			var currentGPmin = getGSAmount().dividedBy(player.galacticSacrifice.time / 600)
-			if (currentGPmin.gt(GPminpeak)) GPminpeak = currentGPmin
-			var notationOkay = (GPminpeak.gt("1e300000") && player.options.theme != "Aarex's Modifications") || player.options.notation == "Morse code" || player.options.notation == 'Spazzy'
-			var notation2okay = (GPminpeak.gt("1e3000") && player.options.theme != "Aarex's Modifications") || player.options.notation == "Morse code" || player.options.notation == 'Spazzy'
-			document.getElementById("sacrificebtn").innerHTML = (notationOkay ? "Gain " : "Galactic Sacrifice for ") + shortenDimensions(getGSAmount()) + " Galaxy points." +
-				(notation2okay ? "" : "<br>" + shortenMoney(currentGPmin) + " GP/min" + "<br>Peaked at " + shortenMoney(GPminpeak) + " GP/min")
-		} else document.getElementById("gSacrifice").className = "unavailablebtn"
+		document.getElementById("gSacrifice").className = getGSAmount.gt(0) ? "storebtn" : "unavailablebtn"
+	}
+	if (document.getElementById("sacrificebtn").style.display === "inline-block") {
+		document.getElementById("sacrificebtn").style.display = ""
+		var currentGPmin = getGSAmount().dividedBy(player.galacticSacrifice.time / 600)
+		if (currentGPmin.gt(GPminpeak)) GPminpeak = currentGPmin
+		var notationOkay = (GPminpeak.gt("1e300000") && player.options.theme != "Aarex's Modifications") || player.options.notation == "Morse code" || player.options.notation == 'Spazzy'
+		var notation2okay = (GPminpeak.gt("1e3000") && player.options.theme != "Aarex's Modifications") || player.options.notation == "Morse code" || player.options.notation == 'Spazzy'
+		document.getElementById("sacrificebtn").innerHTML = (notationOkay ? "Gain " : "Galactic Sacrifice for ") + shortenDimensions(getGSAmount()) + " Galaxy points." +
+			(notation2okay ? "" : "<br>" + shortenMoney(currentGPmin) + " GP/min" + "<br>Peaked at " + shortenMoney(GPminpeak) + " GP/min")
 	}
 }
 
