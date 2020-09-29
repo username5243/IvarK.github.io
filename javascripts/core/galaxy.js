@@ -40,7 +40,7 @@ function galaxyReset(bulk) {
 	if (tmp.ngp3 && bulk) {
 		if (tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(6, true)
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
-		if (ghostified && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
+		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
 	hideDimensions()
 	tmp.tickUpdate = true;
@@ -65,7 +65,7 @@ function getDistantScalingEffect(){
 	if (GUActive("rg6")) speed *= 0.867
 	if (GUActive("gb6")) speed /= 1 + Math.pow(player.infinityPower.plus(1).log10(), 0.25) / 2810
 	if (GUActive("br6")) speed /= 1 + player.meta.resets / 340
-	if (ghostified && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
+	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
 	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 	if (player.achievements.includes("ng3p98")) speed *= 0.9
 	if (player.achievements.includes("ng3p101")) speed *= 0.5
