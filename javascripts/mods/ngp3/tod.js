@@ -123,7 +123,7 @@ function updateTODStuff() {
 		start = extra ? "" : "Cost: "
 		end = extra ? color : color + " quark spin"
 		for (var b = 1; b < 4; b++) {
-			document.getElementById(color + "upg" + b + "current").textContent = shortenDimensions(getBranchUpgMult(shorthand, b))
+			document.getElementById(color + "upg" + b + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(shorthand, b))
 			document.getElementById(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
 			if (b > 1) document.getElementById(color + "UpgName" + b).textContent=name
 		}
@@ -161,6 +161,26 @@ function getUnstableGain(branch) {
 	ret = Decimal.pow(2, power).times(ret)
 	if (ret.gt(1)) ret = Decimal.pow(ret, Math.pow(2, power + 1))
 	return ret.times(Decimal.pow(2, getRDPower(branch) + 1)).min(Decimal.pow(10, Math.pow(2, 51)))
+}
+
+function getFixedRDPower(x){
+	let y = Math.max(x - 5, 0)
+	let r = x * 25 + (Math.pow(y, 2) + y) * 1.25
+	return r
+}
+
+function getLowerBoundDecays(branch){
+	let lvl = getBranchUpgLevel(branch, 2)
+	//getRDPower(branch)
+	var canget = 0
+	var x = 1
+	while (lvl >= getFixedRDPower(x * 2 - 1)) x *= 2
+	while (x >= 1) {
+		if (lvl >= getFixedRDPower(x + y - 1)) canget += x
+		x /= 2
+	}
+	return canget
+	// it is at least this many, and may be a few (almost certainly 1) more
 }
 
 function canUnstable(branch) {
@@ -374,7 +394,7 @@ function buyBranchUpg(branch, upg) {
 	extra = bData.spin.log10() > 200
 	start = extra ? "" : "Cost: "
 	end = extra ? colors[branch] : colors[branch] + " quark spin"
-	document.getElementById(colors[branch] + "upg" + upg + "current").textContent = shortenDimensions(getBranchUpgMult(branch, upg))
+	document.getElementById(colors[branch] + "upg" + upg + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, upg))
 	document.getElementById(colors[branch] + "upg" + upg + "cost").textContent = start + shortenMoney(getBranchUpgCost(branch, upg)) + " " + end
 }
 
@@ -527,7 +547,7 @@ function maxBranchUpg(branch, weak) {
 			bData.upgrades[u] += toAdd
 		}
 		if (bData.upgrades[u] > oldLvl) {
-			document.getElementById(colors[branch] + "upg" + u + "current").textContent=shortenDimensions(getBranchUpgMult(branch, u))
+			document.getElementById(colors[branch] + "upg" + u + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, u))
 			extra = bData.spin.log10() > 200
 			start = extra ? "" : "Cost: "
 			end = extra ? colors[branch] : colors[branch] + " quark spin"
@@ -547,6 +567,22 @@ function radioactiveDecay(shorthand) {
 	updateTODStuff()
 }
 
+function maxRadioactiveDecay(shorthand){
+	let data = tmp.qu.tod[shorthand]
+	if (!data.quarks.max(getUnstableGain(shorthand)).gte(Decimal.pow(10, Math.pow(2, 50)))) return
+	data.quarks = new Decimal(0)
+	data.spin = new Decimal(0)
+	data.upgrades = {}
+	if (player.ghostify.milestones > 3) data.upgrades[1] = 5
+	data.decays = Math.max(data.decays || 0, getLowerBoundDecays(shorthand))
+	updateTODStuff()
+}
+
+function maxAllRadioactiveDecay(){
+	maxRadioactiveDecay('r')
+	maxRadioactiveDecay('b')
+	maxRadioactiveDecay('g')
+}
 
 function getTotalRadioactiveDecays(){
 	return getRadioactiveDecays('g') + getRadioactiveDecays('b') + getRadioactiveDecays('r')
@@ -623,6 +659,16 @@ function getBranchUpg3SoftcapStart(){
 
 function getBranchUpg2SoftcapStart(){
 	return 1e4 * Math.log2(10)
+}
+
+function getEffectiveBranchUpgMult(branch, upg){
+	if (upg == 2) {
+		let x = getBU2Power(branch) - getRDPower(branch)
+		let s = getBranchUpg2SoftcapStart()
+		if (x > s) x = Math.pow(x * s, .5)
+		return Decimal.pow(2, x).max(1)
+	}
+	return getBranchUpgMult(branch, upg)
 }
 
 function getBranchUpgMult(branch, upg) {

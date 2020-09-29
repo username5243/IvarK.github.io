@@ -4562,7 +4562,7 @@ function nanofieldProducingChargeUpdating(diff){
 	if (toSub.eq(0)) {
 		tmp.qu.nanofield.producingCharge = false
 		document.getElementById("produceQuarkCharge").innerHTML="Start production of preon charge.<br>(You will not get preons when you do this.)"
-	} else {
+	} else if (!hasBosonicUpg(51)) {
 		tmp.qu.replicants.quarks = tmp.qu.replicants.quarks.sub(toSub)
 		tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(toSub.div(loss).times(rate))
 	}
@@ -4572,7 +4572,7 @@ function nanofieldUpdating(diff){
 	var AErate = getQuarkAntienergyProduction()
 	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(tmp.qu.nanofield.antienergy))
 	if (tmp.qu.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
-	if (hasBosonicUpg(51)) tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().div(100))
+	if (hasBosonicUpg(51)) tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().times(diff))
 	if (toAddAE.gt(0)) {
 		tmp.qu.nanofield.antienergy = tmp.qu.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
 		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuarkEnergyProduction()))

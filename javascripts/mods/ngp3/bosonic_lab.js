@@ -774,7 +774,7 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You automatically produce 1% of preon charge gain.",
+		51: "You produce preon charge no matter what.",
 		52: "Unlock Quantum Challenge 9.",
 		53: "Gravitons divide the Light Empowerment requirement.",
 		54: "Radioactive Decays boost Tree Upgrades.",
