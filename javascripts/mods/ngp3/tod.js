@@ -87,7 +87,8 @@ function updateTreeOfDecayTab(){
 			let effLvl = getEffectiveTreeUpgLevel(u)
 			document.getElementById("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
 			document.getElementById("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
-			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(lvl >= 1e4 ? 2 : cost.gte("1e2500") ? 1 : 0) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
+			let scalingsActive = (lvl >= 1e4 ? 1 : 0) + (cost.log10() > 25e3 ? 1 : 0)
+			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
 			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
 		/*

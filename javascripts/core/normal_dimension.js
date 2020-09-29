@@ -154,7 +154,11 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
-	if (player.currentEternityChall == "eterc11") return tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+	if (player.currentEternityChall == "eterc11") {
+		let x = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+		if (tmp.quActive) x = x.times(colorBoosts.dim.r)
+		return x
+	}
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
 		if (tier == 4) mult = mult.pow(1.4)
 		if (tier == 2) mult = mult.pow(1.7)

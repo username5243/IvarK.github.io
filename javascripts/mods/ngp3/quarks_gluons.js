@@ -245,7 +245,9 @@ function updateColorPowers(log) {
 function updateColorDimPowers(log) {
 	if (log == undefined) log = getCPLogs()
 	
-	var rexp = Math.sqrt(player.money.add(1).log10()) * Math.pow(getColorDimPowerBase("r", log), 4/7) * (inQC(6) ? 1 : 35)
+	let expmult = inQC(6) ? 1 : 35
+	if (player.currentEternityChall == "eterc11") expmult /= 100
+	var rexp = Math.sqrt(player.money.add(1).log10()) * Math.pow(getColorDimPowerBase("r", log), 4/7) * expmult
 	var gexp = Math.sqrt(player.infinityPower.add(1).log10()) * Math.pow(getColorDimPowerBase("g", log), 4/7) * 5
 	var bexp = Math.sqrt(player.timeShards.add(1).log10()) * Math.pow(getColorDimPowerBase("b", log), 8/21)
 	
