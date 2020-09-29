@@ -97,7 +97,8 @@ function getQuarkAntienergyProduction() {
 	let ret = tmp.qu.nanofield.charge.sqrt()
 	if (player.masterystudies.includes("t401")) ret = ret.div(getMTSMult(401))
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
-	ret = ret.times(getNanofieldFinalSpeed())
+	if (!hasBosonicUpg(63)) ret = ret.times(getNanofieldFinalSpeed())
+	else ret = ret.div(getNanofieldFinalSpeed())
 	return ret
 }
 

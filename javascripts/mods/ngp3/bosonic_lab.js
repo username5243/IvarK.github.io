@@ -774,13 +774,14 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You produce preon charge no matter what.",
+		51: "You produce preon charge and 1% of your normal preon energy no matter what.",
 		52: "Unlock Quantum Challenge 9.",
 		53: "Gravitons divide the Light Empowerment requirement.",
 		54: "Radioactive Decays boost Tree Upgrades.",
 		55: "Remove all softcaps of Bosonic Antimatter production.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		62: "Unlock 4 new Light Empowerment boosts."
+		62: "Unlock 4 new Light Empowerment boosts.",
+		63: "Nanofield speed divides preon anti-energy production instead of multiplying it." //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
 	},
 	effects: {
 		11() {

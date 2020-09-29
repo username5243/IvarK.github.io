@@ -4572,10 +4572,15 @@ function nanofieldUpdating(diff){
 	var AErate = getQuarkAntienergyProduction()
 	var toAddAE = AErate.times(diff).min(getQuarkChargeProductionCap().sub(tmp.qu.nanofield.antienergy))
 	if (tmp.qu.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
-	if (hasBosonicUpg(51)) tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().times(diff))
+	if (hasBosonicUpg(51)) {
+		tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().times(diff))
+		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(getQuarkEnergyProduction().times(diff).div(100))
+	}
 	if (toAddAE.gt(0)) {
 		tmp.qu.nanofield.antienergy = tmp.qu.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
 		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuarkEnergyProduction()))
+	}
+	if (toAddAE.gt(0) || hasBosonicUpg(51)) {
 		updateNextPreonEnergyThreshold()
 		if (tmp.qu.nanofield.power > tmp.qu.nanofield.rewards) {
 			tmp.qu.nanofield.rewards = tmp.qu.nanofield.power
