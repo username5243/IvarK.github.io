@@ -1585,7 +1585,7 @@ function updateMoney() {
 	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
 		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
 		var extra = getExtraTime()
-		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * getEC12Mult(),0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)"
+		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * tmp.ec12Mult,0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * tmp.ec12Mult) : "") + " left until matter reset)"
 		element2.innerHTML = txt
 	}
 	var element3 = document.getElementById("chall13Mult");
@@ -1594,13 +1594,13 @@ function updateMoney() {
 		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
 	if (inNC(14) && player.aarexModifications.ngmX > 3) document.getElementById("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
-	if (player.pSac !== undefined) document.getElementById("ec12Mult").textContent = "Time speed: 1 / " + shorten(getEC12Mult()) + "x"
+	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 }
 
 function updateCoinPerSec() {
 	var element = document.getElementById("coinsPerSec");
 	var ret = getDimensionProductionPerSecond(1)
-	if (player.pSac !== undefined) ret = ret.div(getEC12Mult())
+	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
 	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per second.'
 }
 
@@ -3907,6 +3907,10 @@ function startEternityChallenge(n) {
 	if (tmp.ngp3 && player.dilation.upgrades.includes("ngpp3") && getEternitied() >= 1e9) player.dbPower = getDimensionBoostPower()
 }
 
+function isEC12Active() {
+	return player.currentEternityChall == "eterc12" || player.pSac !== undefined
+}
+
 function getEC12Mult() {
 	let r = 1e3
 	let p14 = hasPU(14, true)
@@ -5358,7 +5362,7 @@ function gameLoop(diff) {
 	if (tmp.gameSpeed != 1) diff = diff * tmp.gameSpeed
 	var diffStat = diff * 10
 	if (player.version === 12.2 && typeof player.shameLevel === 'number') diff *= Math.min(Math.pow(10, player.shameLevel), 1)
-	if (player.currentEternityChall === "eterc12" || player.pSac !== undefined) diff /= getEC12Mult()
+	if (tmp.inEC12) diff /= tmp.ec12Mult
 
 	updateInfinityTimes()
 	updateTemp()

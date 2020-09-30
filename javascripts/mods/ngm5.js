@@ -329,7 +329,7 @@ function getPDDesc(d) {
 }
 
 function getPDRate(d) {
-	let toGain = getPDProduction(d + 2).div(getEC12Mult())
+	let toGain = getPDProduction(d + 2).div(tmp.ec12Mult)
 	var current = player.pSac.dims[d].amount.max(1)
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()

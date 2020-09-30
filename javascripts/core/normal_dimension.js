@@ -230,7 +230,7 @@ function getDimensionRateOfChange(tier) {
 		if (tier == 7) return 0
 		else toGain = getDimensionProductionPerSecond(tier + 2);
 	}
-	if (player.pSac !== undefined) toGain = toGain.div(getEC12Mult())
+	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
 	var current = player[name + 'Amount'].max(1);
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
@@ -573,7 +573,7 @@ function getDimensionProductionPerSecond(tier) {
 	if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
-	if (player.aarexModifications.ngmX>3) ret = ret.div(100)
+	if (player.aarexModifications.ngmX > 3) ret = ret.div(10)
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 	let tick = dilates(Decimal.div(1e3,getTickspeed()),"tick")
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)

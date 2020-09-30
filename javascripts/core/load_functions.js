@@ -546,8 +546,6 @@ function dov7tov10(){
 	document.getElementById("Universal harmony").style["background-image"]="url(images/"+(player.masterystudies==undefined?104:"104-ngp3")+".png)"
 	document.getElementById("Infinite time").style["background-image"]="url(images/"+(inERS?79:69)+".png)"
 
-	document.getElementById("ec12Mult").style.display = player.pSac !== undefined ? "" : "none"
-
 	if (player.version < 9.5) {
 		player.version = 9.5
 		if (player.timestudy.studies.includes(191)) player.timestudy.theorem += 100

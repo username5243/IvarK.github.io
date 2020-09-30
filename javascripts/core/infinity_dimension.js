@@ -53,7 +53,7 @@ function DimensionDescription(tier) {
 
 function DimensionRateOfChange(tier) {
 	var toGain = DimensionProduction(tier + ((inQC(4) || player.pSac !== undefined) && tier < 8 ? 2 : 1))
-	if (player.pSac !== undefined) toGain = toGain.div(getEC12Mult())
+	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
 	var current = Decimal.max(player["infinityDimension"+tier].amount, 1);
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
@@ -348,7 +348,7 @@ function updateInfPower() {
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = DimensionProduction(1)
-		if (player.pSac != undefined) r = r.div(getEC12Mult())
+		if (player.pSac != undefined) r = r.div(tmp.ec12Mult)
 		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per second."
 	}
 }

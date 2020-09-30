@@ -143,7 +143,7 @@ function isTDUnlocked(t) {
 
 function getTimeDimensionRateOfChange(tier) {
 	let toGain = getTimeDimensionProduction(tier + (inQC(4) || player.pSac !== undefined ? 2 : 1))
-	if (player.pSac !== undefined) toGain = toGain.div(getEC12Mult())
+	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
 	var current = Decimal.max(player["timeDimension" + tier].amount, 1);
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
@@ -184,7 +184,7 @@ function updateTimeDimensions() {
 
 function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
-	if (player.pSac !== undefined) p = p.div(getEC12Mult())
+	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)

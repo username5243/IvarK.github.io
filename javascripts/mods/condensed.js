@@ -73,13 +73,17 @@ let CONDENSED = {
 				let res = getOrSubResource(x)
 				let cost = this.cost(x)
 				if (res.lt(cost)) return;
+				if (getAmount(1) == 0) {
+					alert("You need to buy at least 1 of Normal Dimensions to condense Normal Dimensions.")
+					return;
+				}
 				getOrSubResource(x, cost)
 				player.condensed.normal[x]++
 			},
 			max(x) {
 				let res = getOrSubResource(x)
 				let cost = this.cost(x)
-				if (res.lt(cost)) return
+				if (res.lt(cost) || getAmount(1) == 0) return
 				player.condensed.normal[x] = Math.max(player.condensed.normal[x], this.target(x))
 				getOrSubResource(x, cost)
 			}

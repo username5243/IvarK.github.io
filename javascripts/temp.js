@@ -31,13 +31,15 @@ function updateTemp() {
 
 	tmp.rm = getReplMult()
 	updateExtraReplGalaxies()
-	
 	updateTS232Temp()
-	updateMatterSpeed()
 
 	tmp.tsReduce = getTickSpeedMultiplier()
+	updateMatterSpeed()
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
+
+	tmp.inEC12 = isEC12Active()
+	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() : 1
 
 	ngC.updateTmp()
 
