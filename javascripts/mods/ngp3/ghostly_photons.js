@@ -134,7 +134,7 @@ var leBoosts = {
 		},
 		leThreshold: 0,
 		eff() {
-			return Math.log10(player.replicanti.amount.log10() + 1) * Math.cbrt(tmp.leBoost / 1e4) + 1
+			return Math.log10(player.replicanti.amount.plus(1).log10() + 1) * Math.cbrt(tmp.leBoost / 1e4) + 1
 		},
 		effDesc(x) {
 			return (x * 100 - 100).toFixed(2)

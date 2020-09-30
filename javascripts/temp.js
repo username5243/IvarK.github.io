@@ -162,22 +162,17 @@ function updateFixedLightTemp() {
 }
 
 function updateInfiniteTimeTemp() {
-	var x = (3 - getTickspeed().log10()) * 0.000005
+	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
 		if (tmp.be && !player.dilation.active && tmp.qu.breakEternity.upgrades.includes(8)) x *= getBreakUpgMult(8)
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
-		if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
 
-		if (player.aarexModifications.ngudpV) {
-			if (x > 1e8) x = Math.pow(1e8 * x, .5)
-			if (x > 1e9) x = Math.pow(1 + Math.log10(x), 9)
-			if (tmp.be && x > 1e7) x = Math.pow(93 + Math.log10(x), 3.5)
-		}
 		if (player.dilation.active && x > 1e5) x = Math.pow(1e20 * x, .2)
 		if (!tmp.qu.bigRip.active) x = softcap(x, "inf_time_log_2")
+		if (hasBosonicUpg(52)) x *= tmp.blu[52].it
 	}
 	tmp.it = Decimal.pow(10, x)
 }
@@ -188,7 +183,6 @@ function updateIntergalacticTemp() {
 	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
 	x += tmp.effAeg
-	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	tmp.igg = x
 
 	tmp.igs = 0 //Intergalactic Scaling: Used in the display text
@@ -219,7 +213,7 @@ function updateIntergalacticTemp() {
 		tmp.igs += Math.floor(Math.log10(igLog) - 20) + 1
 		if (igLog > 1e24) igLog = Math.pow(Math.pow(Math.log10(igLog), 2) + 424, 8)
 	}
-
+	if (hasBosonicUpg(52)) igLog *= tmp.blu[52].ig
 	tmp.ig = Decimal.pow(10, igLog)
 }
 

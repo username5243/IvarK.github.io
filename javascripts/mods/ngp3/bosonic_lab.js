@@ -781,7 +781,7 @@ var bu = {
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "You produce preon charge and 1% of your normal preon energy regardless of anti-preon energy.",
-		52: "Replicantis raise all boosts to Infinite Time and Intergalactic rewards to an exponent.",
+		52: "Replicantis raises Infinite Time and Intergalactic rewards to an exponent.",
 		53: "Unlock Quantum Challenge 9, 3 new Neutrino upgrades, and 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",
 		55: "Bosonic Antimatter reduces the requirement of Light Empowerments.",
