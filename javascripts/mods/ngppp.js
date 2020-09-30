@@ -577,6 +577,9 @@ function ghostifyReset(implode, gain, amount, force) {
 	doGhostifyGhostifyResetStuff(bm, force)
 
 	//After that...
+	updateSpeedruns()
+	if (!bm && !player.achievements.includes("ng3p77")) handleDisplaysOnQuantum(false, true)
+	else handleQuantumDisplays(true)
 	resetUP()
 }
 
@@ -662,30 +665,30 @@ function buyGHPMult() {
 	player.ghostify.multPower++
 	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(5)
 	document.getElementById("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
-	document.getElementById("ghpMult").textContent = shortenDimensions(Decimal.pow(2,player.ghostify.multPower-1))
+	document.getElementById("ghpMult").textContent = shortenDimensions(Decimal.pow(2, player.ghostify.multPower - 1))
 	document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
 function maxGHPMult() {
 	let sum = player.ghostify.neutrinos.electron.add(player.ghostify.neutrinos.mu).add(player.ghostify.neutrinos.tau).round()
 	let cost = getGHPMultCost()
+	let scaling = getGHPMultCostScalingStart()
+	let totalBought = 0
 	if (sum.lt(cost)) return
-	if (player.ghostify.multPower < 85) {
-		let toBuy=Math.min(Math.floor(sum.div(cost).times(24).add(1).log(25)),85-player.ghostify.multPower)
-		subNeutrinos(Decimal.pow(25,toBuy).sub(1).div(24).times(cost))
-		player.ghostify.multPower+=toBuy
-		player.ghostify.automatorGhosts[15].a=player.ghostify.automatorGhosts[15].a.times(Decimal.pow(5,toBuy))
-		document.getElementById("autoGhost15a").value=formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
-		cost=getGHPMultCost()
+	if (player.ghostify.multPower < scaling) {
+		let toBuy = Math.min(Math.floor(sum.div(cost).times(24).add(1).log(25)), scaling - player.ghostify.multPower)
+		subNeutrinos(Decimal.pow(25, toBuy).sub(1).div(24).times(cost))
+		totalBought += toBuy
+		cost = getGHPMultCost(totalBought)
 	}
-	if (player.ghostify.multPower>84) {
-		let b=player.ghostify.multPower*2-167
-		let x=Math.floor((-b+Math.sqrt(b*b+4*sum.div(cost).log(5)))/2)+1
+	if (player.ghostify.multPower >= scaling) {
+		let b = player.ghostify.multPower * 2 - scaling + 3
+		let x = Math.floor((-b + Math.sqrt(b * b + 4 * sum.div(cost).log(5))) / 2) + 1
 		if (x) {
 			let toBuy=x
 			let toSpend=0
-			while (x>0) {
-				cost=getGHPMultCost(x-1)
+			while (x > 0) {
+				cost = getGHPMultCost(x + totalBought - 1)
 				if (sum.div(cost).gt(1e16)) break
 				toSpend=cost.add(toSpend)
 				if (sum.lt(toSpend)) {
@@ -695,11 +698,16 @@ function maxGHPMult() {
 				x--
 			}
 			subNeutrinos(toSpend)
-			player.ghostify.multPower+=toBuy
+			totalBought += toBuy
 		}
 	}
-	document.getElementById("ghpMult").textContent=shortenDimensions(Decimal.pow(2,player.ghostify.multPower-1))
-	document.getElementById("ghpMultUpgCost").textContent=shortenDimensions(getGHPMultCost())
+
+	player.ghostify.multPower += totalBought
+	document.getElementById("ghpMult").textContent = shortenDimensions(Decimal.pow(2, player.ghostify.multPower - 1))
+	document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
+
+	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(Decimal.pow(5, totalBought))
+	document.getElementById("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
 }
 
 function setupAutomaticGhostsData() {
@@ -823,8 +831,14 @@ function startEC10() {
 function getGHPMultCost(offset = 0) {
 	let lvl = player.ghostify.multPower + offset
 	let pow5 = lvl * 2 - 1
-	if (lvl > 85) pow5 += Math.max(lvl - 85, 0) * (lvl - 84)
+	let scaling = getGHPMultCostScalingStart()
+	if (lvl > scaling) pow5 += Math.max(lvl - scaling, 0) * (lvl - scaling + 1)
 	return Decimal.pow(5, pow5).times(25e8)
+}
+
+function getGHPMultCostScalingStart() {
+	if (hasNU(16)) return 1/0
+	return 85
 }
 
 //v2.2

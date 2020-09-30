@@ -6,10 +6,8 @@ var quantumChallenges = {
 var assigned
 var pcFocus = 0
 function updateQuantumChallenges() {
-	if (!tmp.quUnl || !player.masterystudies.includes("d8")) {
-		document.getElementById("qctabbtn").style.display = "none"
-		return
-	} else document.getElementById("qctabbtn").style.display = ""
+	if (document.getElementById("qctabbtn").style == "none") return
+
 	assigned = []
 	var assignedNums = {}
 	document.getElementById("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
@@ -31,7 +29,7 @@ function updateQuantumChallenges() {
 			document.getElementById(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
 			document.getElementById(property+"cost").textContent = "Cost: " + (!sc2 && !player.achievements.includes("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
 			document.getElementById(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
-			document.getElementById(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : tmp.qu.pairedChallenges.current == pc ? "Running" : "Start"
+			document.getElementById(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
 			document.getElementById(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
 
 			var sc1t = Math.min(sc1, sc2)
@@ -67,7 +65,7 @@ function updateQuantumChallenges() {
 	updateQCDisplaysSpecifics()
 }
 
-function updateQCDisplaysSpecifics(){
+function updateQCDisplaysSpecifics() {
 	document.getElementById("qc2reward").textContent = Math.round(tmp.qcRewards[2] * 100 - 100)
 	document.getElementById("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
 	document.getElementById("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
@@ -76,7 +74,7 @@ function updateQCDisplaysSpecifics(){
 
 function isQCUnlocked(x) {
 	if (x == 1) return player.masterystudies.includes("d8")
-	if (x == 9) return hasBosonicUpg(52)
+	//if (x == 9) return hasBosonicUpg(53)
 	return QCIntensity(x - 1) >= 1
 }
 
@@ -145,11 +143,12 @@ function updateQCTimes() {
 	setAndMaybeShow("qctimesum", tempcounter > 1, '"The sum of your completed Quantum Challenge time records is "+timeDisplayShort(' + temp + ', false, 3)')
 }
 
-var ranking=0
+var ranking = 0
 function updatePCCompletions() {
 	var shownormal = false
 	document.getElementById("pccompletionsbtn").style.display = "none"
-	if (!player.masterystudies) return
+	if (!tmp.ngp3) return
+
 	var r = 0
 	tmp.pcc = {} // PC Completion counters
 	for (var c1 = 2; c1 <= 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
@@ -177,6 +176,7 @@ function updatePCCompletions() {
 		r += Math.sqrt(rankingPart)
 	}
 	r *= 100 / 56
+
 	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
 	document.getElementById("pccranking").textContent = r.toFixed(1)
 	document.getElementById("pccrankingMax").textContent = Math.sqrt(11250 * (2 + qcm.modifiers.length)).toFixed(1)
@@ -230,7 +230,6 @@ let qcRewards = {
 			let mult = player.meta[2].amount.times(player.meta[4].amount).times(player.meta[6].amount).times(player.meta[8].amount).max(1)
 			if (comps <= 1) return Decimal.pow(10 * comps, Math.sqrt(mult.log10()) / 10)
 			return mult.pow(comps / 150)
-			
 		},
 		5: function(comps) {
 			if (comps == 0) return 0
@@ -250,7 +249,11 @@ let qcRewards = {
 		},
 		9: function(comps) {
 			comps = 1
-			return Math.pow(Math.log10(player.replicanti.amount.log10() + 1) * comps + 1, 1/4) - 1
+			let x = Math.log10(player.replicanti.amount.log10() + 1) * Math.sqrt(comps)
+			return {
+				td: Math.pow(Math.max(x * 2 - 4, 1), 2),
+				ge: x / 20
+			}
 		}
 	}
 }

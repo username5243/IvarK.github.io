@@ -144,9 +144,9 @@ let GDs = {
 		let unl = GDs.unlocked()
 		document.getElementById("gdtabbtn").style.display = unl ? "" : "none"
 		document.getElementById("gvBlCell").style.display = unl ? "" : "none"
-		if (!unl) return
+		updateNeutrinoUpgradeUnlocks(16, 18)
 
-		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = GDs.save.gdBoosts + 1 >= d ? "" : "hidden"
+		if (unl) GDs.dimDisplay()
 	},
 	unlocked() {
 		return GDs.save && GDs.save.unl
@@ -191,6 +191,9 @@ let GDs = {
 	rdExp() {
 		return GDs.save.gc ? GDs.boosts[GDs.save.gc].rdExp : 0.5
 	},
+	dimDisplay() {
+		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = GDs.save.gdBoosts + 1 >= d ? "" : "hidden"
+	},
 	dimReset() {
 		let data = GDs.save
 		if (!GDs.unlocked()) return
@@ -213,7 +216,7 @@ let GDs = {
 	energyMult() {
 		let x = 1
 		if (isEnchantUsed(15)) x = tmp.bEn[15]
-		if (isQCRewardActive(9)) x += tmp.qcRewards[9] || 0
+		if (isQCRewardActive(9)) x += tmp.qcRewards[9].ge || 0
 		return x
 	},
 	charge(ge, id) {

@@ -21,10 +21,9 @@ function updateToDSpeedDisplay(){
 	document.getElementById("todspeed").textContent = t
 }
 
-function getTreeUpgradeEfficiencyDisplayText(){
-	s = getTreeUpgradeEfficiencyText()
-	if (!shiftDown) s = "Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"%"
-	return s
+function getTreeUpgradeEfficiencyDisplayText() {
+	if (!shiftDown) return "Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"% (hold shift for details)"
+	return getTreeUpgradeEfficiencyText()
 }
 
 function todTimeDisplay(t){
@@ -91,17 +90,7 @@ function updateTreeOfDecayTab(){
 			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
 			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
-		/*
-		if (ph.did("ghostify")){
-			document.getElementById("treeUpgradeEff").textContent = getTreeUpgradeEfficiencyDisplayText()
-			document.getElementById("treeUpgradeEff").style.display = ""
-		} else {
-			document.getElementById("treeUpgradeEff").style.display = "none"
-		} 
-		// This currently isnt working so hm....
-		*/
-		setAndMaybeShow("treeUpgradeEff", ph.did("ghostify"), '"Tree upgrade efficiency: "+(tmp.tue*100).toFixed(1)+"%"')
-		// I want to make it getTreeUpgradeEfficiencyDisplay(), but that doesnt work, so leaveing it out for now
+		setAndMaybeShow("treeUpgradeEff", ph.did("ghostify"), 'getTreeUpgradeEfficiencyDisplayText()')
 	}
 	updateToDSpeedDisplay()
 }
@@ -202,7 +191,7 @@ function getBranchSpeedText(){
 	if (new Decimal(getTreeUpgradeEffect(5)).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5)) + "x, "
 	if (player.masterystudies.includes("t431")) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
-	if (hasNU(4)) if (tmp.nu[2].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[2]) + "x, "
+	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
 	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
@@ -223,7 +212,7 @@ function getBranchSpeed() {
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
 	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
-	if (hasNU(4)) x = x.times(tmp.nu[2])
+	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
 	if (GDs.unlocked()) x = x.pow(GDs.tmp.tod)
@@ -265,11 +254,11 @@ function getMilestone14SpinMult(){
 
 function getQuarkSpinProduction(branch) {
 	let ret = getBranchUpgMult(branch, 1).times(getBranchFinalSpeed())
-	if (hasNU(4)) ret = ret.times(tmp.nu[2])
+	if (hasNU(4)) ret = ret.times(tmp.nu[4])
 	if (player.achievements.includes("ng3p74")) if (tmp.qu.tod[branch].decays) ret = ret.times(1 + tmp.qu.tod[branch].decays)
 	if (tmp.qu.bigRip.active) {
 		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
-		if (hasNU(12)) ret = ret.times(tmp.nu[4].normal)
+		if (hasNU(12)) ret = ret.times(tmp.nu[12].normal)
 	}
 	ret = ret.times(Decimal.pow(1.1, tmp.qu.nanofield.rewards - 12))
 	ret = ret.times(getBranchDevSpeed())
@@ -620,7 +609,7 @@ function getTreeUpgradeEfficiencyText(){
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
-	if (hasBosonicUpg(54)) text += "Bosonic Lab Upgrade 24: " + shorten(tmp.blu[53]) + "x, "
+	if (isLEBoostUnlocked(10)) text += "Light Empowerments (by Bosonic Lab Upgrade 23): " + shorten(tmp.leBonus[10]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
@@ -630,7 +619,7 @@ function getTreeUpgradeEfficiency(mod) {
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61) || mod == "br") && mod != "noNB") r += tmp.nb[7]
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
-	if (hasBosonicUpg(54)) r *= tmp.blu[54]
+	if (isLEBoostUnlocked(10)) r *= tmp.leBonus[10]
 	return r
 }
 

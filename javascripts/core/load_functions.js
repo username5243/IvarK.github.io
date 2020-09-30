@@ -357,23 +357,23 @@ function setReplTSIfUndefined(){
 }
 
 function setEverythingPreNGp3onLoad(){
-        clickedAntimatter = 0
-        happyHalloween = false
-        if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
+	clickedAntimatter = 0
+	happyHalloween = false
+	if (player.totalmoney === undefined || isNaN(player.totalmoney)) player.totalmoney = player.money;
 	if (player.tickspeed === undefined) player.tickspeed = new Decimal(1000)
 	setOptionsIfUndefined()
 	setPreBreakIfUndefined()
 	setPreEterIfUndefined()
-        setPreNGp3IfUndefined()
+	setPreNGp3IfUndefined()
 	setTheme(player.options.theme);
 	sliderText.textContent = "Update rate: " + player.options.updateRate + "ms";
 	slider.value = player.options.updateRate;
-        checkShowTS()
-        setIDIfUndefined()
-        setTD1to4IfUndefined()
-        setABIfUndefined()
+	checkShowTS()
+	setIDIfUndefined()
+	setTD1to4IfUndefined()
+	setABIfUndefined()
 	document.getElementById("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
-        setPeakIfUndefined()
+	setPeakIfUndefined()
 	dov1tov5()
 	if (typeof player.autobuyers[9].bulk !== "number") player.autobuyers[9].bulk = 1
         setReplTSIfUndefined()
@@ -1691,30 +1691,30 @@ function dov12tov122(){
 }
 
 function updateVersionsONLOAD(){
-        dov7tov10()
+	dov7tov10()
 	doNGM1Versions()
 	if (player.aarexModifications.newGamePlusVersion === undefined) if (player.eternities < 20 && ECTimesCompleted("eterc1") > 0) player.aarexModifications.newGamePlusVersion = 1
 	doInitNGp2NOT3Stuff()
-        doNGP2v2tov2302()
-        doQuantumRestore()
-        doNGp3v15tov199()
-        doNGp3v199tov19995()
-        doNGp3v19995tov21()
-        doNGp3v21tov221()
-        doNGm2v11tov3()
-        doNGm3v21tov3202()
-        doERSv0tov102()
-        doNGExpv0tov111()
-        doNGUdv0tov11()
-        doExdilationIfUndefined()
-        if (player.aarexModifications.ngudpV < 1.12) player.aarexModifications.ngudpV = 1.12
-        if (player.aarexModifications.nguepV < 1.03) player.aarexModifications.nguepV = 1.03
-        doIRSv0tov12()
-        doNGM4v0tov2111()
-        doNGM5v0tov052()
-        doNGSPUpdatingVersion()
-        doInitInfMultStuff()
-        dov12tov122()
+	doNGP2v2tov2302()
+	doQuantumRestore()
+	doNGp3v15tov199()
+	doNGp3v199tov19995()
+	doNGp3v19995tov21()
+	doNGp3v21tov221()
+	doNGm2v11tov3()
+	doNGm3v21tov3202()
+	doERSv0tov102()
+	doNGExpv0tov111()
+	doNGUdv0tov11()
+	doExdilationIfUndefined()
+	if (player.aarexModifications.ngudpV < 1.12) player.aarexModifications.ngudpV = 1.12
+	if (player.aarexModifications.nguepV < 1.03) player.aarexModifications.nguepV = 1.03
+	doIRSv0tov12()
+	doNGM4v0tov2111()
+	doNGM5v0tov052()
+	doNGSPUpdatingVersion()
+	doInitInfMultStuff()
+	dov12tov122()
 }
 
 function doNGp3Init2(){
@@ -2002,8 +2002,6 @@ function updateNGp3DisplayStuff(){
         document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
         document.getElementById("gluonCharger1").style.display = ""
         document.getElementById("gluonCharger2").style.display = ""
-        document.getElementById('rg4toggle').style.display="none"
-        document.getElementById('rg4toggle').textContent="Toggle: O"+(tmp.qu.rg4?"N":"FF")
         document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
         document.getElementById('sacrificeAuto').textContent="Auto: O"+(tmp.qu.autoOptions.sacrifice?"N":"FF")
         document.getElementById("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
@@ -2015,23 +2013,14 @@ function updateNGp3DisplayStuff(){
         document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
         document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
         document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
-        for (var u=5;u<13;u++) {
-                if (u%3==1) document.getElementById("neutrinoUpg"+u).parentElement.parentElement.style.display=u>player.ghostify.times+2?"none":""
-                else document.getElementById("neutrinoUpg"+u).style.display=u>player.ghostify.times+2?"none":""
-        }
         document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
         updateBLUnlockDisplay()
         document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
         for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
-        updateAssortPercentage()
-        updateElectrons()
-        updateAutoQuantumMode()
-        updateColorCharge()
-        updateGluonsTabOnUpdate()
-        updateReplicants()
-        updateTODStuff()
+		handleDisplaysOnQuantum(tmp.qu.bigRip.active)
         updateBraveMilestones()
         updateNeutrinoBoosts()
+        updateNeutrinoUpgradeUnlocks(5, 12)
         tmp.updateLights = true
         updateGPHUnlocks()
         updateBLUnlocks()
@@ -2196,15 +2185,10 @@ function onLoad(noOffline) {
 	updateEterChallengeTimes()
 	updateDilationUpgradeCosts()
 	updateExdilation()
-	updateLastTenQuantums()
-	updateSpeedruns()
+	handleDisplaysOnQuantum()
 	updateBankedEter()
-	updateQuantumChallenges()
-	updateQCTimes()
-	updatePCCompletions()
 	maybeShowFillAll()
 	updateNanoRewardTemp()
-	updateBreakEternity()
 	updateLastTenGhostifies()
 	onNotationChangeNeutrinos()
 	setAchieveTooltip()

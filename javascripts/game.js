@@ -4547,9 +4547,10 @@ function WZBosonsUpdating(diff){
 
 function ghostlyPhotonsUpdating(diff){
 	var data = player.ghostify.ghostlyPhotons
-	var type = tmp.qu.bigRip.active ? "amount" : "darkMatter"
-	data[type] = data[type].add(getGPHProduction().times(diff))
+	data.amount = data.amount.add(getGPHProduction().times(diff))
+	data.darkMatter = data.darkMatter.add(getDMProduction().times(diff))
 	data.ghostlyRays = data.ghostlyRays.add(getGHRProduction().times(diff)).min(getGHRCap())
+
 	for (var c = 0; c < 8; c++) {
 		if (data.ghostlyRays.gte(getLightThreshold(c))) {
 			data.lights[c] += Math.floor(data.ghostlyRays.div(getLightThreshold(c)).log(getLightThresholdIncrease(c)) + 1)
@@ -4783,13 +4784,16 @@ function nonERFreeTickUpdating(){
 	if (isQCRewardActive(7)) thresholdMult *= tmp.qcRewards[7]
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 9) thresholdMult -= tmp.nb[10]
 	if (thresholdMult < 1.1 && player.galacticSacrifice == undefined) thresholdMult = 1.05 + 0.05 / (2.1 - thresholdMult)
-	if (thresholdMult < 1.01 && player.galacticSacrifice) thresholdMult = 1.005 + 0.005 / (2.01 - thresholdMult)
-	gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10()/Math.log10(thresholdMult))
+	if (thresholdMult < 1.01 && player.galacticSacrifice != undefined) thresholdMult = 1.005 + 0.005 / (2.01 - thresholdMult)
+
+	let thresholdExp = 1
+
+	gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(thresholdMult) / thresholdExp)
 	player.totalTickGained += gain
 	player.tickspeed = player.tickspeed.times(Decimal.pow(tmp.tsReduce, gain))
 	player.postC3Reward = Decimal.pow(getPostC3Mult(), gain * getIC3EffFromFreeUpgs()).times(player.postC3Reward)
 	var base = player.aarexModifications.ngmX > 3 ? 0.01 : (player.tickspeedBoosts ? .1 : 1)
-	player.tickThreshold = Decimal.pow(thresholdMult, player.totalTickGained).times(base)
+	player.tickThreshold = Decimal.pow(thresholdMult, player.totalTickGained * thresholdExp).times(base)
 	document.getElementById("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
 	tmp.tickUpdate = true
 }
@@ -5191,8 +5195,10 @@ function challengeOverallDisplayUpdating(){
 		if (document.getElementById("quantumchallenges").style.display == "block") {
 			if (tmp.qu.autoOptions.sacrifice) document.getElementById("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<=9;c++) {
-				if (c==5) document.getElementById("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
-				else if (c!=2&&c!=8) document.getElementById("qc"+c+"reward").textContent = shorten(tmp.qcRewards[c])
+				let x = tmp.qcRewards[c]
+				if (c==9) document.getElementById("qc9reward").textContent = getFullExpansion(Math.floor(x.td)) + "x stronger to Time Dimensions, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
+				else if (c==5) document.getElementById("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
+				else if (c!=2&&c!=8) document.getElementById("qc"+c+"reward").textContent = shorten(x)
 			}
 			if (player.masterystudies.includes("d14")) bigRipUpgradeUpdating() //big rip
 		}
@@ -5881,7 +5887,7 @@ function showEternityTab(tabName, init) {
 		if (tabName === "blackhole") requestAnimationFrame(drawBlackhole)
 		if (tabName === "autoEternity" && document.getElementById("eternitystore").style.display === "block") loadAP()
 	}
-	closeToolTip()
+	if (!init) closeToolTip()
 }
 
 function showAchTab(tabName) {
@@ -6162,4 +6168,3 @@ function switchDecimalMode() {
 		document.location.reload(true)
 	}
 }
-

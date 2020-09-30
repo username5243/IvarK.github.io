@@ -61,8 +61,8 @@ function updateNanofieldTab(){
 function getQuarkChargeProduction(noSpeed) {
 	let ret = new Decimal(1)
 	if (isNanoEffectUsed("preon_charge")) ret = tmp.nf.effects.preon_charge
-	if (hasNU(3)) ret = ret.times(tmp.nu[1])
-	if (hasNU(7)) ret = ret.times(tmp.nu[3])
+	if (hasNU(3)) ret = ret.times(tmp.nu[3])
+	if (hasNU(7)) ret = ret.times(tmp.nu[7])
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.div(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
 	if (!noSpeed) ret = ret.times(getNanofieldFinalSpeed())
 	return ret
@@ -98,7 +98,7 @@ function getQuarkAntienergyProduction() {
 	if (player.masterystudies.includes("t401")) ret = ret.div(getMTSMult(401))
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
 	if (!hasBosonicUpg(63)) ret = ret.times(getNanofieldFinalSpeed())
-	else ret = ret.div(getNanofieldFinalSpeed())
+	else ret = ret.div(tmp.ns).times(nanospeed * ls.mult("nf"))
 	return ret
 }
 
@@ -253,7 +253,7 @@ function getNanofieldSpeedText(){
 	text = ""
 	if (ph.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
-	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[6]) + "x, "
+	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
 	if (nanospeed != 1) {
 		if (nanospeed > 1) text += "Dev: " + shorten(nanospeed) + "x, "
@@ -272,7 +272,7 @@ function getNanofieldSpeed() {
 	let x = 1
 	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
-	if (hasNU(15)) x = tmp.nu[6].times(x)
+	if (hasNU(15)) x = tmp.nu[15].times(x)
 	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.nf)
 	return x
 }

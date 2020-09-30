@@ -390,10 +390,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 				else if (count < 20) {
 					newMS.push(study)
 					count++
-				} else {
-					if (study == "t373") updateColorCharge()
-					player.timestudy.theorem += masteryStudies.costs.time[split[1]]
-				}
+				} else player.timestudy.theorem += masteryStudies.costs.time[split[1]]
 			}
 			player.masterystudies = newMS
 			respecUnbuyableTimeStudies()
@@ -560,18 +557,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			tmp.qu.bigRip.active = bigRip
 		}
 		document.getElementById("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
-		updateColorCharge()
 		updateColorDimPowers()
-		updateGluonsTabOnUpdate()
-		let dontshowrg4 = inQC(1) || QCIntensity(1) >= 1 || ph.did("ghostify")
-		document.getElementById('rg4toggle').style.display = dontshowrg4 ? "none" : ""
-		updateElectrons()
-		updateBankedEter()
-		updateQuantumChallenges()
-		updateQCTimes()
-		updatePCCompletions()
-		updateReplicants()
-		updateBreakEternity()
 		if (!oheHeadstart) {
 			player.eternityBuyer.dilationMode = false
 			player.eternityBuyer.dilationPerAmount = 10
@@ -593,10 +579,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		document.getElementById('toggleallmetadims').style.display = speedrunMilestonesReached > 7 ? "" : "none"
 		document.getElementById('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
 		document.getElementById("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
-		if (speedrunMilestonesReached < 6 || !isRewardEnabled(4)) {
-			document.getElementById("qctabbtn").style.display = "none"
-			document.getElementById("electronstabbtn").style.display = "none"
-		}
 		if (bigRip ? tmp.qu.bigRip.upgrades.includes(12) : isRewardEnabled(11)&&isRewardEnabled(4)) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
 		if (bigRip ? tmp.qu.bigRip.upgrades.includes(12) : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
@@ -610,8 +592,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		tmp.qu.notrelative = true
 		updateMasteryStudyCosts()
 		updateMasteryStudyButtons()
-		if (!bigRip && !tmp.qu.breakEternity.unlocked && document.getElementById("breakEternity").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display!="block")
-		document.getElementById("breakEternityTabbtn").style.display = bigRip || tmp.qu.breakEternity.unlocked ? "" : "none"
 		delete tmp.qu.autoECN
 	} // bounds if tmp.ngp3
 	if (speedrunMilestonesReached < 1 && !bigRip) {
@@ -684,31 +664,97 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
 	drawStudyTree()
-	if (!isRewardEnabled(4) || (bigRip ? !tmp.qu.bigRip.upgrades.includes(10) : false)) if (document.getElementById("dilation").style.display=="block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display=="block")
-	document.getElementById("masterystudyunlock").style.display = (bigRip ? !tmp.qu.bigRip.upgrades.includes(12) : speedrunMilestonesReached < 14 || !isRewardEnabled(4)) ? "none" : ""
-	if (speedrunMilestonesReached < 14 || !isRewardEnabled(4)) {
-		document.getElementById("edtabbtn").style.display = "none"
-		document.getElementById("nanofieldtabbtn").style.display = "none"
-		document.getElementById("todtabbtn").style.display = "none"
-		updateUnlockedMasteryStudies()
-		if (document.getElementById("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
-		if (document.getElementById("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
-		if (document.getElementById("electrons").style.display == "block" || document.getElementById("replicants").style.display == "block" || document.getElementById("nanofield").style.display == "block") showQuantumTab("uquarks")
-	}
-	let keepMastery = bigRip ? isBigRipUpgradeActive(12) : speedrunMilestonesReached > 13 && isRewardEnabled(4)
-	document.getElementById("respecMastery").style.display = keepMastery ? "block" : "none"
-	document.getElementById("respecMastery2").style.display = keepMastery ? "block" : "none"
-	if (!keepMastery) {
-		performedTS = false
-		if (document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
-		if (document.getElementById("masterystudies").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display!="block")
-	}
-	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
-	if ((bigRip ? !isBigRipUpgradeActive(2) : speedrunMilestonesReached < 2) && document.getElementById("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
-	drawMasteryTree()
+	handleDisplaysOnQuantum(bigRip)
+
 	Marathon2 = 0;
 	setInitialMoney()
 	document.getElementById("quantumConfirmBtn").style.display = "inline-block"
+}
+
+function handleDisplaysOnQuantum(bigRip, prestige) {
+	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
+
+	let keepECs = bigRip ? isBigRipUpgradeActive(2) : speedrunMilestonesReached >= 2
+	if (!keepECs && document.getElementById("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
+
+	let keepDil = bigRip ? isBigRipUpgradeActive(10) : player.dilation.studies.includes(1)
+	if (!keepDil && document.getElementById("dilation").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display=="block")
+
+	let keepMDs = bigRip ? isBigRipUpgradeActive(12) : keepDil && speedrunMilestonesReached >= 6
+	if (!keepMDs && document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+
+	let keepMSs = bigRip || (keepMDs && speedrunMilestonesReached >= 16)
+	document.getElementById("masterystudyunlock").style.display = keepMSs ? "" : "none"
+	document.getElementById("respecMastery").style.display = keepMSs ? "block" : "none"
+	document.getElementById("respecMastery2").style.display = keepMSs ? "block" : "none"
+	if (keepMSs) drawMasteryTree()
+	else {
+		performedTS = false
+		if (document.getElementById("masterystudies").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display != "block")
+	}
+
+	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
+	if (tmp.quActive && !bigRip) {
+		let keepElc = keepQuantum && player.masterystudies.includes("d7")
+		let keepAnts = keepQuantum && player.masterystudies.includes("d10")
+		let keepNf = keepQuantum && player.masterystudies.includes("d11")
+		let keepToD = keepQuantum && player.masterystudies.includes("d12")
+
+		document.getElementById("electronstabbtn").style.display = keepElc ? "" : "none"
+		document.getElementById("replicantstabbtn").style.display = keepAnts ? "" : "none"
+		document.getElementById("nanofieldtabbtn").style.display = keepNf ? "" : "none"
+		document.getElementById("todtabbtn").style.display = keepToD ? "" : "none"
+	
+		if (!keepElc && document.getElementById("electrons").style.display == "block") showQuantumTab("uquarks")
+		if (!keepAnts && document.getElementById("replicants").style.display == "block") showQuantumTab("uquarks")
+		if (!keepNf && document.getElementById("nanofield").style.display == "block") showQuantumTab("uquarks")
+		if (!keepToD && document.getElementById("tod").style.display == "block") showQuantumTab("uquarks")
+	}
+
+	handleDisplaysOutOfQuantum(bigRip)
+	handleQuantumDisplays(prestige)
+}
+
+function handleDisplaysOutOfQuantum() {
+	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
+	let keepQCs = ph.shown("quantum") && tmp.quUnl && speedrunMilestonesReached >= 16 && player.masterystudies.includes("d8")
+	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
+	let keepBE = ph.shown("quantum") && tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
+
+	if (!keepQCs && document.getElementById("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepEDs && document.getElementById("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
+	if (!keepBE && document.getElementById("breakEternity").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display != "block")
+
+	document.getElementById("qctabbtn").style.display = keepQCs ? "" : "none"
+	document.getElementById("edtabbtn").style.display = keepEDs ? "" : "none"
+	document.getElementById("breakEternityTabbtn").style.display = keepBE? "" : "none"
+}
+
+function handleQuantumDisplays(prestige) {
+	updateBankedEter()
+	updateSpeedruns()
+	if (!tmp.ngp3) return
+
+	updateLastTenQuantums()
+	updateAutoQuantumMode()
+
+	updateAssortPercentage()
+	updateColorCharge()
+	updateGluonsTabOnUpdate()
+	updateElectrons()
+
+	let dontshowrg4 = inQC(1) || QCIntensity(1) >= 1 || ph.did("ghostify")
+	document.getElementById('rg4toggle').style.display = dontshowrg4 ? "none" : ""
+
+	updateQuantumChallenges()
+	updateQCTimes()
+	updatePCCompletions()
+
+	updateReplicants(prestige ? "prestige" : "")
+
+	updateTODStuff()
+
+	updateBreakEternity()
 }
 
 function updateQuarkDisplay() {

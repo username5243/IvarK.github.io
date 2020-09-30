@@ -118,7 +118,7 @@ var leBoosts = {
 	},
 	9: {
 		req() {
-			return hasBosonicUpg(62)
+			return hasBosonicUpg(53)
 		},
 		leThreshold: 0,
 		eff() {
@@ -130,38 +130,26 @@ var leBoosts = {
 	},
 	10: {
 		req() {
-			return hasBosonicUpg(62)
+			return hasBosonicUpg(53)
 		},
 		leThreshold: 0,
 		eff() {
-			return 1
+			return Math.log10(player.replicanti.amount.log10() + 1) * Math.cbrt(tmp.leBoost / 1e4) + 1
 		},
 		effDesc(x) {
-			return shorten(x)
+			return (x * 100 - 100).toFixed(2)
 		}
 	},
 	11: {
 		req() {
-			return hasBosonicUpg(62)
+			return hasBosonicUpg(53)
 		},
 		leThreshold: 0,
 		eff() {
 			return 1
 		},
 		effDesc(x) {
-			return shorten(x)
-		}
-	},
-	12: {
-		req() {
-			return hasBosonicUpg(62)
-		},
-		leThreshold: 0,
-		eff() {
-			return 1
-		},
-		effDesc(x) {
-			return shorten(x)
+			return (x * 100 - 100).toFixed(2)
 		}
 	}
 }
@@ -180,17 +168,24 @@ function updateGPHUnlocks() {
 	let unl = player.ghostify.ghostlyPhotons.unl
 	document.getElementById("gphUnl").style.display = unl ? "none" : ""
 	document.getElementById("gphDiv").style.display = unl ? "" : "none"
-	document.getElementById("gphRow").style.display = unl ? "" : "none"
 	document.getElementById("breakUpgR3").style.display = unl ? "" : "none"
 	document.getElementById("bltabbtn").style.display = unl ? "" : "none"
+	updateNeutrinoUpgradeUnlocks(13, 15)
 }
 
 function getGPHProduction() {
-	let b = tmp.qu.bigRip.active
-	if (b) var ret = player.dilation.dilatedTime.div("1e480")
-	else var ret = player.dilation.dilatedTime.div("1e930")
+	let ret = new Decimal(0)
+	if (tmp.qu.bigRip.active) ret = player.dilation.dilatedTime.div("1e480")
+	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
-	if (b && ret.gt(Decimal.pow(2, 444))) ret = ret.div(Decimal.pow(2, 444)).sqrt().times(Decimal.pow(2, 444))
+	return ret
+}
+
+function getDMProduction() {
+	let ret = new Decimal(0)
+	if (!tmp.qu.bigRip.active) ret = player.dilation.dilatedTime.div("1e930")
+	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
+	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret
 }
 
@@ -205,7 +200,7 @@ function updatePhotonsTab(){
 function updateRaysPhotonsDisplay(){
 	var gphData = player.ghostify.ghostlyPhotons
 	document.getElementById("dtGPH").textContent = shorten(player.dilation.dilatedTime)
-	document.getElementById("gphProduction").textContent = shorten(getGPHProduction())
+	document.getElementById("gphProduction").textContent = shorten(tmp.qu.bigRip.active ? getGPHProduction() : getDMProduction())
 	document.getElementById("gphProduction").className = (tmp.qu.bigRip.active ? "gph" : "dm") + "Amount"
 	document.getElementById("gphProductionType").textContent = tmp.qu.bigRip.active ? "Ghostly Photons" : "Dark Matter"
 	document.getElementById("gph").textContent = shortenMoney(gphData.amount)
@@ -309,9 +304,9 @@ function getLightEmpowermentReq(le) {
 		x += Math.pow(1.2, le - 49) - 1
 		scale = 2
 	}
-	
 	if (player.achievements.includes("ng3p95")) x--
-	if (hasBosonicUpg(52)) x /= tmp.blu[52]
+	if (hasBosonicUpg(55)) x /= tmp.blu[55]
+
 	tmp.leReqScale = scale
 	return Math.floor(x)
 }

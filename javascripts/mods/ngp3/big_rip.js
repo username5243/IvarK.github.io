@@ -124,11 +124,8 @@ function isBigRipUpgradeActive(id, bigRipped) {
 }
 
 function updateBreakEternity() {
-	if (!tmp.quUnl || !tmp.qu.bigRip.active || !tmp.qu.breakEternity.unlocked) {
-		document.getElementById("breakEternityTabbtn").style.display = "none"
-		return
-	}
-	document.getElementById("breakEternityTabbtn").style.display = ""
+	if (document.getElementById("breakEternityTabbtn").style == "none") return
+
 	if (tmp.qu.breakEternity.unlocked) {
 		document.getElementById("breakEternityReq").style.display = "none"
 		document.getElementById("breakEternityShop").style.display = ""

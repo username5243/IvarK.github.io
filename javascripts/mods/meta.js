@@ -141,7 +141,7 @@ function getMetaShiftRequirement() {
 	if (tmp.ngp3) if (player.masterystudies.includes("t312")) data.mult -= 1
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
-	if (ph.did("ghostify")) if (hasNU(1)) data.amount -= tmp.nu[0]
+	if (ph.did("ghostify")) if (hasNU(1)) data.amount -= tmp.nu[1]
 
 	data.scalingStart = inQC4 ? 55 : 15
 	if (player.meta.resets >= data.scalingStart) {
@@ -318,7 +318,7 @@ function getMetaDimensionProduction(tier) {
 }
 
 function getExtraDimensionBoostPower() {
-	if (player.currentEternityChall=="eterc14" || inQC(7)) return new Decimal(1)
+	if (player.currentEternityChall=="eterc14" || inQC(7) || inQC(9)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (!inQC(3)) r = r.add(1)

@@ -172,8 +172,9 @@ function getBosonicAMProduction() {
 	var ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
 	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
+
 	//maybe softcap at e40 or e50?
-	if (!hasBosonicUpg(55)) ret = softcap(ret, "bam")
+	ret = softcap(ret, "bam")
 	return ret
 }
 
@@ -504,6 +505,7 @@ var bEn = {
 			return Decimal.pow(Decimal.add(l, 100).log10(), 4).div(16)
 		},
 		34(l) {
+			if (hasBosonicUpg(54)) return Decimal.add(l, 1).pow(player.ghostify.hb.higgs / 40)
 			return Decimal.pow(player.ghostify.hb.higgs / 20 + 1, l.add(1).log10() / 5)
 		},
 		15(l) {
@@ -612,8 +614,12 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
-	if (id == 32 || id == 62) tmp.updateLights = true
-	if (id == 54) updateQuantumChallenges()
+	if (id == 32) tmp.updateLights = true
+	if (id == 53) {
+		updateQuantumChallenges()
+		updateNeutrinoUpgradeUnlocks(16, 18)
+		tmp.updateLights = true
+	}
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
@@ -774,13 +780,12 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You produce preon charge and 1% of your normal preon energy no matter what.",
-		52: "Unlock Quantum Challenge 9.",
-		53: "Gravitons divide the Light Empowerment requirement.",
-		54: "Radioactive Decays boost Tree Upgrades.",
-		55: "Remove all softcaps of base Bosonic Antimatter production.",
+		51: "You produce preon charge and 1% of your normal preon energy regardless of anti-preon energy.",
+		52: "Replicantis raise all boosts to Infinite Time and Intergalactic rewards to an exponent.",
+		53: "Unlock Quantum Challenge 9, 3 new Neutrino upgrades, and 3 new Light Empowerment boosts.",
+		54: "Bosonic Enchant 6 has a stronger boost.",
+		55: "Bosonic Antimatter reduces the requirement of Light Empowerments.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		62: "Unlock 4 new Light Empowerment boosts.",
 		63: "Nanofield speed divides preon anti-energy production instead of multiplying it." //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
 	},
 	effects: {
@@ -896,13 +901,15 @@ var bu = {
 			eff = softcap(eff, "bu45")
 			return eff.toNumber()
 		},
-		53() {
-			let gv = GDs.save.gv
-			return gv.max(1).log10() / 5 + 1
+		52() {
+			let log = Math.sqrt(player.replicanti.amount.log10() / 4e8 + 1)
+			return {
+				ig: log,
+				it: Math.log10(log) + 1
+			}
 		},
-		54() {
-			if (!tmp.quActive) return 1
-			return Math.max(getTotalRadioactiveDecays() / 50, 1)
+		55() {
+			return tmp.bl.am.add(1).pow(0.01).toNumber()
 		}
 	},
 	effectDescs: {
@@ -948,11 +955,11 @@ var bu = {
 		45(x) {
 			return "/" + shorten(x) + " to efficiency"
 		},
-		53(x) {
-			return "/" + shorten(x)
+		52(x) {
+			return "^" + x.ig.toFixed(3) + " to Intergalactic, ^" + x.it.toFixed(3) + " to Infinite Time"
 		},
-		54(x) {
-			return (x * 100 - 100).toFixed(1) + "% stronger"
+		55(x) {
+			return "/" + shorten(x)
 		}
 	}
 }

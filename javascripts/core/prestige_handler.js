@@ -166,6 +166,8 @@ let Prestiges = {
 		if (player.aarexModifications.layerHidden[layer]) delete player.aarexModifications.layerHidden[layer]
 		else player.aarexModifications.layerHidden[layer] = true
 
+		if (layer == "quantum") handleDisplaysOutOfQuantum()
+
 		document.getElementById("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	}
 }

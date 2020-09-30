@@ -69,8 +69,15 @@ function calcVanillaTSTDMult(tier){
 	return ret
 }
 
+function getRepToTDExp() {
+	let x = 0.1
+	if (isQCRewardActive(9)) x *= tmp.qcRewards[9].td
+	return x
+}
+
 function getTimeDimensionPower(tier) {
 	if (player.currentEternityChall == "eterc11") return new Decimal(1)
+	if (inQC(9)) return tmp.rm.pow(getRepToTDExp())
 	if (tmp.be) return getBreakEternityTDMult(tier)
 	var dim = player["timeDimension" + tier]
 	var ret = dim.power.pow(player.boughtDims ? 1 : 2)
@@ -90,7 +97,7 @@ function getTimeDimensionPower(tier) {
 	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(getECReward(10))
 	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galMults.u43())
-	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
+	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 	if (inQC(6)) ret = ret.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
 	ret = dilates(ret, 2)
@@ -98,7 +105,7 @@ function getTimeDimensionPower(tier) {
 
 	ret = dilates(ret, 1)
 	if (tmp.quActive) ret = ret.times(colorBoosts.dim.b)
-	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(0.1))
+	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
 
 	return ret
@@ -125,7 +132,7 @@ function getIC3EffFromFreeUpgs() {
 		if (player.currentEternityChall=='eterc14') x = 5
 		else {
 			x = ECTimesCompleted("eterc14") * 4
-			if (hasNU(12)) if (tmp.qu.bigRip.active) x *= tmp.nu[4].replicated
+			if (hasNU(12)) if (tmp.qu.bigRip.active) x *= tmp.nu[12].replicated
 		}
 	}
 	if (player.galacticSacrifice !== undefined) x++

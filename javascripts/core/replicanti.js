@@ -204,7 +204,7 @@ function replicantiGalaxyAutoToggle() {
 function getReplSpeed() {
 	let inc = .2
 	let exp = 308
-	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) && !inQC(9)) {
+	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
@@ -217,7 +217,6 @@ function getReplSpeed() {
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	if (GDs.unlocked()) exp *= GDs.tmp.rep
-	if (inQC(9)) exp *= 0.1
 	return {inc: inc, exp: exp}
 }
 

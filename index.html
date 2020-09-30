@@ -1890,7 +1890,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 6.2)</span>
+				<span class="warning">(Test server: Beta 7)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2726,7 +2726,7 @@
 								<div id="The Holy Particle" class="achievement achievementlocked" style="background-image: url(images/175.png)" ach-tooltip="Get a Higgs Boson. Reward: Bosonic Upgrades and Enchants are 2x cheaper, achievement power boosts Bosonic Antimatter production at a reduced rate, and Light Enpowerements do not reset Ghostly Photons."></div>
 							</td>
 							<td>
-								<div id="Bright as the Anti-Sun" class="achievement achievementlocked" style="background-image: url(images/176.png)" ach-tooltip="Reach 25 Light Empowerments. Reward: You always have the 12th Bosonic Upgrade and you can max Light Empowerments."></div>
+								<div id="Bright as the Anti-Sun" class="achievement achievementlocked" style="background-image: url(images/176.png)" ach-tooltip="Reach 25 Light Empowerments. Reward: You can max Light Empowerments, you always have the 12th Bosonic Upgrade, and you always produce 1 base Ghostly Photons / Dark Matter per second. (before boosts)"></div>
 							</td>
 							<td>
 								<div id="Are these another..." class="achievement achievementlocked" style="background-image: url(images/177.png)"></div>
@@ -3793,7 +3793,7 @@
 					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc9div">
-								<span>Replicate interval increase scaling is ^0.1 and 1e20 DT upgrade is useless</span>
+								<span>Only Replicantis can boost Time Dimensions, but meta-antimatter doesn't boost Dimension Boosts.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3801,8 +3801,8 @@
 									<br>
 									<span id="qc9cost"></span><br>
 									<span id="qc9goal"></span><br>
-									Reward: Replicantis boost Gravity Energy gain. (Boosted by number of unique PC completions)<br>
-									Currently: +<span id="qc9reward"></span>
+									Reward: Replicantis has a stronger boost to Time Dimensions and boost Gravity Energy. (Boosted by # of unique PC completions)<br>
+									Currently: <span id="qc9reward"></span>
 								</div>
 							</div>
 						</td>
@@ -5126,10 +5126,15 @@
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg11" onclick="buyNeutrinoUpg(11)">8th Big Rip upgrade is never repealed and capped.<br>Cost: <span id="neutrinoUpg11Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg12" onclick="buyNeutrinoUpg(12)" style="font-size: 10px">In Big Rips, each galaxy type boosts differently.<br>Hover to see your current effects<br>Cost: <span id="neutrinoUpg12Cost"></span> of any neutrinos</button></td>
 					</tr>
-					<tr id="gphRow">
+					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg13" onclick="buyNeutrinoUpg(13)">100 RG upgrade doesn't nerf the 100 BR upgrade.<br>Cost: <span id="neutrinoUpg13Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg14" onclick="buyNeutrinoUpg(14)" style="font-size: 10px">Gain more neutrinos based on your GhP and color powers.<br>Currently: <span id="neutrinoUpg14Pow"></span>x<br>Cost: <span id="neutrinoUpg14Cost"></span> of any neutrinos</button></td>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanorewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
+					</tr>
+					<tr>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">Remove the cost scaling of GhP multiplier upgrades.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg17" onclick="buyNeutrinoUpg(17)">???<br>Cost: <span id="neutrinoUpg17Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg18" onclick="buyNeutrinoUpg(18)">???<br>Cost: <span id="neutrinoUpg18Cost"></span> of any neutrinos</button></td>
 					</tr>
 				</table>
 			</div>
@@ -5363,7 +5368,7 @@
 							They boost orange Light strength by <span class="yellow" id="lightStrength2" style="font-size:35px"></span>x and make electrons effect softcap starts <span class="yellow" id="lightBoost3" style="font-size:35px"></span> later.
 						</td>
 						<td>
-							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost the total green power effect by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
+							They boost yellow Light strength by <span class="green" id="lightStrength3" style="font-size:35px"></span>x and boost the preon effect by <span class="green" id="lightBoost4" style="font-size:35px"></span>%.
 						</td>
 					</tr><tr>
 						<td id="le3">
@@ -5439,7 +5444,7 @@
 						</td>
 					</tr><tr>
 						<td id="le10">
-							Boost something by <span class="lEp" id="leBoost10" style="font-size:35px"></span>x?
+							Replicantis strengthen Tree Upgrades by <span class="lEp" id="leBoost10" style="font-size:35px"></span>%
 						</td>
 						<td>
 							Translated to +<span class="lEp" id="lightEmpowermentsEffect" style="font-size:35px"></span>x multiplier to all Light strength boosts.
@@ -5448,7 +5453,7 @@
 							They make that all Lights boost other Lights from (x+1)^0.5 to <span class="lEp" id="leBoost5" style="font-size:35px"></span>.
 						</td>
 						<td id="le11">
-							Boost something by <span class="lEp" id="leBoost11" style="font-size:35px"></span>x?
+							They boost something by <span class="lEp" id="leBoost11" style="font-size:35px"></span>%. :)
 						</td>
 					</tr></table>
 				</div>

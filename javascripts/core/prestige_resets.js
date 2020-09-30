@@ -946,7 +946,7 @@ function doEternityGhostifyResetStuff(implode, bm){
 	document.getElementById("eternitybtn").style.display = "none"
 	document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
-	if (((document.getElementById("masterystudies").style.display == "block" || document.getElementById("breakEternity").style.display == "block") && !bm) || implode) showEternityTab("timestudies", document.getElementById("eternitystore").style.display == "none")
+	if (implode) showEternityTab("timestudies", document.getElementById("eternitystore").style.display == "none")
 	updateLastTenEternities()
 	resetTimeDimensions()
 	updateRespecButtons()
@@ -957,11 +957,6 @@ function doEternityGhostifyResetStuff(implode, bm){
 	if (!bm) updateAutoEterMode()
 	updateEternityChallenges()
 	updateDilationUpgradeCosts()
-	if (!bm) {
-		document.getElementById("masterystudyunlock").style.display = "none"
-		document.getElementById('rebuyupgmax').style.display = ""
-		document.getElementById('rebuyupgauto').style.display = "none"
-	}
 	updateMasteryStudyCosts()
 	updateMasteryStudyButtons()
 }
@@ -1004,27 +999,18 @@ function doQuantumGhostifyResetStuff(implode, bm){
 		document.getElementById("autoBuyerQuantum").style.display="none"
 		document.getElementById('toggleautoquantummode').style.display="none"
 	}
-	if (!bm && !player.achievements.includes("ng3p77")) {
-		document.getElementById("electronstabbtn").style.display = "none"
-		document.getElementById("nanofieldtabbtn").style.display = "none"
-		document.getElementById("edtabbtn").style.display = "none"
-	}
+
 	document.getElementById('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
 	document.getElementById("quantumbtn").style.display = "none"
-	updateLastTenQuantums()
-	updateSpeedruns()
 	updateColorCharge()
 	updateColorDimPowers()
 	updateGluonsTabOnUpdate("prestige")
 	updateQuantumWorth("quick")
 	updateBankedEter()
-	updateQuantumChallenges()
-	updatePCCompletions()
 	updateReplicants("prestige")
 	updateEmperorDimensions()
 	updateNanoRewardTemp()
 	updateTODStuff()
-	updateBreakEternity()
 }
 
 function doGhostifyGhostifyResetStuff(bm, force){
@@ -1039,9 +1025,8 @@ function doGhostifyGhostifyResetStuff(bm, force){
 		document.getElementById("ghostifyConfirmBtn").style.display = "inline-block"
 		giveAchievement("Kee-hee-hee!")
 	} else if (player.ghostify.times > 2 && player.ghostify.times < 11) {
-		$.notify("You unlocked " + (player.ghostify.times+2) + "th Neutrino upgrade!", "success")
-		if (player.ghostify.times % 3 > 1) document.getElementById("neutrinoUpg" + (player.ghostify.times + 2)).parentElement.parentElement.style.display = ""
-		else document.getElementById("neutrinoUpg" + (player.ghostify.times + 2)).style.display = ""
+		$.notify("You unlocked " + (player.ghostify.times + 2) + "th Neutrino upgrade!", "success")
+		updateNeutrinoUpgradeUnlock(player.ghostify.times + 2)
 	}
 	document.getElementById("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
 	if (bm < 7) {

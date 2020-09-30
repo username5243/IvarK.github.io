@@ -65,13 +65,9 @@ function updateReplicantsTab(){
 }
 
 function updateReplicants(mode) {
+	if (document.getElementById("replicantstabbtn").style == "none") return
+
 	if (player.masterystudies == undefined ? true : player.ghostify.milestones < 8) mode = undefined
-	if (mode === undefined) {
-		if (player.masterystudies ? !player.masterystudies.includes("d10") : true) {
-			document.getElementById("replicantstabbtn").style.display = "none"
-			return
-		} else document.getElementById("replicantstabbtn").style.display = ""
-	}
 	if (mode === undefined || mode === "display") {
 		document.getElementById("quantumFoodAmount").textContent = getFullExpansion(tmp.qu.replicants.quantumFood)
 		if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) document.getElementById("buyQuantumFood").innerHTML = "Buy 1 quantum food<br>Cost: " + shortenDimensions(tmp.qu.replicants.quantumFoodCost) + " of all 3 gluons"

@@ -30,31 +30,36 @@ function updateNeutrinoAmountDisplay(){
 	document.getElementById("tauNeutrinos").textContent = shortenDimensions(player.ghostify.neutrinos.tau)
 }
 
-function updateNeutrinoUpgradeDisplay(){
-	document.getElementById("neutrinoUpg1Pow").textContent = tmp.nu[0]
-	document.getElementById("neutrinoUpg3Pow").textContent = shorten(tmp.nu[1])
-	document.getElementById("neutrinoUpg4Pow").textContent = shorten(tmp.nu[2])
-	if (player.ghostify.times > 4) document.getElementById("neutrinoUpg7Pow").textContent = shorten(tmp.nu[3])
-	if (player.ghostify.times > 9) document.getElementById("neutrinoUpg12").setAttribute('ach-tooltip',
-		"Normal galaxy effect: " + shorten(tmp.nu[4].normal) + "x to quark spin production, "+
-		"Replicated galaxy effect: " + shorten(tmp.nu[4].replicated) + "x to EC14 reward, "+
-		"Free galaxy effect: " + shorten(tmp.nu[4].free) + "x to IC3 reward"
-	)
-	if (player.ghostify.ghostlyPhotons.unl) {
-		document.getElementById("neutrinoUpg14Pow").textContent=shorten(tmp.nu[5])
-		document.getElementById("neutrinoUpg15Pow").textContent=shorten(tmp.nu[6])
-	}
+function updateNeutrinoUpgradeDisplay() {
 	var sum = player.ghostify.neutrinos.electron.add(player.ghostify.neutrinos.mu).add(player.ghostify.neutrinos.tau).round()
-	for (var u = 1; u < 16; u++) {
-		var e = false
-		if (u > 12) e = player.ghostify.ghostlyPhotons.unl
-		else e = player.ghostify.times + 3 > u || u < 5
-		if (e) {
-			if (hasNU(u)) document.getElementById("neutrinoUpg" + u).className = "gluonupgradebought neutrinoupg"
-			else if (sum.gte(tmp.nuc[u])) document.getElementById("neutrinoUpg" + u).className = "gluonupgrade neutrinoupg"
-			else document.getElementById("neutrinoUpg" + u).className = "gluonupgrade unavailablebtn"
-		}
+	for (var u = 1; u <= neutrinoUpgrades.max; u++) if (isNeutrinoUpgUnlocked(u)) {
+		if (hasNU(u)) document.getElementById("neutrinoUpg" + u).className = "gluonupgradebought neutrinoupg"
+		else if (sum.gte(tmp.nuc[u])) document.getElementById("neutrinoUpg" + u).className = "gluonupgrade neutrinoupg"
+		else document.getElementById("neutrinoUpg" + u).className = "gluonupgrade unavailablebtn"
+
+		eff = tmp.nu[u]
+		if (!eff) continue
+		if (u == 12) document.getElementById("neutrinoUpg12").setAttribute('ach-tooltip', neutrinoUpgrades[u].effDesc(eff))
+		else document.getElementById("neutrinoUpg" + u + "Pow").textContent = neutrinoUpgrades[u].effDesc(eff)
 	}
+}
+
+function isNeutrinoUpgUnlocked(u) {
+	if (u >= 16) return hasBosonicUpg(53)
+	if (u >= 13) return player.ghostify.ghostlyPhotons.unl
+	if (u >= 5) return player.ghostify.times >= u - 2
+	return true
+}
+
+function updateNeutrinoUpgradeUnlock(u) {
+	let unl = isNeutrinoUpgUnlocked(u)
+	if (u % 3 == 1) document.getElementById("neutrinoUpg"+u).parentElement.parentElement.style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+	else document.getElementById("neutrinoUpg"+u).style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+}
+
+function updateNeutrinoUpgradeUnlocks(rangeMin, rangeMax) {
+	if (!tmp.ngp3) return
+	for (var u = rangeMin; u <= rangeMax; u++) updateNeutrinoUpgradeUnlock(u)
 }
 
 function updateNeutrinosTab(){
@@ -89,7 +94,7 @@ function onNotationChangeNeutrinos() {
 function getNeutrinoGain() {
 	let ret = Decimal.pow(5, player.ghostify.neutrinos.multPower - 1)
 	if (player.ghostify.ghostlyPhotons.unl) ret = ret.times(tmp.le[5])
-	if (hasNU(14)) ret = ret.times(tmp.nu[5])
+	if (hasNU(14)) ret = ret.times(tmp.nu[14])
 	if (isNanoEffectUsed("neutrinos")) ret = ret.times(tmp.nf.effects.neutrinos)
 	return ret
 }
@@ -105,6 +110,7 @@ function buyNeutrinoUpg(id) {
 		document.getElementById("workerReplWhat").textContent="babies"
 	}
 	if (id == 5) updateElectrons(true)
+	if (id == 16) document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
 function updateNeutrinoBoosts() {
@@ -146,7 +152,7 @@ function maxNeutrinoMult() {
 	let cost = Decimal.pow(4,player.ghostify.neutrinos.multPower-1).times(2)
 	if (!player.ghostify.ghostParticles.gte(cost)) return
 	let toBuy = Math.floor(player.ghostify.ghostParticles.div(cost).times(3).add(1).log(4))
-	let toSpend = Decimal.pow(4,toBuy).sub(1).div(3).times(cost)
+	let toSpend = Decimal.pow(4, toBuy).sub(1).div(3).times(cost)
 	player.ghostify.ghostParticles = player.ghostify.ghostParticles.sub(toSpend.min(player.ghostify.ghostParticles)).round()
 	player.ghostify.neutrinos.multPower += toBuy
 	document.getElementById("neutrinoMult").textContent = shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
@@ -154,21 +160,25 @@ function maxNeutrinoMult() {
 }
 
 var neutrinoBoosts = {
-	boosts: {
-		1: function(nt) {
+	max: 18,
+	1: {
+		eff(nt) {
 			let nb1mult = .75
 			if (tmp.newNGP3E) nb1mult = .8
 			if (isLEBoostUnlocked(7)) nb1mult *= tmp.leBonus[7]
 			let nb1neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			return Math.log10(1+nb1neutrinos)*nb1mult
-		},
-		2: function(nt) {
+		}
+	},
+	2: {
+		eff(nt) {
 			let nb2neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			let nb2 = Math.pow(nb2neutrinos, .25) * 1.5
 			return nb2 
-		},
-		3: function(nt) {
-			//NG+3
+		}
+	},
+	3: {
+		eff(nt) {
 			let nb3neutrinos = Math.sqrt(
 				Math.pow(nt[0].max(1).log10(), 2) +
 				Math.pow(nt[1].max(1).log10(), 2) +
@@ -176,25 +186,33 @@ var neutrinoBoosts = {
 			)
 			let nb3 = Math.sqrt(nb3neutrinos + 625) / 25
 			return nb3
-		},
-		4: function(nt) {
+		}
+	},
+	4: {
+		eff(nt) {
 			var nb4neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			var nb4 = Math.pow(nb4neutrinos, .25) * 0.07 + 1
 			return nb4
-		},
-		5: function(nt) {
+		}
+	},
+	5: {
+		eff(nt) {
 			var nb5neutrinos = nt[0].max(1).log10()+nt[1].max(1).log10()+nt[2].max(1).log10()
 			return Math.min(nb5neutrinos / 33, 1)
-		},
-		6: function(nt) {
+		}
+	},
+	6: {
+		eff(nt) {
 			var nb6neutrinos = Math.pow(nt[0].add(1).log10(), 2) + Math.pow(nt[1].add(1).log10(), 2) + Math.pow(nt[2].add(1).log10(), 2)
 			var nb6exp1 = .25
 			if (tmp.newNGP3E) nb6exp1 = .26
 			let nb6 = Math.pow(Math.pow(nb6neutrinos, nb6exp1) * 0.525 + 1, tmp.qu.bigRip.active ? 0.5 : 1)
 			if (isLEBoostUnlocked(9)) nb6 *= tmp.leBonus[7]
 			return nb6
-		},
-		7: function(nt) {
+		}
+	},
+	7: {
+		eff(nt) {
 			let nb7exp = .5
 			if (tmp.newNGP3E) nb7exp = .6
 			if (!tmp.qu.bigRip.active && hasBosonicUpg(61)) nb7exp /= 2
@@ -203,31 +221,124 @@ var neutrinoBoosts = {
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
 			if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
 			return nb7
-		},
-		8: function(nt) {
+		}
+	},
+	8: {
+		eff(nt) {
 			let nb8neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			let nb8exp = .25
 			if (tmp.newNGP3E) nb8exp = .27
 			var nb8 = Math.pow(nb8neutrinos, nb8exp) / 10 + 1
 			if (nb8 > 11) nb8 = 7 + Math.log2(nb8 + 5)
 			return nb8
-		},
-		9: function(nt) {
+		}
+	},
+	9: {
+		eff(nt) {
 			var nb9 = (nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10())/10
 			if (isLEBoostUnlocked(9)) nb9 *= tmp.leBonus[7]
 			return nb9
-		},
-		10: function(nt) {
+		}
+	},
+	10: {
+		eff(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
 			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
 			return nb10
-		},
-		11: function(nt) {
+		}
+	},
+	11: {
+		eff(nt) {
 			let nb11neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
 			let nb11exp = Math.sqrt(nb11neutrinos)
 			let nb11 = Decimal.pow(1.15, nb11exp)
 			return nb11
+		}
+	}
+}
+
+var neutrinoUpgrades = {
+	max: 18,
+	1: {
+		eff() {
+			let x = 110
+			if (!tmp.qu.bigRip.active) x = Math.max(x - player.meta.resets, 0)
+			return x
+		},
+		effDesc(x) {
+			return x
+		}
+	},
+	3: {
+		eff() {
+			let log = tmp.qu.colorPowers.b.log10()
+			let exp = Math.max(log / 1e4 + 1, 2)
+			let x
+			if (!tmp.quActive) x = new Decimal(1)
+			else if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
+			else x = Math.pow(Math.max(log / 250 + 1, 1), exp)
+			return x
+		},
+		effDesc(x) {
+			return shorten(x)
+		}
+	},
+	4: {
+		eff() {
+			let nu4base = 50
+			if (tmp.ngp3l) nu4base = 20
+			return Decimal.pow(nu4base, Math.pow(Math.max(-getTickspeed().div(1e3).log10() / 4e13 - 4, 0), 1/4))
+		},
+		effDesc(x) {
+			return shorten(x)
+		}
+	},
+	7: {
+		eff() {
+			var nu7 = tmp.qu.colorPowers.g.add(1).log10()/400
+			if (!tmp.quActive) nu7 = 0
+			else if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
+			return Decimal.pow(10, nu7) 
+		},
+		effDesc(x) {
+			return shorten(x)
+		}
+	},
+	12: {
+		eff() {
+			return { 
+				normal: Math.sqrt(player.galaxies * .0035 + 1),
+				free: player.dilation.freeGalaxies * .035 + 1,
+				replicated: Math.sqrt(getTotalRG()) * .0175 + 1 //NU12 
+			}
+		},
+		effDesc(x) {
+			return "Normal galaxy effect: " + shorten(x.normal) + "x to quark spin production, "+
+			"Replicated galaxy effect: " + shorten(x.replicated) + "x to EC14 reward, "+
+			"Free galaxy effect: " + shorten(x.free) + "x to IC3 reward"
+		}
+	},
+	14: {
+		eff() {
+			if (!tmp.quActive) return new Decimal(1)
+			var base = player.ghostify.ghostParticles.add(1).log10()
+			var colorsPortion = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(),1/3)
+			return Decimal.pow(base, colorsPortion * 0.8 + 1).max(1)
+		},
+		effDesc(x) {
+			return shorten(x)
+		}
+	},
+	15: {
+		eff() {
+			if (!tmp.quActive) return new Decimal(1)
+			let nr = tmp.qu.nanofield.rewards
+			if (nr > 90) nr = Math.sqrt(nr * 90)
+			return Decimal.pow(2, nr / 2.5)
+		},
+		effDesc(x) {
+			return shorten(x)
 		}
 	}
 }

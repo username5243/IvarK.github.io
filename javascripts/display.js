@@ -29,13 +29,14 @@ function getGalaxyScaleName(x) {
 function intergalacticDisplay(){
 	if (player.achievements.includes("ng3p27") && getShiftRequirement(0).tier == 8) {
 		document.getElementById("intergalacticLabel").parentElement.style.display = ""
+		let extra = Decimal.sub(tmp.igg, player.galaxies)
 		let nanopart = 1
 		if (isNanoEffectUsed("dil_effect_exp")) nanopart = tmp.nf.effects["dil_effect_exp"] || 1
 		document.getElementById("intergalacticLabel").innerHTML = 
 			getGalaxyScaleName(tmp.igs) + 'Intergalactic Boost ' + 
 			(player.dilation.active || player.galacticSacrifice != undefined ? " (estimated)" : "") +
-			" (" + getFullExpansion(player.galaxies) + (Math.floor(tmp.igg - player.galaxies) > 0 ? " + " + 
-			getFullExpansion(Math.floor(tmp.igg - player.galaxies)) : "") + "): " + 
+			" (" + getFullExpansion(player.galaxies) + (extra.gt(0) ? " + " + 
+			getFullExpansion(extra.lt(1e12) ? Math.floor(extra.round().toNumber()) : extra) : "") + "): " + 
 			shorten(dilates(tmp.ig).pow(player.dilation.active ? nanopart : 1)) + 
 			'x to Eighth Dimensions'
 	} else document.getElementById("intergalacticLabel").parentElement.style.display = "none"
@@ -152,24 +153,18 @@ function bestInfinityDisplay(){
 }
 
 function bestEternityDisplay(){
-	document.getElementById("eternityStatistics").style.display = "none"
-	if (player.eternities == 0) {
-		document.getElementById("besteternity").textContent = ""
-		document.getElementById("thiseternity").textContent = ""
-		document.getElementById("eternitied").textContent = ""
-	} else {
-		document.getElementById("eternityStatistics").style.display = "inline-block"
+	if (ph.did("eternity")) {
+		document.getElementById("eternityStatistics").style.display = ""
 		if (player.bestEternity >= 9999999999) {
 			document.getElementById("besteternity").textContent = ""
 		} else document.getElementById("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
 		document.getElementById("thiseternity").textContent = "You have spent " + timeDisplay(player.thisEternity) + " in this Eternity."
 		document.getElementById("eternitied").textContent = "You have Eternitied " + getFullExpansion(player.eternities) + " time" + (player.eternities == 1 ? "" : "s") + (ph.did("quantum") ? " this Quantum." : ".")
-	}
-	if (player.eternitiesBank > 0) document.getElementById("eternityStatistics").style.display = ""
+	} else document.getElementById("eternityStatistics").style.display = "none"
 }
 
 function bestQuantumDisplay(){
-	if (!ph.did("quantum")) document.getElementById("quantumStatistics").style.display = "none"
+	if (!tmp.quUnl) document.getElementById("quantumStatistics").style.display = "none"
 	else {
 		document.getElementById("quantumStatistics").style.display = ""
 		document.getElementById("quantumed").textContent = "You have gone Quantum " + getFullExpansion(tmp.qu.times) + " times."

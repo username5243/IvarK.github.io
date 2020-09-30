@@ -141,7 +141,7 @@ function getPostC3Base() {
 	if (inQC(2)) perGalaxy = 0
 	if (tmp.ngp3 ? tmp.qu.bigRip.active : false) {
 		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]
-		if (hasNU(12)) perGalaxy *= tmp.nu[4].free
+		if (hasNU(12)) perGalaxy *= tmp.nu[12].free
 	}
 	if (!player.galacticSacrifice) return player.galaxies * perGalaxy + 1.05
 	if (tmp.cp > 1) {

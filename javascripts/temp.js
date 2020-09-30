@@ -63,7 +63,7 @@ let tmp = {
 	beu: {},
 	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
 	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000"],
-	nu: [],
+	nu: {},
 	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280],
 	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
 	lti: [2,4,1.5,10,4,1e3,2.5,3],
@@ -164,57 +164,59 @@ function updateFixedLightTemp() {
 function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 0.000005
 	if (tmp.ngp3) {
-		if (!tmp.ngp3l && player.achievements.includes("ng3p56")) x *= 1.03
-		if (ghostified && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
+		if (player.achievements.includes("ng3p56")) x *= 1.03
+		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
 		if (tmp.be && !player.dilation.active && tmp.qu.breakEternity.upgrades.includes(8)) x *= getBreakUpgMult(8)
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
+		if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
+
 		if (player.aarexModifications.ngudpV) {
 			if (x > 1e8) x = Math.pow(1e8 * x, .5)
 			if (x > 1e9) x = Math.pow(1 + Math.log10(x), 9)
 			if (tmp.be && x > 1e7) x = Math.pow(93 + Math.log10(x), 3.5)
 		}
-		if ((!tmp.ngp3l || player.aarexModifications.ngudpV) && player.dilation.active && x > 1e5) x = Math.pow(1e20 * x, .2)
-		if (!tmp.ngp3l && !player.quantum.bigRip.active) x = softcap(x, "inf_time_log_2")
+		if (player.dilation.active && x > 1e5) x = Math.pow(1e20 * x, .2)
+		if (!tmp.qu.bigRip.active) x = softcap(x, "inf_time_log_2")
 	}
 	tmp.it = Decimal.pow(10, x)
 }
 
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
-	x = player.galaxies
+	let x = player.galaxies
 	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
-	if (!tmp.ngp3l) x += tmp.effAeg
+	x += tmp.effAeg
+	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	tmp.igg = x
 
-	tmp.igs = 0 //Intergalactic Scaling ; used in the display text
-	var igLog = Math.pow(x, Math.min(Math.sqrt(Math.log10(Math.max(x,1))) * 2, 2.5)) //Log10 of reward
-	
-	if (player.quantum.bigRip.active && !tmp.ngp3l) {
+	tmp.igs = 0 //Intergalactic Scaling: Used in the display text
+	var igLog = Math.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
+
+	if (tmp.qu.bigRip.active) { //Big Rip
 		if (igLog > 1e9) { //Distant
 			igLog = Math.pow(igLog * 1e3, .75)
-			tmp.igs = 1
+			tmp.igs++
 		}
-		if (igLog > 1e11) { //Further
-			igLog = Math.pow(Math.log10(igLog) - 1, 11)
-			tmp.igs = 2
+		if (igLog > 1e10) { //Further
+			igLog = Math.pow(Math.log10(igLog) / 2 + 5, 10)
+			tmp.igs++
 		}
-		tmp.ig = Decimal.pow(10, igLog)
-		return
-	}
-	if ((player.aarexModifications.ngudpV || !tmp.ngp3l) && igLog > 1e15) { //Further
-		igLog = Math.pow(10 + 6 * Math.log10(igLog), 7.5)
-		tmp.igs = 2
-	}
-	if (player.aarexModifications.ngudpV && igLog > 1e16) { //Remote
-		igLog = Math.pow(84 + Math.log10(igLog), 8)
-		tmp.igs = 3
+	} else {
+		if (igLog > 1e15) { //Distant
+			igLog = Math.pow(10 + 6 * Math.log10(igLog), 7.5)
+			tmp.igs++
+		}
+		if (player.aarexModifications.ngudpV && igLog > 1e16) { //Further
+			igLog = Math.pow(84 + Math.log10(igLog), 8)
+			tmp.igs++
+		}
 	}
 
-	if (!tmp.ngp3l && igLog > 1e20) { //Dark Matter or Ghostly or Ethereal
+	if (igLog > 1e20) { //Further / Remote and beyond
 		igLog = softcap(igLog, "ig_log_high")
-		tmp.igs = Math.min(Math.floor(Math.log10(igLog) - 16), 8)
+		tmp.igs += Math.floor(Math.log10(igLog) - 20) + 1
 		if (igLog > 1e24) igLog = Math.pow(Math.pow(Math.log10(igLog), 2) + 424, 8)
 	}
 
@@ -350,77 +352,26 @@ function updateGhostifyTempStuff(){
 		}
 		updateIndigoLightBoostTemp()
 		updatePhotonsUnlockedBRUpgrades()
-		updateNU14Temp()
-		updateNU15Temp()
 	}
-	if (ph.did("ghostify")) {
-		updateNeutrinoUpgradesTemp()
-		updateNeutrinoBoostsTemp()
-	}
+	updateNeutrinoBoostsTemp()
+	updateNeutrinoUpgradesTemp()
 }
 
 function updateNeutrinoBoostsTemp() {
 	tmp.nb = {}
+	if (!ph.did("ghostify")) return
 
 	var nt = []
-	for (var g = 0; g < 3; g++) nt[g] = player.ghostify.neutrinos[(["electron","mu","tau"])[g]]
-	for (var nb = 1; nb <= player.ghostify.neutrinos.boosts; nb++) tmp.nb[nb] = neutrinoBoosts.boosts[nb](nt)
+	var exp = 1
+	for (var g = 0; g < 3; g++) nt[g] = player.ghostify.neutrinos[(["electron","mu","tau"])[g]].pow(exp)
+	for (var nb = 1; nb <= player.ghostify.neutrinos.boosts; nb++) tmp.nb[nb] = neutrinoBoosts[nb].eff(nt)
 }
 
-function updateNU1Temp(){
-	let x = 110
-	if (!tmp.qu.bigRip.active) x = Math.max(x - player.meta.resets, 0)
-	tmp.nu[0] = x
-}
+function updateNeutrinoUpgradesTemp() {
+	tmp.nu = {}
+	if (!ph.did("ghostify")) return
 
-function updateNU3Temp(){
-	let log = tmp.qu.colorPowers.b.log10()
-	let exp = Math.max(log / 1e4 + 1, 2)
-	let x
-	if (!tmp.quActive) x = new Decimal(1)
-	else if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
-	else x = Math.pow(Math.max(log / 250 + 1, 1), exp)
-	tmp.nu[1] = x
-}
-
-function updateNU4Temp(){
-	let nu4base = 50
-	if (tmp.ngp3l) nu4base = 20
-	tmp.nu[2] = Decimal.pow(nu4base, Math.pow(Math.max(-getTickspeed().div(1e3).log10() / 4e13 - 4, 0), 1/4))
-}
-
-function updateNU7Temp(){
-	var nu7 = tmp.qu.colorPowers.g.add(1).log10()/400
-	if (!tmp.quActive) nu7 = 0
-	else if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
-	tmp.nu[3] = Decimal.pow(10, nu7) 
-}
-
-function updateNU12Temp(){
-	tmp.nu[4] = { 
-		normal: Math.sqrt(player.galaxies * .0035 + 1),
-		free: player.dilation.freeGalaxies * .035 + 1,
-		replicated: Math.sqrt(getTotalRG()) * .0175 + 1 //NU12 
-	}
-}
-
-function updateNU14Temp(){
-	var base = player.ghostify.ghostParticles.add(1).log10()
-	var colorsPortion = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(),1/3)
-	tmp.nu[5] = tmp.quActive ? Decimal.pow(base, colorsPortion * 0.8 + 1).max(1) : new Decimal(1) //NU14
-}
-
-function updateNU15Temp(){
-	tmp.nu[6] = tmp.quActive ? Decimal.pow(2,(tmp.qu.nanofield.rewards>90?Math.sqrt(90*tmp.qu.nanofield.rewards):tmp.qu.nanofield.rewards) / 2.5) : new Decimal(1)
-	//NU15
-}
-
-function updateNeutrinoUpgradesTemp(){
-	updateNU1Temp()
-	updateNU3Temp()
-	updateNU4Temp()
-	updateNU7Temp()
-	updateNU12Temp()
+	for (var nu = 1; nu <= neutrinoUpgrades.max; nu++) if (neutrinoUpgrades[nu] !== undefined) tmp.nu[nu] = neutrinoUpgrades[nu].eff()
 }
 
 function updateBreakEternityUpgrade1Temp(){
