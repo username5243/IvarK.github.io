@@ -632,13 +632,16 @@ function updateWZBosonsTemp(){
 	var wnl = player.ghostify.wzb.wnb.add(1).log10()
 
 	var bosonsExp = Math.max(wpl * (player.ghostify.wzb.wpb.sub(player.ghostify.wzb.wnb.min(player.ghostify.wzb.wpb))).div(player.ghostify.wzb.wpb.max(1)).toNumber(), 0)
+	if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
+	//softcap it to remove inflation in WZB
 	data.wbt = Decimal.pow(tmp.newNGP3E ? 5 : 3, bosonsExp) //W Bosons boost to extract time
 	data.wbo = Decimal.pow(10, Math.max(bosonsExp, 0)) //W Bosons boost to Z Neutrino oscillation requirement
-	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) //W Bosons boost to Bosonic Antimatter production
+	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) 
+	//W Bosons boost to Bosonic Antimatter production
 
-	var zbslog = player.ghostify.wzb.zb.div(10).add(1).sqrt().log10()
+	var zbslog = player.ghostify.wzb.zb.div(10).add(1).log10() / 2
+	if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
 	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
-	//if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog)
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }
 
