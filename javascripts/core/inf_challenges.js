@@ -37,7 +37,7 @@ function startChallenge(name) {
 	updateDimTechs()
 	
 	if (player.replicanti.unl) player.replicanti.amount = new Decimal(1)
-	player.replicanti.galaxies = 0
+	if (!tmp.ngC) player.replicanti.galaxies = 0
 
 	// even if we're in a challenge, apparently if it's challenge 2 we might have four resets anyway.
 	setInitialResetPower();
@@ -184,63 +184,80 @@ function updateChallenges() {
 	}
 
 	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
-	for (c=0;c<order.length;c++) document.getElementById(order[c]).parentElement.parentElement.style.display=player.postChallUnlocked<c+1?"none":""
+	for (c = 0; c < order.length; c++) document.getElementById(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
 }
 
 function getNextAt(chall) {
-	var ret = nextAt[chall]
+	let ret = nextAt[chall]
 	if (player.galacticSacrifice) {
-		var retNGMM = nextAt[chall+"_ngmm"]
-		if (retNGMM) ret = retNGMM
+		let retMod = nextAt[chall+"_ngmm"]
+		if (retMod) ret = retMod
 	}
 	if (player.tickspeedBoosts != undefined) {
-		var retNGM3 = nextAt[chall+"_ngm3"]
-		if (retNGM3) ret = retNGM3
+		let retMod = nextAt[chall+"_ngm3"]
+		if (retMod) ret = retMod
 	}
 	if (player.aarexModifications.ngmX >= 4){
-		var retNGM4 = nextAt[chall+"_ngm4"]
-		if (retNGM4) ret = retNGM4
+		let retMod = nextAt[chall+"_ngm4"]
+		if (retMod) ret = retMod
+	}
+	if (tmp.ngc) {
+		let retMod = nextAt[chall+"_ngp3c"]
+		if (retMod) ret = retMod
 	}
 	return ret
 }
 
 function getGoal(chall) {
-	var ret = goals[chall]
+	let ret = goals[chall]
 	if (player.galacticSacrifice) {
-		var retNGMM = goals[chall+"_ngmm"]
-		if (retNGMM) ret = retNGMM
+		let retMod = goals[chall+"_ngmm"]
+		if (retMod) ret = retMod
 	}
 	if (player.tickspeedBoosts != undefined) {
-		var retNGM3 = goals[chall+"_ngm3"]
-		if (retNGM3) ret = retNGM3
+		let retMod = goals[chall+"_ngm3"]
+		if (retMod) ret = retMod
 	}
 	if (player.aarexModifications.ngmX >= 4){
-		var retNGM4 = goals[chall+"_ngm4"]
-		if (retNGM4) ret = retNGM4
+		let retMod = goals[chall+"_ngm4"]
+		if (retMod) ret = retMod
+	}
+	if (tmp.ngc) {
+		let retMod = nextAt[chall+"_ngp3c"]
+		if (retMod) ret = retMod
 	}
 	return ret
 }
 
 function checkICID(name) {
 	if (player.galacticSacrifice) {
-		var split=name.split("postcngm3_")
-		if (split[1]!=undefined) return parseInt(split[1])+2
-		var split=name.split("postcngmm_")
-		if (split[1]!=undefined) {
-			var num=parseInt(split[1])
-			if (player.tickspeedBoosts != undefined&&num>2) return 5
+		var split = name.split("postcngm3_")
+		if (split[1] != undefined) return parseInt(split[1]) + 2
+
+		var split = name.split("postcngmm_")
+		if (split[1] != undefined) {
+			var num = parseInt(split[1])
+			if (player.tickspeedBoosts != undefined && num > 2) return 5
 			return num
 		}
+
+		var split = name.split("postcngc_")
+		if (split[1] != undefined) {
+			var num = parseInt(split[1])
+			var offset = player.tickspeedBoosts != undefined ? 13 : player.galacticSacrifice !== undefined ? 11 : 8
+			return num + offset
+		}
+
 		var split=name.split("postc")
-		if (split[1]!=undefined) {
-			var num=parseInt(split[1])
-			var offset=player.tickspeedBoosts == undefined?3:5
-			if (num>2) offset--
-			return num+offset
+		if (split[1] != undefined) {
+			var num = parseInt(split[1])
+			var offset = player.tickspeedBoosts == undefined ? 3 : 5
+			if (num > 2) offset--
+			return num + offset
 		}
 	} else {
-		var split=name.split("postc")
-		if (split[1]!=undefined) return parseInt(split[1])
+		var split = name.split("postc")
+		if (split[1] != undefined) return parseInt(split[1])
 	}
 }
 

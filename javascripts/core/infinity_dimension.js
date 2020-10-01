@@ -26,6 +26,8 @@ function maxAllID() {
 			dim.power=dim.power.times(Decimal.pow(getInfBuy10Mult(t),toBuy))
 			dim.cost=dim.cost.times(Decimal.pow(costMult,toBuy))
 		}
+
+		if (tmp.ngC) ngC.condense.ids.max(t)
 	}
 }
 
@@ -75,6 +77,7 @@ function updateInfinityDimensions() {
 				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) document.getElementById("infMax"+tier).className = "storebtn"
 				else document.getElementById("infMax" + tier).className = "unavailablebtn"
 				document.getElementById("infRow" + tier).style.visibility = "visible";
+				if (tmp.ngC) ngC.condense.ids.update(tier)
 			}
 		}
 	}
@@ -130,18 +133,23 @@ function DimensionPower(tier) {
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
   	if (player.currentEternityChall == 'eterc14') return getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
-  	
+  
 	var mult = getStartingIDPower(tier)
-	
+
+	if (tmp.ngC && ngC.tmp && player.currentChallenge != "postngc_1") {
+		if (player.currentChallenge == "postngc_2") return ngC.tmp.ids[tier]
+		mult = ngC.tmp.ids[tier]
+	}
   	mult = mult.times(infDimPow)
 
   	if (hasPU(31)) mult = mult.times(puMults[31]())
   	if (player.pSac !== undefined) if (tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
 
+	let replUnl = tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
   	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow);
   	if (player.achievements.includes("r66") && player.galacticSacrifice !== undefined) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
-  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice === undefined) mult = mult.times(getIDReplMult())
+  	if (replUnl && player.galacticSacrifice === undefined) mult = mult.times(getIDReplMult())
 
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
@@ -156,7 +164,7 @@ function DimensionPower(tier) {
   	if (inQC(6)) mult = mult.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
   	mult = dilates(mult, 2)
-  	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.galacticSacrifice !== undefined) mult = mult.times(getIDReplMult())
+  	if (replUnl && player.galacticSacrifice !== undefined) mult = mult.times(getIDReplMult())
   	if (player.galacticSacrifice !== undefined) mult = mult.times(ec9)
 
   	mult = dilates(mult, 1)
@@ -232,6 +240,8 @@ function buyManyInfinityDimension(tier, auto) {
 }
 
 function buyMaxInfDims(tier, auto) {
+	if (tmp.ngC) ngC.condense.ids.max(tier)
+
 	var dim = player["infinityDimension"+tier]
 	var cost = getIDCost(tier)
 	if (player.infinityPoints.lt(cost)) return false

@@ -1859,25 +1859,26 @@ function setOptionsDisplaysStuff1(){
 }
 
 function setDisplaysStuff1(){
-        document.getElementById("secretstudy").style.opacity = 0
-        document.getElementById("secretstudy").style.cursor = "pointer"
+	document.getElementById("secretstudy").style.opacity = 0
+	document.getElementById("secretstudy").style.cursor = "pointer"
   
-        document.getElementById("bestAntimatterType").textContent = player.masterystudies && ph.did("quantum") ? "Your best meta-antimatter for this quantum" : "Your best-ever meta-antimatter"
+	document.getElementById("bestAntimatterType").textContent = player.masterystudies && ph.did("quantum") ? "Your best meta-antimatter for this quantum" : "Your best-ever meta-antimatter"
 
-        document.getElementById("masterystudyunlock").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "" : "none"
-        document.getElementById("respecMastery").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
-        document.getElementById("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
+	document.getElementById("masterystudyunlock").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "" : "none"
+	document.getElementById("respecMastery").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
+	document.getElementById("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
 
-        if (player.galacticSacrifice) {
-                document.getElementById("galaxy11").innerHTML = "Normal"+(player.aarexModifications.ngmX>3?" and Time D":" d")+"imensions are "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
-                document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
-        } else {
-                document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions<br>"+(player.aarexModifications.newGameExpVersion?"20x -> 24x":"2x -> 2.2x")+"<br>Cost: 1 IP"
-                document.getElementById("infi33").innerHTML = "Increase Dimension Boost multiplier<br>2x -> 2.5x<br>Cost: 7 IP"
-        }
-        var resetSkipCosts=[20,40,80]
-        for (u=1;u<4;u++) document.getElementById("infi4"+u).innerHTML="You start with the "+(u+4)+"th dimension unlocked"+(player.tickspeedBoosts==undefined?"":" and "+(u*4)+" tickspeed boosts")+"<br>Cost: "+resetSkipCosts[u-1]+" IP"
-        document.getElementById("infi44").innerHTML="You start with the 8th dimension unlocked"+(player.tickspeedBoosts==undefined?"":", 16 tickspeed boosts")+", and a Galaxy<br>Cost: 500 IP"
+	if (player.galacticSacrifice) {
+		document.getElementById("galaxy11").innerHTML = "Normal"+(player.aarexModifications.ngmX>3?" and Time D":" d")+"imensions are "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
+		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
+	} else {
+		if (!tmp.ngC) document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions<br>"+(player.aarexModifications.newGameExpVersion?"20x -> 24x":"2x -> 2.2x")+"<br>Cost: 1 IP"
+		document.getElementById("infi33").innerHTML = "Increase Dimension Boost multiplier<br>2x -> 2.5x<br>Cost: 7 IP"
+	}
+	document.getElementById("infi24").innerHTML = "Antimatter Galaxies are " + (tmp.ngC ? "quadruple" : "twice") + " as effective<br>Cost: 2 IP"
+	var resetSkipCosts=[20,40,80]
+	for (u=1;u<4;u++) document.getElementById("infi4"+u).innerHTML="You start with the "+(u+4)+"th dimension unlocked"+(player.tickspeedBoosts==undefined?"":" and "+(u*4)+" tickspeed boosts")+"<br>Cost: "+resetSkipCosts[u-1]+" IP"
+	document.getElementById("infi44").innerHTML="You start with the 8th dimension unlocked"+(player.tickspeedBoosts==undefined?"":", 16 tickspeed boosts")+", and a Galaxy<br>Cost: 500 IP"
 }
 
 function setChallengeDisplay(){
@@ -1899,48 +1900,72 @@ function setChallengeDisplay(){
 }
 
 function setInfChallengeDisplay(){
-        if (player.galacticSacrifice) {
-                order=['postcngmm_1','postcngmm_2','postcngmm_3','postc1','postc2','postc4','postc5','postc6','postc7','postc8']
-                document.getElementById("icngmm_row").style.display=""
-                document.getElementById("icngmm_3div").style.display=""
-                document.getElementById("ic2div").style.display="none"
-                document.getElementById("icngmm_4div").style.display=""
-                document.getElementById("ic3div").style.display="none"
-                document.getElementById("icngmm_4div").appendChild(document.getElementById("postc2").parentElement.parentElement)
-        } else {
-                order=['postc1','postc2','postc3','postc4','postc5','postc6','postc7','postc8']
-                document.getElementById("icngmm_row").style.display="none"
-                document.getElementById("icngmm_3div").style.display="none"
-                document.getElementById("ic2div").style.display=""
-                document.getElementById("icngmm_4div").style.display="none"
-                document.getElementById("ic3div").style.display=""
-                document.getElementById("ic2div").appendChild(document.getElementById("postc2").parentElement.parentElement)
-        }
-        document.getElementById("postc2reward").textContent = "Reward: "+(player.galacticSacrifice?"S":"Get the sacrifice autobuyer, and s")+"acrifice is more powerful."
-        if (player.tickspeedBoosts == undefined) {
-                document.getElementById("icngm3_row").style.display="none"
-                document.getElementById("icngm3_row2").style.display="none"
-                document.getElementById("icngm3_div1").style.display="none"
-                galCosts[31]=2
-	        galCosts[12]=3
-	        galCosts[32]=8
-	        galCosts[13]=20
-	        galCosts[33]=1e3
-                document.getElementById("ic4div").appendChild(document.getElementById("postc4").parentElement.parentElement)
-                document.getElementById("ic4div").style.display=""
-        } else {
-                document.getElementById("icngm3_row").style.display=""
-                document.getElementById("icngm3_row2").style.display=""
-                document.getElementById("icngm3_div1").style.display=""
-                order=['postcngmm_1','postcngmm_2','postcngm3_1','postcngm3_2','postcngmm_3','postc1','postc2','postcngm3_3','postc4','postcngm3_4','postc5','postc6','postc7','postc8']
-	        galCosts[31]=5
-	        galCosts[12]=5
-	        galCosts[32]=20
-	        galCosts[13]=50
-	        galCosts[33]=1e15
-                document.getElementById("icngm3_div2").appendChild(document.getElementById("postc4").parentElement.parentElement)
-                document.getElementById("ic4div").style.display="none"
-        }
+	let ngmm = player.galacticSacrifice !== undefined
+	let ngm3 = player.tickspeedBoosts !== undefined
+
+	if (ngmm) {
+		document.getElementById("icngmm_row").style.display=""
+		document.getElementById("icngmm_3div").style.display=""
+		document.getElementById("ic2div").style.display="none"
+		document.getElementById("icngmm_4div").style.display=""
+		document.getElementById("ic3div").style.display="none"
+		document.getElementById("icngmm_4div").appendChild(document.getElementById("postc2").parentElement.parentElement)
+	} else {
+		document.getElementById("icngmm_row").style.display="none"
+		document.getElementById("icngmm_3div").style.display="none"
+		document.getElementById("ic2div").style.display=""
+		document.getElementById("icngmm_4div").style.display="none"
+		document.getElementById("ic3div").style.display=""
+		document.getElementById("ic2div").appendChild(document.getElementById("postc2").parentElement.parentElement)
+	}
+	document.getElementById("postc2reward").textContent = "Reward: "+(player.galacticSacrifice?"S":"Get the sacrifice autobuyer, and s")+"acrifice is more powerful."
+
+	if (!ngm3) {
+		document.getElementById("icngm3_row").style.display="none"
+		document.getElementById("icngm3_row2").style.display="none"
+		document.getElementById("icngm3_div1").style.display="none"
+		galCosts[31]=2
+		galCosts[12]=3
+		galCosts[32]=8
+		galCosts[13]=20
+		galCosts[33]=1e3
+		document.getElementById("ic4div").appendChild(document.getElementById("postc4").parentElement.parentElement)
+		document.getElementById("ic4div").style.display=""
+	} else {
+		document.getElementById("icngm3_row").style.display=""
+		document.getElementById("icngm3_row2").style.display=""
+		document.getElementById("icngm3_div1").style.display=""
+		galCosts[31]=5
+		galCosts[12]=5
+		galCosts[32]=20
+		galCosts[13]=50
+		galCosts[33]=1e15
+		document.getElementById("icngm3_div2").appendChild(document.getElementById("postc4").parentElement.parentElement)
+		document.getElementById("ic4div").style.display="none"
+	}
+
+	order = []
+	if (ngmm) {
+		order.push("postcngmm_1")
+		order.push("postcngmm_2")
+	}
+	if (ngm3) {
+		order.push("postcngm3_1")
+		order.push("postcngm3_2")
+	}
+	if (ngmm) order.push("postcngmm_3")
+	order.push("postc1")
+	order.push("postc2")
+	if (!ngmm) order.push("postc3")
+	if (ngm3) order.push("postcngm3_3")
+	order.push("postc4")
+	if (ngm3) order.push("postcngm3_4")
+	for (let c = 5; c <= 8; c++) order.push("postc" + c)
+	if (tmp.ngC) {
+		order.push("postcngc_1")
+		order.push("postcngc_2")
+	}
+	document.getElementById("icngc_row").style.display = tmp.ngC ? "" : "none"
 }
 
 function setOtherChallDisplay(){
@@ -1964,8 +1989,12 @@ function setOtherChallDisplay(){
         document.getElementById("ic5desc").textContent=player.tickspeedBoosts==undefined?"When buying Normal Dimensions 1-4, everything with costs smaller or equal increases. When buying Normal Dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.":"You can't get tickspeed upgrades and galaxies. Tickspeed Boosts boost tickspeed instead."
         document.getElementById("ic7desc").textContent="You can't get Antimatter Galaxies, but the Dimension Boost multiplier "+(player.galacticSacrifice?"is cubed":"is increased to 10x")+"."
         document.getElementById("ic7reward").textContent="Reward: The Dimension Boost multiplier "+(player.galacticSacrifice? "is squared":" is increased to 4x.")
-        document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
-        document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20?" (disabled)":"")
+}
+
+function setReplDisplay() {
+	document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
+	document.getElementById("replDesc").textContent = tmp.ngC ? "IP gain & all Normal Dimensions (after softcaps)" : "all Infinity Dimensions"
+	document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20?" (disabled)":"")
 }
 
 function setTSDisplay(){
@@ -1983,49 +2012,46 @@ function setTSDisplay(){
 }
 
 function updateNGp3DisplayStuff(){
-        for (var i=0;i<masteryStudies.timeStudies.length;i++) {
-                var t=masteryStudies.timeStudies[i]
-                var d=masteryStudies.timeStudyDescs[t]
-                document.getElementById("ts"+t+"Desc").innerHTML=(typeof(d)=="function"?d():d)||"Unknown desc."
-        }
-        updateMasteryStudyCosts()
-        if (ph.did("quantum")) giveAchievement("Sub-atomic")
-        if (tmp.qu.best<=10) giveAchievement("Quantum doesn't take so long")
-        if (ph.did("ghostify")) giveAchievement("Kee-hee-hee!")
-        document.getElementById('reward3disable').textContent="6 hours reward: O"+(tmp.qu.disabledRewards[3]?"FF":"N")
-        document.getElementById('reward4disable').textContent="4.5 hours reward: O"+(tmp.qu.disabledRewards[4]?"FF":"N")
-        document.getElementById('reward11disable').textContent="33.3 mins reward: O"+(tmp.qu.disabledRewards[11]?"FF":"N")
-        document.getElementById('reward27disable').textContent="10 seconds reward: O"+(tmp.qu.disabledRewards[27]?"FF":"N")
-        document.getElementById('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
-        document.getElementById('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
-        document.getElementById('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
-        document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
-        document.getElementById("gluonCharger1").style.display = ""
-        document.getElementById("gluonCharger2").style.display = ""
-        document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
-        document.getElementById('sacrificeAuto').textContent="Auto: O"+(tmp.qu.autoOptions.sacrifice?"N":"FF")
-        document.getElementById("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
-        document.getElementById("ratio_r").value = tmp.qu.assignAllRatios.r
-        document.getElementById("ratio_g").value = tmp.qu.assignAllRatios.g
-        document.getElementById("ratio_b").value = tmp.qu.assignAllRatios.b
-        document.getElementById('autoAssign').textContent="Auto: O"+(tmp.qu.autoOptions.assignQK?"N":"FF")
-        document.getElementById('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
-        document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
-        document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
-        document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
-        document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
-        updateBLUnlockDisplay()
-        document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
-        for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
+	for (var i=0;i<masteryStudies.timeStudies.length;i++) {
+		var t=masteryStudies.timeStudies[i]
+		var d=masteryStudies.timeStudyDescs[t]
+		document.getElementById("ts"+t+"Desc").innerHTML=(typeof(d)=="function"?d():d)||"Unknown desc."
+	}
+	updateMasteryStudyCosts()
+	document.getElementById('reward3disable').textContent="6 hours reward: O"+(tmp.qu.disabledRewards[3]?"FF":"N")
+	document.getElementById('reward4disable').textContent="4.5 hours reward: O"+(tmp.qu.disabledRewards[4]?"FF":"N")
+	document.getElementById('reward11disable').textContent="33.3 mins reward: O"+(tmp.qu.disabledRewards[11]?"FF":"N")
+	document.getElementById('reward27disable').textContent="10 seconds reward: O"+(tmp.qu.disabledRewards[27]?"FF":"N")
+	document.getElementById('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
+	document.getElementById('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
+	document.getElementById('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
+	document.getElementById('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
+	document.getElementById("gluonCharger1").style.display = ""
+	document.getElementById("gluonCharger2").style.display = ""
+	document.getElementById("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
+	document.getElementById('sacrificeAuto').textContent="Auto: O"+(tmp.qu.autoOptions.sacrifice?"N":"FF")
+	document.getElementById("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
+	document.getElementById("ratio_r").value = tmp.qu.assignAllRatios.r
+	document.getElementById("ratio_g").value = tmp.qu.assignAllRatios.g
+	document.getElementById("ratio_b").value = tmp.qu.assignAllRatios.b
+	document.getElementById('autoAssign').textContent="Auto: O"+(tmp.qu.autoOptions.assignQK?"N":"FF")
+	document.getElementById('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
+	document.getElementById('autoReset').textContent="Auto: O"+(tmp.qu.autoOptions.replicantiReset?"N":"FF")
+	document.getElementById("nanofieldtabbtn").style.display=player.masterystudies.includes("d12")?"":"none"
+	document.getElementById("ghostifyAnimBtn").textContent="Ghostify: O"+(player.options.animations.ghostify?"N":"FF")
+	document.getElementById("gphUnl").textContent="To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
+	updateBLUnlockDisplay()
+	document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
+	for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
 	handleDisplaysOnQuantum(tmp.qu.bigRip.active)
-        updateBraveMilestones()
-        updateNeutrinoBoosts()
-        updateNeutrinoUpgradeUnlocks(5, 12)
-        tmp.updateLights = true
-        updateGPHUnlocks()
-        updateBLUnlocks()
-        updateBosonicStuffCosts()
-        updateHiggsUnlocks()
+	updateBraveMilestones()
+	updateNeutrinoBoosts()
+	updateNeutrinoUpgradeUnlocks(5, 12)
+	tmp.updateLights = true
+	updateGPHUnlocks()
+	updateBLUnlocks()
+	updateBosonicStuffCosts()
+	updateHiggsUnlocks()
 }
 
 function setSomeQuantumAutomationDisplay(){
@@ -2160,6 +2186,7 @@ function onLoad(noOffline) {
 	updateSingularity()
 	updateDimTechs()
 	setOtherChallDisplay()
+	setReplDisplay()
 	setTSDisplay()
 	setReplAutoDisplay()
 	setSomeQuantumAutomationDisplay()
@@ -2336,36 +2363,40 @@ function load_game(noOffline, init) {
 		if (break_infinity_js) Decimal = Decimal_BI
 		initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
 		costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"),
-                    postc2:new Decimal("1e5000"),
-                    postc3:new Decimal("1e12000"),
-                    postc4:new Decimal("1e14000"),
-                    postc5:new Decimal("1e18000"), postc5_ngm3:new Decimal("1e21500"),
-                    postc6:new Decimal("1e20000"), postc6_ngm3:new Decimal("1e23000"),
-                    postc7:new Decimal("1e23000"), postc7_ngm3:new Decimal("1e25500"),
-                    postc8:new Decimal("1e28000"), postc8_ngm3:new Decimal("1e39000"),
-                    postcngmm_1:new Decimal("1e750"),postcngmm_1_ngm3:new Decimal("1e1080"),
-                    postcngmm_2:new Decimal("1e1350"),
-                    postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
-                    postcngm3_1:new Decimal("1e1560"),
-                    postcngm3_2:new Decimal("1e2085"),
-                    postcngm3_3:new Decimal("1e8140"),
-                    postcngm3_4:new Decimal("1e17000")}
+		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngp3c: new Decimal("1e5555"),
+					postc2:new Decimal("1e5000"), postc2_ngp3c:new Decimal("1e5860"),
+					postc3:new Decimal("1e12000"), postc3_ngp3c:new Decimal("1e7175"),
+					postc4:new Decimal("1e14000"), postc4_ngp3c:new Decimal("1e8475"),
+					postc5:new Decimal("1e18000"), postc5_ngm3:new Decimal("1e21500"), postc5_ngp3c:new Decimal("1e21000"),
+					postc6:new Decimal("1e20000"), postc6_ngm3:new Decimal("1e23000"), postc6_ngp3c:new Decimal("1e21000"),
+					postc7:new Decimal("1e23000"), postc7_ngm3:new Decimal("1e25500"), postc7_ngp3c:new Decimal("1e32000"),
+					postc8:new Decimal("1e28000"), postc8_ngm3:new Decimal("1e39000"), postc8_ngp3c:new Decimal("1e37500"),
+					postcngmm_1:new Decimal("1e750"), postcngmm_1_ngm3:new Decimal("1e1080"),
+					postcngmm_2:new Decimal("1e1350"),
+					postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
+					postcngm3_1:new Decimal("1e1560"),
+					postcngm3_2:new Decimal("1e2085"),
+					postcngm3_3:new Decimal("1e8140"),
+					postcngm3_4:new Decimal("1e17000"),
+					postcngc_1:new Decimal("1e38000"),
+					postcngc_2:new Decimal("1e42250")}
 		goals = {postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"),
-                    postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"),
-                    postc3:new Decimal("1e5000"),
-                    postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"),
-                    postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"),
-                    postc6:new Decimal("2e22222"),
-                    postc7:new Decimal("1e10000"), postc7_ngmm:new Decimal("1e15000"), postc7_ngm3:new Decimal("1e5100"),
-                    postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
-                    postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
-                    postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
-                    postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1530"),
-                    postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
-                    postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
-                    postcngm3_3:new Decimal("8.8888e888"),
-                    postcngm3_4:new Decimal("1e12345")}
+					postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngp3c:new Decimal("1e5850"),
+					postc3:new Decimal("1e5000"), postc3_ngp3c:new Decimal("1e2675"),
+					postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"), postc4_ngp3c:new Decimal("1e5750"),
+					postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"), postc5_ngp3c:new Decimal("1e2400"),
+					postc6:new Decimal("2e22222"), postc6_ngp3c:new Decimal("2.1e21111"),
+					postc7:new Decimal("1e10000"), postc7_ngmm:new Decimal("1e15000"), postc7_ngm3:new Decimal("1e5100"), postc7_ngp3c:new Decimal("1e4300"),
+					postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
+					postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
+					postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
+					postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1530"),
+					postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
+					postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
+					postcngm3_3:new Decimal("8.8888e888"),
+					postcngm3_4:new Decimal("1e12345"),
+					postcngc_1:new Decimal("1e10525"),
+					postcngc_2:new Decimal("1e27225")}
 		setUnlocks = [Decimal.pow(Number.MAX_VALUE, 2.9)]
 	}
 	if (infiniteCheck) exportInfiniteSave()

@@ -1,10 +1,17 @@
+function getReplUnlCost() {
+	if (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined) return 1e80
+	if (tmp.ngC) return 1e111
+	return 1e140
+}
+
 function unlockReplicantis() {
-	if (player.infinityPoints.gte(player.galacticSacrifice!=undefined&&player.tickspeedBoosts==undefined?1e80:1e140)) {
+	let cost = getReplUnlCost()
+	if (player.infinityPoints.gte(cost)) {
 		document.getElementById("replicantidiv").style.display = "inline-block"
 		document.getElementById("replicantiunlock").style.display = "none"
 		player.replicanti.unl = true
 		player.replicanti.amount = new Decimal(1)
-		player.infinityPoints = player.infinityPoints.minus(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140)
+		player.infinityPoints = player.infinityPoints.minus(cost)
 	}
 }
 
@@ -20,6 +27,7 @@ function getReplMult(next) {
 		exp += (player.timestudy.ers_studies[3] + (next ? 1 : 0)) / 2
 		if (player.achievements.includes('r108')) exp *= 1.09;
 	}
+	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
 	if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
@@ -229,6 +237,7 @@ function getReplicantiInterval() {
 	if (GUActive("gb1")) interval /= getGB1Effect()
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
+	if (tmp.ngC) interval /= 20
 	interval /= ls.mult("rep")
 
 	interval = new Decimal(interval)
@@ -236,6 +245,7 @@ function getReplicantiInterval() {
 	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (tmp.ngp3) if (player.masterystudies.includes("t332")) interval = interval.div(getMTSMult(332))
+	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
 

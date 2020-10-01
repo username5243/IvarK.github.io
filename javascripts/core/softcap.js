@@ -404,7 +404,87 @@ var softcap_data = {
 			mul: 4 / Math.log10(8), /* log2(4096)=12, so 4/3s that is 16 and 16**3 = 4096 */
 			pow: 3
 		}
-	}
+	},
+
+	//NG Condensed
+	nds_ngC: {
+		1: {
+			func: "pow",
+			start: 1e50,
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	ts_ngC: {
+		1: {
+			func: "pow",
+			start: Number.MAX_VALUE,
+			pow() {
+				return player.challenges.includes("postcngc_2") ? 2/5 : 1/3
+			},
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal("1e1000"),
+			pow() {
+				return player.challenges.includes("postcngc_2") ? 13/40 : 1/4
+			},
+			derv: false,
+		},
+	},
+	sac_ngC: {
+		1: {
+			func: "pow",
+			start: 1e25,
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	ip_ngC: {
+		1: {
+			func: "pow",
+			start: 1e10,
+			pow() {
+				return player.challenges.includes("postc6") ? .875 : .5
+			},
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: 1e30,
+			pow() {
+				return player.challenges.includes("postc6") ? 5/6 : 1/3
+			},
+			derv: false,
+		},
+	},
+	rep_ngC: {
+		1: {
+			func: "pow",
+			start: 1e6,
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "log",
+			start: 1e9,
+			mul: Math.sqrt(1e9) / 9,
+			pow: 2,
+		},
+	},
 }
 
 var softcap_vars = {
@@ -430,6 +510,10 @@ var softcap_funcs = {
 		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
 	},
+	log_decimal(x, pow = 1, mul = 1, add = 0) {
+		var x2 = Math.pow(x.log10() * mul + add, pow)
+		return Math.min(x, x2)
+	},
 	logshift: function (x, shift, pow, add = 0){
 		var x2 = Math.pow(Math.log10(x * shift), pow) + add
 		return Math.min(x, x2)
@@ -444,10 +528,7 @@ function do_softcap(x, data, num) {
 	var vars = softcap_vars[func]
 
 	var v = [data[vars[0]], data[vars[1]], data[vars[2]]]
-	/*
 	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
-	*/
-	//note from pg: this will work now
 
 	var decimal = false
 	var canSoftcap = false

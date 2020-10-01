@@ -150,7 +150,10 @@ function getStartingNDMult(tier) {
 function getDimensionFinalMultiplier(tier) {
 	let mult = getStartingNDMult(tier)
 
-	if (tmp.ngC && ngC.tmp) mult = mult.times(ngC.tmp.nds[tier])
+	if (tmp.ngC && ngC.tmp && player.currentChallenge != "postngc_1") {
+		if (player.currentChallenge == "postngc_2") return ngC.tmp.nds[tier]
+		mult = mult.times(ngC.tmp.nds[tier])
+	}
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
 	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
@@ -207,6 +210,11 @@ function getDimensionFinalMultiplier(tier) {
 	if (tmp.quActive) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
+
+	if (tmp.ngC) {
+		mult = softcap(mult, "nds_ngC")
+		if (player.replicanti.unl) mult = mult.times(getIDReplMult())
+	}
 
 	return mult
 }
@@ -325,13 +333,6 @@ function getMPTExp(focusOn) {
 	let x = 1
 	if (tmp.quActive && player.masterystudies.includes("d7")) x = getElectronBoost(focusOn)
 	return x
-}
-
-function infUpg12Pow() {
-	if (player.tickspeedBoosts !== undefined) return 1.05 + .01 * Math.min(Math.max(player.infinitied, 0), 45)
-	if (player.galacticSacrifice) return 1.05 + .0025 * Math.min(Math.max(player.infinitied, 0), 60)
-	if (player.aarexModifications.newGameExpVersion) return 1.2
-	return 1.1
 }
 	
 function clearDimensions(amount) {
@@ -538,13 +539,36 @@ function timeMult() {
 }
 
 function infUpg11Pow() {
-	if (player.galacticSacrifice) return Math.max(Math.pow(player.totalTimePlayed / 864e3, 0.75), 1)
-	else return Math.max(Math.pow(player.totalTimePlayed / 1200, 0.15), 1)
+	let x = player.totalTimePlayed / 1200
+	let exp = 0.15 
+	if (player.galacticSacrifice !== undefined) {
+		x = player.totalTimePlayed / 864e3
+		exp = 0.75
+	}
+	if (tmp.ngC) exp *= Math.log10(player.money.plus(1).log10() + 1) * 3 + 1
+
+	if (exp > 10) return Decimal.pow(x, exp).max(1)
+	return Math.max(Math.pow(x, exp), 1)
+}
+
+function infUpg12Pow() {
+	let toAdd = .1
+	if (player.tickspeedBoosts !== undefined) toAdd = Math.min(Math.max(player.infinitied, 0), 45) * .01 + .05
+	else if (player.galacticSacrifice !== undefined) toAdd = Math.min(Math.max(player.infinitied, 0), 60) * .0025 + .05
+	if (tmp.ngC) toAdd *= Math.log10(player.money.plus(1).log10() + 1) + 1
+	if (player.aarexModifications.newGameExpVersion) toAdd *= 2
+
+	return toAdd + 1
 }
 
 function infUpg13Pow() {
-	if (player.galacticSacrifice) return Math.pow(1 + player.thisInfinityTime / 2400, 1.5)
-	else return Math.max(Math.pow(player.thisInfinityTime / 2400, 0.25), 1)
+	let x = player.thisInfinityTime / 2400
+	let exp = 0.25 
+	if (player.galacticSacrifice !== undefined) exp = 1.5
+	if (tmp.ngC) exp *= Math.sqrt(player.galaxies + 1) * 200
+
+	if (exp > 10) return Decimal.pow(x, exp).max(1)
+	return Math.max(Math.pow(x, exp), 1)
 }
 
 function dimMults() {

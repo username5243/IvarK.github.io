@@ -525,6 +525,11 @@ function doEternityResetStuff(){
 	player.currentEternityChall = ""
 	player.quantum = tmp.qu
 	player.dontWant = tmp.ngp3 ? true : undefined
+
+	if (tmp.ngC) {
+		ngC.resetIDs()
+		ngC.resetRepl()
+	}
 }
 
 function getReplicantsOnGhostifyData(){

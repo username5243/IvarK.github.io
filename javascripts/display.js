@@ -282,12 +282,15 @@ function infinityUpgradesDisplay(){
 	if (player.infinityUpgrades.includes("skipResetGalaxy")) document.getElementById("infi44").className = "infinistorebtnbought"
 	else if (player.infinityUpgrades.includes("skipReset3") && player.infinityPoints.gte(500)) document.getElementById("infi44").className = "infinistorebtn4"
 	else document.getElementById("infi44").className = "infinistorebtnlocked"
-	document.getElementById("infi11").innerHTML = "Normal Dimensions gain a multiplier based on time played <br>Currently: " + (infUpg11Pow()).toFixed(2) + "x<br>Cost: 1 IP"
-	document.getElementById("infi12").innerHTML = "First and Eighth Dimensions gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi13").innerHTML = "Third and Sixth Dimensions gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi22").innerHTML = "Second and Seventh Dimensions gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi23").innerHTML = "Fourth and Fifth Dimensions gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi31").innerHTML = "Normal Dimensions gain a multiplier based on time spent in this Infinity<br>Currently: " + shorten(infUpg13Pow()) + "x<br>Cost: 3 IP"
+	
+	let infiCol1And2Middle = tmp.ngC ? " and Tickspeed " : ""
+
+	document.getElementById("infi11").innerHTML = "Normal Dimensions gain a multiplier based on time played" + (tmp.ngC ? " and antimatter" : "") + "<br>Currently: " + shorten(infUpg11Pow()) + "x<br>Cost: 1 IP"
+	document.getElementById("infi12").innerHTML = "First and Eighth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
+	document.getElementById("infi13").innerHTML = "Third and Sixth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
+	document.getElementById("infi22").innerHTML = "Second and Seventh Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
+	document.getElementById("infi23").innerHTML = "Fourth and Fifth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
+	document.getElementById("infi31").innerHTML = "Normal Dimensions gain a multiplier based on time spent in this Infinity" + (tmp.ngC ? " and total antimatter" : "") + "<br>Currently: " + shorten(infUpg13Pow()) + "x<br>Cost: 3 IP"
 	var infi32middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? " <br> Currently: " + formatValue(player.options.notation, getUnspentBonus(), 2, 2) + "x" : ""
 	document.getElementById("infi32").innerHTML = "1st Dimension gets a multiplier based on unspent IP " + infi32middle + "<br>Cost: 5 IP"
 }
@@ -302,12 +305,17 @@ function preBreakUpgradeDisplay(){
 		infinityRespecedInfinityDisplay()
 	} else {
 		infinityUpgradesDisplay()
-		if (player.galacticSacrifice) {
+		let based = []
+		if (player.galacticSacrifice !== undefined) based.push("Infinities")
+		if (tmp.ngC) based.push("your antimatter")
+		if (based.length > 0) {
 			var base = player.tickspeedBoosts == undefined ? 2 : 1
 			if (player.aarexModifications.newGameExpVersion) base *= 10
-			document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions based on Infinities<br>"+base+"x -> "+(infUpg12Pow()*base).toPrecision(4)+"x<br>Cost: 1 IP"
-			document.getElementById("infi33").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x<br>Cost: 7 IP"
+			document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions based on " + wordizeList(based) + "<br>" + base + "x -> "+(infUpg12Pow() * base).toPrecision(4) + "x<br>Cost: 1 IP"
 		}
+
+		if (player.galacticSacrifice !== undefined) document.getElementById("infi33").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x<br>Cost: 7 IP"
+
 		var infi34Middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>Currently: " + shortenDimensions(getIPMult()) + " every " + timeDisplay(player.bestInfinityTime * 10) : ""
 		document.getElementById("infi34").innerHTML = "Generate IP based on your fastest Infinity " + infi34Middle + "<br>Cost: 10 IP"
 	}
@@ -549,6 +557,7 @@ function INFINITYUPGRADESDisplay(){
 		if (player.galacticSacrifice && (player.infinityDimension4.amount.gt(0) || player.eternities > (player.aarexModifications.newGameMinusVersion ? -20 : 0) || ph.did("quantum"))) {
 			breakNGm2UpgradeRow6Display()
 		} else document.getElementById("postinfir6").style.display = "none"
+		if (tmp.ngC) ngC.breakInfUpgs.display()
 	} else if (document.getElementById("singularity").style.display == "block" && document.getElementById("singularitydiv").style.display == "") {
 		document.getElementById("darkMatter").textContent = shortenMoney(player.singularity.darkMatter)
 		document.getElementById("darkMatterMult").textContent = shortenMoney(getDarkMatterMult())
@@ -682,9 +691,11 @@ function replicantiDisplay() {
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (!player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		if (tmp.ngC) ngC.condense.rep.update()
 	} else {
-		document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140) + " IP"
-		document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(player.galacticSacrifice != undefined && player.tickspeedBoosts == undefined ? 1e80 : 1e140)) ? "storebtn" : "unavailablebtn"
+		let cost = getReplUnlCost()
+		document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(cost) + " IP"
+		document.getElementById("replicantiunlock").className = player.infinityPoints.gte(cost) ? "storebtn" : "unavailablebtn"
 	}
 }
 

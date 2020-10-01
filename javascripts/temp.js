@@ -29,6 +29,8 @@ function updateTemp() {
 		tmp.ig = tmp.ig.times(tmp.blu[41].ig)
 	}
 
+	ngC.updateTmp()
+
 	tmp.rm = getReplMult()
 	updateExtraReplGalaxies()
 	updateTS232Temp()
@@ -40,8 +42,6 @@ function updateTemp() {
 
 	tmp.inEC12 = isEC12Active()
 	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() : 1
-
-	ngC.updateTmp()
 
 	let totalSpeed = gameSpeed * ls.mult("game")
 	if (tmp.gameSpeed != totalSpeed) {
@@ -266,14 +266,19 @@ function updateReplicantiTemp() {
 }
 
 function updatePostInfiTemp() {
-	var exp11 = player.galacticSacrifice ? 2 : 0.5
-	var exp21 = player.galacticSacrifice ? 2 : 0.5
+	var exp11 = player.galacticSacrifice !== undefined ? 2 : 0.5
+	var exp21 = player.galacticSacrifice !== undefined ? 2 : 0.5
+
 	if (player.aarexModifications.ngmX >= 4){
 		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
 		exp21 += player.money.plus(10).div(10).log10() / 1e4
+
+		tmp.postinfi11 = Decimal.pow(player.totalmoney.plus(10).log10(), exp11)
+		tmp.postinfi21 = Decimal.pow(player.money.plus(10).log10(), exp21)
+	} else {
+		tmp.postinfi11 = Math.pow(player.totalmoney.plus(10).log10(), exp11)
+		tmp.postinfi21 = Math.pow(player.money.plus(10).log10(), exp21)
 	}
-	tmp.postinfi11 = Math.pow(player.totalmoney.plus(10).log10(), exp11)
-	tmp.postinfi21 = Math.pow(player.money.plus(10).log10(), exp21)
 }
 
 function updatePPTITemp(){

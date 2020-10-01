@@ -37,6 +37,10 @@ function setupFooterHTML() {
 }
 
 function setupAutobuyerHTMLandData(){
+	getAutobuyerReduction = function() {
+		return tmp.ngC ? 0.3 : 0.6
+	}
+
 	buyAutobuyer = function(id) {
    		if (player.infinityUpgradesRespecced != undefined && player.autobuyers[id].interval == 100 && id > 8) {
 			if (player.autobuyers[id].bulkBought || player.infinityPoints.lt(1e4) || id > 10) return
@@ -58,7 +62,7 @@ function setupAutobuyerHTMLandData(){
 			}
 			if (b1) giveAchievement("Bulked up");
 		} else {
-			player.autobuyers[id].interval = Math.max(player.autobuyers[id].interval * 0.6, 100);
+			player.autobuyers[id].interval = Math.max(player.autobuyers[id].interval * getAutobuyerReduction(), 100);
 			if (player.autobuyers[id].interval > 120) player.autobuyers[id].cost *= 2; //if your last purchase wont be very strong, dont double the cost
 		}
 		updateAutobuyers();
@@ -149,7 +153,6 @@ function setupInfUpgHTMLandData(){
 		}
 	}
 	document.getElementById("infi14").innerHTML = "Decrease the number of Dimensions needed for Dimension Boosts and Galaxies by 9<br>Cost: 1 IP"
-	document.getElementById("infi24").innerHTML = "Antimatter Galaxies are twice as effective<br>Cost: 2 IP"
 	document.getElementById("infi11").onclick = function () {
 		buyInfinityUpgrade("timeMult", 1);
 	}
@@ -1653,7 +1656,6 @@ function updateCosts() {
 			document.getElementById('B'+i).textContent = costPart + shortenPreInfCosts(cost)
 			document.getElementById('M'+i).className = cost.times(10 - dimBought(i)).lte(resource) ? 'storebtn' : 'unavailablebtn'
 			document.getElementById('M'+i).textContent = until10CostPart + shortenPreInfCosts(cost.times(10 - dimBought(i)));
-			document.getElementById("CondenseDiv"+i).style.display = tmp.ngC ? "" : "none"
 			if (tmp.ngC) ngC.condense.nds.update(i)
 		}
 	}
@@ -2594,7 +2596,11 @@ function getSacrificeBoost(){
 	return calcSacrificeBoost()
 }
 
-function calcSacrificeBoost() {
+function getTotalSacrificeBoost(next) {
+	return calcTotalSacrificeBoost(next)
+}
+
+function calcSacrificeBoostBeforeSoftcap() {
 	let ret
 	let pow
 	if (player.firstAmount == 0) return new Decimal(1);
@@ -2616,11 +2622,7 @@ function calcSacrificeBoost() {
 	return ret
 }
 
-function getTotalSacrificeBoost(next){
-	return calcTotalSacrificeBoost(next)
-}
-
-function calcTotalSacrificeBoost(next) {
+function calcTotalSacrificeBoostBeforeSoftcap(next) {
 	if (player.resets < 5) return new Decimal(1)
 	let ret
 	let pow
@@ -2639,6 +2641,21 @@ function calcTotalSacrificeBoost(next) {
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
 	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
+	return ret
+}
+
+function calcSacrificeBoost() {
+	let ret = calcSacrificeBoostBeforeSoftcap()
+	if (tmp.ngC) {
+		let total = calcTotalSacrificeBoostBeforeSoftcap()
+		ret = softcap(ret.times(total), "sac_ngC").div(tmp.sacPow)
+	}
+	return ret.max(1)
+}
+
+function calcTotalSacrificeBoost(next) {
+	let ret = calcTotalSacrificeBoostBeforeSoftcap(next)
+	if (tmp.ngC) ret = softcap(ret, "sac_ngC")
 	return ret
 }
 
@@ -2845,6 +2862,7 @@ function updateAutobuyers() {
 	if (player.tickspeedBoosts != undefined) document.getElementById("intervalTickspeedBoost").textContent = "Current interval: " + (player.autobuyers[13].interval * intervalUnits).toFixed(2) + " seconds"
 	if (player.aarexModifications.ngmX>3) document.getElementById("intervalTDBoost").textContent = "Current interval: " + (player.autobuyers[14].interval * intervalUnits).toFixed(2) + " seconds"
 
+		var reduction = Math.round(100 - getAutobuyerReduction() * 100)
     	var maxedAutobuy = 0;
     	var e100autobuy = 0;
     	var currencyEnd = player.aarexModifications.ngmX > 3 ? " GP" : " IP"
@@ -2863,7 +2881,7 @@ function updateAutobuyers() {
 				}
 				maxedAutobuy++;
 			}
-			else document.getElementById("buyerBtn" + tier).innerHTML = "40% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + currencyEnd
+			else document.getElementById("buyerBtn" + tier).innerHTML = reduction + "% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + currencyEnd
 		}
 	}
 
@@ -2909,11 +2927,11 @@ function updateAutobuyers() {
         	maxedAutobuy++;
     	}
 
-    	document.getElementById("buyerBtnTickSpeed").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[8].cost + currencyEnd
-	document.getElementById("buyerBtnDimBoost").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[9].cost + currencyEnd
-    	document.getElementById("buyerBtnGalaxies").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[10].cost + currencyEnd
-    	document.getElementById("buyerBtnInf").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
-    	document.getElementById("buyerBtnSac").innerHTML = "40% smaller interval <br>Cost: " + player.autoSacrifice.cost + currencyEnd
+    	document.getElementById("buyerBtnTickSpeed").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[8].cost + currencyEnd
+	document.getElementById("buyerBtnDimBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[9].cost + currencyEnd
+    	document.getElementById("buyerBtnGalaxies").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[10].cost + currencyEnd
+    	document.getElementById("buyerBtnInf").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
+    	document.getElementById("buyerBtnSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autoSacrifice.cost + currencyEnd
     	if (player.autobuyers[9].interval <= 100) {
         	if (player.infinityUpgradesRespecced && !player.autobuyers[9].bulkBought) document.getElementById("buyerBtnDimBoost").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
         	else document.getElementById("buyerBtnDimBoost").style.display = "none"
@@ -2924,9 +2942,9 @@ function updateAutobuyers() {
         	else document.getElementById("buyerBtnGalaxies").style.display = "none"
         	maxedAutobuy++;
     	}
-    	if (player.galacticSacrifice) document.getElementById("buyerBtnGalSac").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[12].cost + currencyEnd
-	if (player.tickspeedBoosts != undefined) document.getElementById("buyerBtnTickspeedBoost").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[13].cost + currencyEnd
-	if (player.aarexModifications.ngmX > 3) document.getElementById("buyerBtnTDBoost").innerHTML = "40% smaller interval <br>Cost: " + player.autobuyers[14].cost + currencyEnd
+    	if (player.galacticSacrifice) document.getElementById("buyerBtnGalSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[12].cost + currencyEnd
+	if (player.tickspeedBoosts != undefined) document.getElementById("buyerBtnTickspeedBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[13].cost + currencyEnd
+	if (player.aarexModifications.ngmX > 3) document.getElementById("buyerBtnTDBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[14].cost + currencyEnd
 
 	if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
     	if (maxedAutobuy >= getTotalNormalChallenges() + 1) giveAchievement("Definitely not worth it");
@@ -4181,6 +4199,7 @@ function updateResetTierButtons(){
 }
 
 function updateOrderGoals(){
+	document.getElementById("postc6desc").textContent = "Reward: Tickspeed affects Infinity Dimensions with reduced effect" + (tmp.ngC ? ", and the IP gain softcap is 75% weaker." : ".")
 	if (order) for (var i=0; i<order.length; i++) document.getElementById(order[i]+"goal").textContent = "Goal: "+shortenCosts(getGoal(order[i]))
 }
 
@@ -5249,12 +5268,13 @@ function newIDDisplayUpdating(){
 	}
 }
 
-function d8SacDisplay(){
+function d8SacDisplay() {
+	let desc = tmp.ngC ? "Boost all Dimensions" : "Boost the 8th Dimension"
 	if (calcTotalSacrificeBoost().lte(Decimal.pow(10, 1e9))) {
-		document.getElementById("sacrifice").setAttribute('ach-tooltip', "Boost the 8th Dimension by " + formatValue(player.options.notation, calcSacrificeBoost(), 2, 2) + "x");
+		document.getElementById("sacrifice").setAttribute('ach-tooltip', desc + " by " + formatValue(player.options.notation, calcSacrificeBoost(), 2, 2) + "x");
 		document.getElementById("sacrifice").textContent = "Dimensional Sacrifice (" + formatValue(player.options.notation, calcSacrificeBoost(), 2, 2) + "x)"
 	} else {
-		document.getElementById("sacrifice").setAttribute('ach-tooltip', "Boost the 8th Dimension");
+		document.getElementById("sacrifice").setAttribute('ach-tooltip', desc);
 		document.getElementById("sacrifice").textContent = "Dimensional Sacrifice (Total: " + formatValue(player.options.notation, calcTotalSacrificeBoost(), 2, 2) + "x)"
 	}
 }
@@ -5765,9 +5785,11 @@ function autoBuyerTick() {
 					}
 				} else if (canBuyDimension(priority[i].tier)) {
 					if (priority[i].target > 10) {
+						if (tmp.ngC) ngC.condense.nds.max(priority[i].target - 10)
 						if (player.options.bulkOn) buyBulkDimension(priority[i].target - 10, priority[i].bulk, true)
 						else buyBulkDimension(priority[i].target - 10, 1, true)
 					} else {
+						if (tmp.ngC) ngC.condense.nds.max(priority[i].target)
 						buyOneDimension(priority[i].target)
 					}
 					if (player.aarexModifications.ngmX>3) buyMaxTimeDimension(priority[i].target % 10, priority[i].bulk)
@@ -6106,8 +6128,11 @@ window.addEventListener('keyup', function(event) {
 function getUnspentBonus() {
 	x = player.infinityPoints
 	if (!x) return new Decimal(1)
-	if (player.galacticSacrifice) return x.pow(Math.max(Math.min(Math.pow(x.max(1).log(10), 1 / 3) * 3, 8), 1)).plus(1);
-	else return x.dividedBy(2).pow(1.5).plus(1)
+
+	if (player.galacticSacrifice) x = x.pow(Math.max(Math.min(Math.pow(x.max(1).log(10), 1 / 3) * 3, 8), 1)).plus(1)
+	else x = x.dividedBy(2).pow(1.5).plus(1)
+	if (tmp.ngC) x = x.pow(5)
+	return x
 }
 
 var totalMult = 1
@@ -6132,6 +6157,7 @@ function getAchievementMult(){
 		div -= Math.sqrt(gups)
 		if (gups > 15) exp += gups
 	}
+	if (tmp.ngC) div /= 10
 	return Math.max(Math.pow(ach - minus - getSecretAchAmount(), exp) / div, 1)
 }
 

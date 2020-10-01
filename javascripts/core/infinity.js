@@ -53,6 +53,11 @@ function gainedInfinityPoints(next) {
 	}
 	if (isBigRipUpgradeActive(4)) ret = ret.times(player.replicanti.amount.pow(0.34).max(1))
 	if (player.tickspeedBoosts != undefined && player.achievements.includes("r95") && player.eightAmount > 5000) ret = ret.times(Decimal.pow(player.eightAmount, 2))
+	if (tmp.ngC) {
+		ret = softcap(ret, "ip_ngC")
+		ret = ret.times(ngC.breakInfUpgs[80]())
+		if (player.replicanti.unl) ret = ret.times(getIDReplMult())
+	}
 	return ret.floor()
 }
 
@@ -177,7 +182,7 @@ function getIPMultPower() {
 }
 
 function canBuyIPMult() {
-	if (player.infinityUpgradesRespecced!=undefined) return player.infinityPoints.gte(player.infMultCost)
+	if (tmp.ngC || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
 	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
 }
 
@@ -244,7 +249,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
-	if (speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDs()
