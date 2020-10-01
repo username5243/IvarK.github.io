@@ -510,9 +510,10 @@ var softcap_funcs = {
 		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
 	},
-	log_decimal(x, pow = 1, mul = 1, add = 0) {
-		var x2 = Math.pow(x.log10() * mul + add, pow)
-		return Math.min(x, x2)
+	log_decimal(x, pow = 1, mul = 1, add = 0) { 
+		//dont we want to return a Decimal since x is a Decimal
+		var x2 = Decimal.pow(x.log10() * mul + add, pow)
+		return Decimal.min(x, x2)
 	},
 	logshift: function (x, shift, pow, add = 0){
 		var x2 = Math.pow(Math.log10(x * shift), pow) + add

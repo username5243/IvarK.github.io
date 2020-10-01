@@ -56,7 +56,7 @@ let GDs = {
 
 		//Gravity Energy
 		data.gem = GDs.energyMult() //Determine GE / GP
-		data.ge = data.gem * gp //GP * GE / GP => GE (DO NOT EVER SOFTCAP THiS!)
+		data.ge = data.gem * gp //GP * GE / GP => GE (DO NOT EVER SOFTCAP THIS!)
 
 		//Gravity Charge
 		data.gc = GDs.chargeMult()
@@ -264,7 +264,7 @@ let GDs = {
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			eff(x) {
-				return Math.sqrt(x + 1)
+				return Math.pow(x + 1, .5)
 			},
 			rdExp: 1.5
 		},
@@ -278,14 +278,14 @@ let GDs = {
 		tod: {
 			desc: "^{{x}} to Branch speed",
 			eff(x) {
-				return Math.cbrt(x / 2 + 1)
+				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .5 : 1 / 3)
 			},
 			rdExp: 0.5
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return Math.pow(x / 2 + 1, 0.75)
+				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .85 : .75)
 			},
 			rdExp: 1
 		},

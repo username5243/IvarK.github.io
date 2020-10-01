@@ -136,7 +136,8 @@ function updateEffectiveLightAmountsTemp(){
 		if (c == 0) {
 			tmp.effL[0] = {
 				normal: x * y, // Without best red Light
-				best: (player.ghostify.ghostlyPhotons.maxRed + x * 2) / 3 * y //With best red Light
+				best: (player.ghostify.ghostlyPhotons.maxRed + x * 2) / 3 * y 
+				//With best red Light
 			}
 		} else tmp.effL[c] = x * y
 	}
@@ -486,7 +487,8 @@ function updateBRU14Temp() {
 		tmp.bru[14] = 1
 		return
 	}
-	var val = Math.sqrt(tmp.qu.bigRip.spaceShards.div(3e15).add(1).log10() * ret+1)
+	let ret = Math.min(tmp.qu.bigRip.spaceShards.div(3e18).add(1).log10() / 3, 0.4)
+	let val = Math.sqrt(tmp.qu.bigRip.spaceShards.div(3e15).add(1).log10() * ret + 1)
 	if (val > 12) val = 10 + Math.log10(4 + 8 * val)
 	tmp.bru[14] = val //BRU14
 }

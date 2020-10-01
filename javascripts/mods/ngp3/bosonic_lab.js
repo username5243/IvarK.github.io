@@ -168,8 +168,8 @@ function getAchBAMMult(){
 }
 
 function getBosonicAMProduction() {
-	var exp = player.money.max(1).log10() / 15e15 - 3
-	var ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
+	let exp = player.money.max(1).log10() / 15e15 - 3
+	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
 	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
 
@@ -262,7 +262,7 @@ function updateBosonicLabTab(){
 	if (document.getElementById("butab").style.display=="block") updateBosonicUpgradeDescs()
 	if (document.getElementById("wzbtab").style.display=="block") updateWZBosonsTab()
 	if (player.ghostify.hb.unl) {
-		var req = getHiggsRequirement()
+		let req = getHiggsRequirement()
 		document.getElementById("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
 		document.getElementById("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
 		document.getElementById("hbResetReq").textContent = shorten(req)
@@ -811,11 +811,14 @@ var bu = {
 			if (!tmp.quActive) return 1
 			var decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
 			var div = 3
-			if (tmp.newNGP3E){
-				decays += Math.sqrt(decays) + decays / 3
-				div = 2
-			}
-			return Math.max(Math.sqrt(decays) / 3 + .6, 1)
+			if (tmp.newNGP3E) decays += Math.sqrt(decays) + decays / 3
+			let ret = Math.max(Math.sqrt(decays) / div + .6, 1)
+			if (tmp.newNGP3E && ret > 6) ret = Math.pow(ret, 3) / 36
+			if (tmp.newNGP3E && ret > 10) ret = Math.pow(ret, 3) / 100
+			if (tmp.newNGP3E && ret > 14) ret = Math.pow(ret, 3) / 196
+
+			if (ret > 100) ret = Math.log10(ret) * 100
+			return ret
 		},
 		14() {
 			if (!tmp.quActive) return 0
@@ -887,7 +890,7 @@ var bu = {
 		},
 		42() {
 			if (!tmp.quActive) return 1
-			var exp = tmp.newNGP3E ? 1/3 : 1/4
+			let exp = tmp.newNGP3E ? 1/3 : 1/4
 			return Math.pow(tmp.qu.colorPowers.r.add(1).log10() / 2e4 + 1, exp)
 		},
 		43() {
@@ -896,11 +899,12 @@ var bu = {
 		},
 		44() {
 			if (!tmp.quActive) return 0
-			var exp = tmp.newNGP3E ? .55 : .5
-			return Math.pow(tmp.qu.colorPowers.b.add(1).log10(), exp) * 0.15
+			let exp = tmp.newNGP3E ? .65 : .5
+			let mul = tmp.newNGP3E ? .2 : .15
+			return Math.pow(tmp.qu.colorPowers.b.add(1).log10(), exp) * mul
 		},
 		45() {
-			var eff = player.dilation.dilatedTime.add(1).pow(.0005)
+			let eff = player.dilation.dilatedTime.add(1).pow(.0005)
 			eff = softcap(eff, "bu45")
 			return eff.toNumber()
 		},

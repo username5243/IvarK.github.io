@@ -2596,7 +2596,7 @@ function getSacrificeBoost(){
 	return calcSacrificeBoost()
 }
 
-function getTotalSacrificeBoost(next) {
+function getTotalSacrificeBoost(next = false) {
 	return calcTotalSacrificeBoost(next)
 }
 
@@ -5305,7 +5305,9 @@ function galSacBtnUpdating() {
 }
 
 function IPonCrunchPassiveGain(diff){
-	if (player.timestudy.studies.includes(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
+	if (player.timestudy.studies.includes(181) || player.achievements.includes("ng3p88")) {
+		player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
+	}
 }
 
 function EPonEternityPassiveGain(diff){
