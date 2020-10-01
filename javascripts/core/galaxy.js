@@ -142,7 +142,7 @@ function getGalaxyReqMultiplier() {
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
 	if (player.galacticSacrifice !== undefined) {
-		player.galacticSacrifice.upgrades.includes(22)) ret -= 30
+		if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
 	} else if (player.timestudy.studies.includes(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
 	if (tmp.ngC) ret -= 35
