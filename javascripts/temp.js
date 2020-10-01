@@ -99,9 +99,7 @@ function updateYellowLightBoostTemp(){
 }
 
 function updateGreenLightBoostTemp(){
-	var lighteffect3 = 1
-	if (tmp.ngp3l) lighteffect3 = tmp.effL[3] > 8 ? Math.log10(tmp.effL[3] / 8) + Math.sqrt(12) + 1 : Math.sqrt(tmp.effL[3] * 1.5) + 1
-	else lighteffect3 = Math.log10(tmp.effL[3] + 1) / 5 + 1
+	var lighteffect3 = Math.log10(tmp.effL[3] + 1) / 5 + 1
 	tmp.le[3] = lighteffect3
 }
 
@@ -114,7 +112,7 @@ function updateBlueLightBoostTemp(){
 function updateIndigoLightBoostTemp(){
 	var loglighteffect5 = tmp.effL[5] > 25 ? Math.sqrt(tmp.effL[5]*10+375) : tmp.effL[5]
 	loglighteffect5 *= tmp.newNGP3E ? 20 : 10
-	if (!tmp.ngp3l && loglighteffect5 > 729) loglighteffect5 = Math.pow(loglighteffect5 * 27, 2 / 3)
+	if (loglighteffect5 > 729) loglighteffect5 = Math.pow(loglighteffect5 * 27, 2 / 3)
 	tmp.le[5] = Decimal.pow(10, loglighteffect5) 
 }
 
@@ -122,7 +120,7 @@ function updateVioletLightBoostTemp(){
 	var lightexp6 = tmp.newNGP3E ? .36 : 1/3
 	var loglighteffect6 = Math.pow(player.postC3Reward.log10() * tmp.effL[6], lightexp6) * 2 
 	if (loglighteffect6 > 15e3) loglighteffect6 = 15e3 * Math.pow(loglighteffect6 / 15e3, .6)
-	if (!tmp.ngp3l && loglighteffect6 > 5e4) loglighteffect6 = Math.sqrt(loglighteffect6 * 5e4)
+	if (loglighteffect6 > 5e4) loglighteffect6 = Math.sqrt(loglighteffect6 * 5e4)
 	tmp.le[6] = Decimal.pow(10, loglighteffect6)
 }
 
@@ -202,17 +200,13 @@ function updateIntergalacticTemp() {
 			igLog = Math.pow(10 + 6 * Math.log10(igLog), 7.5)
 			tmp.igs++
 		}
-		if (player.aarexModifications.ngudpV && igLog > 1e16) { //Further
-			igLog = Math.pow(84 + Math.log10(igLog), 8)
-			tmp.igs++
-		}
 	}
-
 	if (igLog > 1e20) { //Further / Remote and beyond
 		igLog = softcap(igLog, "ig_log_high")
 		tmp.igs += Math.floor(Math.log10(igLog) - 20) + 1
 		if (igLog > 1e24) igLog = Math.pow(Math.pow(Math.log10(igLog), 2) + 424, 8)
 	}
+	
 	if (hasBosonicUpg(52)) igLog *= tmp.blu[52].ig
 	tmp.ig = Decimal.pow(10, igLog)
 }
@@ -221,9 +215,7 @@ function updateAntiElectronGalaxiesTemp(){
 	tmp.aeg = 0
 	if (hasBosonicUpg(14) && !player.quantum.bigRip.active) tmp.aeg = Math.max(tmp.blu[14] - tmp.qu.electrons.sacGals, 0)
 	tmp.effAeg = tmp.aeg
-	if (tmp.aeg > 0) {
-		if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
-	}
+	if (tmp.aeg > 0) if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
 }
 
 function updateTS232Temp() {
@@ -238,7 +230,7 @@ function updateTS232Temp() {
 }
 
 function updateTS431ExtraGalTemp() {
-	tmp.eg431 = tmp.effAeg * (tmp.ngp3l ? 0.1 : 5)
+	tmp.eg431 = tmp.effAeg * 5
 	if (isLEBoostUnlocked(1)) {
 		tmp.leBonus[1].total = (colorBoosts.g + tmp.pe - 1) * tmp.leBonus[1].effect
 		tmp.eg431 += tmp.leBonus[1].total
@@ -247,7 +239,7 @@ function updateTS431ExtraGalTemp() {
 
 function updateMatterSpeed(){
 	//mv: Matter speed
-	tmp.mv = 1.03 + player.resets/200 + player.galaxies/100
+	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
 	if (player.pSac !== undefined) {
 		var exp = 10 / puMults[12](hasPU(12, true, true))
 		tmp.mv = Decimal.pow(tmp.mv, exp)
@@ -388,7 +380,7 @@ function updateBreakEternityUpgrade3Temp(){
 	var log = ep.div("1e1370").add(1).log10()
 	if (nerfUpgs) log /= 2e6
 	var exp = Math.pow(log, 1/3) * 0.5
-	if (!tmp.ngp3l) exp = softcap(exp, "beu3_log")
+	exp = softcap(exp, "beu3_log")
 	tmp.beu[3] = Decimal.pow(10, exp)
 }
 
@@ -398,7 +390,7 @@ function updateBreakEternityUpgrade4Temp(){
 	var log1 = ep.div("1e1860").add(1).log10()
 	var log2 = ss.div("7e19").add(1).log10()
 	var exp = Math.pow(log1, 1/3) + Math.pow(log2, 1/3) * 8
-	if (!tmp.ngp3l && exp > 333) exp = 111 * Math.log10(3 * exp + 1)
+	if (exp > 333) exp = 111 * Math.log10(3 * exp + 1)
 	tmp.beu[4] = Decimal.pow(10, exp)
 }
 
@@ -409,7 +401,7 @@ function updateBreakEternityUpgrade5Temp(){
 	var log2 = ts.div(1e90).add(1).log10()
 	var exp = Math.pow(log1, 1/3) + Math.pow(log2, 1/3)
 	if (player.aarexModifications.ngudpV && exp > 100) exp = Math.log10(exp) * 50
-	if (!tmp.ngp3l && exp > 999) exp = 333 * Math.log10(exp + 1)
+	if (exp > 999) exp = 333 * Math.log10(exp + 1)
 	exp *= 4
 	tmp.beu[5] = Decimal.pow(10, exp)
 }
@@ -422,27 +414,23 @@ function updateBreakEternityUpgrade6Temp(){
 	var log2 = em.div(1e45).add(1).log10()
 	if (nerfUpgs) log1 /= 2e6
 	var exp = Math.pow(log1, 1/3) / 1.7 + Math.pow(log2, 1/3) * 2
-	if (!tmp.ngp3l && exp > 200) exp = 50 * Math.log10(50 * exp)
+	if (exp > 200) exp = 50 * Math.log10(50 * exp)
 	tmp.beu[6] = Decimal.pow(10, exp)
 }
 
 function updateBreakEternityUpgrade8Temp(){
 	var x = Math.log10(player.dilation.tachyonParticles.div(1e200).add(1).log10() / 100 + 1) * 3 + 1
 	if (player.aarexModifications.ngudpV && x > 2.2) x = 1.2 + Math.log10(x + 7.8)
-	if (!tmp.ngp3l) {
-		if (x > 3) x = 1 + Math.log2(x + 1)
-		if (x > 10/3) x = 7/3 + Math.log10(3 * x)
-	}
+	if (x > 3) x = 1 + Math.log2(x + 1)
+	if (x > 10/3) x = 7/3 + Math.log10(3 * x)
 	tmp.beu[8] = x
 }
 
 function updateBreakEternityUpgrade9Temp(){
 	var em = tmp.qu.breakEternity.eternalMatter
 	var x = em.div("1e335").add(1).pow(0.05 * Math.log10(4))
-	if (!tmp.ngp3l) {
-		if (x.gte(Decimal.pow(10,18))) x = Decimal.pow(x.log10() * 5 + 10, 9)
-		if (x.gte(Decimal.pow(10,100))) x = Decimal.pow(x.log10(), 50)
-	}
+	if (x.gte(Decimal.pow(10,18))) x = Decimal.pow(x.log10() * 5 + 10, 9)
+	if (x.gte(Decimal.pow(10,100))) x = Decimal.pow(x.log10(), 50)
 	tmp.beu[9] = x.toNumber()
 }
 
@@ -453,12 +441,6 @@ function updateBreakEternityUpgrade10Temp(){
 
 function updateBreakEternityUpgradesTemp() {
 	//Setup
-	var ep = player.eternityPoints
-	var ts = player.timeShards
-	var ss = tmp.qu.bigRip.spaceShards
-	var em = tmp.qu.breakEternity.eternalMatter
-	var nerfUpgs = !tmp.be && hasBosonicUpg(24)
-
 	updateBreakEternityUpgrade1Temp()
 	updateBreakEternityUpgrade2Temp()
 	updateBreakEternityUpgrade3Temp()
@@ -499,15 +481,14 @@ function updateBRU14Temp() {
 		tmp.bru[14] = 1
 		return
 	}
-	var ret = Math.min(tmp.qu.bigRip.spaceShards.div(3e18).add(1).log10()/3,0.4)
-	var val = Math.sqrt(tmp.qu.bigRip.spaceShards.div(3e15).add(1).log10()*ret+1)
+	var val = Math.sqrt(tmp.qu.bigRip.spaceShards.div(3e15).add(1).log10() * ret+1)
 	if (val > 12) val = 10 + Math.log10(4 + 8 * val)
 	tmp.bru[14] = val //BRU14
 }
 
 function updateBRU15Temp() {
 	let r = Math.sqrt(player.eternityPoints.add(1).log10()) * 3.55
-	if (r > 1e4 && !tmp.ngp3l) r = Math.sqrt(r * 1e4)
+	if (r > 1e4) r = Math.sqrt(r * 1e4)
 	if (!player.quantum.bigRip.active) r = 0
 	tmp.bru[15] = r
 }
@@ -517,7 +498,7 @@ function updateBRU16Temp() {
 }
 
 function updateBRU17Temp() {
-	tmp.bru[17] = !tmp.ngp3l && ghostified ? 3 : 2.9
+	tmp.bru[17] = ph.did("ghostify") ? 3 : 2.9
 }
 
 function updateBigRipUpgradesTemp(){
@@ -544,7 +525,6 @@ function updateBosonicAMDimReturnsTemp() {
 	tmp.badm = data
 
 	if (!tmp.ngp3) return
-	if (tmp.ngp3l) return
 	if (!player.ghostify.wzb.unl) return
 
 	data.start = getHiggsRequirement()
@@ -601,7 +581,7 @@ function updateNanoEffectUsages() {
 
 	//Fifth reward
 	var data2 = ["dil_effect_exp"]
-	if (!tmp.ngp3l) data2.push("light_threshold_speed")
+	data2.push("light_threshold_speed")
 	nanoRewards.effectsUsed[5] = data2
 
 	//Seventh reward

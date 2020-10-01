@@ -475,9 +475,10 @@ var bEn = {
 	},
 	effects: {
 		12(l) {
-			if (isEnchantUsed(15)) l = mult.times(tmp.bEn[15])
+			//if (isEnchantUsed(15)) l = l.times(tmp.bEn[15]) this isnt what this does anymore
 
 			let exp = 0.75
+			if (tmp.newNGP3E) exp += .025
 			if (l.gt(1e10)) exp *= Math.pow(l.log10() / 5 + 79, .25) - 2
 			if (exp > .8) exp = Math.log10(exp * 12.5) * .8
 
@@ -509,7 +510,9 @@ var bEn = {
 			return Decimal.pow(player.ghostify.hb.higgs / 20 + 1, l.add(1).log10() / 5)
 		},
 		15(l) {
-			return Math.log10(l.add(1).log10() + 1) / 2 + 1
+			let div = tmp.newNGP3E ? 1.75 : 2
+			let eff = Math.log10(l.add(1).log10() + 1) / div + 1
+			return eff
 		},
 		25(l) {
 			return 2 - 1 / (l.max(1).log10() / 100 + 1)

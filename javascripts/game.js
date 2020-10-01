@@ -4207,7 +4207,7 @@ function doPerSecondNGP3Stuff(){
 		else document.getElementById("ec" + tmp.qu.autoECN + "unl").onclick()
 		justImported = false
 	}
-	if (isAutoGhostActive(19)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+	if (isAutoGhostActive(17)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 	if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 	if (isAutoGhostActive(16)) maxNeutrinoMult()
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
