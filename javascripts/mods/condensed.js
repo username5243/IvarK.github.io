@@ -94,7 +94,7 @@ let CONDENSED = {
 			},
 			costScale() {
 				let x = 1.5
-				if (player.infinityUpgrades.includes("postinfi70")) x *= 0.6
+				if (player.infinityUpgrades.includes("postinfi70")) x = Math.pow(x, 0.6)
 				return x + 1
 			},
 			target(x) {
@@ -144,7 +144,7 @@ let CONDENSED = {
 		ids: {
 			cost(x) {
 				let bought = ngC.save.inf[x]
-				return Decimal.pow(ngC.condense.costBaseMult[x], Math.pow(bought, 3.5)).times(ngC.condense.costStart[x]).div(this.costDiv())
+				return Decimal.pow(ngC.condense.costBaseMult[x], Decimal.pow(bought, 3.5)).times(Decimal.pow(ngC.condense.costStart[x], 2.5)).div(this.costDiv())
 			},
 			costDiv() {
 				let div = new Decimal(1)
@@ -153,7 +153,7 @@ let CONDENSED = {
 			},
 			target(x) {
 				let res = player.infinityPoints
-				return Math.floor(Math.pow(res.times(this.costDiv()).div(ngC.condense.costStart[x]).max(1).log10() / Math.log10(ngC.condense.costBaseMult[x]), 1 / 3.5) + 1)
+				return Math.floor(Math.pow(res.times(this.costDiv()).div(Decimal.pow(ngC.condense.costStart[x], 2.5)).max(1).log10()/Math.log10(ngC.condense.costBaseMult[x]), 1/3.5)+1)
 			},
 			pow() {
 				let ret = 1

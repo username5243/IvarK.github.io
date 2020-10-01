@@ -194,6 +194,10 @@ var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250, 1e280]
 function getIDCost(tier) {
 	let ret = player["infinityDimension" + tier].cost
 	if (player.galacticSacrifice !== undefined && player.achievements.includes("r123")) ret = ret.div(galMults.u11())
+	if (tmp.ngC) {
+		ret = ret.div(500 / tier)
+		if (tier >= 7) ret = ret.div(1e30)
+	}
 	return ret
 }
 
@@ -215,6 +219,7 @@ function getInfBuy10Mult(tier) {
 	let ret = infPowerMults[player.galacticSacrifice!==undefined&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
+	if (tmp.ngC && tier < 8) ret *= 0.25
 	return ret
 }
 
@@ -288,6 +293,7 @@ function getInfinityPowerEffectExp() {
 	if (x > 100) x = 50 * Math.log10(x)
 	if (hasPU(34)) x *= puMults[34]()
 	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
+	if (tmp.ngC) x *= 0.85
 	return x
 }
 
@@ -364,7 +370,7 @@ function updateInfPower() {
 }
 
 function getNewInfReq() {
-	let reqs = [new Decimal("1e1100"), new Decimal("1e1900"), new Decimal("1e2400"), new Decimal("1e10500"), new Decimal("1e30000"), new Decimal("1e45000"), new Decimal("1e54000")]
+	let reqs = [new Decimal("1e1100"), new Decimal("1e1900"), new Decimal("1e2400"), new Decimal("1e10500"), new Decimal("1e30000"), new Decimal("1e45000"), new Decimal("1e54000"), new Decimal("1e60000")]
 	if (player.galacticSacrifice !== undefined) {
 		if (player.tickspeedBoosts === undefined) {
 			reqs[1] = new Decimal("1e1500")
@@ -378,7 +384,17 @@ function getNewInfReq() {
 			reqs[0] = new Decimal("1e1777")
 		}
 	}
+	if (tmp.ngC) {
+		reqs[0] = new Decimal("1e1450")
+		reqs[1] = new Decimal("1e1750")
+		reqs[2] = new Decimal("1e5825")
+		reqs[3] = new Decimal("1e7150")
+		reqs[4] = new Decimal("1e36000")
+		reqs[5] = new Decimal("1e37750")
+		reqs[6] = new Decimal("1e40500")
+		reqs[7] = new Decimal("1e53000")
+	}
 	for (var tier = 0; tier < 7; tier++) if (!player.infDimensionsUnlocked[tier]) return {money: reqs[tier], tier: tier+1}
-	return {money: new Decimal("1e60000"), tier: 8}
+	return {money: reqs[7], tier: 8}
 }
 
