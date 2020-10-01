@@ -27,7 +27,7 @@ function getTreeUpgradeEfficiencyDisplayText() {
 }
 
 function todTimeDisplay(t){
-	return timeDisplayShort(t, true)
+	return timeDisplayShort(t, true, 2)
 }
 
 function updateTreeOfDecayTab(){

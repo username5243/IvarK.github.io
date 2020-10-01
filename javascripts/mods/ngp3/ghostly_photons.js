@@ -86,7 +86,8 @@ var leBoosts = {
 		},
 		leThreshold: 16,
 		eff() {
-			return Math.pow(3, Math.pow(tmp.effL[2] + 1, 0.25) - 1)
+			let exp = Math.min(Math.pow(tmp.effL[2] + 1, 0.25) - 1, 600)
+			return Math.pow(3, exp)
 		},
 		effDesc(x) {
 			return shorten(x)
