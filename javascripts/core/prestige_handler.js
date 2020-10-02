@@ -137,7 +137,7 @@ let Prestiges = {
 			document.getElementById(d[1]).className = "presCurrency" + ph.tmp.shown
 		}
 
-		let bigRipAndQuantum = (pl && pl.save && !pl.save.on) && !hasNU(16)
+		let bigRipAndQuantum = (pl && pl.save) ? (!pl.save.on && !hasNU(16)) : false
 
 		//Quantum (after Neutrino Upgrade 16)
 		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"

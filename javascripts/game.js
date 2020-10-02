@@ -5291,7 +5291,7 @@ function galSacBtnUpdating() {
 	if (document.getElementById("gSacrifice").style.display === "inline-block") {
 		document.getElementById("gSacrifice").innerHTML = "Galactic Sacrifice (" + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP)"
 		document.getElementById("gSacrifice").setAttribute('ach-tooltip', "Gain " + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP")
-		document.getElementById("gSacrifice").className = getGSAmount.gt(0) ? "storebtn" : "unavailablebtn"
+		document.getElementById("gSacrifice").className = getGSAmount().gt(0) ? "storebtn" : "unavailablebtn"
 	}
 	if (document.getElementById("sacrificebtn").style.display === "inline-block") {
 		document.getElementById("sacrificebtn").style.display = ""
