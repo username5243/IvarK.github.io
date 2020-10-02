@@ -172,11 +172,18 @@ function DimensionPower(tier) {
   	return mult
 }
 
-function resetInfDimensions() {
+function resetInfDimensions(full) {
+	player.infinityPower = new Decimal(0)
 	for (var t = 1; t < 9; t++) {
-		if (player.infDimensionsUnlocked[t - 1]) player["infinityDimension" + t].amount = new Decimal(player["infinityDimension" + t].baseAmount)
+		let dim = player["infinityDimension" + t]
+		if (full) {
+			dim.cost = new Decimal(infBaseCost[t])
+			dim.power = new Decimal(0)
+			dim.baseAmount = 0
+		}
+		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
 	}
-	if (player.infDimensionsUnlocked[0]) player.infinityPower = new Decimal(0)
+	if (full) resetInfDimUnlocked()
 	resetIDs_ngm5()
 }
 

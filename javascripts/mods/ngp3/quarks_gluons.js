@@ -225,13 +225,14 @@ function updateColorPowers(log) {
 	//Blue
 	var bLog = log.b
 	bLog = Math.sqrt(log.b + 1.5) - 1.5
+	if (hasBosonicUpg(63)) bLog *= tmp.blu[63]
 
 	let softcapStartLog = 3
 	let softcapPower = 1
 	if (player.ghostify.ghostlyPhotons.unl) softcapPower += tmp.le[4]
 	if (hasBosonicUpg(11)) softcapPower += tmp.blu[11]
 	if (bLog > softcapStartLog) {
-		bLog = Decimal.pow(bLog/softcapStartLog,softcapPower/2).times(softcapStartLog)
+		bLog = Decimal.pow(bLog / softcapStartLog, softcapPower / 2).times(softcapStartLog)
 		if (bLog.lt(100)) bLog = bLog.toNumber()
 		else bLog = Math.min(bLog.toNumber(), bLog.log10() * (40 + 10 * bLog.sub(90).log10()))
 	}

@@ -137,6 +137,8 @@ let GDs = {
 		GDs.save.unl = true
 		$.notify("Congratulations! You have unlocked Gravity Dimensions!", "success")
 		giveAchievement("The Gravitational Well")
+		updateQuantumChallenges()
+		updateNeutrinoBoosts()
 		updateBosonUnlockDisplay()
 		GDs.unlDisplay()
 	},
@@ -144,6 +146,7 @@ let GDs = {
 		let unl = GDs.unlocked()
 		document.getElementById("gdtabbtn").style.display = unl ? "" : "none"
 		document.getElementById("gvBlCell").style.display = unl ? "" : "none"
+		document.getElementById("breakUpgR4").style.display = unl ? "" : "none"
 		updateNeutrinoUpgradeUnlocks(16, 18)
 
 		if (unl) GDs.dimDisplay()

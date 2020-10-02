@@ -53,13 +53,6 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 			if (!quick) for (var m = 0; m < qcm.on.length; m++) if (ranking >= qcm.reqs[qcm.on[m]] || !qcm.reqs[qcm.on[m]]) tmp.qu.qcsMods.current.push(qcm.on[m])
 		} else tmp.qu.qcsMods.current = []
 		if (inQCModifier("ms")) ph.updateDisplay()
-
-		if (speedrunMilestonesReached > 3 && !isRewardEnabled(4)) {
-			for (var s = 0; s < player.masterystudies.length; s++) {
-				if (player.masterystudies[s].indexOf("t") >= 0) player.timestudy.theorem += masteryStudies.costs.time[player.masterystudies[s].split("t")[1]]
-				else player.timestudy.theorem += masteryStudies.costs.dil[player.masterystudies[s].split("d")[1]]
-			}
-		}
 	}
 
 	var implode = !(auto||force)&&speedrunMilestonesReached<23
@@ -368,7 +361,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		}
 		updateQuantumWorth()
 		if (bigRip && !tmp.qu.bigRip.upgrades.includes(12)) {
-			tmp.qu.bigRip.storedTS={
+			tmp.qu.bigRip.storedTS = {
 				tt: player.timestudy.theorem,
 				studies: player.timestudy.studies,
 				boughtA: Decimal.div(player.timestudy.amcost, "1e20000").log("1e20000"),
@@ -433,13 +426,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14
 	player.challenges = challengesCompletedOnEternity(bigRip)
 	if (bigRip && player.ghostify.milestones > 9 && player.aarexModifications.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
-	if (isRewardEnabled(11) && (bigRip && !tmp.qu.bigRip.upgrades.includes(12))) {
-		if (player.eternityChallUnlocked > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.eternityChallUnlocked]
-		else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.eternityChallUnlocked]
-	}
-	player.eternityChallUnlocked = 0
-	if (headstart) for (var ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec]=5
-	else if (isRewardEnabled(3) && !bigRip) for (ec = 1; ec < 15; ec++) player.eternityChalls['eterc' + ec] = 5
+
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 	if (player.exdilation != undefined) {
 		if (player.eternityUpgrades.length) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
@@ -659,7 +646,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	playerInfinityUpgradesOnEternity()
 	document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
-	updateEternityChallenges()
 	updateTheoremButtons()
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
@@ -683,7 +669,7 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 	let keepMDs = bigRip ? isBigRipUpgradeActive(12) : keepDil && speedrunMilestonesReached >= 6
 	if (!keepMDs && document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
-	let keepMSs = bigRip || (keepMDs && speedrunMilestonesReached >= 16)
+	let keepMSs = bigRip || (tmp.ngp3 && player.dilation.upgrades.includes("ngpp6"))
 	document.getElementById("masterystudyunlock").style.display = keepMSs ? "" : "none"
 	document.getElementById("respecMastery").style.display = keepMSs ? "block" : "none"
 	document.getElementById("respecMastery2").style.display = keepMSs ? "block" : "none"

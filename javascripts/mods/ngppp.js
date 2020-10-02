@@ -837,7 +837,7 @@ function getGHPMultCost(offset = 0) {
 }
 
 function getGHPMultCostScalingStart() {
-	if (hasNU(16)) return 1/0
+	if (hasNU(17)) return 1/0
 	return 85
 }
 

@@ -18,21 +18,8 @@ function resetTDBoosts() {
 	if (player.aarexModifications.ngmX > 3) return player.achievements.includes("r27") && player.currentChallenge == "" ? 3 : 0
 }
 
-function resetTDs() {
-	var bp=getDimensionBoostPower()
-	if (player.aarexModifications.ngmX > 3) {
-		for (var d = 1; d <= 8; d++) {
-			var dim = player["timeDimension" + d]
-			dim.amount = new Decimal(0)
-			dim.bought = 0
-			dim.cost = new Decimal(timeDimStartCosts[1][d])
-			dim.power = bp.pow((player.tdBoosts - d + 1) / 2).max(1)
-		}
-		player.timeShards = new Decimal(0)
-		player.totalTickGained = 0
-		player.tickThreshold = new Decimal(0.01)
-		document.getElementById("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
-	}
+function resetTDsOnNGM4() {
+	if (player.aarexModifications.ngmX >= 4) resetTimeDimensions()
 }
 
 //v2.1

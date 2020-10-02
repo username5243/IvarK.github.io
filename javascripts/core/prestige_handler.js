@@ -23,7 +23,7 @@ let Prestiges = {
 				) && (!player.masterystudies || ECTimesCompleted("eterc14")) && quarkGain().gt(0)
 		},
 		ghostify() {
-			return (tmp.qu.bigRip.active && this.quantum()) || pl.on()
+			return tmp.qu.bigRip.active ? this.quantum() : hasNU(16) || pl.on()
 		},
 		planck() {
 			return pl.can()
@@ -134,12 +134,18 @@ let Prestiges = {
 			document.getElementById(d[1]).className = "presCurrency" + ph.tmp.shown
 		}
 
+		let bigRipAndQuantum = !pl.save.on && !hasNU(16)
+
+		//Quantum (after Neutrino Upgrade 16)
+		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"
+
 		//Big Rip
-		var canBigRip = canQuickBigRip()
+		var canBigRip = canQuickBigRip() && (ph.tmp.quantum.shown || bigRipAndQuantum)
 		document.getElementById("bigripbtn").style.display = canBigRip ? "" : "none"
 		if (canBigRip) {
-			document.getElementById("bigripbtn").className = "presBtn presPos" + (ph.tmp.ghostify.shown ? ph.tmp.ghostify.order : ph.tmp.shown + 1) + " quickBigRip"
-			if (!ph.tmp.ghostify.shown) ph.tmp.shown++
+			let pos = bigRipAndQuantum ? "ghostify" : "quantum"
+			document.getElementById("bigripbtn").className = "presBtn presPos" + (ph.tmp[pos].shown ? ph.tmp[pos].order : ph.tmp.shown + 1) + " quickBigRip"
+			if (!ph.tmp[pos].shown) ph.tmp.shown++
 		}
 
 		if (tmp.ngp3 && tmp.qu.bigRip.active) {

@@ -375,7 +375,7 @@ function respecTimeStudies(force, presetLoad) {
 	var gotAch = respecTime || player.timestudy.studies.length < 1
 	if (player.masterystudies) {
 		respecMastery=player.respecMastery||force
-		gotAch=gotAch&&(respecMastery||player.masterystudies.length<1)
+		gotAch=gotAch && (respecMastery||player.masterystudies.length<1)
 		delete player.quantum.autoECN
 	}
 	if (respecTime) {
@@ -389,17 +389,14 @@ function respecTimeStudies(force, presetLoad) {
 			for (var i = 0; i < all.length; i++) {
 				if (player.timestudy.studies.includes(all[i]) && (!bru7activated || all[i] !== 192)) {
 					player.timestudy.theorem += studyCosts[i]
-					gotAch=false
+					gotAch = false
 				}
 			}
 			if (player.masterystudies) if (player.timestudy.studies.length>1) player.quantum.wasted = false
 			player.timestudy.studies = bru7activated ? [192] : []
-			var ECCosts = [null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1]
-			player.timestudy.theorem += ECCosts[player.eternityChallUnlocked]
-			
 		}
+		if (player.eternityChallUnlocked <= 12) resetEternityChallUnlocks()
 	}
-
 	if (respecMastery) {
 		var respecedMS = []
 		player.timestudy.theorem += masteryStudies.ttSpent
@@ -412,7 +409,8 @@ function respecTimeStudies(force, presetLoad) {
 			player.quantum.wasted = false
 			gotAch = false
 		}
-		player.masterystudies=respecedMS
+		player.masterystudies = respecedMS
+		if (player.eternityChallUnlocked >= 13) resetEternityChallUnlocks()
 		respecUnbuyableTimeStudies()
 		updateMasteryStudyCosts()
 		if (!presetLoad) {
@@ -421,8 +419,7 @@ function respecTimeStudies(force, presetLoad) {
 		}
 		drawMasteryTree()
 	}
-	player.eternityChallUnlocked = 0
-	updateEternityChallenges()
+
 	drawStudyTree()
 	if (!presetLoad) updateTimeStudyButtons(true)
 	if (gotAch) giveAchievement("You do know how these work, right?")
@@ -805,4 +802,16 @@ let tsMults = {
 	222: function() {
 		return player.galacticSacrifice === undefined ? 2 : .5
 	}
+}
+
+//Eternity Challenges
+function resetEternityChallUnlocks() {
+	let ec = player.eternityChallUnlocked
+	if (!ec) return
+
+	if (ec >= 13) player.timestudy.theorem += masteryStudies.costs.ec[ec]
+	else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
+
+	player.eternityChallUnlocked = 0
+	updateEternityChallenges()
 }

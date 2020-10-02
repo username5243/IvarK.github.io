@@ -35,6 +35,7 @@ function getSpaceShardsGain() {
 		if (tmp.qu.breakEternity.upgrades.includes(6)) ret = ret.times(getBreakUpgMult(6))
 	}
 	if (hasNU(9)) ret = ret.times(Decimal.max(getEternitied(), 1).pow(0.1))
+	if (player.ghostify.neutrinos.boosts >= 12) ret = ret.times(tmp.nb[12])
 
 	/*
 	removed the softcap for now, it can go back in later maybe
@@ -131,7 +132,7 @@ function updateBreakEternity() {
 		document.getElementById("breakEternityShop").style.display = ""
 		document.getElementById("breakEternityNoBigRip").style.display = tmp.qu.bigRip.active ? "none" : ""
 		document.getElementById("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
-		for (var u = 1; u < (player.ghostify.ghostlyPhotons.unl ? 11 : 8); u++) document.getElementById("breakUpg" + u + "Cost").textContent = shortenDimensions(getBreakUpgCost(u))
+		for (var u = 1; u <= 13; u++) document.getElementById("breakUpg" + u + "Cost").textContent = shortenDimensions(getBreakUpgCost(u))
 		document.getElementById("breakUpg7MultIncrease").textContent = shortenDimensions(1e9)
 		document.getElementById("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
 		document.getElementById("breakUpgRS").style.display = tmp.qu.bigRip.active ? "" : "none"
@@ -163,6 +164,7 @@ function getEMGain() {
 	if (!tmp.quActive) return new Decimal(0)
 	let log = player.timeShards.div(1e9).log10() * 0.25
 	if (log > 15) log = Math.sqrt(log * 15)
+	if (!tmp.be) log *= 0.1
 	
 	let log2log = Math.log10(log) / Math.log10(2)
 	let start = 10 //Starts at e1024.
@@ -175,7 +177,7 @@ function getEMGain() {
 	return Decimal.pow(10, log).floor()
 }
 
-var breakUpgCosts = [1, 1e3, 2e6, 2e11, 8e17, 1e45, null, 1e290, new Decimal("1e350"), new Decimal("1e375")]
+var breakUpgCosts = [1, 1e3, 2e6, 2e11, 8e17, 1e45, null, 1e290, new Decimal("1e350"), new Decimal("1e375"), 1/0, 1/0, 1/0]
 function getBreakUpgCost(id) {
 	if (id == 7) return Decimal.pow(2, tmp.qu.breakEternity.epMultPower).times(1e5)
 	return breakUpgCosts[id - 1]

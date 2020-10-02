@@ -252,7 +252,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
-	resetTDs()
+	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower();
 	doDefaultTickspeedReduction()

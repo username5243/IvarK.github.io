@@ -617,12 +617,7 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
-	if (id == 32) tmp.updateLights = true
-	if (id == 53) {
-		updateQuantumChallenges()
-		updateNeutrinoUpgradeUnlocks(16, 18)
-		tmp.updateLights = true
-	}
+	if (id == 32 || id == 53 || id == 65) tmp.updateLights = true
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
@@ -653,7 +648,7 @@ function updateBosonicUpgradeDescs() {
 }
 
 var bu = {
-	limits: [0, 2, 4, 7],
+	limits: [0, 2, 4, 6],
 	costs: {
 		11: {
 			am: 200,
@@ -783,13 +778,16 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You produce preon charge and 1% of your normal preon energy regardless of anti-preon energy.",
+		51: "You produce preon charge, 1% of your normal preon energy, and 1% of Eternal Matter gain (but at reduced rate), regardless of anti-preon energy.",
 		52: "Replicantis raises Infinite Time and Intergalactic rewards to an exponent.",
-		53: "Unlock Quantum Challenge 9, 3 new Neutrino upgrades, and 3 new Light Empowerment boosts.",
+		53: "Unlock 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",
-		55: "Bosonic Antimatter reduces the requirement of Light Empowerments.",
+		55: "Bosonic Antimatter reduces the requirement of Light Empowerments before cost subtraction.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		63: "Nanofield speed divides preon anti-energy production instead of multiplying it." //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
+		62: "Nanospeed divides preon anti-energy production instead of multiplying it.", //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
+		63: "Higgs Bosons raise all Blue Power effects to an exponent before the softcaps.",
+		64: "Remove the Electrons softcap is weaker. (x^0.5 -> x^0.9)",
+		65: "Square the main Orange Light effect.",
 	},
 	effects: {
 		11() {
@@ -917,6 +915,9 @@ var bu = {
 		},
 		55() {
 			return tmp.bl.am.add(1).pow(0.01).toNumber()
+		},
+		63() {
+			return Math.pow(2, player.ghostify.hb.higgs / 30)
 		}
 	},
 	effectDescs: {
@@ -967,7 +968,10 @@ var bu = {
 		},
 		55(x) {
 			return "/" + shorten(x)
-		}
+		},
+		63(x) {
+			return "^" + x.toFixed(2)
+		},
 	}
 }
 

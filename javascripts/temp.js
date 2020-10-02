@@ -62,9 +62,9 @@ let tmp = {
 	be: false,
 	beu: {},
 	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
-	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000"],
+	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000",1/0],
 	nu: {},
-	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280],
+	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,1/0,1/0,1/0],
 	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
 	lti: [2,4,1.5,10,4,1e3,2.5,3],
 	effL: [0,0,0,0,0,0,0],
@@ -89,6 +89,7 @@ function updateRedLightBoostTemp(){
 function updateOrangeLightBoostTemp(){
 	if (tmp.effL[1] > 64) big = tmp.newNGP3E ? 10 + Math.pow(tmp.effL[1], 1/3) : Math.log10(tmp.effL[1] / 64) + 14
 	tmp.le[1] = tmp.effL[1] > 64 ? big : tmp.effL[1] > 8 ? Math.sqrt(tmp.effL[1]) + 6 : tmp.effL[1] + 1
+	if (hasBosonicUpg(65)) tmp.le[1] = Math.pow(tmp.le[1], 2)
 }
 
 function updateYellowLightBoostTemp(){

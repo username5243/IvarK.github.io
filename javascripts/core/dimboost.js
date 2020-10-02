@@ -49,7 +49,7 @@ function softReset(bulk, tier=1) {
 		resetInfDimensions()
 		player.pSac.dims.extraTime = 0
 	}
-	resetTDs()
+	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()
 	if (player.currentChallenge == "postc2") {

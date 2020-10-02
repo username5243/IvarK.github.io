@@ -45,16 +45,8 @@ function maxAllIDswithAM() {
 	for (var d = 1; d < 9; d++) maxIDwithAM(d)
 }
 
-function resetIDs_ngm5() {
-	if (player.pSac == undefined) return
-	for (var t = 1; t < 9; t++) {
-		var d = player["infinityDimension" + t]
-		d.amount = new Decimal(d.baseAmount)
-		d.power = Decimal.pow(getInfBuy10Mult(t), d.baseAmount)
-		d.costAM = new Decimal(idBaseCosts[t])
-		d.boughtAM = 0
-	}
-	player.infinityPower = new Decimal(1)
+function resetIDsOnNGM5() {
+	if (player.pSac !== undefined) resetInfinityDimensions()
 }
 
 //Global Dimension unlocks

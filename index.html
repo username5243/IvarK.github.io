@@ -1030,6 +1030,17 @@
 								<button id="breakUpg10" class="eternityupbtnlocked" onclick="buyBreakUpg(10)">Eternity Points multiply the normal galaxy amount in "Intergalactic" in Dilation runs.<br>Currently: <span id="breakUpg10Mult">???</span>x<br>Cost: <span id="breakUpg10Cost"></span> Eternal Matter</button>
 							</td>
 						</tr>
+						<tr id="breakUpgR4">
+							<td>
+								<button id="breakUpg11" class="eternityupbtnlocked" onclick="buyBreakUpg(11)">The above upgrade works outside of Big Rip, but at the reduced rate.<br>Cost: <span id="breakUpg11Cost"></span> Eternal Matter</button>
+							</td>
+							<td>
+								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You passively produce 1% of GHP gain per second, whether you broke Eternity or not.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
+							</td>
+							<td>
+								<button id="breakUpg13" class="eternityupbtnlocked" onclick="buyBreakUpg(13)">You gain way more Space Shards based on Eternal Matter.<br>Cost: <span id="breakUpg13Cost"></span> Eternal Matter</button>
+							</td>
+						</tr>
 						<tr id="breakUpgRS">
 							<td>
 								<button class="eternityupbtn" onclick="eternity()">Eternal Matter: <span id="eterShortcutEM"></span><br>Start a normal Eternity run.</button>
@@ -1914,7 +1925,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 7.1)</span>
+				<span class="warning">(Test server: Beta 8)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -5176,7 +5187,7 @@
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow4">
 						<td>They decrease free tickspeed upgrade threshold by -<span class="neutrinos" id="neutrinoBoost10"></span>.</td>
 						<td id="neutrinoBoostCell11">They boost the production and cap of Ghostly Rays by <span class="neutrinos" id="neutrinoBoost11">1.00</span>x.</td>
-						<td></td>
+						<td id="neutrinoBoostCell12">They multiply the Eternal Matter gain by <span class="neutrinos" id="neutrinoBoost12">1.00</span>x.<br>(Nerfed in Big Rip runs)</td>
 					</tr>
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>
@@ -5209,9 +5220,9 @@
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg15" onclick="buyNeutrinoUpg(15)">Your Nanorewards speed up Nanofield.<br>Currently: <span id="neutrinoUpg15Pow"></span>x<br>Cost: <span id="neutrinoUpg15Cost"></span> of any neutrinos</button></td>
 					</tr>
 					<tr>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">Remove the cost scaling of GhP multiplier upgrades.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg17" onclick="buyNeutrinoUpg(17)">???<br>Cost: <span id="neutrinoUpg17Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg18" onclick="buyNeutrinoUpg(18)">???<br>Cost: <span id="neutrinoUpg18Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">You can become a ghost without having to Big Rip, but at the reduced rate.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg17" onclick="buyNeutrinoUpg(17)">Remove the cost scaling of GhP multiplier upgrades.<br>Cost: <span id="neutrinoUpg17Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg18" onclick="buyNeutrinoUpg(18)">The 4th row of Neutrino Boosts are twice as strong.<br>Cost: <span id="neutrinoUpg18Cost"></span> of any neutrinos</button></td>
 					</tr>
 				</table>
 			</div>
@@ -5521,7 +5532,7 @@
 						</td>
 					</tr><tr>
 						<td id="le10">
-							Replicantis strengthen Tree Upgrades by <span class="lEp" id="leBoost10" style="font-size:35px"></span>%
+							They strengthen Tree Upgrades by <span class="lEp" id="leBoost10" style="font-size:35px"></span>%
 						</td>
 						<td>
 							Translated to +<span class="lEp" id="lightEmpowermentsEffect" style="font-size:35px"></span>x multiplier to all Light strength boosts.
@@ -5530,7 +5541,7 @@
 							They make that all Lights boost other Lights from (x+1)^0.5 to <span class="lEp" id="leBoost5" style="font-size:35px"></span>.
 						</td>
 						<td id="le11">
-							They boost something by <span class="lEp" id="leBoost11" style="font-size:35px"></span>%. :)
+							They subtract their base requirement by <span class="lEp" id="leBoost11" style="font-size:35px"></span>.
 						</td>
 					</tr></table>
 				</div>

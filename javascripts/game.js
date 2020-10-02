@@ -1189,7 +1189,7 @@ function doNGMinusFourPlayer(){
 	player.tdBoosts = 0
 	player.challengeTimes.push(600 * 60 * 24 * 31)
 	player.autobuyers.push(15)
-	resetTDs()
+	resetTDsOnNGM4()
 	reduceDimCosts()
 }
 
@@ -1197,7 +1197,7 @@ function doNGMinusFivePlayer(){
 	player.aarexModifications.ngm5V = 0.52
 	player.aarexModifications.ngmX = 5
 	resetPSac()
-	resetIDs_ngm5()
+	resetIDsOnNGM5()
 }
 
 function doNGMultipliedPlayer(){
@@ -3242,7 +3242,7 @@ function updateLastTenEternities() {
 		tempTime = tempTime.dividedBy(listed)
 		tempEP = tempEP.dividedBy(listed)
 		var eppm = tempEP.dividedBy(tempTime/600)
-		var tempstring = "(" + shorten(eppm) + " EP/min"
+		var tempstring = "(" + shorten(eppm) + " EP/min)"
 		averageEp = tempEP
 		if (eppm < 1) tempstring = "(" + shorten(eppm * 60) + " EP/hour"
 		document.getElementById("averageEternityRun").textContent = "Average time of the last " + listed + " Eternities: " + timeDisplayShort(tempTime, false, 3) + " | Average EP gain: " + shortenDimensions(tempEP) + " EP. " + tempstring
@@ -3456,7 +3456,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	if (dilated || !player.achievements.includes("ng3p67")) resetReplicantiUpgrades()
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
-	resetTDs()
+	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
@@ -3475,7 +3475,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	setInitialMoney()
 	if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
 	if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-	resetInfDimensions();
+	resetInfDimensions(true);
 	updateChallenges();
 	updateNCVisuals()
 	updateEterChallengeTimes()
@@ -3483,7 +3483,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	updateLastTenEternities()
 	if (!player.achievements.includes("r133")) {
 		var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
-		for (var i = 0; i < 8; i++) infchalls[i].style.display = "none"
+		for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
 	}
 	GPminpeak = new Decimal(0)
 	IPminpeak = new Decimal(0)
@@ -3864,7 +3864,7 @@ function startEternityChallenge(n) {
 	resetReplicantiUpgrades()
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
-	resetTDs()
+	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
@@ -3883,7 +3883,7 @@ function startEternityChallenge(n) {
 	if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
 	if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
 	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
-	resetInfDimensions();
+	resetInfDimensions(true);
 	updateChallenges();
 	updateNCVisuals()
 	updateLastTenRuns()
@@ -5350,7 +5350,7 @@ function passiveQuantumLevelStuff(diff){
 		}
 		if (player.ghostify.milestones>15) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
 	}
-	if (tmp.be && player.ghostify.milestones>14) tmp.qu.breakEternity.eternalMatter=tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
+	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
 }

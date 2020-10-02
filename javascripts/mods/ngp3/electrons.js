@@ -52,7 +52,10 @@ function getElectronBoost(mod) {
 	var s = 149840
 	if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
 	
-	if (amount > 37460 + s) amount = Math.sqrt((amount-s) * 37460) + s
+	if (amount > 37460 + s) {
+		if (hasBosonicUpg(64)) amount = Math.pow((amount - s) / 37460, 0.9) * 37460 + s
+		else amount = Math.sqrt((amount - s) * 37460) + s
+	}
 	if (GUActive("rg4") && mod != "no-rg4") amount *= 0.7
 	if (player.masterystudies !== undefined && isTreeUpgActive(4) && mod != "noTree") amount *= getTreeUpgradeEffect(4)
 	return amount + 1

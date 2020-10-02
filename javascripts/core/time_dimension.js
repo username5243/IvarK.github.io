@@ -242,13 +242,6 @@ function buyTimeDimension(tier) {
 	return true
 }
 
-function resetTimeDimensions() {
-	for (var i = 1; i <= 8; i++) {
-		var dim = player["timeDimension" + i]
-		dim.amount = new Decimal(dim.bought)
-	}
-}
-
 function getOrSubResourceTD(tier, sub) {
 	if (sub == undefined) {
 		var currmax = player.currentChallenge == "" ? new Decimal(Number.MAX_VALUE).pow(10) : Decimal.pow(10, 1000)
