@@ -329,7 +329,7 @@ function updateQuantumTempStuff() {
 	tmp.rg4 = tmp.quActive && tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || inQC(1) || QCIntensity(1))
 	tmp.qcComps = 0
 	if (player.quantum.pairedChallenges && player.quantum.pairedChallenges.completions){
-		tp.qcComps = Object.keys(player.quantum.pairedChallenges.completions).length
+		tmp.qcComps = Object.keys(player.quantum.pairedChallenges.completions).length
 	}
 }
 
