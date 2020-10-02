@@ -75,6 +75,9 @@ let Prestiges = {
 	did(id) {
 		return ph.tmp[id] && ph.tmp[id].did
 	},
+	has(id){
+		return ph.tmp[id] && ph.tmp[id].did
+	},
 	displayData: {
 		paradox: ["pSac", "px", "paradoxbtn"],
 		galaxy: ["sacrificebtn", "galaxyPoints2", "galaxybtn"],

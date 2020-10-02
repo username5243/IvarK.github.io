@@ -339,7 +339,7 @@ var masteryStudies = {
 	allConnections_legacy: {252: [263, 264, "d7"], ec13: [], ec14: []},
 	allUnlocks: {
 		d7() {
-			return quantumed
+			return ph.did("quantum")
 		},
 		322() {
 			return player.masterystudies.includes("d10") || ghostified
@@ -708,7 +708,7 @@ function updateMasteryStudyTextDisplay() {
 		document.getElementById("ds" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.dil[id]) + " Time Theorems"
 		if (req) document.getElementById("ds" + id + "Req").innerHTML = ghostified || !req ? "" : "<br>Requirement: " + req
 	}
-	if (quantumed) document.getElementById("321effect").textContent=shortenCosts(new Decimal("1e430"))
+	if (ph.did("quantum")) document.getElementById("321effect").textContent=shortenCosts(new Decimal("1e430"))
 }
 
 var occupied
