@@ -468,7 +468,7 @@ var bEn = {
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
-		13: "The usage of Anti-Preons is stronger.",
+		13: "Things that consume Anti-Preons are stronger.",
 		23: "Bosonic Antimatter boosts oscillate speed.",
 		14: "Divide the requirement of Higgs and start with some Bosonic Upgrades even it is inactive.",
 		24: "You gain more Bosonic Battery.",
@@ -518,10 +518,14 @@ var bEn = {
 			return eff
 		},
 		25(l) {
-			return 2 - 1 / (l.max(1).log10() / 100 + 1)
+			return 1.99 - .99 / (l.plus(1).log10() / 100 + 1) 
+			// if you let this approach 2 then there will be issues with inflation
+			// either you need to softcap the formula or make this not approach 2
+			// since you don't like softcaps (which is fine) we need this solution
+			// this is VERY important
 		},
 		35(l) {
-			return Decimal.pow(1.1, l)
+			return Decimal.pow(1.1, l) //i think this might be op if we dont softcap
 		},
 		45(l) {
 			return Decimal.add(l, 1).log10() / 10 + 1
@@ -794,9 +798,9 @@ var bu = {
 		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Unlock 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",
-		55: "Bosonic Antimatter reduces the requirement of Light Empowerments before subtracting the cost.",
+		55: "Bosonic Antimatter divides the requirement of Light Empowerments prior to cost subtraction.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		62: "Nanospeed divides preon anti-energy production instead of multiplying it.", //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
+		62: "Nanospeed divides preon anti-energy production instead of multiplying it.", 
 		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
 		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.9)",
 		65: "Square the main Orange Light effect.",

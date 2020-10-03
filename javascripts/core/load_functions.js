@@ -1724,8 +1724,8 @@ function doNGp3Init2(){
 			updateUnlockedMasteryStudies()
 			updateSpentableMasteryStudies()
         }
-		updateActiveLayers()
-		updateActiveBigRipUpgrades()
+	updateActiveLayers()
+	updateActiveBigRipUpgrades()
         updateBosonicLimits()
         updateTemp()
         updateBosonicAMDimReturnsTemp()

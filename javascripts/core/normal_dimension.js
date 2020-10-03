@@ -565,10 +565,13 @@ function infUpg13Pow() {
 	let x = player.thisInfinityTime / 2400
 	let exp = 0.25 
 	if (player.galacticSacrifice !== undefined) exp = 1.5
-	if (tmp.ngC) exp *= Math.sqrt(player.galaxies + 1) * 200
+	if (tmp.ngC) {
+		exp *= Math.sqrt(player.galaxies + 1) * 200
+		x += 1
+	}
 
 	if (exp > 10) return Decimal.pow(x, exp).max(1)
-	return Math.max(Math.pow(x, exp), 1)
+	return Decimal.max(Decimal.pow(x, exp), 1)
 }
 
 function dimMults() {

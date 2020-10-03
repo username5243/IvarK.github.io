@@ -108,7 +108,7 @@ function getQuarkChargeProductionCap() {
 
 var nanoRewards = {
 	scaling: {
-		max: 3,
+		max: 4,
 		0: {
 			start: 0,
 			mult(diff) {

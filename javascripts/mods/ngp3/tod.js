@@ -644,11 +644,11 @@ function getBU2Power(branch) {
 }
 
 function getBranchUpg3SoftcapStart(){
-	return 1/0 //1000 (maybe later on we can have things buff this)
+	return 1/0 
 }
 
 function getBranchUpg2SoftcapStart(){
-	return 1/0 //1e4 * Math.log2(10)
+	return 1/0 
 }
 
 function getEffectiveBranchUpgMult(branch, upg){

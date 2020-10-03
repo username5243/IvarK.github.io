@@ -472,9 +472,13 @@ function switchAB() {
 	updateAutoEterMode()
 }
 
+function getAMforGHPGain(){
+	return tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun.log10() : Math.pow(player.money.plus(1).log10(), 0.6)
+}
+
 function getGHPGain() {
 	if (!ph.did("ghostify")) return new Decimal(1)
-	let log = (tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun.log10() : Math.pow(player.money.log10(), 0.6)) / getQCGoalLog([6, 8], true) - 1
+	let log = getAMforGHPGain() / getQCGoalLog([6, 8], true) - 1
 	if (player.achievements.includes("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
 		let x = Math.min(7, log / 2) + Math.min(3, log / 2)

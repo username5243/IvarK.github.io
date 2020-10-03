@@ -29,7 +29,7 @@ function getReplMult(next) {
 	}
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
-	if (hasTimeStudy(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
+	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (hasTimeStudy(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
 	return replmult;
 }

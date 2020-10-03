@@ -180,7 +180,7 @@ function getDistantAdd(x) {
 }
 
 function getRemoteScalingStart(galaxies) {
-	var n = 800
+	let n = tmp.ngC ? 150 : 800
 	if (player.aarexModifications.ngmX > 3) {
 		n = 6
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2

@@ -408,6 +408,12 @@ var softcap_data = {
 			pow: 1/4,
 			derv: false,
 		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e10000"),
+			pow: 1/7,
+			derv: false,
+		}
 	},
 	ts_ngC: {
 		1: {
@@ -471,6 +477,20 @@ var softcap_data = {
 			start: 1e9,
 			mul: Math.sqrt(1e9) / 9,
 			pow: 2,
+		},
+	},
+	ep_ngC: {
+		1: {
+			func: "pow",
+			start: 1e10,
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/3,
+			derv: false,
 		},
 	},
 }

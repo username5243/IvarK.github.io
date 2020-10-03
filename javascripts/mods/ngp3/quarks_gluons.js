@@ -232,7 +232,7 @@ function updateColorPowers(log) {
 	if (hasBosonicUpg(11)) softcapPower += tmp.blu[11]
 
 	if (tmp.bE50kDT) {
-		//Beyond e20k DT
+		//Beyond e50k DT
 		let b2Log = new Decimal(Math.log10(bLog))
 		if (hasBosonicUpg(63)) b2Log = b2Log.add(tmp.blu[63])
 
@@ -241,7 +241,7 @@ function updateColorPowers(log) {
 		bLog = softcap(bLog, "dt_log")
 		colorBoosts.b = Decimal.pow(10, bLog)
 	} else {
-		//Before e20k DT
+		//Before e50k DT
 		if (hasBosonicUpg(63)) bLog = Decimal.pow(10, tmp.blu[63]).times(bLog)
 
 		if (Decimal.gt(bLog, softcapStartLog)) {
