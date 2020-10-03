@@ -147,10 +147,10 @@ var leBoosts = {
 		},
 		leThreshold: 0,
 		eff() {
-			return tmp.leBoost / 1e4
+			return tmp.leBoost / 10
 		},
 		effDesc(x) {
-			return (x * 100 - 100).toFixed(2)
+			return x.toFixed(2)
 		}
 	}
 }
@@ -302,10 +302,11 @@ function getLightEmpowermentReq(le) {
 		scale = 1
 	}
 	if (le >= 50) {
-		x += Math.pow(1.2, le - 49) - 1
+		x = Decimal.pow(1.2, le - 49).add(x - 1)
 		scale = 2
 	}
-	if (hasBosonicUpg(55)) x /= tmp.blu[55]
+	if (hasBosonicUpg(55)) x = Decimal.div(x, tmp.blu[55])
+	if (x + 0 !== x) x = x.toNumber()
 
 	if (player.achievements.includes("ng3p95")) x -= 1
 	if (isLEBoostUnlocked(11)) x -= tmp.leBonus[11]

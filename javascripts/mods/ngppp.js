@@ -81,8 +81,14 @@ function toggleAllMetaDims() {
 
 //v1.997
 function respecTogglePC() {
-	tmp.qu.pairedChallenges.respec = !tmp.qu.pairedChallenges.respec
-	document.getElementById("respecPC").className = tmp.qu.pairedChallenges.respec ? "quantumbtn" : "storebtn"
+	if (hasNU(16)) {
+		if (!ph.can("quantum")) return
+		tmp.qu.pairedChallenges.respec = true
+		quantum(true)
+	} else {
+		tmp.qu.pairedChallenges.respec = !tmp.qu.pairedChallenges.respec
+		document.getElementById("respecPC").className = tmp.qu.pairedChallenges.respec ? "quantumbtn" : "storebtn"
+	}
 }
 
 //v1.99799
@@ -467,10 +473,8 @@ function switchAB() {
 }
 
 function getGHPGain() {
-	if (!tmp.ngp3 || !tmp.qu.bigRip.active) return new Decimal(0)
 	if (!ph.did("ghostify")) return new Decimal(1)
-	let log = tmp.qu.bigRip.bestThisRun.log10() / getQCGoalLog(undefined, true) - 1
-	if (log < 0) return new Decimal(0)
+	let log = (tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun.log10() : Math.pow(player.money.log10(), 0.6)) / getQCGoalLog([6, 8], true) - 1
 	if (player.achievements.includes("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
 		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
@@ -556,7 +560,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	var nBEU = []
 	for (var u = 20; u > 0; u--) {
 		if (nBRU.includes(u + 1) || tmp.qu.bigRip.upgrades.includes(u)) nBRU.push(u)
-		if (u < 11 && u != 7 && (nBEU.includes(u + 1) || tmp.qu.breakEternity.upgrades.includes(u))) nBEU.push(u)
+		if (u <= 13 && u != 7 && (nBEU.includes(u + 1) || tmp.qu.breakEternity.upgrades.includes(u))) nBEU.push(u)
 	}
 	if (bm > 2) for (var c=1;c<9;c++) tmp.qu.electrons.mult += .5 - QCIntensity(c) * .25
 	if (bm > 6 && !force && player.achievements.includes("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")

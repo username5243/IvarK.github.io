@@ -139,7 +139,7 @@ function galaxySacDisplay(){
 
 function bestInfinityDisplay(){
 	document.getElementById("infinityStatistics").style.display = "none"
-	if (player.bestInfinityTime >= 9999999999) {
+	if (!ph.shown("infinity") || player.bestInfinityTime >= 9999999999) {
 		document.getElementById("bestInfinity").textContent = ""
 		document.getElementById("thisInfinity").textContent = ""
 		document.getElementById("infinitied").textContent = ""
@@ -149,11 +149,11 @@ function bestInfinityDisplay(){
 		document.getElementById("thisInfinity").textContent = "You have spent " + timeDisplay(player.thisInfinityTime) + " in this Infinity."
 		document.getElementById("infinitied").textContent = "You have Infinitied " + getFullExpansion(player.infinitied) + " time" + (player.infinitied == 1 ? "" : "s") + (player.eternities!==0||player.eternitiesBank>0 ? " this Eternity." : ".")
 	}
-	if (player.infinitiedBank>0) document.getElementById("infinityStatistics").style.display = ""
+	if (ph.shown("infinity") && player.infinitiedBank > 0) document.getElementById("infinityStatistics").style.display = ""
 }
 
 function bestEternityDisplay(){
-	if (ph.did("eternity")) {
+	if (ph.shown("eternity")) {
 		document.getElementById("eternityStatistics").style.display = ""
 		if (player.bestEternity >= 9999999999) {
 			document.getElementById("besteternity").textContent = ""
@@ -164,7 +164,7 @@ function bestEternityDisplay(){
 }
 
 function bestQuantumDisplay(){
-	if (!tmp.quUnl) document.getElementById("quantumStatistics").style.display = "none"
+	if (!ph.shown("quantum")) document.getElementById("quantumStatistics").style.display = "none"
 	else {
 		document.getElementById("quantumStatistics").style.display = ""
 		document.getElementById("quantumed").textContent = "You have gone Quantum " + getFullExpansion(tmp.qu.times) + " times."
@@ -174,7 +174,7 @@ function bestQuantumDisplay(){
 }
 
 function bestGhostifyDisplay(){
-	if (!ph.did("ghostify")) document.getElementById("ghostifyStatistics").style.display = "none"
+	if (!ph.shown("ghostify")) document.getElementById("ghostifyStatistics").style.display = "none"
 	else {
 		document.getElementById("ghostifyStatistics").style.display = ""
 		document.getElementById("ghostified").textContent = "You have became a ghost and passed Big Ripped universes " + getFullExpansion(player.ghostify.times) + " times."
@@ -676,9 +676,10 @@ function replicantiDisplay() {
 		var chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
 		document.getElementById("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber()))+"%") + chanceDisplayEnding
 		document.getElementById("replicantiinterval").innerHTML = "Interval: "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100), true, 3) + (isIntervalAffordable() ? "<br>-> "+timeDisplayShort(Decimal.times(tmp.rep.interval, 9e-3), true, 3)+" Cost: "+shortenCosts(player.replicanti.intervalCost)+" IP" : "")
-		var replGalName = player.replicanti.gal < 3e3 ? "Max Replicanti galaxies" : (player.replicanti.gal < 58200 ? "Distant" : "Further") + " Replicated Galaxies"
+		var replGal = player.replicanti.gal
+		var replGalName = player.replicanti.gal < 100 ? "Max Replicanti galaxies" : getGalaxyScaleName((replGal > 399 ? 2 : replGal > 99 ? 1 : 0) + (tmp.ngp3 && player.masterystudies.includes("t266") ? (replGal > 12e4 ? 3 : replGal > 58198 ? 2 : replGal > 2998 ? 1 : 0) : 0)) + "Replicated Galaxies"
 		var replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
-		document.getElementById("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(player.replicanti.gal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
+		document.getElementById("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		document.getElementById("replicantireset").innerHTML = (player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16") ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ") + "1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 		document.getElementById("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
@@ -820,14 +821,14 @@ function replicantiShopABDisplay(){
 }
 
 function primaryStatsDisplayResetLayers(){
-	if (getEternitied() == 0 && !ph.did("quantum")) document.getElementById("pasteternities").style.display = "none"
+	if (!ph.shown("eternity")) document.getElementById("pasteternities").style.display = "none"
 	else document.getElementById("pasteternities").style.display = "inline-block"
-	if (ph.did("quantum")) document.getElementById("pastquantums").style.display = "inline-block"
+	if (ph.shown("quantum")) document.getElementById("pastquantums").style.display = "inline-block"
 	else document.getElementById("pastquantums").style.display = "none"
-	if (ph.did("ghostify")) document.getElementById("pastghostifies").style.display = "inline-block"
+	if (ph.shown("ghostify")) document.getElementById("pastghostifies").style.display = "inline-block"
 	else document.getElementById("pastghostifies").style.display = "none"
-	document.getElementById("pastinfs").style.display = ph.did("infinity") ? "" : "none"
-	var showStats = player.challenges.length >= 2 || ph.did("eternity") ? "" : "none"
+	document.getElementById("pastinfs").style.display = ph.shown("infinity") ? "" : "none"
+	var showStats = (ph.shown("infinity") && player.challenges.length >= 2) || ph.shown("eternity") || ph.shown("quantum") || ph.shown("ghostify") ? "" : "none"
 	document.getElementById("brfilter").style.display = showStats
 	document.getElementById("statstabs").style.display = showStats
 	var display = player.aarexModifications.hideSecretAchs?"none":""

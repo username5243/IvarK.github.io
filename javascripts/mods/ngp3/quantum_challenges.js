@@ -109,7 +109,7 @@ function getQCGoalLog(QCs, bigRip) {
 		mods = qcm.on
 	}
 	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
-	if (mods.includes("ms")) mult *= 1e3
+	if (mods.includes("ms")) mult *= 5e3
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
 	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
 
@@ -156,6 +156,7 @@ function updatePCCompletions() {
 		if (tmp.qu.pairedChallenges.completions[c2 * 10 + c1]) {
 			rankingPart = 5 - tmp.qu.pairedChallenges.completions[c2 * 10 + c1]
 			tmp.pcc.normal = (tmp.pcc.normal || 0) + 1
+			if (c1 == 9) tmp.pcc.c9 = (tmp.pcc.c9 || 0) + 1
 		} else if (c2 * 10 + c1 == 68 && ghostified) {
 			rankingPart = 0.5
 			tmp.pcc.normal = (tmp.pcc.normal || 0) + 1
@@ -177,6 +178,12 @@ function updatePCCompletions() {
 	}
 	r *= 100 / 56
 
+	tmp.pce = {} // PC Completion effects
+	for (var m = 0; m < qcm.modifiers.length; m++) {
+		let mod = qcm.modifiers[m]
+		if (tmp.pcc[mod] && qcm.rewards[mod]) tmp.pce[mod] = qcm.rewards[mod].eff(tmp.pcc[mod])
+	}
+
 	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
 	document.getElementById("pccranking").textContent = r.toFixed(1)
 	document.getElementById("pccrankingMax").textContent = Math.sqrt(11250 * (2 + qcm.modifiers.length)).toFixed(1)
@@ -193,7 +200,7 @@ function updatePCCompletions() {
 			var id = qcm.modifiers[m]
 			if (r >= qcm.reqs[id] || !qcm.reqs[id]) {
 				document.getElementById("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
-				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', qcm.descs[id] || "???")
+				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', (qcm.descs[id] || "???") + (tmp.pce[id] ? " (PC Reward: " + qcm.rewards[id].desc(tmp.pce[id]) + ")" : ""))
 			} else {
 				document.getElementById("qcm_" + id).className = "unavailablebtn"
 				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', 'Get ' + qcm.reqs[id] + ' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
@@ -207,7 +214,7 @@ function updatePCCompletions() {
 let qcRewards = {
 	effects: {
 		1: function(comps) {
-			if (comps == 0) return 1
+			if (comps == 0 || tmp.bE50kDT) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
 			return Decimal.pow(10, Math.pow(base, exp) / 200)
@@ -248,7 +255,7 @@ let qcRewards = {
 			return comps + 2
 		},
 		9: function(comps) {
-			comps = 1
+			comps = ((tmp.pcc && tmp.pcc.c9) || 0) + 1
 			let x = Math.log10(player.replicanti.amount.log10() + 1) * Math.sqrt(comps)
 			return {
 				td: Math.pow(Math.max(x * 2 - 4, 1), 2),
@@ -259,11 +266,12 @@ let qcRewards = {
 }
 
 function isQCRewardActive(x) {
-	return tmp.quActive && player.masterystudies.includes("d8") && QCIntensity(x)
+	return tmp.qcRewards && tmp.qcRewards[x] && player.masterystudies.includes("d8") && QCIntensity(x)
 }
 
 function updateQCRewardsTemp() {
 	tmp.qcRewards = {}
+	if (!tmp.quUnl) return
 	for (var c = 1; c <= 9; c++) tmp.qcRewards[c] = qcRewards.effects[c](QCIntensity(c))
 }
 
@@ -338,6 +346,7 @@ function updatePCTable() {
 	updateBestPC68Display()
 	document.getElementById("upcc").textContent = (qcm.names[tmp.pct] || "Unique PC completions") + ": " + (tmp.pcc[tmp.pct || "normal"] || 0) + " / 36"
 	document.getElementById("udcc").textContent = tmp.pct == "" ?  "No dilation: " + (tmp.pcc.noDil || 0) + " / 36" : ""
+	document.getElementById("pcEff").textContent = tmp.pce[tmp.pct] ? "Effect: " + qcm.rewards[tmp.pct].desc(tmp.pce[tmp.pct]) : ""
 }
 
 function updateBestPC68Display() {
@@ -359,7 +368,17 @@ var qcm={
 	descs: {
 		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
 		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies.",
-		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 1,000. Good luck! :)"
+		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 5,000. Good luck! :)"
+	},
+	rewards: {
+		ms: {
+			eff(x) {
+				return Math.pow(tmp.pcc.ms / 100 + 1, 0.75)
+			},
+			desc(x) {
+				return "Boost all Emperor Dimensions by " + (x.eds * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension."
+			}
+		}
 	},
 	on: []
 }

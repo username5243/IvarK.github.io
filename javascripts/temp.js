@@ -9,6 +9,7 @@ function updateTemp() {
 	tmp.nrm = 1
 	if (player.timestudy.studies.includes(101)) tmp.nrm = player.replicanti.amount.max(1)
 	tmp.rg4 = false
+	tmp.bE50kDT = false
 	if (tmp.ngp3) {
 		updateGhostifyTempStuff()
 		updateQuantumTempStuff()
@@ -74,6 +75,8 @@ let tmp = {
 }
 
 function updateActiveLayers() {
+	tmp.eterUnl = ph.did("eternity") && !player.pl.on
+
 	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !player.pl.on
 	tmp.quActive = tmp.quUnl && !inQCModifier("ms")
 }
@@ -166,50 +169,51 @@ function updateInfiniteTimeTemp() {
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
-		if (tmp.be && !player.dilation.active && tmp.qu.breakEternity.upgrades.includes(8)) x *= getBreakUpgMult(8)
+		if (tmp.qu.breakEternity.upgrades.includes(tmp.be ? 11 : 8)) x *= getBreakUpgMult(8)
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
+		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
 
 		if (player.dilation.active && x > 1e5) x = Math.pow(1e20 * x, .2)
 		if (!tmp.qu.bigRip.active) x = softcap(x, "inf_time_log_2")
-		if (hasBosonicUpg(52)) x *= tmp.blu[52].it
 	}
 	tmp.it = Decimal.pow(10, x)
 }
 
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
-	let x = player.galaxies
+	let x = Math.max(player.galaxies, 1)
 	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
 	x += tmp.effAeg
+	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	tmp.igg = x
 
+	let igLog = Decimal.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
 	tmp.igs = 0 //Intergalactic Scaling: Used in the display text
-	var igLog = Math.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
 
 	if (tmp.qu.bigRip.active) { //Big Rip
-		if (igLog > 1e9) { //Distant
-			igLog = Math.pow(igLog * 1e3, .75)
+		if (igLog.gt(1e9)) { //Distant
+			igLog = igLog.times(1e3).pow(.75)
 			tmp.igs++
 		}
-		if (igLog > 1e10) { //Further
-			igLog = Math.pow(Math.log10(igLog) / 2 + 5, 10)
+		if (igLog.gt(1e10)) { //Further
+			igLog = Math.pow(igLog.log10() / 2 + 5, 10)
 			tmp.igs++
 		}
 	} else {
-		if (igLog > 1e15) { //Distant
-			igLog = Math.pow(10 + 6 * Math.log10(igLog), 7.5)
+		if (igLog.gt(1e15)) { //Distant
+			igLog = Math.pow(10 + 6 * igLog.log10(), 7.5)
 			tmp.igs++
 		}
 	}
-	if (igLog > 1e20) { //Further / Remote and beyond
+	/*if (igLog > 1e20) { //Further / Remote and beyond
 		igLog = softcap(igLog, "ig_log_high")
 		tmp.igs += Math.floor(Math.log10(igLog) - 20) + 1
 		if (igLog > 1e24) igLog = Math.pow(Math.pow(Math.log10(igLog), 2) + 424, 8)
-	}
-	
-	if (hasBosonicUpg(52)) igLog *= tmp.blu[52].ig
+	}*/
+
+	if (igLog + 0 !== igLog) igLog = igLog.toNumber() 
 	tmp.ig = Decimal.pow(10, igLog)
 }
 
@@ -295,6 +299,7 @@ function updatePPTITemp(){
 
 function updateQuantumTempStuff() {
 	if (tmp.quActive) {
+		tmp.bE50kDT = player.dilation.dilatedTime.gt("1e50000")
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
 		if (tmp.nrm !== 1 && tmp.qu.bigRip.active) {
@@ -414,14 +419,20 @@ function updateBreakEternityUpgrade5Temp(){
 }
 
 function updateBreakEternityUpgrade6Temp(){
-	var ep = player.eternityPoints
-	var em = tmp.qu.breakEternity.eternalMatter
-	var nerfUpgs = !tmp.be && hasBosonicUpg(24)
-	var log1 = ep.div("1e4900").add(1).log10()
-	var log2 = em.div(1e45).add(1).log10()
+	let ep = player.eternityPoints
+	let em = tmp.qu.breakEternity.eternalMatter
+	let nerfUpgs = !tmp.be && hasBosonicUpg(24)
+	let hasU13 = tmp.qu.breakEternity.upgrades.includes(13)
+
+	let log1 = ep.div("1e4900").add(1).log10()
+	let log2 = em.div(1e45).add(1).log10()
 	if (nerfUpgs) log1 /= 2e6
-	var exp = Math.pow(log1, 1/3) / 1.7 + Math.pow(log2, 1/3) * 2
+
+	let exp = Math.pow(log1, 1/3) / 1.7
+	if (!hasU13) exp += Math.pow(log2, 1/3) * 2
 	if (exp > 200) exp = 50 * Math.log10(50 * exp)
+	if (hasU13) exp += Math.pow(log2, 0.8)
+
 	tmp.beu[6] = Decimal.pow(10, exp)
 }
 
@@ -565,7 +576,7 @@ function updateWZBosonsTemp(){
 	var wnl = player.ghostify.wzb.wnb.add(1).log10()
 
 	var bosonsExp = Math.max(wpl * (player.ghostify.wzb.wpb.sub(player.ghostify.wzb.wnb.min(player.ghostify.wzb.wpb))).div(player.ghostify.wzb.wpb.max(1)).toNumber(), 0)
-	if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
+	//if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
 	//softcap it to remove inflation in WZB
 	data.wbt = Decimal.pow(tmp.newNGP3E ? 5 : 3, bosonsExp) //W Bosons boost to extract time
 	data.wbo = Decimal.pow(10, Math.max(bosonsExp, 0)) //W Bosons boost to Z Neutrino oscillation requirement
@@ -573,7 +584,7 @@ function updateWZBosonsTemp(){
 	//W Bosons boost to Bosonic Antimatter production
 
 	var zbslog = player.ghostify.wzb.zb.div(10).add(1).log10() / 2
-	if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
+	//if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
 	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }

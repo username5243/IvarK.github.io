@@ -261,33 +261,6 @@ function checkICID(name) {
 	}
 }
 
-function updateEternityChallenges() {
-	tmp.ec=0
-	var locked = true
-	for (ec=1;ec<15;ec++) {
-		var property = "eterc"+ec 
-		var ecdata = player.eternityChalls[property]
-		if (ecdata) {
-			tmp.ec+=ecdata
-			locked=false
-		}
-		document.getElementById(property+"div").style.display=ecdata?"inline-block":"none"
-		document.getElementById(property).textContent=ecdata>4?"Completed":"Locked"
-		document.getElementById(property).className=ecdata>4?"completedchallengesbtn":"lockedchallengesbtn"
-	}
-	if (player.eternityChallUnlocked>0) {
-		var property="eterc"+player.eternityChallUnlocked
-		var onchallenge=player.currentEternityChall==property
-		locked=false
-		document.getElementById(property+"div").style.display="inline-block"
-		document.getElementById(property).textContent=onchallenge?"Running":"Start"
-		document.getElementById(property).className=onchallenge?"onchallengebtn":"challengesbtn"
-	}
-	document.getElementById("eterctabbtn").parentElement.style.display = locked?"none":""
-	document.getElementById("autoEC").style.display=ph.did("quantum")&&tmp.ngp3?"inline-block":"none"
-	if (ph.did("quantum")&&tmp.ngp3) document.getElementById("autoEC").className=tmp.qu.autoEC?"timestudybought":"storebtn"
-}
-
 var challNames = [null, null, "Second Dimension Autobuyer Challenge", "Third Dimension Autobuyer Challenge", "Fourth Dimension Autobuyer Challenge", "Fifth Dimension Autobuyer Challenge", "Sixth Dimension Autobuyer Challenge", "Seventh Dimension Autobuyer Challenge", "Eighth Dimension Autobuyer Challenge", "Tickspeed Autobuyer Challenge", "Automated Dimension Boosts Challenge", "Automated Galaxies Challenge", "Automated Big Crunches Challenge", "Automated Dimensional Sacrifice Challenge", "Automated Galactic Sacrifice Challenge", "Automated Tickspeed Boosts Challenge", "Automated Time Dimension Boosts Challenge"]
 var challOrder = [null, 1, 2, 3, 8, 6, 10, 9, 11, 5, 4, 12, 7, 13, 14, 15, 16]
 function updateChallengeTimes() {

@@ -86,7 +86,7 @@ function updateTreeOfDecayTab(){
 			let effLvl = getEffectiveTreeUpgLevel(u)
 			document.getElementById("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
 			document.getElementById("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
-			let scalingsActive = (lvl >= 1e4 ? 1 : 0) + (cost.log10() > 25e3 ? 1 : 0)
+			let scalingsActive = (lvl >= 1e4 ? 1 : 0) //+ (cost.log10() > 25e3 ? 1 : 0)
 			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
 			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
@@ -189,7 +189,7 @@ function getBranchSpeedText(){
 	let text = ""
 	if (new Decimal(getTreeUpgradeEffect(3)).gt(1)) text += "Tree Upgrade 3: " + shorten(getTreeUpgradeEffect(3)) + "x, "
 	if (new Decimal(getTreeUpgradeEffect(5)).gt(1)) text += "Tree Upgrade 5: " + shorten(getTreeUpgradeEffect(5)) + "x, "
-	if (player.masterystudies.includes("t431")) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
+	if (masteryStudies.has(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
 	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
@@ -210,7 +210,7 @@ function getBranchSpeedText(){
 
 function getBranchSpeed() { 
 	let x = Decimal.times(getTreeUpgradeEffect(3), getTreeUpgradeEffect(5))
-	if (player.masterystudies.includes("t431")) x = x.times(getMTSMult(431))
+	if (masteryStudies.has(431)) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
@@ -281,7 +281,7 @@ function getTreeUpgradeCost(upg, add) {
 	if (upg == 7) x = Decimal.pow(16, lvl * lvl).times(4e22)
 	if (upg == 8) x = Decimal.pow(2, lvl).times(3e23)
 	let y = x.log10()
-	if (y > 25e3) y = Math.pow(y, 2) / 25e3
+	//if (y > 25e3) y = Math.pow(y, 2) / 25e3
 	if (lvl > 1e4) y *= lvl / 1e4
 	return Decimal.pow(10, y)
 }
@@ -350,6 +350,7 @@ function getTreeUpgradeEffect(upg) {
 		return Decimal.pow(2, lvl)
 	}
 	if (upg == 7) {
+		if (tmp.bE50kDT) return 1
 		return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
 	}
 	if (upg == 8) {
@@ -408,7 +409,7 @@ function unstableAll() {
 			bData.quarks = bData.quarks.max(getUnstableGain(colors[c]))
 			if (player.ghostify.milestones < 4) tmp.qu.usedQuarks[colors[c]] = new Decimal(0)
 		}
-		player.unstableThisGhostify ++
+		player.unstableThisGhostify++
 	}
 	updateColorCharge()
 	updateQuantumWorth()
@@ -465,7 +466,7 @@ var uq_names = {
 }
 
 function getUQName(rds) {
-	return uq_names[player.aarexModifications.uq_notation || "exponents"](rds)
+	return uq_names[player.aarexModifications.uq_notation || "mixed"](rds)
 }
 
 function getUQNameFromBranch(shorthand) {
@@ -473,40 +474,40 @@ function getUQNameFromBranch(shorthand) {
 }
 
 function maxTreeUpg() {
-	var update = false
-	var colors = ["r", "g", "b"]
-	var todData = tmp.qu.tod
-	for (var u = 1; u <= 8; u++) {
-		var cost = getTreeUpgradeCost(u)
-		var newSpins = []
-		var lvl = getTreeUpgradeLevel(u)
-		var min
-		for (var c = 0; c < 3; c++) {
-			min = todData[colors[c]].spin.min(c ? min : 1/0)
-			newSpins[c] = todData[colors[c]].spin
+	let update = false
+	let colors = ["r", "g", "b"]
+	let data = tmp.qu.tod
+	for (let u = 1; u <= 8; u++) {
+		let cost = getTreeUpgradeCost(u)
+		let spins = []
+		let lvl = getTreeUpgradeLevel(u)
+		let min
+		for (let c = 0; c < 3; c++) {
+			min = data[colors[c]].spin.min(c ? min : 1/0)
+			spins[c] = data[colors[c]].spin
 		}
-		if (newSpins[lvl % 3].gte(cost)) {
-			var increment = 1
-			while (newSpins[(lvl + increment - 1) % 3].gte(getTreeUpgradeCost(u, increment - 1))) increment *= 2
-			var toBuy = 0
-			while (increment >= 1) {
-				if (newSpins[(lvl + toBuy + increment - 1) % 3].gte(getTreeUpgradeCost(u, toBuy + increment - 1))) toBuy += increment
-				increment /= 2
+		if (spins[lvl % 3].gte(cost)) {
+			let inc = 1
+			while (spins[(lvl + inc - 1) % 3].gte(getTreeUpgradeCost(u, inc - 1))) inc *= 2
+			let toBuy = 0
+			while (inc >= 1) {
+				if (spins[(lvl + toBuy + inc - 1) % 3].gte(getTreeUpgradeCost(u, toBuy + inc - 1))) toBuy += inc
+				inc /= 2
 			}
-			var cost = getTreeUpgradeCost(u, toBuy - 1)
-			var toBuy2 = toBuy
-			while (toBuy > 0 && newSpins[(lvl + toBuy - 1) % 3].div(cost).lt(1e16)) {
-				if (newSpins[(lvl + toBuy - 1) % 3].gte(cost)) newSpins[(lvl + toBuy - 1) % 3]=newSpins[(lvl + toBuy - 1) % 3].sub(cost)
+			let cost = getTreeUpgradeCost(u, toBuy - 1)
+			let toBuy2 = toBuy
+			while (toBuy > 0 && spins[(lvl + toBuy - 1) % 3].div(cost).lt(1e16)) {
+				if (spins[(lvl + toBuy - 1) % 3].gte(cost)) spins[(lvl + toBuy - 1) % 3]=spins[(lvl + toBuy - 1) % 3].sub(cost)
 				else {
-					newSpins[(lvl + toBuy - 1) % 3] = todData[colors[(lvl + toBuy - 1) % 3]].spin.sub(cost)
+					spins[(lvl + toBuy - 1) % 3] = data[colors[(lvl + toBuy - 1) % 3]].spin.sub(cost)
 					toBuy2--
 				}
 				toBuy--
 				cost = getTreeUpgradeCost(u, toBuy - 1)
 			}
 			if (toBuy2) {
-				for (c = 0; c < 3; c++) todData[colors[c]].spin = isNaN(newSpins[c].e) ? new Decimal(0) : newSpins[c]
-				todData.upgrades[u] = toBuy2 + (todData.upgrades[u] === undefined ? 0 : todData.upgrades[u])
+				for (c = 0; c < 3; c++) data[colors[c]].spin = isNaN(spins[c].e) ? new Decimal(0) : spins[c]
+				data.upgrades[u] = toBuy2 + (data.upgrades[u] === undefined ? 0 : data.upgrades[u])
 				update = true
 			}
 		}
@@ -643,11 +644,11 @@ function getBU2Power(branch) {
 }
 
 function getBranchUpg3SoftcapStart(){
-	return 1000 //maybe later on we can have things buff this
+	return 1/0 //1000 (maybe later on we can have things buff this)
 }
 
 function getBranchUpg2SoftcapStart(){
-	return 1e4 * Math.log2(10)
+	return 1/0 //1e4 * Math.log2(10)
 }
 
 function getEffectiveBranchUpgMult(branch, upg){

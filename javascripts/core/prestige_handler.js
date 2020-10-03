@@ -88,9 +88,9 @@ let Prestiges = {
 		planck: ["planck", "planckinfo", "plancktabbtn"],
 	},
 	shown(id) {
-		if (id == "eternity" && pl.on()) return false
+		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
-		return !player.aarexModifications.layerHidden[id]
+		return ph.tmp[id] && !player.aarexModifications.layerHidden[id]
 	},
 	tmp: {},
 	reset() {
@@ -143,7 +143,7 @@ let Prestiges = {
 		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"
 
 		//Big Rip
-		var canBigRip = canQuickBigRip() && (ph.tmp.quantum.shown || bigRipAndQuantum)
+		var canBigRip = canQuickBigRip() && (ph.shown("quantum") || bigRipAndQuantum)
 		document.getElementById("bigripbtn").style.display = canBigRip ? "" : "none"
 		if (canBigRip) {
 			let pos = bigRipAndQuantum ? "ghostify" : "quantum"
@@ -175,6 +175,10 @@ let Prestiges = {
 		if (player.aarexModifications.layerHidden[layer]) delete player.aarexModifications.layerHidden[layer]
 		else player.aarexModifications.layerHidden[layer] = true
 
+		if (layer == "eternity" && !player.aarexModifications.layerHidden.eternity) {
+			if (document.getElementById("timedimensions").style.display == "block" || document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (document.getElementById("eternitychallenges").style.display == "block") showChallengeTab("normalchallenges")
+		}
 		if (layer == "quantum") handleDisplaysOutOfQuantum()
 
 		document.getElementById("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer

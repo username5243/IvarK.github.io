@@ -2,7 +2,7 @@
 
 function getBreakEternityTDMult(tier){
 	var ret = tmp.it
-	if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.times(tsMults[11]())
+	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
 	if (tmp.qu.breakEternity.upgrades.includes(1) && tier < 5) ret = ret.times(getBreakUpgMult(1))
 	if (tmp.qu.breakEternity.upgrades.includes(4) && tier > 3 && tier < 7) ret = ret.times(getBreakUpgMult(4))
 	if (tmp.qu.bigRip.upgrades.includes(13)) ret = ret.times(player.replicanti.amount.max(1).pow(1e-6))
@@ -51,21 +51,21 @@ function calcNGM2atleastTDPreVPostDilMultiplier(tier){
 	var ngPlus = (player.aarexModifications.newGamePlusVersion ? 103680000 : 0)
 	if (player.currentEternityChall == "eterc9") ret2 = ret2.times(tmp.infPow)
 	if (ECTimesCompleted("eterc1") !== 0) ret2 = ret2.times(getECReward(1))
-	if (player.eternityUpgrades.includes(4)) ret2 = ret2.times(player.achPow)
-	if (player.eternityUpgrades.includes(5)) ret2 = ret2.times(Math.max(player.timestudy.theorem, 1))
-	if (player.eternityUpgrades.includes(6)) ret2 = ret2.times((player.totalTimePlayed + ngPlus) / 10 / 60 / 60 / 24)
+	if (hasEternityUpg(4)) ret2 = ret2.times(player.achPow)
+	if (hasEternityUpg(5)) ret2 = ret2.times(Math.max(player.timestudy.theorem, 1))
+	if (hasEternityUpg(6)) ret2 = ret2.times((player.totalTimePlayed + ngPlus) / 10 / 60 / 60 / 24)
 	if (tmp.ngex) ret2 = ret2.div(10 / tier)
 	return ret2
 }
 
 function calcVanillaTSTDMult(tier){
 	var ret = new Decimal(1)
-	if (player.timestudy.studies.includes(73) && tier == 3) ret = ret.times(tmp.sacPow.pow(0.005).min(new Decimal("1e1300")))
-	if (player.timestudy.studies.includes(93)) ret = ret.times(Decimal.pow(player.totalTickGained, 0.25).max(1))
-	if (player.timestudy.studies.includes(103)) ret = ret.times(Math.max(player.replicanti.galaxies, 1))
-	if (player.timestudy.studies.includes(151)) ret = ret.times(1e4)
-	if (player.timestudy.studies.includes(221)) ret = ret.times(Decimal.pow(1.0025, player.resets))
-	if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(Math.pow(tmp.sacPow.max(10).log10(), 10))
+	if (hasTimeStudy(73) && tier == 3) ret = ret.times(tmp.sacPow.pow(0.005).min(new Decimal("1e1300")))
+	if (hasTimeStudy(93)) ret = ret.times(Decimal.pow(player.totalTickGained, 0.25).max(1))
+	if (hasTimeStudy(103)) ret = ret.times(Math.max(player.replicanti.galaxies, 1))
+	if (hasTimeStudy(151)) ret = ret.times(1e4)
+	if (hasTimeStudy(221)) ret = ret.times(Decimal.pow(1.0025, player.resets))
+	if (hasTimeStudy(227) && tier == 4) ret = ret.times(Math.pow(tmp.sacPow.max(10).log10(), 10))
 	return ret
 }
 
@@ -85,7 +85,7 @@ function getTimeDimensionPower(tier) {
 	if (hasPU(32)) ret = ret.times(puMults[32]())
 	if (player.aarexModifications.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier,ret)
 
-	if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.times(tsMults[11]())
+	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
 	
 	if (player.achievements.includes("r105")) ret = ret.times(tmp.it)
 	ret = ret.times(getERTDAchMults())

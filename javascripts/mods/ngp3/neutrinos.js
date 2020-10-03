@@ -261,7 +261,7 @@ var neutrinoBoosts = {
 	12: {
 		eff(nt) {
 			let nb12neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
-			let nb12 = Decimal.pow(1.001, nb12neutrinos)
+			let nb12 = Decimal.pow(1.01, nb12neutrinos)
 			return nb12
 		}
 	}

@@ -50,9 +50,9 @@ function nanofieldResetOnQuantum(){
 
 function doQuantumResetStuff(bigRip, isQC){
 	var headstart = player.meta !== undefined && !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.qu.bigRip.upgrades.includes(2) : speedrunMilestonesReached >=1
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >=1
 	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
-	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
+	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
 	player.money = new Decimal(10)
@@ -101,11 +101,11 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.qu.bigRip.upgrades.includes(2) ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : oheHeadstart ? 2e4 : player.achievements.includes("ng3p12") ? Math.max(Math.floor(720*3600*10/player.quantum.best),10000) : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : oheHeadstart ? 2e4 : player.achievements.includes("ng3p12") ? Math.max(Math.floor(720*3600*10/player.quantum.best),10000) : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
-	player.eternityUpgrades = isRewardEnabled(3) && (!bigRip || player.quantum.bigRip.upgrades.includes(12)) ? [1,2,3,4,5,6] : []
+	player.eternityUpgrades = isRewardEnabled(3) && (!bigRip || tmp.bruActive[12]) ? [1,2,3,4,5,6] : []
 	player.epmult = new Decimal(1)
 	player.epmultCost = new Decimal(500)
 	resetInfDimensions(true)
@@ -129,7 +129,7 @@ function doQuantumResetStuff(bigRip, isQC){
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
 	resetTimeDimensions(true)
-	player.timestudy = isRewardEnabled(11) && (!bigRip || tmp.qu.bigRip.upgrades.includes(12)) ? player.timestudy : {
+	player.timestudy = isRewardEnabled(11) && (!bigRip || tmp.bruActive[12]) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
@@ -158,15 +158,15 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.dead = true
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
-		studies: bigRip ? (tmp.qu.bigRip.upgrades.includes(12) ? [1,2,3,4,5,6] : tmp.qu.bigRip.upgrades.includes(10) ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
+		studies: bigRip ? (tmp.bruActive[12] ? [1,2,3,4,5,6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
 		active: false,
-		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.qu.bigRip.upgrades.includes(11))) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones > 15 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
+		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.bruActive[11])) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones > 15 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
-		upgrades: speedrunMilestonesReached > 5 && isRewardEnabled(4) && (!bigRip || tmp.qu.bigRip.upgrades.includes(12)) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
+		upgrades: speedrunMilestonesReached > 5 && isRewardEnabled(4) && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
 		autoUpgrades: [],
 		rebuyables: {
 			1: 0,
@@ -287,7 +287,7 @@ function resetTimeDimensions(full) {
 
 function resetEternityChallenges(bigRip, ngpp) {
 	player.eternityChalls = {}
-	if (ngpp || (bigRip ? tmp.qu.bigRip.upgrades.includes(2) : isRewardEnabled(3))) { 
+	if (ngpp || (bigRip ? tmp.bruActive[2] : isRewardEnabled(3))) { 
 		for (let ec = 1; ec <= (ngpp ? 12 : 14); ec++) player.eternityChalls['eterc' + ec] = 5
 	}
 	resetEternityChallUnlocks()
@@ -301,7 +301,7 @@ function doMetaDimensionsReset(bigRip, headstart, isQC) {
 }
 
 function resetMasteryStudies(bigRip) {
-	if (bigRip ? !tmp.qu.bigRip.upgrades.includes(12) : speedrunMilestonesReached < 16 || !isRewardEnabled(11)) {
+	if (bigRip ? !tmp.bruActive[12] : speedrunMilestonesReached < 16 || !isRewardEnabled(11)) {
 		let respeccedMS = []
 		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
 		player.masteryStudies = respeccedMS
@@ -548,7 +548,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			rebuyables: bm > 2 ? tmp.qu.electrons.rebuyables : [0,0,0,0]
 		},
 		challenge: [],
-		challenges: {},
+		challenges: bm ? tmp.qu.challenges : {},
 		nonMAGoalReached: tmp.qu.nonMAGoalReached,
 		challengeRecords: {},
 		pairedChallenges: {
@@ -736,6 +736,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.old = false
 	player.dontWant = true
 	player.unstableThisGhostify = 0
+	updateActiveBigRipUpgrades()
 }
 
 function doPreInfinityGhostifyResetStuff(implode){
@@ -771,8 +772,8 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	updateNCVisuals()
 	updateAutobuyers()
 	hideMaxIDButton()
+	ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
 	if (!bm) {
-		ipMultPower = player.masterystudies.includes("t241") ? 2.2 : 2
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
 		document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
 		document.getElementById("replicantidiv").style.display = "none"
@@ -877,13 +878,12 @@ function doQuantumGhostifyResetStuff(implode, bm){
 		var colors = ['r', 'g', 'b']
 		for (var c = 0; c < 3; c++) tmp.qu.tod[colors[c]].upgrades[1] = 5
 	}
-	if (bm) for (var i = 1; i < 9; i++) tmp.qu.challenges[i] = 2
-	else {
-		document.getElementById('rebuyupgauto').style.display="none"
-		document.getElementById('toggleallmetadims').style.display="none"
-		document.getElementById('metaboostauto').style.display="none"
-		document.getElementById("autoBuyerQuantum").style.display="none"
-		document.getElementById('toggleautoquantummode').style.display="none"
+	if (!bm) {
+		document.getElementById('rebuyupgauto').style.display = "none"
+		document.getElementById('toggleallmetadims').style.display = "none"
+		document.getElementById('metaboostauto').style.display = "none"
+		document.getElementById("autoBuyerQuantum").style.display = "none"
+		document.getElementById('toggleautoquantummode').style.display = "none"
 	}
 
 	document.getElementById('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
@@ -894,7 +894,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	updateQuantumWorth("quick")
 	updateBankedEter()
 	updateReplicants("prestige")
-	updateEmperorDimensions()
 	updateNanoRewardTemp()
 	updateTODStuff()
 }

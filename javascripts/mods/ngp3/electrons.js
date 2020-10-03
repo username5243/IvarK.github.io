@@ -109,8 +109,8 @@ function buyElectronUpg(u, quick) {
 		for (let i = 2; i <= 8; i++) if (!canBuyMetaDimension(i)) document.getElementById(i + "MetaRow").style.display = "none"
 	}
 	tmp.qu.electrons.rebuyables[u - 1]++
-	if (quick) return true
 	tmp.qu.electrons.mult += getElectronUpgIncrease(u)
+	if (quick) return true
 	updateElectrons(true)
 }
 

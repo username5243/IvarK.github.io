@@ -28,8 +28,8 @@ function getGalaxyPower(ng, bi, noDil) {
 	}
 	
 	let extraReplGalPower = 0
-	if (player.timestudy.studies.includes(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
-	if (player.timestudy.studies.includes(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
+	if (hasTimeStudy(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
+	if (hasTimeStudy(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
 	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
 
 	let otherGalPower = player.replicanti.galaxies
@@ -69,8 +69,8 @@ function getGalaxyEff(bi) {
 	}
 	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
-	if (player.timestudy.studies.includes(212)) eff *= tsMults[212]()
-	if (player.timestudy.studies.includes(232) && bi) eff *= tmp.ts232
+	if (hasTimeStudy(212)) eff *= tsMults[212]()
+	if (hasTimeStudy(232) && bi) eff *= tmp.ts232
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r

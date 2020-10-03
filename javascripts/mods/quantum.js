@@ -337,7 +337,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
-	var oheHeadstart = bigRip ? tmp.qu.bigRip.upgrades.includes(2) : speedrunMilestonesReached > 0
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached > 0
 	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
 	var oldTime = tmp.qu.time
 	tmp.qu.time = 0
@@ -360,7 +360,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			}
 		}
 		updateQuantumWorth()
-		if (bigRip && !tmp.qu.bigRip.upgrades.includes(12)) {
+		if (bigRip && !tmp.bruActive[12]) {
 			tmp.qu.bigRip.storedTS = {
 				tt: player.timestudy.theorem,
 				studies: player.timestudy.studies,
@@ -398,8 +398,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.add(getSpaceShardsGain())
 			if (player.ghostify.milestones < 8) tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.round()
 			if (player.matter.gt("1e5000")) giveAchievement("Really?")
-		}
-		else if (inQC(6) && inQC(8) && player.money.gt(tmp.qu.pairedChallenges.pc68best)) {
+		} else if (inQC(6) && inQC(8) && player.money.gt(tmp.qu.pairedChallenges.pc68best)) {
 			tmp.qu.pairedChallenges.pc68best = player.money
 			document.getElementById("bpc68").textContent = shortenMoney(player.money)
 		}
@@ -442,7 +441,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		}
 	}
 	if (tmp.ngp3) {
-		ipMultPower = GUBought("gb3") ? 2.3 : player.masterystudies.includes("t241") ? 2.2 : 2
+		ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
 		player.dilation.times = 0
 		if (!force) {
 			var u = tmp.qu.usedQuarks
@@ -566,9 +565,9 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		document.getElementById('toggleallmetadims').style.display = speedrunMilestonesReached > 7 ? "" : "none"
 		document.getElementById('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
 		document.getElementById("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
-		if (bigRip ? tmp.qu.bigRip.upgrades.includes(12) : isRewardEnabled(11)&&isRewardEnabled(4)) player.dilation.upgrades.push(10)
+		if (bigRip ? tmp.bruActive[12] : isRewardEnabled(11) && isRewardEnabled(4)) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
-		if (bigRip ? tmp.qu.bigRip.upgrades.includes(12) : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
+		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
 			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !player.aarexModifications.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
 			if (player.aarexModifications.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
@@ -660,13 +659,13 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 function handleDisplaysOnQuantum(bigRip, prestige) {
 	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
 
-	let keepECs = bigRip ? isBigRipUpgradeActive(2) : speedrunMilestonesReached >= 2
+	let keepECs = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 2
 	if (!keepECs && document.getElementById("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
 
-	let keepDil = bigRip ? isBigRipUpgradeActive(10) : player.dilation.studies.includes(1)
+	let keepDil = bigRip ? tmp.bruActive[10] : player.dilation.studies.includes(1)
 	if (!keepDil && document.getElementById("dilation").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display=="block")
 
-	let keepMDs = bigRip ? isBigRipUpgradeActive(12) : keepDil && speedrunMilestonesReached >= 6
+	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && speedrunMilestonesReached >= 6
 	if (!keepMDs && document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
 	let keepMSs = bigRip || (tmp.ngp3 && player.dilation.upgrades.includes("ngpp6"))
@@ -701,11 +700,11 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 	handleQuantumDisplays(prestige)
 }
 
-function handleDisplaysOutOfQuantum() {
+function handleDisplaysOutOfQuantum(bigRip) {
 	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
 	let keepQCs = ph.shown("quantum") && tmp.quUnl && speedrunMilestonesReached >= 16 && player.masterystudies.includes("d8")
 	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
-	let keepBE = ph.shown("quantum") && tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
+	let keepBE = tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
 
 	if (!keepQCs && document.getElementById("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
 	if (!keepEDs && document.getElementById("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")

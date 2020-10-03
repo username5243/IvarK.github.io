@@ -53,13 +53,16 @@ function unlockBlackhole() {
 }
 
 function isBHDimUnlocked(t) {
+	if (player.exdilation == undefined) return false
+	if (!tmp.eterUnl) return false
+	if (!player.blackhole.unl) return false
 	if (t > 8) return false
 	if (t > 4) {
 		if (player.aarexModifications.nguspV === undefined) return false
-		if (t==5) return player.eternityPoints.gt("1e120000")
-		if (t==6) return player.eternityPoints.gt("1e175000")
-		if (t==7) return player.eternityPoints.gt("1e190000")
-		if (t==8) return player.eternityPoints.gt("1e1000000")
+		if (t == 5) return player.eternityPoints.gt("1e120000")
+		if (t == 6) return player.eternityPoints.gt("1e175000")
+		if (t == 7) return player.eternityPoints.gt("1e190000")
+		if (t == 8) return player.eternityPoints.gt("1e1000000")
 	}
 	return true
 }

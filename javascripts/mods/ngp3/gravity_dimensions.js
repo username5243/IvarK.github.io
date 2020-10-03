@@ -171,7 +171,9 @@ let GDs = {
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		return Decimal.pow(10, (Math.pow(x * 2, 2) + 5) * GDs.rdExp() * 2)
+		x = Decimal.pow(10, (Math.pow(x * 2, 2) + 5) * GDs.rdExp() * 2)
+		if (isEnchantUsed(35)) x = x.div(tmp.bEn[35])
+		return x
 	},
 	rdNextTickAt() {
 		return GDs.save.rdTick.add(1).pow(1 / GDs.rdExp()).times(30)
@@ -219,7 +221,7 @@ let GDs = {
 	energyMult() {
 		let x = 1
 		if (isEnchantUsed(15)) x = tmp.bEn[15]
-		if (isQCRewardActive(9)) x += tmp.qcRewards[9].ge || 0
+		if (isQCRewardActive(9)) x += tmp.qcRewards[9].ge
 		return x
 	},
 	charge(ge, id) {

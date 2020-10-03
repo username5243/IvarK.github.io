@@ -44,7 +44,7 @@ function bosonicLabReset() {
 	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)
 	player.ghostify.ghostlyPhotons.lights = [0,0,0,0,0,0,0,0]
 	tmp.updateLights = true
-	var startingEnchants = tmp.bEn[14].bUpgs
+	var startingEnchants = player.ghostify.wzb.unl ? tmp.bEn[14].bUpgs : 0
 	player.ghostify.bl = {
 		watt: new Decimal(0),
 		ticks: player.ghostify.bl.ticks,

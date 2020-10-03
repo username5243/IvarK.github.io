@@ -143,13 +143,13 @@ function getGalaxyReqMultiplier() {
 	let ret = 60
 	if (player.galacticSacrifice !== undefined) {
 		if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
-	} else if (player.timestudy.studies.includes(42)) ret *= tsMults[42]()
+	} else if (hasTimeStudy(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
 	if (tmp.ngC) ret -= 35
 	if (player.infinityUpgrades.includes("galCost")) ret -= 5
 	if (player.infinityUpgrades.includes("postinfi52") && player.tickspeedBoosts == undefined) ret -= 3
 	if (player.dilation.upgrades.includes("ngmm12")) ret -= 10
-	if (player.galacticSacrifice !== undefined && player.timestudy.studies.includes(42)) ret *= tsMults[42]()
+	if (player.galacticSacrifice !== undefined && hasTimeStudy(42)) ret *= tsMults[42]()
 	return ret
 }
 
@@ -157,8 +157,8 @@ function getDistantScalingStart() {
 	if (player.currentEternityChall == "eterc5") return 0
 	let n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
-	if (player.timestudy.studies.includes(223)) n += 7
-	if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
+	if (hasTimeStudy(223)) n += 7
+	if (hasTimeStudy(224)) n += Math.floor(player.resets/2000)
 	if (tmp.ngp3 && tmp.qu.bigRip !== undefined && tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
 
@@ -187,8 +187,8 @@ function getRemoteScalingStart(galaxies) {
 	}
 	else if (player.galacticSacrifice != undefined) n += 1e7
 	if (tmp.ngp3) {
-		for (var t = 251; t < 254; t++) if (player.masterystudies.includes("t" + t)) n += getMTSMult(t)
-		if (player.masterystudies.includes("t301")) n += getMTSMult(301)
+		for (var t = 251; t < 254; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
+		if (masteryStudies.has(301)) n += getMTSMult(301)
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 
 	}

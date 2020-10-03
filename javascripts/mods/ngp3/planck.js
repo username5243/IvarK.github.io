@@ -72,7 +72,7 @@ let pl = {
 
 		updateNeutrinoBoosts()
 		updateGPHUnlocks()
-		updateBLUnlockDisplay()
+		updateBLUnlocks()
 		updateBosonUnlockDisplay()
 		ph.updateDisplay()
 

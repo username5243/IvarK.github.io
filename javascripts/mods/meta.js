@@ -53,14 +53,14 @@ function getMetaDimensionGlobalMultiplier() {
 	if (player.achievements.includes("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//Mastery Study Boosts
-		if (player.masterystudies.includes("t262")) ret = ret.times(getMTSMult(262))
-		if (player.masterystudies.includes("t282")) ret = ret.times(getMTSMult(282))
-		if (player.masterystudies.includes("t303")) ret = ret.times(getMTSMult(303))
-		if (player.masterystudies.includes("t351")) ret = ret.times(getMTSMult(351))
-		if (player.masterystudies.includes("t373")) ret = ret.times(getMTSMult(373))
-		if (player.masterystudies.includes("t382")) ret = ret.times(getMTSMult(382))
-		if (player.masterystudies.includes("t383")) ret = ret.times(getMTSMult(383))
-		if (player.masterystudies.includes("t393")) ret = ret.times(getMTSMult(393))
+		if (masteryStudies.has(262)) ret = ret.times(getMTSMult(262))
+		if (masteryStudies.has(282)) ret = ret.times(getMTSMult(282))
+		if (masteryStudies.has(303)) ret = ret.times(getMTSMult(303))
+		if (masteryStudies.has(351)) ret = ret.times(getMTSMult(351))
+		if (masteryStudies.has(373)) ret = ret.times(getMTSMult(373))
+		if (masteryStudies.has(382)) ret = ret.times(getMTSMult(382))
+		if (masteryStudies.has(383)) ret = ret.times(getMTSMult(383))
+		if (masteryStudies.has(393)) ret = ret.times(getMTSMult(393))
 		//Qunatum Upgrades
 		if (GUActive("br4")) ret = ret.times(Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1))
 		//QC Rewards
@@ -90,7 +90,7 @@ function getMetaBoostPower() {
 	if (player.dilation.upgrades.includes("ngpp4")) r = getDil15Bonus()
 	if (tmp.ngp3) {
 		if (isNanoEffectUsed("meta_boost_power")) r = tmp.nf.effects.meta_boost_power
-		if (player.masterystudies.includes("t312")) exp = 1.045
+		if (masteryStudies.has(312)) exp = 1.045
 		if (player.achievements.includes("ng3p26")) exp *= Math.log10(9 + Math.max(player.meta.resets / 75 + 0.25, 1))
 	}
 	if (player.achievements.includes("ngpp14")) r *= 1.01
@@ -138,7 +138,7 @@ function getMetaShiftRequirement() {
 	var data = {tier: Math.min(8, mdb + 4), amount: 20}
 	var inQC4 = inQC(4)
 	data.mult = inQC4 ? 5.5 : 15
-	if (tmp.ngp3) if (player.masterystudies.includes("t312")) data.mult -= 1
+	if (masteryStudies.has(312)) data.mult -= 1
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
 	if (ph.did("ghostify")) if (hasNU(1)) data.amount -= tmp.nu[1]

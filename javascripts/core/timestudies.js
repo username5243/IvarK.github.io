@@ -756,6 +756,10 @@ function changePresetTitle(id, placement) {
 	document.getElementById("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
 }
 
+function hasTimeStudy(x) {
+	return tmp.eterUnl && player.timestudy.studies.includes(x)
+}
+
 //Time Study Effects
 let tsMults = {
 	11: function() {
@@ -802,16 +806,4 @@ let tsMults = {
 	222: function() {
 		return player.galacticSacrifice === undefined ? 2 : .5
 	}
-}
-
-//Eternity Challenges
-function resetEternityChallUnlocks() {
-	let ec = player.eternityChallUnlocked
-	if (!ec) return
-
-	if (ec >= 13) player.timestudy.theorem += masteryStudies.costs.ec[ec]
-	else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
-
-	player.eternityChallUnlocked = 0
-	updateEternityChallenges()
 }

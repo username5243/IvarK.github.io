@@ -33,17 +33,17 @@ function getIPGain(){
 
 function gainedInfinityPoints(next) {
 	let div = 308;
-	if (player.timestudy.studies.includes(111)) div = 285;
+	if (hasTimeStudy(111)) div = 285;
 	else if (player.achievements.includes("r103")) div = 307.8;
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined) div -= galIP()
 
 	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(getIPMult())
 	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(getIPMult())
-	if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
-	if (player.timestudy.studies.includes(51)) ret = ret.times(player.aarexModifications.newGameExpVersion?1e30:1e15)
-	if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
-	if (player.timestudy.studies.includes(142)) ret = ret.times(1e25)
-	if (player.timestudy.studies.includes(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
+	if (hasTimeStudy(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
+	if (hasTimeStudy(51)) ret = ret.times(player.aarexModifications.newGameExpVersion?1e30:1e15)
+	if (hasTimeStudy(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
+	if (hasTimeStudy(142)) ret = ret.times(1e25)
+	if (hasTimeStudy(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
 	if (player.achievements.includes("r116")) ret = ret.times(Decimal.add(getInfinitied(), 1).pow(Math.log10(2)))
 	if (player.achievements.includes("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
 	if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.max(1).pow(1000))
@@ -157,7 +157,7 @@ function getInfinitied() {
 function getInfinitiedGain() {
 	let infGain=1
 	if (player.thisInfinityTime > 50 && player.achievements.includes("r87")) infGain = 250
-	if (player.timestudy.studies.includes(32)) infGain *= tsMults[32]()
+	if (hasTimeStudy(32)) infGain *= tsMults[32]()
 	if (player.achievements.includes("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	return nA(infGain, player.achievements.includes("r87") && player.galacticSacrifice ? 249 : 0)
 }
@@ -184,20 +184,6 @@ function getIPMultPower() {
 function canBuyIPMult() {
 	if (tmp.ngC || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
 	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
-}
-
-function doCrunchReplicantiAutobuy(){
-	if (getEternitied() >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
-		var bought = Math.min(Math.max(Math.floor(player.infinityPoints.div(player.replicanti.chanceCost).log(1e15) + 1), 0), tmp.ngp3&&player.masterystudies.includes("t265")?1/0:100-Math.round(player.replicanti.chance*100))
-		player.replicanti.chance = Math.round(player.replicanti.chance*100+bought)/100
-		player.replicanti.chanceCost = player.replicanti.chanceCost.times(Decimal.pow(1e15, bought))
-	}
-
-	if (getEternitied() >= 60 && player.replicanti.auto[1] && player.currentEternityChall !== "eterc8") {
-		while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && isIntervalAffordable()) upgradeReplicantiInterval()
-	}
-
-	if (getEternitied() >= 80 && player.replicanti.auto[2] && player.currentEternityChall !== "eterc8") autoBuyRG()
 }
 
 function doCrunchIDAutobuy(){
@@ -249,7 +235,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
-	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (player.timestudy.studies.includes(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (hasTimeStudy(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDsOnNGM4()
@@ -266,7 +252,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	IPminpeak = new Decimal(0)
 	doGPUpgCrunchUpdating(g11MultShown)
 	doCrunchIDAutobuy()
-	doCrunchReplicantiAutobuy()
+	replicantiShopABRun()
 	Marathon2 = 0;
 	updateChallenges();
 	updateNCVisuals()
@@ -330,7 +316,7 @@ function bigCrunch(autoed) {
 	if (player.currentChallenge == "postc8") giveAchievement("Anti-antichallenged");
 	var add = getIPMult()
 	if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) add = gainedInfinityPoints()
-	else if (player.timestudy.studies.includes(51)) add = add.times(1e15)
+	else if (hasTimeStudy(51)) add = add.times(1e15)
 	player.infinityPoints = player.infinityPoints.plus(add)
 	var array = [player.thisInfinityTime, add]
 	if (player.currentChallenge != "") array.push(player.currentChallenge)

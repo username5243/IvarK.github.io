@@ -10,6 +10,7 @@ function updateBLUnlocks() {
 	document.getElementById("blDiv").style.display = unl ? "" : "none"
 	document.getElementById("nftabs").style.display = unl ? "" : "none"
 	if (!unl) updateBLUnlockDisplay()
+	updateBosonicLimits()
 }
 
 function updateBLUnlockDisplay() {
@@ -18,6 +19,7 @@ function updateBLUnlockDisplay() {
 
 function getBosonicWattGain() {
 	let x = player.money.log10() / 2e16 - 1.25
+	if (isEnchantUsed(45)) x *= tmp.bEn[45]
 	if (GDs.unlocked()) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
 }
@@ -67,11 +69,15 @@ function bosonicTick(diff) {
 	
 	//W & Z Bosons
 	let apDiff
-	let apSpeed
 	lData = player.ghostify.wzb
 	if (lData.dPUse) {
 		apDiff = diff.times(getAntiPreonLoss()).min(lData.dP).div(aplScalings[player.ghostify.wzb.dPUse])
-		if (isNaN(apDiff.e)) apDiff=new Decimal(0)
+		if (isEnchantUsed(13)) apDiff = apDiff.times(tmp.bEn[13])
+		if (isNaN(apDiff.e)) apDiff = new Decimal(0)
+
+		lData.dP = lData.dP.sub(diff.times(getAntiPreonLoss()).min(lData.dP))
+		if (lData.dP.eq(0)) lData.dPUse = 0
+
 		if (lData.dPUse == 1) {
 			lData.wQkProgress = lData.wQkProgress.add(apDiff.times(tmp.wzb.zbs))
 			if (lData.wQkProgress.gt(1)) {
@@ -101,9 +107,7 @@ function bosonicTick(diff) {
 			lData.wpb = lData.wpb.add(lData.wnb.min(apDiff).times(tmp.wzb.zbs))
 			lData.wnb = lData.wnb.sub(lData.wnb.min(apDiff).times(tmp.wzb.zbs))
 		}
-		lData.dP = lData.dP.sub(diff.times(getAntiPreonLoss()).min(lData.dP))
-		if (lData.dP.eq(0)) lData.dPUse = 0
-	} else lData.dP = lData.dP.add(getAntiPreonProduction().times(diff))
+	} else lData.dP = lData.dP.add(diff.times(getAntiPreonProduction()))
 	lData.zNeReq=Decimal.pow(10, Math.sqrt(Math.max(Math.pow(lData.zNeReq.log10(),2) - diff / 100, 0)))
 	
 	//Bosonic Extractor
@@ -460,23 +464,22 @@ var bEn = {
 		14: [1e6, 2],
 		24: [1e6, 10],
 		34: [1, 0],
-		15: [2e21, 20],
-		25: [2e25, 2e5]
+		15: [2e21, 20]
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
-		13: "Speed up the production and use of Anti-Preons.",
+		13: "The usage of Anti-Preons is stronger.",
 		23: "Bosonic Antimatter boosts oscillate speed.",
 		14: "Divide the requirement of Higgs and start with some Bosonic Upgrades even it is inactive.",
 		24: "You gain more Bosonic Battery.",
 		34: "Higgs Bosons produce more Bosonic Antimatter.",
 		15: "You gain more Gravity Energy.",
 		25: "Z Bosons are stronger.",
+		35: "Divide the requirement of Gravity Dimension Shifts / Boosts.",
+		45: "Boost the Bosonic Watt gain before Gravity Well."
 	},
 	effects: {
 		12(l) {
-			//if (isEnchantUsed(15)) l = l.times(tmp.bEn[15]) this isnt what this does anymore
-
 			let exp = 0.75
 			if (tmp.newNGP3E) exp += .025
 			if (l.gt(1e10)) exp *= Math.pow(l.log10() / 5 + 79, .25) - 2
@@ -506,7 +509,7 @@ var bEn = {
 			return Decimal.pow(Decimal.add(l, 100).log10(), 4).div(16)
 		},
 		34(l) {
-			if (hasBosonicUpg(54)) return Decimal.add(l, 1).pow(player.ghostify.hb.higgs / 40)
+			if (hasBosonicUpg(54)) return Decimal.pow(3, Math.pow(player.ghostify.hb.higgs * Decimal.add(l, 1).log10(), 0.6))
 			return Decimal.pow(player.ghostify.hb.higgs / 20 + 1, l.add(1).log10() / 5)
 		},
 		15(l) {
@@ -516,6 +519,12 @@ var bEn = {
 		},
 		25(l) {
 			return 2 - 1 / (l.max(1).log10() / 100 + 1)
+		},
+		35(l) {
+			return Decimal.pow(1.1, l)
+		},
+		45(l) {
+			return Decimal.add(l, 1).log10() / 10 + 1
 		}
 	},
 	effectDescs: {
@@ -529,6 +538,9 @@ var bEn = {
 		},
 		25(x) {
 			return (x * 100 - 100).toFixed(2) + "% stronger"
+		},
+		35(x) {
+			return "/" + shorten(x)
 		}
 	},
 	action: "upgrade",
@@ -779,14 +791,14 @@ var bu = {
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "You produce preon charge, 1% of your normal preon energy regardless of anti-preon energy, and 1% of Eternal Matter gain (but at reduced rate outside of Big Rip) every second.",
-		52: "Replicantis raises Infinite Time and Intergalactic rewards to an exponent.",
+		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Unlock 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",
-		55: "Bosonic Antimatter reduces the requirement of Light Empowerments before cost subtraction.",
+		55: "Bosonic Antimatter reduces the requirement of Light Empowerments before subtracting the cost.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
 		62: "Nanospeed divides preon anti-energy production instead of multiplying it.", //this is required to properly have nanofield balance as anti-energy shouldnt really be stopping production anymore
-		63: "Higgs Bosons raise all Blue Power effects to an exponent before the softcaps.",
-		64: "Remove the Electrons softcap is weaker. (x^0.5 -> x^0.9)",
+		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
+		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.9)",
 		65: "Square the main Orange Light effect.",
 	},
 	effects: {
@@ -835,7 +847,7 @@ var bu = {
 			if (ghlog > 308) ghlog = Math.sqrt(ghlog * 308)
 
 			return {
-				dt: Decimal.pow(10, 2 * gLog + 3 * gLog / (gLog / 20 + 1)),
+				dt: player.dilation.dilatedTime.gt("1e50000") ? 1 : Decimal.pow(10, 2 * gLog + 3 * gLog / (gLog / 20 + 1)),
 				gh: Decimal.pow(10, ghlog)
 			}
 		},
@@ -907,17 +919,18 @@ var bu = {
 			return eff.toNumber()
 		},
 		52() {
-			let log = Math.sqrt(player.replicanti.amount.log10() / 4e8 + 1)
+			let log = player.replicanti.amount.max(1).log10()
 			return {
-				ig: log,
-				it: Math.log10(log) + 1
+				ig: Math.pow(log / 1e6 + 1, 1 / 7.5),
+				it: Math.sqrt(Math.log10(log + 1) / 10 + 1)
 			}
 		},
 		55() {
-			return tmp.bl.am.add(1).pow(0.01).toNumber()
+			return tmp.bl.am.add(1).pow(0.01)
 		},
 		63() {
-			return Math.pow(2, player.ghostify.hb.higgs / 30)
+			//Log10 of that effect ((log(g)+2)^h)
+			return player.ghostify.hb.higgs * Math.log10(GDs.save.gv.max(1).log10() / 10 + 2)
 		}
 	},
 	effectDescs: {
@@ -964,13 +977,13 @@ var bu = {
 			return "/" + shorten(x) + " to efficiency"
 		},
 		52(x) {
-			return "^" + x.ig.toFixed(3) + " to Intergalactic, ^" + x.it.toFixed(3) + " to Infinite Time"
+			return "^" + shorten(x.ig) + " to Intergalactic, ^" + shorten(x.it) + " to Infinite Time"
 		},
 		55(x) {
 			return "/" + shorten(x)
 		},
 		63(x) {
-			return "^" + x.toFixed(2)
+			return tmp.bE50kDT ? "^Infinite (and Beyond!)" : "^" + shorten(Decimal.pow(10, x))
 		},
 	}
 }
@@ -987,22 +1000,18 @@ function changeOverdriveSpeed() {
 
 //W & Z Bosons
 function getAntiPreonProduction() {
-	let r = new Decimal(0.1)
-	if (isEnchantUsed(13)) r = r.times(tmp.bEn[13])
-	return r
+	return 1 / 10
 }
 
 var aplScalings = {
 	0: 0,
-	1: 8,
-	2: 32,
-	3: 16
+	1: 24,
+	2: 96,
+	3: 48
 }
 
 function getAntiPreonLoss() {
-	let r = new Decimal(0.05)
-	if (isEnchantUsed(13)) r = r.times(tmp.bEn[13])
-	return r
+	return 1 / 30
 }
 
 function useAntiPreon(id) {
@@ -1016,15 +1025,13 @@ function getOscillateGainSpeed() {
 }
 
 function updateWZBosonsTab() {
-	let data = player.ghostify.bl
+	let data = tmp.bl
 	let data2 = tmp.wzb
 	let data3 = player.ghostify.wzb
 	let speed = getBosonicFinalSpeed()
-	let show0 = data2.dPUse == 1 && getAntiPreonLoss().times(speed).div(aplScalings[1]).times(tmp.wzb.zbs).gte(10)
+	let show0 = data3.dPUse == 1 && Decimal.div(getAntiPreonLoss(), aplScalings[1]).times(speed).times(tmp.wzb.zbs).gte(10)
 	let gainSpeed = getOscillateGainSpeed()
-	let r
-	if (!data2.dPUse) r = getAntiPreonProduction().times(speed)
-	else r = getAntiPreonLoss().times(speed)
+	let r = speed.times(data3.dPUse ? getAntiPreonLoss() : getAntiPreonProduction())
 	document.getElementById("ap").textContent = shorten(data3.dP)
 	document.getElementById("apProduction").textContent = (data3.dPUse ? "-" : "+") + shorten(r) + "/s"
 	document.getElementById("apUse").textContent = data3.dPUse == 0 ? "" : "You are currently consuming Anti-Preons to " + (["", "decay W Bosons", "oscillate Z Bosons", "convert W- to W+ Bosons"])[data3.dPUse] + "."

@@ -84,33 +84,37 @@ var masteryStudies = {
 	},
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
+	has(x) {
+		return tmp.ngp3 && tmp.eterUnl && player.masterystudies.includes("t" + x)
+	},
 	timeStudies: [],
 	timeStudyEffects: {
-		251(){
+		251() {
 			if (hasNU(6)) return 0
 			return Math.floor(player.resets / 3e3)
 		},
-		252(){
+		252() {
 			if (hasNU(6)) return 0
 			return Math.floor(player.dilation.freeGalaxies / 7)
 		},
-		253(){
+		253() {
 			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG() / 4)
 		},
-		262(){
+		262() {
 			let r = Math.max(player.resets / 5e4 - 10, 1)
 			let exp = Math.sqrt(Math.max(player.resets / 1e5 - 5.5, 1))
 			if (r > 1e4) r = Math.pow(6 + Math.log10(r), 4)
 			if (player.aarexModifications.newGameExpVersion) exp *= 2
 			return Decimal.pow(r, exp)
 		},
-		263(){
+		263() {
+			if (tmp.bE50kDT) return 1
 			let x = player.meta.resets
 			x = x * (x + 10) / 60
 			return x + 1
 		},
-		264(){
+		264() {
 			let r = player.galaxies / 100 + 1
 			if (player.aarexModifications.newGameExpVersion) return Math.pow(r, 2)
 			return r
@@ -121,20 +125,21 @@ var masteryStudies = {
 			if (uses.includes("intensity")) return intensity
 			return Decimal.max(Math.log10(player.replicanti.chance + 1), 1).pow(intensity)
 		},
-		281(){
+		281() {
 			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
 		},
-		282(){
+		282() {
 			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
 		},
-		301(){
+		301() {
 			if (hasNU(6)) return 0
 			return Math.floor(extraReplGalaxies / 4.15)
 		},
-		303(){
+		303() {
 			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(player.galaxies, 1)), 1.5))
 		},
-		322(){
+		322() {
+			if (tmp.bE50kDT) return 1
 			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
 			if (log > 1e3 && player.aarexModifications.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
@@ -144,48 +149,48 @@ var masteryStudies = {
 			//these are also required very much--more DT is more tickspeed is more DT
 			return Decimal.pow(10, log)
 		},
-		332(){
+		332() {
 			return Math.max(player.galaxies, 1)
 		},
-		341(){
+		341() {
 			if (!tmp.quActive) return new Decimal(1)
 			var exp = Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())
 			if (exp > 150) exp = 150 * Math.pow(exp / 150, .5)
 			if (exp > 200) exp = 200 * Math.pow(exp / 200, .5)
 			return Decimal.pow(tmp.newNGP3E ? 3 : 2, exp)
 		},
-		344(){
+		344() {
 			if (!tmp.quActive) return 1
 			var ret = Math.pow(tmp.qu.replicants.quarks.div(1e7).add(1).log10(), tmp.newNGP3E ? 0.3 : 0.25) * 0.17 + 1
 			if (ret > 3) ret = 1 + Math.log2(ret + 1)
 			if (ret > 4) ret = 3 + Math.log10(ret + 6)
 			return ret
 		},
-		351(){ //maybe use softcap.js
+		351() { //maybe use softcap.js
 			let log = player.timeShards.max(1).log10()*14e-7
 			if (log > 1e4) log = Math.pow(log / 1e4, 0.75) * 1e4
 			if (log > 2e4) log = 2 * Math.pow(Math.log10(5 * log) + 5 ,4)
 			return Decimal.pow(tmp.newNGP3E ? 12 : 10, log)
 		},
-		361(){
+		361() {
 			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
 		},
-		371(){
+		371() {
 			return Math.pow(extraReplGalaxies+1,player.aarexModifications.newGameExpVersion?.5:.3)
 		},
-		372(){
+		372() {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1
 		},
-		373(){
+		373() {
 			return Math.pow(player.galaxies+1,0.55)
 		},
-		381(){
+		381() {
 			return Decimal.min(tmp.tsReduce, 1).log10() / -135 + 1
 		},
-		382(){
+		382() {
 			return player.eightAmount.max(1).pow(Math.PI)
 		},
-		383(){
+		383() {
 			if (!tmp.quActive) return new Decimal(1)
 			var blueExp = 4/21
 			if (tmp.newNGP3E) blueExp = 1/5
@@ -199,35 +204,35 @@ var masteryStudies = {
 
 			return Decimal.pow(10, exp)
 		},
-		391(){
+		391() {
 			return player.meta.antimatter.max(1).pow(8e-4)
 		},
-		392(){
+		392() {
 			if (!tmp.quActive) return new Decimal(1)
 			return Decimal.pow(tmp.newNGP3E ? 1.7 : 1.6, Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())).plus(1)
 		},
-		393(){
+		393() {
 			if (!tmp.twr || !tmp.quActive) return new Decimal(1)
 			return Decimal.pow(4e5, Math.sqrt(tmp.twr.add(1).log10()))
 		},
-		401(){
+		401() {
 			if (!tmp.quActive) return new Decimal(1)
 			let log = tmp.qu.replicants.quarks.div(1e28).add(1).log10()*0.2
 			if (log > 5) log = Math.log10(log * 2) * 5
 			return Decimal.pow(tmp.newNGP3E ? 12 : 10, log)
 		},
-		411(){
+		411() {
 			if (!tmp.tra || !tmp.quActive) return new Decimal(1)
 			var exp = tmp.tra.div(1e24).add(1).pow(0.2).log10()
 			if (tmp.newNGP3E) exp += Math.pow((exp + 9) * 3, .2) * Math.log10(exp + 1)
 			return Decimal.pow(10, exp)
 		},
-		421(){
+		421() {
 			let ret = Math.pow(Math.max(-getTickspeed().log10() / 1e13 - 0.75, 1), 4)
 			if (ret > 100) ret = Math.sqrt(ret * 100)
 			return ret
 		},
-		431(){
+		431() {
 			var gals = player.dilation.freeGalaxies + tmp.eg431
 			if (gals >= 1e6) gals = Math.pow(gals * 1e3, 2/3)
 
@@ -302,7 +307,7 @@ var masteryStudies = {
 		411: "The production of preon energy is faster based on your replicants.",
 		412: "Further reduce the softcap of preon boost.",
 		421: "Tickspeed boosts preon energy production.",
-		431: "DT production and branches are faster based on your free galaxies."
+		431: "Branches are faster based on your free galaxies."
 	},
 	hasStudyEffect: [251, 252, 253, 262, 263, 264, 273, 281, 282, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
@@ -511,26 +516,26 @@ function getMasteryStudyCostMult(id) {
 	return masteryStudies.costs.time_mults[id] || 1
 }
 
-function buyingD7Changes(){
+function buyingD7Changes() {
 	showTab("quantumtab")
 	showQuantumTab("electrons")
 	updateElectrons()
 }
 
-function buyingDilStudyForQC(){
+function buyingDilStudyForQC() {
 	showTab("challenges")
 	showChallengesTab("quantumchallenges")
 	updateQuantumChallenges()
 }
 
-function buyingDilStudyReplicant(){
+function buyingDilStudyReplicant() {
 	showTab("quantumtab")
 	showQuantumTab("replicants")
 	document.getElementById("timestudy322").style.display=""
 	updateReplicants()
 }
 
-function buyingDilStudyED(){
+function buyingDilStudyED() {
 	showTab("dimensions")
 	showDimTab("emperordimensions")
 	document.getElementById("timestudy361").style.display = ""
@@ -539,14 +544,14 @@ function buyingDilStudyED(){
 	updateReplicants()
 }
 
-function buyingDilStudyNanofield(){
+function buyingDilStudyNanofield() {
 	showTab("quantumtab")
 	showQuantumTab("nanofield")
 	document.getElementById("nanofieldtabbtn").style.display = ""
 	updateNanoRewardTemp()
 }
 
-function buyingDilStudyToD(){
+function buyingDilStudyToD() {
 	showTab("quantumtab")
 	showQuantumTab("tod")
 	updateColorCharge()

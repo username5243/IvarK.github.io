@@ -56,14 +56,14 @@ function getNormalDimensionVanillaAchievementBonus(tier){
 
 function getNormalDimensionVanillaTimeStudyBonus(tier){
 	var mult = new Decimal(1)
-	if (player.timestudy.studies.includes(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
-	if (player.timestudy.studies.includes(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
-	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : player.masterystudies.includes("t323")
+	if (hasTimeStudy(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
+	if (hasTimeStudy(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
+	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (player.timestudy.studies.includes(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
-	if (player.timestudy.studies.includes(234) && tier == 1) mult = mult.times(tmp.sacPow)
-	if (player.timestudy.studies.includes(193)) mult = mult.times(Decimal.pow(1.03, getEternitied()).min("1e13000"))
-	if (tier == 8 && player.timestudy.studies.includes(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
+	if (hasTimeStudy(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
+	if (hasTimeStudy(234) && tier == 1) mult = mult.times(tmp.sacPow)
+	if (hasTimeStudy(193)) mult = mult.times(Decimal.pow(1.03, getEternitied()).min("1e13000"))
+	if (tier == 8 && hasTimeStudy(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
 	return mult
 }
 
@@ -205,7 +205,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (mult.gt(10)) mult = dilates(mult.max(1), 1)
 	if (player.dilation.upgrades.includes(6)) mult = mult.times(player.dilation.dilatedTime.max(1).pow(308))
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
-	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : player.masterystudies.includes("t323")
+	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (tmp.quActive) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
@@ -304,7 +304,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 	
 function getMPTBase(focusOn) {
 	if (((inQC(5) || inQC(7)) && focusOn != "linear") || (((inNC(13) && player.tickspeedBoosts == undefined) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") && player.galacticSacrifice != undefined)) {
-		if (player.masterystudies) if (player.masterystudies.includes("t321")) return new Decimal("1e430")
+		if (player.masterystudies) if (masteryStudies.has("t321")) return new Decimal("1e430")
 		return 1
 	}
 	let ret = 2
@@ -331,7 +331,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (tmp.quActive && player.masterystudies.includes("d7")) x = getElectronBoost(focusOn)
+	if (tmp.quActive && masteryStudies.has("d7")) x = getElectronBoost(focusOn)
 	return x
 }
 	
@@ -572,13 +572,13 @@ function infUpg13Pow() {
 }
 
 function dimMults() {
-	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1),(player.galacticSacrifice ? 2 : 1) * (player.timestudy.studies.includes(31) ? 4 : 1))
+	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1),(player.galacticSacrifice ? 2 : 1) * (hasTimeStudy(31) ? 4 : 1))
 }
 
 function getInfinitiedMult() {
 	var add = player.galacticSacrifice ? 0 : 1
 	var base = (player.galacticSacrifice ? 1 : 0) + Decimal.add(getInfinitied(), 1).log10() * (player.galacticSacrifice ? 100 : 10)
-	var exp = (player.galacticSacrifice ? 2 : 1) * (player.timestudy.studies.includes(31) ? 4 : 1)
+	var exp = (player.galacticSacrifice ? 2 : 1) * (hasTimeStudy(31) ? 4 : 1)
 	if (player.aarexModifications.ngmX >= 4) {
 		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !player.achievements.includes("r71")) exp += .2
 		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3

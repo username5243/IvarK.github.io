@@ -1032,7 +1032,7 @@
 						</tr>
 						<tr id="breakUpgR4">
 							<td>
-								<button id="breakUpg11" class="eternityupbtnlocked" onclick="buyBreakUpg(11)">The above upgrade works outside of Big Rip, but at a reduced rate.<br>Cost: <span id="breakUpg11Cost"></span> Eternal Matter</button>
+								<button id="breakUpg11" class="eternityupbtnlocked" onclick="buyBreakUpg(11)">The above upgrade works outside of Big Rip.<br>Cost: <span id="breakUpg11Cost"></span> Eternal Matter</button>
 							</td>
 							<td>
 								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You passively produce 1% of GHP gain per second, whether you broke Eternity or not.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
@@ -1925,7 +1925,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 8)</span>
+				<span class="warning">(Test server: Beta 9)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2082,7 +2082,8 @@
 				<table id="pccompletionstable"></table>
 				<span id="bpc68"></span><br>
 				<span id="upcc"></span><br>
-				<span id="udcc"></span><br><br>
+				<span id="udcc"></span><br>
+				<span id="pcEff"></span><br><br>
 				<div id="modifiersStats"></div><br>
 				Ranking: <span id="pccranking"></span> / <span id="pccrankingMax"></span>
 			</div>
@@ -3974,7 +3975,7 @@
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg17" onclick='buyBigRipUpg(17)'>Reactivate the first upgrade, and make its effect <span id="bigripupg17current">3</span>x stronger.<br>Cost: <span id="bigripupg17cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg18" onclick='buyBigRipUpg(18)'>Space Shards boost quark spin production.<br>Currently: <span id="bigripupg18current"></span>x<br>Cost: <span id="bigripupg18cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg19" onclick='buyBigRipUpg(19)'>Time Shards speed up Branches.<br>Currently: <span id="bigripupg19current"></span>x<br>Cost: <span id="bigripupg19cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>In Big Rip, you gain Tachyon particles without dilating time.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
+							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>You passively gain Tachyon particles, whether you Big Rip or not.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
 						</tr>
 					</table>
 				</div>
@@ -5187,7 +5188,7 @@
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow4">
 						<td>They decrease free tickspeed upgrade threshold by -<span class="neutrinos" id="neutrinoBoost10"></span>.</td>
 						<td id="neutrinoBoostCell11">They boost the production and cap of Ghostly Rays by <span class="neutrinos" id="neutrinoBoost11">1.00</span>x.</td>
-						<td id="neutrinoBoostCell12">They multiply the Eternal Matter gain by <span class="neutrinos" id="neutrinoBoost12">1.00</span>x.<br>(Nerfed in Big Rip runs)</td>
+						<td id="neutrinoBoostCell12">They multiply the Eternal Matter gain by <span class="neutrinos" id="neutrinoBoost12">1.00</span>x.</td>
 					</tr>
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>
@@ -5368,7 +5369,6 @@
 						</div></td>
 						<td id="autoGhost21"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-W & Z Boson Ghost</b><br>
-							(not implemented)<br>
 							Power usage: 10<br>
 							Is active: <input id="isAutoGhostOn21" type="checkbox" onchange="toggleAutoGhost(21)"></input>
 						</div></td>
@@ -5541,7 +5541,7 @@
 							They make that all Lights boost other Lights from (x+1)^0.5 to <span class="lEp" id="leBoost5" style="font-size:35px"></span>.
 						</td>
 						<td id="le11">
-							They subtract their base requirement by <span class="lEp" id="leBoost11" style="font-size:35px"></span>.
+							They subtract their requirement by <span class="lEp" id="leBoost11" style="font-size:35px"></span>.
 						</td>
 					</tr></table>
 				</div>
@@ -5851,6 +5851,7 @@
 <script type="text/javascript" src="javascripts/core/devtools.js"></script>
 <script type="text/javascript" src="javascripts/core/dilation.js"></script>
 <script type="text/javascript" src="javascripts/core/dimboost.js"></script>
+<script type="text/javascript" src="javascripts/core/eter_challenges.js"></script>
 <script type="text/javascript" src="javascripts/core/format.js"></script>
 <script type="text/javascript" src="javascripts/core/galaxy.js"></script>
 <script type="text/javascript" src="javascripts/core/inf_challenges.js"></script>

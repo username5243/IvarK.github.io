@@ -223,21 +223,35 @@ function updateColorPowers(log) {
 	colorBoosts.g = (colorBoosts.g - 1) * m + 1
 
 	//Blue
-	var bLog = log.b
+	let bLog = log.b
 	bLog = Math.sqrt(log.b + 1.5) - 1.5
-	if (hasBosonicUpg(63)) bLog *= tmp.blu[63]
 
 	let softcapStartLog = 3
 	let softcapPower = 1
 	if (player.ghostify.ghostlyPhotons.unl) softcapPower += tmp.le[4]
 	if (hasBosonicUpg(11)) softcapPower += tmp.blu[11]
-	if (bLog > softcapStartLog) {
-		bLog = Decimal.pow(bLog / softcapStartLog, softcapPower / 2).times(softcapStartLog)
-		if (bLog.lt(100)) bLog = bLog.toNumber()
-		else bLog = Math.min(bLog.toNumber(), bLog.log10() * (40 + 10 * bLog.sub(90).log10()))
+
+	if (tmp.bE50kDT) {
+		//Beyond e20k DT
+		let b2Log = new Decimal(Math.log10(bLog))
+		if (hasBosonicUpg(63)) b2Log = b2Log.add(tmp.blu[63])
+
+		b2Log = b2Log.sub(softcapStartLog).times(softcapPower / 2).add(softcapStartLog)
+		bLog = b2Log.times(10).add(40).times(b2Log)
+		bLog = softcap(bLog, "dt_log")
+		colorBoosts.b = Decimal.pow(10, bLog)
+	} else {
+		//Before e20k DT
+		if (hasBosonicUpg(63)) bLog = Decimal.pow(10, tmp.blu[63]).times(bLog)
+
+		if (Decimal.gt(bLog, softcapStartLog)) {
+			bLog = Decimal.div(bLog, softcapStartLog).pow(softcapPower / 2).times(softcapStartLog)
+			if (bLog.lt(100)) bLog = bLog.toNumber()
+			else bLog = Math.min(bLog.toNumber(), bLog.log10() * (40 + 10 * bLog.sub(90).log10()))
+		}
+		if (bLog < 0) bLog = 0
 	}
-	if (bLog < 0) bLog = 0
-	colorBoosts.b = Decimal.pow(10,bLog)
+	colorBoosts.b = Decimal.pow(10, bLog)
 
 	//Dimensions
 	updateColorDimPowers(log)

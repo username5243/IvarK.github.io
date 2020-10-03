@@ -6,7 +6,7 @@ function unstoreTT() {
 	player.timestudy.epcost = Decimal.pow(2, tmp.qu.bigRip.storedTS.boughtE)
 	var newTS = []
 	var newMS = []
-	var studies=tmp.qu.bigRip.storedTS.studies
+	var studies = tmp.qu.bigRip.storedTS.studies
 	for (var s = 0; s < studies.length; s++) {
 		var num=studies[s]
 		if (typeof(num)=="string") num=parseInt(num)
@@ -35,7 +35,6 @@ function getSpaceShardsGain() {
 		if (tmp.qu.breakEternity.upgrades.includes(6)) ret = ret.times(getBreakUpgMult(6))
 	}
 	if (hasNU(9)) ret = ret.times(Decimal.max(getEternitied(), 1).pow(0.1))
-	if (player.ghostify.neutrinos.boosts >= 12) ret = ret.times(tmp.nb[12])
 
 	/*
 	removed the softcap for now, it can go back in later maybe
@@ -115,13 +114,33 @@ function tweakBigRip(id, reset) {
 	}
 }
 
+function updateActiveBigRipUpgrades() {
+	let data = []
+	tmp.bruActive = data
+	if (!tmp.quUnl) return
+
+	let upgs = tmp.qu.bigRip.upgrades
+	for (let i = 0; i < upgs.length; i++) data[upgs[i]] = true
+	if (data[9]) {
+		delete data[3]
+		for (let u = 5; u <= 7; u++) delete data[u]
+	}
+	if (data[9] && !hasNU(11)) delete data[8]
+	if (data[11]) delete data[4]
+	if (!data[17]) {
+		for (let u = 3; u <= 16; u++) { 
+			if (data[u]) {
+				delete data[upgs[1]]
+				break
+			}
+		}
+	}
+}
+
 function isBigRipUpgradeActive(id, bigRipped) {
 	if (!tmp.quActive) return false
 	if (bigRipped === undefined ? !tmp.qu.bigRip.active : !bigRipped) return false
-	if (id == 1) if (!tmp.qu.bigRip.upgrades.includes(17)) for (var u = 3; u < 18; u++) if (tmp.qu.bigRip.upgrades.includes(u)) return false
-	if (id > 2 && id != 4 && id < 9) if (tmp.qu.bigRip.upgrades.includes(9) && (id != 8 || !hasNU(11))) return false
-	if (id == 4) if (tmp.qu.bigRip.upgrades.includes(11)) return false
-	return tmp.qu.bigRip.upgrades.includes(id)
+	return tmp.bruActive[id]
 }
 
 function updateBreakEternity() {
@@ -174,6 +193,8 @@ function getEMGain() {
 		log = Math.pow(2, log2log)
 	}
 	
+	if (player.ghostify.neutrinos.boosts >= 12) log += tmp.nb[12].log10()
+
 	return Decimal.pow(10, log).floor()
 }
 

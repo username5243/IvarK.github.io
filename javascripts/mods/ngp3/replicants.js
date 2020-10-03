@@ -100,7 +100,7 @@ function updateReplicants(mode) {
 
 function getGatherRate() {
 	var mult = new Decimal(1)
-	if (player.masterystudies.includes("t373")) mult = getMTSMult(373)
+	if (masteryStudies.has(373)) mult = getMTSMult(373)
 	var data = {
 		normal: tmp.qu.replicants.amount.times(mult),
 		babies: tmp.qu.replicants.babies.times(mult).div(20),
@@ -156,16 +156,17 @@ function getEmperorDimensionMultiplier(dim) {
 	let ret = new Decimal(1)
 	if (player.currentEternityChall == "eterc11") return ret
 	ret = tmp.edgm //Global multiplier of all Emperor Dimensions
-	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[3])
+	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[7])
 	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 8))))
 	return dilates(ret, 1)
 }
 
 function getEmperorDimensionGlobalMultiplier() {
 	let ret = new Decimal(1)
-	if (player.masterystudies.includes("t392")) ret = getMTSMult(392)
-	if (player.masterystudies.includes("t402")) ret = ret.times(30)
+	if (masteryStudies.has(392)) ret = getMTSMult(392)
+	if (masteryStudies.has(402)) ret = ret.times(30)
 	if (isTreeUpgActive(6)) ret = ret.times(getTreeUpgradeEffect(6))
+	if (tmp.pce && tmp.pce.ms) ret = ret.times(Decimal.pow(tmp.pce.ms, tmp.eds[8].perm))
 	if (hasBosonicUpg(35)) ret = ret.times(tmp.blu[35].eds)
 	return ret
 }
@@ -264,12 +265,12 @@ function getNextLimitMsg() {
 
 function getHatchSpeed() {
 	var speed = tmp.qu.replicants.hatchSpeed
-	if (player.masterystudies.includes("t361")) speed /= getMTSMult(361)
-	if (player.masterystudies.includes("t371")) speed /= getMTSMult(371)
-	if (player.masterystudies.includes("t372")) speed /= getMTSMult(372)
-	if (player.masterystudies.includes("t381")) speed /= getMTSMult(381)
-	if (player.masterystudies.includes("t391")) speed /= getMTSMult(391)
-	if (player.masterystudies.includes("t402")) speed /= 30
+	if (masteryStudies.has(361)) speed /= getMTSMult(361)
+	if (masteryStudies.has(371)) speed /= getMTSMult(371)
+	if (masteryStudies.has(372)) speed /= getMTSMult(372)
+	if (masteryStudies.has(381)) speed /= getMTSMult(381)
+	if (masteryStudies.has(391)) speed /= getMTSMult(391)
+	if (masteryStudies.has(402)) speed /= 30
 	if (isNanoEffectUsed("hatch_speed")) speed /= tmp.nf.effects.hatch_speed
 	return speed
 }

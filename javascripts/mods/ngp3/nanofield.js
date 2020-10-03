@@ -41,7 +41,7 @@ function updateNanoverseTab(){
 		document.getElementById("nfRewardHeader" + reward).textContent = (rewards % 8 + 1 == reward ? "Next" : DISPLAY_NAMES[reward]) + " reward"
 		document.getElementById("nfRewardTier" + reward).textContent = "Tier " + getFullExpansion(Math.ceil((rewards + 1 - reward) / 8)) + " / Power: " + tmp.nf.powers[reward].toFixed(1)
 	}
-	document.getElementById("nfReward5").textContent = (!tmp.ngp3l && tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
+	document.getElementById("nfReward5").textContent = (tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
 	document.getElementById("ns").textContent = getNanospeedText()
 }
 
@@ -86,8 +86,8 @@ function getQuarkLossProduction() {
 
 function getQuarkEnergyProduction() {
 	let ret = tmp.qu.nanofield.charge.sqrt()
-	if (player.masterystudies.includes("t411")) ret = ret.times(getMTSMult(411))
-	if (player.masterystudies.includes("t421")) ret = ret.times(getMTSMult(421))
+	if (masteryStudies.has(411)) ret = ret.times(getMTSMult(411))
+	if (masteryStudies.has(421)) ret = ret.times(getMTSMult(421))
 	if (isNanoEffectUsed("preon_energy")) ret = ret.times(tmp.nf.effects.preon_energy)
 	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
@@ -95,7 +95,7 @@ function getQuarkEnergyProduction() {
 
 function getQuarkAntienergyProduction() {
 	let ret = tmp.qu.nanofield.charge.sqrt()
-	if (player.masterystudies.includes("t401")) ret = ret.div(getMTSMult(401))
+	if (masteryStudies.has(401)) ret = ret.div(getMTSMult(401))
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
 	if (!hasBosonicUpg(62)) ret = ret.times(getNanofieldFinalSpeed())
 	else ret = ret.div(tmp.ns).times(nanospeed * ls.mult("nf"))
@@ -108,7 +108,7 @@ function getQuarkChargeProductionCap() {
 
 var nanoRewards = {
 	scaling: {
-		max: 4,
+		max: 3,
 		0: {
 			start: 0,
 			mult(diff) {
@@ -152,20 +152,19 @@ var nanoRewards = {
 		},
 		dil_gal_gain: function(x) {
 			x = Math.pow(x, 0.83) * 0.039
-			if (!tmp.ngp3l && x > 1/3) x = (Math.log10(x * 3) + 1) / 3
+			if (x > 1/3) x = (Math.log10(x * 3) + 1) / 3
 			return x + 1
 		},
 		dt_to_ma_exp: function(x) {
 			return Math.sqrt(x) * 0.021 + 1
 		},
 		dil_effect_exp: function(x) {
-			if (!tmp.ngp3l && x > 15) tier = Math.log10(x - 5) * 15
+			if (x > 15) tier = Math.log10(x - 5) * 15
 			return x * 0.36 + 1
 		},
 		meta_boost_power: function(x) {
 			let y = 2
-			if (tmp.ngp3l) y = 3
-			else if (player.dilation.upgrades.includes("ngpp4")) y = getDil15Bonus()
+			if (player.dilation.upgrades.includes("ngpp4")) y = getDil15Bonus()
 			return x * 1.34 + y
 		},
 		remote_start: function(x) {
@@ -178,7 +177,6 @@ var nanoRewards = {
 			return x * 0.76
 		},
 		preon_energy: function(x) {
-			if (tmp.ngp3l) return x > 0 ? 2.5 : 1
 			return Decimal.pow(2.5, Math.sqrt(x))
 		},
 		supersonic_start: function(x) {
@@ -252,7 +250,7 @@ function isNanoEffectUsed(x) {
 function getNanofieldSpeedText(){
 	text = ""
 	if (ph.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
-	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
+	if (player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
 	if (nanospeed != 1) {
@@ -271,7 +269,7 @@ function getNanofieldSpeedText(){
 function getNanofieldSpeed() {
 	let x = 1
 	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
-	if (!tmp.ngp3l && player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
+	if (player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[15].times(x)
 	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.nf)
 	return x
