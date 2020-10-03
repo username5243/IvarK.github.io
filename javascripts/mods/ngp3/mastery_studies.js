@@ -85,7 +85,7 @@ var masteryStudies = {
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
 	has(x) {
-		return tmp.ngp3 && tmp.eterUnl && player.masterystudies.includes("t" + x)
+		return tmp.ngp3 && tmp.eterUnl && (player.masterystudies.includes("t" + x) || (player.masterystudies.includes(x) && x[0] == "d"))
 	},
 	timeStudies: [],
 	timeStudyEffects: {
