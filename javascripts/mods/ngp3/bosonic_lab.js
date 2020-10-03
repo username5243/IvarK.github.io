@@ -177,7 +177,6 @@ function getBosonicAMProduction() {
 	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
 	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
 
-	//maybe softcap at e40 or e50?
 	ret = softcap(ret, "bam")
 	return ret
 }

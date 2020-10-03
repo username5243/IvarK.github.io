@@ -580,7 +580,7 @@ function updateWZBosonsTemp(){
 	var wnl = player.ghostify.wzb.wnb.add(1).log10()
 
 	var bosonsExp = Math.max(wpl * (player.ghostify.wzb.wpb.sub(player.ghostify.wzb.wnb.min(player.ghostify.wzb.wpb))).div(player.ghostify.wzb.wpb.max(1)).toNumber(), 0)
-	//if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
+	if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
 	//softcap it to remove inflation in WZB
 	data.wbt = Decimal.pow(tmp.newNGP3E ? 5 : 3, bosonsExp) //W Bosons boost to extract time
 	data.wbo = Decimal.pow(10, Math.max(bosonsExp, 0)) //W Bosons boost to Z Neutrino oscillation requirement
