@@ -138,7 +138,7 @@ function DimensionPower(tier) {
 
 	if (tmp.ngC && ngC.tmp && player.currentChallenge != "postngc_1") {
 		if (player.currentChallenge == "postngc_2") return ngC.tmp.ids[tier]
-		mult = ngC.tmp.ids[tier]
+		mult = mult.times(ngC.tmp.ids[tier])
 	}
   	mult = mult.times(infDimPow)
 

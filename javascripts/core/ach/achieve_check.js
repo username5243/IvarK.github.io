@@ -222,7 +222,7 @@ function getTwoDecaysBool(){
 	return true
 }
 
-function ngP3AchieveCheck(){
+function preHiggsNGp3AchieveCheck(){	
 	let checkEmpty = player.timestudy.studies.length < 1
 	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
 		if (player.masterystudies[id].split("t")[1]) checkEmpty = false
@@ -294,23 +294,20 @@ function ngP3AchieveCheck(){
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays >= 10) giveAchievement("Radioactive Decaying to the max!")
 	if (tmp.quUnl) giveAchievement("Sub-atomic")
-
-	beyondHiggsAchieveCheck()
 }
 
 function beyondHiggsAchieveCheck(){
-	let minUQ = getMinimumUnstableQuarks()
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (player.quantum.quarks.log10() >= 4e4) giveAchievement("Are these another...")
-	if (player.ghostify.reference && minUQ.decays >= 2) giveAchievement("... references to EC8?")
+	if (player.ghostify.reference && getMinimumUnstableQuarks().decays >= 2) giveAchievement("... references to EC8?")
 	if (player.ghostify.hb.bosonicSemipowerment && player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq / 2) giveAchievement("Bosonic Semipowerment")
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
 	if (player.unstableThisGhostify <= 10 && getTwoDecaysBool()) giveAchievement("... references to EC8?")
 
 	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
-	//
+	if (tmp.qcComps >= 33) giveAchievement("The Forbidden Challenge")
 	//
 	//
 	//
@@ -344,6 +341,7 @@ function ALLACHIEVECHECK(){
 		if (player.meta) checkNGp2Achieve()
 		if (player.exdilation || player.meta) checkUniversalHarmony()
 	}
-
-	if (tmp.ngp3) ngP3AchieveCheck()
+	if (!tmp.ngp3) return
+	if (!player.achievements.includes("ng3p101")) preHiggsNGp3AchieveCheck()
+	beyondHiggsAchieveCheck()
 }
