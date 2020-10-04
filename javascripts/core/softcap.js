@@ -95,6 +95,18 @@ var softcap_data = {
 			start: 19e4,
 			pow: 0.4,
 			derv: true
+		},
+		6: {
+			func: "pow",
+			start: 2e5,
+			pow: .9,
+			derv: false
+		},
+		7: {
+			func: "pow",
+			start: 3e5,
+			pow: .8,
+			derv: false
 		}
 	},
 	ms322_log: {
@@ -198,27 +210,21 @@ var softcap_data = {
 			derv: false
 		}
 	},
-	ig_log_high: {
+	ig_log_high: { // this never gets above e15 in my e71 Qt Ng+3^ save so remove this?
 		1: { 
 			func: "log",
 			start: 1e20,
 			pow: 10,
 			mul: 5
 		},
-		2: {
-			func: "pow",
-			start: 1e21,
-			pow: 0.2,
-			derv: false
-		},
-		3: { 
+		2: { 
 			func: "log", 
 			start: 1e22,
 			pow: 11,
 			mul: 4,
 			add: 12
 		},
-		4: {
+		3: {
 			func: "pow",
 			start: 1e23,
 			pow: 0.1,
@@ -278,25 +284,25 @@ var softcap_data = {
 		},
 		3: {
 			func: "pow",
-			start: 1e16,
+			start: 3e15,
 			pow: .80,
 			derv: true
 		},
 		4: {
 			func: "pow",
-			start: 1e17,
+			start: 1e16,
 			pow: .75,
 			derv: true
 		},
 		5: {
 			func: "pow",
-			start: 3e17,
+			start: 3e16,
 			pow: .70,
 			derv: true
 		},
 		6: {
 			func: "pow",
-			start: 1e18,
+			start: 1e17,
 			pow: .65,
 			derv: true
 		}
@@ -349,6 +355,18 @@ var softcap_data = {
 		5: {
 			func: "pow",
 			start: 121,
+			pow: .5,
+			derv: false
+		},
+		6: {
+			func: "pow",
+			start: 169,
+			pow: .5,
+			derv: false
+		},
+		7: {
+			func: "pow",
+			start: 225,
 			pow: .5,
 			derv: false
 		}
