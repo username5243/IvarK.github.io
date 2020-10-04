@@ -321,7 +321,7 @@ function setupQuantumChallenges(){
 	var modDiv = ""
 	for (var m = 0; m < qcm.modifiers.length; m++) {
 		var id = qcm.modifiers[m]
-		modDiv += ' <button id="qcm_' + id + '" onclick="toggleQCModifier(\'' + id + '\')">' + (qcm.names[id] || "???") + '</button>'
+		modDiv += ' <button id="qcm_' + id + '" onclick="toggleQCModifier(\'' + id + '\')" style="width: 240px">' + (qcm.names[id] || "???") + '</button><br><br>'
 	}
 	document.getElementById("modifiers").innerHTML = modDiv
 	var modDiv = '<button class="storebtn" id="qcms_normal" onclick="showQCModifierStats(\'\')">Normal</button>'
@@ -2001,9 +2001,9 @@ function changeSaveDesc(saveId, placement) {
 			}
 			if (temp.aarexModifications.ngp3lV) msg += "L"
 		}
-		if (temp.aarexModifications.ngmX > 3) msg += "-" + temp.aarexModifications.ngmX
-		else if (temp.galacticSacrifice) msg += "--" + (temp.tickspeedBoosts != undefined ? "-" : "")
-		else if (temp.aarexModifications.newGameMinusVersion) msg += "-"
+		var ngmX = calcNGMX(temp)
+		if (ngmX >= 4) msg += "-" + ngmX
+		else if (ngmX) msg += "-".repeat(ngmX)
 		var ex=temp.aarexModifications.ngexV
 		if (temp.condensed !== undefined) msg = msg != "" || ex ? msg + "C" : msg + " Condensed"
 		if (temp.boughtDims) msg = msg != "" || ex ? "ER" + msg : "Eternity Respecced"
@@ -3517,8 +3517,6 @@ function eternity(force, auto, presetLoad, dilated) {
 	}
 	hideMaxIDButton()
 	document.getElementById("eternitybtn").style.display = "none"
-	document.getElementById("eternityPoints2").style.display = ph.shown("eternity") ? "inline-block" : ""
-	document.getElementById("eternitystorebtn").style.display = ph.shown("eternity") ? "inline-block" : ""
 	updateEternityUpgrades()
 	document.getElementById("totaltickgained").textContent = "You've gained "+getFullExpansion(player.totalTickGained)+" tickspeed upgrades."
 	hideDimensions()
@@ -3851,11 +3849,10 @@ function updateResetTierButtons(){
 	ph.updateDisplay()
 
 	var haveBlock = ph.tmp.shown >= 3
-	var haveBlock2 = ph.tmp.shown >= 6
 
-	document.getElementById("bigcrunch").parentElement.style.top = haveBlock2 ? "259px" : haveBlock ? "139px" : "19px"
+	document.getElementById("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 19) + "px" : "19px"
 	document.getElementById("quantumBlock").style.display = haveBlock ? "" : "none"
-	document.getElementById("quantumBlock").style.height = haveBlock2 ? "240px" : "120px"
+	document.getElementById("quantumBlock").style.height = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 12) + "px" : "120px"
 
 	if (ph.did("ghostify")) {
 		document.getElementById("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
@@ -3893,9 +3890,12 @@ function doPerSecondNGP3Stuff(){
 		else document.getElementById("ec" + tmp.qu.autoECN + "unl").onclick()
 		justImported = false
 	}
+	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
 	if (player.ghostify.wzb.unl) {
 		if (isAutoGhostActive(17)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
+		if (isAutoGhostActive(24)) higgsReset(true)
+		if (isAutoGhostActive(25)) GDs.gdBoost()
 	}
 	if (isAutoGhostActive(16)) maxNeutrinoMult()
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
@@ -4198,14 +4198,19 @@ function ghostifyAutomationUpdating(diff){
 		}
 		if (isAutoGhostActive(6)) maxTreeUpg()
 		if (isAutoGhostActive(11)) {
-			var ag=player.ghostify.automatorGhosts[11]
-			var preonGenerate=tmp.qu.replicants.quarks.div(getGatherRate().total).gte(ag.pw)&&tmp.qu.replicants.quarks.div(getQuarkLossProduction()).gte(ag.lw)&&tmp.qu.nanofield.charge.div(ag.cw).lt(1)
-			if (tmp.qu.nanofield.producingCharge!=preonGenerate) startProduceQuarkCharge()
+			let ag = player.ghostify.automatorGhosts[11]
+			ag.t = (ag.t || 0) + diff
+
+			let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
+			if (tmp.qu.nanofield.producingCharge != start) {
+				startProduceQuarkCharge()
+				if (start) ag.t = 0
+			}
 		}
 		if (isAutoGhostActive(13)) {
 			if (tmp.qu.bigRip.active) {
 				if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u*10) quantumReset(true,true,0,false)
-			} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10) bigRip(true)
+			} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10&&tmp.qu.bigRip.times<(player.ghostify.automatorGhosts[13].o||1/0)) bigRip(true)
 		}
 		if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
 		if (isAutoGhostActive(17)) extract()
@@ -4218,7 +4223,7 @@ function ghostifyAutomationUpdating(diff){
 				ag.t = ag.t - times
 			}
 		}
-		if (isAutoGhostActive(21)) {
+		if (player.ghostify.wzb.unl && isAutoGhostActive(21)) {
 			let ag = player.ghostify.automatorGhosts[21]
 			let data = player.ghostify.wzb
 			let hasWNB = data.wnb.gt(0)
@@ -4302,9 +4307,11 @@ function nanofieldUpdating(diff){
 			if (!tmp.qu.nanofield.apgWoke && tmp.qu.nanofield.rewards >= tmp.apgw) {
 				tmp.qu.nanofield.apgWoke = tmp.apgw
 				$.notify("You reached " + getFullExpansion(tmp.apgw) + " rewards... The Anti-Preontius has woken up and took over the Nanoverse! Be careful!")
-				showTab("quantumtab")
-				showQuantumTab("nanofield")
-				showNFTab("antipreon")
+				if (!player.achievements.includes("ng3p91")) {
+					showTab("quantumtab")
+					showQuantumTab("nanofield")
+					showNFTab("antipreon")
+				}
 			}
 			updateNanoRewardScaling()
 		}
@@ -5040,7 +5047,7 @@ function passiveQuantumLevelStuff(diff){
 		if (player.ghostify.milestones>15) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
 	}
 	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
-	if (tmp.qu.breakEternity.upgrades.includes(12)) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(12)) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
 }
@@ -5149,8 +5156,8 @@ function gameLoop(diff) {
 			gain = getDilTimeGainPerSecond()
 		}
 		player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
+		gainDilationGalaxies()
 	}
-	gainDilationGalaxies()
 
 	passiveGPGen(diff)
 	normalSacDisplay()
@@ -5373,7 +5380,7 @@ function autoEternityABTick(){
 		if (player.peakSpent >= new Decimal(player.eternityBuyer.limit).toNumber()*10 && EPminpeak.gt(0)) eternity(false, true)
 	} else if (player.autoEterMode == "eternitied") {
 		var eternitied = getEternitied()
-		if (nG(nA(eternitied, gainEternitiedStat()), nM(eternitied, new Decimal(player.eternityBuyer.limit).toNumber()))) eternity(false, true)
+		if (nG(nA(eternitied, gainEternitiedStat()), nM(eternitied, nN(new Decimal(player.eternityBuyer.limit))))) eternity(false, true)
 	}
 }
 

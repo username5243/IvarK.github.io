@@ -203,48 +203,35 @@ function dilationPowerStrength() {
  */
 
 const DIL_UPGS = []
-const DIL_UPG_SIZES = [5, 7]
+const DIL_UPG_SIZES = [5, 6]
 const DIL_UPG_COSTS = {
 	r1: [1e5, 10, 1/0],
 	r2: [1e6, 100, 1/0],
 	r3: [1e7, 20, 72],
 	r4: [1e8, 1e4, 24],
-	r4_ngmm: [1e30, 1e4, 18],
 	r5: [1e16, 10, 1/0],
-	  4: 5e6,
-	  5: 1e9,
-	  6: 5e7,
-	  7: 2e12,
-	  8: 1e10,
-	  9: 1e11,
-	  10: 1e15,
-	  ngud1: 1e20,
-	  ngud2: 1e25,
-	  ngpp1: 1e20,
-	  ngpp2: 1e25,
-	  ngpp3: 1e50,
-	  ngpp4: 1e60,
-	  ngpp5: 1e80,
-	  ngpp6: 1e100,
-	  ngpp3_usp: 1e79,
-	  ngpp4_usp: 1e84,
-	  ngpp5_usp: 1e89,
-	  ngpp6_usp: 1e100,
-	  ngmm1: 5e16,
-	  ngmm2: 1e19,
-	  ngmm3: 1e20,
-	  ngmm4: 1e25,
-	  ngmm5: 1/0,
-	  ngmm6: 1/0,
-	  ngmm7: 1/0,
-	  ngmm8: 1/0,
-	  ngmm9: 1/0,
-	  ngmm10: 1/0,
-	  ngmm11: 1/0,
-	  ngmm12: 1/0,
-	  ngusp1: 1e50,
-	  ngusp2: 1e55,
-	  ngusp3: 1e94
+	4: 5e6,
+	5: 1e9,
+	6: 5e7,
+	7: 2e12,
+	8: 1e10,
+	9: 1e11,
+	10: 1e15,
+	ngud1: 1e20,
+	ngud2: 1e25,
+	ngpp1: 1e20,
+	ngpp2: 1e25,
+	ngpp3: 1e50,
+	ngpp4: 1e60,
+	ngpp5: 1e80,
+	ngpp6: 1e100,
+	ngpp3_usp: 1e79,
+	ngpp4_usp: 1e84,
+	ngpp5_usp: 1e89,
+	ngpp6_usp: 1e100,
+	ngusp1: 1e50,
+	ngusp2: 1e55,
+	ngusp3: 1e94
 }
 
 const DIL_UPG_OLD_POS_IDS = {
@@ -269,13 +256,12 @@ const DIL_UPG_OLD_POS_IDS = {
 }
 
 const DIL_UPG_POS_IDS = {
-	11: "r1",    12: "r2",    13: "r3",     15: "r5",     14: "r4",     
-	21: 4,       22: 5,       23: 6,        25: "ngmm1",  24: "ngpp1",
-	31: 7,       32: 8,       33: 9,        35: "ngmm2",  34: "ngpp2",
-	51: "ngpp3", 52: "ngpp4", 53: "ngpp5",  55: "ngmm7",  54: "ngpp6",
-	71: "ngmm8", 72: "ngmm9", 73: "ngmm10", 74: "ngmm11", 75: "ngmm12",
-	41: 10,      42: "ngmm3", 43: "ngmm4",  44: "ngmm5",  45: "ngmm6",
-	61: "ngud1", 62: "ngud2", 63: "ngusp1", 64: "ngusp2", 65: "ngusp3"
+	11: "r1",    12: "r2",    13: "r3",    14: "r4",     
+	21: 4,       22: 5,       23: 6,       24: "ngpp1",
+	31: 7,       32: 8,       33: 9,       34: "ngpp2",
+	51: "ngpp3", 52: "ngpp4", 53: "ngpp5", 54: "ngpp6",
+	41: 10,      42: "ngud1", 43: "ngud2", 44: "ngusp1", 45: "ngusp2",
+	61: "ngusp3"
 }
 
 const DIL_UPG_ID_POS = {}
@@ -306,13 +292,6 @@ function isDilUpgUnlocked(id) {
 	let ngpp = id.split("ngpp")[1]
 	let ngmm = id.split("ngmm")[1]
 	if (id == "r4") return player.meta !== undefined
-	if (id == "r5") return player.galacticSacrifice !== undefined 
-	if (ngmm) {
-		let r = player.galacticSacrifice !== undefined 
-		if (ngmm == 6) r = r && player.meta !== undefined
-		if (ngmm >= 7) r = r && player.dilation.studies.includes(6)
-		return r
-	}
 	if (ngpp) {
 		ngpp = parseInt(ngpp)
 		let r = player.meta !== undefined
@@ -346,7 +325,6 @@ function getDilUpgCost(id) {
 
 function getRebuyableDilUpgCost(id) {
 	var costGroup = DIL_UPG_COSTS["r"+id]
-	if (id == 4 && player.galacticSacrifice !== undefined) costGroup = DIL_UPG_COSTS.r4_ngmm
 	var amount = player.dilation.rebuyables[id] || 0
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1],amount))
 	if (player.aarexModifications.nguspV) {
@@ -451,18 +429,10 @@ function updateDilationUpgradeButtons() {
 		document.getElementById("dil54formula").textContent = "(log(x)^0.5" + (tmp.ngp3 ? ")" : "/2)")
 		document.getElementById("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
-	if (player.exdilation != undefined) document.getElementById("dil61desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
+	if (player.exdilation != undefined) document.getElementById("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
 	if (isDilUpgUnlocked("ngusp2")) {
-		document.getElementById("dil64desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
-		document.getElementById("dil65desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
-	}
-	if (player.galacticSacrifice !== undefined) {
-		document.getElementById("dil44desc").textContent = "Currently: +" + shortenMoney(getDil44Mult())
-		document.getElementById("dil45desc").textContent = "Currently: " + shortenMoney(getDil45Mult()) + "x"
-		if (player.dilation.studies.includes(6)) {
-			document.getElementById("dil71desc").textContent = "Currently: ^" + shortenMoney(getDil71Mult())
-			document.getElementById("dil72desc").textContent = "Currently: " + shortenMoney(getDil72Mult()) + "x"
-		}
+		document.getElementById("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
+		document.getElementById("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
 	}
 }
 
@@ -483,6 +453,10 @@ function updateDilationUpgradeCosts() {
 		var id = getDilUpgId(pos)
 		if (DIL_UPG_UNLOCKED[id]) updateDilationUpgradeCost(pos, id)
 	}
+}
+
+function canBuyGalaxyThresholdUpg() {
+	return !tmp.ngp3 || player.dilation.rebuyables[2] < 60
 }
 
 function getFreeGalaxyThresholdIncrease(){

@@ -64,7 +64,7 @@ function getDistantScalingEffect(){
 	let speed = 1
 	if (GUActive("rg6")) speed *= 0.867
 	if (GUActive("gb6")) speed /= 1 + Math.pow(player.infinityPower.plus(1).log10(), 0.25) / 2810
-	if (GUActive("br6")) speed /= 1 + player.meta.resets / 340
+	if (GUActive("br6")) speed /= getBR6Effect()
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
 	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 	if (player.achievements.includes("ng3p98")) speed *= 0.9
@@ -166,7 +166,7 @@ function getDistantScalingStart() {
 		let push = 5 / tmp.grd.speed
 		if (GUActive("rg5")) push *= 1.13
 		if (GUActive("gb5")) push *= 1 + Math.sqrt(player.replicanti.galaxies) / 550
-		if (GUActive("br5")) push *= 1 + Math.min(Math.sqrt(player.dilation.tachyonParticles.max(1).log10()) * 0.013, 0.14)
+		if (GUActive("br5")) push *= getBR5Effect()
 		n -= Math.ceil((tmp.grd.galaxies - tmp.grd.darkStart + 1) / push)
 	}
 

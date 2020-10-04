@@ -766,9 +766,9 @@ var bu = {
 			g4: 4e8
 		},
 		51: {
-			am: 2e95,
-			g1: 2e17,
-			g3: 2e16
+			am: 2e75,
+			g1: 6e12,
+			g3: 2e12
 		}
 	},
 	reqData: {},
@@ -793,13 +793,13 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You produce preon charge, 1% of your normal preon energy regardless of anti-preon energy, and 1% of Eternal Matter gain (but at reduced rate outside of Big Rip) every second.",
+		51: "You never produce preon anti-energy and always produce Eternal Matter. (but at the reduced rate outside of Big Rips)",
 		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Unlock 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",
 		55: "Bosonic Antimatter divides the requirement of Light Empowerments prior to cost subtraction.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		62: "Nanospeed divides preon anti-energy production instead of multiplying it.", 
+		62: "???", 
 		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
 		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.9)",
 		65: "Square the main Orange Light effect.",
@@ -851,10 +851,11 @@ var bu = {
 
 			return {
 				dt: player.dilation.dilatedTime.gt("1e50000") ? 1 : Decimal.pow(10, 2 * gLog + 3 * gLog / (gLog / 20 + 1)),
-				gh: Decimal.pow(10, ghlog)
+				gh: tmp.eterUnl ? Decimal.pow(10, ghlog) : new Decimal(1)
 			}
 		},
 		23() {
+			if (!tmp.eterUnl) return new Decimal(1)
 			return player.meta.antimatter.add(1).pow(0.06)
 		},
 		25() {
@@ -917,6 +918,7 @@ var bu = {
 			return Math.pow(tmp.qu.colorPowers.b.add(1).log10(), exp) * mul
 		},
 		45() {
+			if (!tmp.eterUnl) return 1
 			let eff = player.dilation.dilatedTime.add(1).pow(.0005)
 			eff = softcap(eff, "bu45")
 			return eff.toNumber()
@@ -924,7 +926,7 @@ var bu = {
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
 			return {
-				ig: Math.pow(log / 1e6 + 1, 1 / 7.5),
+				ig: Math.pow(Math.log10(log + 1) / 20 + 1, 2),
 				it: Math.sqrt(Math.log10(log + 1) / 10 + 1)
 			}
 		},

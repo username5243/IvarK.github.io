@@ -46,7 +46,7 @@ function maxAllIDswithAM() {
 }
 
 function resetIDsOnNGM5() {
-	if (player.pSac !== undefined) resetInfinityDimensions()
+	if (player.pSac !== undefined) resetInfDimensions()
 }
 
 //Global Dimension unlocks

@@ -225,9 +225,11 @@ let GDs = {
 		return x
 	},
 	charge(ge, id) {
-		if (GDs.save.gc == id) ge *= GDs.tmp.gc
-		ge *= GDs.tmp.gsc
-		return ge
+		let mult = 1
+		if (GDs.save.gc == id) mult += GDs.tmp.gc
+		if (pl.save.on) mult += GDs.tmp.gsc
+
+		return ge * mult
 	},
 	chargeMult() {
 		let x = 3

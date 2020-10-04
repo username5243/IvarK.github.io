@@ -25,6 +25,18 @@
 			<div id='news'>.</div>
 		</div>
 		<div style="position: relative">
+			<div id="vel">You have <span class='vel'>0</span> Velocity.</div>
+			<button id="accReset" class="storebtn" onclick="ngm6.accelerate()">Accelerate your tickspeed for ??? Velocity.</button>
+		</div>
+		<div style="position: relative">
+			<div id="px">You have <span class='pxAmount'>0</span> Paradoxes.</div>
+			<button id="pSac" class="storebtn" onclick="pSac()"></button>
+		</div>
+		<div style="position: relative">
+			<div id="galaxyPoints2">You have <span class='GPAmount'>0</span> Galaxy points.</div>
+			<button id="sacrificebtn" class="storebtn" onclick="galacticSacrifice()"></button>
+		</div>
+		<div style="position: relative">
 			<div class="presCurrency1" id="infinityPoints2"></div>
 			<button class="presBtn presPos1" id="postInfinityButton" onclick="bigCrunch()">Big Crunch for x Infinity Points</button>
 		</div>
@@ -39,12 +51,8 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="px">You have <span class='pxAmount'>0</span> Paradoxes.</div>
-			<button id="pSac" class="storebtn" onclick="pSac()"></button>
-		</div>
-		<div style="position: relative">
-			<div id="galaxyPoints2">You have <span class='GPAmount'>0</span> Galaxy points.</div>
-			<button id="sacrificebtn" class="storebtn" onclick="galacticSacrifice()"></button>
+			<div id="irEmpty"></div>
+			<button id="irReset" class="storebtn" onclick="showTab('irTab')">A new rift has formed... Enter the Interreality.</button>
 		</div>
 		<div style="position: relative">
 			<div id="quantumInfo">
@@ -105,10 +113,12 @@
 			<button id="achievementsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('achievements')">Achievements</button>
 			<button id="challengesbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('challenges')">Challenges</button>
 			<button id="automationbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick='showTab("autobuyers")'>Automation</button>
+			<button id="accTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="acceleratebtn" onclick='showTab("accTab")'>Accelerate</button>
 			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn paradoxbtn" onclick='showTab("paradox")'>Paradox</button>
 			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")' class="tabbtn galaxybtn">Galaxy</button>
 			<button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('infinity')">Infinity</button>
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
+			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
 			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("planck")'>Planck</button>
@@ -830,9 +840,6 @@
 							<button id="dil13" onclick="buyDilationUpgrade(13)"><span id="dil13desc"></span><br><span id="dil13cost"></span></button>
 						</td>
 						<td>
-							<button id="dil15" onclick="buyDilationUpgrade(15)">Reduce the dilation penalty.<br><span id="dil15cost"></span></button>
-						</td>
-						<td>
 							<button id="dil14" onclick="buyDilationUpgrade(14)"><span id="dil14desc"></span><br><span id="dil14cost"></span></button>
 						</td>
 					</tr>
@@ -847,9 +854,6 @@
 						</td>
 						<td>
 							<button id="xd3" style="height: 50px;" onclick="boostDilationUpgrade(3)">Boost the upgrade above with ex-dilation<br><span id="xd3span">1x -> 1.5x</span></button>
-						</td>
-						<td>
-							<button id="xd5" style="height: 50px;" onclick="boostDilationUpgrade(5)">Boost the upgrade above with ex-dilation<br><span id="xd5span">1x -> 1.5x</span></button>
 						</td>
 						<td>
 							<button id="xd4" style="height: 50px;" onclick="boostDilationUpgrade(4)">Boost the upgrade above with ex-dilation<br><span id="xd4span">1x -> 1.5x</span></button>
@@ -868,9 +872,6 @@
 							<button id="dil23" onclick="buyDilationUpgrade(23)">Normal Dimensions gain a multiplier based on dilated time, unaffected by time dilation.<br><span id="dil23cost"></span></button>
 						</td>
 						<td>
-							<button id="dil25" onclick="buyDilationUpgrade(25)">Gain twice as many free galaxies again.<br><span id="dil25cost"></span></button>
-						</td>
-						<td>
 							<button id="dil24" onclick="buyDilationUpgrade(24)">Replicanti increases faster based on dilated time.<br><span id="dil24cost"></span></button>
 						</td>
 					</tr>
@@ -885,9 +886,6 @@
 						</td>
 						<td>
 							<button id="dil33" onclick="buyDilationUpgrade(33)">Reduce the dilation penalty. (^ 1.05 after reduction)<br><span id="dil33cost"></span></button>
-						</td>
-						<td>
-							<button id="dil35" onclick="buyDilationUpgrade(35)">Dilation penalty doesn't affect the Replicantis boost to Time Dimensions.<br><span id="dil35cost"></span></button>
 						</td>
 						<td>
 							<button id="dil34" onclick="buyDilationUpgrade(34)">Eternities and dilated time power up each other.<br><span id="dil34cost"></span></button>
@@ -906,29 +904,7 @@
 							<button id="dil53" onclick="buyDilationUpgrade(53)">The meta-antimatter effect on dimension boosts is stronger.<br>(^8 -> ^9)<br><span id="dil53cost"></span></button>
 						</td>
 						<td>
-							<button id="dil55" onclick="buyDilationUpgrade(55)">Reduce the Meta-Dimension Boost scaling by 1 per level.<br><span id="dil55cost"></span></button>
-						</td>
-						<td>
 							<button id="dil54" onclick="buyDilationUpgrade(54)" style='font-size:10px'>Dilated time production is boosted based on best meta-antimatter.<br><span id="dil54formula"></span><br><span id="dil54desc"></span><br><span id="dil54cost"></span></button>
-						</td>
-					</tr>
-				</table>
-				<table>
-					<tr>
-						<td>
-							<button id="dil71" onclick="buyDilationUpgrade(71)" style='font-size:9px'>Time and Meta Dimensions gain a exponent boost based on your best meta-antimatter.<br><span id="dil71desc">Currently: ???</span><br><span id="dil71cost"></span></button>
-						</td>
-						<td>
-							<button id="dil72" onclick="buyDilationUpgrade(72)" style='font-size:9px'>Speed up the replicate interval based on your best meta-antimatter.<br><span id="dil72desc">Currently: ???</span><br><span id="dil72cost"></span></button>
-						</td>
-						<td>
-							<button id="dil73" onclick="buyDilationUpgrade(73)" style='font-size:10px'>Replicate interval increases faster based on dilation upgrades bought.<br><span id="dil73cost"></span></button>
-						</td>
-						<td>
-							<button id="dil74" onclick="buyDilationUpgrade(74)">Distant galaxy cost scaling starts 25 later.<br><span id="dil74cost"></span></button>
-						</td>
-						<td>
-							<button id="dil75" onclick="buyDilationUpgrade(75)">Decrease the base galaxy cost multiplier by 10.<br><span id="dil75cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -937,35 +913,23 @@
 						<td>
 							<button id="dil41" onclick="buyDilationUpgrade(41)">Generate time theorems based on tachyon particles.<br><span id="dil41desc"></span><br><span id="dil41cost"></span></button>
 						</td>
-						<td id="n1">
-							<button id="dil42" onclick="buyDilationUpgrade(42)">Eternities and dilated time power up each other.<br><span id="dil42cost"></span></button>
+						<td>
+							<button id="dil42" onclick="buyDilationUpgrade(42)">Gain 5% more Tachyon particles for each <span id="dil42oom"></span>x replicanti.<br><span id="dil42desc"></span><br><span id="dil42cost"></span></button>
 						</td>
-						<td id="n2">
-							<button id="dil43" onclick="buyDilationUpgrade(43)">Further increase the exponent of all normal dimensions by ^0.1.<br><span id="dil43cost"></span></button>
+						<td>
+							<button id="dil43" onclick="buyDilationUpgrade(43)">Eternities and dilated time boost each other by ^0.1.<br><span id="dil43cost"></span></button>
 						</td>
-						<td id="n3">
-							<button id="dil44" onclick="buyDilationUpgrade(44)" style='font-size:9px'>Increase the exponent of Infinity Power effect based on your free galaxies.<br><span id="dil44desc">Currently: ???</span><br><span id="dil44cost"></span></button>
+						<td>
+							<button id="dil44" onclick="buyDilationUpgrade(44)">Boost the ex-dilation gain.<br><span id="dil44cost"></span></button>
 						</td>
-						<td id="n4">
-							<button id="dil45" onclick="buyDilationUpgrade(45)" style='font-size:10px'>Replicantis boost per-10 Infinity Dimensions multiplier.<br><span id="dil45desc">Currently: ???</span><br><span id="dil45cost"></span></button>
+						<td>
+							<button id="dil45" onclick="buyDilationUpgrade(45)" style='font-size:10px'>Buff the black hole upgrade effect based on your Eternity points.<br><span id="dil45desc"></span><br><span id="dil45cost"></span></button>
 						</td>
 				</table>
 				<table>
 					<tr>
-						<td id="n5">
-							<button id="dil61" onclick="buyDilationUpgrade(61)">Gain 5% more Tachyon particles for each <span id="dil61oom"></span>x replicanti.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
-						</td>
-						<td id="n6">
-							<button id="dil62" onclick="buyDilationUpgrade(62)">Eternities and dilated time boost each other by ^0.1.<br><span id="dil62cost"></span></button>
-						</td>
-						<td id="n7">
-							<button id="dil63" onclick="buyDilationUpgrade(63)">Boost the ex-dilation gain.<br><span id="dil63cost"></span></button>
-						</td>
-						<td id="n8">
-							<button id="dil64" onclick="buyDilationUpgrade(64)" style='font-size:10px'>Buff the black hole upgrade effect based on your Eternity points.<br><span id="dil64desc"></span><br><span id="dil64cost"></span></button>
-						</td>
 						<td>
-							<button id="dil65" onclick="buyDilationUpgrade(65)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil65desc"></span><br><span id="dil65cost"></span></button>
+							<button id="dil61" onclick="buyDilationUpgrade(61)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -1035,7 +999,7 @@
 								<button id="breakUpg11" class="eternityupbtnlocked" onclick="buyBreakUpg(11)">The above upgrade works outside of Big Rip.<br>Cost: <span id="breakUpg11Cost"></span> Eternal Matter</button>
 							</td>
 							<td>
-								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You passively produce 1% of GHP gain per second, whether you broke Eternity or not.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
+								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You passively produce 1% of GHP gain per second.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
 							</td>
 							<td>
 								<button id="breakUpg13" class="eternityupbtnlocked" onclick="buyBreakUpg(13)">You gain way more Space Shards based on Eternal Matter.<br>Cost: <span id="breakUpg13Cost"></span> Eternal Matter</button>
@@ -1925,7 +1889,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 9)</span>
+				<span class="warning">(Test server: Beta 10)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2788,7 +2752,7 @@
 								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock three new Break Eternity upgrades and a new Quantum Challenge, and get all achievements from before Higgs Bosons."></div>
 							</td>
 							<td>
-								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges."></div>
+								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges. Reward: You always have Bosonic Upgrade 23."></div>
 							</td>
 							<td>
 								<div id="ng3p103" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
@@ -3728,10 +3692,6 @@
 				<div>Spend electrons to start quantum challenges.</div>
 				<div>If you are in a Quantum Challenge or have completed a Quantum Challenge the RG4 toggle will disappear and RG4 will be on.</div>
 				<div id='electronsAmount2'></div>
-				<div id="modifiersdiv">
-					<b style="font-size: 35px">Modifiers</b><br>
-					<div id="modifiers"></div>
-				</div>
 				<table class="table" style="margin: 0 auto">
 					<tr>
 						<td>
@@ -3762,8 +3722,6 @@
 								</div>
 							</div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc3div">
 								<span>Only meta-antimatter can boost Infinity Dimensions, but meta-antimatter cannot boost dimension boosts.</span>
@@ -3795,7 +3753,7 @@
 					</tr>
 					<tr>
 						<td>
-							<div class="quantumchallengediv" id="qc5div" style="height:160px">
+							<div class="quantumchallengediv" id="qc5div">
 								<span>Dimension Supersonic scaling starts instantly, and grows much faster. Replicanti Galaxy cost and free galaxy threshold also grow much faster. Multiplier per ten dimensions is 1x.</span>
 								<br>
 								<br>
@@ -3809,7 +3767,7 @@
 							</div>
 						</td>
 						<td>
-							<div class="quantumchallengediv" id="qc6div" style="height:160px">
+							<div class="quantumchallengediv" id="qc6div">
 								<span>IC2, IC6, IC7 and IC8 are applied to Normal, Infinity, and Time Dimensions, and IC3 is applied to Normal Dimensions. Matter cannot surpass antimatter or you fail the challenge. You can't gain dimension boosts, but the multiplier per-10 Meta Dimensions is slightly stronger.</span>
 								<br>
 								<br>
@@ -3822,8 +3780,6 @@
 								</div>
 							</div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc7div">
 								<span id="qc7desc"></span>
@@ -3874,74 +3830,80 @@
 						</td>
 					</tr>
 				</table>
-				<button class="storebtn" onclick="respecTogglePC()" id="respecPC" style="width:150px; height: 40px; font-size: 10px; border-width: 1px; margin: auto">Respec paired challenges on next quantum</button>
-				<table class="table" id="pairedchallenges" style="margin: 0 auto">
-					<tr>
-						<td>
-							<div class="quantumchallengediv">
-								<span id="pc1desc"></span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 1, true)">Assign</button>
-									<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 1, true, true)">Big Rip</button>
+				<div id="modifiersdiv">
+					<b style="font-size: 25px">QC Modifiers</b><br>
+					<div id="modifiers"></div>
+				</div>
+				<div id="pairedchallenges">
+					<b style="font-size: 35px">Paired Challenges</b><br>
+					<button class="storebtn" onclick="respecTogglePC()" id="respecPC" style="width:150px; height: 40px; font-size: 10px; border-width: 1px; margin: auto">Respec paired challenges on next quantum</button>
+					<table class="table" style="margin: 0 auto">
+						<tr>
+							<td>
+								<div class="quantumchallengediv">
+									<span id="pc1desc"></span>
 									<br>
-									<span id="pc1cost"></span><br>
-									<span id="pc1goal"></span><br>
-									Reward: Boost the reward for these sub-challenges.
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv">
-								<span id="pc2desc"></span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 2, true)">Assign</button>
-									<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 2, true, true)">Big Rip</button>
 									<br>
-									<span id="pc2cost"></span><br>
-									<span id="pc2goal"></span><br>
-									Reward: Boost the reward for these sub-challenges.
+									<div class="outer">
+										<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 1, true)">Assign</button>
+										<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 1, true, true)">Big Rip</button>
+										<br>
+										<span id="pc1cost"></span><br>
+										<span id="pc1goal"></span><br>
+										Reward: Boost the reward for these sub-challenges.
+									</div>
 								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="quantumchallengediv">
-								<span id="pc3desc"></span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 3, true)">Assign</button>
-									<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 3, true, true)">Big Rip</button>
+							</td>
+							<td>
+								<div class="quantumchallengediv">
+									<span id="pc2desc"></span>
 									<br>
-									<span id="pc3cost"></span><br>
-									<span id="pc3goal"></span><br>
-									Reward: Boost the reward for these sub-challenges.
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv">
-								<span id="pc4desc"></span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 4, true)">Assign</button>
-									<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 4, true, true)">Big Rip</button>
 									<br>
-									<span id="pc4cost"></span><br>
-									<span id="pc4goal"></span><br>
-									Reward: Boost the reward for these sub-challenges.
+									<div class="outer">
+										<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 2, true)">Assign</button>
+										<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 2, true, true)">Big Rip</button>
+										<br>
+										<span id="pc2cost"></span><br>
+										<span id="pc2goal"></span><br>
+										Reward: Boost the reward for these sub-challenges.
+									</div>
 								</div>
-							</div>
-						</td>
-					</tr>
-				</table>
+							</td>
+							<td>
+								<div class="quantumchallengediv">
+									<span id="pc3desc"></span>
+									<br>
+									<br>
+									<div class="outer">
+										<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 3, true)">Assign</button>
+										<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 3, true, true)">Big Rip</button>
+										<br>
+										<span id="pc3cost"></span><br>
+										<span id="pc3goal"></span><br>
+										Reward: Boost the reward for these sub-challenges.
+									</div>
+								</div>
+							</td>
+							<td>
+								<div class="quantumchallengediv">
+									<span id="pc4desc"></span>
+									<br>
+									<br>
+									<div class="outer">
+										<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 4, true)">Assign</button>
+										<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 4, true, true)">Big Rip</button>
+										<br>
+										<span id="pc4cost"></span><br>
+										<span id="pc4goal"></span><br>
+										Reward: Boost the reward for these sub-challenges.
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
 				<div id="bigrip">
+					<b style="font-size: 35px">Big Rip</b><br>
 					To big rip the universe, you need to assign a PC with QC6 & 8 first.<br>
 					You have <span class="SSAmount" id="spaceShards" style="font-size:35px">0</span> Space Shards.
 					<table class="table" align="center" style="margin: auto">
@@ -5256,12 +5218,10 @@
 							Power usage: 1<br>
 							Is active: <input id="isAutoGhostOn3" type="checkbox" onchange="toggleAutoGhost(3)"></input>
 						</div></td>
-					</tr>
-					<tr>
 						<td id="autoGhost4"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Unstabilize Rotate Ghost</b><br>
+							<b>Auto-Rotate Ghost</b><br>
 							Power usage: 1<br>
-							Auto-rotate: <button class="storebtn" id="autoGhostMod4" onclick="changeAutoGhost('4m')" style="font-size: 100%; width: 120px; height: 20px">Every quantum</button><br>
+							Auto-rotate unstabilize ghosts: <button class="storebtn" id="autoGhostMod4" onclick="changeAutoGhost('4m')" style="font-size: 100%; width: 120px; height: 20px">Every quantum</button><br>
 							Direction: <button class="storebtn" id="autoGhostRotate4" onclick="changeAutoGhost('4r')" style="font-size: 100%; width: 120px; height: 20px">Right</button><br>
 							Is active: <input id="isAutoGhostOn4" type="checkbox" onchange="toggleAutoGhost(4)"></input>
 						</div></td>
@@ -5270,12 +5230,6 @@
 							(buys if possible)<br>
 							Power usage: 2<br>
 							Is active: <input id="isAutoGhostOn5" type="checkbox" onchange="toggleAutoGhost(5)"></input>
-						</div></td>
-						<td id="autoGhost6"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Tree Upgrade Ghost</b><br>
-							(buys if possible)<br>
-							Power usage: 2<br>
-							Is active: <input id="isAutoGhostOn6" type="checkbox" onchange="toggleAutoGhost(6)"></input>
 						</div></td>
 					</tr>
 					<tr>
@@ -5297,6 +5251,18 @@
 							Power usage: 0.5<br>
 							Is active: <input id="isAutoGhostOn9" type="checkbox" onchange="toggleAutoGhost(9)"></input>
 						</div></td>
+						<td id="autoGhost12"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Radioactive Decay Ghost</b><br>
+							(buys if possible)<br>
+							Power usage: 0.5<br>
+							Is active: <input id="isAutoGhostOn12" type="checkbox" onchange="toggleAutoGhost(12)"></input>
+						</div></td>
+						<td id="autoGhost6"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Tree Upgrade Ghost</b><br>
+							(buys if possible)<br>
+							Power usage: 2<br>
+							Is active: <input id="isAutoGhostOn6" type="checkbox" onchange="toggleAutoGhost(6)"></input>
+						</div></td>
 					</tr>
 					<tr>
 						<td id="autoGhost10"><div class="autoBuyerDiv" style="display:block">
@@ -5305,30 +5271,23 @@
 							Power usage: 1<br>
 							Is active: <input id="isAutoGhostOn10" type="checkbox" onchange="toggleAutoGhost(10)"></input>
 						</div></td>
+						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Electron Multi Ghost</b><br>
+							Power usage: 4<br>
+							Is active: <input id="isAutoGhostOn18" type="checkbox" onchange="toggleAutoGhost(18)"></input>
+						</div></td>
 						<td id="autoGhost11"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Preon Generate Ghost</b><br>
+							<b>Auto-Nanoreward Ghost</b><br>
 							Power usage: 0.5<br>
-							Start producing preon charge when you have <input id="autoGhost11pw" onchange="changeAutoGhost('11pw')"></input>s worth of preon production and <input id="autoGhost11lw" type="text" onchange="changeAutoGhost('11lw')"></input>s worth loss of preon loss, but stop producing preon charge when you have <input id="autoGhost11cw" type="text" onchange="changeAutoGhost('11cw')"></input>s worth of preon charge production.
+							Every <input id="autoGhost11pw" onchange="changeAutoGhost('11pw')"></input> seconds, producing preon charge for <input id="autoGhost11cw" type="text" onchange="changeAutoGhost('11cw')"></input> seconds.<br>
 							Is active: <input id="isAutoGhostOn11" type="checkbox" onchange="toggleAutoGhost(11)"></input>
 						</div></td>
-						<td id="autoGhost12"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Radioactive Decay Ghost</b><br>
-							(buys if possible)<br>
-							Power usage: 0.5<br>
-							Is active: <input id="isAutoGhostOn12" type="checkbox" onchange="toggleAutoGhost(12)"></input>
-						</div></td>
-					</tr>
-					<tr>
 						<td id="autoGhost13"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Big Rip Ghost</b><br>
 							Power usage: 0.5<br>
-							Big Rip in <input id="autoGhost13t" onchange="changeAutoGhost('13t')"></input> seconds after you go quantum and undo the Big Rip after <input id="autoGhost13u" onchange="changeAutoGhost('13u')"></input> seconds.<br>
+							Big Rip in <input id="autoGhost13t" onchange="changeAutoGhost('13t')"></input> seconds and undo after <input id="autoGhost13u" onchange="changeAutoGhost('13u')"></input> seconds.<br>
+							Stop after <input id="autoGhost13o" onchange="changeAutoGhost('13o')"></input> times.<br>(0 = always)<br>
 							Is active: <input id="isAutoGhostOn13" type="checkbox" onchange="toggleAutoGhost(13)"></input>
-						</div></td>
-						<td id="autoGhost14"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-BE Multi Upgrade Ghost</b><br>
-							Power usage: 0.5<br>
-							Is active: <input id="isAutoGhostOn14" type="checkbox" onchange="toggleAutoGhost(14)"></input>
 						</div></td>
 						<td id="autoGhost15"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Ghostify Ghost</b><br>
@@ -5343,34 +5302,59 @@
 							Power usage: 2<br>
 							Is active: <input id="isAutoGhostOn16" type="checkbox" onchange="toggleAutoGhost(16)"></input>
 						</div></td>
+						<td id="autoGhost14"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-BE Multi Upgrade Ghost</b><br>
+							Power usage: 0.5<br>
+							Is active: <input id="isAutoGhostOn14" type="checkbox" onchange="toggleAutoGhost(14)"></input>
+						</div></td>
 						<td id="autoGhost17"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Extractor Ghost</b><br>
 							(also rotates the type of Bosonic Runes every second)<br>
 							Power usage: 3<br>
 							Is active: <input id="isAutoGhostOn17" type="checkbox" onchange="toggleAutoGhost(17)"></input>
 						</div></td>
-						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Electron Multi Ghost</b><br>
-							Power usage: 4<br>
-							Is active: <input id="isAutoGhostOn18" type="checkbox" onchange="toggleAutoGhost(18)"></input>
-						</div></td>
-					</tr>
-					<tr>
 						<td id="autoGhost19"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Enchanter Ghost</b><br>
 							(doesn't consume your Bosonic Runes, enchant every 2 seconds)<br>
 							Power usage: 4<br>
 							Is active: <input id="isAutoGhostOn19" type="checkbox" onchange="toggleAutoGhost(19)"></input>
 						</div></td>
-						<td id="autoGhost20"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Bosonic Upgrader Ghost</b><br>
-							Power usage: 5<br>
-							Is active: <input id="isAutoGhostOn20" type="checkbox" onchange="toggleAutoGhost(20)"></input>
+						<td id="autoGhost22"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Challenge Sweeper Ghost</b><br>
+							(not implemented)<br>
+							Power usage: 0<br>
+							<button class="quantumbtn" onclick="teleportToQCs()">Teleport to Quantum Challenges.</button><br>
+							Is active: <input id="isAutoGhostOn22" type="checkbox" onchange="toggleAutoGhost(22)"></input>
+						</div></td>
+					</tr>
+					<tr>
+						<td id="autoGhost24"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Higgs Ghost</b><br>
+							(automatically get Higgs Bosons every second)<br>
+							Power usage: ???<br>
+							Is active: <input id="isAutoGhostOn24" type="checkbox" onchange="toggleAutoGhost(24)"></input>
+						</div></td>
+						<td id="autoGhost25"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Shifter Ghost</b><br>
+							(automatically get Gravity Dimension Shifts / Boosts every second)<br>
+							Power usage: ???<br>
+							Is active: <input id="isAutoGhostOn25" type="checkbox" onchange="toggleAutoGhost(25)"></input>
 						</div></td>
 						<td id="autoGhost21"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-W & Z Boson Ghost</b><br>
 							Power usage: 10<br>
 							Is active: <input id="isAutoGhostOn21" type="checkbox" onchange="toggleAutoGhost(21)"></input>
+						</div></td>
+						<td id="autoGhost20"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Bosonic Upgrader Ghost</b><br>
+							Power usage: 5<br>
+							Is active: <input id="isAutoGhostOn20" type="checkbox" onchange="toggleAutoGhost(20)"></input>
+						</div></td>
+						<td id="autoGhost23"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Light Ghost</b><br>
+							(automatically get Light Empowerments every second)<br>
+							Power usage: ???<br>
+							Is active: <input id="isAutoGhostOn23" type="checkbox" onchange="toggleAutoGhost(23)"></input>
 						</div></td>
 					</tr>
 				</table>
@@ -5677,10 +5661,10 @@
 			<b>Expansion Mods</b><br>
 			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline">NG++: OFF</button>
 			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline">NGUd: OFF</button>
-			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline">NG Condensed: OFF</button>
 			<br><br>
 			<b>Hellish Mods</b><br>
 			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline">NG--: OFF</button>
+			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline">NG Condensed: OFF</button>
 			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline">Expert Mode: OFF</button>
 			<br><br>
 			<b>Easy Mods</b><br>
@@ -5690,6 +5674,8 @@
 			<button class="storebtn longbtn" id='ngprwBtn' style="font-size: 15px" onclick="toggle_mod('ngprw')" style="display: inline">NG+ Reworked: OFF</button>
 			<br>
 			Reset Mode #<input id='ngpLayer' type="number" onchange="changeNGPLayer()" min=0 value=0>
+			<br><br>
+			<button class="storebtn longbtn" id='ezBtn' style="font-size: 15px" onclick="toggle_mod('ez')" style="display: inline">Barrier-Easing: OFF</button>
 			<br><br>
 			<b>Buffed Mods</b><br>
 			<button class="storebtn longbtn" id='ngmuBtn' style="font-size: 15px" onclick="toggle_mod('ngmu')" style="display: inline">NG*: OFF</button>

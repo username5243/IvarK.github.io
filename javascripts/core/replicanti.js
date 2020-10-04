@@ -91,7 +91,7 @@ function getRGCost(offset = 0, costChange) {
 						increase += (offset - Math.max(399 - player.replicanti.gal, 0)) * (1500 * (offset - Math.max(399 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 399) * 2) - 1183500)
 						if (player.replicanti.gal + offset > 2998) increase += (offset - Math.max(2998 - player.replicanti.gal, 0)) * (5e3 * (offset - Math.max(2998 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 2998) * 2) - 29935e3)
 						if (player.replicanti.gal + offset > 58198) increase += (offset - Math.max(58199 - player.replicanti.gal, 0)) * (1e6 * (offset - Math.max(58199 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 58199) * 2) - 58199e6)
-						if (player.replicanti.gal + offset > 12e4) increase += Math.pow((player.replicanti.gal + offset - 12e4), 2.5) - Math.pow(Math.max(player.replicanti.gal - 12e4, 0), 2.5)
+						if (player.replicanti.gal + offset > 12e4) increase += Math.pow((player.replicanti.gal + offset - 12e4), 3) - Math.pow(Math.max(player.replicanti.gal - 12e4, 0), 3)
 					} else for (var g = Math.max(player.replicanti.gal, 399); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - 394))
 				}
 			}

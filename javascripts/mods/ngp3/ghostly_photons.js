@@ -277,9 +277,9 @@ function getLightThresholdIncrease(l) {
 	return x
 }
 
-function lightEmpowerment() {
+function lightEmpowerment(auto) {
 	if (!(player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq)) return
-	if (!player.aarexModifications.leNoConf && !confirm("You will become a ghost, but Ghostly Photons will be reset. You will gain 1 Light Empowerment from this. Are you sure you want to proceed?")) return
+	if (!auto && !player.aarexModifications.leNoConf && !confirm("You will become a ghost, but Ghostly Photons will be reset. You will gain 1 Light Empowerment from this. Are you sure you want to proceed?")) return
 	if (!player.ghostify.ghostlyPhotons.enpowerments) document.getElementById("leConfirmBtn").style.display = "inline-block"
 
 	if (player.achievements.includes("ng3p92")) maxLightEmpowerments()

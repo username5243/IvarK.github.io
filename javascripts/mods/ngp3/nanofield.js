@@ -94,11 +94,11 @@ function getQuarkEnergyProduction() {
 }
 
 function getQuarkAntienergyProduction() {
+	if (hasBosonicUpg(51)) return new Decimal(0)
 	let ret = tmp.qu.nanofield.charge.sqrt()
 	if (masteryStudies.has(401)) ret = ret.div(getMTSMult(401))
 	if (tmp.qu.nanofield.power > tmp.apgw) ret = ret.times(Decimal.pow(2, (tmp.qu.nanofield.power - tmp.apgw) / 2))
-	if (!hasBosonicUpg(62)) ret = ret.times(getNanofieldFinalSpeed())
-	else ret = ret.div(tmp.ns).times(nanospeed * ls.mult("nf"))
+	ret = ret.times(getNanofieldFinalSpeed())
 	return ret
 }
 

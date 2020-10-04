@@ -68,6 +68,7 @@ function bosonicLabReset() {
 		player.ghostify.bl.upgrades.push(order[i])
 	}
 	if (!player.ghostify.bl.upgrades.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
+	if (player.achievements.includes("ng3p102")) player.ghostify.bl.upgrades.push(53)
 	for (var g = 1; g <= br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(new Decimal(0))
 	player.ghostify.wzb = {
 		unl: true,
@@ -93,10 +94,10 @@ function bosonicLabReset() {
 	matchTempPlayerHiggs()
 }
 
-function higgsReset() {
+function higgsReset(auto) {
 	var oldHiggs = player.ghostify.hb.higgs
 	if (!player.ghostify.bl.am.gte(getHiggsRequirement())) return
-	if (!player.aarexModifications.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
+	if (!auto && !player.aarexModifications.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
 	addHiggs(getHiggsGain())
 	bosonicLabReset()
 	if (oldHiggs == 0) {

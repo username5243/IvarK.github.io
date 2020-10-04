@@ -1487,11 +1487,9 @@ function doNGm3v21tov3202() {
                 for (var u=0;u<player.galacticSacrifice.upgrades.length;u++) if (player.galacticSacrifice.upgrades[u]!=34) newUpgs.push(player.galacticSacrifice.upgrades[u])
                 player.galacticSacrifice.upgrades=newUpgs
                 player.aarexModifications.newGame3MinusVersion = 3
-                player.aarexModifications.ngmX=player.aarexModifications.newGame4MinusVersion?4:3
                 if (player.aarexModifications.ngmX>3) reduceDimCosts()
         } else if (!player.aarexModifications.ngmX && player.tickspeedBoosts !== undefined) {
                 player.aarexModifications.newGame4MinusVersion = 1
-                player.aarexModifications.ngmX=4
                 reduceDimCosts()
         }
         if (player.aarexModifications.newGame3MinusVersion < 3.201) {
@@ -2166,6 +2164,8 @@ function onLoad(noOffline) {
 
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 
+	tmp.ngmX = calcNGMX()
+	if (tmp.ngmX) player.aarexModifications.ngmX = tmp.ngmX
 	ngC.compile()
 	ph.reset()
 	ls.reset()

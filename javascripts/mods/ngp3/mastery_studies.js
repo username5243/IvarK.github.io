@@ -523,8 +523,7 @@ function buyingD7Changes() {
 }
 
 function buyingDilStudyForQC() {
-	showTab("challenges")
-	showChallengesTab("quantumchallenges")
+	teleportToQCs()
 	updateQuantumChallenges()
 }
 

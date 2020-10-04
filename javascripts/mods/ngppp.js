@@ -723,35 +723,34 @@ function setupAutomaticGhostsData() {
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) data[ghost] = {on: false}
 	data[4].mode = "q"
 	data[4].rotate = "r"
-	data[11].pw = 1
-	data[11].lw = 1
-	data[11].cw = 1
+	data[11].pw = 10
+	data[11].cw = 10
 	data[15].a = 1
 	data[19].t = 0
 	return data
 }
 
-var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35]
+var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,1/0,1/0,1/0,1/0]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,10]
+var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,10,0,0,0,0]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
 		for (var x = 1; x <= MAX_AUTO_GHOSTS; x++) if (data[x] === undefined) data[x] = {on: false}
-		if (data.ghosts >= MAX_AUTO_GHOSTS) document.getElementById("nextAutomatorGhost").parentElement.style.display="none"
+		if (data.ghosts >= MAX_AUTO_GHOSTS) document.getElementById("nextAutomatorGhost").parentElement.style.visibility="hidden"
 		else {
 			document.getElementById("automatorGhostsAmount").textContent=data.ghosts
-			document.getElementById("nextAutomatorGhost").parentElement.style.display=""
+			document.getElementById("nextAutomatorGhost").parentElement.style.visibility="visible"
 			document.getElementById("nextAutomatorGhost").textContent=autoGhostRequirements[data.ghosts-3].toFixed(2)
 		}
 	}
 	powerConsumed=0
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
 		if (ghost>data.ghosts) {
-			if (load) document.getElementById("autoGhost"+ghost).style.display="none"
+			if (load) document.getElementById("autoGhost"+ghost).style.visibility="hidden"
 		} else {
 			if (load) {
-				document.getElementById("autoGhost"+ghost).style.display=""
+				document.getElementById("autoGhost"+ghost).style.visibility="visible"
 				document.getElementById("isAutoGhostOn"+ghost).checked=data[ghost].on
 			}
 			if (data[ghost].on) powerConsumed+=powerConsumptions[ghost]
@@ -761,10 +760,10 @@ function updateAutoGhosts(load) {
 		document.getElementById("autoGhostMod4").textContent = "Every " + (data[4].mode == "t" ? "second" : "Quantum")
 		document.getElementById("autoGhostRotate4").textContent = data[4].rotate == "l" ? "Left" : "Right"
 		document.getElementById("autoGhost11pw").value = data[11].pw
-		document.getElementById("autoGhost11lw").value = data[11].lw
 		document.getElementById("autoGhost11cw").value = data[11].cw
 		document.getElementById("autoGhost13t").value = data[13].t
 		document.getElementById("autoGhost13u").value = data[13].u
+		document.getElementById("autoGhost13o").value = data[13].o
 		document.getElementById("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
 	}
 	document.getElementById("consumedPower").textContent = powerConsumed.toFixed(2)
@@ -792,9 +791,6 @@ function changeAutoGhost(o) {
 	} else if (o == "11pw") {
 		var num = parseFloat(document.getElementById("autoGhost11pw").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].pw = num
-	} else if (o == "11lw") {
-		var num = parseFloat(document.getElementById("autoGhost11lw").value)
-		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].lw = num
 	} else if (o == "11cw") {
 		var num = parseFloat(document.getElementById("autoGhost11cw").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[11].cw = num
@@ -804,6 +800,9 @@ function changeAutoGhost(o) {
 	} else if (o == "13u") {
 		var num = parseFloat(document.getElementById("autoGhost13u").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[13].u = num
+	} else if (o == "13o") {
+		var num = parseInt(document.getElementById("autoGhost13o").value)
+		if (!isNaN(num) && num >= 0) player.ghostify.automatorGhosts[13].o = num
 	} else if (o == "15a") {
 		var num = fromValue(document.getElementById("autoGhost15a").value)
 		if (!isNaN(break_infinity_js ? num : num.l)) player.ghostify.automatorGhosts[15].a = num
@@ -824,7 +823,7 @@ function rotateAutoUnstable() {
 	for (var g = 1; g < 4; g++) document.getElementById("isAutoGhostOn" + g).checked = player.ghostify.automatorGhosts[g].on
 }
 
-const MAX_AUTO_GHOSTS = 21
+const MAX_AUTO_GHOSTS = 25
 
 //v2.1
 function startEC10() {
@@ -850,10 +849,6 @@ function getGHPMultCostScalingStart() {
 }
 
 //v2.2
-function canBuyGalaxyThresholdUpg() {
-	return !tmp.ngp3 || player.dilation.rebuyables[2] < 60
-}
-
 function showNFTab(tabName) {
 	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
 	var tabs = document.getElementsByClassName('nftab');

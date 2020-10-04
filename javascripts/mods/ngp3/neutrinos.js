@@ -281,11 +281,11 @@ var neutrinoUpgrades = {
 	},
 	3: {
 		eff() {
+			if (!tmp.quActive) return new Decimal(1)
 			let log = tmp.qu.colorPowers.b.log10()
 			let exp = Math.max(log / 1e4 + 1, 2)
 			let x
-			if (!tmp.quActive) x = new Decimal(1)
-			else if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
+			if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
 			else x = Math.pow(Math.max(log / 250 + 1, 1), exp)
 			return x
 		},
@@ -305,9 +305,9 @@ var neutrinoUpgrades = {
 	},
 	7: {
 		eff() {
+			if (!tmp.quActive) return new Decimal(1)
 			var nu7 = tmp.qu.colorPowers.g.add(1).log10()/400
-			if (!tmp.quActive) nu7 = 0
-			else if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
+			if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
 			return Decimal.pow(10, nu7) 
 		},
 		effDesc(x) {

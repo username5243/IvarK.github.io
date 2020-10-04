@@ -725,3 +725,13 @@ function calcG13Exp(){
 	return exp
 }
 
+function calcNGMX(data) {
+	if (data === undefined) data = player
+	return data.aarexModifications.ngmX ||
+		(data.pSac !== undefined ? 5 :
+		data.tdBoosts !== undefined ? 4 :
+		data.tickspeedBoosts !== undefined ? 3 :
+		data.galacticSacrifice !== undefined ? 2 :
+		data.aarexModifications.newGameMinusVersion ? 1 :
+		0)
+}

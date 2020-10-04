@@ -1,8 +1,11 @@
 let Prestiges = {
-	order: ["paradox", "galaxy", "infinity", "eternity", "quantum", "ghostify", "planck"],
+	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "quantum", "ghostify", "planck"],
 	reqs: {
 		paradox() {
 			return player.matter.max(player.money).gte(1e3) && player.totalTickGained && !tmp.ri
+		},
+		accelerate() {
+			return false
 		},
 		galaxy() {
 			return getGSAmount().gte(1) && !tmp.ri
@@ -14,6 +17,9 @@ let Prestiges = {
 			var id7unlocked = player.infDimensionsUnlocked[7]
 			if (getEternitied() >= 25 || (tmp.ngp3 && tmp.qu.bigRip.active)) id7unlocked = true
 			return player.infinityPoints.gte(player.currentEternityChall != "" ? player.eternityChallGoal : Number.MAX_VALUE) && id7unlocked
+		},
+		interreality() {
+			return ECTimesCompleted("eterc10")
 		},
 		quantum() {
 			return player.money.log10() >= getQCGoalLog() &&
@@ -33,7 +39,13 @@ let Prestiges = {
 		paradox() {
 			return player.pSac !== undefined
 		},
+		accelerate() {
+			return tmp.ngmX >= 6
+		},
 		galaxy() {
+			return player.galacticSacrifice !== undefined
+		},
+		interreality() {
 			return player.galacticSacrifice !== undefined
 		},
 		quantum() {
@@ -53,6 +65,9 @@ let Prestiges = {
 		paradox() {
 			return player.pSac.times >= 1
 		},
+		accelerate() {
+			return false
+		},
 		galaxy() {
 			return player.galacticSacrifice.times >= 1
 		},
@@ -61,6 +76,9 @@ let Prestiges = {
 		},
 		eternity() {
 			return player.eternities >= 1
+		},
+		interreality() {
+			return false
 		},
 		quantum() {
 			return tmp.qu.times >= 1
@@ -80,9 +98,11 @@ let Prestiges = {
 	},
 	displayData: {
 		paradox: ["pSac", "px", "paradoxbtn"],
+		accelerate: ["accReset", "vel", "accTabBtn"],
 		galaxy: ["sacrificebtn", "galaxyPoints2", "galaxybtn"],
 		infinity: ["postInfinityButton", "infinityPoints2", "infinitybtn"],
 		eternity: ["eternitybtn", "eternityPoints2", "eternitystorebtn"],
+		interreality: ["irReset", "irEmpty", "irTabBtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
 		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"],
 		planck: ["planck", "planckinfo", "plancktabbtn"],

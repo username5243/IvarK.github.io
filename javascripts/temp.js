@@ -75,7 +75,7 @@ let tmp = {
 }
 
 function updateActiveLayers() {
-	tmp.eterUnl = ph.did("eternity") && !player.pl.on
+	tmp.eterUnl = ph.did("eternity") && !inQCModifier("tb") && !player.pl.on
 
 	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !player.pl.on
 	tmp.quActive = tmp.quUnl && !inQCModifier("ms")
@@ -165,12 +165,17 @@ function updateFixedLightTemp() {
 }
 
 function updateInfiniteTimeTemp() {
+	if (!tmp.eterUnl || !player.achievements.includes("r105")) {
+		tmp.it = new Decimal(1)
+		return
+	}
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
 		if (tmp.qu.breakEternity.upgrades.includes(tmp.be ? 11 : 8)) x *= getBreakUpgMult(8)
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
+		if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
 

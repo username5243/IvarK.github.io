@@ -342,6 +342,7 @@ function getTreeUpgradeEffect(upg) {
 		return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
 	}
 	if (upg == 5) {
+		if (!tmp.eterUnl) return new Decimal(1)
 		let MA = player.meta.bestOverQuantums
 		if (player.achievements.includes("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
 		return Math.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))

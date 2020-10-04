@@ -146,7 +146,7 @@ button {
 	display:table;
 	text-align:center;
 	width: 350px;
-	height: 140px;
+	height: 160px;
 	color: #32c832;
 	background: #0a640a;
 	font-weight: bold;
@@ -463,6 +463,18 @@ button {
 	top: 280px;
 }
 
+.presPos8 {
+	position: absolute;
+	right: 75%;
+	top: 280px;
+}
+
+.presPos9 {
+	position: absolute;
+	transform: translate(-50%,0);
+	top: 280px;
+}
+
 .presCurrency1 {
     left: 75%;
     position: absolute;
@@ -518,6 +530,23 @@ button {
     width: 210px;
 }
 
+.presCurrency8 {
+    right: 75%;
+	top: 240px;
+    position: absolute;
+    font-size: 12px;
+    width: 210px;
+}
+
+.presCurrency9 {
+	position: absolute;
+	right: 50%;
+	top: 240px;
+	transform: translate(105px, 0);
+	width: 210px;
+	font-size: 12px;
+}
+
 .presBtn {
     background: #E0E0E0;
     border: 2px solid #4980CC;
@@ -544,6 +573,18 @@ button {
     border-radius: 4px;
 }
 
+.vel {
+	font-weight: bold;
+}
+
+.pxAmount {
+	font-weight: bold;
+}
+
+#galaxyPoints2 .GPAmount {
+    font-weight: bold;
+}
+
 .IPAmount2 {
     font-weight: bold;
 }
@@ -556,12 +597,8 @@ button {
 	font-weight: bold;
 }
 
-.pxAmount, #GHPAmount, #quantumedBMAmount {
+#GHPAmount, #quantumedBMAmount {
 	font-weight: bold;
-}
-
-#galaxyPoints2 .GPAmount {
-    font-weight: bold;
 }
 
 #quickQuantum {
@@ -643,6 +680,36 @@ button {
 .newdimlocked:hover {
     color: #000000;
     background: #B84B5F;
+}
+
+.acceleratebtn {
+	background: linear-gradient(#000000, transparent, #000000), linear-gradient(90deg, #000000, #000000, #ffbf00, #000000);
+	background-size: 200% 100%;
+	border: 2px solid rgba(255, 191, 0, 0.25);
+	border-radius: 4px;
+	color: #ffefbf;
+	text-shadow: 0px 0px 6px #ffdf7f, 0px 0px 6px #000000, 0px 0px 12px #ffbf00;
+	font-family: Typewriter;
+	font-weight: bold;
+	animation: 5s accelerate ease-in-out infinite;
+	transition-duration: 0.2s;
+	cursor: pointer
+}
+
+.acceleratebtn:hover {
+	border-color: rgba(255, 191, 0, 0.5);
+	box-shadow: inset 0px 0px 12px 0px #ffbf00;
+	color: #ffbf00;
+	text-shadow: 0px 0px 6px #ffbf00, 0px 0px 6px #000000, 0px 0px 12px #ffbf00;
+}
+
+@keyframes accelerate {
+	0% {
+		background-position: 0% 0%
+	}
+	100% {
+		background-position: 600% 0%
+	}
 }
 
 .paradoxbtn {
@@ -759,6 +826,27 @@ button {
 .eternitytabbtn:hover {
     color: #511568;
     background: white;
+}
+
+
+.interrealitybtn {
+	background: linear-gradient(90deg, #007f00, #000000, #003f7f);
+	border: 2px solid;
+	border-color: #007f00 #003f7f #003f7f #007f00;
+	border-radius: 4px;
+	box-shadow: inset 0px 0px 12px 0px #000000;
+	color: #ffffff;
+	text-shadow: 0px 0px 3px #ffffff, 0px 0px 6px #ffffff;
+	font-family: Typewriter;
+	font-weight: bold;
+	transition-duration: 0.2s;
+	cursor: pointer
+}
+
+.interrealitybtn:hover {
+	border-color: #00bf00 #005fbf #005fbf #00bf00;
+	box-shadow: inset 0px 0px 12px 0px rgba(255, 255, 255, 0.5);
+	text-shadow: 0px 0px 6px #ffffff, 0px 0px 12px #ffffff;
 }
 
 .quantumbtn {
@@ -2066,7 +2154,16 @@ br {
 	animation: electronupg 5s infinite
 }
 
-#replicants .qtable td { vertical-align:0 }
+#moreQCs {
+	width: 100%
+}
+
+#moreQCs td {
+	vertical-align: 0;
+	text-align: center
+}
+
+#replicants .qtable td { vertical-align: 0 }
 
 .upgbought {
 	color: black;
@@ -2409,7 +2506,7 @@ br {
 	height: 90px
 }
 
-#autoGhost11pw, #autoGhost11lw, #autoGhost11cw {
+#autoGhost11pw, #autoGhost11lw, #autoGhost11cw, #autoGhost13t, #autoGhost13u, #autoGhost13o {
 	width: 50px
 }
 
