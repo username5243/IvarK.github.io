@@ -284,6 +284,8 @@ function lightEmpowerment(auto) {
 
 	if (player.achievements.includes("ng3p92")) maxLightEmpowerments()
 	else player.ghostify.ghostlyPhotons.enpowerments++
+	
+	if (player.achievements.includes("ng3p102")) return
 	ghostify(false, true)
 
 	if (player.achievements.includes("ng3p91")) return

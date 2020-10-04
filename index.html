@@ -2752,7 +2752,7 @@
 								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock three new Break Eternity upgrades and a new Quantum Challenge, and get all achievements from before Higgs Bosons."></div>
 							</td>
 							<td>
-								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges. Reward: You always have Bosonic Upgrade 23."></div>
+								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges. Reward: You always have Bosonic Upgrade 23 and Light Empowerments reset nothing."></div>
 							</td>
 							<td>
 								<div id="ng3p103" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
@@ -3736,6 +3736,8 @@
 								</div>
 							</div>
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc4div">
 								<span>Automatic Big Crunch Challenge is applied to your Normal, Infinity, Time and Meta Dimensions. Meta-Dimension Boost cost scales less, but their buffs are nullified.</span>
@@ -3750,8 +3752,6 @@
 								</div>
 							</div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc5div">
 								<span>Dimension Supersonic scaling starts instantly, and grows much faster. Replicanti Galaxy cost and free galaxy threshold also grow much faster. Multiplier per ten dimensions is 1x.</span>
@@ -3780,6 +3780,8 @@
 								</div>
 							</div>
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc7div">
 								<span id="qc7desc"></span>
@@ -3808,8 +3810,6 @@
 								</div>
 							</div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc9div">
 								<span>Only Replicantis boost Time Dimensions and meta-antimatter doesn't boost Dimension Boosts.</span>
@@ -3837,70 +3837,72 @@
 				<div id="pairedchallenges">
 					<b style="font-size: 35px">Paired Challenges</b><br>
 					<button class="storebtn" onclick="respecTogglePC()" id="respecPC" style="width:150px; height: 40px; font-size: 10px; border-width: 1px; margin: auto">Respec paired challenges on next quantum</button>
-					<table class="table" style="margin: 0 auto">
-						<tr>
-							<td>
-								<div class="quantumchallengediv">
-									<span id="pc1desc"></span>
-									<br>
-									<br>
-									<div class="outer">
-										<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 1, true)">Assign</button>
-										<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 1, true, true)">Big Rip</button>
-										<br>
-										<span id="pc1cost"></span><br>
-										<span id="pc1goal"></span><br>
-										Reward: Boost the reward for these sub-challenges.
-									</div>
-								</div>
-							</td>
-							<td>
-								<div class="quantumchallengediv">
-									<span id="pc2desc"></span>
-									<br>
-									<br>
-									<div class="outer">
-										<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 2, true)">Assign</button>
-										<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 2, true, true)">Big Rip</button>
-										<br>
-										<span id="pc2cost"></span><br>
-										<span id="pc2goal"></span><br>
-										Reward: Boost the reward for these sub-challenges.
-									</div>
-								</div>
-							</td>
-							<td>
-								<div class="quantumchallengediv">
-									<span id="pc3desc"></span>
-									<br>
-									<br>
-									<div class="outer">
-										<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 3, true)">Assign</button>
-										<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 3, true, true)">Big Rip</button>
-										<br>
-										<span id="pc3cost"></span><br>
-										<span id="pc3goal"></span><br>
-										Reward: Boost the reward for these sub-challenges.
-									</div>
-								</div>
-							</td>
-							<td>
-								<div class="quantumchallengediv">
-									<span id="pc4desc"></span>
-									<br>
-									<br>
-									<div class="outer">
-										<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 4, true)">Assign</button>
-										<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 4, true, true)">Big Rip</button>
-										<br>
-										<span id="pc4cost"></span><br>
-										<span id="pc4goal"></span><br>
-										Reward: Boost the reward for these sub-challenges.
-									</div>
-								</div>
-							</td>
-						</tr>
-					</table>
+				<table class="table" id="pairedchallenges" style="margin: 0 auto"> 
+					<tr> 
+						<td> 
+							<div class="quantumchallengediv"> 
+								<span id="pc1desc"></span> 
+								<br> 
+								<br> 
+								<div class="outer"> 
+									<button id="pc1" class="challengesbtn" onclick="quantum(false, true, 1, true)">Assign</button> 
+									<button id="pc1br" class="challengesbtn" onclick="quantum(false, true, 1, true, true)">Big Rip</button> 
+									<br> 
+									<span id="pc1cost"></span><br> 
+									<span id="pc1goal"></span><br> 
+									Reward: Boost the reward for these sub-challenges. 
+								</div> 
+							</div> 
+						</td> 
+						<td> 
+							<div class="quantumchallengediv"> 
+								<span id="pc2desc"></span> 
+								<br> 
+								<br> 
+								<div class="outer"> 
+									<button id="pc2" class="challengesbtn" onclick="quantum(false, true, 2, true)">Assign</button> 
+									<button id="pc2br" class="challengesbtn" onclick="quantum(false, true, 2, true, true)">Big Rip</button> 
+									<br> 
+									<span id="pc2cost"></span><br> 
+									<span id="pc2goal"></span><br> 
+									Reward: Boost the reward for these sub-challenges. 
+								</div> 
+							</div> 
+						</td> 
+					</tr> 
+					<tr> 
+						<td> 
+							<div class="quantumchallengediv"> 
+								<span id="pc3desc"></span> 
+								<br> 
+								<br> 
+								<div class="outer"> 
+									<button id="pc3" class="challengesbtn" onclick="quantum(false, true, 3, true)">Assign</button> 
+									<button id="pc3br" class="challengesbtn" onclick="quantum(false, true, 3, true, true)">Big Rip</button> 
+									<br> 
+									<span id="pc3cost"></span><br> 
+									<span id="pc3goal"></span><br> 
+									Reward: Boost the reward for these sub-challenges. 
+								</div> 
+							</div> 
+						</td> 
+						<td> 
+							<div class="quantumchallengediv"> 
+								<span id="pc4desc"></span> 
+								<br> 
+								<br> 
+								<div class="outer"> 
+									<button id="pc4" class="challengesbtn" onclick="quantum(false, true, 4, true)">Assign</button> 
+									<button id="pc4br" class="challengesbtn" onclick="quantum(false, true, 4, true, true)">Big Rip</button> 
+									<br> 
+									<span id="pc4cost"></span><br> 
+									<span id="pc4goal"></span><br> 
+									Reward: Boost the reward for these sub-challenges. 
+								</div> 
+							</div> 
+						</td> 
+					</tr> 
+				</table> 
 				</div>
 				<div id="bigrip">
 					<b style="font-size: 35px">Big Rip</b><br>
@@ -3937,7 +3939,7 @@
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg17" onclick='buyBigRipUpg(17)'>Reactivate the first upgrade, and make its effect <span id="bigripupg17current">3</span>x stronger.<br>Cost: <span id="bigripupg17cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg18" onclick='buyBigRipUpg(18)'>Space Shards boost quark spin production.<br>Currently: <span id="bigripupg18current"></span>x<br>Cost: <span id="bigripupg18cost"></span> Space Shards</button></td>
 							<td><button class='gluonupgrade unavailablebtn' id="bigripupg19" onclick='buyBigRipUpg(19)'>Time Shards speed up Branches.<br>Currently: <span id="bigripupg19current"></span>x<br>Cost: <span id="bigripupg19cost"></span> Space Shards</button></td>
-							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>You passively gain Tachyon particles, whether you are currently Big Ripped or not.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
+							<td><button class='gluonupgrade unavailablebtn' id="bigripupg20" onclick='buyBigRipUpg(20)'>You passively gain Tachyon particles no matter what.<br>Cost: <span id="bigripupg20cost"></span> Space Shards</button></td>
 						</tr>
 					</table>
 				</div>

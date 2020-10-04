@@ -793,7 +793,7 @@ var bu = {
 		43: "Green power effect boosts Tree Upgrades.",
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
-		51: "You never produce preon anti-energy and always produce Eternal Matter. (but at the reduced rate outside of Big Rips)",
+		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Unlock 3 new Light Empowerment boosts.",
 		54: "Bosonic Enchant 6 has a stronger boost.",

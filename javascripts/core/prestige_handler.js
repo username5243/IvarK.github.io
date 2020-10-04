@@ -19,7 +19,7 @@ let Prestiges = {
 			return player.infinityPoints.gte(player.currentEternityChall != "" ? player.eternityChallGoal : Number.MAX_VALUE) && id7unlocked
 		},
 		interreality() {
-			return ECTimesCompleted("eterc10")
+			return ECTimesCompleted("eterc10") >= 1
 		},
 		quantum() {
 			return player.money.log10() >= getQCGoalLog() &&
