@@ -347,8 +347,22 @@ function getIDReplMult() {
 	return tmp.rm
 }
 
+function getEU2Eternities(){
+	let e = nMx(getEternitied(), 0)
+	if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(e.log2() / 4, 128)
+	return e
+}
+
 function getEU2Mult() {
-	var e = nMx(getEternitied(), 0)
+	var e = getEU2Eternities() 
+	/*
+	the reason I softcapped eternities is because they caused balance issues 
+	when you got a lot of eternities (from tmp.e50kdt being true <==> that broken DT upgrade)
+	you get a TON of IPo so much so that you supa-inflate, and this should stop most of it 
+	note: it was giving me about 95% of the mult to ID which is.... a LOT
+	note2: that being said, you can softcap it later, but it it gets to e1000 then the multiplier is
+	about ee14 to IDs = BROKEN (e5k = e50DT ==> e3e17 to IDs = BROKEN BROKEN GOOD)
+	*/
 	if (typeof(e) == "number" && isNaN(e)) e = 0
 	if (player.boughtDims) return Decimal.pow(e, Decimal.times(e,2).add(1).log(4))
 	var cap = nMn(e, 1e5)
@@ -356,8 +370,10 @@ function getEU2Mult() {
 	if (e > 1e5) soft = nS(e, cap)
 	var achReward = 1
 	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 4.75))
-	if (tmp.ngC) return Decimal.pow(cap/100 + 1, Math.log(cap * 4 + 1) / Math.log(2)).times(Decimal.div(soft, 100).add(1).times(Decimal.times(soft, 4).add(1).log(2)).max(1)).max(achReward)
-	return Decimal.pow(cap/200 + 1, Math.log(cap * 2 + 1) / Math.log(4)).times(Decimal.div(soft, 200).add(1).times(Decimal.times(soft, 2).add(1).log(4)).max(1)).max(achReward)
+	let div1 = tmp.ngC ? 100 : 200
+	let div2 = tmp.ngC ? 2 : 4
+	let tim1 = tmp.ngC ? 4 : 2
+	return Decimal.pow(cap / div1 + 1, Math.log(cap * tim1 + 1) / Math.log(div2)).times(Decimal.div(soft, div1).add(1).times(Decimal.times(soft, div2).add(1).log(div2)).max(1)).max(achReward)
 }
 
 function getEU3Mult() {
