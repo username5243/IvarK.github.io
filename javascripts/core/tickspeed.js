@@ -7,8 +7,8 @@ function getTickSpeedMultiplier() {
 
 function initialGalaxies() {
 	let g = player.galaxies
-	if (tmp.ngp3 && !tmp.be) {
-		g = Math.max(g-player.quantum.electrons.sacGals, 0)
+	if (tmp.quActive && !tmp.be) {
+		g = Math.max(g - player.quantum.electrons.sacGals, 0)
 		g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
 	}
 	if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)

@@ -101,7 +101,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : oheHeadstart ? 2e4 : player.achievements.includes("ng3p12") ? Math.max(Math.floor(720*3600*10/player.quantum.best),10000) : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : player.achievements.includes("ng3p12") ? Math.max(Math.floor(1e8 / player.quantum.best), 2e4) : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
@@ -287,7 +287,7 @@ function resetTimeDimensions(full) {
 
 function resetEternityChallenges(bigRip, ngpp) {
 	player.eternityChalls = {}
-	if (ngpp || (bigRip ? tmp.bruActive[2] : isRewardEnabled(3))) { 
+	if (ngpp || (bigRip ? tmp.bruActive[2] : isRewardEnabled(1))) { 
 		for (let ec = 1; ec <= (ngpp ? 12 : 14); ec++) player.eternityChalls['eterc' + ec] = 5
 	}
 	resetEternityChallUnlocks()
@@ -543,6 +543,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 		},
 		electrons: {
 			amount: 0,
+			percentage: tmp.qu.electrons.percentage,
 			sacGals: 0,
 			mult: bm > 2 ? tmp.qu.electrons.mult : bm ? 6 : 2,
 			rebuyables: bm > 2 ? tmp.qu.electrons.rebuyables : [0,0,0,0]
@@ -642,7 +643,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = bm ? 1e13 : 0
+	player.eternities = bm ? 1e13 : 1e10
 	player.eternitiesBank = 0
 	player.thisEternity = 0
 	player.bestEternity = 9999999999

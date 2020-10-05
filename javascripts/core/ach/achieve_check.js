@@ -342,6 +342,7 @@ function ALLACHIEVECHECK(){
 		if (player.exdilation || player.meta) checkUniversalHarmony()
 	}
 	if (!tmp.ngp3) return
-	if (!player.achievements.includes("ng3p101")) preHiggsNGp3AchieveCheck()
+
+	preHiggsNGp3AchieveCheck()
 	beyondHiggsAchieveCheck()
 }

@@ -368,28 +368,22 @@ function giveAchievement(name, noUpdate) {
 		loadAutoBuyerSettings()
 	}
 	if (name == "Kee-hee-hee!" && (player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37"))) {
-                setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
-                dev.giveAllNGAchievements()
-                for (let i = 1; i <= 8; i++){
-                        if (!player.achievements.includes("ngpp1" + i)) player.achievements.push("ngpp1" + i)
-                        if (!player.achievements.includes("ng3p1" + i)) player.achievements.push("ng3p1" + i)
-                        if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
-                }
-        }
-        if (name == "Even Ghostlier than before") {
-                for (let i = 1; i <= 8; i++){
-                        if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
-                        if (!player.achievements.includes("ng3p4" + i)) player.achievements.push("ng3p4" + i)
-                        if (!player.achievements.includes("ng3p5" + i)) player.achievements.push("ng3p5" + i)
-                        if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
-                }
-        }
-        if (name == "The Power of Relativity"){
-                for (let i = 1; i <= 8; i++){
-                        if (!player.achievements.includes("ng3p7" + i)) player.achievements.push("ng3p7" + i)
-                        if (!player.achievements.includes("ng3p8" + i)) player.achievements.push("ng3p8" + i)
-                }
-        }
+		setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+		dev.giveAllNGAchievements()
+		for (let i = 1; i <= 8; i++){
+			if (!player.achievements.includes("ngpp1" + i)) player.achievements.push("ngpp1" + i)
+			if (!player.achievements.includes("ng3p1" + i)) player.achievements.push("ng3p1" + i)
+			if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
+		}
+	}
+	if (name == "Even Ghostlier than before") {
+		for (let i = 1; i <= 8; i++){
+			if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
+			if (!player.achievements.includes("ng3p4" + i)) player.achievements.push("ng3p4" + i)
+			if (!player.achievements.includes("ng3p5" + i)) player.achievements.push("ng3p5" + i)
+			if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
+		}
+	}
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()
 	if (name == "Not-so-very-challenging") updateQuantumChallenges()

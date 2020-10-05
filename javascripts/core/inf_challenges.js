@@ -103,7 +103,7 @@ function updateNCVisuals() {
 	if (inNC(3) || chall == "postc1") document.getElementById("chall3Pow").style.display = "inline-block"
 	else document.getElementById("chall3Pow").style.display = "none"
 
-	if (inNC(12) || chall == "postc1" || chall == "postc6" || inQC(6) || player.pSac) document.getElementById("matter").style.display = "block"
+	if (inMatterChallenge()) document.getElementById("matter").style.display = "block"
 	else document.getElementById("matter").style.display = "none"
 
 	if (isADSCRunning()) document.getElementById("chall13Mult").style.display = "block"
@@ -114,6 +114,10 @@ function updateNCVisuals() {
 
 	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && player.tickspeedBoosts == undefined) || player.pSac || chall == "postc1" || chall == "postc6" || chall == "postc8") document.getElementById("quickReset").style.display = "inline-block"
 	else document.getElementById("quickReset").style.display = "none"
+}
+
+function inMatterChallenge() {
+	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || inQC(6) || player.pSac !== undefined || pl.on()
 }
 
 var worstChallengeTime = 1
@@ -201,8 +205,8 @@ function getNextAt(chall) {
 		let retMod = nextAt[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
-	if (tmp.ngc) {
-		let retMod = nextAt[chall+"_ngp3c"]
+	if (tmp.ngC) {
+		let retMod = nextAt[chall+"_ngC"]
 		if (retMod) ret = retMod
 	}
 	return ret
@@ -222,8 +226,8 @@ function getGoal(chall) {
 		let retMod = goals[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
-	if (tmp.ngc) {
-		let retMod = nextAt[chall+"_ngp3c"]
+	if (tmp.ngC) {
+		let retMod = nextAt[chall+"_ngC"]
 		if (retMod) ret = retMod
 	}
 	return ret

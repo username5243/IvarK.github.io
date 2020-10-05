@@ -75,9 +75,9 @@ let tmp = {
 }
 
 function updateActiveLayers() {
-	tmp.eterUnl = ph.did("eternity") && !inQCModifier("tb") && !player.pl.on
+	tmp.eterUnl = ph.did("eternity") && !inQCModifier("tb") && !pl.on()
 
-	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !player.pl.on
+	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !pl.on()
 	tmp.quActive = tmp.quUnl && !inQCModifier("ms")
 }
 
@@ -349,6 +349,8 @@ function updateGhostifyTempStuff(){
 	tmp.apgw = tmp.qu.nanofield.apgWoke || getAntiPreonGhostWake()
 	updatePPTITemp() //preon power threshold increase
 	if (player.ghostify.ghostlyPhotons.unl) {
+		tmp.phF = getPhotonicFlow()
+
 		var x = getLightEmpowermentBoost()
 		var y = hasBosonicUpg(32)
 		if (tmp.leBoost !== x || tmp.hasBU32 !== y || tmp.updateLights) {

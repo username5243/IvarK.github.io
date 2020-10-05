@@ -481,8 +481,7 @@ var bEn = {
 		12(l) {
 			let exp = 0.75
 			if (tmp.newNGP3E) exp += .025
-			if (l.gt(1e10)) exp *= Math.pow(l.log10() / 5 + 79, .25) - 2
-			if (exp > .8) exp = Math.log10(exp * 12.5) * .8
+			if (l.gt(1e10)) exp *= Decimal.log10(l) / 20 + 0.5
 
 			return Decimal.pow(l, exp).div(bEn.autoScalings[player.ghostify.bl.typeToExtract])
 		},
@@ -799,7 +798,7 @@ var bu = {
 		54: "Bosonic Enchant 6 has a stronger boost.",
 		55: "Bosonic Antimatter divides the requirement of Light Empowerments prior to cost subtraction.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
-		62: "???", 
+		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
 		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
 		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.9)",
 		65: "Square the main Orange Light effect.",

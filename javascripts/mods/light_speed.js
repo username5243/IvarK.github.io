@@ -17,6 +17,9 @@ let LIGHT_SPEED = {
 		tod() {
 			return tmp.ngp3 && player.masterystudies.includes("d12")
 		},
+		gph() {
+			return tmp.ngp3 && player.ghostify.ghostlyPhotons.unl
+		},
 		bl() {
 			return tmp.ngp3 && player.ghostify.wzb.unl
 		},

@@ -80,7 +80,7 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="planckinfo">You have <b id="decayedMatter">0</b> Decayed Matter.</div>
+			<div id="planckinfo">You have <b id="decayedFoam">0</b> Decayed Foam.</div>
 			<button onclick="pl.reset()" id="planck">
 				<b>It's time to supercharge... I want to reduce the universe to Planck Length.</b>
 			</button>
@@ -1672,7 +1672,7 @@
 					<tr>
 						<td id="gvCell" colspan=3 style="text-align: center; width: 60%">
 							You have <span id="gv" style="font-size: 35px">0.0</span> Gravitons. <span id="gvRate" style="font-size: 25px">+0.0/s</span><br>
-							You have <span id="gdWatt" style="font-size: 25px">1.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
+							You have <span id="gdWatt" style="font-size: 25px">0.00</span>x Bosonic Speed, which boosts all Gravity Dimensions by <span id="gdMult" style="font-size: 25px">1.00</span>x before exponents.
 						</td>
 						<td rowspan=12 style="text-align: center; vertical-align: 0; width: 40%">
 							The Gravity Well produced <span id="gvPow" style="font-size: 35px"></span> <span id="gvPowScaling"></span> from your Gravitons and Gravity Radiation.
@@ -1686,15 +1686,13 @@
 								<td>Charge: <span class="gvBoost" id="gvCharge">0.00%</span> stronger</td>
 								<td style="text-align: right"><button class="storebtn" id="gvUncharge" onclick="GDs.unchargeBoost()">Uncharge</button></td>
 							</tr>
-							<!--
 							<tr>
 								<td colspan=2 style="vertical-align: 0">
 									Supercharge: <span class="gvBoost" id="gvSupercharge">0.00%</span> stronger<br>
-									<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Length!</b><br>
-									(requires 100.00 Energy)
+									<!--<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Length!</b><br>-->
+									(requires <span id="plReq"></span>)
 								</td>
 							</tr>
-							-->
 							</table>
 						</td>
 					</tr>
@@ -1732,10 +1730,15 @@
 					</tr>
 					<tr>
 						<td id="gdBoostDesc">
-							Gravity Dimension Shift (0): Requires ??? Gravity Radiation
+							Gravity Dimension Shift (0 + 0): Requires ??? Gravity Radiation
 						</td>
 						<td style="text-align: right">
 							<button class="storebtn" id="gdBoost" style="width: 240px" onclick="GDs.gdBoost()">Unlock a new Dimension</button>
+						</td>
+					</tr>
+					<tr>
+						<td id="extraGDB" colspan=2>
+							Next extra Gravity Dimension Shift / Boost is at ??? Higgs Bosons
 						</td>
 					</tr>
 					<tr>
@@ -1868,6 +1871,9 @@
 						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('tod')"></div>
 					</div></td></tr>
 					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('gph')"></div>
+					</div></td></tr>
+					<tr><td><div>
 						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('bl')"></div>
 					</div></td></tr>
 				</table>
@@ -1889,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 10)</span>
+				<span class="warning">(Test server: Beta 11)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2518,7 +2524,7 @@
 								<div id="I don't have enough fuel!" class="achievement achievementlocked" style="background-image: url(images/105.png)"><br></div>
 							</td>
 							<td>
-								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 20x more eternities up to 100,000 eternities, start with eternities based on your fastest quantum (up to 10,000), and unlock the 'Don't respec studies and auto-reunlock ECs' option in the Eternity Challenges menu."><br></div>
+								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 20x more eternities up to 100,000 eternities, start with eternities based on your fastest quantum (up to 20,000), and unlock the 'Don't respec studies and auto-reunlock ECs' option in the Eternity Challenges menu."><br></div>
 							</td>
 							<td>
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge."><br></div>
@@ -2645,7 +2651,7 @@
 						</tr>
 						<tr id="achRowng3p6">
 							<td>
-								<div id="Kee-hee-hee!" class="achievement achievementlocked" style="background-image: url(images/151.png)"></div>							
+								<div id="Kee-hee-hee!" class="achievement achievementlocked" style="background-image: url(images/151.png)" ach-tooltip="Become a ghost. Reward: Start with 10,000,000,000 eternities, all quantum mechanic unlocks only require Time Theorems, assignation options are kept permanently, Nanofield is 3x faster until you reach 16 rewards, get all achievements prior to Paired Challenges, and start with 1 Eighth Time Dimension in Big Rips."></div>							
 							</td>
 							<td>
 								<div id="Finite Time" class="achievement achievementlocked" style="background-image: url(images/152.png)"></div>
@@ -2697,7 +2703,7 @@
 						</tr>
 						<tr id="achRowng3p8">
 							<td>
-								<div id="Even Ghostlier than before" class="achievement achievementlocked" style="background-image: url(images/167.png)"></div>
+								<div id="Even Ghostlier than before" class="achievement achievementlocked" style="background-image: url(images/167.png)" ach-tooltip="Unlock Bosonic Lab. Reward: The meta-antimatter effect uses your best meta-antimatter in your current Ghostify instead of your best in the current Quantum, unlock all achievements prior to Ghostly Photons, and Photonic Flow is 2x faster."></div>
 							</td>
 							<td>
 								<div id="Overchallenged" class="achievement achievementlocked" style="background-image: url(images/168.png)"></div>
@@ -2749,7 +2755,7 @@
 						</tr>
 						<tr id="achRowng3p10">
 							<td>
-								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock three new Break Eternity upgrades and a new Quantum Challenge, and get all achievements from before Higgs Bosons."></div>
+								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock three new Break Eternity upgrades and a new Quantum Challenge."></div>
 							</td>
 							<td>
 								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges. Reward: You always have Bosonic Upgrade 23."></div>
@@ -4949,9 +4955,9 @@
 				<button class='storebtn' id='reward27disable' onclick='disableReward(27)' style='width:190px'>10 seconds reward: ON</button>
 				<table style="margin: auto">
 					<tr id="speedrunRow1">
-						<td><div id="speedrunMilestone1" style="background-image: url(images/quantum_speedruns/1.png)" ach-tooltip="Reward: Start with 20,000 eternities."></div></td>
+						<td><div id="speedrunMilestone1" style="background-image: url(images/quantum_speedruns/1.png)" ach-tooltip="Reward: Start with all Eternity Challenges completed."></div></td>
 						<td><div id="speedrunMilestone2" style="background-image: url(images/quantum_speedruns/2.png)" ach-tooltip="Reward: Unlock the Time Theorem autobuyer."></div></td>
-						<td><div id="speedrunMilestone3" style="background-image: url(images/quantum_speedruns/3.png)" ach-tooltip="Reward: Start with all Eternity Challenges completed and Eternity Upgrades bought."></div></td>
+						<td><div id="speedrunMilestone3" style="background-image: url(images/quantum_speedruns/3.png)" ach-tooltip="Reward: Start with all Eternity Upgrades bought."></div></td>
 						<td><div id="speedrunMilestone4" style="background-image: url(images/quantum_speedruns/4.png)" ach-tooltip="Reward: Start with time dilation unlocked."></div></td>
 						<td><div id="speedrunMilestone5" style="background-image: url(images/quantum_speedruns/5.png)" ach-tooltip="Reward: Unlock the dilation option for the Eternity autobuyer."></div></td>
 						<td><div id="speedrunMilestone6" style="background-image: url(images/quantum_speedruns/6.png)" ach-tooltip="Reward: Start with all dilation studies & non-rebuyable dilation upgrades before Meta Dimensions unlocked, except for the passive TT gen upgrade."></div></td>
@@ -4989,17 +4995,25 @@
 				</table>
 			</div>
 			<div class='quantumtab' id='electrons'>
-				You have <span id="normalGalaxies">0</span> normal galaxies.<br>
-				You sacrificed <span id='sacrificedGals'>0</span> galaxies.<br>
-				<button class='gluonupgrade storebtn' id='sacrificeGal' onclick='sacrificeGalaxy()' style='width:210px; height:90px'>Sacrifice <span id='sacrificeGals'>0</span> galaxies for <span id="electronsGain"></span> electrons.<br>Gain <span id='electronsGainMult'>2</span> electrons for each sacrificed galaxy.</button><br>
-				<button class='storebtn' id='sacrificeAuto' onclick='toggleAutoQuantumContent("sacrifice")' style='width:210px'></button><br>
-				You have <span id="electronsAmount" style="font-size:35px">0</span> electrons.<br>
-				The multiplier per ten dimensions after being raised to the power of <span id="electronsTranslation" style="font-size:35px">1.00</span>, is currently <span id="electronsEffect" style="font-size:35px">2.00</span>x. (Base multiplier: <span id="linearPerTenMult">2.00</span>x)<br>
+				You have <span id="normal_galaxies">0</span> normal galaxies.<br>
+				Galaxy percentage on next Quantum:
+				<br>
+				<button class="storebtn" onclick="changeGalaxySacrificeMult(0)">0%</button>
+				<button class="storebtn" onclick="changeGalaxySacrificeMult(0.5)">50%</button>
+				<button class="storebtn" onclick="changeGalaxySacrificeMult(1)">100%</button>
+				<br>
+				<br>
+				<span id="elc_percentage" style="font-size:35px">50</span>% of normal galaxies (<span id="sacrificed_gals" style="font-size:25px"></span>) are sacrificed to get <span id="elc_amount" style="font-size:35px"></span> electrons.
+				<br>
+				You gain <span id='elc_mult'>2</span> electrons per 1 sacrificed galaxy.
+				<br>
+				<br>
+				The multiplier per ten dimensions after being raised to the power of <span id="elc_translation" style="font-size:35px">1.00</span>, is currently <span id="elc_effect" style="font-size:35px">2.00</span>x. (Base multiplier: <span id="linear_per_ten_mult">2.00</span>x)<br>
 				<table class="table" align="center" style="margin: auto"><tr>
-					<td><button class='gluonupgrade storebtn' id='electronupg1' onclick='buyElectronUpg(1)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg2' onclick='buyElectronUpg(2)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg3' onclick='buyElectronUpg(3)'></button></td>
-					<td><button class='gluonupgrade storebtn' id='electronupg4' onclick='buyElectronUpg(4)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='elc_upg_1' onclick='buyElectronUpg(1)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='elc_upg_2' onclick='buyElectronUpg(2)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='elc_upg_3' onclick='buyElectronUpg(3)'></button></td>
+					<td><button class='gluonupgrade storebtn' id='elc_upg_4' onclick='buyElectronUpg(4)'></button></td>
 				</tr></table>
 			</div>
 			<div class='quantumtab' id='replicants'>
@@ -5387,6 +5401,8 @@
 			<div id="gphtab" class="ghostifytab">
 				<div id="gphUnl"></div>
 				<div id="gphDiv">
+					<span id="gphSpeed">Photonic Flow: 1x</span>
+					<br><br>
 					You have <span id="dtGPH">0</span> dilated time.<br>
 					You are getting <span class="gphAmount" id="gphProduction">0</span> <span id="gphProductionType">Ghostly Photons</span> per second.<br>
 					<table class='qtable'><tr>

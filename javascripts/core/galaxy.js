@@ -37,11 +37,11 @@ function galaxyReset(bulk) {
 	}
 	if (!player.achievements.includes("r111")) setInitialMoney()
 	if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-	if (tmp.ngp3 && bulk) {
-		if (tmp.qu.autoOptions.sacrifice) sacrificeGalaxy(6, true)
+	if (tmp.quActive && bulk) {
+		if (player.masterystudies.includes("d7")) sacrificeGalaxy()
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
-		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	}
+	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	hideDimensions()
 	tmp.tickUpdate = true;
 }

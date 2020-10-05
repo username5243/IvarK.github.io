@@ -32,9 +32,8 @@ let GDs = {
 			data["rd" + d] = Decimal.max(data["rd" + d], 1)
 		}
 		data.gdBoosts = parseInt(data.gdBoosts)
+		data.extraGDBs = parseInt(data.extraGDBs || 0)
 		delete data.rdBoosts
-
-		GDs.chargeDisplay()
 	},
 	updateTmp() {
 		let data = {}
@@ -42,7 +41,7 @@ let GDs = {
 
 		if (!GDs.unlocked()) return
 
-		data.gdm = tmp.bl.speed.div(10).add(1).log10() //Determine the initial multiplier for Gravity Dimensions.
+		data.gdm = GDs.gdMult() //Determine the initial multiplier for Gravity Dimensions.
 
 		//Gravity Power
 		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
@@ -79,18 +78,34 @@ let GDs = {
 		}
 		document.getElementById("gvBoosts").innerHTML = html
 	},
+	setupDisplays() {
+		GDs.updateDisplay()
+		GDs.dimDisplay()
+		GDs.chargeDisplay()
+	},
 	updateDisplay() {
+		if (!GDs.unlocked()) return
+
+		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100 - 100).toFixed(2) + "%"
+		document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100 - 100).toFixed(2) + "%"
+		
+		document.getElementById("plReq").textContent = pl.reqText()
+	},
+	updateDisplayOnTick() {
 		document.getElementById("gdWatt").textContent = shorten(tmp.bl.speed)
 		document.getElementById("gdMult").textContent = shorten(GDs.tmp.gdm)
 		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
 
-		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (GDs.save.gdBoosts >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
-		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
+		let totalGDBs = GDs.totalGDBs()
 		document.getElementById("gdBoost").textContent = GDs.save.gdBoosts >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
+		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (totalGDBs >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + " + " + getFullExpansion(GDs.save.extraGDBs) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
+		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
+		document.getElementById("extraGDB").textContent = "Next extra Gravity Dimension Shift / Boost is at " + getFullExpansion(player.ghostify.hb.higgs) + " / " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons"
+	
 		document.getElementById("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
 		document.getElementById("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
 		for (var d = 1; d <= 4; d++) {
-			if (GDs.save.gdBoosts + 1 >= d) {
+			if (d <= totalGDBs + 1) {
 				document.getElementById("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
 				document.getElementById("gd" + d + "Amount").textContent = shortenDimensions(GDs.save["gd" + d])
 			}
@@ -117,8 +132,6 @@ let GDs = {
 			let b = GDs.boosts.list[i]
 			document.getElementById("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
 		}
-		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100 - 100).toFixed(2) + "%"
-		//document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100 - 100).toFixed(2) + "%"
 	},
 	teleport() {
 		showDimTab("gdims")
@@ -149,31 +162,46 @@ let GDs = {
 		document.getElementById("breakUpgR4").style.display = unl ? "" : "none"
 		updateNeutrinoUpgradeUnlocks(16, 18)
 
-		if (unl) GDs.dimDisplay()
+		if (unl) GDs.setupDisplays()
 	},
 	unlocked() {
 		return GDs.save && GDs.save.unl
 	},
 	gdTick(diff) {
-		for (var d = Math.min(GDs.save.gdBoosts + 1, 4); d >= 1; d--) {
+		for (var d = Math.min(GDs.totalGDBs() + 1, 4); d >= 1; d--) {
 			let add = Decimal.pow(GDs.tmp.gdm, GDs.gdExp(d)).times(GDs.save["gd" + d])
 			if (d == 1) GDs.save.gv = GDs.save.gv.add(add.times(diff))
 			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(diff / 10))
 		}
 	},
+	gdMult() {
+		return tmp.bl.speed.div(2).max(1).log10() + 1
+	},
 	gdExp(dim) {
-		return (GDs.save.gdBoosts - dim + 1) / Math.sqrt(dim) + 1
+		return (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) + 1
 	},
 	gdBoost(x) {
 		if (!GDs.save.gr.gte(GDs.gdBoostReq())) return
+		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
 		GDs.save.gdBoosts++
-		if (GDs.save.gdBoosts < 4) GDs.unlDisplay()
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		x = Decimal.pow(10, (Math.pow(x * 2, 2) + 5) * GDs.rdExp() * 2)
+		x = Decimal.pow(10, (x * 3 + 5) * GDs.rdExp() * 2)
 		if (isEnchantUsed(35)) x = x.div(tmp.bEn[35])
 		return x
+	},
+	extraGDBReq() {
+		return GDs.save.extraGDBs * 10 + 50
+	},
+	getExtraGDBs() {
+		let toAdd = Math.floor((player.ghostify.hb.higgs - GDs.extraGDBReq()) / 10) + 1
+		if (toAdd < 1) return
+		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
+		GDs.save.extraGDBs += toAdd
+	},
+	totalGDBs() {
+		return GDs.save.gdBoosts + GDs.save.extraGDBs
 	},
 	rdNextTickAt() {
 		return GDs.save.rdTick.add(1).pow(1 / GDs.rdExp()).times(30)
@@ -197,7 +225,8 @@ let GDs = {
 		return GDs.save.gc ? GDs.boosts[GDs.save.gc].rdExp : 0.5
 	},
 	dimDisplay() {
-		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = GDs.save.gdBoosts + 1 >= d ? "" : "hidden"
+		let totalGDBs = GDs.totalGDBs()
+		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = d <= totalGDBs + 1 ? "" : "hidden"
 	},
 	dimReset() {
 		let data = GDs.save
@@ -267,7 +296,7 @@ let GDs = {
 		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
 	},
 	boosts: {
-		list: ["rep", "nf", "tod", "bl"],
+		list: ["rep", "nf", "tod", "gph", "bl"],
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			eff(x) {
@@ -285,9 +314,16 @@ let GDs = {
 		tod: {
 			desc: "^{{x}} to Branch speed",
 			eff(x) {
-				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .5 : 1 / 3)
+				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .5 : 1/3)
 			},
 			rdExp: 0.5
+		},
+		gph: {
+			desc: "^{{x}} to Photonic Flow",
+			eff(x) {
+				return Math.pow(x / 3 + 1, .8)
+			},
+			rdExp: 1.25
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",

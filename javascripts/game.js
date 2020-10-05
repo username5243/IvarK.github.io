@@ -1386,7 +1386,7 @@ function wordizeList(list, caseFirst) {
 
 function factorizeDescs(list, descs) {
 	let length = list.length
-	if (length == 1) return ""
+	if (length < 2) return ""
 
 	let ret = ""
 	for (var i = 0; i < length; i++) {
@@ -1583,10 +1583,11 @@ function showTab(tabName, init) {
 
 function updateMoney() {
 	document.getElementById("coinAmount").textContent = shortenMoney(player.money)
+	var matterName = pl.on() ? "Matterius Foam" : "matter"
 	var element2 = document.getElementById("matter");
-	if (player.currentChallenge == "postc6" || inQC(6)) element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."; //TODO
+	if (player.currentChallenge == "postc6" || inQC(6)) element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."; //TODO
 	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
-		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
+		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."
 		var extra = getExtraTime()
 		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * tmp.ec12Mult,0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * tmp.ec12Mult) : "") + " left until matter reset)"
 		element2.innerHTML = txt
@@ -2024,9 +2025,12 @@ function changeSaveDesc(saveId, placement) {
 		var isSaveGhostified = temp.ghostify ? temp.ghostify.times > 0 : false
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
 		if (isSaveGhostified) {
-			if (temp.achievements.includes("ng3p91")) {
+			if (temp.achievements.includes("ng3p101")) {
+				var data=temp.ghostify.gds
+				msg+="Gravitons: "+shorten(new Decimal(data.gv))+", Gravity Dimension Shifts / Boosts: "+getFullExpansion(data.gdBoosts)
+			} else if (temp.achievements.includes("ng3p91")) {
 				var data=temp.ghostify.hb
-				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", Higgs Bosons: "+shortenDimensions(new Decimal(data.higgs))
+				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", Higgs Bosons: "+getFullExpansion(data.higgs)
 			} else if (temp.achievements.includes("ng3p81")) {
 				var data=temp.ghostify.wzb
 				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", W+ Bosons: "+shortenDimensions(new Decimal(data.wpb))+", W- Bosons: "+shortenDimensions(new Decimal(data.wnb))+", Z Bosons: "+shortenDimensions(new Decimal(data.zb))
@@ -2428,6 +2432,7 @@ function onNotationChange() {
 		if (!player.ghostify.ghostlyPhotons.unl) document.getElementById("gphUnl").textContent = "To unlock Ghostly Photons, you need to get "+shortenCosts(Decimal.pow(10,6e9))+" antimatter while your universe is Big Ripped first."
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else updateBosonUnlockDisplay()
+		GDs.updateDisplay()
 	}
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
@@ -3555,7 +3560,6 @@ function challengesCompletedOnEternity(bigRip) {
 function gainEternitiedStat() {
 	let ret = 1
 	if (ph.did("ghostify")) {
-		ret = Math.pow(10, 2 / (Math.log10(getEternitied() + 1) / 10 + 1))
 		if (hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
 	}
 	if (ph.did("quantum") && player.eternities < 1e5) ret = Math.max(ret, 20)
@@ -4032,7 +4036,7 @@ function updateEPminpeak(diff, type) {
 }
 
 function checkMatter(diff){
-	var haveET=haveExtraTime()
+	var haveET = haveExtraTime()
 	var pxGain
 	if (haveET) {
 		//Matter
@@ -4047,17 +4051,17 @@ function checkMatter(diff){
 			haveET=false
 		}
 	} else {
-		var newMatter = player.matter.times(Decimal.pow(tmp.mv,diff))
+		var newMatter = player.matter.times(Decimal.pow(tmp.mv, diff))
 		if (player.pSac != undefined && !haveET && newMatter.gt(player.money)) pxGain = getPxGain()
 		player.matter = newMatter
 	}
-	if (player.matter.pow(20).gt(player.money) && (player.currentChallenge == "postc7" || (inQC(6) && !player.achievements.includes("ng3p34")))) {
+	if (player.matter.pow(20).gt(player.money) && (player.currentChallenge == "postc7" || (inQC(6) && !player.achievements.includes("ng3p34")) )) {
 		if (tmp.ngp3 ? tmp.qu.bigRip.active && tmp.ri : false) {}
 		else if (inQC(6)) {
 			quantum(false, true, 0)
 			onChallengeFail()
 		} else quickReset()
-	} else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) && !haveET) {
+	} else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) && !haveET) {
 		if (player.pSac!=undefined) player.pSac.lostResets++
 		if (player.pSac!=undefined && !player.resets) pSacReset(true, undefined, pxGain)
 		else quickReset()

@@ -73,6 +73,7 @@ function updateQCDisplaysSpecifics() {
 }
 
 function teleportToQCs() {
+	if (!tmp.quUnl) return
 	showTab("challenges")
 	showChallengesTab("quantumchallenges")
 }
@@ -223,6 +224,9 @@ let qcRewards = {
 			if (comps == 0 || tmp.bE50kDT) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
+			if (hasBosonicUpg(62)) {
+				exp *= 1.1
+			}
 			return Decimal.pow(10, Math.pow(base, exp) / 200)
 		},
 		2: function(comps) {
@@ -232,8 +236,8 @@ let qcRewards = {
 		3: function(comps) {
 			if (comps == 0) return 1
 			let ipow = player.infinityPower.plus(1).log10()
-			let log = Math.sqrt(ipow / 2e8) 
-			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps/9)
+			let log = Math.pow(ipow / 2e8, hasBosonicUpg(62) ? 1 : 0.5) 
+			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps / 9)
 			
 			log = softcap(log, "qc3reward")
 			return Decimal.pow(10, log)
@@ -246,11 +250,13 @@ let qcRewards = {
 		},
 		5: function(comps) {
 			if (comps == 0) return 0
-			return Math.log10(1 + player.resets) * Math.pow(comps, 0.4)
+			return Math.log10(1 + player.resets) * Math.pow(comps, hasBosonicUpg(62) ? 1 : 0.4)
 		},
 		6: function(comps) {
 			if (comps == 0) return 1
-			return player.achPow.pow(comps * 2 - 1)
+			let exp = comps * 2 - 1
+			if (hasBosonicUpg(62)) exp *= player.achPow.sqrt().toNumber()
+			return player.achPow.pow(exp)
 		},
 		7: function(comps) {
 			if (comps == 0) return 1
