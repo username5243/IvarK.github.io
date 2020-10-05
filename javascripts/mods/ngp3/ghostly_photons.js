@@ -185,7 +185,7 @@ function getLightEmpowermentBoost() {
 	return r
 }
 
-let leBoosts = {
+var leBoosts = {
 	max: 11,
 	1: {
 		req() {

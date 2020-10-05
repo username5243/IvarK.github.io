@@ -343,6 +343,6 @@ function ALLACHIEVECHECK(){
 	}
 	if (!tmp.ngp3) return
 
-	preHiggsNGp3AchieveCheck()
+	if (!player.achievements.includes("ng3p101")) preHiggsNGp3AchieveCheck()
 	beyondHiggsAchieveCheck()
 }

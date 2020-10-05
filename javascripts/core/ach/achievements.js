@@ -367,7 +367,7 @@ function giveAchievement(name, noUpdate) {
 		updateAutoEterMode()
 		loadAutoBuyerSettings()
 	}
-	if (name == "Kee-hee-hee!" && (player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37"))) {
+	if (name == "Kee-hee-hee!") {
 		setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 		dev.giveAllNGAchievements()
 		for (let i = 1; i <= 8; i++){
@@ -384,6 +384,12 @@ function giveAchievement(name, noUpdate) {
 			if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
 		}
 	}
+        if (name == "The Power of Relativity") {
+                for (let i = 1; i <= 8; i++){
+			if (!player.achievements.includes("ng3p7" + i)) player.achievements.push("ng3p7" + i)
+			if (!player.achievements.includes("ng3p8" + i)) player.achievements.push("ng3p8" + i)
+		}
+        }
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()
 	if (name == "Not-so-very-challenging") updateQuantumChallenges()
