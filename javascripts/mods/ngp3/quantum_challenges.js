@@ -224,19 +224,21 @@ let qcRewards = {
 			if (comps == 0 || tmp.bE50kDT) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
-			if (hasBosonicUpg(62)) {
-				exp *= 1.1
-			}
+			if (hasBosonicUpg(62)) exp *= 1.1
 			return Decimal.pow(10, Math.pow(base, exp) / 200)
 		},
 		2: function(comps) {
 			if (comps == 0) return 1
-			return 1.2 + comps * 0.2
+			let exp = tmp.newNGP3E ? 1.25 : 1
+			return Math.pow(1.2 + comps * 0.2, exp)
 		},
 		3: function(comps) {
 			if (comps == 0) return 1
 			let ipow = player.infinityPower.plus(1).log10()
-			let log = Math.pow(ipow / 2e8, hasBosonicUpg(62) ? 1 : 0.5) 
+			let exp = hasBosonicUpg(62) ? 1 : 0.5
+			if (tmp.newNGP3E) exp += Math.sqrt(exp) / 10
+			
+			let log = Math.pow(ipow / 2e8, exp) 
 			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps / 9)
 			
 			log = softcap(log, "qc3reward")
@@ -268,7 +270,7 @@ let qcRewards = {
 		},
 		9: function(comps) {
 			comps = ((tmp.pcc && tmp.pcc.c9) || 0) + 1
-			let x = Math.log10(player.replicanti.amount.log10() + 1) * Math.sqrt(comps)
+			let x = Math.log10(player.replicanti.amount.plus(1).log10() + 1) * Math.sqrt(comps)
 			return {
 				td: Math.pow(Math.max(x * 2 - 4, 1), 2),
 				ge: x / 20

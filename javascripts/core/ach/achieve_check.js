@@ -292,7 +292,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (speedrunMilestonesReached >= 28) giveAchievement("Special Relativity")
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
-	if (getTotalRadioactiveDecays >= 10) giveAchievement("Radioactive Decaying to the max!")
+	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")
 	if (tmp.quUnl) giveAchievement("Sub-atomic")
 }
 
