@@ -1716,11 +1716,12 @@ function updateVersionsONLOAD(){
 }
 
 function doNGp3Init2(){
+        if (!tmp.ngp3) return
         tmp.eds = tmp.qu && tmp.qu.emperorDimensions
         if (tmp.ngp3) {
-			setupMasteryStudies()
-			updateUnlockedMasteryStudies()
-			updateSpentableMasteryStudies()
+		setupMasteryStudies()
+		updateUnlockedMasteryStudies()
+		updateSpentableMasteryStudies()
         }
 	updateActiveLayers()
 	updateActiveBigRipUpgrades()
