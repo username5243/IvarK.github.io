@@ -117,7 +117,7 @@ function getGalaxyRequirement(offset = 0, display) {
 		}
 
 		let remoteStart = getRemoteScalingStart()
-		if (tmp.grd.galaxies >= remoteStart && !tmp.be && !hasNU(6)) {
+		if (tmp.grd.galaxies >= remoteStart && !tmp.be && !hasNU(6) && !player.achievements.includes("ng3p117")) {
 			let speed2 = tmp.grd.speed
 			if (GUActive("rg7")) speed2 *= 0.9
 			if (GUActive("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100

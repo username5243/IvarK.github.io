@@ -2433,6 +2433,7 @@ function onNotationChange() {
 		else if (!player.ghostify.wzb.unl) updateBLUnlockDisplay()
 		else updateBosonUnlockDisplay()
 		GDs.updateDisplay()
+		if (ph.did("planck")) pl.updateDisplay()
 	}
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 	document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + shortenMoney(player.achPow) + "x"
@@ -3901,7 +3902,10 @@ function doPerSecondNGP3Stuff(){
 		if (isAutoGhostActive(24)) higgsReset(true)
 		if (isAutoGhostActive(25)) GDs.gdBoost()
 	}
-	if (isAutoGhostActive(16)) maxNeutrinoMult()
+	if (isAutoGhostActive(16)) {
+		maxNeutrinoMult()
+		maxGHPMult()
+	}
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
 	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
 	if (isAutoGhostActive(10)) maxBuyLimit()
@@ -3950,7 +3954,7 @@ setInterval(function() {
 	ALLACHIEVECHECK()
 	bendTimeCheck()
 	metaAchMultLabelUpdate()
-	bAMAchMultLabelUpdate()
+	bWtAchMultLabelUpdate()
 
 	// AB Stuff
 	updateReplicantiGalaxyToggels()
@@ -5050,8 +5054,8 @@ function passiveQuantumLevelStuff(diff){
 		}
 		if (player.ghostify.milestones>15) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
 	}
+	if (tmp.qu.bigRip.active ? player.achievements.includes("ng3p106") : player.achievements.includes("ng3p112")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
-	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(12)) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
 }

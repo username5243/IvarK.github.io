@@ -191,20 +191,20 @@ const allAchievements = {
   ng3p98 : "Meta-Quintillion",
   ng3p101 : "The Power of Relativity",
   ng3p102 : "The Forbidden Challenge",
-  ng3p103 : "ng3p103",
-  ng3p104 : "ng3p104",
-  ng3p105 : "ng3p105",
-  ng3p106 : "ng3p106",
-  ng3p107 : "ng3p107",
-  ng3p108 : "ng3p108",
-  ng3p111 : "Quantum-Scale",
-  ng3p112 : "ng3p112",
-  ng3p113 : "ng3p113",
-  ng3p114 : "ng3p114",
-  ng3p115 : "ng3p115",
-  ng3p116 : "ng3p116",
-  ng3p117 : "ng3p117",
-  ng3p118 : "ng3p118",
+  ng3p103 : "Einstein's Ghost",
+  ng3p104 : "Gigafield",
+  ng3p105 : "X-Ranked",
+  ng3p106 : "Do you even how to?",
+  ng3p107 : "Brutally Challenging",
+  ng3p108 : "Auto-Ghost Speedrunning",
+  ng3p111 : "Quantum Scality",
+  ng3p112 : "Infinitely Massive",
+  ng3p113 : "Replicated Universes",
+  ng3p114 : "The Supervoid",
+  ng3p115 : "Truly Dilating Time",
+  ng3p116 : "Spectre Prisms",
+  ng3p117 : "Universe Immortality",
+  ng3p118 : "Chaos, Chaos, Chaos!",
   s11 : "The first one's always free",
   s12 : "Just in case",
   s13 : "It pays to have respect",
@@ -579,11 +579,11 @@ function metaAchMultLabelUpdate() {
 	document.getElementById("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(tmp.qcRewards[6]) + "x"
 }
 
-function bAMAchMultLabelUpdate() {
+function bWtAchMultLabelUpdate() {
 	if (!player.achievements.includes("ng3p91")) {
-		document.getElementById("bAMAchMultLabel").style.display = "none"
+		document.getElementById("bWtAchMultLabel").style.display = "none"
 		return
 	}
-	document.getElementById("bAMAchMultLabel").style.display = ""
-	document.getElementById("bAMAchMultLabel").textContent = "Achievement multiplier to Bosonic Antimatter: " + shorten(getAchBAMMult()) + "x"
+	document.getElementById("bWtAchMultLabel").style.display = ""
+	document.getElementById("bWtAchMultLabel").textContent = "Achievement multiplier to Bosonic Watts: " + shorten(getAchBWtMult()) + "x"
 }

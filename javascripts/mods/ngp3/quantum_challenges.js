@@ -115,6 +115,8 @@ function getQCGoalLog(QCs, bigRip) {
 		mods = qcm.on
 	}
 	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
+	if (player.achievements.includes("ng3p102") && !bigRip) mult *= 0.5
+	if (player.achievements.includes("ng3p118") && !bigRip) mult *= 0.75
 	if (mods.includes("ms")) mult *= 5e3
 	if (mods.includes("tb")) mult *= 100
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult

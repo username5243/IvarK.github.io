@@ -64,14 +64,14 @@ let GDs = {
 		//Gravity Energy boosts...
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
-			data[b] = GDs.boosts[b].eff(GDs.charge(data.ge, b))
+			if (!GDs.boosts[b].unl || GDs.boosts[b].unl()) data[b] = GDs.boosts[b].eff(GDs.charge(data.ge, b))
 		}
 	},
 	setupHTML() {
 		var html = ""
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
-			html += '<tr>' +
+			html += '<tr id="gvRow_' + b + '">' +
 				'<td>' + GDs.boosts[b].desc.replace('{{x}}', '<span class="gvBoost" id="gvTo_' + b + '">1.00</span>') + '</td>' +
 				'<td style="text-align: right"><button id="gvCharge_' + b + '" onclick="GDs.chargeBoost(\'' + b + '\')">Charge</button></td>' +
 				'</tr>'
@@ -130,7 +130,9 @@ let GDs = {
 
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
-			document.getElementById("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
+			let u = GDs.tmp[b] !== undefined
+			document.getElementById("gvRow_" + b).style.display = u ? "" : "none"
+			if (u) document.getElementById("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
 		}
 	},
 	teleport() {
@@ -256,7 +258,7 @@ let GDs = {
 	charge(ge, id) {
 		let mult = 1
 		if (GDs.save.gc == id) mult += GDs.tmp.gc
-		if (pl.save.on) mult += GDs.tmp.gsc
+		if (pl.on()) mult += GDs.tmp.gsc
 
 		return ge * mult
 	},
@@ -265,7 +267,7 @@ let GDs = {
 		return x
 	},
 	superchargeMult() {
-		return 1
+		return (pl.save.layer - 1) / 5
 	},
 	chargeBoost(id) {
 		if (GDs.save.gc == id) return
@@ -296,9 +298,12 @@ let GDs = {
 		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
 	},
 	boosts: {
-		list: ["rep", "nf", "tod", "gph", "bl"],
+		list: ["rep", "nf", "tod", "gph", "bl", "mf"],
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
+			unl() {
+				return !pl.on()
+			},
 			eff(x) {
 				return Math.pow(x + 1, .5)
 			},
@@ -306,6 +311,9 @@ let GDs = {
 		},
 		nf: {
 			desc: "^{{x}} to Nanospeed",
+			unl() {
+				return !pl.on()
+			},
 			eff(x) {
 				return x + 1
 			},
@@ -313,6 +321,9 @@ let GDs = {
 		},
 		tod: {
 			desc: "^{{x}} to Branch speed",
+			unl() {
+				return !pl.on()
+			},
 			eff(x) {
 				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .5 : 1/3)
 			},
@@ -332,6 +343,19 @@ let GDs = {
 			},
 			rdExp: 1
 		},
+		mf: {
+			desc: "^{{x}} to Matterius Foam speed",
+			unl() {
+				return pl.on()
+			},
+			eff(x) {
+				return x + 1
+			},
+			rdExp: 1
+		},
+	},
+	boostUnl(x) {
+		return GDs.unlocked() && GDs.tmp[x]
 	},
 	reset(unl) {
 		if (!unl && document.getElementById("gdims").style.display != "none") showDimTab("antimatterdimensions")

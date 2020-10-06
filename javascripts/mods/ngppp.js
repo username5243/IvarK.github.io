@@ -572,8 +572,8 @@ function ghostifyReset(implode, gain, amount, force) {
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
 	tmp.qu = player.quantum
-	updateActiveLayers()
 	updateInQCs()
+	updateActiveLayers()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)
 	doEternityGhostifyResetStuff(implode, bm)	
@@ -582,8 +582,8 @@ function ghostifyReset(implode, gain, amount, force) {
 
 	//After that...
 	updateSpeedruns()
-	if (!bm && !player.achievements.includes("ng3p77")) handleDisplaysOnQuantum(false, true)
-	else handleQuantumDisplays(true)
+	handleDisplaysOutOfQuantum()
+	handleQuantumDisplays(true)
 	resetUP()
 }
 

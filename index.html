@@ -80,7 +80,7 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="planckinfo">You have <b id="decayedFoam">0</b> Decayed Foam.</div>
+			<div id="planckinfo">You have <b class="pl" id="decayedFoam">0</b> Decayed Foam.</div>
 			<button onclick="pl.reset()" id="planck">
 				<b>It's time to supercharge... I want to reduce the universe to Planck Length.</b>
 			</button>
@@ -999,10 +999,10 @@
 								<button id="breakUpg11" class="eternityupbtnlocked" onclick="buyBreakUpg(11)">The above upgrade works outside of Big Rip.<br>Cost: <span id="breakUpg11Cost"></span> Eternal Matter</button>
 							</td>
 							<td>
-								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You passively produce 1% of GHP gain per second.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
+								<button id="breakUpg12" class="eternityupbtnlocked" onclick="buyBreakUpg(12)">You gain way more Space Shards based on Eternal Matter.<br>Cost: <span id="breakUpg12Cost"></span> Eternal Matter</button>
 							</td>
 							<td>
-								<button id="breakUpg13" class="eternityupbtnlocked" onclick="buyBreakUpg(13)">You gain way more Space Shards based on Eternal Matter.<br>Cost: <span id="breakUpg13Cost"></span> Eternal Matter</button>
+								<button id="breakUpg13" class="eternityupbtnlocked" onclick="buyBreakUpg(13)">Eternal Matter strengthens the first Big Rip upgrade.<br>Currently: +<span id="breakUpg13Mult">???</span>%<br>Cost: <span id="breakUpg13Cost"></span> Eternal Matter</button>
 							</td>
 						</tr>
 						<tr id="breakUpgRS">
@@ -1689,7 +1689,7 @@
 							<tr>
 								<td colspan=2 style="vertical-align: 0">
 									Supercharge: <span class="gvBoost" id="gvSupercharge">0.00%</span> stronger<br>
-									<!--<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Length!</b><br>-->
+									<b class="warning">WARNING!</b> <b>This requires you to reduce the universe to Planck Length!</b><br>
 									(requires <span id="plReq"></span>)
 								</td>
 							</tr>
@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 11)</span>
+				<span class="warning">(Test server: Beta 12)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2129,7 +2129,7 @@
 			<div id="normalachievements" class="achtab">
 				<div id="achmultlabel" style="font-size: 140%"></div>
 				<div id="metaAchMultLabel" style="font-size: 140%"></div>
-				<div id="bAMAchMultLabel" style="font-size: 140%"></div>
+				<div id="bWtAchMultLabel" style="font-size: 140%"></div>
 				<table id="achievementtable" style="margin: auto">
 					<tr id="achRow1">
 						<td>
@@ -2729,7 +2729,7 @@
 						</tr>
 						<tr id="achRowng3p9">
 							<td>
-								<div id="The Holy Particle" class="achievement achievementlocked" style="background-image: url(images/175.png)" ach-tooltip="Get a Higgs Boson. Reward: Bosonic Upgrades and Enchants are 2x cheaper, achievement power boosts Bosonic Antimatter production at a reduced rate, and Light Enpowerements do not reset Ghostly Photons."></div>
+								<div id="The Holy Particle" class="achievement achievementlocked" style="background-image: url(images/175.png)" ach-tooltip="Get a Higgs Boson. Reward: Bosonic Upgrades and Enchants are 2x cheaper, achievement power boosts Bosonic Watt gain, and Light Enpowerements do not reset Ghostly Photons."></div>
 							</td>
 							<td>
 								<div id="Bright as the Anti-Sun" class="achievement achievementlocked" style="background-image: url(images/176.png)" ach-tooltip="Reach 25 Light Empowerments. Reward: You can max Light Empowerments, you always have the 12th Bosonic Upgrade, and you always produce 1 base Ghostly Photons / Dark Matter per second. (before boosts)"></div>
@@ -2755,54 +2755,54 @@
 						</tr>
 						<tr id="achRowng3p10">
 							<td>
-								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock three new Break Eternity upgrades and a new Quantum Challenge, and get all achievements from before Higgs Bosons."></div>
+								<div id="The Power of Relativity" class="achievement achievementlocked" style="background-image: url(images/183.png)" ach-tooltip="Unlock Gravity Dimensions. Reward: Reduce the Distant Antimatter Galaxies scaling by 50%, unlock 3 new Break Eternity upgrades and Quantum Challenge 9, and get all achievements from before Higgs Bosons."></div>
 							</td>
 							<td>
-								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 33 total Paired Challenges. Reward: You always have Bosonic Upgrade 23 and Light Empowerments reset nothing."></div>
+								<div id="The Forbidden Challenge" class="achievement achievementlocked" style="background-image: url(images/184.png)" ach-tooltip="Complete 32 total Paired Challenges. Reward: All QC goals are 50% lower."></div>
 							</td>
 							<td>
-								<div id="ng3p103" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Einstein's Ghost" class="achievement achievementlocked" style="background-image: url(images/185.png)" ach-tooltip="Get e??? Ghost Particles. Reward: Light Empowerments reset nothing."></div>
 							</td>
 							<td>
-								<div id="ng3p104" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="Get 250 Nanorewards. Reward: You always have Bosonic Upgrade 23."></div>
 							</td>
 							<td>
-								<div id="ng3p105" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="X-Ranked" class="achievement achievementlocked" style="background-image: url(images/187.png)" ach-tooltip="Get 230 - 250 PC ranking. Reward: Start with 1e25 Space Shards and Eternal Matter."></div>
 							</td>
 							<td>
-								<div id="ng3p106" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Do you even how to?" class="achievement achievementlocked" style="background-image: url(images/188.png)" ach-tooltip="Reach e??? antimatter in Big Rips. Reward: Passively generate GhP in Big Rips."></div>
 							</td>
 							<td>
-								<div id="ng3p107" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Brutally Challenging" class="achievement achievementlocked" style="background-image: url(images/189.png)" ach-tooltip="Complete QC? with ?? and ?? modifiers."></div>
 							</td>
 							<td>
-								<div id="ng3p108" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Auto-Ghost Speedrunning" class="achievement achievementlocked" style="background-image: url(images/190.png)" ach-tooltip="Reach e??? in the first 10 seconds of Ghostify."></div>
 							</td>
 						</tr>
 						<tr id="achRowng3p11">
 							<td>
-								<div id="Quantum-Scale" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Quantum Scality" class="achievement achievementlocked" style="background-image: url(images/191.png)" ach-tooltip="You will see... Reward: Start with 3 Light Empowerments and 1 Higgs Bosons."></div>
 							</td>
 							<td>
-								<div id="ng3p112" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Infinitely Massive" class="achievement achievementlocked" style="background-image: url(images/192.png)" ach-tooltip="Get 308 Higgs Bosons. Reward: Passively generate Ghost Particles, no matter what."></div>
 							</td>
 							<td>
-								<div id="ng3p113" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Replicated Universes" class="achievement achievementlocked" style="background-image: url(images/193.png)" ach-tooltip="Get e10,000,000,000 replicantis. Reward: Replicate interval increases 5% slower."></div>
 							</td>
 							<td>
-								<div id="ng3p114" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="The Supervoid" class="achievement achievementlocked" style="background-image: url(images/194.png)" ach-tooltip="Get a Intergalactic multiplier of e???. Reward: Intergalactic is 2x stronger."></div>
 							</td>
 							<td>
-								<div id="ng3p115" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Truly Dilating Time" class="achievement achievementlocked" style="background-image: url(images/195.png)" ach-tooltip="Reach a supercharge of ???%. Reward: Start with 1e25 Ghost Particles."></div>
 							</td>
 							<td>
-								<div id="ng3p116" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Spectre Prisms" class="achievement achievementlocked" style="background-image: url(images/196.png)" ach-tooltip="Reach ??? Light Empowerments. Reward: Divide the Light Empowerment requirement by 2 prior to cost subtraction."></div>
 							</td>
 							<td>
-								<div id="ng3p117" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Universe Immortality" class="achievement achievementlocked" style="background-image: url(images/197.png)" ach-tooltip="Get e??? antimatter without Big Ripping outside of 'supercharging' runs. Reward: Permanently disable the Remote Antimatter Galaxies scaling."></div>
 							</td>
 							<td>
-								<div id="ng3p118" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Coming soon!"></div>
+								<div id="Chaos, Chaos, Chaos!" class="achievement achievementlocked" style="background-image: url(images/198.png)" ach-tooltip="Complete QC1 with all 4 QC Modifiers. Reward: Reduce all QC goals by 25%."></div>
 							</td>
 						</tr>
 				</table>
@@ -5160,13 +5160,13 @@
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow3">
 						<td>In Big Rips, they make Tree upgrades <span class="neutrinos" id="neutrinoBoost7">0.0</span>% more effective. (<span id="preNeutrinoBoost7Eff">100.0</span>% to <span class="neutrinos" id="neutrinoBoost7Eff" style="font-size:25px">100.0</span>%)</td>
-						<td id="neutrinoBoostCell8">In Big Rips, they make the first Big Rip upgrade <span class="neutrinos" id="neutrinoBoost8">0.0</span>% stronger.</td>
+						<td id="neutrinoBoostCell8">They strengthen the first Big Rip upgrade by <span class="neutrinos" id="neutrinoBoost8">0.0</span>%.</td>
 						<td id="neutrinoBoostCell9">In Big Rips, they multiply the IC3 reward for each tickspeed purchase by <span class="neutrinos" id="neutrinoBoost9">1.00</span>x.</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow4">
 						<td>They decrease free tickspeed upgrade threshold by -<span class="neutrinos" id="neutrinoBoost10"></span>.</td>
 						<td id="neutrinoBoostCell11">They boost the production and cap of Ghostly Rays by <span class="neutrinos" id="neutrinoBoost11">1.00</span>x.</td>
-						<td id="neutrinoBoostCell12">They multiply the Eternal Matter gain by <span class="neutrinos" id="neutrinoBoost12">1.00</span>x.</td>
+						<td id="neutrinoBoostCell12">They raise the Eternal Matter gain to the power of ^<span class="neutrinos" id="neutrinoBoost12">1.00</span>.</td>
 					</tr>
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>
@@ -5314,7 +5314,7 @@
 					</tr>
 					<tr>
 						<td id="autoGhost16"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Neutrino Multi Ghost</b><br>
+							<b>Auto-Neutrino Cycler Ghost</b><br>
 							Power usage: 2<br>
 							Is active: <input id="isAutoGhostOn16" type="checkbox" onchange="toggleAutoGhost(16)"></input>
 						</div></td>
@@ -5640,8 +5640,38 @@
 			<div class="footer"></div>
 		</div>
 		<div class="tab" id="planck">
+			You have a Planck Tier of <span class="pl" id="plTier" style="font-size: 35px">1</span>.
 			<br>
-			<button class="gluonupgrade storebtn" onclick="pl.exit()">Enlargen the Universe back to normal.</button>
+			<button class="gluonupgrade planckbtn" onclick="pl.tier()">
+				Level up your Planck Tier, but compress the universe.
+				<br>
+				Requires <span id="plTierReq"></span> antimatter.
+			</button>
+			<button id="plExit" onclick="pl.exit()">
+				Enlargen the Universe back to normal.
+			</button>
+			<br><br>
+			<table class="table" align="center" style="margin: auto">
+				<tr>
+					<td><button class="secondarytabbtn">Matterius Decay</button></td>
+					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn">Dark Empowerments</button></td>
+				</tr>
+			</table>
+			<div id="matteriusDecayTab">
+				You have <span class="pl" id="decayedFoam2" style="font-size: 35px"></span> Decayed Foam, which adds and multiplies the Bosonic Watt gain by <span class="pl" id="dfToBl" style="font-size: 25px"></span>x (before Gravity Well),
+				<br>
+				<b class="warning">but reduces the growth of Matterius Foam by <span class="pl" id="dfToMf" style="font-size: 25px"></span>x and reduces the base of Photonic Flow from 2.00x to <span class="pl" id="dfToGph" style="font-size: 25px"></span>x.</b>
+				<br>
+				<button class="gluonupgrade planckbtn" onclick="pl.decay()">
+					Decay all your Matterius Foam for x<span>1.00</span> Decayed Foam.
+				</button>
+				<button class="gluonupgrade planckbtn" onclick="pl.annihilate()">
+					Annilhilate all your Decayed Foam.
+					<br>
+					(resets this mechanic)
+				</button>
+				<br>
+			</div>
 		</div>
 	</div>
 	<div class="popup" id="challfail">

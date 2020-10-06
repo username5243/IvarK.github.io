@@ -215,7 +215,7 @@ function getBranchSpeed() {
 	if (hasNU(4)) x = x.times(tmp.nu[4])
 	if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
-	if (GDs.unlocked()) x = x.pow(GDs.tmp.tod)
+	if (GDs.boostUnl('tod')) x = x.pow(GDs.tmp.tod)
 	return x
 }
 

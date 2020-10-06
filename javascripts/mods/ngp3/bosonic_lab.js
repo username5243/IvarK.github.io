@@ -18,10 +18,16 @@ function updateBLUnlockDisplay() {
 }
 
 function getBosonicWattGain() {
-	let x = player.money.log10() / 2e16 - 1.25
+	let x = Math.max(player.money.log10() / 2e16 - 1.25, 0)
+	if (pl.on()) x = (x * pl.tmp.bl + pl.tmp.bl)
 	if (isEnchantUsed(45)) x *= tmp.bEn[45]
-	if (GDs.unlocked()) x = Decimal.pow(x, getBosonicSpeedExp())
+	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
+	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
+}
+
+function getAchBWtMult() {
+	return player.achPow.div(Math.pow(1.5, 20)).toNumber()
 }
 
 function getBatteryGainPerSecond(toSub){
@@ -34,12 +40,12 @@ function getBatteryGainPerSecond(toSub){
 
 function getBosonicSpeedExp() {
 	let x = 1
-	if (GDs.unlocked()) x *= GDs.tmp.bl
+	if (GDs.boostUnl('bl')) x *= GDs.tmp.bl
 	return x
 }
 
 function getOverdriveFinalSpeed() {
-	if (GDs.unlocked()) return Decimal.pow(tmp.bl.odSpeed, getBosonicSpeedExp())
+	if (GDs.boostUnl('bl')) return Decimal.pow(tmp.bl.odSpeed, getBosonicSpeedExp())
 	return tmp.bl.odSpeed
 }
 
@@ -166,16 +172,10 @@ function getBosonicAntiMatterProduction(){
 	return getBosonicAMProduction()
 }
 
-function getAchBAMMult(){
-	if (!player.achievements.includes("ng3p91")) return 1
-	return player.achPow.pow(0.2)
-}
-
 function getBosonicAMProduction() {
 	let exp = player.money.max(1).log10() / 15e15 - 3
 	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
-	if (player.achievements.includes("ng3p91")) ret = ret.times(getAchBAMMult())
 
 	ret = softcap(ret, "bam")
 	return ret
@@ -190,10 +190,10 @@ function getBosonicAMFinalProduction() {
 let maxBLLvl = 3
 function updateBosonicLimits() {
 	//Bosonic Level?
-	let lvl = maxBLLvl
-	if (!tmp.ngp3 || !player.ghostify.wzb.unl) lvl = 0
-	else if (player.ghostify.hb.higgs == 0) lvl = 1
-	else if (!GDs.unlocked()) lvl = 2
+	let lvl = 0
+	if (GDs.unlocked()) lvl = 3
+	else if (player.ghostify.hb.higgs > 0) lvl = 2
+	else if (player.ghostify.wzb.unl) lvl = 1
 
 	//Bosonic Lab
 	br.limit = br.limits[lvl]

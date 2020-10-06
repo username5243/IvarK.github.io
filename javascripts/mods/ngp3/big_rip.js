@@ -183,6 +183,7 @@ function getEMGain() {
 	if (!tmp.quActive) return new Decimal(0)
 	let log = player.timeShards.div(1e9).log10() * 0.25
 	if (log > 15) log = Math.sqrt(log * 15)
+	if (player.ghostify.neutrinos.boosts >= 12) log *= tmp.nb[12]
 	
 	let log2log = Math.log10(log) / Math.log10(2)
 	let start = 10 //Starts at e1024.
@@ -192,7 +193,6 @@ function getEMGain() {
 		log = Math.pow(2, log2log)
 	}
 	
-	if (player.ghostify.neutrinos.boosts >= 12) log += tmp.nb[12].log10()
 	if (!tmp.be) log /= 2
 
 	return Decimal.pow(10, log).floor()

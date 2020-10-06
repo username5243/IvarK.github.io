@@ -68,7 +68,7 @@ function bosonicLabReset() {
 		player.ghostify.bl.upgrades.push(order[i])
 	}
 	if (!player.ghostify.bl.upgrades.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
-	if (player.achievements.includes("ng3p102")) player.ghostify.bl.upgrades.push(53)
+	if (player.achievements.includes("ng3p104")) player.ghostify.bl.upgrades.push(53)
 	for (var g = 1; g <= br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(new Decimal(0))
 	player.ghostify.wzb = {
 		unl: true,

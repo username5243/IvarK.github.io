@@ -51,8 +51,8 @@ function getLightThresholdIncrease(l) {
 
 function getPhotonicFlow() {
 	let x = new Decimal(1)
-	if (player.achievements.includes("ng3p81")) x = new Decimal(2)
-	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.gph)
+	if (player.achievements.includes("ng3p81")) x = new Decimal(pl.on() ? pl.tmp.gph : 2)
+	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
 	return x
 }
 
@@ -127,6 +127,7 @@ function getLightEmpowermentReq(le) {
 		x = Decimal.pow(1.2, le - 49).add(x - 1)
 		scale = 2
 	}
+	if (player.achievements.includes("ng3p116")) x = Decimal.div(x, 2)
 	if (hasBosonicUpg(55)) x = Decimal.div(x, tmp.blu[55])
 	if (x + 0 !== x) x = x.toNumber()
 
@@ -143,7 +144,7 @@ function updateLightEmpowermentReq() {
 
 function lightEmpowerment(auto) {
 	if (!(player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq)) return
-	if (!auto && !player.achievements.includes("ng3p102") && !player.aarexModifications.leNoConf) {
+	if (!auto && !player.achievements.includes("ng3p103") && !player.aarexModifications.leNoConf) {
 		if (!player.achievements.includes("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
 		if (player.achievements.includes("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
 		/*

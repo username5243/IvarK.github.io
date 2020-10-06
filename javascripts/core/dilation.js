@@ -472,6 +472,8 @@ function getFreeGalaxyThresholdIncrease(){
 }
 
 function gainDilationGalaxies() {
+	if (!hasDilationStudy(1)) return
+
 	let thresholdMult = getFreeGalaxyThresholdIncrease()
 	let thresholdStart = getFreeGalaxyThresholdStart()
 	let galaxyMult = getFreeGalaxyGainMult()

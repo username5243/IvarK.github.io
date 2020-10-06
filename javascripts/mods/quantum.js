@@ -335,6 +335,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		}
 		if (!inQC(4)) if (player.meta.resets < 1) giveAchievement("Infinity Morals")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
+		if (inQC(1/0) && inQCModifier("?1") && inQCModifier("?2")) giveAchievement("Brutually Challenging")
+		if (inQC(1) && inQCModifier("ad") && inQCModifier("sm") && inQCModifier("ms") && inQCModifier("tb")) giveAchievement("Chaos, Chaos, Chaos!")
 		if (player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached > 0

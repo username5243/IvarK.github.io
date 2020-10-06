@@ -271,7 +271,7 @@ function getNanofieldSpeed() {
 	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
 	if (player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[15].times(x)
-	if (GDs.unlocked()) x = Decimal.pow(x, GDs.tmp.nf)
+	if (GDs.boostUnl('nf')) x = Decimal.pow(x, GDs.tmp.nf)
 	return x
 }
 

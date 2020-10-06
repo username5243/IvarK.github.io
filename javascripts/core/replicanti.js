@@ -217,7 +217,8 @@ function getReplSpeed() {
 	if (GUActive("gb2")) exp *= 2
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
-	if (GDs.unlocked()) exp *= GDs.tmp.rep
+	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+	if (player.achievements.includes("ng3p113")) exp *= 0.9
 	return {inc: inc, exp: exp}
 }
 

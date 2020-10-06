@@ -480,7 +480,7 @@ function getBigRipOnGhostifyData(nBRU){
 		bestGals: tmp.qu.bigRip.bestGals,
 		savedAutobuyersNoBR: tmp.qu.bigRip.savedAutobuyersNoBR,
 		savedAutobuyersBR: tmp.qu.bigRip.savedAutobuyersBR,
-		spaceShards: new Decimal(0),
+		spaceShards: new Decimal(player.achievements.includes("ng3p105") ? 1e25 : 0),
 		upgrades: bm ? nBRU : []
 	}
 }
@@ -489,7 +489,7 @@ function getBreakEternityDataOnGhostify(nBEU, bm){
 	return {
 		unlocked: bm > 14,
 		break: bm > 14 ? tmp.qu.breakEternity.break : false,
-		eternalMatter: new Decimal(0),
+		eternalMatter: new Decimal(player.achievements.includes("ng3p105") ? 1e25 : 0),
 		upgrades: bm > 14 ? nBEU : [],
 		epMultPower: 0
 	}
