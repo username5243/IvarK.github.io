@@ -218,7 +218,7 @@ function getReplSpeed() {
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
-	if (player.achievements.includes("ng3p113")) exp *= 0.9
+	if (player.achievements.includes("ng3p113")) exp /= 0.95
 	return {inc: inc, exp: exp}
 }
 
@@ -288,32 +288,4 @@ function continuousReplicantiUpdating(diff){
 	else if (hasTimeStudy(192)) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
 	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiLimit())
 	replicantiTicks = 0
-}
-
-function toggleReplAuto(i) {
-	if (i == "chance") {
-		if (player.replicanti.auto[0]) {
-			player.replicanti.auto[0] = false
-			document.getElementById("replauto1").textContent = "Auto: OFF"
-		} else {
-			player.replicanti.auto[0] = true
-			document.getElementById("replauto1").textContent = "Auto: ON"
-		}
-	} else if (i == "interval") {
-		if (player.replicanti.auto[1]) {
-			player.replicanti.auto[1] = false
-			document.getElementById("replauto2").textContent = "Auto: OFF"
-		} else {
-			player.replicanti.auto[1] = true
-			document.getElementById("replauto2").textContent = "Auto: ON"
-		}
-	} else if (i == "galaxy") {
-		if (player.replicanti.auto[2]) {
-			player.replicanti.auto[2] = false
-			document.getElementById("replauto3").textContent = "Auto: OFF"
-		} else {
-			player.replicanti.auto[2] = true
-			document.getElementById("replauto3").textContent = "Auto: ON"
-		}
-	}
 }

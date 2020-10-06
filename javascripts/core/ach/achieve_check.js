@@ -296,7 +296,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (tmp.quUnl) giveAchievement("Sub-atomic")
 }
 
-function beyondHiggsAchieveCheck(){
+function atHiggsAchCheck(){
 	if (player.ghostify.hb.higgs >= 1) giveAchievement("The Holy Particle")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 25) giveAchievement("Bright as the Anti-Sun")
 	if (player.quantum.quarks.log10() >= 4e4) giveAchievement("Are these another...")
@@ -305,24 +305,34 @@ function beyondHiggsAchieveCheck(){
 	if (player.ghostify.times >= Math.pow(Number.MAX_VALUE, 1/4)) giveAchievement("The Ghostliest Side")
 	if (player.money.log10() >= 1e18) giveAchievement("Meta-Quintillion")
 	if (player.unstableThisGhostify <= 10 && getTwoDecaysBool()) giveAchievement("... references to EC8?")
+}
 
+function atGravDimsAchCheck(){
 	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
 	if (tmp.qcComps >= 32) giveAchievement("The Forbidden Challenge")
-	if (player.ghostify.ghostParticles.e >= 1/0) giveAchievement("Einstein's Ghost")
+	if (player.ghostify.ghostParticles.plus(1).log10() >= 1/0) giveAchievement("Einstein's Ghost")
 	if (tmp.qu.nanofield.rewards >= 250) giveAchievement("Gigafield")
 	if (ranking >= 250) giveAchievement("X-Ranked")
-	if (tmp.qu.bigRip.bestThisRun.e >= 1/0) giveAchievement("Do you even how to?")
+	if (tmp.qu.bigRip.bestThisRun.plus(1).log10() >= 1/0) giveAchievement("Do you even how to?")
 	//
-	if (player.ghostify.time <= 100 && player.money.e >= 1/0) giveAchievement("Auto-Ghost Speedrunning")
+	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")
+}
 
+function atPlankAchCheck(){
 	if (ph.did("planck")) giveAchievement("Quantum Scality")
 	if (player.ghostify.hb.higgs >= 308) giveAchievement("Infinitely Massive")
-	if (player.replicanti.amount.e >= 1e10) giveAchievement("Replicated Universes")
-	if (tmp.ig.e >= 1/0) giveAchievement("The Supervoid")
+	if (player.replicanti.amount.plus(1).log10() >= 1e10) giveAchievement("Replicated Universes")
+	if (tmp.ig.plus(1).log10() >= 1/0) giveAchievement("The Supervoid")
 	if (GDs.tmp.gsc >= 1/0) giveAchievement("Truly Dilating Time")
 	if (player.ghostify.ghostlyPhotons.enpowerments >= 1/0) giveAchievement("Spectre Prisms")
-	if (!pl.on() && pl.save.immortal && player.money.e >= 1/0) giveAchievement("Universe Immortality")
+	if (!pl.on() && pl.save.immortal && player.money.plus(1).log10() >= 1/0) giveAchievement("Universe Immortality")
 	//
+}
+
+function beyondHiggsAchieveCheck(){
+	atHiggsAchCheck()
+	atGravDimsAchCheck()
+	atPlankAchCheck()
 }
 
 function ALLACHIEVECHECK(){
