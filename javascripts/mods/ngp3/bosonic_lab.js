@@ -28,7 +28,7 @@ function getBosonicWattGain() {
 }
 
 function getAchBWtMult() {
-	return player.achPow.div(Math.pow(1.5, 20)).toNumber()
+	return player.achPow.div(Math.pow(1.5, 20)).max(1)
 }
 
 function getBatteryGainPerSecond(toSub){
@@ -58,6 +58,23 @@ function getOverdriveSpeedDisplay() {
 
 function getBosonicFinalSpeed() {
 	return Decimal.times(player.ghostify.bl.speed, getOverdriveSpeedDisplay()).times(ls.mult("bl"))
+}
+
+function updateBAMAmount(diff = 0){
+	let data = player.ghostify.bl
+	var newBA = data.am
+	var baAdded = getBosonicAMProduction().times(diff)
+	if (tmp.badm.start !== undefined && data.am.gt(tmp.badm.start) && tmp.badm.postDim <= Number.MAX_VALUE) data.am = tmp.badm.preDim.times(tmp.badm.start)
+	updateBosonicAMDimReturnsTemp()
+	newBA = data.am.add(baAdded)
+	if (newBA.gt(tmp.badm.start)) {
+		newBA = newBA.div(tmp.badm.start)
+		tmp.badm.preDim = newBA
+		newBA = newBA.sub(-tmp.badm.offset).ln() / Math.log(tmp.badm.base) + tmp.badm.offset2
+		tmp.badm.postDim = newBA
+		newBA = tmp.badm.start.times(newBA)
+	}
+	data.am = newBA
 }
 
 function bosonicTick(diff) {
@@ -150,19 +167,7 @@ function bosonicTick(diff) {
 	}
 
 	//Bosonic Antimatter production
-	var newBA = data.am
-	var baAdded = getBosonicAMProduction().times(diff)
-	if (tmp.badm.start !== undefined && data.am.gt(tmp.badm.start) && tmp.badm.postDim <= Number.MAX_VALUE) data.am = tmp.badm.preDim.times(tmp.badm.start)
-	updateBosonicAMDimReturnsTemp()
-	newBA = data.am.add(baAdded)
-	if (newBA.gt(tmp.badm.start)) {
-		newBA = newBA.div(tmp.badm.start)
-		tmp.badm.preDim = newBA
-		newBA = newBA.sub(-tmp.badm.offset).ln() / Math.log(tmp.badm.base) + tmp.badm.offset2
-		tmp.badm.postDim = newBA
-		newBA = tmp.badm.start.times(newBA)
-	}
-	data.am = newBA
+	updateBAMAmount(diff)
 }
 
 function getBAMProduction(){
@@ -586,6 +591,7 @@ var bEn = {
 					data.usedEnchants = newData
 				} else data.usedEnchants.push(id)
 			}
+			if (id == 14) updateBAMAmount()
 		}
 	},
 	limits: [0, 2, 4, 10],
