@@ -30,7 +30,7 @@ function setupFooterHTML() {
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a>Test server</a> (You are in it!) | " + 
 			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a>" + 
-		"</div></tr></td></table>"
+			"</div></tr></td></table>"
 
 	var footers = document.getElementsByClassName("footer")
 	for (var f = 0; f < footers.length; f++) footers[f].innerHTML = html
@@ -393,6 +393,7 @@ function setupBosonicRunes(){
 
 function setupHTMLAndData() {
 	setupFooterHTML()
+	setupBreakInfUpgHTMLandData()
 	ph.setupHTML()
 	setupParadoxUpgrades()
 	setupInfUpgHTMLandData()
@@ -1713,7 +1714,71 @@ document.getElementById("secretstudy").onclick = function () {
 
 document.getElementById("The first one's always free").onclick = function () {
 	giveAchievement("The first one's always free")
-};
+}
+
+function setupBreakInfUpgHTMLandData() {
+	document.getElementById("postinfi11").onclick = function() {
+		buyInfinityUpgrade("totalMult", 1e4);
+	}
+
+	document.getElementById("postinfi21").onclick = function() {
+		buyInfinityUpgrade("currentMult", 5e4);
+	}
+
+	document.getElementById("postinfi31").onclick = function() {
+		if (player.infinityPoints.gte(player.tickSpeedMultDecreaseCost) && player.tickSpeedMultDecrease > 2) {
+			player.infinityPoints = player.infinityPoints.minus(player.tickSpeedMultDecreaseCost)
+			player.tickSpeedMultDecreaseCost *= 5
+			player.tickSpeedMultDecrease--;
+			if (player.tickSpeedMultDecrease > 2) document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
+			else {
+				for (c=0;c<ECTimesCompleted("eterc11");c++) player.tickSpeedMultDecrease-=0.07
+				document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase<br>"+player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease<2?2:0)+"x"
+			}
+		}
+	}
+
+	document.getElementById("postinfi41").onclick = function() {
+		buyInfinityUpgrade("postGalaxy", 5e11);
+	}
+
+	document.getElementById("postinfi12").onclick = function() {
+		buyInfinityUpgrade("infinitiedMult", 1e5);
+	}
+
+	document.getElementById("postinfi22").onclick = function() {
+		buyInfinityUpgrade("achievementMult", 1e6);
+	}
+
+	document.getElementById("postinfi32").onclick = function() {
+		buyInfinityUpgrade("challengeMult", 1e7);
+	}
+
+	document.getElementById("postinfi42").onclick = function() {
+		if (player.infinityPoints.gte(player.dimensionMultDecreaseCost) && player.dimensionMultDecrease > 3) {
+			player.infinityPoints = player.infinityPoints.minus(player.dimensionMultDecreaseCost)
+			player.dimensionMultDecreaseCost *= 5000
+			player.dimensionMultDecrease--;
+			if (player.dimensionMultDecrease > 3) document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease+"x -> "+(player.dimensionMultDecrease-1)+"x<br>Cost: "+shortenCosts(player.dimensionMultDecreaseCost) +" IP"
+			else {
+				for (c=0;c<ECTimesCompleted("eterc6");c++) player.dimensionMultDecrease-=0.2
+				document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECTimesCompleted("eterc6")%5>0?1:0)+"x"
+			}
+		}
+	}
+
+	document.getElementById("postinfi23").onclick = function() {
+		buyInfinityUpgrade("bulkBoost",player.tickspeedBoosts != undefined ? 2e4 : player.galacticSacrifice?5e6:5e9);
+	}
+
+	document.getElementById("offlineProd").onclick = function() {
+		if (player.infinityPoints.gte(player.offlineProdCost) && player.offlineProd < 50) {
+			player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost)
+			player.offlineProdCost *= 10
+			player.offlineProd += 5
+		}
+	}
+}
 
 function glowText(id) {
 	var text = document.getElementById(id);
@@ -1843,68 +1908,6 @@ function playerInfinityUpgradesOnEternity() {
 		for (u = 0; u < player.infinityUpgrades.length; u++) if (filter.includes(player.infinityUpgrades[u])) newUpgrades.push(player.infinityUpgrades[u])
 		player.infinityUpgrades = newUpgrades
 	} else player.infinityUpgrades = []
-}
-
-document.getElementById("postinfi11").onclick = function() {
-	buyInfinityUpgrade("totalMult", 1e4);
-}
-
-document.getElementById("postinfi21").onclick = function() {
-	buyInfinityUpgrade("currentMult", 5e4);
-}
-
-document.getElementById("postinfi31").onclick = function() {
-	if (player.infinityPoints.gte(player.tickSpeedMultDecreaseCost) && player.tickSpeedMultDecrease > 2) {
-		player.infinityPoints = player.infinityPoints.minus(player.tickSpeedMultDecreaseCost)
-		player.tickSpeedMultDecreaseCost *= 5
-		player.tickSpeedMultDecrease--;
-		if (player.tickSpeedMultDecrease > 2) document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
-		else {
-			for (c=0;c<ECTimesCompleted("eterc11");c++) player.tickSpeedMultDecrease-=0.07
-			document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase<br>"+player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease<2?2:0)+"x"
-		}
-	}
-}
-
-document.getElementById("postinfi41").onclick = function() {
-	buyInfinityUpgrade("postGalaxy", 5e11);
-}
-
-document.getElementById("postinfi12").onclick = function() {
-	buyInfinityUpgrade("infinitiedMult", 1e5);
-}
-
-document.getElementById("postinfi22").onclick = function() {
-	buyInfinityUpgrade("achievementMult", 1e6);
-}
-
-document.getElementById("postinfi32").onclick = function() {
-	buyInfinityUpgrade("challengeMult", 1e7);
-}
-
-document.getElementById("postinfi42").onclick = function() {
-	if (player.infinityPoints.gte(player.dimensionMultDecreaseCost) && player.dimensionMultDecrease > 3) {
-		player.infinityPoints = player.infinityPoints.minus(player.dimensionMultDecreaseCost)
-		player.dimensionMultDecreaseCost *= 5000
-		player.dimensionMultDecrease--;
-		if (player.dimensionMultDecrease > 3) document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease+"x -> "+(player.dimensionMultDecrease-1)+"x<br>Cost: "+shortenCosts(player.dimensionMultDecreaseCost) +" IP"
-		else {
-			for (c=0;c<ECTimesCompleted("eterc6");c++) player.dimensionMultDecrease-=0.2
-			document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECTimesCompleted("eterc6")%5>0?1:0)+"x"
-		}
-	}
-}
-
-document.getElementById("postinfi23").onclick = function() {
-	buyInfinityUpgrade("bulkBoost",player.tickspeedBoosts != undefined ? 2e4 : player.galacticSacrifice?5e6:5e9);
-}
-
-document.getElementById("offlineProd").onclick = function() {
-	if (player.infinityPoints.gte(player.offlineProdCost) && player.offlineProd < 50) {
-		player.infinityPoints = player.infinityPoints.minus(player.offlineProdCost)
-		player.offlineProdCost *= 10
-		player.offlineProd += 5
-	}
 }
 
 //MORE DISPLAY STUFF
