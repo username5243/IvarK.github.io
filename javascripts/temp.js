@@ -193,6 +193,7 @@ function updateIntergalacticTemp() {
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
 	x += tmp.effAeg
 	if (player.achievements.includes("ng3p114")) x *= 1.5
+	if (pl.on()) x *= pl.tmp.buff1
 	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	tmp.igg = x
 
@@ -258,7 +259,7 @@ function updateMatterSpeed(){
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 	if (GDs.boostUnl('mf')) {
-		let exp = GDs.tmp.mf / pl.tmp.mf
+		let exp = GDs.tmp.mf / pl.tmp.nerf2
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 }

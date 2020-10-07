@@ -80,7 +80,7 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="planckinfo">You have <b class="pl" id="decayedFoam">0</b> Decayed Foam.</div>
+			<div id="planckinfo">You have <b class="pl" id="decayedFoam">0</b> Nulli Foam.</div>
 			<button onclick="pl.reset()" id="planck">
 				<b>It's time to supercharge... I want to reduce the universe to Planck Length.</b>
 			</button>
@@ -121,7 +121,7 @@
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
-			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("planck")'>Planck</button>
+			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("plTab")'>Planck</button>
 		</div>
 		<div id="emptiness" class="tab" style="font-size: 150%">
 			<br>
@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 12)</span>
+				<span class="warning">(Test server: Beta 13)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2781,10 +2781,10 @@
 						</tr>
 						<tr id="achRowng3p11">
 							<td>
-								<div id="Quantum Scality" class="achievement achievementlocked" style="background-image: url(images/191.png)" ach-tooltip="You will see... Reward: Start with 3 Light Empowerments and 1 Higgs Bosons."></div>
+								<div id="Quantum Scality" class="achievement achievementlocked" style="background-image: url(images/191.png)" ach-tooltip="You will see... Reward: Start with 9 Neutrino boosts, 3 Light Empowerments, and 1 Higgs Boson."></div>
 							</td>
 							<td>
-								<div id="Infinitely Massive" class="achievement achievementlocked" style="background-image: url(images/192.png)" ach-tooltip="Get 308 Higgs Bosons. Reward: Passively generate Ghost Particles, no matter what."></div>
+								<div id="Infinitely Massive" class="achievement achievementlocked" style="background-image: url(images/192.png)" ach-tooltip="Get 308 Higgs Bosons. Reward: Passively generate Ghost Particles, no matter what, and Higgs resets nothing in Planck runs."></div>
 							</td>
 							<td>
 								<div id="Replicated Universes" class="achievement achievementlocked" style="background-image: url(images/193.png)" ach-tooltip="Get e10,000,000,000 replicantis. Reward: Replicate interval increases 5% slower."></div>
@@ -5053,7 +5053,7 @@
 				<table id='nftabs' align="center" style="margin: auto">
 					<tr>
 						<td><button class="secondarytabbtn" onclick="showNFTab('nanoverse')">The Nanoverse</button></td>
-						<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')"><span style="font-size:11px">Anti-Preontius' Lair</span></button></td>
+						<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')">Antipretus' Lair</button></td>
 					</tr>
 				</table>
 				<div class='nftab' id='nanoverse'>
@@ -5076,20 +5076,38 @@
 					<br><br>
 				</div>
 				<div class='nftab' id='antipreon'>
+					You have <span id="rewards_AP" style="font-size:35px"></span> Nanorewards.
+					<br><br>
 					<div id="apgInfo">
-						You have <span id="rewards_AP" style="font-size:35px"></span> rewards.<br>
+						<b style="font-size: 35px">Welcome to my lair, ghosts!</b>
+						<br>
+						~ <span style="font-size: 25px"> Antipretus</span>, the Ghost Overseer of Antifield
+						<br><br>
 						<span id="sleepy">
-							Anti-Preontius, the Anti-Preon Ghost, is currently sleepy...
-							<b class="warning">Don't get <span id="rewards_wake">104</span> rewards or else he will wake up and take over the Nanoverse!</b>
+							<b style="font-size: 25px">Antipretus is sleepy...</b>
+							<br>
+							The scientists from Bosonic Lab know that he will take control of Nanoverse when he see a lot of Nanorewards from you.
+							<br><br>
+							<b class="warning">Don't get <span id="rewards_wake" style="font-size: 35px">104</span> rewards or else!</b>
 						</span>
-						<b id="woke" class="warning" style="font-size: 25px; display: none">Anti-Preontius, the Anti-Preon Ghost, has woken up and took control of the Nanoverse!</b><br><br>
-						The following effects will be applied when he wakes up:<br>
-						- When you get 1 preon power, you will lose preons faster if you are producing preon charge.<br>
-						- When you get 1 preon power, your preon charge production is 1.41x slower.<br>
-						- When you get 1 preon power, your anti-energy production is 1.41x faster.<br>
-						- Reward tiers are softcapped.<br><br>
-						However, the ghostly scientists from Bosonic Lab have created a special power. You will gain 0.5 extra tiers to your current reward when he wakes up.<br>
-						Good luck for getting more rewards. :)
+						<span id="woke">
+							<b class="warning" style="font-size: 35px">Antipretus has woken up and took control of your Nanoverse!</b>
+							<br>
+							Oh no! He had woken up!
+							<br><br>
+							<b style="font-size: 25px">Be careful, because the following effects have applied!</b>
+							<br>
+							Each time you get 1 preon power:<br>
+							- You will lose preons faster when you start generating charge.<br>
+							- 1.41x slower charge production.<br>
+							- 1.41x faster anti-energy production.
+							<br><br>
+							Also, the power of Nanorewards have been softcapped!
+							<br><br>
+							However, the scientists gave an advantage to you. Your current reward gained 0.5 free tiers.
+							<br><br>
+							<b style="font-size: 35px">Good luck! :)</b>
+						</span>
 					</div>
 				</div>
 			</div>
@@ -5465,7 +5483,7 @@
 							In non-Big Rips, Red Light multiplies normal galaxy amount of 'Intergalactic' reward by <span class="red" id="leBoost3" style="font-size:35px"></span>x.<br>(Your best red Light doesn't boost this.)
 						</td>
 						<td id="le9">
-							They make that Anti-Preontius wakes up <span class="orange" id="leBoost9" style="font-size:35px"></span> later.
+							They make that Antipretus wakes up <span class="orange" id="leBoost9" style="font-size:35px"></span> later.
 						</td>
 						<td id="le6">
 							They boost Time Theorem production by <span class="yellow" id="leBoost6" style="font-size:35px"></span>x.
@@ -5639,10 +5657,10 @@
 			<br><br>
 			<div class="footer"></div>
 		</div>
-		<div class="tab" id="planck">
+		<div class="tab" id="plTab">
 			You have a Planck Tier of <span class="pl" id="plTier" style="font-size: 35px">1</span>.
 			<br>
-			<button class="gluonupgrade planckbtn" onclick="pl.tier()">
+			<button id="plTierUp" class="gluonupgrade planckbtn" onclick="pl.tier()">
 				Level up your Planck Tier, but compress the universe.
 				<br>
 				Requires <span id="plTierReq"></span> antimatter.
@@ -5653,24 +5671,47 @@
 			<br><br>
 			<table class="table" align="center" style="margin: auto">
 				<tr>
-					<td><button class="secondarytabbtn">Matterius Decay</button></td>
+					<td><button class="secondarytabbtn">Matteria Decay</button></td>
 					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn">Dark Empowerments</button></td>
 				</tr>
 			</table>
-			<div id="matteriusDecayTab">
-				You have <span class="pl" id="decayedFoam2" style="font-size: 35px"></span> Decayed Foam, which adds and multiplies the Bosonic Watt gain by <span class="pl" id="dfToBl" style="font-size: 25px"></span>x (before Gravity Well),
+			<div id="MatteriaDecayTab">
+				You have <span class="pl" id="decayedFoam2" style="font-size: 35px"></span> Nulli Foam.
 				<br>
-				<b class="warning">but reduces the growth of Matterius Foam by <span class="pl" id="dfToMf" style="font-size: 25px"></span>x and reduces the base of Photonic Flow from 2.00x to <span class="pl" id="dfToGph" style="font-size: 25px"></span>x.</b>
-				<br>
-				<button class="gluonupgrade planckbtn" onclick="pl.decay()">
-					Decay all your Matterius Foam for x<span>1.00</span> Decayed Foam.
+				<button class="gluonupgrade planckbtn" id="mfDecay" onclick="pl.decay()">
+					Decay all your Matteria Foam for x<span id="dfGain">1.00</span> Nulli Foam.
 				</button>
 				<button class="gluonupgrade planckbtn" onclick="pl.annihilate()">
-					Annilhilate all your Decayed Foam.
+					Annilhilate all your Nulli Foam.
 					<br>
 					(resets this mechanic)
 				</button>
-				<br>
+				<br><br>
+				Your Nulli Foam is translated to...
+				<table class="qtable">
+					<tr>
+						<td>
+							<span class="pl" id="dfBuff1" style="font-size: 25px"></span>x to Intergalactic amount
+						</td>
+						<td>
+							+<span class="pl" id="dfBuff2" style="font-size: 25px"></span> to base Bosonic Watt gain
+						</td>
+						<td>
+							<span class="pl" id="dfBuff3" style="font-size: 25px"></span>x to Bosonic Watt gain (before Gravity Well)
+						</td>
+					</tr>
+					<tr style="background: rgba(255, 0, 0, 0.25)">
+						<td>
+							Reduce the Photonic Flow base from 2.00x to <span class="pl" id="dfNerf1" style="font-size: 25px"></span>x
+						</td>
+						<td>
+							/<span class="pl" id="dfNerf2" style="font-size: 25px"></span> to Matteria Foam growth
+						</td>
+						<td>
+							Distant Antimatter Galaxies starts <span class="pl" id="dfNerf3" style="font-size: 25px"></span> earlier
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 	</div>

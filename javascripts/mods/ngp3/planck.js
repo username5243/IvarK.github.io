@@ -33,11 +33,24 @@ let pl = {
 		let data = {}
 		pl.tmp = data
 
-		let plTier = pl.save.layer
-		let dfEff = pl.save.df.amt.log10()
-		data.bl = dfEff + 1
-		data.mf = Math.sqrt(dfEff * plTier + 1)
-		data.gph = Math.pow(2, 1 / (dfEff * Math.sqrt(plTier) / 5 + 1))
+		let dfEff1 = pl.save.df.amt.log10() * Math.sqrt(pl.save.layer)
+		let dfEff2 = dfEff1
+		let dfEff3 = dfEff2
+
+		/*
+			ID Guide:
+			- 1: Normal
+			- 2: Low Matteria
+			- 3: High Matteria
+		*/
+
+		data.buff1 = Math.log10(dfEff1 / 5 + 1) + 1
+		data.buff2 = dfEff2
+		data.buff3 = dfEff3 + 1
+
+		data.nerf1 = 1 / (dfEff1 / 20 + 1) + 1
+		data.nerf2 = dfEff2 + 1
+		data.nerf3 = dfEff3
 	},
 	can() {
 		return GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 505
@@ -76,6 +89,7 @@ let pl = {
 		player.ghostify.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 		player.ghostify.ghostParticles = new Decimal(player.achievements.includes("ng3p115") ? 1e25 : 0)
 		player.ghostify.neutrinos = getBrandNewNeutrinoData()
+		player.ghostify.neutrinos.boosts = 9
 		player.ghostify.multPower = 1
 		player.ghostify.ghostlyPhotons.enpowerments = 3
 		tmp.bl.ticks = new Decimal(0)
@@ -120,11 +134,16 @@ let pl = {
 		document.getElementById("decayedFoam").textContent = shortenDimensions(pl.save.df.amt)
 		document.getElementById("decayedFoam2").textContent = shortenDimensions(pl.save.df.amt)
 
-		document.getElementById("dfToBl").textContent = pl.tmp.bl.toFixed(2)
-		document.getElementById("dfToMf").textContent = pl.tmp.mf.toFixed(2)
-		document.getElementById("dfToGph").textContent = pl.tmp.gph.toFixed(2)
+		document.getElementById("mfDecay").className = "gluonupgrade " + (pl.on() ? "planckbtn" : "unavailablebtn")
 	},
 	updateDisplayOnTick() {
+		document.getElementById("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
+		document.getElementById("dfGain").textContent = shorten(pl.decayGain())
+
+		for (let x = 1; x <= 3; x++) {
+			document.getElementById("dfBuff" + x).textContent = pl.tmp["buff" + x].toFixed(2)
+			document.getElementById("dfNerf" + x).textContent = pl.tmp["nerf" + x].toFixed(2)
+		}
 	},
 	tierReq() {
 		return Decimal.pow(10, Math.sqrt(pl.save.layer) * 1e18)
@@ -137,11 +156,20 @@ let pl = {
 		if (!confirm("You will be rewarded with extremely powerful boosts, but you will make the Planck layer harder. Are you sure?")) return
 		pl.onReset()
 	},
+	decayGain() {
+		return player.matter.max(1).log10() / 100 + 1
+	},
+	decay() {
+		if (!pl.on()) return
+		pl.save.df.amt = pl.save.df.amt.times(pl.decayGain())
+		bosonicLabReset()
+		pl.updateDisplay()
+	},
 	annihilate() {
 		if (!confirm("Are you sure?")) return
 		pl.save.df.amt = new Decimal(1)
 		pl.save.df.bestMatter = new Decimal(0)
-		bosonicLabReset()
+		if (pl.on()) bosonicLabReset()
 		pl.updateDisplay()
 	}
 }

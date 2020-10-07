@@ -214,7 +214,7 @@ function doGalaxyResetStuff(bulk){
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
 	player.tickspeedMultiplier = new Decimal(10)
 	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
+	if (!pl.on()) player.matter = new Decimal(0)
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)

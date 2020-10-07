@@ -664,6 +664,7 @@ function updateDimensionsDisplay() {
 	if (document.getElementById("eternitystore").style.display == "block") ETERNITYSTOREDisplay()
    	if (document.getElementById("quantumtab").style.display == "block") updateQuantumTabs()
    	if (document.getElementById("ghostify").style.display == "block") updateGhostifyTabs()
+   	if (document.getElementById("plTab").style.display == "block") pl.updateDisplayOnTick()
 }
 
 function replicantiDisplay() {

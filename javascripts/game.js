@@ -1583,7 +1583,7 @@ function showTab(tabName, init) {
 
 function updateMoney() {
 	document.getElementById("coinAmount").textContent = shortenMoney(player.money)
-	var matterName = pl.on() ? "Matterius Foam" : "matter"
+	var matterName = pl.on() ? "Matteria Foam" : "matter"
 	var element2 = document.getElementById("matter");
 	if (player.currentChallenge == "postc6" || inQC(6)) element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."; //TODO
 	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
@@ -4314,7 +4314,7 @@ function nanofieldUpdating(diff){
 			tmp.qu.nanofield.rewards = tmp.qu.nanofield.power
 			if (!tmp.qu.nanofield.apgWoke && tmp.qu.nanofield.rewards >= tmp.apgw) {
 				tmp.qu.nanofield.apgWoke = tmp.apgw
-				$.notify("You reached " + getFullExpansion(tmp.apgw) + " rewards... The Anti-Preontius has woken up and took over the Nanoverse! Be careful!")
+				$.notify("You reached " + getFullExpansion(tmp.apgw) + " rewards... Antipretus has woken up and took over the Nanoverse! Be careful!")
 				if (!player.achievements.includes("ng3p91")) {
 					showTab("quantumtab")
 					showQuantumTab("nanofield")

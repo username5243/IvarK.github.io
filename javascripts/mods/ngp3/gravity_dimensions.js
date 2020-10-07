@@ -86,8 +86,8 @@ let GDs = {
 	updateDisplay() {
 		if (!GDs.unlocked()) return
 
-		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100 - 100).toFixed(2) + "%"
-		document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100 - 100).toFixed(2) + "%"
+		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100).toFixed(2) + "%"
+		document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100).toFixed(2) + "%"
 		
 		document.getElementById("plReq").textContent = pl.reqText()
 	},
@@ -263,8 +263,7 @@ let GDs = {
 		return ge * mult
 	},
 	chargeMult() {
-		let x = 3
-		return x
+		return 2
 	},
 	superchargeMult() {
 		return (pl.save.layer - 1) / 5

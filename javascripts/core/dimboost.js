@@ -21,7 +21,7 @@ function getDimensionBoostPower(next, focusOn) {
 	return new Decimal(ret)
 }
 
-function softReset(bulk, tier=1) {
+function softReset(bulk, tier = 1) {
 	if (tmp.ri) return;
 	var oldResets = player.resets
 	player.resets += bulk;
@@ -29,7 +29,7 @@ function softReset(bulk, tier=1) {
 	if (inNC(14) && player.tickspeedBoosts == undefined) player.tickBoughtThisInf.pastResets.push({resets: player.resets, bought: player.tickBoughtThisInf.current})
 	if (tmp.ngp3 && getEternitied() >= 1e9 && player.dilation.upgrades.includes("ngpp6") && tier < 2) {
 		skipResets()
-		player.matter = new Decimal(0)
+		if (!pl.on()) player.matter = new Decimal(0)
 		player.postC8Mult = new Decimal(1)
 		player.dbPower = getDimensionBoostPower()
 		return

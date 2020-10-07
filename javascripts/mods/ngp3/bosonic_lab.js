@@ -19,9 +19,10 @@ function updateBLUnlockDisplay() {
 
 function getBosonicWattGain() {
 	let x = Math.max(player.money.log10() / 2e16 - 1.25, 0)
-	if (pl.on()) x = (x * pl.tmp.bl + pl.tmp.bl)
+	if (pl.on()) x += pl.tmp.buff2
 	if (isEnchantUsed(45)) x *= tmp.bEn[45]
 	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
+	if (pl.on()) x *= pl.tmp.buff3
 	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
 }
