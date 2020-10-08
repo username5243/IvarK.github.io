@@ -619,6 +619,10 @@ function hasSoftcapStarted(id, num, arg){
 	return Decimal.gt(arg, softcap_data[id][num].start)
 }
 
+function hasFirstSoftcapStarted(id, arg){
+	return Decimal.gt(arg, softcap_data[id][1].start) 
+}
+
 function numSoftcapsTotal(id){
 	return Object.keys(softcap_data[id]).length
 }
@@ -652,4 +656,8 @@ function getSoftcapStringEffect(id, num){
 	} 
 	return "oops someone messed up"
 }
+
+// softcapsbtn is the name of the button to hide/show, it is hidden by default
+// we want to show it when any softcap is active
+
 
