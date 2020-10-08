@@ -53,7 +53,7 @@ let pl = {
 		data.nerf3 = dfEff3
 	},
 	can() {
-		return GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 505
+		return GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 50
 	},
 	reqText() {
 		return "250.0 PC Ranking and 50.0 Gravity Energy"
