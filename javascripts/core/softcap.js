@@ -584,3 +584,72 @@ function softcap(x, id, max = 1/0) {
 	}
 	return x
 }
+
+function getSoftcapName(id){
+	let names = {
+		dt_log: "Log base 10 of dilated time gain",
+		ts_reduce_log: "Log base 10 of tickspeed reduction",
+		ts_reduce_log_big_rip: "Log base 10 of tickspeed reduction in Big Rip",
+		ts11_log_big_rip: "Log base 10 of time study 11 effect in Big Rip",
+		ms322_log: "Log base 10 of mastery study 322",
+		bru1_log: "Log base 10 of Big Rip Upgrade 1",
+		beu3_log: "Log base 10 of Big Rip Upgrade 3",
+		inf_time_log_1: "Log base 10 of Infinite Time reward",
+		inf_time_log_1_big_rip: "Log base 10 of Infinite Time reward in Big Rip",
+		inf_time_log_2: "Log base 10 of Infinite Time reward",
+		ig_log_high: "Log base 10 of Intergalactic reward",
+		bam: "Bosonic Antimatter Gain",
+		idbase: "Log base 10 of infinity dimension power",
+		working_ts: "Log base 10 of tickspeed effect",
+		bu45: "Bosonic Upgrade 45",
+		EPtoQK: "Log base 10 of the multiplier from Eternity Points to Quarks",
+		qc3reward: "Log base 10 of Quantum Challenge 3 Reward",
+		// Condensened:
+		nds_ngC: "Normal Dimensions (condensed)",
+		ts_ngC: "Tickspeed (condensed)",
+		sac_ngC: "Sacrifice (condensed)",
+		ip_ngC: "Infinity Points (condensed)",
+		rep_ngC: "Replicanti (condensed)",
+		ep_ngC: "Eternity Points (condensed)"
+	}
+	return names[id]
+}
+
+function hasSoftcapStarted(id, num, arg){
+	return Decimal.gt(arg, softcap_data[id][num].start)
+}
+
+function numSoftcapsTotal(id){
+	return Object.keys(softcap_data[id]).length
+}
+
+function softcapShorten(x){
+	if (typeof x == "number" && x < 1000 && x % 1 == 0) return x
+	return shorten(x)
+}
+
+function getSoftcapStringEffect(id, num){
+	let data = softcap_data[id][num]
+	if (data == undefined) return "Nothing, prb bug."
+	let name = (getSoftcapName(id) || id) + " number " + num + "."
+
+	var func = data.func
+	var vars = softcap_vars[func]
+
+	var v = [data[vars[0]], data[vars[1]], data[vars[2]]]
+	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
+	
+	if (func == "pow"){
+		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[1]) + (v[2] ? ", and keeps " : ", and does not keep ") + "smoothness at softcap start"
+		return name + " " + inside + "."
+	}
+	if (func == "log"){ // vars ["pow", "mul", "add"]
+		let mult = (v[1] != undefined && Decimal.neq(v[1], 1)) ? ", Times: " + softcapShorten(v[1]) : ""
+		let add = (v[2] != undefined && Decimal.neq(v[2], 0)) ? ", Plus: " + softcapShorten(v[2]) : ""
+		let inside = "Log base 10" + mult + add + ", to the Power of " + softcapShorten(v[0])
+		if (data.start) inside += " which means the softcap starts at " + softcapShorten(data.start)
+		return name + " " + inside + "."
+	} 
+	return "oops someone messed up"
+}
+

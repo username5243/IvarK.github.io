@@ -178,7 +178,7 @@ function resetInfDimensions(full) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
 			dim.cost = new Decimal(infBaseCost[t])
-			dim.power = new Decimal(0)
+			dim.power = new Decimal(1)
 			dim.baseAmount = 0
 		}
 		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)

@@ -102,7 +102,7 @@ function getDilationTPFormulaExp(disable){
 
 function getDilExp(disable) {
 	let ret = 1.5
-	if (player.aarexModifications.newGameExpVersion) ret += .001
+	if (tmp.newNGP3E) ret += .1
 	if (player.meta !== undefined && !player.aarexModifications.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
 		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(3) && disable != "TU3") ret += getTreeUpgradeEffect(2)
@@ -120,13 +120,10 @@ function getTotalTachyonParticleGain(){
 }
 
 function getDilGain() {
-	if (inQCModifier("ad") || player.money.lt(10)) {
-		return new Decimal(0)
-	}
+	if (inQCModifier("ad") || player.money.lt(10)) return new Decimal(0)
 	var log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
 	return Decimal.pow(10, log)
 }
-
 
 function getReqForTPGain() {
 	let tplog = player.dilation.totalTachyonParticles.log10()
@@ -150,7 +147,7 @@ function getEternityBoostToDT(){
 	var gain = new Decimal(1)
 	let eterExp = getEternitiesAndDTBoostExp()
 	if (eterExp > 0) gain = gain.times(Decimal.max(getEternitied(), 1).pow(eterExp))
-	if (hasDilationUpg('ngpp2') && player.aarexModifications.newGameExpVersion) {
+	if (hasDilationUpg('ngpp2') && tmp.newNGP3E) {
 		let e = new Decimal(getEternitied())
 		gain = gain.times(e.max(10).log10()).times(Math.pow(e.max(1e7).log10()-6,3))
 		if (e.gt(5e14)) gain = gain.times(Math.sqrt(e.log10())) // this comes into play at the grind right before quantum
