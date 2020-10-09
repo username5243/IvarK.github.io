@@ -659,6 +659,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 }
 
 function handleDisplaysOnQuantum(bigRip, prestige) {
+	if (!tmp.ngp3) return
+	
 	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
 
 	let keepECs = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 2

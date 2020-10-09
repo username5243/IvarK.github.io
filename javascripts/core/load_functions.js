@@ -2150,6 +2150,11 @@ function updateNGModeMessage(){
 
 function onLoad(noOffline) {
 	tmp.qu = player.quantum
+	if (tmp.qu == undefined || player.aarexModifications.newGamePlusPlusVersion == undefined) {
+		tmp.quActive = false
+		tmp.quUnl = false
+                speedrunMilestonesReached = 0
+	}
 	ghostifyDenied = 0
 	setEverythingPreNGp3onLoad()
 	setAarexModIfUndefined()
@@ -2827,6 +2832,10 @@ function conToDeciLateEter(){
         player.dilation.dilatedTime = new Decimal(player.dilation.dilatedTime)
         player.dilation.totalTachyonParticles = new Decimal(player.dilation.totalTachyonParticles)
         player.dilation.nextThreshold = new Decimal(player.dilation.nextThreshold)
+        if (player.eternitiesBank != undefined) {
+                player.eternitiesBank = new Decimal(player.eternitiesBank)
+                if (player.eternitiesBank.lt(1e308)) player.eternitiesBank = player.eternitiesBank.toNumber()
+        }
 }
 
 function conToDeciMS(){

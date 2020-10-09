@@ -687,7 +687,8 @@ function numSoftcapsTotal(id){
 }
 
 function softcapShorten(x){
-	if (x > 1) return formatValue(player.options.notation, x, 3, 0)
+	if (typeof x == "number" && x < 1000 && x % 1 == 0) return x
+	if (x > 1) return formatValue(player.options.notation, x, 3, 3)
 	if (x == 1) return 1
 	else return shorten(x)
 }
@@ -695,7 +696,7 @@ function softcapShorten(x){
 function getSoftcapStringEffect(id, num){
 	let data = softcap_data[id][num]
 	if (data == undefined) return "Nothing, prb bug."
-	let name = (getSoftcapName(id) || id) + " number " + num + "."
+	let name = (getSoftcapName(id) || id) + " #" + num + "."
 
 	var func = data.func
 	var vars = softcap_vars[func]

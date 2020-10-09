@@ -3201,12 +3201,12 @@ function updateHotkeys() {
 	html += ", C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity"
 	if (player.achievements.includes("r136")) html += ", D to dilate time"
 	if (player.achievements.includes("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
-	if (player.meta) html += ", Q for quantum"
+	if (player.meta) html += ",<br>Q for quantum"
 	if (player.achievements.includes("ng3p45")) html += ", U for unstabilize all quarks"
 	if (player.achievements.includes("ng3p51")) html += ", B for Big Rip, G to become a ghost"
 	html += "."
 	if (player.boughtDims) html += "<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
-	html += "<br>Hotkeys do not work while holding control."
+	html += "<br>Hotkeys do not work while holding control. Hold shift to see details on many formulas."
 	document.getElementById("hotkeysDesc").innerHTML = html
 }
 
