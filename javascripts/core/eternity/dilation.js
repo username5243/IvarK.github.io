@@ -59,7 +59,7 @@ function getDilTimeGainPerSecond() {
 
 function getDTGainExp() {
 	let exp = GUActive("br3") ? 1.1 : 1
-	if (ghostified && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
+	if (ph.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 	return exp
 }
 

@@ -587,35 +587,82 @@ function softcap(x, id, max = 1/0) {
 
 function getSoftcapName(id){
 	let names = {
-		dt_log: "Log base 10 of dilated time gain",
-		ts_reduce_log: "Log base 10 of tickspeed reduction",
-		ts_reduce_log_big_rip: "Log base 10 of tickspeed reduction in Big Rip",
-		ts11_log_big_rip: "Log base 10 of time study 11 effect in Big Rip",
-		ms322_log: "Log base 10 of mastery study 322",
-		bru1_log: "Log base 10 of Big Rip Upgrade 1",
-		beu3_log: "Log base 10 of Big Rip Upgrade 3",
-		inf_time_log_1: "Log base 10 of Infinite Time reward",
-		inf_time_log_1_big_rip: "Log base 10 of Infinite Time reward in Big Rip",
-		inf_time_log_2: "Log base 10 of Infinite Time reward",
-		ig_log_high: "Log base 10 of Intergalactic reward",
-		bam: "Bosonic Antimatter Gain",
-		idbase: "Log base 10 of infinity dimension power",
-		working_ts: "Log base 10 of tickspeed effect",
-		bu45: "Bosonic Upgrade 45",
-		EPtoQK: "Log base 10 of the multiplier from Eternity Points to Quarks",
-		qc3reward: "Log base 10 of Quantum Challenge 3 Reward",
+		dt_log: "log base 10 of dilated time gain per second",
+		ts_reduce_log: "log base 10 of tickspeed reduction",
+		ts_reduce_log_big_rip: "log base 10 of tickspeed reduction in Big Rip",
+		ts11_log_big_rip: "log base 10 of time study 11 effect in Big Rip",
+		ms322_log: "log base 10 of mastery study 322",
+		bru1_log: "log base 10 of Big Rip Upgrade 1",
+		beu3_log: "log base 10 of Big Rip Upgrade 3",
+		inf_time_log_1: "log base 10 of Infinite Time reward",
+		inf_time_log_1_big_rip: "log base 10 of Infinite Time reward in Big Rip",
+		inf_time_log_2: "log base 10 of Infinite Time reward",
+		ig_log_high: "log base 10 of Intergalactic reward",
+		bam: "Bosonic Antimatter gain per second",
+		idbase: "log base 10 of initial infinity dimension power",
+		working_ts: "log base 10 of tickspeed effect",
+		bu45: "20th Bosonic Upgrade",
+		EPtoQK: "log base 10 of the multiplier from Eternity Points to Quark gain",
+		qc3reward: "log base 10 of Quantum Challenge 3 reward",
 		// Condensened:
 		nds_ngC: "Normal Dimensions (condensed)",
 		ts_ngC: "Tickspeed (condensed)",
 		sac_ngC: "Sacrifice (condensed)",
 		ip_ngC: "Infinity Points (condensed)",
-		rep_ngC: "Replicanti (condensed)",
+		rep_ngC: "Replicanti in Replicanti to Infinity Point amount (condensed)",
 		ep_ngC: "Eternity Points (condensed)"
 	}
 	return names[id]
 }
 
-function hasSoftcapStarted(id, num, arg){
+function hasSoftcapStarted(id, num){
+	let amt = { // for amount
+		dt_log: getDilTimeGainPerSecond().plus(1).log10(), // and tmp.bE50kDT is false
+		ts_reduce_log: Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts_reduce_log_big_rip: Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts11_log_big_rip: tsMults[11]().log10(),
+		ms322_log: masteryStudies.timeStudyEffects[322]().log10(),
+		bru1_log: tmp.bru[1].plus(1).log10(),
+		beu3_log: tmp.beu[3].plus(1).log10(),
+		inf_time_log_1: tmp.it.plus(1).log10(),
+		inf_time_log_1_big_rip: tmp.it.plus(1).log10(),
+		inf_time_log_2: tmp.it.plus(1).log10(),
+		ig_log_high: tmp.ig.plus(1).log10(),
+		bam: getBosonicAMProduction(),
+		idbase: getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
+		working_ts: getTickspeed().pow(-1).log10(),
+		bu45: bu.effects[45](),
+		EPtoQK: getEPtoQKMult(),
+		qc3reward: qcRewards["effects"][3](QCIntensity(3)).plus(1).log10(),
+		// Condensened:
+		nds_ngC: getDimensionFinalMultiplier(1).div(getIDReplMult()),
+		ts_ngC: getTickspeed().pow(-1),
+		sac_ngC: calcSacrificeBoost(),
+		ip_ngC: getInfinityPointGain(),
+		rep_ngC: player.replicanti.amount, 
+		ep_ngC: gainedEternityPoints()
+	}[id]
+	let check = { 
+		/*
+		this is where you need to put anything else that needs to be true
+		that is: if it is false it does not display, but if it is true,
+		it continues as if nothing happens
+		NOTE: this excludes Big Rip (and only BR) 
+		*/
+		dt_log: !tmp.bE50kDT,
+		nds_ngC: tmp.ngC,
+		ts_ngC: tmp.ngC,
+		sac_ngC: tmp.ngC,
+		ip_ngC: tmp.ngC,
+		rep_ngC: tmp.ngC,
+		ep_ngC: tmp.ngC
+	}
+	if (!player.quantum.bigRip.active && id.length > 8 && id.slice(id.length - 8, id.length) == "_big_rip") return false
+	if (check[id] != undefined && check[id] == false) return false
+	return hasSoftcapStartedArg(id, num, amt)
+}
+
+function hasSoftcapStartedArg(id, num, arg){
 	return Decimal.gt(arg, softcap_data[id][num].start)
 }
 
@@ -628,8 +675,8 @@ function numSoftcapsTotal(id){
 }
 
 function softcapShorten(x){
-	if (typeof x == "number" && x < 1000 && x % 1 == 0) return x
-	return shorten(x)
+	if (x > 1) return formatValue(player.options.notation, x, 3, 0)
+	else return shorten(x)
 }
 
 function getSoftcapStringEffect(id, num){
@@ -645,19 +692,78 @@ function getSoftcapStringEffect(id, num){
 	
 	if (func == "pow"){
 		let inside = "Start: " + softcapShorten(v[0]) + ", Exponent: " + softcapShorten(v[1]) + (v[2] ? ", and keeps " : ", and does not keep ") + "smoothness at softcap start"
-		return name + " " + inside + "."
+		return "Softcap of " + name + " " + inside + "."
 	}
 	if (func == "log"){ // vars ["pow", "mul", "add"]
 		let mult = (v[1] != undefined && Decimal.neq(v[1], 1)) ? ", Times: " + softcapShorten(v[1]) : ""
 		let add = (v[2] != undefined && Decimal.neq(v[2], 0)) ? ", Plus: " + softcapShorten(v[2]) : ""
 		let inside = "Log base 10" + mult + add + ", to the Power of " + softcapShorten(v[0])
 		if (data.start) inside += " which means the softcap starts at " + softcapShorten(data.start)
-		return name + " " + inside + "."
+		return "Softcap of " + name + " " + inside + "."
 	} 
 	return "oops someone messed up"
+}
+
+function getInnerHTMLSoftcap(id){
+	let n = numSoftcapsTotal(id)
+	let s = ""
+	if (!hasSoftcapStarted(id, 1)) return ""
+	for (let i = 1; i <= n; i++) {
+		s += getSoftcapStringEffect(id, i) + "<br>"
+	}
+	return s + "<br>"
 }
 
 // softcapsbtn is the name of the button to hide/show, it is hidden by default
 // we want to show it when any softcap is active
 
+function updateSoftcapStatsTab(){
+	let names = {
+		dt_log: "softcap_dt",
+		ts_reduce_log: "softcap_ts1",
+		ts_reduce_log_big_rip: "softcap_tsBR",
+		ts11_log_big_rip: "softcap_ts2",
+		ms322_log: "softcap_ms322",
+		bru1_log: "softcap_bru1",
+		beu3_log: "softcap_beu3",
+		inf_time_log_1: "softcap_it1",
+		inf_time_log_1_big_rip: "softcap_it1BR",
+		inf_time_log_2: "softcap_it2",
+		ig_log_high: "softcap_ig",
+		bam: "softcap_bam",
+		idbase: "softcap_idbase",
+		working_ts: "softcap_workts",
+		bu45: "softcap_bu45",
+		EPtoQK: "softcap_epqk",
+		qc3reward: "softcap_qc3",
+		// Condensened:
+		nds_ngC: "softcap_C_nd",
+		ts_ngC: "softcap_C_ts",
+		sac_ngC: "softcap_C_sac",
+		ip_ngC: "softcap_C_ip",
+		rep_ngC: "softcap_C_rep",
+		ep_ngC: "softcap_C_ep"
+	}
+	let n = Object.keys(names)
+	let anyActive = false
 
+	for (let i = 0; i < n.length; i++){
+		if (hasSoftcapStarted(n[i], 1)) anyActive = true
+	}
+
+	if (anyActive) {
+		document.getElementById("softcapsbtn").style = "display:inline-block"
+	} else {
+		document.getElementById("softcapsbtn").style = "display:none"
+	}
+
+	for (let i = 0; i < n.length; i++){
+		let elname = names[n[i]]
+		if (hasSoftcapStarted(n[i], 1)) {  
+			document.getElementById(elname).style = "display:inline-block"
+			document.getElementById(elname).innerHTML = getInnerHTMLSoftcap(n[i])
+		} else {
+			document.getElementById(elname).style = "display:none"
+		}
+	}
+}

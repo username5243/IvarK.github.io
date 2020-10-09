@@ -3671,6 +3671,7 @@ function updateBlinkOfAnEye(){
 
 function canQuickBigRip() {
 	var x = false
+	if (!tmp.ngp3) return false
 	if (tmp.quUnl && player.masterystudies.includes("d14") && inQC(0) && tmp.qu.electrons.amount >= getQCCost([6, 8])) {
 		if (player.ghostify.milestones >= 2) x = true
 		else for (var p = 1; p <= 4; p++) {
@@ -4000,6 +4001,7 @@ setInterval(function() {
 	updateTimeStudyButtons(false, true)
 	updateHotkeys()
 	updateQCDisplaysSpecifics()
+	updateSoftcapStatsTab()
 
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()

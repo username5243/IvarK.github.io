@@ -501,7 +501,7 @@ function updateBreakEternityUpgradesTemp() {
 }
 
 function updateBRU1Temp() {
-	tmp.bru[1] = 1
+	tmp.bru[1] = new Decimal(1)
 	if (!tmp.qu.bigRip.active) return
 	let exp = 1
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
