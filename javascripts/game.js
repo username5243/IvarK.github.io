@@ -5733,6 +5733,7 @@ window.addEventListener('keydown', function(event) {
 	if (event.keyCode == 17) controlDown = true;
 	if (event.keyCode == 16) {
 		shiftDown = true;
+		updateSoftcapStatsTab()
 		drawStudyTree()
 		drawMasteryTree()
 	}
@@ -5745,6 +5746,7 @@ window.addEventListener('keyup', function(event) {
 	if (event.keyCode == 17) controlDown = false;
 	if (event.keyCode == 16) {
 		shiftDown = false;
+		updateSoftcapStatsTab()
 		drawStudyTree()
 		drawMasteryTree()
 	}
