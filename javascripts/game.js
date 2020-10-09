@@ -3296,36 +3296,6 @@ function updateRespecButtons() {
 	document.getElementById("respecMastery2").className = className
 }
 
-function doCheckECCompletionStuff(){
-	var forceRespec = false
-	if (player.currentEternityChall !== "") {
-		if (player.eternityChalls[player.currentEternityChall] === undefined) {
-			player.eternityChalls[player.currentEternityChall] = 1
-		} else if (player.eternityChalls[player.currentEternityChall] < 5) {
-			player.eternityChalls[player.currentEternityChall] += 1
-		}
-		else if (player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] === undefined) player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
-		else player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked])
-		if (player.currentEternityChall === "eterc12" && player.achievements.includes("ng3p51")) {
-			if (player.eternityChalls.eterc11 === undefined) player.eternityChalls.eterc11 = 1
-			else if (player.eternityChalls.eterc11 < 5) player.eternityChalls.eterc11++
-		}
-		if (tmp.ngp3 ? tmp.qu.autoEC && player.eternityChalls[player.currentEternityChall] < 5 : false) {
-			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
-			else player.timestudy.theorem += ([0,30,35,40,70,130,85,115,115,415,550,1,1])[player.etercreq]
-			player.eternityChallUnlocked = 0
-			tmp.qu.autoECN = player.etercreq
-		} else if (ph.did("ghostify") && player.ghostify.milestones > 1) {
-			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
-			else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.etercreq]
-			player.eternityChallUnlocked = 0
-		} else forceRespec = true
-		player.etercreq = 0
-	} else if (tmp.ngp3) delete tmp.qu.autoECN
-	return forceRespec
-}
-
-
 function eternity(force, auto, presetLoad, dilated) {
 	var canEternity = force || (ph.can("eternity") && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
 	if (!canEternity) return
@@ -4720,9 +4690,7 @@ function passiveGPGen(diff){
 	else if (player.galacticSacrifice) passiveGPGen = hasTimeStudy(181)
 	var mult = 1
 	if (player.aarexModifications.ngmX >= 4){
-		if (player.achievements.includes("r43")){
-			mult = Math.pow(player.galacticSacrifice.galaxyPoints.plus(1e20).log10() / 10, 2) /2
-		}
+		if (player.achievements.includes("r43")) ult = Math.pow(player.galacticSacrifice.galaxyPoints.plus(1e20).log10() / 10, 2) /2
 		if (mult > 100) mult = 100
 	}
 	if (passiveGPGen) player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.add(getGSAmount().times(diff / 100 * mult))
@@ -5349,24 +5317,6 @@ function dimBoolean() {
 	return true
 }
 
-
-function maxBuyGalaxies(manual) {
-	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && player.tickspeedBoosts != undefined) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
-	if (player.autobuyers[10].priority > player.galaxies || manual) {
-		let amount=getAmount(inNC(4)||player.pSac!=undefined?6:8)
-		let increment=0.5
-		let toSkip=0
-		var check=0
-		while (amount >= getGalaxyRequirement(increment*2) && (player.autobuyers[10].priority > player.galaxies + increment*2 || manual)) increment*=2
-		while (increment>=1) {
-			check=toSkip+increment
-			if (amount >= getGalaxyRequirement(check) && (player.autobuyers[10].priority > player.galaxies + check || manual)) toSkip+=increment
-			increment/=2
-		}
-		galaxyReset(toSkip+1)
-	}
-}
-
 function autoQuantumABTick(){
 	if (tmp.qu.autobuyer.mode == "amount") {
 		if (quarkGain().gte(Decimal.round(tmp.qu.autobuyer.limit))) quantum(true, false, 0)
@@ -5849,7 +5799,6 @@ window.addEventListener('keyup', function(event) {
 		break;
 	}
 }, false);
-
 
 function getUnspentBonus() {
 	x = player.infinityPoints

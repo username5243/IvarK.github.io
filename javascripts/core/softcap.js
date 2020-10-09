@@ -593,7 +593,7 @@ function getSoftcapName(id){
 		ts11_log_big_rip: "log base 10 of time study 11 effect in Big Rip",
 		ms322_log: "log base 10 of mastery study 322",
 		bru1_log: "log base 10 of Big Rip Upgrade 1",
-		beu3_log: "log base 10 of Big Rip Upgrade 3",
+		beu3_log: "log base 10 of Break Eternity Upgrade 3",
 		inf_time_log_1: "log base 10 of Infinite Time reward",
 		inf_time_log_1_big_rip: "log base 10 of Infinite Time reward in Big Rip",
 		inf_time_log_2: "log base 10 of Infinite Time reward for high values",

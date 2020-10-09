@@ -195,3 +195,20 @@ function getRemoteScalingStart(galaxies) {
 	}
 	return n
 }
+
+function maxBuyGalaxies(manual) {
+	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && player.tickspeedBoosts != undefined) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
+	if (player.autobuyers[10].priority > player.galaxies || manual) {
+		let amount=getAmount(inNC(4)||player.pSac!=undefined?6:8)
+		let increment=0.5
+		let toSkip=0
+		var check=0
+		while (amount >= getGalaxyRequirement(increment*2) && (player.autobuyers[10].priority > player.galaxies + increment*2 || manual)) increment*=2
+		while (increment>=1) {
+			check=toSkip+increment
+			if (amount >= getGalaxyRequirement(check) && (player.autobuyers[10].priority > player.galaxies + check || manual)) toSkip+=increment
+			increment/=2
+		}
+		galaxyReset(toSkip+1)
+	}
+}
