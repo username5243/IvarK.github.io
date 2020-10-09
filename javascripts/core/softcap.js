@@ -688,6 +688,7 @@ function numSoftcapsTotal(id){
 
 function softcapShorten(x){
 	if (x > 1) return formatValue(player.options.notation, x, 3, 0)
+	if (x == 1) return 1
 	else return shorten(x)
 }
 
@@ -709,7 +710,11 @@ function getSoftcapStringEffect(id, num){
 	}
 	if (func == "log"){ // vars ["pow", "mul", "add"]
 		let mult = (v[1] != undefined && Decimal.neq(v[1], 1)) ? ", Times: " + softcapShorten(v[1]) : ""
-		let add = (v[2] != undefined && Decimal.neq(v[2], 0)) ? ", Plus: " + softcapShorten(v[2]) : ""
+		let add = ""
+		if (v[2] != undefined) {
+			if (typeof v[2] != "number" || v[2] > 0) add = (v[2] != undefined && Decimal.neq(v[2], 0)) ? ", Plus: " + softcapShorten(v[2]) : ""
+			else add = (v[2] != undefined) ? ", Minus: " + softcapShorten(-1*v[2]) : ""
+		}
 		let inside = "Log base 10" + mult + add + ", to the Power of " + softcapShorten(v[0])
 		end = " "
 		if (data.start) end = " Start: " + softcapShorten(data.start) + ", "
@@ -723,7 +728,8 @@ function getInnerHTMLSoftcap(id){
 	let s = ""
 	if (!hasSoftcapStarted(id, 1)) return ""
 	for (let i = 1; i <= n; i++) {
-		s += getSoftcapStringEffect(id, i) + "<br>"
+		if (hasSoftcapStarted(id, i)) s += getSoftcapStringEffect(id, i) + "<br>"
+		else return s + "<br><br>"
 	}
 	return s + "<br><br>"
 }
