@@ -2163,6 +2163,7 @@ function onLoad(noOffline) {
 
 	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 
+	ngmR.compile()
 	tmp.ngmX = calcNGMX()
 	if (tmp.ngmX) player.aarexModifications.ngmX = tmp.ngmX
 	ngC.compile()

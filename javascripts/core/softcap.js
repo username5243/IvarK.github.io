@@ -616,32 +616,6 @@ function getSoftcapName(id){
 }
 
 function hasSoftcapStarted(id, num){
-	let amt = { // for amount
-		dt_log: getDilTimeGainPerSecond().plus(1).log10(), // and tmp.bE50kDT is false
-		ts_reduce_log: Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
-		ts_reduce_log_big_rip: Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
-		ts11_log_big_rip: tsMults[11]().log10(),
-		ms322_log: masteryStudies.timeStudyEffects[322]().log10(),
-		bru1_log: tmp.bru[1].plus(1).log10(),
-		beu3_log: tmp.beu[3].plus(1).log10(),
-		inf_time_log_1: tmp.it.plus(1).log10(),
-		inf_time_log_1_big_rip: tmp.it.plus(1).log10(),
-		inf_time_log_2: tmp.it.plus(1).log10(),
-		ig_log_high: tmp.ig.plus(1).log10(),
-		bam: getBosonicAMProduction(),
-		idbase: getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
-		working_ts: getTickspeed().pow(-1).log10(),
-		bu45: bu.effects[45](),
-		EPtoQK: getEPtoQKMult(),
-		qc3reward: qcRewards["effects"][3](QCIntensity(3)).plus(1).log10(),
-		// Condensened:
-		nds_ngC: getDimensionFinalMultiplier(1).div(getIDReplMult()),
-		ts_ngC: getTickspeed().pow(-1),
-		sac_ngC: calcSacrificeBoost(),
-		ip_ngC: getInfinityPointGain(),
-		rep_ngC: player.replicanti.amount, 
-		ep_ngC: gainedEternityPoints()
-	}[id]
 	let check = { 
 		/*
 		this is where you need to put anything else that needs to be true
@@ -649,7 +623,17 @@ function hasSoftcapStarted(id, num){
 		it continues as if nothing happens
 		NOTE: this excludes Big Rip (and only BR) 
 		*/
-		dt_log: !tmp.bE50kDT,
+		idbase: tmp.ngp3,
+		dt_log: tmp.ngp3 && !tmp.bE50kDT,
+		ms322_log: tmp.ngp3,
+		EPtoQK: tmp.ngp3,
+		qc3reward: tmp.ngp3 && tmp.qcRewards && tmp.qcRewards[3] !== undefined,
+		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined,
+		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined,
+		bam: tmp.ngp3,
+		bu45: tmp.ngp3,
+		ig_log_high: tmp.ig !== undefined,
+
 		nds_ngC: tmp.ngC,
 		ts_ngC: tmp.ngC,
 		sac_ngC: tmp.ngC,
@@ -657,8 +641,36 @@ function hasSoftcapStarted(id, num){
 		rep_ngC: tmp.ngC,
 		ep_ngC: tmp.ngC
 	}
-	if (!player.quantum.bigRip.active && id.length > 8 && id.slice(id.length - 8, id.length) == "_big_rip") return false
-	if (check[id] != undefined && check[id] == false) return false
+	if (check[id] !== undefined && !check[id]) return false
+	if (tmp.ngp3 && !tmp.qu.bigRip.active && id.length > 8 && id.slice(id.length - 8, id.length) == "_big_rip") return false
+
+	let amt = { // for amount
+		dt_log: () => getDilTimeGainPerSecond().plus(1).log10(), // and tmp.bE50kDT is false
+		ts_reduce_log: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts_reduce_log_big_rip: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts11_log_big_rip: () => tsMults[11]().log10(),
+		ms322_log: () => masteryStudies.timeStudyEffects[322]().log10(),
+		bru1_log: () => tmp.bru[1].plus(1).log10(),
+		beu3_log: () => tmp.beu[3].plus(1).log10(),
+		inf_time_log_1: () => tmp.it.plus(1).log10(),
+		inf_time_log_1_big_rip: () => tmp.it.plus(1).log10(),
+		inf_time_log_2: () => tmp.it.plus(1).log10(),
+		ig_log_high: () => tmp.ig.plus(1).log10(),
+		bam: () => getBosonicAMProduction(),
+		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
+		working_ts: () => getTickspeed().pow(-1).log10(),
+		bu45: () => bu.effects[45](),
+		EPtoQK: () => getEPtoQKMult(),
+		qc3reward: () => qcRewards["effects"][3](QCIntensity(3)).plus(1).log10(),
+
+		// Condensened: () =>
+		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
+		ts_ngC: () => getTickspeed().pow(-1),
+		sac_ngC: () => calcSacrificeBoost(),
+		ip_ngC: () => getInfinityPointGain(),
+		rep_ngC: () => player.replicanti.amount, 
+		ep_ngC: () => gainedEternityPoints()
+	}[id]()
 	return hasSoftcapStartedArg(id, num, amt)
 }
 

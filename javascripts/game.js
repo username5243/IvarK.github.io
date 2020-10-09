@@ -414,7 +414,7 @@ function setupHTMLAndData() {
 function updateNewPlayer(reseted) {
 	if (reseted) {
 		var modesChosen = {
-			ngm: player.aarexModifications.newGameMinusVersion !== undefined,
+			ngm: player.aarexModifications.ngmR !== undefined ? 2 : player.aarexModifications.newGameMinusVersion !== undefined ? 1 : 0,
 			ngp: player.aarexModifications.ngp4V !== undefined ? 2 : player.aarexModifications.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: player.aarexModifications.newGameExpVersion !== undefined,
 			ngpp: player.meta == undefined ? false : player.aarexModifications.ngp3lV ? 3 : tmp.ngp3 ? 2 : 1,
@@ -447,7 +447,7 @@ function updateNewPlayer(reseted) {
 		secondAmount: new Decimal(0),
 		thirdAmount: new Decimal(0),
 		fourthAmount: new Decimal(0),
-		firstBought: modesChosen.ngm ? 5 : 0,
+		firstBought: modesChosen.ngm === 1 ? 5 : 0,
 		secondBought: 0,
 		thirdBought: 0,
 		fourthBought: 0,
@@ -465,13 +465,13 @@ function updateNewPlayer(reseted) {
 		challenges: [],
 		currentChallenge: "",
 		infinityPoints: new Decimal(0),
-		infinitied: modesChosen.ngm ? 990 : modesChosen.ngp%2>0 ? 1 : 0,
-		infinitiedBank: modesChosen.ngm ? -1000 : 0,
+		infinitied: modesChosen.ngm === 1 ? 990 : modesChosen.ngp%2>0 ? 1 : 0,
+		infinitiedBank: modesChosen.ngm === 1 ? -1000 : 0,
 		totalTimePlayed: 0,
 		bestInfinityTime: 9999999999,
 		thisInfinityTime: 0,
 		resets: 0,
-		galaxies: modesChosen.ngm ? -1 : 0,
+		galaxies: modesChosen.ngm === 1 ? -1 : 0,
 		totalmoney: new Decimal(0),
 		achPow: 1,
 		newsArray: [],
@@ -484,30 +484,30 @@ function updateNewPlayer(reseted) {
 		chall3Pow: new Decimal(0.01),
 		matter: new Decimal(0),
 		chall11Pow: new Decimal(1),
-		partInfinityPoint: modesChosen.ngm ? -1e300 : 0,
-		partInfinitied: modesChosen.ngm ? -1e8 : 0,
+		partInfinityPoint: modesChosen.ngm === 1 ? -1e300 : 0,
+		partInfinitied: modesChosen.ngm === 1 ? -1e8 : 0,
 		break: false,
 		challengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
 		infchallengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
 		lastTenRuns: [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]],
 		lastTenEternities: [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]],
-		infMult: new Decimal(modesChosen.ngm ? 0.5 : 1),
-		infMultCost: new Decimal(modesChosen.ngm ? 30 : 10),
+		infMult: new Decimal(modesChosen.ngm === 1 ? 0.5 : 1),
+		infMultCost: new Decimal(modesChosen.ngm === 1 ? 30 : 10),
 		tickSpeedMultDecrease: 10,
 		tickSpeedMultDecreaseCost: 3e6,
-		dimensionMultDecrease: modesChosen.ngm ? 11 : 10,
+		dimensionMultDecrease: modesChosen.ngm === 1 ? 11 : 10,
 		dimensionMultDecreaseCost: 1e8,
 		overXGalaxies: 10,
 		version: 10,
 		infDimensionsUnlocked: [],
 		infinityPower: new Decimal(1),
-		spreadingCancer: modesChosen.ngm ? -9990 : 0,
+		spreadingCancer: modesChosen.ngm === 1 ? -9990 : 0,
 		postChallUnlocked: 0,
 		postC4Tier: 0,
 		postC3Reward: new Decimal(1),
 		postC8Mult: new Decimal(1),
 		eternityPoints: new Decimal(0),
-		eternities: modesChosen.ngm ? -20 : 0,
+		eternities: modesChosen.ngm === 1 ? -20 : 0,
 		thisEternity: 0,
 		bestEternity: 9999999999,
 		eternityUpgrades: [],
@@ -538,35 +538,35 @@ function updateNewPlayer(reseted) {
 			cost: new Decimal(1e20),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm ? 0.0000125 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.0000125 : 1),
 			baseAmount: 0
 		},
 		infinityDimension5 : {
 			cost: new Decimal(1e140),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm ? 0.01 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infinityDimension6 : {
 			cost: new Decimal(1e200),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm ? 0.015 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.015 : 1),
 			baseAmount: 0
 		},
 		infinityDimension7 : {
 			cost: new Decimal(1e250),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm ? 0.01 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infinityDimension8 : {
 			cost: new Decimal(1e280),
 			amount: new Decimal(0),
 			bought: 0,
-			power: new Decimal(modesChosen.ngm ? 0.01 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
 			baseAmount: 0
 		},
 		infDimBuyers: [false, false, false, false, false, false, false, false],
@@ -576,53 +576,53 @@ function updateNewPlayer(reseted) {
 		timeDimension1: {
 			cost: new Decimal(1),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 0.01 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.01 : 1),
 			bought: 0
 		},
 		timeDimension2: {
 			cost: new Decimal(5),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 0.03 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.03 : 1),
 			bought: 0
 		},
 		timeDimension3: {
 			cost: new Decimal(100),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 0.025 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.025 : 1),
 			bought: 0
 		},
 		timeDimension4: {
 			cost: new Decimal(1000),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 0.02 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 0.02 : 1),
 			bought: 0
 		},
 		timeDimension5: {
 			cost: new Decimal("1e2350"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 1e-5 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 1e-5 : 1),
 			bought: 0
 		},
 		timeDimension6: {
 			cost: new Decimal("1e2650"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 5e-6 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 5e-6 : 1),
 			bought: 0
 		},
 		timeDimension7: {
 			cost: new Decimal("1e3000"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 3e-6 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 3e-6 : 1),
 			bought: 0
 		},
 		timeDimension8: {
 			cost: new Decimal("1e3350"),
 			amount: new Decimal(0),
-			power: new Decimal(modesChosen.ngm ? 2e-6 : 1),
+			power: new Decimal(modesChosen.ngm === 1 ? 2e-6 : 1),
 			bought: 0
 		},
 		offlineProd: 0,
-		offlineProdCost: modesChosen.ngm ? 5e11 : 1e7,
+		offlineProdCost: modesChosen.ngm === 1 ? 5e11 : 1e7,
 		challengeTarget: 0,
 		autoSacrifice: 1,
 		replicanti: {
@@ -630,7 +630,7 @@ function updateNewPlayer(reseted) {
 			unl: false,
 			chance: 0.01,
 			chanceCost: new Decimal(modesChosen.ngmm?1e90:1e150),
-			interval: modesChosen.ngm ? 5000 : 1000,
+			interval: modesChosen.ngm === 1 ? 5000 : 1000,
 			intervalCost: new Decimal(modesChosen.ngmm?1e80:modesChosen.rs==1?1e150:1e140),
 			gal: 0,
 			galaxies: 0,
@@ -638,13 +638,13 @@ function updateNewPlayer(reseted) {
 			auto: [false, false, false]
 		},
 		timestudy: {
-			theorem: modesChosen.ngm ? -6 : 0,
+			theorem: modesChosen.ngm === 1 ? -6 : 0,
 			amcost: new Decimal("1e20000"),
-			ipcost: new Decimal(modesChosen.ngm ? 1e-13 : 1),
+			ipcost: new Decimal(modesChosen.ngm === 1 ? 1e-13 : 1),
 			epcost: new Decimal(1),
 			studies: [],
 		},
-		eternityChalls: modesChosen.ngm ? {eterc1:-6} : {},
+		eternityChalls: modesChosen.ngm === 1 ? {eterc1:-6} : {},
 		eternityChallGoal: new Decimal(Number.MAX_VALUE),
 		currentEternityChall: "",
 		eternityChallUnlocked: 0,
@@ -667,13 +667,13 @@ function updateNewPlayer(reseted) {
 			active: false,
 			tachyonParticles: new Decimal(0),
 			dilatedTime: new Decimal(0),
-			totalTachyonParticles: new Decimal(modesChosen.ngm ? 2000 :0),
+			totalTachyonParticles: new Decimal(modesChosen.ngm === 1 ? 2000 :0),
 			nextThreshold: new Decimal(1000),
 			freeGalaxies: 0,
 			upgrades: [],
 			rebuyables: {
 				1: 0,
-				2: modesChosen.ngm ? 1 : 0,
+				2: modesChosen.ngm === 1 ? 1 : 0,
 				3: 0,
 			}
 		},
@@ -720,7 +720,8 @@ function updateNewPlayer(reseted) {
 			breakInfinity: false
 		}
 	}
-	if (modesChosen.ngm) doNGMinusNewPlayer()
+	if (modesChosen.ngm === 1) player.aarexModifications.newGameMinusVersion = 2.2
+	if (modesChosen.ngm === 2) ngmR.setup()
 	if (modesChosen.ngp) doNGPlusOneNewPlayer()
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) doNGMinusTwoNewPlayer()
@@ -2014,7 +2015,7 @@ function changeSaveDesc(saveId, placement) {
 		else if (temp.singularity) msg = msg != "" || ex ? "IR" + msg : "Infinity Respecced"
 		else msg = "NG" + msg
 		if (ex) msg = msg == "NG" ? "Expert Mode" : msg + "Ex"
-		if (temp.galacticSacrifice&&temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
+		if (temp.galacticSacrifice && temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
 		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", no NG+ features"
 		msg = (msg == "NG" ? "" : msg + "<br>") + (isSaveCurrent ? "Selected<br>" : "Played for " + timeDisplayShort(temp.totalTimePlayed) + "<br>")
 		var originalBreak = player.break
@@ -2121,6 +2122,7 @@ var modFullNames = {
 	ngc: "NG Condensed"
 }
 var modSubNames = {
+	ngm: ["OFF", "ON", "NG- Remade"],
 	ngp: ["OFF", "ON", "NG++++"],
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
@@ -4163,13 +4165,6 @@ function requiredInfinityUpdating(diff){
 function chall2PowerUpdating(diff){
 	var div = 1800 / puMults[11](hasPU(11, true, true))
 	player.chall2Pow = Math.min(player.chall2Pow + diff / div, 1);
-	if (player.currentChallenge == "postc2" || inQC(6)) {
-		postC2Count++;
-		if (postC2Count >= 8 || diff > 80) {
-			sacrifice();
-			postC2Count = 0;
-		}
-	}
 }
 
 function normalChallPowerUpdating(diff){
@@ -4177,7 +4172,15 @@ function normalChallPowerUpdating(diff){
 
 	if (inNC(3) || player.matter.gte(1)) player.chall3Pow = player.chall3Pow.times(Decimal.pow(1.00038, diff)).min(1e200);
 
-	chall2PowerUpdating(diff)
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) chall2PowerUpdating(diff)
+
+	if (player.currentChallenge == "postc2" || inQC(6)) {
+		postC2Count++;
+		if (postC2Count >= 8 || diff > 80) {
+			sacrifice();
+			postC2Count = 0;
+		}
+	}
 }
 
 function incrementParadoxUpdating(diff){

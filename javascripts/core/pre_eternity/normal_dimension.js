@@ -15,8 +15,8 @@ function resetDimensions() {
 
 function getR84or73Mult(){
 	var mult = new Decimal(1)
-	if (player.achievements.includes("r84")) mult = player.money.pow(player.galacticSacrifice?0.0002:0.00004).plus(1);
-	else if (player.achievements.includes("r73")) mult = player.money.pow(player.galacticSacrifice?0.0001:0.00002).plus(1);
+	if (player.achievements.includes("r84")) mult = player.money.pow(player.galacticSacrifice ? 0.0002 : 0.00004).plus(1);
+	else if (player.achievements.includes("r73")) mult = player.money.pow(player.galacticSacrifice ? 0.0001 : 0.00002).plus(1);
 	
 	var log = mult.log10()
 	if (log > 1e12) log = 1e12 * Math.pow(log / 1e12, .5)
@@ -260,7 +260,7 @@ function multiplySameCosts(cost) {
 	for (let i = 1; i <= 8; i++) {
 		if (player[tiers[i] + "Cost"].e == cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
 	}
-	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
+	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(getTickspeedCostMultiplier())
 }
 
 function multiplyPC5Costs(cost, tier) {
@@ -346,13 +346,22 @@ function clearDimensions(amount) {
 	
 function getDimensionCostMultiplier(tier) {
 	var multiplier2 = [new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4), new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)];
-	if (inNC(10)) return multiplier2[tier - 1];
-	else return player.costMultipliers[tier - 1];
+
+	let ret
+	if (inNC(10)) ret = multiplier2[tier - 1]
+	else ret = player.costMultipliers[tier - 1]
+
+	if (tmp.ngmR) {
+		ret = Math.pow(ret, ngmR.cost_scales.nds)
+		ret *= Math.pow(1.1, player.galaxies)
+	}
+
+	return ret
 }
 	
 function onBuyDimension(tier) {
 	giveAchievement(allAchievements["r1"+tier])
-	if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
 	if (inNC(8) || player.currentChallenge == "postc1") clearDimensions(tier-1)
 	if (inMatterChallenge() && player.matter.eq(0)) player.matter = new Decimal(1)
 	player.postC4Tier = tier;
@@ -596,13 +605,16 @@ function getDimensionProductionPerSecond(tier) {
 		else if (tier == 2) ret = ret.pow(1.5)
 	}
 	ret = ret.times(getDimensionFinalMultiplier(tier))
+
+	if (tmp.ngmR) ret = ret.div(2)
 	if (tmp.ngC && tier == 1) ret = ret.times(3)
-	if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) ret = ret.times(player.chall2Pow)
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(10)
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
-	let tick = dilates(Decimal.div(1e3,getTickspeed()),"tick")
+
+	let tick = dilates(Decimal.div(1e3,getTickspeed()), "tick")
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)
 	ret = ret.times(tick)
 	return ret

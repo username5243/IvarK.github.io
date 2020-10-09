@@ -97,7 +97,7 @@ function getTotalNormalChallenges() {
 function updateNCVisuals() {
 	var chall = player.currentChallenge
 
-	if (inNC(2) || chall == "postc1" || player.pSac) document.getElementById("chall2Pow").style.display = "inline-block"
+	if (inNC(2) || chall == "postc1" || tmp.ngmR || tmp.ngmX >= 5) document.getElementById("chall2Pow").style.display = "inline-block"
 	else document.getElementById("chall2Pow").style.display = "none"
 
 	if (inNC(3) || chall == "postc1") document.getElementById("chall3Pow").style.display = "inline-block"
