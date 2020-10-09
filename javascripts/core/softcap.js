@@ -661,7 +661,7 @@ function hasSoftcapStarted(id, num){
 		working_ts: () => getTickspeed().pow(-1).log10(),
 		bu45: () => bu.effects[45](),
 		EPtoQK: () => getEPtoQKMult(),
-		qc3reward: () => qcRewards["effects"][3](QCIntensity(3)).plus(1).log10(),
+		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
 
 		// Condensened: () =>
 		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
