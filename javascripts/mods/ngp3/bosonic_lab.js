@@ -657,7 +657,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return id <= bu.rows * 10 + 10 && player.ghostify.bl.upgrades.includes(id)
+	return tmp.ngp3 && id <= bu.rows * 10 + 10 && player.ghostify.bl.upgrades.includes(id)
 }
 
 function updateBosonicUpgradeDescs() {

@@ -374,3 +374,32 @@ function getECReward(x) {
 	}
 	if (x == 14) return getIC3EffFromFreeUpgs()
 }
+
+function doCheckECCompletionStuff(){
+	var forceRespec = false
+	if (player.currentEternityChall !== "") {
+		if (player.eternityChalls[player.currentEternityChall] === undefined) {
+			player.eternityChalls[player.currentEternityChall] = 1
+		} else if (player.eternityChalls[player.currentEternityChall] < 5) {
+			player.eternityChalls[player.currentEternityChall] += 1
+		}
+		else if (player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] === undefined) player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
+		else player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked])
+		if (player.currentEternityChall === "eterc12" && player.achievements.includes("ng3p51")) {
+			if (player.eternityChalls.eterc11 === undefined) player.eternityChalls.eterc11 = 1
+			else if (player.eternityChalls.eterc11 < 5) player.eternityChalls.eterc11++
+		}
+		if (tmp.ngp3 ? tmp.qu.autoEC && player.eternityChalls[player.currentEternityChall] < 5 : false) {
+			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
+			else player.timestudy.theorem += ([0,30,35,40,70,130,85,115,115,415,550,1,1])[player.etercreq]
+			player.eternityChallUnlocked = 0
+			tmp.qu.autoECN = player.etercreq
+		} else if (ph.did("ghostify") && player.ghostify.milestones > 1) {
+			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
+			else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.etercreq]
+			player.eternityChallUnlocked = 0
+		} else forceRespec = true
+		player.etercreq = 0
+	} else if (tmp.ngp3) delete tmp.qu.autoECN
+	return forceRespec
+}
