@@ -5111,9 +5111,11 @@ function gameLoop(diff) {
 
 	if (player.break) document.getElementById("iplimit").style.display = "inline"
 	else document.getElementById("iplimit").style.display = "none"
-	document.getElementById("IPPeakDiv").style.display=(player.break&&player.boughtDims)?"":"none"
-	try {document.getElementsByClassName("GPAmount")[0].textContent = shorten(player.galacticSacrifice.galaxyPoints)}
-	finally {}
+	document.getElementById("IPPeakDiv").style.display = (player.break && player.boughtDims) ? "" : "none"
+   	if (player.galacticSacrifice) {
+	    try {document.getElementsByClassName("GPAmount")[0].textContent = shorten(player.galacticSacrifice.galaxyPoints)}
+	    finally {}
+    	}
 
 	if (tmp.tickUpdate) {
 		updateTickspeed()
