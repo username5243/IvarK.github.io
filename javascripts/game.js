@@ -3919,7 +3919,7 @@ function checkGluonRounding(){
 
 function doNGm2CorrectPostC3Reward(){
 	if (player.eternitied > 0) return
-	player.postC3Reward = Decimal.pow(getPostC3Mult(),  player.totalTickGained * getIC3EffFromFreeUpgs() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
+	player.postC3Reward = Decimal.pow(getPostC3Mult(),  player.totalTickGained * getIC3EffFromFreeUpgs() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease())).max(player.postC3Reward)
 }
 
 let autoSaveSeconds=0

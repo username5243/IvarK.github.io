@@ -116,7 +116,7 @@ function setR7Tooltip() {
 	// Row 7 (5/8)
 	let not = document.getElementById("ERROR 909: Dimension not found")
 	let cant = document.getElementById("Can't hold all these infinities")
-	//r73/////
+	let dne1 = document.getElementById("This achievement doesn't exist")
 	//r74/////
 	let newDim = document.getElementById("NEW DIMENSIONS???")
 	//r76/////
@@ -126,6 +126,7 @@ function setR7Tooltip() {
 	//ACHIEVEMENT ROW 7
 	not.setAttribute('ach-tooltip',"Big Crunch with only a single First Dimension without Dimension Boosts, Shifts or Galaxies while in the Automatic Galaxies Challenge. Reward: First Dimensions are " + (player.galacticSacrifice ? 909 : 3) + " times stronger" + (player.aarexModifications.ngmX >= 4 ? ", and buff the more expensive Break Infinity upgrade based on Infinities to be more effective" : "") + ".")
 	cant.setAttribute('ach-tooltip', "Get all Dimension multipliers over "+shortenCosts(1e308)+". Reward: All Normal Dimensions  are 10" + (player.galacticSacrifice ? "x" : "%") + " stronger" + (player.aarexModifications.ngmX >= 4 ? ", achievement multiplier multiplies GP gain and make the break infinity upgrades based on antimatter 4x more powerful." : "."))
+	dne1.setAttribute('ach-tooltip', "Get 9.9999e9999 antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have" + (player.aarexModifications.ngmX >= 4 ? " and you now bulk buy Time Dimension Boosts (NOT A THING YET)." : "."))
 	newDim.setAttribute('ach-tooltip', "Unlock the 4th Infinity Dimension."+(player.boughtDims?"":" Reward: Your achievement bonus affects Infinity Dimensions."))
 	tables.setAttribute('ach-tooltip', "Get 8th Dimension multiplier to be highest, 7th Dimension multiplier second highest, etc. Reward: Each dimension gains a boost proportional to their tier (8th dimension gets 8"+(player.galacticSacrifice?"0":"")+"%, 7th gets 7"+(player.galacticSacrifice?"0":"")+"%, etc.)")
 	blink.setAttribute('ach-tooltip', "Big Crunch in under 200 milliseconds. Reward: Start with " + formatValue(player.options.notation, 2e25, 0, 0) + " antimatter, and all Normal Dimensions are stronger in the first 300 milliseconds of this Infinity.");

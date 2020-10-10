@@ -522,7 +522,7 @@ function breakNGm2UpgradeRow5Display(){
 		inf52text = "Galaxy cost increases by 3 less.<br>Currently: " + Math.round(getGalaxyReqMultiplier() * 10) / 10 + (player.infinityUpgrades.includes("postinfi52") ? "" : " -> " + Math.round(getGalaxyReqMultiplier() * 10 - 30) / 10) + "<br>Cost: " + shortenCosts(1e33) + " IP"
 	} else inf52text = "Decrease tickspeed boost cost multiplier to 3.<br>Cost: " + shortenCosts(1e25) + " IP"
 	document.getElementById("postinfi52").innerHTML = inf52text
-	document.getElementById("postinfi53").innerHTML = "Divide all Infinity Dimension cost multipliers by 50.<br>Cost: "+shortenCosts(player.tickspeedBoosts == undefined ? 1e37 : 1e29) + " IP"
+	document.getElementById("postinfi53").innerHTML = "Divide all Infinity Dimension cost multipliers by 50" + (player.aarexModifications.ngmX >= 4 ? ", free tickspeed upgrades multiply GP gain and IC completions boost Time Dimension Cost limit" : "") + ".<br>Cost: "+shortenCosts(player.tickspeedBoosts == undefined ? 1e37 : 1e29) + " IP"
 }
 
 function breakNGm2UpgradeRow6Display(){

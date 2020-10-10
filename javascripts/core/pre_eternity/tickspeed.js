@@ -66,6 +66,16 @@ function getGalaxyEff(bi) {
 			if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
 			eff += .07 * x
 		}
+		if (player.aarexModifications.ngmX >= 4) {
+			let e = 1
+			if (player.achievements.includes("r66")) {
+				e *= Math.log10(player.galacticSacrifice.galaxyPoints.max(1e86).log10() + 14) / 2
+				if (player.galacticSacrifice.galaxyPoints.gt(1e86)) e += player.galacticSacrifice.galaxyPoints.div(1e86).minus(1).min(10).div(100).toNumber()
+			}
+			
+			if (e > 1.5) e = Math.log10(e*6 + 1) + .5
+			eff *= e
+		}
 	}
 	if (tmp.ngmR) eff *= 1.2
 	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75

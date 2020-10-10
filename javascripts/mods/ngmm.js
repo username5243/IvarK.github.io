@@ -50,6 +50,7 @@ function getGPMultipliers(){
 	}
 	if (player.achievements.includes("r62") && player.tickspeedBoosts == undefined) ret = ret.times(player.infinityPoints.max(10).log10())
 	if (player.achievements.includes("r72")) ret = ret.times(player.achPow || 1)
+	if (player.infinityUpgrades.includes("postinfi53")) ret = ret.times(player.totalTickGained + 1)
 	return ret
 }
 

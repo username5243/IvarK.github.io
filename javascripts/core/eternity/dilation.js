@@ -174,7 +174,7 @@ function dilates(x, m) {
 	if (a) {
 		if (m != "tick") x = x.max(1)
 		else if (player.galacticSacrifice == undefined) x = x.times(1e3)
-		if (x.gt(10) || !(player.aarexModifications.ngmX > 3)) x = Decimal.pow(10, Math.pow(x.log10(), e))
+		if (x.gt(10)) x = Decimal.pow(10, Math.pow(x.log10(), e))
 		if (m == "tick" && player.galacticSacrifice == undefined) x = x.div(1e3)
 		if (m == "tick" && x.lt(1)) x = Decimal.div(1, x)
 	}

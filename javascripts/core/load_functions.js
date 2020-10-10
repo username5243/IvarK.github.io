@@ -2371,7 +2371,7 @@ function load_game(noOffline, init) {
 		if (break_infinity_js) Decimal = Decimal_BI
 		initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
 		costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4444"), postc1_ngC: new Decimal("1e5555"),
+		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),
 					postc2:new Decimal("1e5000"), postc2_ngC:new Decimal("1e5860"),
 					postc3:new Decimal("1e12000"), postc3_ngC:new Decimal("1e7175"),
 					postc4:new Decimal("1e14000"), postc4_ngC:new Decimal("1e8475"),
@@ -2384,13 +2384,13 @@ function load_game(noOffline, init) {
 					postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
 					postcngm3_1:new Decimal("1e1560"),
 					postcngm3_2:new Decimal("1e2085"),
-					postcngm3_3:new Decimal("1e8140"),
+					postcngm3_3:new Decimal("1e8421"),
 					postcngm3_4:new Decimal("1e17000"),
 					postcngc_1:new Decimal("1e38000"),
 					postcngc_2:new Decimal("1e42250")}
-		goals = {postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"),
-					postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngC:new Decimal("1e5850"),
-					postc3:new Decimal("1e5000"), postc3_ngC:new Decimal("1e2675"),
+		goals = {postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"), postc1_ngm4:new Decimal("1e575"),
+					postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngm4:new Decimal("1e4675"), postc2_ngC:new Decimal("1e5850"),
+					postc3:new Decimal("1e5000"), postc3_ngC:new Decimal("1e2675"), 
 					postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"), postc4_ngC:new Decimal("1e5750"),
 					postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"), postc5_ngC:new Decimal("1e2400"),
 					postc6:new Decimal("2e22222"), postc6_ngC:new Decimal("2.1e21111"),
@@ -2401,7 +2401,7 @@ function load_game(noOffline, init) {
 					postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1425"),
 					postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
 					postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
-					postcngm3_3:new Decimal("8.8888e888"),
+					postcngm3_3:new Decimal("8e888"), postcngm3_4:new Decimal("1e1500"),
 					postcngm3_4:new Decimal("1e12345"),
 					postcngc_1:new Decimal("1e10525"),
 					postcngc_2:new Decimal("1e27225")}
