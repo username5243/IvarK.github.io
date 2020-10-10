@@ -404,8 +404,9 @@ function getNewInfReq() {
 			reqs[1] = new Decimal("1e2400")
 			reqs[2] = new Decimal("1e4000")
 		}
-		if (player.aarexModifications.ngmX >= 4){
+		if (tmp.ngmX >= 4){
 			reqs[0] = new Decimal("1e1777")
+			reqs[1] = new Decimal("1e2385")
 		}
 	}
 	if (tmp.ngC) {

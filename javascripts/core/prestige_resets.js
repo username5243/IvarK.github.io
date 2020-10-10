@@ -56,10 +56,9 @@ function doQuantumResetStuff(bigRip, isQC){
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
 	player.money = new Decimal(10)
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickspeed = new Decimal(player.aarexModifications.newGameExpVersion ? 500 : 1000)
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	resetNormalDimensions()
+	resetTickspeed()
+	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.sacrificed = new Decimal(0)
 	player.challenges = keepABnICs ? player.challenges : []
 	player.currentChallenge = ""
@@ -78,7 +77,6 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.partInfinitied = 0
 	player.break = keepABnICs ? player.break : false
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.tickspeedMultiplier = new Decimal(10)
 	player.chall2Pow = 1
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -202,9 +200,9 @@ function resetNormalDimensions(){
 
 function doGalaxyResetStuff(bulk){
 	player.money = player.achievements.includes("r111") ? player.money : new Decimal(10)
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	resetNormalDimensions()
+	resetTickspeed()
+	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	player.sacrificed = new Decimal(0)
 	player.totalBoughtDims = resetTotalBought()
 	player.resets = player.achievements.includes("ng3p55") ? player.resets : 0
@@ -212,7 +210,6 @@ function doGalaxyResetStuff(bulk){
 	player.tdBoosts = resetTDBoosts()
 	player.galaxies = player.galaxies + bulk
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.tickspeedMultiplier = new Decimal(10)
 	player.chall3Pow = new Decimal(0.01)
 	if (!pl.on()) player.matter = new Decimal(0)
 	player.chall11Pow = new Decimal(1)
@@ -222,9 +219,9 @@ function doGalaxyResetStuff(bulk){
 
 function doNormalChallengeResetStuff(){
 	player.money = new Decimal(10)
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	resetNormalDimensions()
+	resetTickspeed()
+	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
 	player.thisInfinityTime = 0
@@ -232,8 +229,6 @@ function doNormalChallengeResetStuff(){
 	player.galaxies = 0
 	player.interval = null
 	player.galacticSacrifice = newGalacticDataOnInfinity()
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.tickspeedMultiplier= new Decimal(10)
 	player.chall2Pow = 1
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -340,9 +335,9 @@ function checkSecondSetOnCrunchAchievements(){
 function doCrunchResetStuff() {
 	player.galacticSacrifice = newGalacticDataOnInfinity()
 	player.money = new Decimal(10)
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	resetNormalDimensions()
+	resetTickspeed()
+	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
 	player.bestInfinityTime = (player.currentEternityChall !== "eterc12") ? Math.min(player.bestInfinityTime, player.thisInfinityTime) : player.bestInfinityTime
@@ -350,7 +345,6 @@ function doCrunchResetStuff() {
 	player.resets = 0
 	player.interval = null
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.tickspeedMultiplier = new Decimal(10)
 	player.chall2Pow = 1
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -363,8 +357,7 @@ function doCrunchResetStuff() {
 
 function doEternityResetStuff() {
 	player.money = new Decimal(10)
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickspeed = new Decimal(player.aarexModifications.newGameExpVersion?500:1000)
+	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	resetNormalDimensions()
 	player.infinitied = 0
@@ -382,8 +375,7 @@ function doEternityResetStuff() {
 	player.break = getEternitied() > 1 ? player.break : false
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
 	player.partInfinityPoint = 0
-	player.partInfinitied = 0    
-	player.tickspeedMultiplier = new Decimal(10)
+	player.partInfinitied = 0
 	player.chall2Pow = 1
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -605,10 +597,9 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	var bm = player.ghostify.milestones
 	player.galacticSacrifice = resetGalacticSacrifice()
-	resetNormalDimensions()
 	player.money = onQuantumAM()
-	player.tickSpeedCost = new Decimal(1000)
-	player.tickspeed = new Decimal(player.aarexModifications.newGameExpVersion ? 500 : 1000)
+	resetNormalDimensions()
+	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -626,7 +617,6 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.partInfinityPoint = 0
 	player.partInfinitied = 0
 	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.tickspeedMultiplier = new Decimal(10)
 	player.chall2Pow = 1
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)

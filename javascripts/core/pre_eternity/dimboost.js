@@ -36,9 +36,7 @@ function softReset(bulk, tier = 1) {
 	}
 	resetDimensions()
 	player.totalBoughtDims = resetTotalBought()
-	player.tickspeed = new Decimal(player.aarexModifications.newGameExpVersion ? 500 : 1000)
-	player.tickSpeedCost = new Decimal(1e3)
-	player.tickspeedMultiplier = new Decimal(10)
+	resetTickspeed()
 	player.sacrificed = new Decimal(0)
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -57,12 +55,6 @@ function softReset(bulk, tier = 1) {
 		player.eightBought = 1;
 	}
 	setInitialResetPower();
-
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95,player.galaxies));
-	divideTickspeedIC5()
 
 	if (player.resets > 4) {
 		document.getElementById("confirmation").style.display = "inline-block";

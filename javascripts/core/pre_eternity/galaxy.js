@@ -22,10 +22,6 @@ function galaxyReset(bulk) {
 	setInitialResetPower();
 	
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95, player.galaxies));
-	divideTickspeedIC5()
 
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
 		document.getElementById("sacrifice").style.display = "none"

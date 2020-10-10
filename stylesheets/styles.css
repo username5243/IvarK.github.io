@@ -643,11 +643,8 @@ button {
     border-radius: 4px;
     transition-duration: 0.2s;
     cursor: pointer;
-    position: absolute;
-    right: 75%;
-    top: 40px;
-    width: 200px;
-    height: 60px;
+    width: 210px;
+    height: 70px;
     font-family: Typewriter;
     color: black;
     background: #F2F2F2;
@@ -664,11 +661,8 @@ button {
 .newdimlocked {
     border-radius: 4px;
     transition-duration: 0.2s;
-    position: absolute;
-    right: 75%;
-    top: 40px;
-    width: 200px;
-    height: 60px;
+    width: 210px;
+    height: 70px;
     color: #000000;
     background: #A3A3A3;
     font-weight: bold;

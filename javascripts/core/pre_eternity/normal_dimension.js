@@ -1,16 +1,21 @@
 function resetDimensions() {
-	var costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
-	var costMults = [1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
+	let costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
 	if (inNC(10) || player.currentChallenge == "postc1") costs = [10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
-	if (inNC(10)) costMults = [1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
-	for (var d = 1; d < 9; d++) {
+
+	for (var d = 1; d <= 8; d++) {
 		var name = TIER_NAMES[d]
 		player[name + "Amount"] = new Decimal(0)
 		player[name + "Bought"] = 0
 		player[name + "Cost"] = new Decimal(costs[d - 1])
-		player.costMultipliers[d - 1] = new Decimal(costMults[d - 1])
 	}
+	resetNormalDimensionCostMults()
+
 	if (tmp.ngC) ngC.resetNDs()
+}
+
+function resetNormalDimensionCostMults() {
+	let costMults = getNormalDimensionCostMults()
+	for (var d = 1; d <= 8; d++) player.costMultipliers[d - 1] = new Decimal(costMults[d])
 }
 
 function getR84or73Mult(){
@@ -345,20 +350,22 @@ function clearDimensions(amount) {
 	
 	
 function getDimensionCostMultiplier(tier) {
-	var multiplier2 = [new Decimal(1e3), new Decimal(5e3), new Decimal(1e4), new Decimal(1.2e4), new Decimal(1.8e4), new Decimal(2.6e4), new Decimal(3.2e4), new Decimal(4.2e4)];
+	return player.costMultipliers[tier - 1]
+}
 
-	let ret
-	if (inNC(10)) ret = multiplier2[tier - 1]
-	else ret = player.costMultipliers[tier - 1]
+function getNormalDimensionCostMults() {
+	let x = []
+	if (inNC(10)) x = [null, 1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
+	else x = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
 
 	if (tmp.ngmR) {
-		ret = Math.pow(ret, ngmR.cost_scales.nds)
-		ret *= Math.pow(1.1, player.galaxies)
+		for (let d = 1; d <= 8; d++) x[d] = Math.pow(x[d], ngmR.cost_scales.nds)
+		if (player.galaxies > 0) for (let d = 1; d <= 8; d++) x[d] = Decimal.pow(1.1, player.galaxies).times(x[d])
 	}
 
-	return ret
+	return x
 }
-	
+
 function onBuyDimension(tier) {
 	giveAchievement(allAchievements["r1"+tier])
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0

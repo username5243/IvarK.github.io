@@ -4965,20 +4965,21 @@ function galaxyBtnUpdating(){
 	}
 }
 
-function newIDDisplayUpdating(){
+let newDimPresPos = 1
+function newIDDisplayUpdating() {
 	document.getElementById("newDimensionButton").style.display = "none"
 	var req = getNewInfReq()
-	if (getEternitied() > 24) {
+	if (getEternitied() >= 25) {
 		while (req.money.lt(player.money) && !player.infDimensionsUnlocked[7]) {
 			newDimension()
 			if (player.infDimBuyers[req.tier-1] && player.currentEternityChall != "eterc8") buyMaxInfDims(req.tier)
 			req = getNewInfReq()
 		}
-	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7]) {
+	} else if (player.break && player.currentChallenge == "" && !player.infDimensionsUnlocked[7] && ph.tmp.infinity.shown) {
 		document.getElementById("newDimensionButton").style.display = "inline-block"
 		document.getElementById("newDimensionButton").textContent = "Get " + shortenCosts(req.money) + " antimatter to unlock a new Dimension."
-		if (player.money.gte(req.money)) document.getElementById("newDimensionButton").className = "newdim"
-		else document.getElementById("newDimensionButton").className = "newdimlocked"
+		if (player.money.gte(req.money)) document.getElementById("newDimensionButton").className = "presPos" + newDimPresPos + "newdim"
+		else document.getElementById("newDimensionButton").className = "presPos" + newDimPresPos + " newdimlocked"
 	}
 }
 
@@ -5007,8 +5008,7 @@ function galSacBtnUpdating() {
 		document.getElementById("gSacrifice").setAttribute('ach-tooltip', "Gain " + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP")
 		document.getElementById("gSacrifice").className = getGSAmount().gt(0) ? "storebtn" : "unavailablebtn"
 	}
-	if (document.getElementById("sacrificebtn").style.display === "inline-block") {
-		document.getElementById("sacrificebtn").style.display = ""
+	if (document.getElementById("sacrificebtn").style.display !== "none") {
 		var currentGPmin = getGSAmount().dividedBy(player.galacticSacrifice.time / 600)
 		if (currentGPmin.gt(GPminpeak)) GPminpeak = currentGPmin
 		var notationOkay = (GPminpeak.gt("1e300000") && player.options.theme != "Aarex's Modifications") || player.options.notation == "Morse code" || player.options.notation == 'Spazzy'
