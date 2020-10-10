@@ -290,12 +290,21 @@ function updatePostInfiTemp() {
 	if (player.aarexModifications.ngmX >= 4){
 		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
 		exp21 += player.money.plus(10).div(10).log10() / 1e4
+		base11 = player.totalmoney.plus(10).log10()
+		base21 = player.money.plus(10).log10()
 
+		if (player.achievements.includes("r72")) {
+			exp11 *= 4
+			exp21 *= 4
+			base11 *= 4
+			base21 *= 4
+		}
+
+		tmp.postinfi11 = Decimal.pow(base11, exp11)
+		tmp.postinfi21 = Decimal.pow(base21, exp21)
+	} else {
 		tmp.postinfi11 = Decimal.pow(player.totalmoney.plus(10).log10(), exp11)
 		tmp.postinfi21 = Decimal.pow(player.money.plus(10).log10(), exp21)
-	} else {
-		tmp.postinfi11 = Math.pow(player.totalmoney.plus(10).log10(), exp11)
-		tmp.postinfi21 = Math.pow(player.money.plus(10).log10(), exp21)
 	}
 }
 

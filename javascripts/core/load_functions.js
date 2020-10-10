@@ -2042,7 +2042,7 @@ function updateNGp3DisplayStuff(){
 	updateBLUnlockDisplay()
 	document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
 	for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
-	handleDisplaysOnQuantum(tmp.qu.bigRip.active)
+        handleDisplaysOnQuantum(tmp.qu.bigRip.active)
 	updateBraveMilestones()
 	updateNeutrinoBoosts()
 	updateNeutrinoUpgradeUnlocks(5, 12)
@@ -2201,6 +2201,7 @@ function onLoad(noOffline) {
 		updatePUCosts()
 	}
 	if (tmp.ngp3) updateNGp3DisplayStuff()
+        handleDisplaysOutOfQuantum()
 	hideDimensions()
 	updateChallenges()
 	updateNCVisuals()
@@ -2295,6 +2296,7 @@ function onLoad(noOffline) {
 	document.getElementById("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
 	updateTemp()
 	updateTemp()
+        
 }
 
 
@@ -2369,7 +2371,7 @@ function load_game(noOffline, init) {
 		if (break_infinity_js) Decimal = Decimal_BI
 		initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
 		costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngC: new Decimal("1e5555"),
+		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4444"), postc1_ngC: new Decimal("1e5555"),
 					postc2:new Decimal("1e5000"), postc2_ngC:new Decimal("1e5860"),
 					postc3:new Decimal("1e12000"), postc3_ngC:new Decimal("1e7175"),
 					postc4:new Decimal("1e14000"), postc4_ngC:new Decimal("1e8475"),
@@ -2396,7 +2398,7 @@ function load_game(noOffline, init) {
 					postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
 					postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
 					postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
-					postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1530"),
+					postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1425"),
 					postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
 					postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
 					postcngm3_3:new Decimal("8.8888e888"),

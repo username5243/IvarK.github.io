@@ -3917,6 +3917,11 @@ function checkGluonRounding(){
 	if (tmp.qu.quarks.lt(101)) tmp.qu.quarks = tmp.qu.quarks.round()
 }
 
+function doNGm2CorrectPostC3Reward(){
+	if (player.eternitied > 0) return
+	player.postC3Reward = Decimal.pow(getPostC3Mult(),  player.totalTickGained * getIC3EffFromFreeUpgs() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
+}
+
 let autoSaveSeconds=0
 setInterval(function() {
 	updateTemp()
@@ -3974,6 +3979,7 @@ setInterval(function() {
 	updateHotkeys()
 	updateQCDisplaysSpecifics()
 	updateSoftcapStatsTab()
+	doNGm2CorrectPostC3Reward()
 
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
@@ -4690,7 +4696,7 @@ function passiveGPGen(diff){
 	else if (player.galacticSacrifice) passiveGPGen = hasTimeStudy(181)
 	var mult = 1
 	if (player.aarexModifications.ngmX >= 4){
-		if (player.achievements.includes("r43")) ult = Math.pow(player.galacticSacrifice.galaxyPoints.plus(1e20).log10() / 10, 2) /2
+		if (player.achievements.includes("r43")) mult = Math.pow(player.galacticSacrifice.galaxyPoints.plus(1e20).log10() / 10, 2) /2
 		if (mult > 100) mult = 100
 	}
 	if (passiveGPGen) player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.add(getGSAmount().times(diff / 100 * mult))
@@ -5106,6 +5112,8 @@ function gameLoop(diff) {
 	if (player.break) document.getElementById("iplimit").style.display = "inline"
 	else document.getElementById("iplimit").style.display = "none"
 	document.getElementById("IPPeakDiv").style.display=(player.break&&player.boughtDims)?"":"none"
+	try {document.getElementsByClassName("GPAmount")[0].textContent = shorten(player.galacticSacrifice.galaxyPoints)}
+	finally {}
 
 	if (tmp.tickUpdate) {
 		updateTickspeed()
@@ -5833,7 +5841,7 @@ function getAchievementMult(){
 		if (gups > 15) exp += gups
 	}
 	if (tmp.ngC) div /= 10
-	return Math.max(Math.pow(ach - minus - getSecretAchAmount(), exp) / div, 1)
+	return Decimal.pow(ach - minus - getSecretAchAmount(), exp).div(div).max(1)
 }
 
 function updatePowers() {

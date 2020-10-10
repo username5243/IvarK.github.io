@@ -161,9 +161,14 @@ function getPostC3Base() {
 
 function getPostC3Exp() {
 	let x = 1
+	if (player.achievements.includes("r66") && player.aarexModifications.ngmX >= 4) {
+		x *= Decimal.min(5, player.galacticSacrifice.galaxyPoints.div(1e58).max(1).pow(.05)).toNumber()
+		if (x > 1.25) x = Math.log10(8 * x) * 1.25
+		if (x > 4/3) x = 1 + x/4
+	}
 	if (player.galacticSacrifice !== undefined) {
 		let g = getGalaxyPower(0, false, true)
-		if (g < 7) return 1 + g / 5
+		if (g < 7) return x * (1 + g / 5)
 		let y = 5
 		let z = .5
 		if (tmp.ec > 29) {
@@ -174,7 +179,7 @@ function getPostC3Exp() {
 				else if (tmp.ec > 37) y = 3.5
 			} else z = .6
 		}
-		x = 2 + Math.pow(g - 5, z) / y
+		x *= 2 + Math.pow(g - 5, z) / y
 	}
 	if (tmp.ngC) {
 		let g = player.galaxies

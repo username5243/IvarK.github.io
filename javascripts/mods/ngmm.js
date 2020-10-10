@@ -49,6 +49,7 @@ function getGPMultipliers(){
 		else ret = ret.times(10 * (1 + Math.pow(Math.log10(18000 / player.bestInfinityTime), 2)))
 	}
 	if (player.achievements.includes("r62") && player.tickspeedBoosts == undefined) ret = ret.times(player.infinityPoints.max(10).log10())
+	if (player.achievements.includes("r72")) ret = ret.times(player.achPow || 1)
 	return ret
 }
 

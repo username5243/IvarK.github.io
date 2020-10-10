@@ -467,7 +467,7 @@ function updateAchievements() {
 		}
 	}
     player.achPow = Decimal.pow(player.aarexModifications.newGameMinusMinusVersion ? 5 : 1.5, amount)
-    document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each " + achMultLabelUpdate() + " Dimension: " + shortenMoney(player.achPow) + "x"
+    document.getElementById("achmultlabel").textContent = "Current achievement multiplier on " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
 	document.getElementById("nothingness").style.display = rowsShown ? "none" : ""
 
 	rowsShown = 0
@@ -564,7 +564,9 @@ function toggleSecretAchs() {
 }
 
 function achMultLabelUpdate() {
-	var labels = ["Normal"]
+        var labels = []
+        if (player.achievements.includes("r72") && player.aarexModifications.ngmX >= 4) labels.push("Galaxy Points")
+	labels.push("Normal")
 	if (player.achievements.includes("r75")) labels.push("Infinity")
 	if (player.eternityUpgrades.includes(4)) labels.push("Time")
 	return wordizeList(labels)
