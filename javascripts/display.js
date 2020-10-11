@@ -234,54 +234,13 @@ function infinityRespecedInfinityDisplay(){
 }
 
 function infinityUpgradesDisplay(){
-	if (player.infinityUpgrades.includes("timeMult")) document.getElementById("infi11").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)) document.getElementById("infi11").className = "infinistorebtn1"
-	else document.getElementById("infi11").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("dimMult")) document.getElementById("infi21").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)) document.getElementById("infi21").className = "infinistorebtn2"
-	else document.getElementById("infi21").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("18Mult")) document.getElementById("infi12").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)&&player.infinityUpgrades.includes("timeMult")) document.getElementById("infi12").className = "infinistorebtn1"
-	else document.getElementById("infi12").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("27Mult")) document.getElementById("infi22").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)&&player.infinityUpgrades.includes("dimMult")) document.getElementById("infi22").className = "infinistorebtn2"
-	else document.getElementById("infi22").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("36Mult")) document.getElementById("infi13").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)&&player.infinityUpgrades.includes("18Mult")) document.getElementById("infi13").className = "infinistorebtn1"
-	else document.getElementById("infi13").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("45Mult")) document.getElementById("infi23").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)&&player.infinityUpgrades.includes("27Mult")) document.getElementById("infi23").className = "infinistorebtn2"
-	else document.getElementById("infi23").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("resetBoost")) document.getElementById("infi14").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(1)&&player.infinityUpgrades.includes("36Mult")) document.getElementById("infi14").className = "infinistorebtn1"
-	else document.getElementById("infi14").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("galaxyBoost")) document.getElementById("infi24").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(2)&&player.infinityUpgrades.includes("45Mult")) document.getElementById("infi24").className = "infinistorebtn2"
-	else document.getElementById("infi24").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("timeMult2")) document.getElementById("infi31").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(3)) document.getElementById("infi31").className = "infinistorebtn3"
-	else document.getElementById("infi31").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("unspentBonus")) document.getElementById("infi32").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("timeMult2") && player.infinityPoints.gte(5)) document.getElementById("infi32").className = "infinistorebtn3"
-	else document.getElementById("infi32").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("resetMult")) document.getElementById("infi33").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("unspentBonus") && player.infinityPoints.gte(7)) document.getElementById("infi33").className = "infinistorebtn3"
-	else document.getElementById("infi33").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("passiveGen")) document.getElementById("infi34").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("resetMult") && player.infinityPoints.gte(10)) document.getElementById("infi34").className = "infinistorebtn3"
-	else document.getElementById("infi34").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("skipReset1")) document.getElementById("infi41").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(20)) document.getElementById("infi41").className = "infinistorebtn4"
-	else document.getElementById("infi41").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("skipReset2")) document.getElementById("infi42").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("skipReset1") && player.infinityPoints.gte(40)) document.getElementById("infi42").className = "infinistorebtn4"
-	else document.getElementById("infi42").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("skipReset3")) document.getElementById("infi43").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("skipReset2") && player.infinityPoints.gte(80)) document.getElementById("infi43").className = "infinistorebtn4"
-	else document.getElementById("infi43").className = "infinistorebtnlocked"
-	if (player.infinityUpgrades.includes("skipResetGalaxy")) document.getElementById("infi44").className = "infinistorebtnbought"
-	else if (player.infinityUpgrades.includes("skipReset3") && player.infinityPoints.gte(500)) document.getElementById("infi44").className = "infinistorebtn4"
-	else document.getElementById("infi44").className = "infinistorebtnlocked"
+	for (let x = 1; x <= 4; x++) {
+		for (let y = 1; y <= 4; y++) {
+			let id = x * 10 + y
+			let upgId = INF_UPGS.normal.ids[id]
+			document.getElementById("infi" + id).className = "infinistorebtn" + (player.infinityUpgrades.includes(upgId) ? "bought" : INF_UPGS.normal.can(id) ? y : "locked")
+		}
+	}
 	
 	let infiCol1And2Middle = tmp.ngC ? " and Tickspeed " : ""
 

@@ -162,30 +162,6 @@ function getInfinitiedGain() {
 	return nA(infGain, player.achievements.includes("r87") && player.galacticSacrifice ? 249 : 0)
 }
 
-function buyInfinityUpgrade(name, cost) {
-	if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
-		player.infinityUpgrades.push(name)
-		player.infinityPoints = player.infinityPoints.minus(cost)
-		if (name == "postinfi53") for (tier = 1; tier <= 8; tier++) {
-			let dim = player["infinityDimension" + tier]
-			dim.cost = Decimal.pow(getIDCostMult(tier),dim.baseAmount / 10).times(infBaseCost[tier])
-		}
-	}
-}
-
-var ipMultPower = 2
-var ipMultCostIncrease = 10
-function getIPMultPower() {
-	let ret = ipMultPower
-	if (player.galacticSacrifice && player.galacticSacrifice.upgrades.includes(53)) ret += Math.pow(1.25, -15e4 / player.galacticSacrifice.galaxyPoints.log10())
-	return ret
-}
-
-function canBuyIPMult() {
-	if (tmp.ngC || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
-	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
-}
-
 function doCrunchIDAutobuy(){
 	if (getEternitied() > 10 && player.currentEternityChall !== "eterc8" && player.currentEternityChall !== "eterc2" && player.currentEternityChall !== "eterc10") {
 		for (var i = 1; i < getEternitied() - 9 && i < 9; i++) {
@@ -334,4 +310,83 @@ function bigCrunch(autoed) {
 	doCrunchInfinitiesGain()
 	doCrunchResetStuff()
 	doAfterResetCrunchStuff(g11MultShown)
+}
+
+//INFINITY UPGRADES
+let INF_UPGS = {
+	normal: {
+		ids: {
+			11: "timeMult",
+			21: "dimMult",
+			31: "timeMult2",
+			41: "skipReset1",
+			12: "18Mult",
+			22: "27Mult",
+			32: "unspentBonus",
+			42: "skipReset2",
+			13: "36Mult",
+			23: "45Mult",
+			33: "resetMult",
+			43: "skipReset3",
+			14: "resetBoost",
+			24: "galaxyBoost",
+			34: "passiveGen",
+			44: "skipResetGalaxy",
+		},
+		costs: {
+			11: 1,
+			21: 1,
+			31: 3,
+			41: 20,
+			12: 1,
+			22: 1,
+			32: 5,
+			42: 40,
+			13: 1,
+			23: 1,
+			33: 7,
+			43: 80,
+			14: 1,
+			24: 2,
+			34: 10,
+			44: 500,
+		},
+		can(x) {
+			let y = x % 10
+			if (y > 1 && !player.infinityUpgrades.includes(this.ids[x - 1])) return false
+			return player.infinityPoints.gte(this.costs[x])
+		},
+		buy(x) {
+			let id = this.ids[x]
+			if (player.infinityUpgrades.includes(id)) return
+			if (!this.can()) return
+
+			player.infinityUpgrades.push(id)
+			player.infinityPoints = player.infinityPoints.minus(this.costs[x])
+		}
+	}
+}
+
+function buyInfinityUpgrade(name, cost) {
+	if (player.infinityPoints.gte(cost) && !player.infinityUpgrades.includes(name)) {
+		player.infinityUpgrades.push(name)
+		player.infinityPoints = player.infinityPoints.minus(cost)
+		if (name == "postinfi53") for (tier = 1; tier <= 8; tier++) {
+			let dim = player["infinityDimension" + tier]
+			dim.cost = Decimal.pow(getIDCostMult(tier),dim.baseAmount / 10).times(infBaseCost[tier])
+		}
+	}
+}
+
+var ipMultPower = 2
+var ipMultCostIncrease = 10
+function getIPMultPower() {
+	let ret = ipMultPower
+	if (player.galacticSacrifice && player.galacticSacrifice.upgrades.includes(53)) ret += Math.pow(1.25, -15e4 / player.galacticSacrifice.galaxyPoints.log10())
+	return ret
+}
+
+function canBuyIPMult() {
+	if (tmp.ngC || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
+	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
 }

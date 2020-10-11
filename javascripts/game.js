@@ -145,62 +145,15 @@ function setupAutobuyerHTMLandData(){
 
 function setupInfUpgHTMLandData(){
 	var iut = document.getElementById("preinfupgrades")
-	for (let r = 1; r < 5; r++) {
+	for (let r = 1; r <= 4; r++) {
 		let row = iut.insertRow(r - 1)
-		for (let c = 1; c < 5; c++) {
+		for (let c = 1; c <= 4; c++) {
 			var col = row.insertCell(c - 1)
-			col.innerHTML = "<button id='infi" + (c * 10 + r) + "' class='infinistorebtn" + c + "'></button>"
+			col.innerHTML = "<button class='infinistorebtn" + c + "' id='infi" + (c * 10 + r) + "' onclick='INF_UPGS.normal.buy(" + (c * 10 + r) + ")'></button>"
 		}
 	}
+
 	document.getElementById("infi14").innerHTML = "Decrease the number of Dimensions needed for Dimension Boosts and Galaxies by 9<br>Cost: 1 IP"
-	document.getElementById("infi11").onclick = function () {
-		buyInfinityUpgrade("timeMult", 1);
-	}
-	document.getElementById("infi21").onclick = function () {
-		buyInfinityUpgrade("dimMult", 1);
-	}
-	document.getElementById("infi12").onclick = function () {
-		if (player.infinityUpgrades.includes("timeMult")) buyInfinityUpgrade("18Mult", 1);
-	}
-	document.getElementById("infi22").onclick = function () {
-		if (player.infinityUpgrades.includes("dimMult")) buyInfinityUpgrade("27Mult", 1);
-	}
-	document.getElementById("infi13").onclick = function () {
-		if (player.infinityUpgrades.includes("18Mult")) buyInfinityUpgrade("36Mult", 1);
-	}
-	document.getElementById("infi23").onclick = function () {
-		if (player.infinityUpgrades.includes("27Mult")) buyInfinityUpgrade("45Mult", 1);
-	}
-	document.getElementById("infi14").onclick = function () {
-		if (player.infinityUpgrades.includes("36Mult")) buyInfinityUpgrade("resetBoost", 1);
-	}
-	document.getElementById("infi24").onclick = function () {
-		if (player.infinityUpgrades.includes("45Mult")) buyInfinityUpgrade("galaxyBoost", 2);
-	}
-	document.getElementById("infi31").onclick = function() {
-		buyInfinityUpgrade("timeMult2", 3);
-	}
-	document.getElementById("infi32").onclick = function() {
-		if (player.infinityUpgrades.includes("timeMult2")) buyInfinityUpgrade("unspentBonus", 5);
-	}
-	document.getElementById("infi33").onclick = function() {
-		if (player.infinityUpgrades.includes("unspentBonus")) buyInfinityUpgrade("resetMult", 7);
-	}
-	document.getElementById("infi34").onclick = function() {
-		if (player.infinityUpgrades.includes("resetMult")) buyInfinityUpgrade("passiveGen", 10);
-	}
-	document.getElementById("infi41").onclick = function() {
-		buyInfinityUpgrade("skipReset1", 20);
-	}
-	document.getElementById("infi42").onclick = function() {
-		if (player.infinityUpgrades.includes("skipReset1")) buyInfinityUpgrade("skipReset2", 40)
-	}
-	document.getElementById("infi43").onclick = function() {
-		if (player.infinityUpgrades.includes("skipReset2")) buyInfinityUpgrade("skipReset3", 80)
-	}
-	document.getElementById("infi44").onclick = function() {
-		if (player.infinityUpgrades.includes("skipReset3")) buyInfinityUpgrade("skipResetGalaxy", 500)
-	}
 }
 
 function setupParadoxUpgrades(){
