@@ -3871,6 +3871,7 @@ function checkGluonRounding(){
 }
 
 function doNGm2CorrectPostC3Reward(){
+	return //this should be for testing purposes only so i can properly hack in TDB/DB
 	player.postC3Reward = Decimal.pow(getPostC3Mult(), getInitPostC3Power() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
 }
 
