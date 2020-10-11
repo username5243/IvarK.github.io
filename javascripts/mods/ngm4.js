@@ -5,6 +5,19 @@ function getTDBoostReq() {
 	return {amount: Math.ceil(amount + Math.max(player.tdBoosts + (player.pSac ? 0 : 1 - maxTier), 0) * mult), mult: mult, tier: Math.min(player.tdBoosts + 1, maxTier)}
 }
 
+function buyMaxTDB(){
+	let r = getTDBoostReq()
+	if (r.tier < 8) {
+		tdBoost(1)
+		return
+	}
+	let b = 0
+	if (r.amount <= player.timeDimension8.bought) b = 1 + Math.floor((player.timeDimension8.bought - r.amount)/r.mult)
+	if (!player.achievements.includes("r73")) b = Math.min(1, b)
+	b = Math.max(0,b)
+	tdBoost(b)
+}
+
 function tdBoost(bulk) {
 	let req = getTDBoostReq()
 	if (player["timeDimension" + req.tier].bought < req.amount) return

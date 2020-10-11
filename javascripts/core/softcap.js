@@ -1,5 +1,6 @@
 var softcap_data = {
 	dt_log: {
+		name: "log base 10 of dilated time gain per second",
 		1: {
 			func: "pow",
 			start: 4e3,
@@ -20,6 +21,7 @@ var softcap_data = {
 		}
 	},
 	ts_reduce_log: {
+		name: "log base 10 of tickspeed reduction",
 		1: {
 			func: "pow",
 			start: 1e6,
@@ -52,6 +54,7 @@ var softcap_data = {
 		}
 	},
 	ts_reduce_log_big_rip: {
+		name: "log base 10 of tickspeed reduction in Big Rip",
 		1: {
 			func: "pow",
 			start: 1e4,
@@ -66,6 +69,7 @@ var softcap_data = {
 		}
 	},
 	ts11_log_big_rip: {
+		name: "log base 10 of time study 11 effect in Big Rip",
 		1: {
 			func: "pow",
 			start: 11e4,
@@ -110,6 +114,7 @@ var softcap_data = {
 		}
 	},
 	ms322_log: {
+		name: "log base 10 of mastery study 322",
 		1: {
 			func: "pow",
 			start: 500,
@@ -118,6 +123,7 @@ var softcap_data = {
 		}
 	},
 	bru1_log: {
+		name: "log base 10 of Big Rip Upgrade 1",
 		1: {
 			func: "pow",
 			start: 3e8,
@@ -149,6 +155,7 @@ var softcap_data = {
 		}
 	},
 	beu3_log: {
+		name: "log base 10 of Break Eternity Upgrade 3",
 		1: {
 			func: "pow",
 			start: 150,
@@ -157,6 +164,7 @@ var softcap_data = {
 		}
 	},
 	inf_time_log_1: {
+		name: "log base 10 of Infinite Time reward",
 		1: {
 			func: "pow",
 			start: 12e4,
@@ -171,6 +179,7 @@ var softcap_data = {
 		}
 	},
 	inf_time_log_1_big_rip: {
+		name: "log base 10 of Infinite Time reward in Big Rip",
 		1: {
 			func: "pow",
 			start: 100,
@@ -191,6 +200,7 @@ var softcap_data = {
 		}
 	},
 	inf_time_log_2: {
+		name: "log base 10 of Infinite Time reward for high values",
 		1: {
 			func: "pow",
 			start: 12e7,
@@ -210,7 +220,8 @@ var softcap_data = {
 			derv: false
 		}
 	},
-	ig_log_high: { // this never gets above e15 in my e71 Qt Ng+3^ save so remove this?
+	ig_log_high: { 
+		name: "log base 10 of Intergalactic reward",
 		1: { 
 			func: "log",
 			start: 1e20,
@@ -232,6 +243,7 @@ var softcap_data = {
 		}
 	},
 	bam: {
+		name: "Bosonic Antimatter gain per second",
 		1: {
 			func: "pow",
 			start: new Decimal(1e80),
@@ -270,6 +282,7 @@ var softcap_data = {
 		}
 	},
 	idbase: {
+		name: "log base 10 of initial infinity dimension power",
 		1: {
 			func: "pow",
 			start: 1e14,
@@ -308,6 +321,7 @@ var softcap_data = {
 		}
 	},
 	working_ts: {
+		name: "log base 10 of tickspeed effect",
 		1: {
 			func: "pow",
 			start: 1e15,
@@ -328,6 +342,7 @@ var softcap_data = {
 		}
 	},
 	bu45: {
+		name: "20th Bosonic Upgrade",
 		1: {
 			func: "pow",
 			start: 9,
@@ -372,6 +387,7 @@ var softcap_data = {
 		}
 	},
 	EPtoQK: {
+		name: "log base 10 of the multiplier from Eternity Points to Quark gain",
 		1: {
 			func: "pow",
 			start: 1e3,
@@ -398,6 +414,7 @@ var softcap_data = {
 		}
 	},
 	qc3reward: {
+		name: "log base 10 of Quantum Challenge 3 reward",
 		1: {
 			func: "pow",
 			start: 1331,
@@ -414,6 +431,7 @@ var softcap_data = {
 
 	//NG Condensed
 	nds_ngC: {
+		name: "Normal Dimensions (condensed)",
 		1: {
 			func: "pow",
 			start: 1e50,
@@ -434,6 +452,7 @@ var softcap_data = {
 		}
 	},
 	ts_ngC: {
+		name: "Tickspeed (condensed)",
 		1: {
 			func: "pow",
 			start: Number.MAX_VALUE,
@@ -452,6 +471,7 @@ var softcap_data = {
 		},
 	},
 	sac_ngC: {
+		name: "Sacrifice (condensed)",
 		1: {
 			func: "pow",
 			start: 1e25,
@@ -466,6 +486,7 @@ var softcap_data = {
 		},
 	},
 	ip_ngC: {
+		name: "Infinity Points (condensed)",
 		1: {
 			func: "pow",
 			start: 1e10,
@@ -484,6 +505,7 @@ var softcap_data = {
 		},
 	},
 	rep_ngC: {
+		name: "Replicanti in Replicanti to Infinity Point amount (condensed)",
 		1: {
 			func: "pow",
 			start: 1e6,
@@ -498,6 +520,7 @@ var softcap_data = {
 		},
 	},
 	ep_ngC: {
+		name: "Eternity Points (condensed)",
 		1: {
 			func: "pow",
 			start: 1e10,
@@ -511,6 +534,17 @@ var softcap_data = {
 			derv: false,
 		},
 	},
+
+	//NGmX Mods:
+	id_ngm4: {
+		name: "infinity dimension multiplier (NG-4)",
+		1: {
+			func: "pow",
+			start: new Decimal(1e40),
+			pow: .8,
+			derv: true
+		}
+	}
 }
 
 var softcap_vars = {
@@ -586,42 +620,18 @@ function softcap(x, id, max = 1/0) {
 }
 
 function getSoftcapName(id){
-	let names = {
-		dt_log: "log base 10 of dilated time gain per second",
-		ts_reduce_log: "log base 10 of tickspeed reduction",
-		ts_reduce_log_big_rip: "log base 10 of tickspeed reduction in Big Rip",
-		ts11_log_big_rip: "log base 10 of time study 11 effect in Big Rip",
-		ms322_log: "log base 10 of mastery study 322",
-		bru1_log: "log base 10 of Big Rip Upgrade 1",
-		beu3_log: "log base 10 of Break Eternity Upgrade 3",
-		inf_time_log_1: "log base 10 of Infinite Time reward",
-		inf_time_log_1_big_rip: "log base 10 of Infinite Time reward in Big Rip",
-		inf_time_log_2: "log base 10 of Infinite Time reward for high values",
-		ig_log_high: "log base 10 of Intergalactic reward",
-		bam: "Bosonic Antimatter gain per second",
-		idbase: "log base 10 of initial infinity dimension power",
-		working_ts: "log base 10 of tickspeed effect",
-		bu45: "20th Bosonic Upgrade",
-		EPtoQK: "log base 10 of the multiplier from Eternity Points to Quark gain",
-		qc3reward: "log base 10 of Quantum Challenge 3 reward",
-		// Condensened:
-		nds_ngC: "Normal Dimensions (condensed)",
-		ts_ngC: "Tickspeed (condensed)",
-		sac_ngC: "Sacrifice (condensed)",
-		ip_ngC: "Infinity Points (condensed)",
-		rep_ngC: "Replicanti in Replicanti to Infinity Point amount (condensed)",
-		ep_ngC: "Eternity Points (condensed)"
-	}
-	return names[id]
+	return softcap_data[id]["name"]
 }
 
 function hasSoftcapStarted(id, num){
+	let l = id.length
 	let check = { 
 		/*
 		this is where you need to put anything else that needs to be true
 		that is: if it is false it does not display, but if it is true,
 		it continues as if nothing happens
-		NOTE: this excludes Big Rip (and only BR) 
+		NOTE: this excludes Big Rip, and other endings that are at the end of words 
+		This currently includes: _ngC, _big_rip, _ngm4
 		*/
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
@@ -633,16 +643,12 @@ function hasSoftcapStarted(id, num){
 		bam: tmp.ngp3,
 		bu45: tmp.ngp3,
 		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
-
-		nds_ngC: tmp.ngC,
-		ts_ngC: tmp.ngC,
-		sac_ngC: tmp.ngC,
-		ip_ngC: tmp.ngC,
-		rep_ngC: tmp.ngC,
-		ep_ngC: tmp.ngC
 	}
+	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
+	if (l >= 5 && !player.aarexModifications.ngmX >= 4 && id.slice(l - 5, l) == "_ngm4") return false
+	if (tmp.ngp3 && !tmp.qu.bigRip.active && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
-	if (tmp.ngp3 && !tmp.qu.bigRip.active && id.length > 8 && id.slice(id.length - 8, id.length) == "_big_rip") return false
+	
 
 	let amt = { // for amount
 		dt_log: () => getDilTimeGainPerSecond().plus(1).log10(), 
@@ -669,12 +675,17 @@ function hasSoftcapStarted(id, num){
 		sac_ngC: () => calcSacrificeBoost(),
 		ip_ngC: () => getInfinityPointGain(),
 		rep_ngC: () => player.replicanti.amount, 
-		ep_ngC: () => gainedEternityPoints()
+		ep_ngC: () => gainedEternityPoints(),
+
+		//NGmX
+
+		id_ngm4: () => DimensionPower(1).max(DimensionPower(2)).max(DimensionPower(3)).max(DimensionPower(4)).max(DimensionPower(5)).max(DimensionPower(6)).max(DimensionPower(7)).max(DimensionPower(8)),
+		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
 	}[id]()
 	return hasSoftcapStartedArg(id, num, amt)
 }
 
-function hasSoftcapStartedArg(id, num, arg){
+function hasSoftcapStartedArg(id, num, arg){ // also make it so that if the function is Pow, and the exp is 1 we dont do anything
 	return Decimal.gt(arg, softcap_data[id][num].start)
 }
 
@@ -683,7 +694,12 @@ function hasFirstSoftcapStarted(id, arg){
 }
 
 function numSoftcapsTotal(id){
-	return Object.keys(softcap_data[id]).length
+	let a = Object.keys(softcap_data[id])
+	let b = 0
+	for (let i = 0; i <= a.length; i++){
+		if (!isNaN(parseInt(a[i]))) b ++
+	}
+	return b
 }
 
 function softcapShorten(x){
@@ -763,7 +779,9 @@ function updateSoftcapStatsTab(){
 		sac_ngC: "softcap_C_sac",
 		ip_ngC: "softcap_C_ip",
 		rep_ngC: "softcap_C_rep",
-		ep_ngC: "softcap_C_ep"
+		ep_ngC: "softcap_C_ep",
+		//NGmX
+		id_ngm4: "softcap_m4_id",
 	}
 	let n = Object.keys(names)
 	let anyActive = false

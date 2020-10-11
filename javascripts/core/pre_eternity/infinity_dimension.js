@@ -153,7 +153,8 @@ function DimensionPower(tier) {
 
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
-	
+
+	if (player.aarexModifications.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
 
@@ -169,6 +170,11 @@ function DimensionPower(tier) {
 
   	mult = dilates(mult, 1)
   	if (tmp.quActive) mult = mult.times(colorBoosts.dim.g)
+
+	if (player.aarexModifications.ngmX >= 4){
+		mult = softcap(mult, "id_ngm4")
+	}
+
   	return mult
 }
 
@@ -396,17 +402,18 @@ function updateInfPower() {
 function getNewInfReq() {
 	let reqs = [new Decimal("1e1100"), new Decimal("1e1900"), new Decimal("1e2400"), new Decimal("1e10500"), new Decimal("1e30000"), new Decimal("1e45000"), new Decimal("1e54000"), new Decimal("1e60000")]
 	if (player.galacticSacrifice !== undefined) {
-		if (player.tickspeedBoosts === undefined) {
+		if (player.tickspeedBoosts === undefined) { // NG minus 2
 			reqs[1] = new Decimal("1e1500")
 			reqs[3] = new Decimal("1e9600")
-		} else {
+		} else { // NG minus 3
 			reqs[0] = new Decimal("1e1800")
 			reqs[1] = new Decimal("1e2400")
 			reqs[2] = new Decimal("1e4000")
 		}
-		if (tmp.ngmX >= 4){
+		if (tmp.ngmX >= 4){ // NG minus 4
 			reqs[0] = new Decimal("1e1777")
 			reqs[1] = new Decimal("1e2385")
+			reqs[3] = new Decimal("1e9525")
 		}
 	}
 	if (tmp.ngC) {

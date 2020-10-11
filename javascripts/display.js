@@ -474,7 +474,7 @@ function breakNGm2UpgradeRow5Display(){
 	if (player.infinityUpgrades.includes("postinfi53")) document.getElementById("postinfi53").className = "infinistorebtnbought"
 	else if (player.infinityPoints.gte(player.tickspeedBoosts == undefined ? 1e37 : 1e29)) document.getElementById("postinfi53").className = "infinistorebtn1"
 	else document.getElementById("postinfi53").className = "infinistorebtnlocked"
-	document.getElementById("postinfi50").innerHTML = "Dimension Boost cost increases by 0.5 less.<br>Currently: " + new Decimal(getDimboostCostIncrease()).toFixed(2) + (player.infinityUpgrades.includes("postinfi50") ? "" : " -> ") + (new Decimal(getDimboostCostIncrease() - .5).toFixed(2)) + "<br>Cost: " + shortenCosts(player.tickspeedBoosts==undefined ? 1e25 : 1e18) + " IP"
+	document.getElementById("postinfi50").innerHTML = "Dimension Boost cost increases by 0.5 less.<br>Currently: " + new Decimal(getDimboostCostIncrease()).toFixed(2) + (player.infinityUpgrades.includes("postinfi50") ? "" : " -> " + (new Decimal(getDimboostCostIncrease() - .5).toFixed(2))) + "<br>Cost: " + shortenCosts(player.tickspeedBoosts==undefined ? 1e25 : 1e18) + " IP"
 	document.getElementById("postinfi51").innerHTML = "Galaxies are " + (player.tickspeedBoosts ? 15 : 20) + "% more stronger.<br>Cost: " + shortenCosts(player.tickspeedBoosts == undefined ? 1e29 : 1e20) + " IP"
 	let inf52text = ''
 	if (player.tickspeedBoosts == undefined){

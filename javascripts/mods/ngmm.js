@@ -19,11 +19,15 @@ function getGSAmount(offset=0) {
 	if (player.galacticSacrifice.upgrades.includes(16) && player.tdBoosts) ret = ret.times(Math.max(player.tdBoosts, 1))
 	if (player.aarexModifications.ngmX >= 4) {
 		var e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
-		if (player.galacticSacrifice.upgrades.includes(41) && player.aarexModifications.ngmX >= 4) ret = ret.times(Decimal.max(player.tickspeedBoosts, 1).pow(e))
-		if (player.galacticSacrifice.upgrades.includes(43) && player.aarexModifications.ngmX >= 4) ret = ret.times(Decimal.max(player.resets, 1).pow(e))
-		if (player.galacticSacrifice.upgrades.includes(45) && player.aarexModifications.ngmX >= 4) ret = ret.times(player.eightAmount.max(1).pow(e))
-		if (player.challenges.includes("postcngm3_1") && player.aarexModifications.ngmX >= 4) ret = ret.times(Decimal.pow(3, tmp.cp))
+		if (player.galacticSacrifice.upgrades.includes(41)) ret = ret.times(Decimal.max(player.tickspeedBoosts, 1).pow(e))
+		if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(Decimal.max(player.resets, 1).pow(e * (player.achievements.includes("r75") ? 2 : 1)))
+		if (player.galacticSacrifice.upgrades.includes(45)) ret = ret.times(player.eightAmount.max(1).pow(e))
+		if (player.challenges.includes("postcngm3_1")) ret = ret.times(Decimal.pow(3, tmp.cp))
+		let a = 0
+		if (player.infinityUpgrades.includes("postinfi60")) a = galaxies * Math.max(galaxies, 20)
+		ret = ret.times(Decimal.pow(1.1, a))
 	}
+
 	var rgs = player.replicanti.galaxies
 	if (player.achievements.includes("r98")) rgs *= 2
 	if (player.tickspeedBoosts != undefined && player.achievements.includes("r95")) ret = ret.times(Decimal.pow(Math.max(1, player.eightAmount), rgs))
@@ -597,11 +601,14 @@ let galMults = {
 	u23: function() {
 		let x = player.galacticSacrifice.galaxyPoints.max(1).log10() * .75 + 1
 		if (!tmp.ngp3l && player.achievements.includes("r138")) x *= Decimal.add(player.dilation.bestIP,10).log10()
+		if (player.achievements.includes("r75") && player.aarexModifications.ngmX >= 4) x *= 2
 		return x
 	},
 	u33: function() {
 		if (player.tickspeedBoosts != undefined) return player.galacticSacrifice.galaxyPoints.div(1e10).add(1).log10()/5+1
-		return player.galacticSacrifice.galaxyPoints.max(1).log10() / 4 + 1
+		let x = player.galacticSacrifice.galaxyPoints.max(1).log10() / 4 + 1
+		if (player.achievements.includes("r75") && player.aarexModifications.ngmX >= 4) x *= 2
+		return x
 	},
 	u43: function() {
 		return Decimal.pow(player.galacticSacrifice.galaxyPoints.log10(), 50)
@@ -710,6 +717,7 @@ function getNewB60Mult(){
 
 function calcG13Exp(){
 	let exp = 3
+	if (player.achievements.includes("r75") && player.aarexModifications.ngmX >= 4) exp *= 2
 	if (player.infinityUpgrades.includes("postinfi62") && player.achievements.includes("r117") && player.tickspeedBoosts == undefined) {
 		if (player.currentEternityChall === "") exp *= Math.pow(.8 + Math.log(player.resets + 3), 2.08)
 		else if (player.currentEternityChall == "eterc9" || player.currentEternityChall == "eterc7" || player.currentEternityChall == "eterc6") {

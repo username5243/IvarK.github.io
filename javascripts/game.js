@@ -3871,8 +3871,7 @@ function checkGluonRounding(){
 }
 
 function doNGm2CorrectPostC3Reward(){
-	if (player.eternitied > 0) return
-	player.postC3Reward = Decimal.pow(getPostC3Mult(),  player.totalTickGained * getIC3EffFromFreeUpgs() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease())).max(player.postC3Reward)
+	player.postC3Reward = Decimal.pow(getPostC3Mult(), getInitPostC3Power() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
 }
 
 let autoSaveSeconds=0
@@ -5345,7 +5344,7 @@ function TSBoostABTick(){
 
 function TDBoostABTick(){
 	if (autoTDBoostBoolean()) {
-		tdBoost(1)
+		buyMaxTDB()
 		player.autobuyers[14].ticks = 0
 	}
 	player.autobuyers[14].ticks += 1;
@@ -5706,7 +5705,7 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 76: // N
-			if (player.aarexModifications.ngmX >= 4) tdBoost(1)
+			if (player.aarexModifications.ngmX >= 4) buyMaxTDB()
 		break;
 
 		case 77: // M

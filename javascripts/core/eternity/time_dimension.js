@@ -246,7 +246,7 @@ function getOrSubResourceTD(tier, sub) {
 	if (sub == undefined) {
 		var currmax = player.currentChallenge == "" ? new Decimal(Number.MAX_VALUE).pow(10) : Decimal.pow(10, 1000)
 		if (player.currentChallenge == "postcngm3_1") currmax = new Decimal(1e60)
-		if (player.infinityUpgrades.includes("postinfi53")) currmax = currmax.pow(1 + tmp.cp / 4)
+		if (player.infinityUpgrades.includes("postinfi53")) currmax = currmax.pow(1 + tmp.cp / 3)
 		var maxval = player.achievements.includes("r36") ? currmax : new Decimal(Number.MAX_VALUE)
 		if (player.aarexModifications.ngmX >= 4) return player.money.min(maxval)
 		return player.eternityPoints
