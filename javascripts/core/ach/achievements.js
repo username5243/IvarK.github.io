@@ -321,6 +321,10 @@ function giveAchievement(name, noUpdate) {
 
 	if (player.achievements.includes(allAchievementNums[name])) return false
 
+        if (allAchievementNums[name] == undefined) {
+                console.log(name)
+        }
+
 	var ngudAchId = allAchievementNums[name].split("ngud")[1]
 	if (ngudAchId != undefined) if (player.exdilation == undefined) return
 
@@ -389,6 +393,7 @@ function giveAchievement(name, noUpdate) {
 			if (!player.achievements.includes("ng3p7" + i)) player.achievements.push("ng3p7" + i)
 			if (!player.achievements.includes("ng3p8" + i)) player.achievements.push("ng3p8" + i)
 		}
+                updateBosonicLimits()
         }
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()

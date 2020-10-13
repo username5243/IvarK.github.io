@@ -5145,6 +5145,7 @@ function gameLoop(diff) {
 				// Gravity Dimensions
 				GDs.gdTick(diff)
 				GDs.gainRDTicks()
+				if (document.getElementById("gdims").style.display != "none") GDs.updateDisplay()
 			}
 			if (player.ghostify.wzb.unl) WZBosonsUpdating(diff) // Bosonic Lab
 			if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons

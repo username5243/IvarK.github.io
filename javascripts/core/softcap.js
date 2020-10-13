@@ -645,7 +645,10 @@ function hasSoftcapStarted(id, num){
 		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
 	}
 	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
-	if (l >= 5 && !player.aarexModifications.ngmX >= 4 && id.slice(l - 5, l) == "_ngm4") return false
+	if (l >= 5 && id.slice(l - 5, l - 1) == "_ngm") {
+		let int = parseInt(id[l - 1])
+		if (!isNaN(int)) if (!(player.aarexModifications.ngmX >= int)) return false
+	}
 	if (tmp.ngp3 && !tmp.qu.bigRip.active && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
 	

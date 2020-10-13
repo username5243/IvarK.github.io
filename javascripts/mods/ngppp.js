@@ -728,7 +728,7 @@ function setupAutomaticGhostsData() {
 
 var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,1/0,1/0,1/0,1/0]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,10,0,0,0,0]
+var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,5,6,6,8,13,0,0,0,0]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
@@ -743,14 +743,15 @@ function updateAutoGhosts(load) {
 	powerConsumed=0
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
 		if (ghost>data.ghosts) {
-			if (load) document.getElementById("autoGhost"+ghost).style.visibility="hidden"
+			if (load) document.getElementById("autoGhost" + ghost).style.visibility="hidden"
 		} else {
 			if (load) {
-				document.getElementById("autoGhost"+ghost).style.visibility="visible"
-				document.getElementById("isAutoGhostOn"+ghost).checked=data[ghost].on
+				document.getElementById("autoGhost" + ghost).style.visibility="visible"
+				document.getElementById("isAutoGhostOn" + ghost).checked=data[ghost].on
 			}
 			if (data[ghost].on) powerConsumed+=powerConsumptions[ghost]
 		}
+		document.getElementById("ghostcost" + ghost).textContent = powerConsumptions[ghost]
 	}
 	if (load) {
 		document.getElementById("autoGhostMod4").textContent = "Every " + (data[4].mode == "t" ? "second" : "Quantum")

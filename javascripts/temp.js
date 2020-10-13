@@ -173,9 +173,11 @@ function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
-		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts>3) x *= tmp.nb[4]
-		if (tmp.qu.breakEternity.upgrades.includes(tmp.be ? 11 : 8)) x *= getBreakUpgMult(8)
+		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
+		if (!player.dilation.active) {
+			if (tmp.qu.breakEternity.upgrades.includes(tmp.qu.bigRip.active ? 8 : 11)) x *= getBreakUpgMult(8)
+		}
 		if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
@@ -469,6 +471,7 @@ function updateBreakEternityUpgrade8Temp(){
 	if (player.aarexModifications.ngudpV && x > 2.2) x = 1.2 + Math.log10(x + 7.8)
 	if (x > 3) x = 1 + Math.log2(x + 1)
 	if (x > 10/3) x = 7/3 + Math.log10(3 * x)
+	if (!player.quantum.bigRip.active && tmp.qu.breakEternity.upgrades.includes(11)) x *= 3
 	tmp.beu[8] = x
 }
 

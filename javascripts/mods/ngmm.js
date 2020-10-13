@@ -109,7 +109,7 @@ function getD8Exp(){
 	if (player.achievements.includes("r124")) {
 		let div = 30
 		if (player.currentEternityChall == "") div += 12
-		else if (getNormalAchAmount() > 90) div -= .1 * (player.achievements.length - 90)
+		else if (getNormalAchAmount() > 90) div -= .1 * (getNormalAchAmount() - 90)
 		let amt = getAmount(8) / div
 		if (amt > 1048576) amt = Math.pow(Math.log2(amt) / 5, 10) 
 		// 1048576 = 2^20 = 4^10
