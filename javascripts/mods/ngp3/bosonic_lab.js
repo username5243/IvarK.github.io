@@ -775,7 +775,12 @@ var bu = {
 			am: 2e75,
 			g1: 6e12,
 			g3: 2e12
-		}
+		},
+		52: {
+			am: 2e100,
+			g2: 4e33,
+			g5: 2e15
+		},
 	},
 	reqData: {},
 	descs: {
@@ -931,9 +936,11 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
+			let div1 = player.quantum.bigRip.active ? 250 : 50
+			let div2 = player.quantum.bigRip.active ? 100 : 10
 			return {
-				ig: Math.pow(Math.log10(log + 1) / 20 + 1, 2),
-				it: Math.sqrt(Math.log10(log + 1) / 10 + 1)
+				ig: Math.pow(Math.log10(log + 1) / div1 + 1, 2),
+				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
 			}
 		},
 		55() {
@@ -988,7 +995,7 @@ var bu = {
 			return "/" + shorten(x) + " to efficiency"
 		},
 		52(x) {
-			return "^" + shorten(x.ig) + " to Intergalactic, ^" + shorten(x.it) + " to Infinite Time"
+			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
 		},
 		55(x) {
 			return "/" + shorten(x)

@@ -189,12 +189,14 @@ let GDs = {
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		x = Decimal.pow(10, (x * 3 + 5) * GDs.rdExp() * 2)
-		if (isEnchantUsed(35)) x = x.div(tmp.bEn[35])
-		return x
+		if (x > 10) x = x*x / 10
+		let y = Decimal.pow(10, (x * 3 + 5) * GDs.rdExp() * 2)
+		if (isEnchantUsed(35)) y = y.div(tmp.bEn[35])
+		return y
 	},
 	extraGDBReq() {
-		return GDs.save.extraGDBs * 10 + 50
+		let e = GDs.save.extraGDBs
+		return e * 10 + 100 + (e > 10 ? e*e - 100 : 0)
 	},
 	getExtraGDBs() {
 		let toAdd = Math.floor((player.ghostify.hb.higgs - GDs.extraGDBReq()) / 10) + 1

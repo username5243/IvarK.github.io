@@ -581,6 +581,7 @@ function breakEternityDisplay(){
 		document.getElementById("breakUpg" + u).className = (tmp.qu.breakEternity.upgrades.includes(u) && u != 7) ? "eternityupbtnbought" : tmp.qu.breakEternity.eternalMatter.gte(getBreakUpgCost(u)) ? "eternityupbtn" : "eternityupbtnlocked"
 		if (u == 8 || u == 13) document.getElementById("breakUpg" + u + "Mult").textContent = (getBreakUpgMult(u) * 100 - 100).toFixed(1)
 		else if (u != 7 && u <= 10) document.getElementById("breakUpg" + u + "Mult").textContent = shortenMoney(getBreakUpgMult(u))
+		else if (u == 12) document.getElementById("breakUpg" + u + "Mult").textContent = shorten(getBreakUpgMult(u))
 	}
 	if (tmp.qu.bigRip.active) {
 		document.getElementById("eterShortcutEM").textContent=shortenDimensions(tmp.qu.breakEternity.eternalMatter)

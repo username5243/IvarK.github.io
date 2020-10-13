@@ -35,15 +35,17 @@ function getSpaceShardsGain() {
 		if (tmp.qu.breakEternity.upgrades.includes(6)) ret = ret.times(getBreakUpgMult(6))
 	}
 	if (hasNU(9)) ret = ret.times(Decimal.max(getEternitied(), 1).pow(0.1))
+	if (tmp.qu.breakEternity.upgrades.includes(12)) ret = ret.pow(getBreakUpgMult(12))
 
 	/*
 	removed the softcap for now, it can go back in later maybe
 	
+	
 	let log = ret.log10()
 	let log4log = Math.log10(log) / Math.log10(4)
-	let start = 5 //Starts at e1,024.
-	if (log4log > start && false) {
-		let capped=Math.min(Math.floor(Math.log10(Math.max(log4log + 2 - start, 1)) / Math.log10(2)), 10 - start)
+	let start = 6 //Starts at e4,096 = 10^(4^6)
+	if (log4log > start) {
+		let capped = Math.min(Math.floor(Math.log10(Math.max(log4log + 2 - start, 1)) / Math.log10(2)), 10 - start)
 		log4log = (log4log - Math.pow(2, capped) - start + 2) / Math.pow(2, capped) + capped + start - 1
 		log = Math.pow(4, log4log)
 	}

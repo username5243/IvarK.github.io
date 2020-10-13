@@ -488,6 +488,14 @@ function updateBreakEternityUpgrade10Temp(){
 	tmp.beu[10] = Math.max(Math.log10(ep.add(1).log10() + 1) - 1, 1)
 }
 
+function updateBreakEternityUpgrade12Temp(){
+	let em = tmp.qu.breakEternity.eternalMatter
+	let r = Math.sqrt(em.log10()) / 30
+	if (r > 1.5) r = Math.log10(6*r + 1) + .5
+	if (r > 5/3) r = Math.sqrt(r * 15) / 3
+	tmp.beu[12] = Math.max(r, 1)
+}
+
 function updateBreakEternityUpgrade13Temp(){
 	let em = tmp.qu.breakEternity.eternalMatter
 	tmp.beu[13] = Math.sqrt(em.add(1).log10() / 10 + 1)
@@ -510,7 +518,10 @@ function updateBreakEternityUpgradesTemp() {
 		updateBreakEternityUpgrade9Temp()
 		updateBreakEternityUpgrade10Temp()
 	}
-	if (player.achievements.includes("ng3p101")) updateBreakEternityUpgrade13Temp()
+	if (player.achievements.includes("ng3p101")) {
+		updateBreakEternityUpgrade12Temp()
+		updateBreakEternityUpgrade13Temp()
+	}
 }
 
 function updateBRU1Temp() {
@@ -622,7 +633,7 @@ function updateWZBosonsTemp(){
 	//W Bosons boost to Bosonic Antimatter production
 
 	var zbslog = player.ghostify.wzb.zb.div(10).add(1).log10() / 2
-	//if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
+	if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
 	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }
