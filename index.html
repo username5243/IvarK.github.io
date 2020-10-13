@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 13.03)</span>
+				<span class="warning">(Test server: Beta 14)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2012,7 +2012,6 @@
 				<div id="softcap_beu3"></div>
 				<div id="softcap_it1"></div>
 				<div id="softcap_it1BR"></div>
-				<div id="softcap_it2"></div>
 				<div id="softcap_ig"></div>
 				<div id="softcap_bam"></div>
 				<div id="softcap_idbase"></div>
@@ -2836,7 +2835,7 @@
 								<div id="Universe Immortality" class="achievement achievementlocked" style="background-image: url(images/197.png)" ach-tooltip="Get e??? antimatter without Big Ripping outside of 'supercharging' runs. Reward: Permanently disable the Remote Antimatter Galaxies scaling."></div>
 							</td>
 							<td>
-								<div id="Chaos, Chaos, Chaos!" class="achievement achievementlocked" style="background-image: url(images/198.png)" ach-tooltip="Complete QC1 with all 4 QC Modifiers. Reward: Reduce all QC goals by 25%."></div>
+								<div id="Chaos, Chaos, Chaos!" class="achievement achievementlocked" style="background-image: url(images/198.png)" ach-tooltip="Complete QC1 with all 4 QC Modifiers at the same time. Reward: Reduce all QC goals by 25%."></div>
 							</td>
 						</tr>
 				</table>
@@ -5299,6 +5298,12 @@
 						</div></td>
 					</tr>
 					<tr>
+						<td id="autoGhost6"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Tree Upgrade Ghost</b><br>
+							(buys if possible)<br>
+							Power usage: <span id="ghostcost6">bug</span><br>
+							Is active: <input id="isAutoGhostOn6" type="checkbox" onchange="toggleAutoGhost(6)"></input>
+						</div></td>
 						<td id="autoGhost7"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-QK Upgrade Ghost</b><br>
 							(buys if possible)<br>
@@ -5317,36 +5322,25 @@
 							Power usage: <span id="ghostcost9">bug</span><br>
 							Is active: <input id="isAutoGhostOn9" type="checkbox" onchange="toggleAutoGhost(9)"></input>
 						</div></td>
-						<td id="autoGhost12"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Radioactive Decay Ghost</b><br>
-							(buys if possible)<br>
-							Power usage: <span id="ghostcost12">bug</span><br>
-							Is active: <input id="isAutoGhostOn12" type="checkbox" onchange="toggleAutoGhost(12)"></input>
-						</div></td>
-						<td id="autoGhost6"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Tree Upgrade Ghost</b><br>
-							(buys if possible)<br>
-							Power usage: <span id="ghostcost6">bug</span><br>
-							Is active: <input id="isAutoGhostOn6" type="checkbox" onchange="toggleAutoGhost(6)"></input>
-						</div></td>
-					</tr>
-					<tr>
 						<td id="autoGhost10"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Limit Upgrade Ghost</b><br>
 							(buys if possible)<br>
 							Power usage: <span id="ghostcost10">bug</span><br>
 							Is active: <input id="isAutoGhostOn10" type="checkbox" onchange="toggleAutoGhost(10)"></input>
 						</div></td>
-						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Electron Multi Ghost</b><br>
-							Power usage: <span id="ghostcost18">bug</span><br>
-							Is active: <input id="isAutoGhostOn18" type="checkbox" onchange="toggleAutoGhost(18)"></input>
-						</div></td>
+					</tr>
+					<tr>
 						<td id="autoGhost11"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Nanoreward Ghost</b><br>
 							Power usage: <span id="ghostcost11">bug</span><br>
 							Every <input id="autoGhost11pw" onchange="changeAutoGhost('11pw')"></input> seconds, producing preon charge for <input id="autoGhost11cw" type="text" onchange="changeAutoGhost('11cw')"></input> seconds.<br>
 							Is active: <input id="isAutoGhostOn11" type="checkbox" onchange="toggleAutoGhost(11)"></input>
+						</div></td>
+						<td id="autoGhost12"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Radioactive Decay Ghost</b><br>
+							(buys if possible)<br>
+							Power usage: <span id="ghostcost12">bug</span><br>
+							Is active: <input id="isAutoGhostOn12" type="checkbox" onchange="toggleAutoGhost(12)"></input>
 						</div></td>
 						<td id="autoGhost13"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Big Rip Ghost</b><br>
@@ -5354,6 +5348,11 @@
 							Big Rip in <input id="autoGhost13t" onchange="changeAutoGhost('13t')"></input> seconds and undo after <input id="autoGhost13u" onchange="changeAutoGhost('13u')"></input> seconds.<br>
 							Stop after <input id="autoGhost13o" onchange="changeAutoGhost('13o')"></input> times.<br>(0 = always)<br>
 							Is active: <input id="isAutoGhostOn13" type="checkbox" onchange="toggleAutoGhost(13)"></input>
+						</div></td>
+						<td id="autoGhost14"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-BE Multi Upgrade Ghost</b><br>
+							Power usage: <span id="ghostcost14">bug</span><br>
+							Is active: <input id="isAutoGhostOn14" type="checkbox" onchange="toggleAutoGhost(14)"></input>
 						</div></td>
 						<td id="autoGhost15"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Ghostify Ghost</b><br>
@@ -5368,22 +5367,34 @@
 							Power usage: <span id="ghostcost16">bug</span><br>
 							Is active: <input id="isAutoGhostOn16" type="checkbox" onchange="toggleAutoGhost(16)"></input>
 						</div></td>
-						<td id="autoGhost14"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-BE Multi Upgrade Ghost</b><br>
-							Power usage: <span id="ghostcost14">bug</span><br>
-							Is active: <input id="isAutoGhostOn14" type="checkbox" onchange="toggleAutoGhost(14)"></input>
-						</div></td>
 						<td id="autoGhost17"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Extractor Ghost</b><br>
 							(also rotates the type of Bosonic Runes every second)<br>
 							Power usage: <span id="ghostcost17">bug</span><br>
 							Is active: <input id="isAutoGhostOn17" type="checkbox" onchange="toggleAutoGhost(17)"></input>
 						</div></td>
+						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Electron Multi Ghost</b><br>
+							Power usage: <span id="ghostcost18">bug</span><br>
+							Is active: <input id="isAutoGhostOn18" type="checkbox" onchange="toggleAutoGhost(18)"></input>
+						</div></td>
 						<td id="autoGhost19"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Enchanter Ghost</b><br>
 							(doesn't consume your Bosonic Runes, enchant every 2 seconds)<br>
 							Power usage: <span id="ghostcost19">bug</span><br>
 							Is active: <input id="isAutoGhostOn19" type="checkbox" onchange="toggleAutoGhost(19)"></input>
+						</div></td>
+						<td id="autoGhost20"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Bosonic Upgrader Ghost</b><br>
+							Power usage: <span id="ghostcost20">bug</span><br>
+							Is active: <input id="isAutoGhostOn20" type="checkbox" onchange="toggleAutoGhost(20)"></input>
+						</div></td>
+					</tr>
+					<tr>
+						<td id="autoGhost21"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-W & Z Boson Ghost</b><br>
+							Power usage: <span id="ghostcost21">bug</span><br>
+							Is active: <input id="isAutoGhostOn21" type="checkbox" onchange="toggleAutoGhost(21)"></input>
 						</div></td>
 						<td id="autoGhost22"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Challenge Sweeper Ghost</b><br>
@@ -5392,8 +5403,12 @@
 							<button class="quantumbtn" onclick="teleportToQCs()">Teleport to Quantum Challenges.</button><br>
 							Is active: <input id="isAutoGhostOn22" type="checkbox" onchange="toggleAutoGhost(22)"></input>
 						</div></td>
-					</tr>
-					<tr>
+						<td id="autoGhost23"><div class="autoBuyerDiv" style="display:block">
+							<b>Auto-Light Ghost</b><br>
+							(automatically get Light Empowerments every second)<br>
+							Power usage: <span id="ghostcost23">bug</span><br>
+							Is active: <input id="isAutoGhostOn23" type="checkbox" onchange="toggleAutoGhost(23)"></input>
+						</div></td>
 						<td id="autoGhost24"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Higgs Ghost</b><br>
 							(automatically get Higgs Bosons every second)<br>
@@ -5405,22 +5420,6 @@
 							(automatically get Gravity Dimension Shifts / Boosts every second)<br>
 							Power usage: <span id="ghostcost25">bug</span><br>
 							Is active: <input id="isAutoGhostOn25" type="checkbox" onchange="toggleAutoGhost(25)"></input>
-						</div></td>
-						<td id="autoGhost21"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-W & Z Boson Ghost</b><br>
-							Power usage: <span id="ghostcost21">bug</span><br>
-							Is active: <input id="isAutoGhostOn21" type="checkbox" onchange="toggleAutoGhost(21)"></input>
-						</div></td>
-						<td id="autoGhost20"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Bosonic Upgrader Ghost</b><br>
-							Power usage: <span id="ghostcost20">bug</span><br>
-							Is active: <input id="isAutoGhostOn20" type="checkbox" onchange="toggleAutoGhost(20)"></input>
-						</div></td>
-						<td id="autoGhost23"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Light Ghost</b><br>
-							(automatically get Light Empowerments every second)<br>
-							Power usage: <span id="ghostcost23">bug</span><br>
-							Is active: <input id="isAutoGhostOn23" type="checkbox" onchange="toggleAutoGhost(23)"></input>
 						</div></td>
 					</tr>
 				</table>

@@ -88,6 +88,13 @@ function inQC(num) {
 	return tmp.inQCs.includes(num)
 }
 
+function inAnyQC(){
+	for (let i = 1; i <= 9; i++){
+		if (inQC(i)) return true
+	}
+	return false
+}
+
 function updateInQCs() {
 	tmp.inQCs = [0]
 	if (tmp.qu !== undefined && tmp.qu.challenge !== undefined) {

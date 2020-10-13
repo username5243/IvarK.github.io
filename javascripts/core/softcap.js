@@ -1,3 +1,17 @@
+/*
+To make a new softcap using this function
+1) Create an element of softcap_data which contains
+  - The name of it (string, used in displays only)
+  - Integers starting from 1 which are dicts
+    - These dicts contains a function name, starting value
+      and other variables from softcap_vars based on which function you choose
+2) Add to getSoftcapAmtFromId like the other functions, except after the =>
+   put whatever function takes the output result of said softcap (to see which ones were active)
+3a) In updateSoftcapStatsTab add a entry like the others with a name
+3b) Go to index.html and find were all the others are stored and store it in a similar fasion
+4) Smile :)
+*/
+
 var softcap_data = {
 	dt_log: {
 		name: "log base 10 of dilated time gain per second",
@@ -176,6 +190,34 @@ var softcap_data = {
 			start: 12e6,
 			pow: 2/3,
 			derv: false
+		}, 
+		3: {
+			func: "pow",
+			start: 1e5,
+			pow: .2,
+			derv: false,
+			active: () => player.dilation.active
+		},
+		4: {
+			func: "pow",
+			start: 12e7,
+			pow: 0.6,
+			derv: false,
+			active: () => !tmp.qu.bigRip.active
+		},
+		5: {
+			func: "pow",
+			start: 16e7,
+			pow: 0.5,
+			derv: false,
+			active: () => !tmp.qu.bigRip.active
+		},
+		6: {
+			func: "pow",
+			start: 20e7,
+			pow: 0.4,
+			derv: false,
+			active: () => !tmp.qu.bigRip.active
 		}
 	},
 	inf_time_log_1_big_rip: {
@@ -197,27 +239,6 @@ var softcap_data = {
 			start: 2e4,
 			pow: .7,
 			derv: true
-		}
-	},
-	inf_time_log_2: {
-		name: "log base 10 of Infinite Time reward for high values",
-		1: {
-			func: "pow",
-			start: 12e7,
-			pow: 0.6,
-			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 16e7,
-			pow: 0.5,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 20e7,
-			pow: 0.4,
-			derv: false
 		}
 	},
 	ig_log_high: { 
@@ -583,13 +604,15 @@ var softcap_funcs = {
 
 function do_softcap(x, data, num) {
 	var data = data[num]
-	if (data === undefined) return
+	if (data === undefined) return "non-existent"
 
 	var func = data.func
 	var vars = softcap_vars[func]
 
-	var v = [data[vars[0]], data[vars[1]], data[vars[2]]]
-	for (let i = 0; i < 3; i++) if (typeof v[i] == "function") v[i] = v[i]()
+	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data.active]
+	for (let i = 0; i < 4; i++) if (typeof v[i] == "function") v[i] = v[i]()
+
+	if (v[4] == false) return x //DO NOT change to if (!v[4])  cause we DONT want undefined to return on this line
 
 	var decimal = false
 	var canSoftcap = false
@@ -607,11 +630,16 @@ function softcap(x, id, max = 1/0) {
 		if (big_rip_data !== undefined) data = big_rip_data
 	}
 
+	if (data == undefined) {
+		console.log("your thing broke at" + id)
+		return
+	}
+
 	var sc = 1
 	var stopped = false
 	while (!stopped && sc <= max) {
 		var y = do_softcap(x, data, sc)
-		if (y !== undefined) {
+		if (y !== "non-existent") {
 			x = y
 			sc++
 		} else stopped = true
@@ -621,6 +649,41 @@ function softcap(x, id, max = 1/0) {
 
 function getSoftcapName(id){
 	return softcap_data[id]["name"]
+}
+
+function getSoftcapAmtFromId(id){
+	return { // for amount
+		dt_log: () => getDilTimeGainPerSecond().plus(1).log10(), 
+		ts_reduce_log: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts_reduce_log_big_rip: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		ts11_log_big_rip: () => tsMults[11]().log10(),
+		ms322_log: () => masteryStudies.timeStudyEffects[322]().log10(),
+		bru1_log: () => tmp.bru[1].plus(1).log10(),
+		beu3_log: () => tmp.beu[3].plus(1).log10(),
+		inf_time_log_1: () => tmp.it.plus(1).log10(),
+		inf_time_log_1_big_rip: () => tmp.it.plus(1).log10(),
+		ig_log_high: () => tmp.ig.plus(1).log10(),
+		bam: () => getBosonicAMProduction(),
+		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
+		working_ts: () => getTickspeed().pow(-1).log10(),
+		bu45: () => bu.effects[45](),
+		EPtoQK: () => getEPtoQKMult(),
+		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
+
+		// Condensened: () =>
+		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
+		ts_ngC: () => getTickspeed().pow(-1),
+		sac_ngC: () => calcSacrificeBoost(),
+		ip_ngC: () => getInfinityPointGain(),
+		rep_ngC: () => player.replicanti.amount, 
+		ep_ngC: () => gainedEternityPoints(),
+
+		//NGmX
+
+		id_ngm4: () => getBestUsedIDPower(),
+		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
+	}[id]()
+
 }
 
 function hasSoftcapStarted(id, num){
@@ -652,48 +715,25 @@ function hasSoftcapStarted(id, num){
 	if (tmp.ngp3 && !tmp.qu.bigRip.active && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
 	
-
-	let amt = { // for amount
-		dt_log: () => getDilTimeGainPerSecond().plus(1).log10(), 
-		ts_reduce_log: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
-		ts_reduce_log_big_rip: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
-		ts11_log_big_rip: () => tsMults[11]().log10(),
-		ms322_log: () => masteryStudies.timeStudyEffects[322]().log10(),
-		bru1_log: () => tmp.bru[1].plus(1).log10(),
-		beu3_log: () => tmp.beu[3].plus(1).log10(),
-		inf_time_log_1: () => tmp.it.plus(1).log10(),
-		inf_time_log_1_big_rip: () => tmp.it.plus(1).log10(),
-		inf_time_log_2: () => tmp.it.plus(1).log10(),
-		ig_log_high: () => tmp.ig.plus(1).log10(),
-		bam: () => getBosonicAMProduction(),
-		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
-		working_ts: () => getTickspeed().pow(-1).log10(),
-		bu45: () => bu.effects[45](),
-		EPtoQK: () => getEPtoQKMult(),
-		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
-
-		// Condensened: () =>
-		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
-		ts_ngC: () => getTickspeed().pow(-1),
-		sac_ngC: () => calcSacrificeBoost(),
-		ip_ngC: () => getInfinityPointGain(),
-		rep_ngC: () => player.replicanti.amount, 
-		ep_ngC: () => gainedEternityPoints(),
-
-		//NGmX
-
-		id_ngm4: () => DimensionPower(1).max(DimensionPower(2)).max(DimensionPower(3)).max(DimensionPower(4)).max(DimensionPower(5)).max(DimensionPower(6)).max(DimensionPower(7)).max(DimensionPower(8)),
-		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
-	}[id]()
+	let amt = getSoftcapAmtFromId(id)
+	
 	return hasSoftcapStartedArg(id, num, amt)
 }
 
-function hasSoftcapStartedArg(id, num, arg){ // also make it so that if the function is Pow, and the exp is 1 we dont do anything
+function hasSoftcapStartedArg(id, num, arg){
+	let a = softcap_data[id][num].active
+	if (a != undefined) {
+		if (typeof a == "function") a = a()
+		if (a == false) return false
+	}
 	return Decimal.gt(arg, softcap_data[id][num].start)
 }
 
-function hasFirstSoftcapStarted(id, arg){
-	return Decimal.gt(arg, softcap_data[id][1].start) 
+function hasAnySoftcapStarted(id){
+	for (let i = 1; i <= numSoftcapsTotal(id); i++){
+		if (hasSoftcapStarted(id, i)) return true
+	}
+	return false
 }
 
 function numSoftcapsTotal(id){
@@ -701,6 +741,7 @@ function numSoftcapsTotal(id){
 	let b = 0
 	for (let i = 0; i <= a.length; i++){
 		if (!isNaN(parseInt(a[i]))) b ++
+		// if the name is an integer add to b
 	}
 	return b
 }
@@ -712,10 +753,11 @@ function softcapShorten(x){
 	else return shorten(x)
 }
 
-function getSoftcapStringEffect(id, num){
+function getSoftcapStringEffect(id, num, namenum){
 	let data = softcap_data[id][num]
+	if (namenum == undefined) namenum = num
 	if (data == undefined) return "Nothing, prb bug."
-	let name = (getSoftcapName(id) || id) + " #" + num + "."
+	let name = (getSoftcapName(id) || id) + " #" + namenum + "."
 
 	var func = data.func
 	var vars = softcap_vars[func]
@@ -747,15 +789,16 @@ function getInnerHTMLSoftcap(id){
 	let n = numSoftcapsTotal(id)
 	let s = ""
 	if (!hasSoftcapStarted(id, 1)) return ""
+	let c = 1
+	let amt = getSoftcapAmtFromId(id)
 	for (let i = 1; i <= n; i++) {
-		if (hasSoftcapStarted(id, i)) s += getSoftcapStringEffect(id, i) + "<br>"
-		else return s + "<br><br>"
+		if (hasSoftcapStartedArg(id, i, amt)) {
+			s += getSoftcapStringEffect(id, i, c) + "<br>"
+			c ++
+		}
 	}
 	return s + "<br><br>"
 }
-
-// softcapsbtn is the name of the button to hide/show, it is hidden by default
-// we want to show it when any softcap is active
 
 function updateSoftcapStatsTab(){
 	let names = {
@@ -768,7 +811,6 @@ function updateSoftcapStatsTab(){
 		beu3_log: "softcap_beu3",
 		inf_time_log_1: "softcap_it1",
 		inf_time_log_1_big_rip: "softcap_it1BR",
-		inf_time_log_2: "softcap_it2",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
 		idbase: "softcap_idbase",
@@ -790,7 +832,10 @@ function updateSoftcapStatsTab(){
 	let anyActive = false
 
 	for (let i = 0; i < n.length; i++){
-		if (hasSoftcapStarted(n[i], 1)) anyActive = true
+		if (hasAnySoftcapStarted(n[i])) {
+			anyActive = true
+			break
+		}
 	}
 
 	if (anyActive) {
@@ -801,7 +846,7 @@ function updateSoftcapStatsTab(){
 
 	for (let i = 0; i < n.length; i++){
 		let elname = names[n[i]]
-		if (hasSoftcapStarted(n[i], 1)) {  
+		if (hasAnySoftcapStarted(n[i])) {  
 			document.getElementById(elname).style = "display:block"
 			document.getElementById(elname).innerHTML = getInnerHTMLSoftcap(n[i])
 		} else {

@@ -96,11 +96,13 @@ let GDs = {
 		document.getElementById("gdMult").textContent = shorten(GDs.tmp.gdm)
 		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
 
+		GDs.getExtraGDBs()
 		let totalGDBs = GDs.totalGDBs()
 		document.getElementById("gdBoost").textContent = GDs.save.gdBoosts >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
 		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (totalGDBs >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + " + " + getFullExpansion(GDs.save.extraGDBs) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
 		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
-		document.getElementById("extraGDB").textContent = "Next extra Gravity Dimension Shift / Boost is at " + getFullExpansion(player.ghostify.hb.higgs) + " / " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons"
+		let nameofthing = totalGDBs > 3 ? "Boost" : "Shift"
+		document.getElementById("extraGDB").textContent = "The next extra Gravity Dimension " + nameofthing + " is at " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons. (You have " + getFullExpansion(player.ghostify.hb.higgs) + ")"
 	
 		document.getElementById("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
 		document.getElementById("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
@@ -196,10 +198,12 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return e * 10 + 100 + (e > 10 ? e*e - 100 : 0)
+		return 100 + (e > 10 ? e*e : e*10)
 	},
 	getExtraGDBs() {
-		let toAdd = Math.floor((player.ghostify.hb.higgs - GDs.extraGDBReq()) / 10) + 1
+		let h = player.ghostify.hb.higgs
+		let tot = h < 200 ? Math.max(Math.floor(h / 10) - 9, 0) : Math.floor(Math.sqrt(h - 100) + 1) 
+		let toAdd = Math.max(tot - GDs.save.extraGDBs, 0)
 		if (toAdd < 1) return
 		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
 		GDs.save.extraGDBs += toAdd

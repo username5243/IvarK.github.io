@@ -48,8 +48,17 @@ function getElectronBoost(mod) {
 	if (player.ghostify.ghostlyPhotons.unl) s += tmp.le[2]
 	
 	if (amount > 37460 + s) {
-		if (hasBosonicUpg(64)) amount = Math.pow((amount - s) / 37460, 0.9) * 37460 + s
-		else amount = Math.sqrt((amount - s) * 37460) + s
+		exp = hasBosonicUpg(64) ? .9 : .5 
+		/*
+		yeah this isnt broken at all, only about ^20 to AM straight out so...
+		either 
+		1) Softcaps (aarex i know how much you hate them)
+		1a) Can be any of MPTD factors, ND base, etc
+		2) nerf this upgrade (id say ^.6) which would be about 
+		   ^1.15 AM straight out which is still op but not broken
+
+		*/
+		amount = Math.pow((amount - s) / 37460, exp) * 37460 + s
 	}
 	if (GUActive("rg4") && mod != "no-rg4") amount *= 0.7
 	if (player.masterystudies !== undefined && isTreeUpgActive(4) && mod != "noTree") amount *= getTreeUpgradeEffect(4)
