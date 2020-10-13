@@ -328,6 +328,7 @@ function updateNextPreonEnergyThreshold(){
 		increment /= 2
 	}
 	tmp.qu.nanofield.power += toSkip
+	tmp.qu.nanofield.best = Math.max(tmp.qu.nanofield.best || 0, tmp.qu.nanofield.power)
 	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
 }
 

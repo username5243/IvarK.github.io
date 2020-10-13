@@ -869,6 +869,7 @@ function getBrandNewNanofieldData(){
 		power: 0,
 		powerThreshold: 50,
 		rewards: 0,
+		best: 0,
 		producingCharge: false
 	}
 }
@@ -1116,6 +1117,7 @@ function doNGPlusFourPlayer(){
 	for (var c = 1; c < 9; c++) player.quantum.challenges[c] = 2
 	player.quantum.pairedChallenges.completed = 4
 	player.quantum.nanofield.rewards = 19
+	player.quantum.nanofield.best = 19
 	player.quantum.reachedInfQK = true
 	player.quantum.tod.r.spin = 1e25
 	player.quantum.tod.g.spin = 1e25
