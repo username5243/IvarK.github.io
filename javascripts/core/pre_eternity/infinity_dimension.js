@@ -355,7 +355,7 @@ function getIDReplMult() {
 
 function getEU2Eternities(){
 	let e = nMx(getEternitied(), 0)
-	if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(e.log2() / 4, 128)
+	if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(new Decimal(e).log10() / 4 * Math.log2(10), 128)
 	return e
 }
 
