@@ -312,7 +312,7 @@ var leBoosts = {
 		},
 		leThreshold: 0,
 		eff() {
-			return Math.cbrt(tmp.leBoost) / 10 + 1
+			return Math.cbrt(tmp.leBoost) / 30 + 1
 		},
 		effDesc(x) {
 			return (x * 100 - 100).toFixed(2)
@@ -324,7 +324,7 @@ var leBoosts = {
 		},
 		leThreshold: 0,
 		eff() {
-			return tmp.leBoost / 10
+			return Math.sqrt(tmp.leBoost) * 3
 		},
 		effDesc(x) {
 			return x.toFixed(2)

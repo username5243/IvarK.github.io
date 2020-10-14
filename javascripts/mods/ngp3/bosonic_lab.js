@@ -472,7 +472,8 @@ var bEn = {
 		14: [1e6, 2],
 		24: [1e6, 10],
 		34: [1, 0],
-		15: [2e21, 20]
+		15: [2e21, 20],
+		25: [2e160, 2e140],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -524,11 +525,7 @@ var bEn = {
 			return eff
 		},
 		25(l) {
-			return 1.99 - .99 / (l.plus(1).log10() / 100 + 1) 
-			// if you let this approach 2 then there will be issues with inflation
-			// either you need to softcap the formula or make this not approach 2
-			// since you don't like softcaps (which is fine) we need this solution
-			// this is VERY important
+			return Math.pow(l.plus(1).log10() / 100 + 1, .25)
 		},
 		35(l) {
 			return Decimal.pow(2, Math.sqrt(l)) 
@@ -950,10 +947,10 @@ var bu = {
 			}
 		},
 		54() {
-			return Math.pow(GDs.radioactivity(1), 0.75) / 100
+			return Math.sqrt(GDs.radioactivity(1)) / 100
 		},
 		55() {
-			return tmp.bl.am.add(1).pow(0.01)
+			return tmp.bl.am.add(1).pow(0.005).plus(tmp.bl.am.add(1).log10() / 2)
 		},
 		63() {
 			//Log10 of that effect ((log(g)+2)^h)
