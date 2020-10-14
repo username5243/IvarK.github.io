@@ -180,7 +180,8 @@ function updateInfiniteTimeTemp() {
 		}
 		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
-		x = softcap(x, "inf_time_log_1")
+		x = softcap(x, "inf_time_log")
+		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")
 	}
 	tmp.it = Decimal.pow(10, x)
 }

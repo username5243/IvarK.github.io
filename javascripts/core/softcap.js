@@ -177,7 +177,7 @@ var softcap_data = {
 			derv: false
 		}
 	},
-	inf_time_log_1: {
+	inf_time_log: {
 		name: "log base 10 of Infinite Time reward",
 		1: {
 			func: "pow",
@@ -190,37 +190,36 @@ var softcap_data = {
 			start: 12e6,
 			pow: 2/3,
 			derv: false
-		}, 
-		3: {
-			func: "pow",
-			start: 1e5,
-			pow: .2,
-			derv: false,
-			active: () => player.dilation.active
 		},
-		4: {
+		3: {
 			func: "pow",
 			start: 12e7,
 			pow: 0.6,
-			derv: false,
-			active: () => !tmp.qu.bigRip.active
+			derv: false
 		},
-		5: {
+		4: {
 			func: "pow",
 			start: 16e7,
 			pow: 0.5,
-			derv: false,
-			active: () => !tmp.qu.bigRip.active
+			derv: false
 		},
-		6: {
+		5: {
 			func: "pow",
 			start: 20e7,
 			pow: 0.4,
-			derv: false,
-			active: () => !tmp.qu.bigRip.active
+			derv: false
 		}
 	},
-	inf_time_log_1_big_rip: {
+	inf_time_log_dilation: {
+		name: "log base 10 of Infinite Time reward in dilation",
+		1: {
+			func: "pow",
+			start: 1e5,
+			pow: .2,
+			derv: false
+		},
+	},
+	inf_time_log_big_rip: {
 		name: "log base 10 of Infinite Time reward in Big Rip",
 		1: {
 			func: "pow",
@@ -624,9 +623,9 @@ function do_softcap(x, data, num) {
 }
 
 function softcap(x, id, max = 1/0) {
-	var data = softcap_data[id]
+	let data = softcap_data[id]
 	if (tmp.ngp3 && tmp.qu.bigRip.active) {
-		var big_rip_data = softcap_data[id + "_big_rip"]
+		let big_rip_data = softcap_data[id + "_big_rip"]
 		if (big_rip_data !== undefined) data = big_rip_data
 	}
 
@@ -635,10 +634,10 @@ function softcap(x, id, max = 1/0) {
 		return
 	}
 
-	var sc = 1
-	var stopped = false
+	let sc = 1
+	let stopped = false
 	while (!stopped && sc <= max) {
-		var y = do_softcap(x, data, sc)
+		let y = do_softcap(x, data, sc)
 		if (y !== "non-existent") {
 			x = y
 			sc++
@@ -653,18 +652,19 @@ function getSoftcapName(id){
 
 function getSoftcapAmtFromId(id){
 	return { // for amount
-		dt_log: () => getDilTimeGainPerSecond().plus(1).log10(), 
-		ts_reduce_log: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
-		ts_reduce_log_big_rip: () => Decimal.pow(getGalaxyTickSpeedMultiplier(), -1).log10(),
+		dt_log: () => getDilTimeGainPerSecond().max(1).log10(), 
+		ts_reduce_log: () => Decimal.pow(tmp.tsReduce, -1).log10(),
+		ts_reduce_log_big_rip: () => Decimal.pow(tmp.tsReduce, -1).log10(),
 		ts11_log_big_rip: () => tsMults[11]().log10(),
 		ms322_log: () => masteryStudies.timeStudyEffects[322]().log10(),
-		bru1_log: () => tmp.bru[1].plus(1).log10(),
-		beu3_log: () => tmp.beu[3].plus(1).log10(),
-		inf_time_log_1: () => tmp.it.plus(1).log10(),
-		inf_time_log_1_big_rip: () => tmp.it.plus(1).log10(),
-		ig_log_high: () => tmp.ig.plus(1).log10(),
+		bru1_log: () => tmp.bru[1].max(1).log10(),
+		beu3_log: () => tmp.beu[3].max(1).log10(),
+		inf_time_log: () => tmp.it.max(1).log10(),
+		inf_time_log_dilation: () => tmp.it.max(1).log10(),
+		inf_time_log_big_rip: () => tmp.it.max(1).log10(),
+		ig_log_high: () => tmp.ig.max(1).log10(),
 		bam: () => getBosonicAMProduction(),
-		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).plus(1).log10(),
+		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
 		working_ts: () => getTickspeed().pow(-1).log10(),
 		bu45: () => bu.effects[45](),
 		EPtoQK: () => getEPtoQKMult(),
@@ -694,7 +694,7 @@ function hasSoftcapStarted(id, num){
 		that is: if it is false it does not display, but if it is true,
 		it continues as if nothing happens
 		NOTE: this excludes Big Rip, and other endings that are at the end of words 
-		This currently includes: _ngC, _big_rip, _ngm4
+		This currently includes: _ngC, _dilation, _big_rip, _ngm4
 		*/
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
@@ -710,8 +710,9 @@ function hasSoftcapStarted(id, num){
 	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
 	if (l >= 5 && id.slice(l - 5, l - 1) == "_ngm") {
 		let int = parseInt(id[l - 1])
-		if (!isNaN(int)) if (!(player.aarexModifications.ngmX >= int)) return false
+		if (!isNaN(int)) if (!(tmp.ngmX >= int)) return false
 	}
+	if (!player.dilation.active && l > 9 && id.slice(l - 9, l) == "_dilation") return false
 	if (tmp.ngp3 && !tmp.qu.bigRip.active && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
 	
@@ -809,8 +810,9 @@ function updateSoftcapStatsTab(){
 		ms322_log: "softcap_ms322",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
-		inf_time_log_1: "softcap_it1",
-		inf_time_log_1_big_rip: "softcap_it1BR",
+		inf_time_log: "softcap_it",
+		inf_time_log_dilation: "softcap_itD",
+		inf_time_log_big_rip: "softcap_itBR",
 		ig_log_high: "softcap_ig",
 		bam: "softcap_bam",
 		idbase: "softcap_idbase",
@@ -832,25 +834,16 @@ function updateSoftcapStatsTab(){
 	let anyActive = false
 
 	for (let i = 0; i < n.length; i++){
-		if (hasAnySoftcapStarted(n[i])) {
-			anyActive = true
-			break
-		}
-	}
-
-	if (anyActive) {
-		document.getElementById("softcapsbtn").style = "display:inline-block"
-	} else {
-		document.getElementById("softcapsbtn").style = "display:none"
-	}
-
-	for (let i = 0; i < n.length; i++){
 		let elname = names[n[i]]
 		if (hasAnySoftcapStarted(n[i])) {  
 			document.getElementById(elname).style = "display:block"
 			document.getElementById(elname).innerHTML = getInnerHTMLSoftcap(n[i])
+
+			anyActive = true
 		} else {
 			document.getElementById(elname).style = "display:none"
 		}
 	}
+
+	document.getElementById("softcapsbtn").style.display = anyActive ? "" : "none"
 }
