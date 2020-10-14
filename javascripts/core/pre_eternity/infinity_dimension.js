@@ -116,6 +116,14 @@ function getInfDimPathIDMult(tier){
 	return mult
 }
 
+function getBestUsedIDPower(){
+	let p = new Decimal(1)
+	for (let i = 1; i <= 8; i++){
+		if (player.infinityDimension1.amount.gt(0)) p = p.max(DimensionPower(i))
+	}
+	return p
+}
+
 function getStartingIDPower(tier){
 	var dim = player["infinityDimension" + tier]
 	var mult = dim.power

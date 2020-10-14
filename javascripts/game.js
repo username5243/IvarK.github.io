@@ -229,7 +229,7 @@ function setupToDHTMLandData(){
 
 		var html = 'You have <span class="' + color + '" id="' + color + 'QuarksToD" style="font-size: 35px">0</span> ' + color + ' quarks.<br>'
 		html += '<button class="storebtn" id="' + color + 'UnstableGain" style="width: 240px; height: 80px" onclick="unstableQuarks(\'' + shorthand + '\')"></button><br>'
-		html += 'You have <span class="' + color + '" id="' + color + 'QuarkSpin" style="font-size: 35px">0.0</span> ' + color + ' quark spin.'
+		html += 'You have <span class="' + color + '" id="' + color + 'QuarkSpin" style="font-size: 35px">0.0</span> ' + color + ' quark spin.<br>'
 		html += '<span class="' + color + '" id="' + color + 'QuarkSpinProduction" style="font-size: 25px">+0/s</span><br>'
 		html += "You have <span class='" + color + "' id='" + color + "UnstableQuarks' style='font-size: 35px'>0</span> " + color + " <span id='" + shorthand + "UQName'></span> quarks.<br>"
 		html += "<span id='" + color + "QuarksDecayRate'></span>.<br>"
@@ -869,6 +869,7 @@ function getBrandNewNanofieldData(){
 		power: 0,
 		powerThreshold: 50,
 		rewards: 0,
+		best: 0,
 		producingCharge: false
 	}
 }
@@ -1116,6 +1117,7 @@ function doNGPlusFourPlayer(){
 	for (var c = 1; c < 9; c++) player.quantum.challenges[c] = 2
 	player.quantum.pairedChallenges.completed = 4
 	player.quantum.nanofield.rewards = 19
+	player.quantum.nanofield.best = 19
 	player.quantum.reachedInfQK = true
 	player.quantum.tod.r.spin = 1e25
 	player.quantum.tod.g.spin = 1e25
@@ -4844,9 +4846,9 @@ function bigRipUpgradeUpdating(){
 			document.getElementById("bigripupg"+u+"cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 		}
 	}
-	document.getElementById("bigripupg1current").textContent=shortenDimensions(tmp.bru[1])
-	document.getElementById("bigripupg8current").textContent=shortenDimensions(tmp.bru[8])+(Decimal.gte(tmp.bru[8],Number.MAX_VALUE)&&!hasNU(11)?"x (cap)":"x")
-	document.getElementById("bigripupg14current").textContent=tmp.bru[14].toFixed(2)
+	document.getElementById("bigripupg1current").textContent = shortenDimensions(tmp.bru[1])
+	document.getElementById("bigripupg8current").textContent = shortenDimensions(tmp.bru[8])+(Decimal.gte(tmp.bru[8],Number.MAX_VALUE)&&!hasNU(11)?"x (cap)":"x")
+	document.getElementById("bigripupg14current").textContent = new Decimal(tmp.bru[14]).toFixed(2)
 	var bru15effect = tmp.bru[15]
 	document.getElementById("bigripupg15current").textContent=bru15effect < 999.995 ? bru15effect.toFixed(2) : getFullExpansion(Math.round(bru15effect))
 	document.getElementById("bigripupg16current").textContent=shorten(tmp.bru[16])
@@ -5774,7 +5776,10 @@ window.addEventListener('keyup', function(event) {
 		break;
 		
 		case 81: // Q, for quantum.
-		if (player.meta) quantum(false,false,0)
+		if (player.meta) {
+			if (!inAnyQC()) quantum(false,false,0)
+			else quantum()
+		} 
 		break;
 	}
 }, false);

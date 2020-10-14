@@ -88,6 +88,10 @@ function inQC(num) {
 	return tmp.inQCs.includes(num)
 }
 
+function inAnyQC() {
+	return tmp.inQCs.length >= 1
+}
+
 function updateInQCs() {
 	tmp.inQCs = [0]
 	if (tmp.qu !== undefined && tmp.qu.challenge !== undefined) {

@@ -562,8 +562,9 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			energy: new Decimal(0),
 			antienergy: new Decimal(0),
 			power: 0,
+			best: tmp.qu.nanofield.best,
 			powerThreshold: new Decimal(50),
-			rewards: bm>12?16:0,
+			rewards: Math.floor(Math.max(bm > 12 ? 16 : 0, (player.achievements.includes("ng3p104") ? tmp.qu.nanofield.best * .95 : 0) || 0)),
 			producingCharge: false,
 			apgWoke: tmp.qu.nanofield.apgWoke
 		},

@@ -181,9 +181,6 @@ function updateInfiniteTimeTemp() {
 		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log_1")
-
-		if (player.dilation.active && x > 1e5) x = Math.pow(1e20 * x, .2)
-		if (!tmp.qu.bigRip.active) x = softcap(x, "inf_time_log_2")
 	}
 	tmp.it = Decimal.pow(10, x)
 }
@@ -528,7 +525,7 @@ function updateBRU1Temp() {
 	if (!tmp.qu.bigRip.active) return
 	let exp = 1
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
-	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(13)) exp *= tmp.beu[13]
+	if (tmp.qu.breakEternity.upgrades.includes(13)) exp *= tmp.beu[13]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
 	exp *= player.infinityPoints.max(1).log10()
 	exp = softcap(exp, "bru1_log", 2)

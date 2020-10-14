@@ -941,8 +941,8 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = player.quantum.bigRip.active ? 250 : 50
-			let div2 = player.quantum.bigRip.active ? 100 : 10
+			let div1 = player.quantum.bigRip.active ? 250 : 60
+			let div2 = player.quantum.bigRip.active ? 100 : 40
 			return {
 				ig: Math.pow(Math.log10(log + 1) / div1 + 1, 2),
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
