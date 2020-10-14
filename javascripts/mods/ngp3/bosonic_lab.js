@@ -531,7 +531,8 @@ var bEn = {
 			// this is VERY important
 		},
 		35(l) {
-			return Decimal.pow(1.1, l) //i think this might be op if we dont softcap
+			return Decimal.pow(2, Math.sqrt(l)) 
+			//i think this might be op if we dont softcap
 		},
 		45(l) {
 			return Decimal.add(l, 1).log10() / 10 + 1
@@ -817,7 +818,7 @@ var bu = {
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
 		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
-		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.9)",
+		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.6)",
 		65: "Square the main Orange Light effect.",
 	},
 	effects: {

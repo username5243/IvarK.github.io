@@ -630,7 +630,10 @@ function updateWZBosonsTemp(){
 	//W Bosons boost to Bosonic Antimatter production
 
 	var zbslog = player.ghostify.wzb.zb.div(10).add(1).log10() / 2
-	//if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) //if you remove this then things *will* inflate
+	zbslog = Math.sqrt(1 + zbslog / 100) * 200 - 199
+	// if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) 
+	// I reiterate, you need to softcap something in this era, it does not work properly
+	//if you remove this then things *will* inflate
 	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
 	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
 }
