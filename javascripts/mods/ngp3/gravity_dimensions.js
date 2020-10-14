@@ -43,8 +43,12 @@ let GDs = {
 
 		data.gdm = GDs.gdMult() //Determine the initial multiplier for Gravity Dimensions.
 
+		//Gravity Radiation Effect
+		let grStr = 1
+		if (isEnchantUsed(45)) grStr /= tmp.bEn[45]
+
 		//Gravity Power
-		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
+		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10() * grStr, 0), 2/3)
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
 			let layer = Math.floor(Math.log2(gp / 10 + 1))
@@ -177,10 +181,12 @@ let GDs = {
 		}
 	},
 	gdMult() {
-		return tmp.bl.speed.div(2).max(1).log10() + 1
+		return tmp.bl.speed.max(1).log10() / 3 + 1
 	},
 	gdExp(dim) {
-		return (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) + 1
+		let x = (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) + 1
+		if (dim == 4 && hasBosonicUpg(54)) x += tmp.blu[54]
+		return x
 	},
 	gdBoost(x) {
 		if (!GDs.save.gr.gte(GDs.gdBoostReq())) return
@@ -189,14 +195,13 @@ let GDs = {
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		if (x > 10) x = x*x / 10
-		let y = Decimal.pow(10, (x * 3 + 5) * GDs.rdExp() * 2)
+		let y = Decimal.pow(10, (x * x * 0.25 + x * 2.75 + 5) * GDs.rdExp() * 2)
 		if (isEnchantUsed(35)) y = y.div(tmp.bEn[35])
 		return y
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return e * 10 + 100 + (e > 10 ? e*e - 100 : 0)
+		return e * 10 + 100
 	},
 	getExtraGDBs() {
 		let toAdd = Math.floor((player.ghostify.hb.higgs - GDs.extraGDBReq()) / 10) + 1
@@ -248,7 +253,7 @@ let GDs = {
 		return GDs.tmp.gpr >= layer
 	},
 	radioactivity(layer) {
-		if (!GDs.isRadioactiveActive(layer)) return
+		if (!GDs.isRadioactiveActive(layer)) return 0
 		return (GDs.tmp.gp - layer * 10) * Math.pow(GDs.save.gr.max(1).log10(), 2)
 	},
 	energyMult() {
@@ -265,7 +270,9 @@ let GDs = {
 		return ge * mult
 	},
 	chargeMult() {
-		return 2
+		let x = 2
+		if (player.achievements.includes("ng3p115")) x += 0.25
+		return x
 	},
 	superchargeMult() {
 		return (pl.save.layer - 1) / 5
@@ -326,7 +333,7 @@ let GDs = {
 				return !pl.on()
 			},
 			eff(x) {
-				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .5 : 1/3)
+				return Math.pow(x / 2 + 1, 1/3)
 			},
 			rdExp: 0.5
 		},
@@ -340,7 +347,7 @@ let GDs = {
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return Math.pow(x / 2 + 1, tmp.newNGP3E ? .85 : .75)
+				return Math.pow(x / 3 + 1, .5)
 			},
 			rdExp: 1
 		},

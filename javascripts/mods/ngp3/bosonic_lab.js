@@ -18,10 +18,10 @@ function updateBLUnlockDisplay() {
 }
 
 function getBosonicWattGain() {
-	let x = Math.max(player.money.log10() / 2e16 - 1.25, 0)
+	let x = Math.max(player.money.log10() / 2e16 - 1, 0)
 	if (pl.on()) x += pl.tmp.buff2
-	if (isEnchantUsed(45)) x *= tmp.bEn[45]
 	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
+	if (isEnchantUsed(34)) x *= tmp.bEn[34]
 	if (pl.on()) x *= pl.tmp.buff3
 	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
@@ -34,9 +34,11 @@ function getAchBWtMult() {
 function getBatteryGainPerSecond(toSub){
 	let batteryMult = new Decimal(1)
 	if (isEnchantUsed(24)) batteryMult = batteryMult.times(tmp.bEn[24])
-	let toAdd = toSub.div(1e6).times(batteryMult)
-	if (toAdd.gt(1e3)) toAdd = Decimal.pow(toAdd.log10() + 7, 3) 
-	return toAdd.div(10)
+
+	let toAdd = toSub.div(2e6).times(batteryMult)
+	if (toAdd.gt(100)) toAdd = Decimal.pow(toAdd.log10() + 8, 3).div(10)
+
+	return toAdd
 }
 
 function getBosonicSpeedExp() {
@@ -181,7 +183,8 @@ function getBosonicAntiMatterProduction(){
 function getBosonicAMProduction() {
 	let exp = player.money.max(1).log10() / 15e15 - 3
 	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
-	if (isEnchantUsed(34)) ret = ret.times(tmp.bEn[34] || 1)
+
+	if (player.achievements.includes("ng3p113")) ret = ret.times(Math.log10(player.replicanti.amount.max(1e10).log10()))
 
 	ret = softcap(ret, "bam")
 	return ret
@@ -477,11 +480,11 @@ var bEn = {
 		23: "Bosonic Antimatter boosts oscillate speed.",
 		14: "Divide the requirement of Higgs and start with some Bosonic Upgrades even it is inactive.",
 		24: "You gain more Bosonic Battery.",
-		34: "Higgs Bosons produce more Bosonic Antimatter.",
+		34: "Higgs Bosons boost Bosonic Watts.",
 		15: "You gain more Gravity Energy.",
 		25: "Z Bosons are stronger.",
 		35: "Divide the requirement of Gravity Dimension Shifts / Boosts.",
-		45: "Boost the Bosonic Watt gain before Gravity Well."
+		45: "Gravity Radiation gives a weaker nerf to Gravity Well."
 	},
 	effects: {
 		12(l) {
@@ -513,8 +516,7 @@ var bEn = {
 			return Decimal.pow(Decimal.add(l, 100).log10(), 4).div(16)
 		},
 		34(l) {
-			if (hasBosonicUpg(54)) return Decimal.pow(3, Math.pow(player.ghostify.hb.higgs * Decimal.add(l, 1).log10(), 0.6))
-			return Decimal.pow(player.ghostify.hb.higgs / 20 + 1, l.add(1).log10() / 5)
+			return Math.sqrt(player.ghostify.hb.higgs) * Math.log10(l.add(1).log10() + 1) / 2 + 1
 		},
 		15(l) {
 			let div = tmp.newNGP3E ? 1.75 : 2
@@ -549,6 +551,9 @@ var bEn = {
 		},
 		35(x) {
 			return "/" + shorten(x)
+		},
+		45(x) {
+			return (100 - 100 / x).toFixed(2) + "% weaker"
 		}
 	},
 	action: "upgrade",
@@ -594,7 +599,7 @@ var bEn = {
 			if (id == 14) updateBAMAmount()
 		}
 	},
-	limits: [0, 2, 4, 10],
+	limits: [0, 2, 5, 9],
 	autoScalings:{
 		1: 1.5,
 		2: 3,
@@ -807,7 +812,7 @@ var bu = {
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Unlock 3 new Light Empowerment boosts.",
-		54: "Bosonic Enchant 6 has a stronger boost.",
+		54: "The Radioactivity of Gravity Well adds the exponent of Fourth Gravity Dimensions.",
 		55: "Bosonic Antimatter divides the requirement of Light Empowerments prior to cost subtraction.",
 		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
@@ -943,6 +948,9 @@ var bu = {
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
 			}
 		},
+		54() {
+			return Math.pow(GDs.radioactivity(1), 0.75) / 100
+		},
 		55() {
 			return tmp.bl.am.add(1).pow(0.01)
 		},
@@ -996,6 +1004,9 @@ var bu = {
 		},
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
+		},
+		54(x) {
+			return "+" + shorten(x)
 		},
 		55(x) {
 			return "/" + shorten(x)

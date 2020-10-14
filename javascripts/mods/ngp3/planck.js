@@ -90,6 +90,7 @@ let pl = {
 		player.ghostify.ghostParticles = new Decimal(player.achievements.includes("ng3p115") ? 1e25 : 0)
 		player.ghostify.neutrinos = getBrandNewNeutrinoData()
 		player.ghostify.neutrinos.boosts = 9
+		player.ghostify.neutrinos.upgrades = player.achievements.includes("ng3p115") ? [6] : []
 		player.ghostify.multPower = 1
 		player.ghostify.ghostlyPhotons.enpowerments = 3
 		tmp.bl.ticks = new Decimal(0)
@@ -144,6 +145,9 @@ let pl = {
 			document.getElementById("dfBuff" + x).textContent = pl.tmp["buff" + x].toFixed(2)
 			document.getElementById("dfNerf" + x).textContent = pl.tmp["nerf" + x].toFixed(2)
 		}
+	},
+	radioactivityToMatter() {
+		return GDs.radioactivity(1) + 1
 	},
 	tierReq() {
 		return Decimal.pow(10, Math.sqrt(pl.save.layer) * 1e18)

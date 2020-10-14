@@ -369,25 +369,25 @@ function updateBestPC68Display() {
 	document.getElementById("bpc68").textContent = tmp.pct == "" ? "Best PC w/ QC6 & 8: " + shortenMoney(tmp.qu.pairedChallenges.pc68best) : ""
 }
 
-var qcm={
+var qcm = {
 	modifiers: ["ad", "sm", "ms", "tb"],
 	names: {
 		ad: "Anti-Dilation",
 		sm: "Supermastery",
 		ms: "Macroscopic",
-		tb: "Time Barrier"
+		//tb: "Time Barrier"
 	},
 	reqs: {
 		ad: 100,
 		sm: 165,
 		ms: 200,
-		tb: 220
+		//tb: 220
 	},
 	descs: {
 		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
 		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies.",
 		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 5,000. Good luck! :)",
-		tb: "All Eternity features are disabled. All QC goals are raised to the power of 100. >:)"
+		//tb: "All Eternity features are disabled. All QC goals are raised to the power of 100. >:)"
 	},
 	rewards: {
 		ms: {
@@ -398,6 +398,7 @@ var qcm={
 				return "Boost all Emperor Dimensions by " + (x * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension."
 			}
 		},
+		/*
 		tb: {
 			eff(x) {
 				return Math.pow(tmp.pcc.tb / 15 + 1, 2)
@@ -406,6 +407,7 @@ var qcm={
 				return "Strengthen Infinite Time reward by " + (x * 100 - 100).toFixed(2) + "%."
 			}
 		}
+		*/
 	},
 	on: []
 }

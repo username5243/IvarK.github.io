@@ -3824,6 +3824,18 @@ function doPerSecondNGP3Stuff(){
 		else document.getElementById("ec" + tmp.qu.autoECN + "unl").onclick()
 		justImported = false
 	}
+	doNGP3UnlockStuff()
+	notifyGhostifyMilestones()
+	ghostifyAutomationUpdatingPerSecond()
+	if (tmp.qu.autoOptions.assignQK && player.ghostify.milestones >= 8) assignAll(true)
+
+	givePerSecondNeuts()
+}
+
+function ghostifyAutomationUpdatingPerSecond() {
+	if (!ph.did("ghostify")) return
+	if (!isAutoGhostsSafe) return
+
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
 	if (player.ghostify.wzb.unl) {
 		if (isAutoGhostActive(17)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
@@ -3854,11 +3866,6 @@ function doPerSecondNGP3Stuff(){
 		maxQuarkMult()
 		maxUpgradeColorDimPower()
 	}
-	doNGP3UnlockStuff()
-	notifyGhostifyMilestones()
-	if (tmp.qu.autoOptions.assignQK && player.ghostify.milestones > 7) assignAll(true) 
-
-	givePerSecondNeuts()
 }
 
 function checkGluonRounding(){
@@ -4130,67 +4137,68 @@ function dimensionButtonDisplayUpdating(){
 }
 
 function ghostifyAutomationUpdating(diff){
-	if (ph.did("ghostify") && isAutoGhostsSafe) {
-		var colorShorthands=["r", "g", "b"]
-		for (var c = 1; c <= 3; c++) {
-			var shorthand = colorShorthands[c - 1]
-			if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
-			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
-				unstableQuarks(shorthand)
-				radioactiveDecay(shorthand)
-			}
-			if (isAutoGhostActive(5)) maxBranchUpg(shorthand)
-		}
-		if (isAutoGhostActive(6)) maxTreeUpg()
-		if (isAutoGhostActive(11)) {
-			let ag = player.ghostify.automatorGhosts[11]
-			ag.t = (ag.t || 0) + diff
+	if (!ph.did("ghostify")) return
+	if (!isAutoGhostsSafe) return
 
-			let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
-			if (tmp.qu.nanofield.producingCharge != start) {
-				startProduceQuarkCharge()
-				if (start) ag.t = 0
-			}
+	var colorShorthands=["r", "g", "b"]
+	for (var c = 1; c <= 3; c++) {
+		var shorthand = colorShorthands[c - 1]
+		if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
+		if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
+			unstableQuarks(shorthand)
+			radioactiveDecay(shorthand)
 		}
-		if (isAutoGhostActive(13)) {
-			if (tmp.qu.bigRip.active) {
-				if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u*10) quantumReset(true,true,0,false)
-			} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10&&tmp.qu.bigRip.times<(player.ghostify.automatorGhosts[13].o||1/0)) bigRip(true)
+		if (isAutoGhostActive(5)) maxBranchUpg(shorthand)
+	}
+	if (isAutoGhostActive(6)) maxTreeUpg()
+	if (isAutoGhostActive(11)) {
+		let ag = player.ghostify.automatorGhosts[11]
+		ag.t = (ag.t || 0) + diff
+
+		let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
+		if (tmp.qu.nanofield.producingCharge != start) {
+			startProduceQuarkCharge()
+			if (start) ag.t = 0
 		}
-		if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
-		if (isAutoGhostActive(17)) extract()
-		if (isAutoGhostActive(19)) {
-			let ag = player.ghostify.automatorGhosts[19]
-			ag.t = (ag.t || 0) + diff / 2
-			let times = Math.floor(ag.t)
-			if (times > 0) {
-				autoMaxAllEnchants(times)
-				ag.t = ag.t - times
-			}
+	}
+	if (isAutoGhostActive(13)) {
+		if (tmp.qu.bigRip.active) {
+			if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u*10) quantumReset(true,true,0,false)
+		} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10&&tmp.qu.bigRip.times<(player.ghostify.automatorGhosts[13].o||1/0)) bigRip(true)
+	}
+	if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
+	if (isAutoGhostActive(17)) extract()
+	if (isAutoGhostActive(19)) {
+		let ag = player.ghostify.automatorGhosts[19]
+		ag.t = (ag.t || 0) + diff / 2
+		let times = Math.floor(ag.t)
+		if (times > 0) {
+			autoMaxAllEnchants(times)
+			ag.t = ag.t - times
 		}
-		if (player.ghostify.wzb.unl && isAutoGhostActive(21)) {
-			let ag = player.ghostify.automatorGhosts[21]
-			let data = player.ghostify.wzb
-			let hasWNB = data.wnb.gt(0)
-			ag.t = (ag.t || 0) + diff
-			if (data.dPUse == 0 && ag.t >= (hasWNB ? 0.1 : 1)) {
-				useAntiPreon(hasWNB ? 3 : 1)
-				ag.t = 0
-			}
-			if (data.dPUse == 1 && ag.t >= 0.1) {
-				useAntiPreon(3)
-				ag.t = 0
-			}
-			if (data.dPUse == 3 && !hasWNB) {
-				useAntiPreon(2)
-				ag.t = 0
-			}
-			if (data.dPUse == 2 && ag.t >= 0.1) {
-				useAntiPreon(1)
-				ag.t = 0
-			}
+	}
+	if (player.ghostify.wzb.unl && isAutoGhostActive(21)) {
+		let ag = player.ghostify.automatorGhosts[21]
+		let data = player.ghostify.wzb
+		let hasWNB = data.wnb.gt(0)
+		ag.t = (ag.t || 0) + diff
+		if (data.dPUse == 0 && ag.t >= (hasWNB ? 0.1 : 1)) {
+			useAntiPreon(hasWNB ? 3 : 1)
+			ag.t = 0
 		}
-	} 
+		if (data.dPUse == 1 && ag.t >= 0.1) {
+			useAntiPreon(3)
+			ag.t = 0
+		}
+		if (data.dPUse == 3 && !hasWNB) {
+			useAntiPreon(2)
+			ag.t = 0
+		}
+		if (data.dPUse == 2 && ag.t >= 0.1) {
+			useAntiPreon(1)
+			ag.t = 0
+		}
+	}
 }
 
 function WZBosonsUpdating(diff){
@@ -4987,9 +4995,10 @@ function passiveQuantumLevelStuff(diff){
 			else r = r.sqrt()
 			tmp.qu.gluons[p[i]] = tmp.qu.gluons[p[i]].add(r.times(diff))
 		}
-		if (player.ghostify.milestones>15) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
+		if (player.ghostify.milestones >= 16) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
 	}
 	if (tmp.qu.bigRip.active ? player.achievements.includes("ng3p106") : player.achievements.includes("ng3p112")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if (player.achievements.includes("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
 	updateQuarkDisplay()
 	updateQuantumWorth("quick")
@@ -5311,6 +5320,12 @@ function autoEternityABTick(){
 	} else if (player.autoEterMode == "eternitied") {
 		var eternitied = getEternitied()
 		if (nG(nA(eternitied, gainEternitiedStat()), nM(eternitied, nN(new Decimal(player.eternityBuyer.limit))))) eternity(false, true)
+	} else if (player.autoEterMode == "exponent") {
+		var eternitied = getEternitied()
+		if (Decimal.gte(
+			nA(eternitied, gainEternitiedStat()),
+			Decimal.pow(eternitied, player.eternityBuyer.limit)
+		)) eternity(false, true)
 	}
 }
 

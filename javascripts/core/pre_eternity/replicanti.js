@@ -218,7 +218,6 @@ function getReplSpeed() {
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
-	if (player.achievements.includes("ng3p113")) exp /= 0.95
 	return {inc: inc, exp: exp}
 }
 
