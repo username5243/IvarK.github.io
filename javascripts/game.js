@@ -3163,6 +3163,7 @@ function updateHotkeys() {
 	if (player.boughtDims) html += "<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
 	html += "<br>Hotkeys do not work while holding control. Hold shift to see details on many formulas."
 	document.getElementById("hotkeysDesc").innerHTML = html
+	//also uhh H for forcing achievement tooltip display update so yeah lol
 }
 
 var bestECTime
@@ -5712,16 +5713,28 @@ window.addEventListener('keydown', function(event) {
 			else if (player.tickspeedBoosts != undefined) manualTickspeedBoost()
 		break;
 
+		case 67: // C
+			bigCrunch()
+		break;
+
 		case 68: // D
 			if (shiftDown && player.achievements.includes("ngpp11")) metaBoost()
 			else if (player.achievements.includes("r136")) startDilatedEternity(false, true)
 			else document.getElementById("softReset").onclick()
 		break;
 
+		case 69: // E, also, nice.
+			document.getElementById("eternitybtn").onclick();
+		break;
+
 		case 71: // G
 			if (player.achievements.includes("ng3p51")) ghostify()
 			else document.getElementById("secondSoftReset").onclick()
 		break;
+
+		case 72: // H
+			setAchieveTooltip()
+		break
 
 		case 76: // N
 			if (player.aarexModifications.ngmX >= 4) buyMaxTDB()
@@ -5740,6 +5753,18 @@ window.addEventListener('keydown', function(event) {
 			}
 		break;
 
+
+		case 81: // Q, for quantum.
+			if (player.meta) {
+				if (!inAnyQC()) quantum(false,false,0)
+				else quantum()
+			} 
+		break;
+
+		case 82: //R
+			replicantiGalaxy()
+		break;
+
 		case 83: // S
 			document.getElementById("sacrifice").onclick()
 		break;
@@ -5751,10 +5776,6 @@ window.addEventListener('keydown', function(event) {
 
 		case 85: // U
 			if (tmp.ngp3) unstableAll()
-		break;
-
-		case 82: //R
-			replicantiGalaxy()
 		break;
 	}
 }, false);
@@ -5768,19 +5789,11 @@ window.addEventListener('keyup', function(event) {
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
 	switch (event.keyCode) {
 		case 67: // C
-		bigCrunch()
+			bigCrunch()
 		break;
 
-		case 69: // E, also, nice.
-		document.getElementById("eternitybtn").onclick();
-		break;
 		
-		case 81: // Q, for quantum.
-		if (player.meta) {
-			if (!inAnyQC()) quantum(false,false,0)
-			else quantum()
-		} 
-		break;
+		
 	}
 }, false);
 

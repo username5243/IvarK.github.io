@@ -529,7 +529,7 @@ function updateBRU1Temp() {
 	if (tmp.qu.breakEternity.upgrades.includes(13)) exp *= tmp.beu[13]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
 	exp *= player.infinityPoints.max(1).log10()
-	exp = softcap(exp, "bru1_log", 2)
+	exp = softcap(exp, "bru1_log")
 	tmp.bru[1] = Decimal.pow(10, exp) // BRU1
 }
 

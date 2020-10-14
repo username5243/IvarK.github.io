@@ -80,6 +80,12 @@ var softcap_data = {
 			start: 2e4,
 			pow: 0.65,
 			derv: false
+		},
+		3: {
+			func: "pow",
+			start: 4e4,
+			pow: .55,
+			derv: false
 		}
 	},
 	ts11_log_big_rip: {
@@ -125,7 +131,13 @@ var softcap_data = {
 			start: 3e5,
 			pow: .8,
 			derv: false
-		}
+		},
+		8: {
+			func: "log",
+			start: 5e5,
+			mul: .2,
+			pow: 1e5
+		},
 	},
 	ms322_log: {
 		name: "log base 10 of mastery study 322",
@@ -448,6 +460,57 @@ var softcap_data = {
 			pow: 3
 		}
 	},
+	mptd_log: { //NOT USED IN ANYTHING YET, JUST TESTING SO PLS DONT REMOVE
+		name: "log base 10 of multiplier per ten dimensions",
+		1: {
+			func: "pow",
+			start: 2.5e6,
+			pow: .99,
+			derv: false
+		},
+		2: {
+			func: "pow",
+			start: 3e6,
+			pow: .97,
+			derv: false
+		},
+		3: {
+			func: "pow",
+			start: 3.5e6,
+			pow: .94,
+			derv: false
+		},
+		4: {
+			func: "pow",
+			start: 4e6,
+			pow: .90,
+			derv: false
+		},
+		5: {
+			func: "pow",
+			start: 4.5e6,
+			pow: .85, 
+			derv: false
+		},
+		6: {
+			func: "pow",
+			start: 5e6,
+			pow: .79, 
+			derv: false
+		},
+		7: {
+			func: "pow",
+			start: 5.5e6,
+			pow: .72, 
+			derv: false
+		},
+		8: {
+			func: "pow",
+			start: 6e6,
+			pow: .64, 
+			derv: false
+		},
+	},
 
 	//NG Condensed
 	nds_ngC: {
@@ -622,8 +685,12 @@ function do_softcap(x, data, num) {
 	return x
 }
 
-function softcap(x, id, max = 1/0) {
-	let data = softcap_data[id]
+function softcap(x, id) { 
+	/* 
+	if you only want to do a certain number of softcaps,
+	change some softcaps to just not being active
+	*/
+	var data = softcap_data[id]
 	if (tmp.ngp3 && tmp.qu.bigRip.active) {
 		let big_rip_data = softcap_data[id + "_big_rip"]
 		if (big_rip_data !== undefined) data = big_rip_data
@@ -634,20 +701,19 @@ function softcap(x, id, max = 1/0) {
 		return
 	}
 
-	let sc = 1
-	let stopped = false
-	while (!stopped && sc <= max) {
-		let y = do_softcap(x, data, sc)
-		if (y !== "non-existent") {
-			x = y
-			sc++
-		} else stopped = true
+	var sc = 1
+	var stopped = false
+	while (!stopped) {
+		var y = do_softcap(x, data, sc)
+		sc++
+		if (y !== "non-existent") x = y
+		else stopped = true
 	}
 	return x
 }
 
 function getSoftcapName(id){
-	return softcap_data[id]["name"]
+	return softcap_data[id]["name"] || "yeet fix bugs pls"
 }
 
 function getSoftcapAmtFromId(id){
@@ -669,6 +735,7 @@ function getSoftcapAmtFromId(id){
 		bu45: () => bu.effects[45](),
 		EPtoQK: () => getEPtoQKMult(),
 		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
+		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
 		// Condensened: () =>
 		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
@@ -694,7 +761,7 @@ function hasSoftcapStarted(id, num){
 		that is: if it is false it does not display, but if it is true,
 		it continues as if nothing happens
 		NOTE: this excludes Big Rip, and other endings that are at the end of words 
-		This currently includes: _ngC, _dilation, _big_rip, _ngm4
+		This currently includes: _ngC, _big_rip, _dilation, _ngmX for integers of length 1 X
 		*/
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
@@ -706,6 +773,7 @@ function hasSoftcapStarted(id, num){
 		bam: tmp.ngp3,
 		bu45: tmp.ngp3,
 		ig_log_high: tmp.ngp3 && tmp.ig !== undefined,
+		mptd_log: false, //again, for now only
 	}
 	if (l >= 4 && !tmp.ngC && id.slice(l - 4, l) == "_ngC") return false
 	if (l >= 5 && id.slice(l - 5, l - 1) == "_ngm") {
@@ -820,6 +888,7 @@ function updateSoftcapStatsTab(){
 		bu45: "softcap_bu45",
 		EPtoQK: "softcap_epqk",
 		qc3reward: "softcap_qc3",
+		mptd_log: "softcap_mptd",
 		// Condensened:
 		nds_ngC: "softcap_C_nd",
 		ts_ngC: "softcap_C_ts",

@@ -771,7 +771,7 @@ let tsMults = {
 		if (log < 0) log = 0
 		
 		if (player.galacticSacrifice || !bigRipped) return Decimal.pow(10, log)
-		log = softcap(log, "ts11_log_big_rip", 1)
+		log = softcap(log, "ts11_log_big_rip")
 		
 		return Decimal.pow(10, log)
 	},
