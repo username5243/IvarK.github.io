@@ -524,7 +524,7 @@ var bEn = {
 			let x = player.ghostify.hb.higgs
 			if (!tmp.newNGP3E) x = Math.sqrt(x / 2)
 
-			return x * Math.log10(l.max(10).log10()) + 1
+			return x * Math.log10(l.plus(10).log10()) + 1
 		},
 		15(l) {
 			let div = tmp.newNGP3E ? 1.75 : 2.5
@@ -536,7 +536,6 @@ var bEn = {
 		},
 		35(l) {
 			return Decimal.add(l, 1).pow(0.25)
-			//i think this might be op if we dont softcap
 		},
 		45(l) {
 			return Decimal.add(l, 1).log10() / 10 + 1

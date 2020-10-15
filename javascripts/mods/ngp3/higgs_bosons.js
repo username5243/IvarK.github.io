@@ -117,7 +117,7 @@ function restartHiggs() {
 function getHiggsRequirementBase() {
 	var div = new Decimal(1)
 	if (isEnchantUsed(14)) div = div.times(tmp.bEn[14].higgs || 1)
-	return new Decimal(1e18).divide(div)
+	return new Decimal(1e20).divide(div)
 }
 
 function getHiggsRequirementMult() {

@@ -207,7 +207,7 @@ let GDs = {
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.max(Math.sqrt(Math.floor((h - 55) / 5)), 0) + 1
+		let target = h >= 55 ? Math.floor(Math.sqrt((h - 55) / 5)) + 1 : 0
 		let toAdd = Math.max(target - GDs.save.extraGDBs, 0)
 		if (toAdd < 1) return
 		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()

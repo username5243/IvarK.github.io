@@ -81,14 +81,13 @@ var softcap_data = {
 			pow: 0.65,
 			derv: false
 		},
-		/*
 		3: {
 			func: "pow",
 			start: 4e4,
 			pow: .55,
-			derv: false
+			derv: false,
+			active: false,
 		}
-		*/
 	},
 	ts11_log_big_rip: {
 		name: "log base 10 of time study 11 effect in Big Rip",
@@ -122,26 +121,12 @@ var softcap_data = {
 			pow: 0.4,
 			derv: true
 		},
-		/*
 		6: {
-			func: "pow",
-			start: 2e5,
-			pow: .9,
-			derv: false
-		},
-		7: {
-			func: "pow",
-			start: 3e5,
-			pow: .8,
-			derv: false
-		},
-		8: {
 			func: "log",
 			start: 5e5,
 			mul: .2,
 			pow: 1e5
-		},
-		*/
+		},	
 	},
 	ms322_log: {
 		name: "log base 10 of mastery study 322",
@@ -165,7 +150,6 @@ var softcap_data = {
 			start: 1e10,
 			pow: 10
 		},
-		/*
 		3: {
 			func: "pow",
 			start: 2e10,
@@ -183,8 +167,7 @@ var softcap_data = {
 			start: 1e11,
 			pow: 11,
 			add: -1
-		}
-		*/
+		},
 	},
 	beu3_log: {
 		name: "log base 10 of Break Eternity Upgrade 3",
@@ -688,7 +671,7 @@ function do_softcap(x, data, num) {
 	if (decimal ? x.gt(data["start"]) : x > data["start"]) canSoftcap = true
 
 	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
-	return "stop"
+	return x
 }
 
 function softcap(x, id) { 

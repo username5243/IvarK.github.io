@@ -4173,7 +4173,7 @@ function ghostifyAutomationUpdating(diff){
 	if (isAutoGhostActive(17)) extract()
 	if (isAutoGhostActive(19)) {
 		let ag = player.ghostify.automatorGhosts[19]
-		ag.t = (ag.t || 0) + diff / 2 * (player.achievements.includes("ng3p103") ? 10 : 1)
+		ag.t = (ag.t || 0) + diff / 2
 		let times = Math.floor(ag.t)
 		if (times > 0) {
 			autoMaxAllEnchants(times)
@@ -5860,10 +5860,6 @@ function resetUP() {
 	mult18 = 1
 	updatePowerInt = setInterval(updatePowers, 100)
 }
-
-setInterval(function() {
-	if (isAutoGhostActive && isAutoGhostActive(17) && player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
-}, 100)
 
 function switchDecimalMode() {
 	if (confirm('You will change the number library preference to ' + (player.aarexModifications.breakInfinity ? 'logarithmica_numerus_lite':'break_infinity.min') + '.js. This requires the webpage to reload for this to take effect. Are you sure you want to do this?')) {
