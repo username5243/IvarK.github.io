@@ -508,13 +508,11 @@ var bEn = {
 			}
 		},
 		23(l) {
-			let exp = Math.max(l.log10() + 1, 0) / 3
+			if (Decimal.eq(0, l)) return new Decimal(1)
+			let exp = Math.max(l.max(1).log10() + 1, 0) / 3
 			if (player.ghostify.bl.am.gt(1e11)) exp *= player.ghostify.bl.am.div(10).log10() / 10
 			if (exp > 5) exp = Math.sqrt(exp * 5)
-			if (exp > 60) {
-				exp = Math.sqrt(exp * 60)
-				//Temporary softcap
-			}
+			if (exp > 60) exp = Math.sqrt(exp * 60)
 			return Decimal.pow(player.ghostify.bl.am.add(10).log10(), exp)
 		},
 		24(l) {
@@ -603,7 +601,7 @@ var bEn = {
 			if (id == 14) updateBAMAmount()
 		}
 	},
-	limits: [0, 2, 5, 9],
+	limits: [0, 2, 5, 10],
 	autoScalings:{
 		1: 1.5,
 		2: 3,

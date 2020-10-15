@@ -1,4 +1,7 @@
 function nP(a) {
+	if (typeof a == "string") {
+		return nN(new Decimal(a))
+	}
 	if (!a.e) return a
 	a = nN(a)
 	return a

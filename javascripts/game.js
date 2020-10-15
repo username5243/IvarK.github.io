@@ -3841,7 +3841,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
 	if (player.ghostify.wzb.unl) {
-		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+		if (isAutoGhostActive(17)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 		if (isAutoGhostActive(24)) higgsReset(true)
 		if (isAutoGhostActive(25)) GDs.gdBoost()

@@ -567,6 +567,10 @@ function updateBRU15Temp() {
 }
 
 function updateBRU16Temp() {
+	if (!tmp.qu.bigRip.active) {
+		tmp.bru[16] = new Decimal(1)
+		return
+	}
 	tmp.bru[16] = player.dilation.dilatedTime.div(1e100).pow(0.155).max(1)
 }
 
@@ -584,6 +588,11 @@ function updateBigRipUpgradesTemp(){
 }
 
 function updatePhotonsUnlockedBRUpgrades(){
+	if (!tmp.qu.bigRip.active) {
+		tmp.bru[18] = new Decimal(1)
+		tmp.bru[19] = new Decimal(1)
+		return
+	}
 	var bigRipUpg18base = 1 + tmp.qu.bigRip.spaceShards.div(1e140).add(1).log10()
 	var bigRipUpg18exp = Math.max(tmp.qu.bigRip.spaceShards.div(1e140).add(1).log10() / 10, 1)
 	if (bigRipUpg18base > 10 && tmp.newNGP3E) bigRipUpg18base *= Math.log10(bigRipUpg18base)

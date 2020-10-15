@@ -628,13 +628,13 @@ var softcap_vars = {
 var softcap_funcs = {
 	pow(x, start, pow, derv = false) {
 		x = Math.pow(x / start, pow)
-		if (derv) x = (x - 1) / pow + 1
+		if (derv && Decimal.neq(pow, 0)) x = (x - 1) / pow + 1
 		x *= start
 		return x
 	},
 	pow_decimal(x, start, pow, derv = false) {
 		x = Decimal.div(x, start).pow(pow)
-		if (derv) x = x.sub(1).div(pow).add(1)
+		if (derv && Decimal.neq(pow, 0)) x = x.sub(1).div(pow).add(1)
 		x = x.times(start)
 		return x
 	},
