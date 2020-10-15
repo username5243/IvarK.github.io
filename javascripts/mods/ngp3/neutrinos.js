@@ -89,7 +89,7 @@ function onNotationChangeNeutrinos() {
 	document.getElementById("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
 	document.getElementById("ghpMult").textContent=shortenDimensions(Decimal.pow(2, player.ghostify.multPower-1))
 	document.getElementById("ghpMultUpgCost").textContent=shortenDimensions(getGHPMultCost())
-	for (var u = 1; u <= neutrinoUpgrades.max; u++) document.getElementById("neutrinoUpg" + u + "Cost").textContent=shortenDimensions(tmp.nuc[u])
+	for (var u = 1; u <= neutrinoUpgrades.max; u++) document.getElementById("neutrinoUpg" + u + "Cost").textContent=shortenDimensions(new Decimal(tmp.nuc[u]))
 }
 
 function getNeutrinoGain() {
@@ -246,16 +246,16 @@ var neutrinoBoosts = {
 		eff(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
-			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
+			if (!hasNU(18) && nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
 			return nb10
 		}
 	},
 	11: {
 		eff(nt) {
 			let nb11neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
-			let nb11exp = Math.sqrt(nb11neutrinos)
-			let nb11 = Decimal.pow(1.15, nb11exp)
-			return nb11
+			let exp = Math.pow(nb11neutrinos, hasNU(18) ? 0.75 : 0.5)
+
+			return Decimal.pow(1.15, exp)
 		}
 	},
 	12: {

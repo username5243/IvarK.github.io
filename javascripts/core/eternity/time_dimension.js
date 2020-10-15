@@ -71,7 +71,6 @@ function calcVanillaTSTDMult(tier){
 
 function getRepToTDExp() {
 	let x = 0.1
-	if (isQCRewardActive(9)) x *= tmp.qcRewards[9].td
 	return x
 }
 

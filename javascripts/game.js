@@ -3841,7 +3841,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
 	if (player.ghostify.wzb.unl) {
-		if (isAutoGhostActive(17)) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 		if (isAutoGhostActive(24)) higgsReset(true)
 		if (isAutoGhostActive(25)) GDs.gdBoost()
@@ -4173,7 +4173,7 @@ function ghostifyAutomationUpdating(diff){
 	if (isAutoGhostActive(17)) extract()
 	if (isAutoGhostActive(19)) {
 		let ag = player.ghostify.automatorGhosts[19]
-		ag.t = (ag.t || 0) + diff / 2
+		ag.t = (ag.t || 0) + diff / 2 * (player.achievements.includes("ng3p103") ? 10 : 1)
 		let times = Math.floor(ag.t)
 		if (times > 0) {
 			autoMaxAllEnchants(times)
@@ -4289,8 +4289,11 @@ function treeOfDecayUpdating(diff){
 			power = power.sub(decayed.times(decayRate))
 
 			var sProd = getQuarkSpinProduction(shorthand)
+			var decaySpent = decayed
+			if (isAutoGhostsSafe && isAutoGhostActive(c + 1)) decaySpent = decaySpent.max(power.div(decayRate).times(10).min(diff))
+
 			branch.quarks = power.gt(1) ? Decimal.pow(2, power - 1).times(mult) : power.times(mult)
-			branch.spin = branch.spin.add(sProd.times(decayed))	
+			branch.spin = branch.spin.add(sProd.times(decaySpent))	
 		}
 	}
 }
@@ -4867,7 +4870,7 @@ function challengeOverallDisplayUpdating(){
 			if (tmp.qu.autoOptions.sacrifice) document.getElementById("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<=9;c++) {
 				let x = tmp.qcRewards[c]
-				if (c==9) document.getElementById("qc9reward").textContent = getFullExpansion(Math.floor(x.td)) + "x stronger to Time Dimensions, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
+				if (c==9) document.getElementById("qc9reward").textContent = "^" + getFullExpansion(Math.floor(x.ri)) + " to interval, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
 				else if (c==5) document.getElementById("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
 				else if (c!=2&&c!=8) document.getElementById("qc"+c+"reward").textContent = shorten(x)
 			}
@@ -4998,9 +5001,9 @@ function passiveQuantumLevelStuff(diff){
 			else r = r.sqrt()
 			tmp.qu.gluons[p[i]] = tmp.qu.gluons[p[i]].add(r.times(diff))
 		}
-		if (player.ghostify.milestones >= 16) tmp.qu.quarks=tmp.qu.quarks.add(quarkGain().times(diff / 100))
+		if (player.ghostify.milestones >= 16) tmp.qu.quarks = tmp.qu.quarks.add(quarkGain().times(diff / 100))
 	}
-	if (tmp.qu.bigRip.active ? player.achievements.includes("ng3p106") : player.achievements.includes("ng3p112")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if (tmp.qu.bigRip.active ? player.achievements.includes("ng3p103") : player.achievements.includes("ng3p112")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (player.achievements.includes("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 	if (hasBosonicUpg(51) || (tmp.be && player.ghostify.milestones > 14)) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.add(getEMGain().times(diff / 100))
 	updateQuarkDisplay()
@@ -5857,6 +5860,10 @@ function resetUP() {
 	mult18 = 1
 	updatePowerInt = setInterval(updatePowers, 100)
 }
+
+setInterval(function() {
+	if (isAutoGhostActive && isAutoGhostActive(17) && player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+}, 100)
 
 function switchDecimalMode() {
 	if (confirm('You will change the number library preference to ' + (player.aarexModifications.breakInfinity ? 'logarithmica_numerus_lite':'break_infinity.min') + '.js. This requires the webpage to reload for this to take effect. Are you sure you want to do this?')) {

@@ -237,7 +237,10 @@ function getReplicantiInterval() {
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (tmp.ngp3) if (masteryStudies.has(332)) interval = interval.div(getMTSMult(332))
+	if (tmp.ngp3) {
+		if (masteryStudies.has(332)) interval = interval.div(getMTSMult(332))
+		if (isQCRewardActive(9)) interval = interval.pow(tmp.qcRewards[9].ri)
+	}
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }

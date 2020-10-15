@@ -66,7 +66,7 @@ let tmp = {
 	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
 	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000",1/0],
 	nu: {},
-	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,1/0,1/0,1/0],
+	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,"1e10000",1/0,1/0],
 	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
 	lti: [2,4,1.5,10,4,1e3,2.5,3],
 	effL: [0,0,0,0,0,0,0],
@@ -115,10 +115,13 @@ function updateBlueLightBoostTemp(){
 }
 
 function updateIndigoLightBoostTemp(){
-	var loglighteffect5 = tmp.effL[5] > 25 ? Math.sqrt(tmp.effL[5]*10+375) : tmp.effL[5]
-	loglighteffect5 *= tmp.newNGP3E ? 20 : 10
-	if (loglighteffect5 > 729) loglighteffect5 = Math.pow(loglighteffect5 * 27, 2 / 3)
-	tmp.le[5] = Decimal.pow(10, loglighteffect5) 
+	let log = tmp.effL[5]
+	log *= tmp.newNGP3E ? 20 : 10
+
+	if (log > 250) log = Math.sqrt(log + 375) * 10
+	if (log > 729) log = Math.pow(log * 27, 2 / 3)
+
+	tmp.le[5] = Decimal.pow(10, log)
 }
 
 function updateVioletLightBoostTemp(){
@@ -188,6 +191,11 @@ function updateInfiniteTimeTemp() {
 
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
+	if (inQC(9)) {
+		tmp.ig = new Decimal(1)
+		return
+	}
+
 	let x = Math.max(player.galaxies, 1)
 	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
@@ -626,17 +634,20 @@ function updateWZBosonsTemp(){
 	//softcap it to remove inflation in WZB
 
 	data.wbt = Decimal.pow(tmp.newNGP3E ? 5 : 3, bosonsExp) //W Bosons boost to extract time
-	data.wbo = Decimal.pow(10, Math.max(bosonsExp, 0)) //W Bosons boost to Z Neutrino oscillation requirement
+	data.wbo = Decimal.pow(10, bosonsExp) //W Bosons boost to Z Neutrino oscillation requirement
 	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) 
 	//W Bosons boost to Bosonic Antimatter production
 
-	var zbslog = player.ghostify.wzb.zb.div(10).add(1).log10() / 2
-	zbslog = Math.sqrt(1 + zbslog / 100) * 200 - 199
-	// if (zbslog > 40) zbslog = Math.sqrt(40 * zbslog) 
-	// I reiterate, you need to softcap something in this era, it does not work properly
-	//if you remove this then things *will* inflate
-	if (isEnchantUsed(25)) zbslog *= tmp.bEn[25]
-	data.zbs = Decimal.pow(10, zbslog) //Z Bosons boost to W Quark
+	let zLog = player.ghostify.wzb.zb.div(10).add(1).log10()
+	let zLogMult = 0.5
+	if (isEnchantUsed(25)) {
+		zLogMult = tmp.bEn[25]
+		//Effect limit before inflation comes: x^0.807388817
+		//Exponent formula: 1 / (1 + log(3) / 2)
+		//At x^0.5, if you gain 10x Z Bosons without boosts, you would get 1,791x with boosts.
+	}
+
+	data.zbs = Decimal.pow(10, zLog * zLogMult) //Z Bosons boost to W Quark
 }
 
 function updateNanoEffectUsages() {

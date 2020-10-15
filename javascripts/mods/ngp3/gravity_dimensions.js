@@ -203,11 +203,11 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return e * 10 + 100
+		return Math.pow(e, 2) * 5 + 55
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.max(Math.floor(h / 10) - 9, 0)
+		let target = Math.max(Math.sqrt(Math.floor((h - 55) / 5)), 0) + 1
 		let toAdd = Math.max(target - GDs.save.extraGDBs, 0)
 		if (toAdd < 1) return
 		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
@@ -317,7 +317,7 @@ let GDs = {
 				return !pl.on()
 			},
 			eff(x) {
-				return Math.pow(x + 1, .5)
+				return Math.pow(x + 1, 1/3)
 			},
 			rdExp: 1.5
 		},
@@ -329,7 +329,7 @@ let GDs = {
 			eff(x) {
 				return x + 1
 			},
-			rdExp: 0.75
+			rdExp: 1
 		},
 		tod: {
 			desc: "^{{x}} to Branch speed",
@@ -339,14 +339,14 @@ let GDs = {
 			eff(x) {
 				return Math.pow(x / 2 + 1, 1/3)
 			},
-			rdExp: 0.5
+			rdExp: 1.5
 		},
 		gph: {
 			desc: "^{{x}} to Photonic Flow",
 			eff(x) {
 				return Math.pow(x / 3 + 1, .8)
 			},
-			rdExp: 1.25
+			rdExp: 0.75
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",

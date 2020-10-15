@@ -310,8 +310,8 @@ function atHiggsAchCheck(){
 function atGravDimsAchCheck(){
 	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
 	if (tmp.qcComps >= 32) giveAchievement("The Forbidden Challenge")
-	if (player.ghostify.ghostParticles.plus(1).log10() >= 1/0) giveAchievement("Einstein's Ghost")
-	if (tmp.qu.nanofield.rewards >= 250) giveAchievement("Gigafield")
+	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
+	if (tmp.qu.nanofield.rewards >= 500) giveAchievement("Gigafield")
 	if (ranking >= 250) giveAchievement("X-Ranked")
 	if (tmp.qu.bigRip.bestThisRun.plus(1).log10() >= 1/0) giveAchievement("Do you even how to?")
 	//

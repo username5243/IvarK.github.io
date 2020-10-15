@@ -143,8 +143,9 @@ function showBranchTab(tabName) {
 }
 
 function getUnstableGain(branch) {
-	let ret = tmp.qu.usedQuarks[branch].div("1e420").add(1).log10()
-	if (ret < 2) ret = Math.max(tmp.qu.usedQuarks[branch].div("1e300").div(99).log10() / 60,0)
+	let log = tmp.qu.usedQuarks[branch].max(1).log10()
+	let ret = Math.max(log / 50 - 6, 0)
+	ret = Math.pow(ret, 2) + ret * 2
 
 	let power = getBranchUpgLevel(branch, 2) - getRDPower(branch)
 	ret = Decimal.pow(2, power).times(ret)
@@ -228,7 +229,7 @@ function getBranchFinalSpeed() {
 }
 
 function getDecayRate(branch) {
-	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, Math.max(0, getRDPower(branch) - 4)))
+	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, Math.max(0, getRDPower(branch) - 4) + 2))
 	if (branch == "r") {
 		if (GUActive("rg8")) ret = ret.div(getGU8Effect("rg"))
 	}

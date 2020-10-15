@@ -473,7 +473,7 @@ var bEn = {
 		24: [1e6, 10],
 		34: [1, 0],
 		15: [2e21, 20],
-		25: [2e160, 2e140],
+		25: [2e200, 2e180],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -483,7 +483,7 @@ var bEn = {
 		24: "You gain more Bosonic Battery.",
 		34: "Higgs Bosons boost Bosonic Watts.",
 		15: "You gain more Gravity Energy.",
-		25: "Z Bosons are stronger.",
+		25: "Z Bosons give a stronger boost to W Bosons.",
 		35: "Divide the requirement of Gravity Dimension Shifts / Boosts.",
 		45: "Gravity Radiation gives a weaker nerf to Gravity Well."
 	},
@@ -511,24 +511,31 @@ var bEn = {
 			let exp = Math.max(l.log10() + 1, 0) / 3
 			if (player.ghostify.bl.am.gt(1e11)) exp *= player.ghostify.bl.am.div(10).log10() / 10
 			if (exp > 5) exp = Math.sqrt(exp * 5)
+			if (exp > 60) {
+				exp = Math.sqrt(exp * 60)
+				//Temporary softcap
+			}
 			return Decimal.pow(player.ghostify.bl.am.add(10).log10(), exp)
 		},
 		24(l) {
 			return Decimal.pow(Decimal.add(l, 100).log10(), 4).div(16)
 		},
 		34(l) {
-			return Math.sqrt(player.ghostify.hb.higgs) * Math.log10(l.add(1).log10() + 1) / 2 + 1
+			let x = player.ghostify.hb.higgs
+			if (!tmp.newNGP3E) x = Math.sqrt(x / 2)
+
+			return x * Math.log10(l.max(10).log10()) + 1
 		},
 		15(l) {
-			let div = tmp.newNGP3E ? 1.75 : 2
+			let div = tmp.newNGP3E ? 1.75 : 2.5
 			let eff = Math.log10(l.add(1).log10() + 1) / div + 1
 			return eff
 		},
 		25(l) {
-			return Math.pow(l.plus(1).log10() / 100 + 1, .25)
+			return 0.8 - 0.3 / Math.sqrt(l.add(1).log10() / 100 + 1)
 		},
 		35(l) {
-			return Decimal.pow(2, Math.sqrt(l)) 
+			return Decimal.add(l, 1).pow(0.25)
 			//i think this might be op if we dont softcap
 		},
 		45(l) {
@@ -545,7 +552,7 @@ var bEn = {
 			return "/" + shorten(x.higgs) + " to Higgs requirement, " + getFullExpansion(x.bUpgs) + " starting upgrades"
 		},
 		25(x) {
-			return (x * 100 - 100).toFixed(2) + "% stronger"
+			return "x^0.500 -> x^" + x.toFixed(3)
 		},
 		35(x) {
 			return "/" + shorten(x)
@@ -780,9 +787,9 @@ var bu = {
 			g3: 2e12
 		},
 		52: {
-			am: 2e100,
-			g2: 4e33,
-			g5: 2e15
+			am: 2e150,
+			g2: 2e170,
+			g5: 2e155
 		},
 	},
 	reqData: {},
@@ -836,16 +843,14 @@ var bu = {
 		},
 		13() {
 			if (!tmp.quActive) return 1
-			var decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
-			var div = 3
-			if (tmp.newNGP3E) decays += Math.sqrt(decays) + decays / 3
-			let ret = Math.max(Math.sqrt(decays) / div + .6, 1)
-			if (tmp.newNGP3E && ret > 6) ret = Math.pow(ret, 3) / 36
-			if (tmp.newNGP3E && ret > 10) ret = Math.pow(ret, 3) / 100
-			if (tmp.newNGP3E && ret > 14) ret = Math.pow(ret, 3) / 196
 
-			if (ret > 100) ret = Math.log10(ret) * 100
-			return ret
+			let decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
+			let x
+
+			if (tmp.newNGP3E) x = Math.sqrt(decays) + 1
+			else x = Math.sqrt(decays) / 3 + .6
+
+			return Math.max(x, 1)
 		},
 		14() {
 			if (!tmp.quActive) return 0
@@ -939,10 +944,10 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = player.quantum.bigRip.active ? 250 : 60
+			let div1 = player.quantum.bigRip.active ? 1e9 : 2e8
 			let div2 = player.quantum.bigRip.active ? 100 : 40
 			return {
-				ig: Math.pow(Math.log10(log + 1) / div1 + 1, 2),
+				ig: Math.pow(log / div1 + 1, 0.1),
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
 			}
 		},

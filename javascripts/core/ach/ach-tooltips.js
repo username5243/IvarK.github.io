@@ -502,7 +502,7 @@ function setR24Tooltip() {
 	// Row 24 (ng3p10) (0/8)
 	//ng3p101/////
 	//ng3p102/////
-	//ng3p103/////
+	let einstein = document.getElementById("Einstein's Ghost")
 	//ng3p104/////
 	//ng3p105/////
 	//ng3p106/////
@@ -510,6 +510,7 @@ function setR24Tooltip() {
 	//ng3p108/////
 
 	//ACHIEVEMENT ROW 24
+	einstein.setAttribute('ach-tooltip', "Get " + shortenMoney(Decimal.pow(10, 5e3)) + " Ghost Particles. Reward: You passive generate Ghost Particles in Big Rips, Light Empowerments reset nothing, and Auto-Extractor & Auto-Enchanter Ghosts are 10x faster.")
 }
 
 function setR25Tooltip() {

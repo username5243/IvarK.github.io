@@ -107,7 +107,6 @@ function higgsReset(auto) {
 		updateBosonicLimits()
 		updateBosonicStuffCosts()
 	}
-	if (GDs.unlocked()) GDs.getExtraGDBs()
 }
 
 function restartHiggs() {
@@ -118,7 +117,7 @@ function restartHiggs() {
 function getHiggsRequirementBase() {
 	var div = new Decimal(1)
 	if (isEnchantUsed(14)) div = div.times(tmp.bEn[14].higgs || 1)
-	return new Decimal(1e20).divide(div)
+	return new Decimal(1e18).divide(div)
 }
 
 function getHiggsRequirementMult() {
@@ -138,6 +137,7 @@ function getHiggsGain() {
 
 function addHiggs(x) {
 	player.ghostify.hb.higgs += x
+	if (GDs.unlocked()) GDs.getExtraGDBs()
 }
 
 function matchTempPlayerHiggs(){
