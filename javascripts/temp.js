@@ -1,3 +1,26 @@
+let tmp = {
+	nrm: new Decimal(1),
+	rm: new Decimal(1),
+	it: 1,
+	rg4: false,
+	inQCs: [0],
+	pct: "",
+	ns: 1,
+	bru: {},
+	be: false,
+	beu: {},
+	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
+	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000",1/0],
+	nu: {},
+	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,"1e10000",1/0,1/0],
+	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
+	lti: [2,4,1.5,10,4,1e3,2.5,3],
+	effL: [0,0,0,0,0,0,0],
+	ls: [0,0,0,0,0,0,0],
+	le: [0,0,0,0,0,0,0],
+	leBonus: {}
+}
+
 function updateTemp() {
 	if (typeof player != "undefined") {
 		if (player.money) tmp.ri = player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
@@ -50,29 +73,6 @@ function updateTemp() {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
 	}
-}
-
-let tmp = {
-	nrm: new Decimal(1),
-	rm: new Decimal(1),
-	it: 1,
-	rg4: false,
-	inQCs: [0],
-	pct: "",
-	ns: 1,
-	bru: {},
-	be: false,
-	beu: {},
-	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
-	nbc: [1,2,4,6,15,50,1e3,1e14,1e35,"1e900","1e3000",1/0],
-	nu: {},
-	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,"1e10000",1/0,1/0],
-	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
-	lti: [2,4,1.5,10,4,1e3,2.5,3],
-	effL: [0,0,0,0,0,0,0],
-	ls: [0,0,0,0,0,0,0],
-	le: [0,0,0,0,0,0,0],
-	leBonus: {}
 }
 
 function updateActiveLayers() {
@@ -642,9 +642,13 @@ function updateWZBosonsTemp(){
 	//if (bosonsExp > 200) bosonsExp = 200 * Math.sqrt(bosonsExp / 200) 
 	//softcap it to remove inflation in WZB
 
-	data.wbt = Decimal.pow(tmp.newNGP3E ? 5 : 3, bosonsExp) //W Bosons boost to extract time
-	data.wbo = Decimal.pow(10, bosonsExp) //W Bosons boost to Z Neutrino oscillation requirement
-	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(100).max(1).pow(1 / 3).sub(1) 
+	let secBase = tmp.newNGP3E ? 2 : 1
+	data.wbt = Decimal.pow(3, bosonsExp).times(Decimal.pow(secBase, Math.sqrt(bosonsExp))) 
+	//W Bosons boost to extract time
+	data.wbo = Decimal.pow(10, bosonsExp).times(Decimal.pow(secBase, Math.sqrt(bosonsExp))) 
+	//W Bosons boost to Z Neutrino oscillation requirement
+	let div1 = tmp.newNGP3E ? 2 : 100
+	data.wbp = player.ghostify.wzb.wpb.add(player.ghostify.wzb.wnb).div(div1).max(1).pow(1 / 3).sub(1) 
 	//W Bosons boost to Bosonic Antimatter production
 
 	let zLog = player.ghostify.wzb.zb.div(10).add(1).log10()

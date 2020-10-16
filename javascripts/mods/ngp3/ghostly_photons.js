@@ -37,7 +37,9 @@ function getGHRCap() {
 }
 
 function getLightThreshold(l) {
-	return Decimal.pow(getLightThresholdIncrease(l), player.ghostify.ghostlyPhotons.lights[l]).times(tmp.lt[l])
+	let inc = Decimal.pow(getLightThresholdIncrease(l), player.ghostify.ghostlyPhotons.lights[l])
+	let base = new Decimal(tmp.lt[l]).div(tmp.newNGP3E ? 10 : 1)
+	return inc.times(base)
 }
 
 function getLightThresholdIncrease(l) {
@@ -140,10 +142,6 @@ function lightEmpowerment(auto) {
 	if (!auto && !player.achievements.includes("ng3p103") && !player.aarexModifications.leNoConf) {
 		if (!player.achievements.includes("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
 		if (player.achievements.includes("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
-		/*
-		a) don't give a confirmation if it resets nothing
-		b) say how many empowerments you can get (1/many)
-		*/
 	}
 	if (!player.ghostify.ghostlyPhotons.enpowerments) document.getElementById("leConfirmBtn").style.display = "inline-block"
 

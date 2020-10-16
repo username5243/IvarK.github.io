@@ -533,7 +533,7 @@ var bEn = {
 			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 30 + 1)
 		},
 		35(l) {
-			return l.max(1).log10() / 3
+			return l.plus(1).log10() / 3
 		},
 		45(l) {
 			return 2 - 1 / (Math.log10(l.max(10).log10()) / 3 + 1)

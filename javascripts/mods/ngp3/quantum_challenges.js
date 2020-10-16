@@ -118,6 +118,13 @@ function getQCGoalLog(QCs, bigRip) {
 		c2 = QCs[1] || 0
 		mods = qcm.on
 	}
+	let cs = [c1, c2]
+	/*
+	if (cs.includes(0) && !cs.includes(6)) mult *= 1.5 
+	Ok Ive been told that QCs are stupid easy once you unlock them 
+	so im thinking we just multiply their goals (this is not tested at all)
+	feel free to never uncomment this :) but i think it might be a good idea for balance
+	*/
 	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
 	if (player.achievements.includes("ng3p102") && !bigRip) mult *= 0.5
 	if (player.achievements.includes("ng3p118") && !bigRip) mult *= 0.75
@@ -126,8 +133,7 @@ function getQCGoalLog(QCs, bigRip) {
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
 	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
 
-	let cs = [c1, c2]
-	mult *= mult
+	mult *= mult //for both challenges
 	if (cs.includes(1) && cs.includes(3)) mult *= 1.6
 	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
 	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
@@ -300,6 +306,7 @@ function getQCCost(QCs) {
 
 	let x = quantumChallenges.costs[QCs[0]]
 	if (QCs[1]) x += quantumChallenges.costs[QCs[1]]
+	if (tmp.newNGP3E) return Math.floor(Math.pow(x, .999))
 	return x
 }
 
