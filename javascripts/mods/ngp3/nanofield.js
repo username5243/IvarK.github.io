@@ -108,7 +108,7 @@ function getQuarkChargeProductionCap() {
 
 var nanoRewards = {
 	scaling: {
-		max: 4,
+		max: 3,
 		0: {
 			start: 0,
 			mult(diff) {
@@ -134,12 +134,6 @@ var nanoRewards = {
 			start: 150,
 			mult(diff) {
 				return Decimal.pow(1.1, diff * (diff + 1) * (diff + 2) / 3 + diff * (diff + 1) / 2 * 19)
-			}
-		},
-		4: {
-			start: 1e3,
-			mult(diff) {
-				return Decimal.pow(2, Math.pow(diff + 1, diff / 100 + 3))
 			}
 		}
 	},
@@ -328,12 +322,11 @@ function updateNextPreonEnergyThreshold(){
 		increment /= 2
 	}
 	tmp.qu.nanofield.power += toSkip
-	tmp.qu.nanofield.best = Math.max(tmp.qu.nanofield.best || 0, tmp.qu.nanofield.power)
 	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
 }
 
 function getAntiPreonGhostWake() {
 	let x = 104
-	if (isLEBoostUnlocked(9)) x += Math.floor(tmp.leBonus[9])
+	if (hasBosonicUpg(53)) x += Math.floor(tmp.blu[53])
 	return x
 }

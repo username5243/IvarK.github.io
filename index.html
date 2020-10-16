@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 16)</span>
+				<span class="warning">(Test server: Beta 17)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2799,7 +2799,7 @@
 								<div id="Einstein's Ghost" class="achievement achievementlocked" style="background-image: url(images/185.png)"></div>
 							</td>
 							<td>
-								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="Get 500 Nanorewards. Reward: You always have Bosonic Upgrade 23 and keep 95% of your best ever Nanorewards. (rounded down)"></div>
+								<div id="Gigafield" class="achievement achievementlocked" style="background-image: url(images/186.png)" ach-tooltip="Get 250 Nanorewards. Reward: You keep Bosonic Upgrade 23 on Higgs."></div>
 							</td>
 							<td>
 								<div id="X-Ranked" class="achievement achievementlocked" style="background-image: url(images/187.png)" ach-tooltip="Get 230 - 250 PC ranking. Reward: Start with 1e25 Space Shards and Eternal Matter."></div>
@@ -5222,7 +5222,7 @@
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>
 						<td><button id="neutrinoMultUpg" class="gluonupgrade unavailablebtn" onclick="buyNeutrinoMult()">You gain 5x more neutrinos.<br>Currently: <span id="neutrinoMult">1</span>x<br>Cost: <span id="neutrinoMultUpgCost">3</span> GhP</button><br><button class="storebtn" onclick='maxNeutrinoMult()' style='width:190px'>Max Neutrino mult</button></td>
-						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
+						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2.5x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)" style="font-size: 10px">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
@@ -5251,8 +5251,8 @@
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg16" onclick="buyNeutrinoUpg(16)">You can become a ghost without having to Big Rip, but at a reduced rate.<br>Cost: <span id="neutrinoUpg16Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg17" onclick="buyNeutrinoUpg(17)">Remove the cost scaling of GhP multiplier upgrades.<br>Cost: <span id="neutrinoUpg17Cost"></span> of any neutrinos</button></td>
-						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg18" onclick="buyNeutrinoUpg(18)">The 4th row of Neutrino Boosts are stronger.<br>Cost: <span id="neutrinoUpg18Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg17" onclick="buyNeutrinoUpg(17)">Neutrino Boost 7 works outside of Big Rips, but at reduced rate.<br>Cost: <span id="neutrinoUpg17Cost"></span> of any neutrinos</button></td>
+						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg18" onclick="buyNeutrinoUpg(18)">Remove the cost scaling of GhP multiplier upgrades.<br>Cost: <span id="neutrinoUpg18Cost"></span> of any neutrinos</button></td>
 					</tr>
 				</table>
 			</div>
@@ -5515,9 +5515,7 @@
 						<td id="le3">
 							In non-Big Rips, Red Light multiplies normal galaxy amount of 'Intergalactic' reward by <span class="red" id="leBoost3" style="font-size:35px"></span>x.<br>(Your best red Light doesn't boost this.)
 						</td>
-						<td id="le9">
-							They make that Antipretus wakes up <span class="orange" id="leBoost9" style="font-size:35px"></span> later.
-						</td>
+						<td></td>
 						<td id="le6">
 							They boost Time Theorem production by <span class="yellow" id="leBoost6" style="font-size:35px"></span>x.
 						</td>
@@ -5584,18 +5582,14 @@
 							<button class="gluonupgrade gph" id="lightEmpowerment" onclick="lightEmpowerment()">Gain 1 Light Empowerment, but become a ghost and reset this mechanic.<br>(requires <span id="lightEmpowermentReq"></span> ultraviolet light.)</button>
 						</td>
 					</tr><tr>
-						<td id="le10">
-							They strengthen Tree Upgrades by <span class="lEp" id="leBoost10" style="font-size:35px"></span>%
-						</td>
+						<td></td>
 						<td>
 							Translated to +<span class="lEp" id="lightEmpowermentsEffect" style="font-size:35px"></span>x multiplier to all Light strength boosts.
 						</td>
 						<td id="le5">
 							They make that all Lights boost other Lights from (x+1)^0.5 to <span class="lEp" id="leBoost5" style="font-size:35px"></span>.
 						</td>
-						<td id="le11">
-							They subtract their requirement by <span class="lEp" id="leBoost11" style="font-size:35px"></span>.
-						</td>
+						<td></td>
 					</tr></table>
 				</div>
 			</div>

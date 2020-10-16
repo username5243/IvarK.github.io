@@ -445,7 +445,9 @@ function autoMaxEnchant(id, times) {
 }
 
 function autoMaxAllEnchants(times) {
-	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) autoMaxEnchant(g1 * 10 + g2, times)
+	for (var g2 = 2; g2 <= br.limit; g2++) {
+		for (var g1 = 1; g1 < g2; g1++) autoMaxEnchant(g1 * 10 + g2, times)
+	}
 }
 
 function isEnchantUsed(x) {
@@ -484,8 +486,8 @@ var bEn = {
 		34: "Higgs Bosons boost Bosonic Watts.",
 		15: "You gain more Gravity Energy.",
 		25: "Z Bosons give a stronger boost to W Bosons.",
-		35: "Divide the requirement of Gravity Dimension Shifts / Boosts.",
-		45: "Gravity Radiation gives a weaker nerf to Gravity Well."
+		35: "Gain extra Gravity Power before Radioactivity.",
+		45: "Multiply the gain of Gravity Energy, but reduce the charging effect."
 	},
 	effects: {
 		12(l) {
@@ -511,10 +513,6 @@ var bEn = {
 			let exp = Math.max(l.log10() + 1, 0) / 3
 			if (player.ghostify.bl.am.gt(1e11)) exp *= player.ghostify.bl.am.div(10).log10() / 10
 			if (exp > 5) exp = Math.sqrt(exp * 5)
-			if (exp > 60) {
-				exp = Math.sqrt(exp * 60)
-				//Temporary softcap
-			}
 			return Decimal.pow(player.ghostify.bl.am.add(10).log10(), exp)
 		},
 		24(l) {
@@ -527,19 +525,17 @@ var bEn = {
 			return x * Math.log10(l.max(10).log10()) + 1
 		},
 		15(l) {
-			let div = tmp.newNGP3E ? 1.75 : 2.5
-			let eff = Math.log10(l.add(1).log10() + 1) / div + 1
+			let eff = Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
 			return eff
 		},
 		25(l) {
-			return 0.8 - 0.3 / Math.sqrt(l.add(1).log10() / 100 + 1)
+			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 30 + 1)
 		},
 		35(l) {
-			return Decimal.add(l, 1).pow(0.25)
-			//i think this might be op if we dont softcap
+			return l.max(1).log10() / 3
 		},
 		45(l) {
-			return Decimal.add(l, 1).log10() / 10 + 1
+			return 2 - 1 / (Math.log10(l.max(10).log10()) / 3 + 1)
 		}
 	},
 	effectDescs: {
@@ -555,10 +551,7 @@ var bEn = {
 			return "x^0.500 -> x^" + x.toFixed(3)
 		},
 		35(x) {
-			return "/" + shorten(x)
-		},
-		45(x) {
-			return (100 - 100 / x).toFixed(2) + "% weaker"
+			return "+" + shorten(x)
 		}
 	},
 	action: "upgrade",
@@ -648,7 +641,7 @@ function buyBosonicUpgrade(id, quick) {
 	player.ghostify.bl.am = player.ghostify.bl.am.sub(getBosonicFinalCost(bu.reqData[id][0]))
 	if (!quick) updateTemp()
 	if (id == 21 || id == 22) updateNanoRewardTemp()
-	if (id == 32 || id == 53 || id == 65) tmp.updateLights = true
+	if (id == 32 || id == 65) tmp.updateLights = true
 	delete player.ghostify.hb.bosonicSemipowerment
 	return true
 }
@@ -815,13 +808,13 @@ var bu = {
 		44: "Blue power makes replicate interval increase slower.",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
-		52: "Replicantis raises all powers to Infinite Time and Intergalactic amount to an exponent.",
-		53: "Unlock 3 new Light Empowerment boosts.",
+		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
+		53: "Higgs Bosons make Antipretus wakes up later.",
 		54: "The Radioactivity of Gravity Well adds the exponent of Fourth Gravity Dimensions.",
-		55: "Bosonic Antimatter divides the requirement of Light Empowerments prior to cost subtraction.",
-		61: "Outside of Big Rip, Neutrino Boost 7 boosts Tree Upgrades at the reduced rate.",
+		55: "Remove the limit of Replicantis.",
+		61: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
-		63: "Higgs Bosons and Gravitons raise the Blue Power effect to an exponent before the softcaps.",
+		63: "Higgs Bosons raise the Blue Power effect to an exponent before the softcaps.",
 		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.6)",
 		65: "Square the main Orange Light effect.",
 	},
@@ -951,15 +944,15 @@ var bu = {
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
 			}
 		},
+		53() {
+			return player.ghostify.hb.higgs / 3
+		},
 		54() {
 			return Math.sqrt(GDs.radioactivity(1)) / 100
 		},
-		55() {
-			return tmp.bl.am.add(1).pow(0.005).plus(tmp.bl.am.add(1).log10() / 2)
-		},
 		63() {
 			//Log10 of that effect ((log(g)+2)^h)
-			return player.ghostify.hb.higgs * Math.log10(GDs.save.gv.max(1).log10() / 10 + 2)
+			return Math.pow(player.ghostify.hb.higgs, 2)
 		}
 	},
 	effectDescs: {
@@ -1008,11 +1001,11 @@ var bu = {
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
 		},
+		53(x) {
+			return "Starts " + x.toFixed(1) + " later"
+		},
 		54(x) {
 			return "+" + shorten(x)
-		},
-		55(x) {
-			return "/" + shorten(x)
 		},
 		63(x) {
 			return tmp.bE50kDT ? "^Infinite (and Beyond!)" : "^" + shorten(Decimal.pow(10, x))

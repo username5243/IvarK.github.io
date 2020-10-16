@@ -87,7 +87,7 @@ function onNotationChangeNeutrinos() {
 	document.getElementById("neutrinoUnlockCost").textContent=shortenDimensions(new Decimal(tmp.nbc[player.ghostify.neutrinos.boosts]))
 	document.getElementById("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
 	document.getElementById("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
-	document.getElementById("ghpMult").textContent=shortenDimensions(Decimal.pow(2, player.ghostify.multPower-1))
+	document.getElementById("ghpMult").textContent = shortenMoney(getGHPBaseMult())
 	document.getElementById("ghpMultUpgCost").textContent=shortenDimensions(getGHPMultCost())
 	for (var u = 1; u <= neutrinoUpgrades.max; u++) document.getElementById("neutrinoUpg" + u + "Cost").textContent=shortenDimensions(new Decimal(tmp.nuc[u]))
 }
@@ -111,7 +111,7 @@ function buyNeutrinoUpg(id) {
 		document.getElementById("workerReplWhat").textContent="babies"
 	}
 	if (id == 5) updateElectrons(true)
-	if (id == 17) document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
+	if (id == 18) document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
 function updateNeutrinoBoosts() {
@@ -246,14 +246,14 @@ var neutrinoBoosts = {
 		eff(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
-			if (!hasNU(18) && nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
+			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
 			return nb10
 		}
 	},
 	11: {
 		eff(nt) {
 			let nb11neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
-			let exp = Math.pow(nb11neutrinos, hasNU(18) ? 0.75 : 0.5)
+			let exp = Math.pow(nb11neutrinos, 0.5)
 
 			return Decimal.pow(1.15, exp)
 		}

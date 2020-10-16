@@ -380,7 +380,8 @@ function updateNewPlayer(reseted) {
 			ngex: player.aarexModifications.ngexV !== undefined,
 			aau: player.aarexModifications.aau !== undefined,
 			ls: player.aarexModifications.ls !== undefined,
-			ngc: tmp.ngC
+			ngc: tmp.ngC,
+			ez: player.aarexModifications.ez !== undefined
 		}
 	} 
 	else var modesChosen = modes
@@ -700,6 +701,7 @@ function updateNewPlayer(reseted) {
 	}
 	if (modesChosen.ls) player.aarexModifications.ls = {}
 	if (modesChosen.ngc) ngC.setup()
+	if (modesChosen.ez) player.aarexModifications.ez = 1
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
 }
 
@@ -1117,7 +1119,6 @@ function doNGPlusFourPlayer(){
 	for (var c = 1; c < 9; c++) player.quantum.challenges[c] = 2
 	player.quantum.pairedChallenges.completed = 4
 	player.quantum.nanofield.rewards = 19
-	player.quantum.nanofield.best = 19
 	player.quantum.reachedInfQK = true
 	player.quantum.tod.r.spin = 1e25
 	player.quantum.tod.g.spin = 1e25
@@ -2074,7 +2075,8 @@ var modFullNames = {
 	aau: "AAU",
 	ngprw: "NG+ Reworked",
 	ls: "Light Speed",
-	ngc: "NG Condensed"
+	ngc: "NG Condensed",
+	ez: "Barrier-Easing"
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
@@ -2585,7 +2587,8 @@ function calcSacrificeBoostBeforeSoftcap() {
 		if (player.achievements.includes("r32")) pow += player.tickspeedBoosts != undefined ? 2 : 0.2
 		if (player.achievements.includes("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
-		ret = Decimal.pow(Math.max(player.firstAmount.e/10.0, 1) / Math.max(player.sacrificed.e/10.0, 1), pow).max(1)
+		if (tmp.ez) pow *= 1.5
+		ret = Decimal.pow(Math.max(player.firstAmount.e / 10, 1) / Math.max(player.sacrificed.e / 10, 1), pow).max(1)
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(player.aarexModifications.ngmX>3?0.05:0.04).max(1)).max(1)
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + player.timestudy.ers_studies[1] / 5)))
 	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
@@ -2607,7 +2610,8 @@ function calcTotalSacrificeBoostBeforeSoftcap(next) {
 		if (player.achievements.includes("r32")) pow += player.tickspeedBoosts != undefined ? 2 : 0.2
 		if (player.achievements.includes("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
-		ret = Decimal.pow(Math.max(player.sacrificed.e/10.0, 1), pow)
+		if (tmp.ez) pow *= 1.5
+		ret = Decimal.pow(Math.max(player.sacrificed.e / 10, 1), pow)
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
 	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
@@ -2663,79 +2667,90 @@ document.getElementById("sacrifice").onclick = function () {
 var ndAutobuyersUsed = 0
 function updateAutobuyers() {
 	var autoBuyerDim1 = new Autobuyer (1)
-    	var autoBuyerDim2 = new Autobuyer (2)
-    	var autoBuyerDim3 = new Autobuyer (3)
-    	var autoBuyerDim4 = new Autobuyer (4)
-    	var autoBuyerDim5 = new Autobuyer (5)
-    	var autoBuyerDim6 = new Autobuyer (6)
-    	var autoBuyerDim7 = new Autobuyer (7)
-    	var autoBuyerDim8 = new Autobuyer (8)
-    	var autoBuyerDimBoost = new Autobuyer (9)
-    	var autoBuyerGalaxy = new Autobuyer (document.getElementById("secondSoftReset"))
-    	var autoBuyerTickspeed = new Autobuyer (document.getElementById("tickSpeed"))
-    	var autoBuyerInf = new Autobuyer (document.getElementById("bigcrunch"))
-    	var autoSacrifice = new Autobuyer(13)
+	var autoBuyerDim2 = new Autobuyer (2)
+	var autoBuyerDim3 = new Autobuyer (3)
+	var autoBuyerDim4 = new Autobuyer (4)
+	var autoBuyerDim5 = new Autobuyer (5)
+	var autoBuyerDim6 = new Autobuyer (6)
+	var autoBuyerDim7 = new Autobuyer (7)
+	var autoBuyerDim8 = new Autobuyer (8)
+	var autoBuyerDimBoost = new Autobuyer (9)
+	var autoBuyerGalaxy = new Autobuyer (document.getElementById("secondSoftReset"))
+	var autoBuyerTickspeed = new Autobuyer (document.getElementById("tickSpeed"))
+	var autoBuyerInf = new Autobuyer (document.getElementById("bigcrunch"))
+	var autoSacrifice = new Autobuyer(13)
 
-    	if (player.aarexModifications.newGameExpVersion) {
-        	autoBuyerDim1.interval = 1000
-        	autoBuyerDim2.interval = 1000
-        	autoBuyerDim3.interval = 1000
-        	autoBuyerDim4.interval = 1000
-        	autoBuyerDim5.interval = 1000
-        	autoBuyerDim6.interval = 1000
-        	autoBuyerDim7.interval = 1000
-        	autoBuyerDim8.interval = 1000
-    	} else {
-        	autoBuyerDim1.interval = 1500
-        	autoBuyerDim2.interval = 2000
-        	autoBuyerDim3.interval = 2500
-        	autoBuyerDim4.interval = 3000
-        	autoBuyerDim5.interval = 4000
-        	autoBuyerDim6.interval = 5000
-        	autoBuyerDim7.interval = 6000
-        	autoBuyerDim8.interval = 7500
-    	}
-    	autoBuyerDimBoost.interval = 8000
-    	if (player.infinityUpgradesRespecced) autoBuyerDimBoost.bulkBought = false
-    	autoBuyerGalaxy.interval = player.galacticSacrifice ? 6e4 : 1.5e4
-    	if (player.infinityUpgradesRespecced) autoBuyerGalaxy.bulkBought = false
-    	autoBuyerTickspeed.interval = 5000
-    	autoBuyerInf.interval = player.galacticSacrifice ? 6e4 : 3e5
+	if (player.aarexModifications.newGameExpVersion || tmp.ez) {
+		autoBuyerDim1.interval = 1000
+		autoBuyerDim2.interval = 1000
+		autoBuyerDim3.interval = 1000
+		autoBuyerDim4.interval = 1000
+		autoBuyerDim5.interval = 1000
+		autoBuyerDim6.interval = 1000
+		autoBuyerDim7.interval = 1000
+		autoBuyerDim8.interval = 1000
+	} else {
+		autoBuyerDim1.interval = 1500
+		autoBuyerDim2.interval = 2000
+		autoBuyerDim3.interval = 2500
+		autoBuyerDim4.interval = 3000
+		autoBuyerDim5.interval = 4000
+		autoBuyerDim6.interval = 5000
+		autoBuyerDim7.interval = 6000
+		autoBuyerDim8.interval = 7500
+	}
+
+	autoBuyerDimBoost.interval = 8000
+	if (tmp.ez) autoBuyerDimBoost.interval = 1000
+	if (player.infinityUpgradesRespecced) autoBuyerDimBoost.bulkBought = false
+
+	autoBuyerGalaxy.interval = player.galacticSacrifice ? 6e4 : 1.5e4
+	if (tmp.ez) autoBuyerGalaxy.interval /= 10
+	if (player.infinityUpgradesRespecced) autoBuyerGalaxy.bulkBought = false
+
+	autoBuyerTickspeed.interval = 5000
+	if (tmp.ez) autoBuyerTickspeed.interval = 1000
+
+	autoBuyerInf.interval = player.galacticSacrifice ? 6e4 : 3e5
+	if (tmp.ez) autoBuyerInf.interval /= 10
    	if (player.boughtDims) {
-        	autoBuyerInf.requireMaxReplicanti = false
-        	autoBuyerInf.requireIPPeak = false
-    	}
+		autoBuyerInf.requireMaxReplicanti = false
+		autoBuyerInf.requireIPPeak = false
+	}
 
-    	autoSacrifice.interval = player.galacticSacrifice ? 1.5e4 : player.infinityUpgradesRespecced ? 3500 : 100
-    	autoSacrifice.priority = 5
+	autoSacrifice.interval = player.galacticSacrifice ? 1.5e4 : player.infinityUpgradesRespecced ? 3500 : 100
+	if (tmp.ez) autoSacrifice.interval /= 10
+	autoSacrifice.priority = 5
 
-    	autoBuyerDim1.tier = 1
-    	autoBuyerDim2.tier = 2
-    	autoBuyerDim3.tier = 3
-    	autoBuyerDim4.tier = 4
-    	autoBuyerDim5.tier = 5
-    	autoBuyerDim6.tier = 6
-    	autoBuyerDim7.tier = 7
-    	autoBuyerDim8.tier = 8
-    	autoBuyerTickSpeed.tier = 9
-	
-    	if (player.galacticSacrifice) {
-        	var autoGalSacrifice = new Autobuyer(14)
-        	autoGalSacrifice.interval = 1.5e4
-        	autoGalSacrifice.priority = 5
-    	}
-	
-    	if (player.tickspeedBoosts != undefined) {
-        	var autoTickspeedBoost = new Autobuyer(15)
-        	autoTickspeedBoost.interval = 1.5e4
-        	autoTickspeedBoost.priority = 5
-    	}
+	autoBuyerDim1.tier = 1
+	autoBuyerDim2.tier = 2
+	autoBuyerDim3.tier = 3
+	autoBuyerDim4.tier = 4
+	autoBuyerDim5.tier = 5
+	autoBuyerDim6.tier = 6
+	autoBuyerDim7.tier = 7
+	autoBuyerDim8.tier = 8
+	autoBuyerTickSpeed.tier = 9
+
+	if (player.galacticSacrifice) {
+		var autoGalSacrifice = new Autobuyer(14)
+		autoGalSacrifice.interval = 1.5e4
+		if (tmp.ez) autoGalSacrifice.interval /= 10
+		autoGalSacrifice.priority = 5
+	}
+	if (player.tickspeedBoosts != undefined) {
+		var autoTickspeedBoost = new Autobuyer(15)
+		autoTickspeedBoost.interval = 1.5e4
+		if (tmp.ez) autoTickspeedBoost.interval /= 10
+		autoTickspeedBoost.priority = 5
+	}
 	if (player.aarexModifications.ngmX > 3) {
-        	var autoTDBoost = new Autobuyer(16)
-        	autoTDBoost.interval = 15e3
-        	autoTDBoost.priority = 5
-        	autoTDBoost.overXGals = 0
-    	}
+		var autoTDBoost = new Autobuyer(16)
+		autoTDBoost.interval = 1.5e4
+		if (tmp.ez) autoTDBoost.interval /= 10
+		autoTDBoost.priority = 5
+		autoTDBoost.overXGals = 0
+	}
 
     	if (player.challenges.includes("challenge1") && player.autobuyers[0] == 1) {
         	player.autobuyers[0] = autoBuyerDim1
@@ -4173,7 +4188,8 @@ function ghostifyAutomationUpdating(diff){
 	if (isAutoGhostActive(17)) extract()
 	if (isAutoGhostActive(19)) {
 		let ag = player.ghostify.automatorGhosts[19]
-		ag.t = (ag.t || 0) + diff / 2 * (player.achievements.includes("ng3p103") ? 10 : 1)
+		let perSec = (player.achievements.includes("ng3p103") ? 10 : 1) / 2
+		ag.t = (ag.t || 0) + diff * perSec
 		let times = Math.floor(ag.t)
 		if (times > 0) {
 			autoMaxAllEnchants(times)
@@ -4541,7 +4557,7 @@ function IRsetsUnlockUpdating(){
 
 function replicantiIncrease(diff) {
 	if (!player.replicanti.unl) return
-	if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || hasTimeStudy(192)) continuousReplicantiUpdating(diff)
+	if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
 	else notContinuousReplicantiUpdating()
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
 

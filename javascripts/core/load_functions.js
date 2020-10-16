@@ -16,8 +16,8 @@ function setOptionsIfUndefined(){
 	}
 	if (player.options.invert === true) player.options.theme = "Inverted"; player.options.invert = undefined;
 	if (player.options.notation === undefined) player.options.notation = "Standard"
-	if (player.options.challConf === undefined) player.options.challConf = false
 	if (player.options.scientific === undefined || typeof(player.options.scientific) == "boolean") player.options.scientific = {significantDigits: undefined}
+	if (player.options.challConf === undefined) player.options.challConf = false
 	if (player.options.logarithm === undefined) player.options.logarithm = {base: 10}
 	if (player.options.tetration === undefined) player.options.tetration = {base: 2}
 	if (player.options.spazzy === undefined) player.options.spazzy = {subNotation: "Scientific"}
@@ -2172,8 +2172,11 @@ function onLoad(noOffline) {
 	tmp.ngmX = calcNGMX()
 	if (tmp.ngmX) player.aarexModifications.ngmX = tmp.ngmX
 	ngC.compile()
+	tmp.ez = player.aarexModifications.ez
+
 	ph.reset()
 	ls.reset()
+
 	updateBoughtTimeStudies()
 	performedTS = false
 	updateVersionsONLOAD()
@@ -2337,6 +2340,7 @@ function setupNGP31Versions() {
 	if (player.aarexModifications.newGame3PlusVersion < 3) {
 		player.ghostify.gds = GDs.setup()
 		player.pl = pl.setup()
+		player.quantum.electrons.percentage = 1
 	} else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
 	}

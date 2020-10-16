@@ -123,16 +123,9 @@ function getLightEmpowermentReq(le) {
 		x += Math.pow(le - 19, 2) / 3
 		scale = 1
 	}
-	if (le >= 50) {
-		x = Decimal.pow(1.2, le - 49).add(x - 1)
-		scale = 2
-	}
-	if (player.achievements.includes("ng3p116")) x = Decimal.div(x, 2)
-	if (hasBosonicUpg(55)) x = Decimal.div(x, tmp.blu[55])
-	if (x + 0 !== x) x = x.toNumber()
 
+	if (player.achievements.includes("ng3p116")) x /= 2
 	if (player.achievements.includes("ng3p95")) x -= 1
-	if (isLEBoostUnlocked(11)) x -= tmp.leBonus[11]
 
 	tmp.leReqScale = scale
 	return Math.floor(x)
@@ -187,7 +180,7 @@ function getLightEmpowermentBoost() {
 }
 
 var leBoosts = {
-	max: 11,
+	max: 8,
 	1: {
 		req() {
 			return true
@@ -292,42 +285,6 @@ var leBoosts = {
 		},
 		effDesc(x) {
 			return (x * 100).toFixed(1)
-		}
-	},
-	9: {
-		req() {
-			return hasBosonicUpg(53)
-		},
-		leThreshold: 0,
-		eff() {
-			return Math.pow(tmp.effL[1] / 10 + 1, 1/3) - 1
-		},
-		effDesc(x) {
-			return x.toFixed(2)
-		}
-	},
-	10: {
-		req() {
-			return hasBosonicUpg(53)
-		},
-		leThreshold: 0,
-		eff() {
-			return Math.cbrt(tmp.leBoost) / 30 + 1
-		},
-		effDesc(x) {
-			return (x * 100 - 100).toFixed(2)
-		}
-	},
-	11: {
-		req() {
-			return hasBosonicUpg(53)
-		},
-		leThreshold: 0,
-		eff() {
-			return Math.sqrt(tmp.leBoost) * 3
-		},
-		effDesc(x) {
-			return x.toFixed(2)
 		}
 	}
 }

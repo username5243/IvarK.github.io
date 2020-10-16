@@ -387,6 +387,6 @@ function getIPMultPower() {
 }
 
 function canBuyIPMult() {
-	if (tmp.ngC || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
+	if (tmp.ngC || tmp.ez || player.infinityUpgradesRespecced != undefined) return player.infinityPoints.gte(player.infMultCost)
 	return player.infinityUpgrades.includes("skipResetGalaxy") && player.infinityUpgrades.includes("passiveGen") && player.infinityUpgrades.includes("galaxyBoost") && player.infinityUpgrades.includes("resetBoost") && player.infinityPoints.gte(player.infMultCost)
 }

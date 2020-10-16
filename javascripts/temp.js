@@ -640,12 +640,7 @@ function updateWZBosonsTemp(){
 
 	let zLog = player.ghostify.wzb.zb.div(10).add(1).log10()
 	let zLogMult = 0.5
-	if (isEnchantUsed(25)) {
-		zLogMult = tmp.bEn[25]
-		//Effect limit before inflation comes: x^0.807388817
-		//Exponent formula: 1 / (1 + log(3) / 2)
-		//At x^0.5, if you gain 10x Z Bosons without boosts, you would get 1,791x with boosts.
-	}
+	if (isEnchantUsed(25)) zLogMult = tmp.bEn[25]
 
 	data.zbs = Decimal.pow(10, zLog * zLogMult) //Z Bosons boost to W Quark
 }

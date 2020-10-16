@@ -19,7 +19,7 @@ function updateQuantumWorth(mode) {
 			}
 			while (player.ghostify.automatorGhosts.ghosts<MAX_AUTO_GHOSTS&&player.ghostify.automatorGhosts.power>=autoGhostRequirements[player.ghostify.automatorGhosts.ghosts-3]) {
 				player.ghostify.automatorGhosts.ghosts++
-				document.getElementById("autoGhost"+player.ghostify.automatorGhosts.ghosts).style.display=""
+				document.getElementById("autoGhost"+player.ghostify.automatorGhosts.ghosts).style.visibility="visible"
 				if (player.ghostify.automatorGhosts.ghosts>=MAX_AUTO_GHOSTS) document.getElementById("nextAutomatorGhost").parentElement.style.display="none"
 				else {
 					document.getElementById("automatorGhostsAmount").textContent=player.ghostify.automatorGhosts.ghosts

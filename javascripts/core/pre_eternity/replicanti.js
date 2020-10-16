@@ -69,6 +69,10 @@ function getReplicantiLimit() {
 	return Number.MAX_VALUE
 }
 
+function isReplicantiLimitBroken() {
+	return hasTimeStudy(181) || hasBosonicUpg(55)
+}
+
 function isIntervalAffordable() {
 	if (tmp.ngp3) if (masteryStudies.has(271)) return true
 	return player.replicanti.interval > (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
@@ -286,8 +290,12 @@ function notContinuousReplicantiUpdating() {
 }
 
 function continuousReplicantiUpdating(diff){
-	if (hasTimeStudy(192) && tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +Math.log((diff*tmp.rep.est/10) * (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp)+1) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
-	else if (hasTimeStudy(192)) player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc)/tmp.rep.speeds.exp))
-	else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln +(diff*tmp.rep.est/10)).min(getReplicantiLimit())
+	if (isReplicantiLimitBroken()) {
+		let ln = tmp.rep.ln
+		if (tmp.rep.est.toNumber() > 0 && tmp.rep.est.toNumber() < 1/0) ln += Math.log((diff * tmp.rep.est / 10) * (Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp) + 1) / (Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp)
+		else ln += tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp)
+
+		player.replicanti.amount = Decimal.pow(Math.E, ln)
+	} else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + (diff * tmp.rep.est / 10)).min(getReplicantiLimit())
 	replicantiTicks = 0
 }

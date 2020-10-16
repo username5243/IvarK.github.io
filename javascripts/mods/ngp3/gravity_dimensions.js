@@ -32,7 +32,8 @@ let GDs = {
 			data["rd" + d] = Decimal.max(data["rd" + d], 1)
 		}
 		data.gdBoosts = parseInt(data.gdBoosts)
-		data.extraGDBs = parseInt(data.extraGDBs || 0)
+		if (data.extraGDBs) data.extraGDBs = parseInt(data.extraGDBs)
+		else data.extraGDBs = 0
 		delete data.rdBoosts
 	},
 	updateTmp() {
@@ -43,12 +44,10 @@ let GDs = {
 
 		data.gdm = GDs.gdMult() //Determine the initial multiplier for Gravity Dimensions.
 
-		//Gravity Radiation Effect
-		let grStr = 1
-		if (isEnchantUsed(45)) grStr /= tmp.bEn[45]
-
 		//Gravity Power
-		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10() * grStr, 0), 2/3)
+		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
+		if (isEnchantUsed(35)) gp += tmp.bEn[35]
+
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
 			let layer = Math.floor(Math.log2(gp / 10 + 1))
@@ -192,26 +191,28 @@ let GDs = {
 	},
 	gdBoost(x) {
 		if (!GDs.save.gr.gte(GDs.gdBoostReq())) return
-		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
+		let old = GDs.totalGDBs()
 		GDs.save.gdBoosts++
+		if (old <= 3) GDs.dimDisplay()
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
 		let y = Decimal.pow(10, (x * x * 0.25 + x * 2.75 + 5) * GDs.rdExp() * 2)
-		if (isEnchantUsed(35)) y = y.div(tmp.bEn[35])
 		return y
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.pow(e, 2) * 5 + 55
+		return Math.pow(e, hasBosonicUpg(61) ? 1.5 : 2) * 5 + 50
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.max(Math.sqrt(Math.floor((h - 55) / 5)), 0) + 1
-		let toAdd = Math.max(target - GDs.save.extraGDBs, 0)
+		let target = Math.floor(Math.pow(Math.max(h - 50, 0) / 5, hasBosonicUpg(61) ? 2 / 3 : 0.5))
+		let toAdd = Math.max(target - GDs.save.extraGDBs + 1, 0)
 		if (toAdd < 1) return
-		if (GDs.totalGDBs() <= 3) GDs.unlDisplay()
+
+		let old = GDs.totalGDBs()
 		GDs.save.extraGDBs += toAdd
+		if (old <= 3) GDs.dimDisplay()
 	},
 	totalGDBs() {
 		return GDs.save.gdBoosts + GDs.save.extraGDBs
@@ -264,6 +265,7 @@ let GDs = {
 		let x = 1
 		if (isEnchantUsed(15)) x = tmp.bEn[15]
 		if (isQCRewardActive(9)) x += tmp.qcRewards[9].ge
+		if (isEnchantUsed(45)) x *= tmp.bEn[45]
 		return x
 	},
 	charge(ge, id) {
@@ -275,7 +277,7 @@ let GDs = {
 	},
 	chargeMult() {
 		let x = 2
-		if (player.achievements.includes("ng3p115")) x += 0.25
+		if (isEnchantUsed(45)) x /= tmp.bEn[45]
 		return x
 	},
 	superchargeMult() {
@@ -288,7 +290,7 @@ let GDs = {
 		bosonicLabReset()
 		document.getElementById("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn gv"
 		document.getElementById("gvCharge_" + id).className = "chosenbtn"
-		GDs.unlDisplay()
+		GDs.dimDisplay()
 		GDs.save.gc = id
 	},
 	unchargeBoost() {
@@ -298,7 +300,7 @@ let GDs = {
 		bosonicLabReset()
 		document.getElementById("gvCharge_" + GDs.save.gc).className = "storebtn gv"
 		document.getElementById("gvUncharge").className = "chosenbtn"
-		GDs.unlDisplay()
+		GDs.dimDisplay()
 		delete GDs.save.gc
 	},
 	chargeDisplay() {
@@ -314,12 +316,12 @@ let GDs = {
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			unl() {
-				return !pl.on()
+				return hasBosonicUpg(55) || !pl.on()
 			},
 			eff(x) {
 				return Math.pow(x + 1, 1/3)
 			},
-			rdExp: 1.5
+			rdExp: 0.5
 		},
 		nf: {
 			desc: "^{{x}} to Nanospeed",
@@ -329,7 +331,7 @@ let GDs = {
 			eff(x) {
 				return x + 1
 			},
-			rdExp: 1
+			rdExp: 1.5
 		},
 		tod: {
 			desc: "^{{x}} to Branch speed",
@@ -339,14 +341,14 @@ let GDs = {
 			eff(x) {
 				return Math.pow(x / 2 + 1, 1/3)
 			},
-			rdExp: 1.5
+			rdExp: 1
 		},
 		gph: {
 			desc: "^{{x}} to Photonic Flow",
 			eff(x) {
-				return Math.pow(x / 3 + 1, .8)
+				return x / 2 + 1
 			},
-			rdExp: 0.75
+			rdExp: 2
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",

@@ -306,16 +306,22 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 	}
 	return ret
 }
+
+function getMPTPreInfBase() {
+	let x = 2
+	if (player.tickspeedBoosts !== undefined) x = 1
+	if (player.aarexModifications.newGameExpVersion) x *= 10
+	if (player.aarexModifications.newGameMult) x *= 2.1
+	if (tmp.ez) x *= 1.05
+	return x
+}
 	
 function getMPTBase(focusOn) {
 	if (((inQC(5) || inQC(7)) && focusOn != "linear") || (((inNC(13) && player.tickspeedBoosts == undefined) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") && player.galacticSacrifice != undefined)) {
 		if (player.masterystudies) if (masteryStudies.has("t321")) return new Decimal("1e430")
 		return 1
 	}
-	let ret = 2
-	if (player.tickspeedBoosts !== undefined) ret = 1
-	if (player.aarexModifications.newGameExpVersion) ret *= 10
-	if (player.aarexModifications.newGameMult) ret *= 2.1
+	let ret =getMPTPreInfBase()
 	if (player.infinityUpgrades.includes("dimMult")) ret *= infUpg12Pow()
 	if (player.achievements.includes("r58")) {
 		if (player.galacticSacrifice !== undefined) {
@@ -614,7 +620,8 @@ function getDimensionProductionPerSecond(tier) {
 	ret = ret.times(getDimensionFinalMultiplier(tier))
 
 	if (tmp.ngmR) ret = ret.div(2)
-	if (tmp.ngC && tier == 1) ret = ret.times(3)
+	if ((tmp.ngC || tmp.ez) && tier == 1) ret = ret.times(3)
+	if (tmp.ez && tier != 1) ret = ret.times(10)
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)

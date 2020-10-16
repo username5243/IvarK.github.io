@@ -485,8 +485,12 @@ function getGHPGain() {
 	return Decimal.pow(10, log).times(getGHPMult()).floor()
 }
 
+function getGHPBaseMult() {
+	return Decimal.pow(2.5, player.ghostify.multPower - 1)
+}
+
 function getGHPMult() {
-	let x = Decimal.pow(2, player.ghostify.multPower - 1)
+	let x = getGHPBaseMult()
 	if (player.achievements.includes("ng3p93")) x = x.times(500)
 	if (player.achievements.includes("ng3p83")) x = x.times(ranking + 1)
 	if (player.achievements.includes("ng3p97")) x = x.times(Decimal.pow(player.ghostify.times + 1, 1/3))
@@ -669,7 +673,7 @@ function buyGHPMult() {
 	player.ghostify.multPower++
 	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(5)
 	document.getElementById("autoGhost15a").value = formatValue("Scientific", player.ghostify.automatorGhosts[15].a, 2, 1)
-	document.getElementById("ghpMult").textContent = shortenDimensions(Decimal.pow(2, player.ghostify.multPower - 1))
+	document.getElementById("ghpMult").textContent = shortenMoney(getGHPBaseMult())
 	document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
@@ -707,7 +711,7 @@ function maxGHPMult() {
 	}
 
 	player.ghostify.multPower += totalBought
-	document.getElementById("ghpMult").textContent = shortenDimensions(Decimal.pow(2, player.ghostify.multPower - 1))
+	document.getElementById("ghpMult").textContent = shortenMoney(getGHPBaseMult())
 	document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 
 	player.ghostify.automatorGhosts[15].a = player.ghostify.automatorGhosts[15].a.times(Decimal.pow(5, totalBought))
@@ -726,9 +730,9 @@ function setupAutomaticGhostsData() {
 	return data
 }
 
-var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,1/0,1/0,1/0,1/0]
+var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,40,40,40,1/0]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,10,0,0,0,0]
+var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,10,3,3,0]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
@@ -841,7 +845,7 @@ function getGHPMultCost(offset = 0) {
 }
 
 function getGHPMultCostScalingStart() {
-	if (hasNU(17)) return 1/0
+	if (hasNU(18)) return 1/0
 	return 85
 }
 

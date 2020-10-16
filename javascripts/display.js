@@ -268,8 +268,7 @@ function preBreakUpgradeDisplay(){
 		if (player.galacticSacrifice !== undefined) based.push("Infinities")
 		if (tmp.ngC) based.push("your antimatter")
 		if (based.length > 0) {
-			var base = player.tickspeedBoosts == undefined ? 2 : 1
-			if (player.aarexModifications.newGameExpVersion) base *= 10
+			var base = getMPTPreInfBase()
 			document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions based on " + wordizeList(based) + "<br>" + base + "x -> "+(infUpg12Pow() * base).toPrecision(4) + "x<br>Cost: 1 IP"
 		}
 

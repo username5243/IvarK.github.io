@@ -612,7 +612,6 @@ function getTreeUpgradeEfficiencyText(){
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
-	if (isLEBoostUnlocked(10)) text += "Light Empowerments (by Bosonic Lab Upgrade 23): " + shorten(tmp.leBonus[10]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
 }
@@ -622,7 +621,6 @@ function getTreeUpgradeEfficiency(mod) {
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61) || mod == "br") && mod != "noNB") r += tmp.nb[7]
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
-	if (isLEBoostUnlocked(10)) r *= tmp.leBonus[10]
 	return r
 }
 
