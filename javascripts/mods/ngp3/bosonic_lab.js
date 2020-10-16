@@ -510,7 +510,8 @@ var bEn = {
 			}
 		},
 		23(l) {
-			let exp = Math.max(l.log10() + 1, 0) / 3
+			if (Decimal.eq(0, l)) return new Decimal(1)
+			let exp = Math.max(l.max(1).log10() + 1, 0) / 3
 			if (player.ghostify.bl.am.gt(1e11)) exp *= player.ghostify.bl.am.div(10).log10() / 10
 			if (exp > 5) exp = Math.sqrt(exp * 5)
 			return Decimal.pow(player.ghostify.bl.am.add(10).log10(), exp)
@@ -522,7 +523,7 @@ var bEn = {
 			let x = player.ghostify.hb.higgs
 			if (!tmp.newNGP3E) x = Math.sqrt(x / 2)
 
-			return x * Math.log10(l.max(10).log10()) + 1
+			return x * Math.log10(l.plus(10).log10()) + 1
 		},
 		15(l) {
 			let eff = Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)

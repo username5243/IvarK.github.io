@@ -81,14 +81,13 @@ var softcap_data = {
 			pow: 0.65,
 			derv: false
 		},
-		/*
 		3: {
 			func: "pow",
 			start: 4e4,
 			pow: .55,
-			derv: false
+			derv: false,
+			active: false,
 		}
-		*/
 	},
 	ts11_log_big_rip: {
 		name: "log base 10 of time study 11 effect in Big Rip",
@@ -122,26 +121,12 @@ var softcap_data = {
 			pow: 0.4,
 			derv: true
 		},
-		/*
 		6: {
-			func: "pow",
-			start: 2e5,
-			pow: .9,
-			derv: false
-		},
-		7: {
-			func: "pow",
-			start: 3e5,
-			pow: .8,
-			derv: false
-		},
-		8: {
 			func: "log",
 			start: 5e5,
 			mul: .2,
 			pow: 1e5
-		},
-		*/
+		},	
 	},
 	ms322_log: {
 		name: "log base 10 of mastery study 322",
@@ -165,7 +150,6 @@ var softcap_data = {
 			start: 1e10,
 			pow: 10
 		},
-		/*
 		3: {
 			func: "pow",
 			start: 2e10,
@@ -183,8 +167,7 @@ var softcap_data = {
 			start: 1e11,
 			pow: 11,
 			add: -1
-		}
-		*/
+		},
 	},
 	beu3_log: {
 		name: "log base 10 of Break Eternity Upgrade 3",
@@ -645,13 +628,13 @@ var softcap_vars = {
 var softcap_funcs = {
 	pow(x, start, pow, derv = false) {
 		x = Math.pow(x / start, pow)
-		if (derv) x = (x - 1) / pow + 1
+		if (derv && pow != 0) x = (x - 1) / pow + 1
 		x *= start
 		return x
 	},
 	pow_decimal(x, start, pow, derv = false) {
 		x = Decimal.div(x, start).pow(pow)
-		if (derv) x = x.sub(1).div(pow).add(1)
+		if (derv && pow != 0) x = x.sub(1).div(pow).add(1)
 		x = x.times(start)
 		return x
 	},
