@@ -108,21 +108,22 @@ function getQuarkChargeProductionCap() {
 
 var nanoRewards = {
 	scaling: {
-		max: 3,
-		0: {
+		max: 4,
+		1: {
 			start: 0,
 			mult(diff) {
-				let base = testHarderNGp3 ? 6 : 4
-				return Decimal.pow(base, diff)
+				let base = testHarderNGp3 ? 5 : 4
+				let init = 50
+				return Decimal.pow(base, diff).times(init)
 			}
 		},
-		1: {
+		2: {
 			start: 16,
 			mult(diff) {
 				return Decimal.pow(2, diff * (diff + 3))
 			}
 		},
-		2: {
+		3: {
 			start: 125,
 			active() {
 				return !player.achievements.includes("ng3p82")
@@ -131,7 +132,7 @@ var nanoRewards = {
 				return Decimal.pow(2, diff * (diff + 1))
 			}
 		},
-		3: {
+		4: {
 			start: 150,
 			mult(diff) {
 				return Decimal.pow(1.1, diff * (diff + 1) * (diff + 2) / 3 + diff * (diff + 1) / 2 * 19)
@@ -140,7 +141,7 @@ var nanoRewards = {
 	},
 	effects: {
 		hatch_speed: function(x) {
-			return Decimal.pow(30, x)
+			return Decimal.pow(25 + 5 * x, x)
 		},
 		ma_effect_exp: function(x) {
 			return x * 6.8
@@ -248,14 +249,14 @@ function getNanofieldSpeedText(){
 	if (player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
-	if (nanospeed != 1) {
-		if (nanospeed > 1) text += "Dev: " + shorten(nanospeed) + "x, "
-		if (nanospeed < 1) text += "Dev: /" + shorten(1 / nanospeed) + ", "
-	}
 	var lsSpeed = ls.mult("nf")
 	if (lsSpeed != 1) {
 		if (lsSpeed > 1) text += "'Light Speed' mod: " + shorten(lsSpeed) + "x, "
 		if (lsSpeed < 1) text += "'Light Speed' mod: /" + shorten(1 / lsSpeed) + ", "
+	}
+	if (nanospeed != 1) {
+		if (nanospeed > 1) text += "Dev: " + shorten(nanospeed) + "x, "
+		if (nanospeed < 1) text += "Dev: /" + shorten(1 / nanospeed) + ", "
 	}
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
@@ -297,15 +298,15 @@ function getNanoRewardReq(additional) {
 
 function isNanoScalingActive(x) {
 	if (x == 0) return true
-	if (!player.ghostify.ghostlyPhotons.unl) return false
 	return nanoRewards.scaling[x].active === undefined || nanoRewards.scaling[x].active()
 }
 
 function getNanoRewardReqFixed(n) {
-	//6 total Nanoreward scalings
-	let x = new Decimal(50)
+	let x = new Decimal(1)
 	let d = nanoRewards.scaling
-	for (let s = 0; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && n >= d[s].start) x = x.times(d[s].mult(n - d[s].start))
+	for (let s = 1; s <= nanoRewards.scaling.max; s++) {
+		if (isNanoScalingActive(s) && n >= d[s].start) x = x.times(d[s].mult(n - d[s].start))
+	}
 	return x.pow(tmp.ppti || 1)
 }
 
