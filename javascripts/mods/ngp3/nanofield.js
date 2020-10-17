@@ -112,13 +112,14 @@ var nanoRewards = {
 		0: {
 			start: 0,
 			mult(diff) {
-				return Decimal.pow(4.0, diff)
+				let base = testHarderNGp3 ? 6 : 4
+				return Decimal.pow(base, diff)
 			}
 		},
 		1: {
 			start: 16,
 			mult(diff) {
-				return Decimal.pow(2.0, diff * (diff + 3))
+				return Decimal.pow(2, diff * (diff + 3))
 			}
 		},
 		2: {
@@ -127,7 +128,7 @@ var nanoRewards = {
 				return !player.achievements.includes("ng3p82")
 			},
 			mult(diff) {
-				return Decimal.pow(2.0, diff * (diff + 1))
+				return Decimal.pow(2, diff * (diff + 1))
 			}
 		},
 		3: {

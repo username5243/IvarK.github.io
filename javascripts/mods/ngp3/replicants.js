@@ -116,13 +116,17 @@ function getGatherRate() {
 	return data
 }
 
+function getQuantumFoodCostIncrease(){
+	return testHarderNGp3 ? 6 : 5
+}
+
 function buyQuantumFood() {
 	if (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).gte(tmp.qu.replicants.quantumFoodCost)) {
 		tmp.qu.gluons.rg = tmp.qu.gluons.rg.sub(tmp.qu.replicants.quantumFoodCost)
 		tmp.qu.gluons.gb = tmp.qu.gluons.gb.sub(tmp.qu.replicants.quantumFoodCost)
 		tmp.qu.gluons.br = tmp.qu.gluons.br.sub(tmp.qu.replicants.quantumFoodCost)
 		tmp.qu.replicants.quantumFood++
-		tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.times(5)
+		tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.times(getQuantumFoodCostIncrease())
 		updateGluonsTabOnUpdate("spend")
 		updateReplicants("spend")
 	}
@@ -157,7 +161,7 @@ function getEmperorDimensionMultiplier(dim) {
 	if (player.currentEternityChall == "eterc11") return ret
 	ret = tmp.edgm //Global multiplier of all Emperor Dimensions
 	if (hasNU(7) && dim % 2 == 1) ret = ret.times(tmp.nu[7])
-	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 8))))
+	if (dim == 8) ret = ret.times(Decimal.pow(1.05, Math.sqrt(Math.max(0, player.quantum.emperorDimensions[8].perm - 9))))
 	return dilates(ret, 1)
 }
 
@@ -187,7 +191,7 @@ function getEmperorDimensionRateOfChange(dim) {
 function feedReplicant(tier, max) {
 	if (!canFeedReplicant(tier)) return
 	var toFeed = max ? Math.min(tmp.qu.replicants.quantumFood, tmp.qu.replicants.limitDim > tier ? Math.round(getWorkerAmount(tier - 1).toNumber() * 3) : Math.round((tmp.qu.replicants.limit - tmp.eds[tier].perm - tmp.eds[tier].progress.toNumber()) * 3)) : 1
-	if (tmp.qu.replicants.limitDim > tier) tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.div(Decimal.pow(5, toFeed))
+	if (tmp.qu.replicants.limitDim > tier) tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.div(Decimal.pow(getQuantumFoodCostIncrease(), toFeed))
 	tmp.eds[tier].progress = tmp.eds[tier].progress.add(toFeed / 3)
 	if (tier < 8 || getWorkerAmount(tier + 1).eq(0)) tmp.eds[tier].progress = tmp.eds[tier].progress.times(3).round().div(3)
 	if (tmp.eds[tier].progress.gte(1)) {
@@ -221,14 +225,15 @@ function getTotalWorkers(data) {
 
 function buyMaxQuantumFood() {
 	let minGluons = tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br)
-	let toBuy = Math.floor(minGluons.div(tmp.qu.replicants.quantumFoodCost).times(4).add(1).log(5))
+	let cInc = getQuantumFoodCostIncrease()
+	let toBuy = Math.floor(minGluons.div(tmp.qu.replicants.quantumFoodCost).times(cInc - 1).add(1).log(cInc))
 	if (toBuy < 1) return
-	let toSpend = Decimal.pow(5, toBuy).minus(1).div(4).times(tmp.qu.replicants.quantumFoodCost)
+	let toSpend = Decimal.pow(cInc, toBuy).minus(1).div(cInc - 1).times(tmp.qu.replicants.quantumFoodCost)
 	tmp.qu.gluons.rg = tmp.qu.gluons.rg.sub(tmp.qu.gluons.rg.min(toSpend))
 	tmp.qu.gluons.gb = tmp.qu.gluons.gb.sub(tmp.qu.gluons.gb.min(toSpend))
 	tmp.qu.gluons.br = tmp.qu.gluons.br.sub(tmp.qu.gluons.br.min(toSpend))
 	tmp.qu.replicants.quantumFood += toBuy
-	tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.times(Decimal.pow(5, toBuy))
+	tmp.qu.replicants.quantumFoodCost = tmp.qu.replicants.quantumFoodCost.times(Decimal.pow(cInc, toBuy))
 	updateGluonsTabOnUpdate("spend")
 	updateReplicants("spend")
 }
@@ -347,28 +352,33 @@ function breakLimit() {
 	}
 }
 
+function getEDLimitCostIncrease(){
+	return testHarderNGp3 ? 300 : 200
+}
+
 function maxBuyLimit() {
 	var min=tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br)
 	if (!min.gte(tmp.qu.replicants.limitCost) && isLimitUpgAffordable()) return
+	let cInc = getEDLimitCostIncrease()
 	for (var i = 0; i < (player.masterystudies.includes("d11") ? 3 : 1); i++) {
 		if (i == 1) {
 			var toAdd = Math.floor(min.div(tmp.qu.replicants.limitCost).log(200) / 9)
 			if (toAdd) {
-				var toSpend = Decimal.pow(200, toAdd * 9).times(tmp.qu.replicants.limitCost)
+				var toSpend = Decimal.pow(cInc, toAdd * 9).times(tmp.qu.replicants.limitCost)
 				tmp.qu.gluons.rg = tmp.qu.gluons.rg.sub(tmp.qu.gluons.rg.min(toSpend))
 				tmp.qu.gluons.gb = tmp.qu.gluons.gb.sub(tmp.qu.gluons.gb.min(toSpend))
 				tmp.qu.gluons.br = tmp.qu.gluons.br.sub(tmp.qu.gluons.br.min(toSpend))
-				tmp.qu.replicants.limitCost = tmp.qu.replicants.limitCost.times(Decimal.pow(200, toAdd * 9))
+				tmp.qu.replicants.limitCost = tmp.qu.replicants.limitCost.times(Decimal.pow(cInc, toAdd * 9))
 				tmp.qu.replicants.limit += toAdd * 10
 			}
 		} else {
 			var limit = tmp.qu.replicants.limit
-			var toAdd = Math.max(Math.min(Math.floor(min.div(tmp.qu.replicants.limitCost).times(199).add(1).log(200)), 10 - limit % 10), 0)
-			var toSpend = Decimal.pow(200,toAdd).sub(1).div(199).round().times(tmp.qu.replicants.limitCost)
+			var toAdd = Math.max(Math.min(Math.floor(min.div(tmp.qu.replicants.limitCost).times(cInc - 1).add(1).log(cInc)), 10 - limit % 10), 0)
+			var toSpend = Decimal.pow(cInc, toAdd).sub(1).div(cInc - 1).round().times(tmp.qu.replicants.limitCost)
 			tmp.qu.gluons.rg = tmp.qu.gluons.rg.sub(tmp.qu.gluons.rg.min(toSpend))
 			tmp.qu.gluons.gb = tmp.qu.gluons.gb.sub(tmp.qu.gluons.gb.min(toSpend))
 			tmp.qu.gluons.br = tmp.qu.gluons.br.sub(tmp.qu.gluons.br.min(toSpend))
-			tmp.qu.replicants.limitCost = tmp.qu.replicants.limitCost.times(Decimal.pow(200, Math.max(Math.min(toAdd, 9 - limit % 10), 0)))
+			tmp.qu.replicants.limitCost = tmp.qu.replicants.limitCost.times(Decimal.pow(cInc, Math.max(Math.min(toAdd, 9 - limit % 10), 0)))
 			tmp.qu.replicants.limit += toAdd
 		}
 		var dimAdd = Math.max(Math.min(Math.ceil(tmp.qu.replicants.limit / 10 - 1), 8 - tmp.qu.replicants.limitDim), 0)

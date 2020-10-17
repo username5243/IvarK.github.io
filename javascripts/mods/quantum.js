@@ -106,7 +106,7 @@ function getQCtoQKEffect(){
 }
 
 function getEPtoQKExp(){
-	let exp = 0.6
+	let exp = testHarderNGp3 ? 0.5 : 0.6
 	if (tmp.newNGP3E) exp += 0.05
 	if (player.achievements.includes("ng3p28")) exp *= 1.01
 	return exp

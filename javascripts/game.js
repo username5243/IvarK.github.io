@@ -21,6 +21,7 @@ var player
 var metaSave = null
 var modes = {}
 var gameSpeed = 1
+var testHarderNGp3 = false
 
 
 function setupFooterHTML() {
