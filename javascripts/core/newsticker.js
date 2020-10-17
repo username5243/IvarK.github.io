@@ -405,7 +405,15 @@ newsArray = [//always true
 ["I hope Hevipelle doesn't find out that he has e308 matter in his basement because he left his challenge uncompleted.", true, "am194"],
 ["Are we in the Gravity Well or outside of it?", "GDs.unlocked()", "am195"],
 ["'The Power of Relativity'", "GDs.unlocked()", "am196"],
-/*NEXT ID: am194*/
+["Gravity Well is basically the time part of dilation, but better.", "GDs.unlocked()", "am197"],
+["Can you please stop having too many types of Dimensions?", "GDs.unlocked()", "am198"],
+["As you go deeper in scale, we don't see you anymore.", "ph.on()", "am199"],
+["You have played a lot of time in Bosonic Lab. Congratulations!", "player.achievements.includes('ng3p81') && tmp.bl.ticks.log10() >= 100", "am200"],
+["Scientists discovered a brand new universe which is made of Replicantis!", "player.achievements.includes('ng3p113')", "am201"],
+["Matter Decay goes brrr!", "ph.did('planck')", "am202"],
+["We recently proved that dark matter exists. We still don't know why.", "player.achievements.includes('ng3p71')", "am203"],
+["Wait... Ghosts should live in spooky places, not our universe.", "ph.did('ghostify')", "am204"],
+/*NEXT ID: am205*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
@@ -509,8 +517,8 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["Ghosts found a ghostly kind of Radioactive Decays!", "Math.max(Math.max(getRadioactiveDecays('r'), getRadioactiveDecays('g')), getRadioactiveDecays('b')) > 4", "gn30"],
 ["Ghosts discovered that some particles, including bosons, are ghostly!", true, "gn31"],
 ["Ghosts don't know how to write more news. They decided to stop it for today.", true, "gn32"],
-["The Anti-Preontius is getting closer. He will destroy your Nanofield. Stay away from him.", "tmp.bl.upgrades.includes(13)", "gn33"],
-["WARNING! The Anti-Preontius will control over your Nanofield! Be careful! Oh. Worker replicants are warned of that Ghost too.", "tmp.bl.upgrades.includes(21)", "gn34"],
+["Antipretus is getting closer. He will destroy your Nanofield. Stay away from him.", "tmp.bl.upgrades.includes(13)", "gn33"],
+["WARNING! Antipretus will control over your Nanofield! Be careful! Oh. Worker replicants are warned of that Ghost too.", "tmp.bl.upgrades.includes(21)", "gn34"],
 ["A ghost tried to take Anti-Preons out, but Bosonic Lab workers decided to ban them out because an Anti-Preon is a resource of Bosonic Lab.", "player.achievements.includes('ng3p81')", "gn35"],
 ["You got one ghostly particle, whatever that means.", "tmp.bl.upgrades.includes(21)", "gn36"],
 ['"Welcome, a new ghost, to the Ghostify layer! Kee-hee-hee!" - Aarex', true, "gn37"],
@@ -536,7 +544,16 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["Void-Preontius, the Void Ultra-Omnipotent Ghost, decided to take over not only the Barrel... He took over the Barrel!", "tmp.qu.nanofield.apgWoke", "gn57"],
 ["GHOST IS YOU", true, "gn58"],
 ["Error 404: Ghost Matter not found", true, "gn59"],
-["Ghost scientists have built a quick transportation to the Gravity Well!", true, "gn60"]
+["Ghost scientists have built a quick transportation to the Gravity Well!", true, "gn60"],
+["We built a new tool that allows you to solve the anomaly!", true, "gn61"],
+["We found an anomaly that allows ghosts to resize themselves in their worlds.", true, "gn62"],
+["Getting tired of finding through small holes? Introducing Planckizer! A tool which allows ghosts to become planck-scale!", "ph.did('planck')", "gn63"],
+["Gonna transform to a Planck Scale ghost!", "ph.did('planck')", "gn64"],
+["The flow of time has messed up thanks to you! Our bosons blew up.", "GDs.unlocked()", "gn65"],
+["We found out that ghosts are made of ghostly foam!", true, "gn66"],
+["Did ghosts transform themselves to keep their lives? Oh, come on! We are immortal!", true, "gn67"],
+["Hey. GhostSauce's Here.", "ph.did('planck')", "gn68"],
+["We finally found a solution that end the war against Antipretus.", "hasBosonicUpg(53)", "gn69"],
 ];}
 
 var ghostlyNewsTickerCache = false

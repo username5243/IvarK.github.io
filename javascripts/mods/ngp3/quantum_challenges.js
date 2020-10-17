@@ -11,6 +11,7 @@ function updateQuantumChallenges() {
 	assigned = []
 	var assignedNums = {}
 	document.getElementById("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
+	document.getElementById("autoCS").style.display = player.ghostify.automatorGhosts.ghosts >= 22 ? "" : "none"
 	document.getElementById("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
 	document.getElementById("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
 	for (var pc = 1; pc <= 4; pc++) {
@@ -135,6 +136,48 @@ function getQCGoalLog(QCs, bigRip) {
 	return quantumChallenges.goalLogs[c1] * quantumChallenges.goalLogs[c2] / 1e11 * mult
 }
 
+function onQCCompletion(qcs, am, time, dilTimes) {
+	let intensity = qcs.length
+	let qc1 = qcs[0]
+	let qc2 = qcs[1]
+	if (intensity == 2) {
+		let qc1st = Math.min(qc1, qc2)
+		let qc2st = Math.max(qc1, qc2)
+		if (qc1st == qc2st) {
+			console.warn("There is an issue, you have assigned a QC twice (QC" + qc1st + ")")
+			intensity = 1
+		} else {
+			let pcid = qc1st * 10 + qc2st
+			if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
+				tmp.qu.challenges[qc1] = 2
+				tmp.qu.challenges[qc2] = 2
+				tmp.qu.electrons.mult += 0.5
+				tmp.qu.pairedChallenges.completed = tmp.qu.pairedChallenges.current
+				if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && am.e >= 1.65e9) giveAchievement("Back to Challenge One")
+				if (tmp.qu.pairedChallenges.current == 4) giveAchievement("Twice in a row")
+			}
+			tmp.qu.pairedChallenges.completions[pcid] = Math.min(tmp.qu.pairedChallenges.current, tmp.qu.pairedChallenges.completions[pcid] || 4)
+			if (dilTimes == 0) {
+				if (tmp.qu.qcsNoDil["pc" + pcid] === undefined) tmp.qu.qcsNoDil["pc" + pcid] = tmp.qu.pairedChallenges.current
+				else tmp.qu.qcsNoDil["pc" + pcid] = Math.min(tmp.qu.pairedChallenges.current,tmp.qu.qcsNoDil["pc" + pcid])
+			}
+			for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("pc" + pcid, tmp.qu.pairedChallenges.current, tmp.preQCMods[m])
+			if (tmp.qu.pairedChallenges.fastest[pcid] === undefined) tmp.qu.pairedChallenges.fastest[pcid] = time
+			else tmp.qu.pairedChallenges.fastest[pcid] = tmp.qu.pairedChallenges.fastest[pcid] = Math.min(tmp.qu.pairedChallenges.fastest[pcid], time)
+		}
+	}
+	if (intensity == 1) {
+		if (!tmp.qu.challenges[qc1]) {
+			tmp.qu.challenges[qc1] = 1
+			tmp.qu.electrons.mult += 0.25
+		}
+		if (tmp.qu.challengeRecords[qc1] == undefined) tmp.qu.challengeRecords[qc1] = time
+		else tmp.qu.challengeRecords[qc1] = Math.min(tmp.qu.challengeRecords[qc1], time)
+		if (dilTimes == 0) tmp.qu.qcsNoDil["qc" + qc1] = 1
+		for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("qc" + qc1, 1, tmp.preQCMods[m])
+	}
+}
+
 function QCIntensity(num) {
 	if (tmp.ngp3 && tmp.qu !== undefined && tmp.qu.challenges !== undefined) return tmp.qu.challenges[num] || 0
 	return 0
@@ -154,6 +197,18 @@ function updateQCTimes() {
 	}
 	if (tempcounter > 0) document.getElementById("qcsbtn").style.display = "inline-block"
 	setAndMaybeShow("qctimesum", tempcounter > 1, '"The sum of your completed Quantum Challenge time records is "+timeDisplayShort(' + temp + ', false, 3)')
+}
+
+function respecPCs() {
+	let data = tmp.qu.pairedChallenges
+	tmp.qu.electrons.mult -= tmp.qu.pairedChallenges.completed * 0.5
+
+	data.order = {}
+	data.completed = 0
+	data.respec = false
+	for (qc = 1; qc <= 9; qc++) if (QCIntensity(qc)) tmp.qu.challenges[qc] = 1
+
+	document.getElementById("respecPC").className = "storebtn"
 }
 
 var ranking = 0
@@ -438,6 +493,5 @@ function recordModifiedQC(id, num, mod) {
 		data = {}
 		tmp.qu.qcsMods[mod] = data
 	}
-	if (data[id] === undefined) data[id] = num
-	else data[id] = Math.min(num, data[id])
+	data[id] = Math.min(num, data[id] || 4)
 }

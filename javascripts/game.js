@@ -3851,7 +3851,6 @@ function doPerSecondNGP3Stuff(){
 }
 
 function ghostifyAutomationUpdatingPerSecond() {
-	if (!ph.did("ghostify")) return
 	if (!isAutoGhostsSafe) return
 
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
@@ -3896,8 +3895,12 @@ function checkGluonRounding(){
 }
 
 function doNGm2CorrectPostC3Reward(){
-	return //this should be for testing purposes only so i can properly hack in TDB/DB
+	return
+	/*
+	this should be for testing purposes only so i can properly hack in TDB/DB
+
 	player.postC3Reward = Decimal.pow(getPostC3Mult(), getInitPostC3Power() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
+	*/
 }
 
 let autoSaveSeconds=0
@@ -4201,19 +4204,19 @@ function ghostifyAutomationUpdating(diff){
 		let data = player.ghostify.wzb
 		let hasWNB = data.wnb.gt(0)
 		ag.t = (ag.t || 0) + diff
-		if (data.dPUse == 0 && ag.t >= (hasWNB ? 0.1 : 1)) {
+		if (data.dPUse == 0 && data.dP.gt(0)) {
 			useAntiPreon(hasWNB ? 3 : 1)
 			ag.t = 0
 		}
-		if (data.dPUse == 1 && ag.t >= 0.1) {
-			useAntiPreon(3)
+		if (data.dPUse == 1) {
+			useAntiPreon(hasWNB ? 3 : 2)
 			ag.t = 0
 		}
 		if (data.dPUse == 3 && !hasWNB) {
 			useAntiPreon(2)
 			ag.t = 0
 		}
-		if (data.dPUse == 2 && ag.t >= 0.1) {
+		if (data.dPUse == 2) {
 			useAntiPreon(1)
 			ag.t = 0
 		}
@@ -4405,6 +4408,13 @@ function quantumOverallUpdating(diff){
 			tmp.qu.metaAutobuyerWait=tmp.qu.metaAutobuyerWait%speed
 			doAutoMetaTick()
 		}
+	}
+	if (AUTO_QC.auto.on) {
+		if (isQuantumReached()) {
+			tmp.preQCMods = tmp.qu.qcsMods.current
+			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
+			AUTO_QC.next()
+		} else if (tmp.qu.time > AUTO_QC.auto.time * 10) AUTO_QC.next()
 	}
 }
 
@@ -5076,7 +5086,6 @@ function gameLoop(diff) {
 	passiveIPperMUpdating(diff)
 	incrementTimesUpdating(diffStat)
 	dimensionButtonDisplayUpdating()
-	ghostifyAutomationUpdating(diff)
 
 	if (player.meta) metaDimsUpdating(diff)
 	infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims
@@ -5170,7 +5179,6 @@ function gameLoop(diff) {
 		}
 		if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
 		if (masteryStudies.has(291)) updateEternityUpgrades() // to fix the 5ep upg display
-		if (ph.did("quantum")) quantumOverallUpdating(diff)
 		if (ph.did("ghostify")) {
 			if (GDs.unlocked()) {
 				// Gravity Dimensions
@@ -5180,7 +5188,9 @@ function gameLoop(diff) {
 			}
 			if (player.ghostify.wzb.unl) WZBosonsUpdating(diff) // Bosonic Lab
 			if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
+			ghostifyAutomationUpdating(diff)
 		}
+		if (ph.did("quantum")) quantumOverallUpdating(diff)
 	}
 
 	thisQuantumTimeUpdating()

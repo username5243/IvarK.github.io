@@ -456,55 +456,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 				u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
 			}
 			var qc = tmp.inQCs
-			var intensity = qc.length
-			var qc1 = qc[0]
-			var qc2 = qc[1]
-			if (intensity > 1) {
-				var qc1st = Math.min(qc1, qc2)
-				var qc2st = Math.max(qc1, qc2)
-				if (qc1st == qc2st) console.log("There is an issue, you have assigned a QC twice (QC" + qc1st + ")")
-				//them being the same should do something lol, not just this
-				var pcid = qc1st * 10 + qc2st
-				if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
-					tmp.qu.challenges[qc1] = 2
-					tmp.qu.challenges[qc2] = 2
-					tmp.qu.electrons.mult += 0.5
-					tmp.qu.pairedChallenges.completed = tmp.qu.pairedChallenges.current
-					if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && oldMoney.e >= 1.65e9) giveAchievement("Back to Challenge One")
-					if (tmp.qu.pairedChallenges.current == 4) giveAchievement("Twice in a row")
-				}
-				if (tmp.qu.pairedChallenges.completions[pcid] === undefined) tmp.qu.pairedChallenges.completions[pcid] = tmp.qu.pairedChallenges.current
-				else tmp.qu.pairedChallenges.completions[pcid] = Math.min(tmp.qu.pairedChallenges.current, tmp.qu.pairedChallenges.completions[pcid])
-				if (dilTimes == 0) {
-					if (tmp.qu.qcsNoDil["pc" + pcid] === undefined) tmp.qu.qcsNoDil["pc" + pcid] = tmp.qu.pairedChallenges.current
-					else tmp.qu.qcsNoDil["pc" + pcid] = Math.min(tmp.qu.pairedChallenges.current,tmp.qu.qcsNoDil["pc" + pcid])
-				}
-				for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("pc" + pcid, tmp.qu.pairedChallenges.current, tmp.preQCMods[m])
-				if (tmp.qu.pairedChallenges.fastest[pcid] === undefined) tmp.qu.pairedChallenges.fastest[pcid] = oldTime
-				else tmp.qu.pairedChallenges.fastest[pcid] = tmp.qu.pairedChallenges.fastest[pcid] = Math.min(tmp.qu.pairedChallenges.fastest[pcid], oldTime)
-			} else if (intensity) {
-				if (!tmp.qu.challenges[qc1]) {
-					tmp.qu.challenges[qc1] = 1
-					tmp.qu.electrons.mult += 0.25
-				}
-				if (tmp.qu.challengeRecords[qc1] == undefined) tmp.qu.challengeRecords[qc1] = oldTime
-				else tmp.qu.challengeRecords[qc1] = Math.min(tmp.qu.challengeRecords[qc1], oldTime)
-				if (dilTimes == 0) tmp.qu.qcsNoDil["qc" + qc1] = 1
-				for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("qc" + qc1, 1, tmp.preQCMods[m])
-			}
-			if (tmp.qu.pairedChallenges.respec) {
-				tmp.qu.electrons.mult -= tmp.qu.pairedChallenges.completed * 0.5
-				tmp.qu.pairedChallenges = {
-					order: {},
-					current: 0,
-					completed: 0,
-					completions: tmp.qu.pairedChallenges.completions,
-					fastest: tmp.qu.pairedChallenges.fastest,
-					respec: false
-				}
-				for (qc = 1; qc <= 9; qc++) if (QCIntensity(qc)) tmp.qu.challenges[qc] = 1
-				document.getElementById("respecPC").className = "storebtn"
-			}
+			onQCCompletion(qc, oldMoney, oldTime, dilTimes)
+			if (tmp.qu.pairedChallenges.respec) respecPCs()
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()

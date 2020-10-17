@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 17)</span>
+				<span class="warning">(Test server: Beta 18)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -3871,6 +3871,11 @@
 						</td>
 					</tr>
 				</table>
+				<div id="autoCS">
+					<b style="font-size: 25px">Auto-Challenge Sweeper Ghost</b><br>
+					This ghost will sweep all possible Paired Challenge combinations in Paired Challenge 1!<br>
+					<button class="gluonupgrade ghostifybtn" onclick="AUTO_QC.on()">Start sweeping those challenges!</button>
+				</div>
 				<div id="modifiersdiv">
 					<b style="font-size: 25px">QC Modifiers</b><br>
 					<div id="modifiers"></div>
@@ -5403,6 +5408,7 @@
 							(not implemented)<br>
 							Power usage: <span id="ghostcost22">bug</span><br>
 							<button class="quantumbtn" onclick="teleportToQCs()">Teleport to Quantum Challenges.</button><br>
+							Seconds per 1 Paired Challenge: <input id="autoGhost22t" onchange="changeAutoGhost('22t')"></input><br>
 							Is active: <input id="isAutoGhostOn22" type="checkbox" onchange="toggleAutoGhost(22)"></input>
 						</div></td>
 						<td id="autoGhost23"><div class="autoBuyerDiv" style="display:block">

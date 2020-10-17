@@ -275,36 +275,6 @@ function toggleAPs() {
 	document.getElementById("toggleAP").textContent = player.eternityBuyer.presets.on ? "Disable" : "Enable"
 }
 
-function bigRip(auto) {
-	if (!tmp.quActive || !player.masterystudies.includes("d14") || tmp.qu.electrons.amount < getQCCost([6, 8]) || !inQC(0)) return
-	if (player.ghostify.milestones > 1) {
-		tmp.qu.pairedChallenges.order = {1: [1, 2], 2: [3, 4], 3: [5, 7], 4:[6, 8]}
-		tmp.qu.pairedChallenges.completed = 4
-		for (var c = 1; c < 9; c++) {
-			tmp.qu.electrons.mult += (2 - tmp.qu.challenges[c]) * 0.25
-			tmp.qu.challenges[c] = 2
-		}
-		quantum(auto, true, 4, true, true, true)
-	} else {
-		for (var p = 1; p < 5; p++) {
-			var pcData = tmp.qu.pairedChallenges.order[p]
-			if (pcData) {
-				var pc1 = Math.min(pcData[0], pcData[1])
-				var pc2 = Math.max(pcData[0], pcData[1])
-				if (pc1 == 6 && pc2 == 8) {
-					if (p - 1 > tmp.qu.pairedChallenges.completed) return
-					quantum(auto, true, p, true, true)
-				}
-			}
-		}
-	}
-}
-
-function toggleBigRipConf() {
-	tmp.qu.bigRip.conf = !tmp.qu.bigRip.conf
-	document.getElementById("bigRipConfirmBtn").textContent = "Big Rip confirmation: O" + (tmp.qu.bigRip.conf ? "N" : "FF")
-}
-
 function switchAB() {
 	var bigRip = tmp.qu.bigRip.active
 	tmp.qu.bigRip["savedAutobuyers" + (bigRip ? "" : "No") + "BR"] = {}
@@ -730,7 +700,7 @@ function setupAutomaticGhostsData() {
 	return data
 }
 
-var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,40,40,40,1/0]
+var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,40,40,40,45]
 var powerConsumed
 var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,10,3,3,0]
 function updateAutoGhosts(load) {
@@ -743,6 +713,8 @@ function updateAutoGhosts(load) {
 			document.getElementById("nextAutomatorGhost").parentElement.style.visibility="visible"
 			document.getElementById("nextAutomatorGhost").textContent=autoGhostRequirements[data.ghosts-3].toFixed(2)
 		}
+
+		AUTO_QC.compile()
 	}
 	powerConsumed=0
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
@@ -766,6 +738,7 @@ function updateAutoGhosts(load) {
 		document.getElementById("autoGhost13u").value = data[13].u
 		document.getElementById("autoGhost13o").value = data[13].o
 		document.getElementById("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
+		document.getElementById("autoGhost22t").value = data[22].time
 	}
 	document.getElementById("consumedPower").textContent = powerConsumed.toFixed(2)
 	isAutoGhostsSafe = data.power >= powerConsumed
@@ -807,6 +780,9 @@ function changeAutoGhost(o) {
 	} else if (o == "15a") {
 		var num = fromValue(document.getElementById("autoGhost15a").value)
 		if (!isNaN(break_infinity_js ? num : num.l)) player.ghostify.automatorGhosts[15].a = num
+	} else if (o == "22t") {
+		var num = parseFloat(document.getElementById("autoGhost22t").value)
+		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[22].time = num
 	}
 }
 
@@ -825,6 +801,69 @@ function rotateAutoUnstable() {
 }
 
 const MAX_AUTO_GHOSTS = 25
+
+let AUTO_QC = {
+	compile() {
+		this.auto = player.ghostify.automatorGhosts[22]
+
+		let data = this.auto
+		if (data.sweep === undefined) {
+			data.time = 3
+			data.sweep = []
+			data.on = false
+		}
+	},
+	on() {
+		this.auto.sweep = [0, 1]
+		this.next()
+	},
+	next() {
+		while (true) {
+			let data = this.auto.sweep
+			data[0]++
+			if (!QCIntensity(data[1]) || data[0] == data[1]) {
+				data[1]++
+				data[0] = 0
+				if (data[1] > 9) {
+					this.off()
+					return
+				}
+			} else if (this.check(data[0], data[1])) {
+				this.start(data[0], data[1])
+				return
+			}
+		}
+	},
+	start(c1, c2) {
+		tmp.inQCs = [0]
+		this.auto.on = true
+
+		respecPCs()
+		tmp.qu.pairedChallenges.order[1] = [c1, c2]
+
+		$.notify("Trying to complete QCs " + c1 + " and " + c2 + " in PC1...", "info")
+		quantum(false, true, 1, true)
+	},
+	check(c1, c2) {
+		let qcMods = qcm.on
+		let pcId = c1 * 10 + c2
+		for (let m = 0; m < qcMods.length; m++) {
+			let data = tmp.qu.qcsMods[qcMods[m]]
+			if (!data || data["pc" + pcId] != 1) return true
+		}
+		if (qcMods.length) return false
+		return tmp.qu.pairedChallenges.completions[pcId] != 1
+	},	
+	off() {
+		this.auto.sweep = []
+		if (this.auto.on){
+			this.auto.on = false
+			setPCsForBigRip()
+			quantum(false, true)
+		}
+		$.notify("Auto-Challenge Sweeper Ghost has done sweeping all possible PC1 combinations!", "success")
+	}
+}
 
 //v2.1
 function startEC10() {
