@@ -73,7 +73,7 @@ function getEternitiesAndDTBoostExp() {
 
 function getDilPower() {
 	var ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
-	if (hasDilationUpg("ngud1")) ret = getD18Bonus().times(ret)
+	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
 		if (masteryStudies.has(264)) ret = ret.times(getMTSMult(264))
@@ -150,7 +150,7 @@ function getEternityBoostToDT(){
 	if (hasDilationUpg('ngpp2') && tmp.newNGP3E) {
 		let e = new Decimal(getEternitied())
 		gain = gain.times(e.max(10).log10()).times(Math.pow(e.max(1e7).log10()-6,3))
-		if (e.gt(5e14)) gain = gain.times(Math.sqrt(e.log10())) // this comes into play at the grind right before quantum
+		if (e.gt(1e14)) gain = gain.times(Math.sqrt(e.log10())) // this comes into play at the grind right before quantum
 	}
 	return gain
 }
@@ -178,7 +178,7 @@ function dilates(x, m) {
 		if (m == "tick" && player.galacticSacrifice == undefined) x = x.div(1e3)
 		if (m == "tick" && x.lt(1)) x = Decimal.div(1, x)
 	}
-	return x.max(0).min(y) //it should never be a buff
+	return x.max(0).min(y)
 }
 
 function dilationPowerStrength() {
@@ -487,7 +487,8 @@ function getFreeGalaxyGainMult() {
 	if (player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) galaxyMult /= 1.5
 	if (isQCRewardActive(2)) galaxyMult *= tmp.qcRewards[2]
 	if (isNanoEffectUsed("dil_gal_gain")) galaxyMult *= tmp.nf.effects.dil_gal_gain
-	return galaxyMult
+	let exp = tmp.newNGP3E ? 1.1 : 1
+	return Math.pow(galaxyMult, exp)
 }
 
 function getFreeGalaxyThresholdStart(){
