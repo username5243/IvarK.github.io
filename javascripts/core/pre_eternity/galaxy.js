@@ -157,7 +157,7 @@ function getDistantScalingStart() {
 	if (hasTimeStudy(224)) n += Math.floor(player.resets/2000)
 	if (tmp.ngp3 && tmp.qu.bigRip !== undefined && tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
-	if (pl.on()) n -= pl.tmp.nerf3
+	if (pl.on()) n -= pl.tmp.nerfMu
 
 	if (tmp.grd.galaxies >= tmp.grd.darkStart) {
 		let push = 5 / tmp.grd.speed

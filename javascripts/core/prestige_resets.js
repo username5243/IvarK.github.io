@@ -173,21 +173,7 @@ function doQuantumResetStuff(bigRip, isQC){
 			4: 0,
 		}
 	}
-	player.exdilation = player.exdilation != undefined ? {
-		unspent: new Decimal(0),
-		spent: {
-			1: new Decimal(0),
-			2: new Decimal(0),
-			3: new Decimal(0),
-			4: new Decimal(0)
-		},
-		times: 0
-	}: player.exdilation
-	player.blackhole = player.exdilation != undefined ? {
-		unl: speedrunMilestonesReached > 4,
-		upgrades: {dilatedTime: 0, bankedInfinities: 0, replicanti: 0, total: 0},
-		power: new Decimal(0)
-	}: player.blackhole
+	resetNGUdData(true)
 	doMetaDimensionsReset(bigRip, headstart, isQC)
 	player.old = tmp.ngp3 ? inQC(0) : undefined
 	player.dontWant = tmp.ngp3 || undefined
@@ -708,21 +694,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 			4: 0,
 		}
 	}
-	player.exdilation = player.exdilation != undefined ? {
-		unspent: new Decimal(0),
-		spent: {
-			1: new Decimal(0),
-			2: new Decimal(0),
-			3: new Decimal(0),
-			4: new Decimal(0)
-		},
-		times: 0
-	} : player.exdilation
-	player.blackhole = player.exdilation != undefined ? {
-		unl: bm > 0,
-		upgrades: {dilatedTime: 0, bankedInfinities: 0, replicanti: 0, total: 0},
-		power: new Decimal(0)
-	} : player.blackhole
+	resetNGUdData()
 	player.quantum = getQuantumOnGhostifyData(bm, nBRU, nBEU)
 	player.old = false
 	player.dontWant = true
@@ -777,22 +749,6 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	resetInfDimensions(true)
 }
 
-function doNGUpdateGhostifyResetStuff() {
-	if (player.exdilation != undefined) {
-		if (player.eternityUpgrades.length) for (var u = 7; u <= 9; u++) player.eternityUpgrades.push(u)
-		for (var d = 1; d <= (player.aarexModifications.nguspV ? 8 : 4); d++) player["blackholeDimension" + d] = {
-			cost: blackholeDimStartCosts[d],
-			amount: new Decimal(0),
-			power: new Decimal(1),
-			bought: 0
-		}
-		if (speedrunMilestonesReached < 3) {
-			document.getElementById("blackholediv").style.display="none"
-			document.getElementById("blackholeunlock").style.display="inline-block"
-		}
-	}
-}
-
 function doTOUSOnGhostify(bm){
 	if (player.achievements.includes("ng3p77")) { //thry of ultimate studies
 		player.timestudy.studies=[]
@@ -819,7 +775,6 @@ function doEternityGhostifyResetStuff(implode, bm){
 	}
 	player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation.totalTachyonParticles = player.dilation.bestTP
-	doNGUpdateGhostifyResetStuff()
 	player.meta.bestOverQuantums = getMetaAntimatterStart()
 	doMetaDimensionsReset()
 	document.getElementById("eternitybtn").style.display = "none"

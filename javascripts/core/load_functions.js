@@ -439,7 +439,11 @@ function setAarexModIfUndefined(){
 
 function doNGp3Init1(){
 	if (player.aarexModifications.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
-	tmp.ngp3 = player.masterystudies !== undefined
+	tmp.ngpX = player.achievements.includes("ng3p111") && pl.save ? 5 :
+		player.masterystudies !== undefined ? 3 :
+		player.meta !== undefined ? 2 :
+		0
+	tmp.ngp3 = tmp.ngpX >= 3
 	tmp.ngex = player.aarexModifications.ngexV !== undefined
 	tmp.newNGP3E = tmp.ngp3 && player.aarexModifications.newGameExpVersion !== undefined
 
@@ -1872,7 +1876,8 @@ function setDisplaysStuff1(){
 		document.getElementById("galaxy11").innerHTML = "Normal"+(player.aarexModifications.ngmX>3?" and Time D":" d")+"imensions are "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
 		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
 	} else {
-		if (!tmp.ngC) document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions<br>"+(player.aarexModifications.newGameExpVersion?"20x -> 24x":"2x -> 2.2x")+"<br>Cost: 1 IP"
+		let base = getMPTPreInfBase()
+		if (!tmp.ngC) document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions<br>" + base.toFixed(1) + "x -> " + (base * infUpg12Pow()).toFixed(1) + "x<br>Cost: 1 IP"
 		document.getElementById("infi33").innerHTML = "Increase Dimension Boost multiplier<br>2x -> 2.5x<br>Cost: 7 IP"
 	}
 	document.getElementById("infi24").innerHTML = "Antimatter Galaxies are " + (tmp.ngC ? "quadruple" : "twice") + " as effective<br>Cost: 2 IP"
@@ -2204,7 +2209,7 @@ function onLoad(noOffline) {
 		updatePUCosts()
 	}
 	if (tmp.ngp3) updateNGp3DisplayStuff()
-        handleDisplaysOutOfQuantum()
+	handleDisplaysOutOfQuantum()
 	hideDimensions()
 	updateChallenges()
 	updateNCVisuals()
@@ -2339,10 +2344,10 @@ function setupNGP31Versions() {
 	}
 	if (player.aarexModifications.newGame3PlusVersion < 3) {
 		player.ghostify.gds = GDs.setup()
-		player.pl = pl.setup()
 		player.quantum.electrons.percentage = 1
 	} else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
+		if (tmp.ngpX < 5) delete player.pl
 	}
 	player.aarexModifications.newGame3PlusVersion = 3
 }
@@ -2595,10 +2600,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(id) {
-	if (modes.ngprw) {
-		alert("Coming soon...")
-		return
-	}
+	if (modes.ngmm == 4 && !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
@@ -2945,7 +2947,7 @@ function conToDeciGhostify(){
 }
 
 function conToDeciPlanck() {
-	if (player.pl !== undefined) pl.compile()
+	pl.compile()
 }
 
 function transformSaveToDecimal() {

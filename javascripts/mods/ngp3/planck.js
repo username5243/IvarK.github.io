@@ -13,8 +13,11 @@ let pl = {
 		return data
 	},
 	compile() {
+		delete pl.tmp
+
 		let data = player.pl
 		pl.save = data
+		if (!data) return
 
 		if (!data.last10) data.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 		for (var r=0;r<10;r++) data.last10[r][1] = new Decimal(data.last10[r][1])
@@ -33,24 +36,17 @@ let pl = {
 		let data = {}
 		pl.tmp = data
 
-		let dfEff1 = pl.save.df.amt.log10() * Math.sqrt(pl.save.layer)
-		let dfEff2 = dfEff1
-		let dfEff3 = dfEff2
+		let eff = pl.save.df.amt.log10() * Math.sqrt(pl.save.layer)
 
-		/*
-			ID Guide:
-			- 1: Normal
-			- 2: Low Matteria
-			- 3: High Matteria
-		*/
+		data.buffNeutral = Math.log10(eff / 5 + 1) + 1
+		data.buffNeutral2 = eff + 1
+		data.nerfNeutral = 1 / (eff / 20 + 1) + 1
+		data.nerfNeutral2 = eff + 1
 
-		data.buff1 = Math.log10(dfEff1 / 5 + 1) + 1
-		data.buff2 = dfEff2
-		data.buff3 = dfEff3 + 1
-
-		data.nerf1 = 1 / (dfEff1 / 20 + 1) + 1
-		data.nerf2 = dfEff2 + 1
-		data.nerf3 = dfEff3
+		data.buffOmega = eff / data.nerfNeutral2
+		data.buffMu = eff / data.nerfNeutral2 + 1
+		data.nerfOmega = eff * data.buffNeutral2 + 1
+		data.nerfMu = eff * data.buffNeutral2
 	},
 	can() {
 		return GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 50
@@ -63,14 +59,17 @@ let pl = {
 	},
 	reset() {
 		if (!pl.can()) return
-		if (pl.save.conf && !confirm(pl.conf)) return
-		if (!pl.did()) for (let x = 0; x < pl.warnings.length; x++) if (!confirm(pl.warnings[x])) return
+		if (pl.save.conf && !confirm(pl.conf())) return
+		if (!pl.did()) {
+			for (let x = 0; x < pl.warnings.length; x++) if (!confirm(pl.warnings[x])) return
+			convertToNGP5()
+		}
 
 		ph.onPrestige("planck")
 		pl.onReset()
 	},
 	exit() {
-		if (!pl.save.on) return
+		if (!pl.on()) return
 		if (!confirm(pl.exitConf)) return
 		pl.save.on = false
 		bosonicLabReset()
@@ -78,7 +77,12 @@ let pl = {
 		ph.updateDisplay()
 	},
 	onReset() {
-		if (pl.save.on) pl.save.layer++
+		if (!pl.save) {
+			convertToNGP5()
+			if (player.exdilation !== undefined) exitNGUd()
+		}
+
+		if (pl.on()) pl.save.layer++
 		else pl.save.on = true
 
 		player.dilation.bestTPOverGhostifies = new Decimal(0)
@@ -117,7 +121,9 @@ let pl = {
 
 		ph.updateDisplay()
 	},
-	conf: "You will reset everything except Brave Milestones, Automator Ghosts, and all Ghostify unlocks, for a big boost / twist to Ghostify. Be warned: Eternity and Quantum don't work in this reduced universe. Ghost scientists researched that there's a little bit of matter that grows itself. Are you ready, again?",
+	conf() {
+		return "You will reset everything except Brave Milestones, Automator Ghosts, and all Ghostify unlocks, for a big boost / twist to Ghostify. Be warned: " + (player.exdilation !== undefined ? "NGUd content won't work anymore after your first Planck! " : "") + "Eternity and Quantum don't work in this reduced universe. Ghost scientists researched that there's a little bit of matter that grows itself. Are you ready, again?"
+	},
 	exitConf: "You will bring the universe back to normal, but matter won't appear until you reduce it again. Are you sure?",
 	warnings: [
 		"Are you sure you want to do this? You will lose everything you have!",
@@ -141,9 +147,11 @@ let pl = {
 		document.getElementById("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
 		document.getElementById("dfGain").textContent = shorten(pl.decayGain())
 
-		for (let x = 1; x <= 3; x++) {
-			document.getElementById("dfBuff" + x).textContent = pl.tmp["buff" + x].toFixed(2)
-			document.getElementById("dfNerf" + x).textContent = pl.tmp["nerf" + x].toFixed(2)
+		let types = ["Omega", "Mu", "Neutral", "Neutral2"]
+		for (let x = 1; x <= 4; x++) {
+			let type = types[x - 1]
+			document.getElementById("dfBuff" + type).textContent = pl.tmp["buff" + type].toFixed(2)
+			document.getElementById("dfNerf" + type).textContent = pl.tmp["nerf" + type].toFixed(2)
 		}
 	},
 	radioactivityToMatter() {

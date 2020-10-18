@@ -1895,7 +1895,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 18)</span>
+				<span class="warning">(Test server: Beta 19)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -5720,28 +5720,57 @@
 					(resets this mechanic)
 				</button>
 				<br><br>
-				Your Nulli Foam is translated to...
+				Your Nulli Foam is composed to:
 				<table class="qtable">
+					<tr class="nulliPows">
+						<td class="omega">
+							<b id="dfAmountOmega">0.0</b> Ω<sup>-</sup> Power
+						</td>
+						<td class="mu">
+							<b id="dfAmountMu">0.0</b> M<sup>+</sup> Power
+						</td>
+						<td class="neutral">
+							<b id="dfAmountNeutral">0.0</b> N<sup>0</sup> Power
+						</td>
+					</tr>
 					<tr>
 						<td>
-							<span class="pl" id="dfBuff1" style="font-size: 25px"></span>x to Intergalactic amount
+							+<span class="pl" id="dfBuffOmega" style="font-size: 25px"></span> to base Bosonic Watt gain
 						</td>
 						<td>
-							+<span class="pl" id="dfBuff2" style="font-size: 25px"></span> to base Bosonic Watt gain
+							<span class="pl" id="dfBuffMu" style="font-size: 25px"></span>x to Bosonic Watt gain (before Gravity Well)
 						</td>
 						<td>
-							<span class="pl" id="dfBuff3" style="font-size: 25px"></span>x to Bosonic Watt gain (before Gravity Well)
+							<span class="pl" id="dfBuffNeutral" style="font-size: 25px"></span>x to Intergalactic amount
+						</td>
+					</tr>
+					<tr>
+						<td>
+							(powered up by having low Matteria Foam)
+						</td>
+						<td>
+							(powered up by having high Matteria Foam)
+						</td>
+						<td>
+							Boost the nerfs of Omega and Mu Powers by <span class="pl" id="dfBuffNeutral2" style="font-size: 25px"></span>x.
 						</td>
 					</tr>
 					<tr style="background: rgba(255, 0, 0, 0.25)">
 						<td>
-							Reduce the Photonic Flow base from 2.00x to <span class="pl" id="dfNerf1" style="font-size: 25px"></span>x
+							/<span class="pl" id="dfNerfOmega" style="font-size: 25px"></span> to Matteria Foam growth
 						</td>
 						<td>
-							/<span class="pl" id="dfNerf2" style="font-size: 25px"></span> to Matteria Foam growth
+							Distant Antimatter Galaxies starts <span class="pl" id="dfNerfMu" style="font-size: 25px"></span> earlier
 						</td>
 						<td>
-							Distant Antimatter Galaxies starts <span class="pl" id="dfNerf3" style="font-size: 25px"></span> earlier
+							Reduce the Photonic Flow base from 2.00x to <span class="pl" id="dfNerfNeutral" style="font-size: 25px"></span>x
+						</td>
+					</tr>
+					<tr style="background: rgba(255, 0, 0, 0.25)">
+						<td></td>
+						<td></td>
+						<td>
+							Nerf the boosts of Omega and Mu Powers by <span class="pl" id="dfNerfNeutral2" style="font-size: 25px"></span>x.
 						</td>
 					</tr>
 				</table>
@@ -5786,7 +5815,6 @@
 			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline">NG Condensed: OFF</button>			
 			<br><br>
 			<b>Hellish Mods</b><br>
-			<button class="storebtn longbtn" id='ngmBtn' style="font-size: 15px" onclick="toggle_mod('ngm')" style="display: inline">NG-: OFF</button>
 			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline">NG--: OFF</button>
 			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline">Expert Mode: OFF</button>
 			<br><br>
@@ -5794,10 +5822,12 @@
 			<button class="storebtn longbtn" id='ngpBtn' style="font-size: 15px" onclick="toggle_mod('ngp')" style="display: inline">NG+: OFF</button>
 			<button class="storebtn longbtn" id='aauBtn' style="font-size: 15px" onclick="toggle_mod('aau')" style="display: inline">AAU: OFF</button>
 			<button class="storebtn longbtn" id='lsBtn' style="font-size: 15px" onclick="toggle_mod('ls')" style="display: inline">Light Speed: OFF</button>
+			<!--
 			<button class="storebtn longbtn" id='ngprwBtn' style="font-size: 15px" onclick="toggle_mod('ngprw')" style="display: inline">NG+ Reworked: OFF</button>
 			<br>
 			Reset Mode #<input id='ngpLayer' type="number" onchange="changeNGPLayer()" min=0 value=0>
 			<br><br>
+			-->
 			<button class="storebtn longbtn" id='ezBtn' style="font-size: 15px" onclick="toggle_mod('ez')" style="display: inline">Barrier-Easing: OFF</button>
 			<br><br>
 			<b>Buffed Mods</b><br>

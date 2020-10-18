@@ -568,6 +568,8 @@ function infUpg11Pow() {
 		exp = 0.75
 	}
 	if (tmp.ngC) exp *= Math.log10(player.money.plus(1).log10() + 1) * 3 + 1
+	if (tmp.ez) x *= 10
+	x = Math.max(x, 1)
 
 	if (exp > 10) return Decimal.pow(x, exp).max(1)
 	return Math.max(Math.pow(x, exp), 1)
@@ -591,9 +593,10 @@ function infUpg13Pow() {
 		exp *= Math.sqrt(player.galaxies + 1) * 200
 		x += 1
 	}
+	if (tmp.ez) x *= 10
 
 	if (exp > 10) return Decimal.pow(x, exp).max(1)
-	return Decimal.max(Decimal.pow(x, exp), 1)
+	return Math.max(Math.pow(x, exp), 1)
 }
 
 function dimMults() {

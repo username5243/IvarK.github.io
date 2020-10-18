@@ -108,7 +108,7 @@ function updateTODStuff() {
 		var branch = tmp.qu.tod[shorthand]
 		var name = getUQNameFromBranch(shorthand)
 		document.getElementById(shorthand+"UQName").textContent = name
-		extra = branch.spin.log10() > 200
+		extra = Decimal.log10(branch.spin) > 200
 		start = extra ? "" : "Cost: "
 		end = extra ? color : color + " quark spin"
 		for (var b = 1; b < 4; b++) {

@@ -15,7 +15,6 @@ function initialGalaxies() {
 	if (GUActive("rg4")) g *= 0.4
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && player.aarexModifications.ngmX == 3) g = 0
-	if (g < 2 && tmp.ez) g = (g + 2) / 2
 	return g
 }
 

@@ -19,10 +19,10 @@ function updateBLUnlockDisplay() {
 
 function getBosonicWattGain() {
 	let x = Math.max(player.money.log10() / 2e16 - 1, 0)
-	if (pl.on()) x += pl.tmp.buff2
+	if (pl.on()) x += pl.tmp.buffOmega
 	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
 	if (isEnchantUsed(34)) x *= tmp.bEn[34]
-	if (pl.on()) x *= pl.tmp.buff3
+	if (pl.on()) x *= pl.tmp.buffMu
 	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
 }
@@ -200,9 +200,11 @@ let maxBLLvl = 3
 function updateBosonicLimits() {
 	//Bosonic Level?
 	let lvl = 0
-	if (GDs.unlocked()) lvl = 3
-	else if (player.ghostify.hb.higgs > 0) lvl = 2
-	else if (player.ghostify.wzb.unl) lvl = 1
+	if (player.ghostify.hb) {
+		if (GDs.unlocked()) lvl = 3
+		else if (player.ghostify.hb.higgs > 0) lvl = 2
+		else if (player.ghostify.wzb.unl) lvl = 1
+	}
 
 	//Bosonic Lab
 	br.limit = br.limits[lvl]

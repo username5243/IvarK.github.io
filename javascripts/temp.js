@@ -33,8 +33,8 @@ function updateTemp() {
 	if (player.timestudy.studies.includes(101)) tmp.nrm = player.replicanti.amount.max(1)
 	tmp.rg4 = false
 	tmp.bE50kDT = false
+	if (tmp.ngpX >= 5) pl.updateTmp()
 	if (tmp.ngp3) {
-		if (ph.did("planck")) pl.updateTmp()
 		updateGhostifyTempStuff()
 		updateQuantumTempStuff()
 	} else tmp.be = false
@@ -200,7 +200,7 @@ function updateIntergalacticTemp() {
 	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
 	x += tmp.effAeg
-	if (pl.on()) x *= pl.tmp.buff1
+	if (pl.on()) x *= pl.tmp.buffNeutral
 	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	if (player.achievements.includes("ng3p114")) x = Decimal.times(x, 1.3)
 	tmp.igg = x
@@ -267,7 +267,7 @@ function updateMatterSpeed(){
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 	if (GDs.boostUnl('mf')) {
-		let exp = GDs.tmp.mf * pl.radioactivityToMatter() / pl.tmp.nerf2
+		let exp = GDs.tmp.mf * pl.radioactivityToMatter() / pl.tmp.nerfOmega
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 }

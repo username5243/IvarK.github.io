@@ -3,7 +3,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	if (tmp.ngp3 && tmp.qu.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
-	if (player.aarexModifications.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and "+(headstart?"other things like Dilation":"including Time Studies, Eternity Challenges, Dilation, "+(tmp.ngp3?"Meta Dimensions, and Mastery Studies":"and Meta Dimensions"))+". You will gain a quark and unlock various upgrades.":"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
+	if (player.aarexModifications.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (tmp.ngmX >= 2 ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!ph.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
 	var QCs = []
@@ -278,6 +278,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		showEternityTab("timestudies", true)
 	}
 	if (!ph.did("quantum")) {
+		exitNGMM()
 		ph.onPrestige("quantum")
 		ph.updateDisplay()
 		if (tmp.ngp3) {
@@ -407,10 +408,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	}
 	var oldMoney = player.money
 	var dilTimes = player.dilation.times
-	var bhd = []
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
-	if (player.aarexModifications.ngudpV) for (var d = 0; d < 4; d++) bhd[d]=Object.assign({}, player["blackholeDimension" + (d + 1)])
 	
 	doQuantumResetStuff(bigRip, isQC)
 	if (ph.did("ghostify") && bigRip) {
@@ -429,19 +428,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (bigRip && player.ghostify.milestones > 9 && player.aarexModifications.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
 
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
-	if (player.exdilation != undefined) {
-		if (player.eternityUpgrades.length) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
-		for (var d = 1; d < (player.aarexModifications.nguspV ? 9 : 5); d++) player["blackholeDimension" + d] = player.achievements.includes("ng3p67") && player.aarexModifications.ngudpV && !player.aarexModifications.ngumuV ? bhd[d - 1] : {
-			cost: blackholeDimStartCosts[d],
-			amount: new Decimal(0),
-			power: new Decimal(1),
-			bought: 0
-		}
-		if (speedrunMilestonesReached < 3) {
-			document.getElementById("blackholediv").style.display = "none"
-			document.getElementById("blackholeunlock").style.display = "inline-block"
-		}
-	}
 	if (tmp.ngp3) {
 		ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
 		player.dilation.times = 0

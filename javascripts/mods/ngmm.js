@@ -746,3 +746,16 @@ function calcNGMX(data) {
 		data.aarexModifications.newGameMinusVersion ? 1 :
 		0)
 }
+
+function exitNGMM() {
+	delete player.aarexModifications.ngmX
+	delete player.galacticSacrifice
+	delete player.tickspeedBoosts
+	delete player.tdBoosts
+	delete player.pSac
+
+	tmp.ngmX = calcNGMX()
+	player.aarexModifications.ngmX = tmp.ngmX
+	document.getElementById("gSacrifice").style.display = "none"
+	ph.reset()
+}

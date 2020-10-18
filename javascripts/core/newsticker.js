@@ -554,6 +554,7 @@ ghostlyNewsArray = [//Ghostly news ticker messages
 ["Did ghosts transform themselves to keep their lives? Oh, come on! We are immortal!", true, "gn67"],
 ["Hey. GhostSauce's Here.", "ph.did('planck')", "gn68"],
 ["We finally found a solution that end the war against Antipretus.", "hasBosonicUpg(53)", "gn69"],
+["A ghost has retired from a haunted office to work on Bosonic Lab!", "player.achievements.includes('ng3p81')", "gn70"],
 ];}
 
 var ghostlyNewsTickerCache = false

@@ -2872,6 +2872,29 @@ td.subFactorH {
 	color: #0f1529
 }
 
+.nulliPows td {
+	font-size: 25px
+}
+
+.nulliPows td.omega {
+	background: #000000;
+	border: 3px solid;
+	border-color: #ff0000;
+	box-shadow: inset 0px 0px 12px #ff0000;
+	color: #ff0000;
+	text-shadow: 0px 0px 6px #ff0000
+}
+
+.nulliPows td.mu {
+	background: linear-gradient(#1f3f00, #7fff00, #1f3f00);
+	color: #1f3f00;
+	text-shadow: 0px 0px 6px #1f3f00
+}
+
+.nulliPows b {
+	font-size: 35px
+}
+
 @media print,
 screen and (max-width: 960px) {
     div.wrapper {

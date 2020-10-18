@@ -441,7 +441,7 @@ function updateDilationUpgradeCost(pos, id) {
 		else r = shortenCosts(r)
 		document.getElementById("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
 	}
-	if (id == "ngud1") document.getElementById("dil61oom").textContent = shortenCosts(new Decimal("1e1000"))
+	if (id == "ngud1") document.getElementById("dil42oom").textContent = shortenCosts(new Decimal("1e1000"))
 }
 
 function updateDilationUpgradeCosts() {

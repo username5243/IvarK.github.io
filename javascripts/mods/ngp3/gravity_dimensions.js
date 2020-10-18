@@ -281,7 +281,7 @@ let GDs = {
 		return x
 	},
 	superchargeMult() {
-		return (pl.save.layer - 1) / 5
+		return ph.did("planck") ? (pl.save.layer - 1) / 5 : 0
 	},
 	chargeBoost(id) {
 		if (GDs.save.gc == id) return

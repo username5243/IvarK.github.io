@@ -1,3 +1,57 @@
+//Setup
+function resetNGUdData(onQuantum) {
+	if (!player.aarexModifications.newGameUpdateVersion) return
+
+	if (speedrunMilestonesReached >= 3) for (var u = 7; u <= 9; u++) player.eternityUpgrades.push(u)
+
+	player.exdilation = {
+		unspent: new Decimal(0),
+		spent: {
+			1: new Decimal(0),
+			2: new Decimal(0),
+			3: new Decimal(0)
+		},
+		times: 0
+	}
+	if (player.meta !== undefined) player.exdilation.spent[4] = new Decimal(0)
+
+	player.blackhole = {
+		unl: speedrunMilestonesReached >= 5,
+		upgrades: {
+			dilatedTime: 0,
+			bankedInfinities: 0,
+			replicanti: 0,
+			total: 0
+		},
+		power: new Decimal(0)
+	}
+	if (speedrunMilestonesReached < 5) {
+		document.getElementById("blackholediv").style.display = "none"
+		document.getElementById("blackholeunlock").style.display = "inline-block"
+	}
+
+	if (onQuantum && player.achievements.includes("ng3p67") && player.aarexModifications.ngudpV && !player.aarexModifications.ngumuV) return
+	for (let d = 1; d <= (player.aarexModifications.nguspV ? 8 : 4); d++) {
+		player["blackholeDimension" + d] = {
+			cost: blackholeDimStartCosts[d],
+			amount: new Decimal(0),
+			power: new Decimal(1),
+			bought: 0
+		}
+	}
+}
+
+function exitNGUd() {
+	delete player.exdilation
+	delete player.blackhole
+	for (let d = 1; d <= 4; d++) delete player["blackholeDimension" + d]
+
+	delete player.aarexModifications.newGameUpdateVersion
+	delete player.aarexModifications.ngudpV
+	delete player.aarexModifications.nguepV
+	delete player.aarexModifications.ngumuV
+}
+
 //v1: black hole part
 function getBlackholeDimensionPower(tier) {
 	let dim = player["blackholeDimension" + tier];
@@ -223,7 +277,7 @@ function updateExdilation() {
 	document.getElementById("exdilationConfirmBtn").style.display = "inline"
 	document.getElementById("exDilationAmount").textContent = shortenDimensions(player.exdilation.unspent)
 	document.getElementById("exDilationBenefit").textContent = (player.aarexModifications.nguspV ? exDilationBenefit() * 100 : exDilationBenefit() / 0.0075).toFixed(1)
-	for (var i = 1; i <= DIL_UPG_SIZES[0]; i++) {
+	for (var i = 1; i <= 4; i++) {
 		let unl = isDilUpgUnlocked("r" + i)
 		if (unl) {
 			document.getElementById("xd" + i).style.height = player.aarexModifications.nguspV ? "60px" : "50px"
@@ -335,5 +389,3 @@ function getExdilationReq() {
 	if (player.aarexModifications.nguspV && !player.aarexModifications.nguepV) return {ep: "1e20000", dt: 1e40}
 	return {ep: "1e10000", dt: 1e30}
 }
-
-

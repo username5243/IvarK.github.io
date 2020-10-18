@@ -319,7 +319,7 @@ function atGravDimsAchCheck(){
 }
 
 function atPlankAchCheck(){
-	if (ph.did("planck")) giveAchievement("Quantum Scality")
+	giveAchievement("Quantum Scality")
 	if (player.ghostify.hb.higgs >= 308) giveAchievement("Infinitely Massive")
 	if (player.replicanti.amount.plus(1).log10() >= 1e10) giveAchievement("Replicated Universes")
 	if (tmp.ig.plus(1).log10() >= 1/0) giveAchievement("The Supervoid")
@@ -332,7 +332,7 @@ function atPlankAchCheck(){
 function beyondHiggsAchieveCheck(){
 	atHiggsAchCheck()
 	atGravDimsAchCheck()
-	atPlankAchCheck()
+	if (tmp.ngpX >= 5) atPlankAchCheck()
 }
 
 function ALLACHIEVECHECK(){

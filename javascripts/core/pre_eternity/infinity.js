@@ -359,7 +359,7 @@ let INF_UPGS = {
 		buy(x) {
 			let id = this.ids[x]
 			if (player.infinityUpgrades.includes(id)) return
-			if (!this.can()) return
+			if (!this.can(x)) return
 
 			player.infinityUpgrades.push(id)
 			player.infinityPoints = player.infinityPoints.minus(this.costs[x])

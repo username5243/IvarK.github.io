@@ -469,7 +469,7 @@ function getGHPMult() {
 
 function ghostify(auto, force) {
 	if (!force && (implosionCheck || !ph.can("ghostify"))) return
-	if (!auto && !force && player.aarexModifications.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets your banked stats, best TP & MA, quarks, gluons, electrons, Quantum Challenges, Replicants, Nanofield, and Tree of Decay to gain a Ghost Particle. Are you ready for this?")) {
+	if (!auto && !force && player.aarexModifications.ghostifyConf && !confirm("Becoming a ghost resets everything Quantum resets, and also resets all your Quantum content and banked stats to gain a Ghost Particle. " + (player.aarexModifications.nguspV ? "You will also exit NGUdS' mode and permanently bring you to NGUd'! " : "") + "Are you ready for this?")) {
 		denyGhostify()
 		return
 	}
@@ -528,20 +528,27 @@ function ghostifyReset(implode, gain, amount, force) {
 		isEmptiness = false
 		ph.updateDisplay()
 	}
-	if (tmp.qu.bigRip.active) switchAB()
-	var bm = player.ghostify.milestones
+
+	if (player.aarexModifications.nguspV) {
+		for (let d = 5; d <= 8; d++) delete player["blackholeDimension" + d]
+		delete player.aarexModifications.nguspV
+	}
+
 	var nBRU = []
 	var nBEU = []
-	for (var u = 20; u > 0; u--) {
-		if (nBRU.includes(u + 1) || tmp.qu.bigRip.upgrades.includes(u)) nBRU.push(u)
-		if (u <= 13 && u != 7 && (nBEU.includes(u + 1) || tmp.qu.breakEternity.upgrades.includes(u))) nBEU.push(u)
-	}
-	if (bm > 2) for (var c=1;c<9;c++) tmp.qu.electrons.mult += .5 - QCIntensity(c) * .25
-	if (bm > 6 && !force && player.achievements.includes("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
-	if (bm > 15) giveAchievement("I rather oppose the theory of everything")
+	for (let u = 20; u > 0; u--) if (nBRU.includes(u + 1) || tmp.qu.bigRip.upgrades.includes(u)) nBRU.push(u)
+	for (let u = 13; u > 0; u--) if (nBEU.includes(u + 1) || tmp.qu.breakEternity.upgrades.includes(u)) nBEU.push(u)
+	if (tmp.qu.bigRip.active) switchAB()
+
+	var bm = player.ghostify.milestones
+	if (bm >= 3) tmp.qu.electrons.mult += (4 - tmp.qu.pairedChallenges.completed) * 0.5
+	if (bm >= 7 && !force && player.achievements.includes("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
+	if (bm >= 16) giveAchievement("I rather oppose the theory of everything")
+
 	if (player.eternityPoints.e>=22e4&&player.ghostify.under) giveAchievement("Underchallenged")
 	if (player.eternityPoints.e>=375e3&&inQCModifier("ad")) giveAchievement("Overchallenged")
 	if (player.ghostify.best<=6) giveAchievement("Running through Big Rips")
+
 	player.ghostify.time = 0
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
@@ -918,4 +925,21 @@ function toggleLEConf() {
 	document.getElementById("leConfirmBtn").textContent = "Light Empowerment confirmation: O" + (player.aarexModifications.leNoConf ? "FF" : "N")
 }
 
+//v3
+function convertToNGP5(setup) {
+	player.aarexModifications.ngpX = 5
+	tmp.ngpX = 5
 
+	player.pl = pl.setup()
+	pl.compile()
+
+	if (setup) {
+		player.ghostify.milestones = 16
+		for (let x = 1; x <= 8; x++) player.achievements.push("ngpp1" + x)
+		for (let y = 1; y <= 8; y++) for (let x = 1; x <= 8; x++) if (!player.achievements.includes("ng3p" + (y  * 10 + x))) player.achievements.push("ng3p" + (y  * 10 + x))
+		player.achievements.push("ng3p91")
+		player.achievements.push("ng3p101")
+		player.achievements.push("ng3p111")
+		pl.save.on = true
+	} else ph.reset()
+}

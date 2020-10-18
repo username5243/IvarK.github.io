@@ -52,10 +52,10 @@ let Prestiges = {
 			return player.meta !== undefined
 		},
 		ghostify() {
-			return player.ghostify !== undefined
+			return tmp.ngp3
 		},
 		planck() {
-			return player.pl !== undefined
+			return tmp.ngpX >= 5
 		}
 	},
 	can(id) {
@@ -87,7 +87,7 @@ let Prestiges = {
 			return player.ghostify.times >= 1
 		},
 		planck() {
-			return player.pl.times >= 1
+			return tmp.ngpX >= 5
 		}
 	},
 	did(id) {

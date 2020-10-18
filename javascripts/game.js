@@ -368,7 +368,7 @@ function updateNewPlayer(reseted) {
 	if (reseted) {
 		var modesChosen = {
 			ngm: player.aarexModifications.ngmR !== undefined ? 2 : player.aarexModifications.newGameMinusVersion !== undefined ? 1 : 0,
-			ngp: player.aarexModifications.ngp4V !== undefined ? 2 : player.aarexModifications.newGamePlusVersion !== undefined ? 1 : 0,
+			ngp: player.aarexModifications.ngpX ? player.aarexModifications.ngpX - 2 : player.aarexModifications.ngp4V !== undefined ? 2 : player.aarexModifications.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: player.aarexModifications.newGameExpVersion !== undefined,
 			ngpp: player.meta == undefined ? false : player.aarexModifications.ngp3lV ? 3 : tmp.ngp3 ? 2 : 1,
 			ngmm: player.aarexModifications.ngmX ? player.aarexModifications.ngmX - 1 : player.galacticSacrifice !== undefined ? 1 : 0,
@@ -686,6 +686,7 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngud) doNGUDNewPlayer()
 	if (modesChosen.rs == 2) doInfinityRespeccedNewPlayer()
 	if (modesChosen.ngp > 1) doNGPlusFourPlayer()
+	if (modesChosen.ngp > 2) convertToNGP5(true)
 	if (modesChosen.ngud == 2) player.aarexModifications.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
 	if (modesChosen.nguep) player.aarexModifications.nguepV = 1.03
@@ -1058,26 +1059,7 @@ function doNGEXPNewPlayer(){
 
 function doNGUDNewPlayer(){
 	player.aarexModifications.newGameUpdateVersion = 1.1
-	player.exdilation = {
-		unspent: 0,
-		spent: {
-			1: 0,
-			2: 0,
-			3: 0
-		},
-		times: 0
-	}
-	player.blackhole = {
-		unl: false,
-		upgrades: {dilatedTime: 0, bankedInfinities: 0, replicanti: 0, total: 0},
-		power: 0
-	}
-	for (var d = 1; d < 5; d++) player["blackholeDimension" + d] = {
-		cost: blackholeDimStartCosts[d],
-		amount: 0,
-		power: 1,
-		bought: 0
-	}
+	resetNGUdData()
 	player.options.animations.blackHole = true 
 	player.options.exdilationconfirm = true
 }
@@ -2080,10 +2062,10 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
-	ngp: ["OFF", "ON", "NG++++"],
+	ngp: ["OFF", "ON", "NG+4"/*, "NG+5"*/],
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
-	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"],
+	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
 	rs: ["NONE", "Eternity", "Infinity"],
 	ngud: ["OFF", "ON", "Prime (')", "Semiprime (S')"/*, "Semiprime.1 (S'.1)"*/],
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/]/*,
@@ -2119,11 +2101,16 @@ function toggle_mod(id) {
 		modes.rs=0
 		document.getElementById("rsBtn").textContent = "Respecced: NONE"
 	}
-	if (((id=="ngpp"&&!subMode)||(id=="rs"&&subMode))&&modes.ngp==2) {
+	if (
+		(id=="ngpp" && !subMode && modes.ngp >= 2) ||
+		(id=="rs" && subMode && modes.ngp >= 2) ||
+		(id=="ngmm" && subMode && modes.ngp >= 2) ||
+		(id=="ngud" && subMode && modes.ngp >= 3)
+	) {
 		modes.ngp=1
 		document.getElementById("ngpBtn").textContent = "NG+: ON"
 	}
-	if (((id=="ngud"&&((subMode>1&&!modes.ngpp)||modes.ngpp==1))||(id=="ngex"&&(modes.ngpp==1||modes.ngpp==3)&&metaSave.ngp3ex))&&subMode) {
+	if (((id=="ngud"&&((subMode>1&&!modes.ngpp)||modes.ngpp==1))||(id=="ngex"&&modes.ngpp==1&&metaSave.ngp3ex))&&subMode) {
 		modes.ngpp=2
 		document.getElementById("ngppBtn").textContent = "NG++: NG+++"
 	}
@@ -2133,11 +2120,18 @@ function toggle_mod(id) {
 	}
 	if (id=="rs"&&subMode) {
 		modes.ngpp=0
-		modes.ngud=0
 		document.getElementById("ngppBtn").textContent = "NG++: OFF"
+	}
+
+	if (id=="rs"&&subMode) {
+		modes.ngud=0
 		document.getElementById("ngudBtn").textContent = "NGUd: OFF"
 	}
-	if (((id=="ngpp"||id=="ngud")&&!subMode)||((id=="rs"||(id=="ngex"&&!metaSave.ngp3ex))&&subMode)) {
+	if (id=="ngp"&&subMode>2) {
+		modes.ngud=0
+		document.getElementById("ngudBtn").textContent = "NGUd: OFF"
+	}
+	if (((id=="ngpp"||id=="ngud")&&!subMode)||((id=="rs"||(id=="ngex"&&!metaSave.ngp3ex))&&subMode)||(id=="ngp"&&subMode>2)) {
 		if (modes.ngud>1) {
 			modes.ngud=1
 			document.getElementById("ngudBtn").textContent = "NGUd: ON"
@@ -4085,10 +4079,8 @@ function changingDecimalSystemUpdating(){
 
 function incrementTimesUpdating(diffStat){
 	player.totalTimePlayed += diffStat
-	if (tmp.ngp3) {
-		player.ghostify.time += diffStat
-		pl.save.time += diffStat
-	}
+	if (tmp.ngpX >= 5) pl.save.time += diffStat
+	if (tmp.ngp3) player.ghostify.time += diffStat
 	if (player.meta) tmp.qu.time += diffStat
 	if (player.currentEternityChall == "eterc12") diffStat /= 1e3
 	player.thisEternity += diffStat
