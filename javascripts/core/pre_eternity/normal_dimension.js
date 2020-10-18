@@ -595,8 +595,7 @@ function infUpg13Pow() {
 	}
 	if (tmp.ez) x *= 10
 
-	if (exp > 10) return Decimal.pow(x, exp).max(1)
-	return Math.max(Math.pow(x, exp), 1)
+	return Decimal.pow(x, exp).max(1)
 }
 
 function dimMults() {
