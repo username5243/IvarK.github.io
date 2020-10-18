@@ -120,8 +120,9 @@ function getQCGoalLog(QCs, bigRip) {
 		mods = qcm.on
 	}
 	let cs = [c1, c2]
+	
+	if (testHarderNGp3) if (cs.includes(0) && !cs.includes(6)) mult *= 1.5 
 	/*
-	if (cs.includes(0) && !cs.includes(6)) mult *= 1.5 
 	Ok Ive been told that QCs are stupid easy once you unlock them 
 	so im thinking we just multiply their goals (this is not tested at all)
 	feel free to never uncomment this :) but i think it might be a good idea for balance

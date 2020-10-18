@@ -149,8 +149,9 @@ function getEternityBoostToDT(){
 	if (eterExp > 0) gain = gain.times(Decimal.max(getEternitied(), 1).pow(eterExp))
 	if (hasDilationUpg('ngpp2') && tmp.newNGP3E) {
 		let e = new Decimal(getEternitied())
-		gain = gain.times(e.max(10).log10()).times(Math.pow(e.max(1e7).log10()-6,3))
-		if (e.gt(1e14)) gain = gain.times(Math.sqrt(e.log10())) // this comes into play at the grind right before quantum
+		gain = gain.times(e.max(10).log10()).times(Math.pow(e.max(1e7).log10() - 6,3))
+		if (e.gt(1e14)) gain = gain.times(Math.sqrt(e.log10()))
+		if (e.gt(1e20)) gain = gain.pow(Math.max(Math.pow(e.log10(), .005) - .01, 1.05))
 	}
 	return gain
 }
@@ -478,7 +479,7 @@ function gainDilationGalaxies() {
 	if (baseGain < 0) baseGain = 0
 	let old = Math.round(player.dilation.freeGalaxies / galaxyMult)
 	player.dilation.freeGalaxies = Math.max(baseGain, old) * galaxyMult
-	player.dilation.nextThreshold = Decimal.pow(thresholdMult, baseGain).times(getFreeGalaxyThresholdStart())
+	player.dilation.nextThreshold = Decimal.pow(thresholdMult, baseGain).times(thresholdStart)
 }
 
 function getFreeGalaxyGainMult() {

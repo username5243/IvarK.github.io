@@ -70,7 +70,7 @@ function getReplicantiLimit() {
 }
 
 function isReplicantiLimitBroken() {
-	return hasTimeStudy(181) || hasBosonicUpg(55)
+	return hasTimeStudy(192) || hasBosonicUpg(55)
 }
 
 function isIntervalAffordable() {

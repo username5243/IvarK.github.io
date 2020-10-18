@@ -153,7 +153,7 @@ function DimensionPower(tier) {
   	if (hasPU(31)) mult = mult.times(puMults[31]())
   	if (player.pSac !== undefined) if (tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
 
-	let replUnl = tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
+	let replUnl = !tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
   	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow);
   	if (player.achievements.includes("r66") && player.galacticSacrifice !== undefined) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
@@ -383,7 +383,7 @@ function getEU2Mult() {
 	var soft = 0
 	if (e > 1e5) soft = nS(e, cap)
 	var achReward = 1
-	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(e), 4.75))
+	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(Decimal.add(e, 10)), 4.75))
 	let div1 = tmp.ngC ? 100 : 200
 	let div2 = tmp.ngC ? 2 : 4
 	let tim1 = tmp.ngC ? 4 : 2
@@ -434,7 +434,7 @@ function getNewInfReq() {
 		reqs[6] = new Decimal("1e40500")
 		reqs[7] = new Decimal("1e53000")
 	}
-	for (var tier = 0; tier < 7; tier++) if (!player.infDimensionsUnlocked[tier]) return {money: reqs[tier], tier: tier+1}
+	for (var tier = 1; tier < 8; tier++) if (!player.infDimensionsUnlocked[tier - 1]) return {money: reqs[tier - 1], tier: tier}
 	return {money: reqs[7], tier: 8}
 }
 
