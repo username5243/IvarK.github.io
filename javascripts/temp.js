@@ -705,7 +705,7 @@ function updateNanoRewardEffects() {
 
 function updateNanoRewardScaling() {
 	let d = nanoRewards.scaling
-	for (let s = 0; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
+	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
 }
 
 function updateNanoRewardTemp() {
