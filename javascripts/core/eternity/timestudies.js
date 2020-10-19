@@ -108,8 +108,10 @@ function buyTimeStudy(name, quickBuy) {
 		player.timestudy.theorem -= player.timestudy.ers_studies[name]+1
 		player.timestudy.ers_studies[name]++
 		updateTimeStudyButtons(true)
-	} else if (shiftDown && !quickBuy) studiesUntil(name);
-	else if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
+		return
+	}
+	if (shiftDown && !quickBuy) studiesUntil(name);
+	if (player.timestudy.theorem >= cost && canBuyStudy(name) && !player.timestudy.studies.includes(name)) {
 		player.timestudy.studies.push(name)
 		player.timestudy.theorem -= cost
 		updateBoughtTimeStudy(name)
@@ -358,9 +360,9 @@ function studiesUntil(id) {
 	for (var i = 1; i < row; i++) {
 		var chosenPath = path[i > 11 ? 1 : 0];
 		if (row > 6 && row < 11) var secondPath = col;
-		if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), 0, true);
-		if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, 0, true);
-		else for (var j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, 0, true);
+		if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), true);
+		if ((i > 6 && i < 11) && player.timestudy.studies.includes(201)) buyTimeStudy(i * 10 + secondPath, true);
+		else for (var j = 1; all.includes(i * 10 + j) ; j++) buyTimeStudy(i * 10 + j, true);
 	}
 }
 
@@ -539,12 +541,12 @@ function importStudyTree(input) {
 				if (study > 120 && study < 150) secondSplitPick = study % 10
 				else if (study > 220 && study < 240) earlyDLStudies.push(study)
 				if (study > 240) buyMasteryStudy("t", study, true)
-				else buyTimeStudy(study, 0, true);
+				else buyTimeStudy(study, true);
 			} else if (study < 150) laterSecondSplits.push(study)
 			else laterDLStudies.push(study)
 		}
-		for (var i=0; i < laterSecondSplits.length; i++) buyTimeStudy(laterSecondSplits[i], 0, true)
-		for (var i=0; i < laterDLStudies.length; i++) buyTimeStudy(laterDLStudies[i], 0, true)
+		for (var i=0; i < laterSecondSplits.length; i++) buyTimeStudy(laterSecondSplits[i], true)
+		for (var i=0; i < laterDLStudies.length; i++) buyTimeStudy(laterDLStudies[i], true)
 		var ec = parseInt(input.split("|")[1])
 		if (ec > 0) {
 			justImported = true;
