@@ -1897,7 +1897,7 @@ function setChallengeDisplay(){
         document.getElementById("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         document.getElementById("autoGSChallengeDesc").textContent=player.aarexModifications.ngmX>3?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(player.aarexModifications.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         document.getElementById("autoTBChallengeDesc").textContent=player.aarexModifications.ngmX>3?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        document.getElementById("infPowEffectPowerDiv").innerHTML=player.galacticSacrifice&&player.pSac==undefined?"Raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, t":"T"
+        document.getElementById("infPowEffectPowerDiv").innerHTML = ((player.galacticSacrifice&&player.pSac==undefined)||player.aarexModifications.ngp3c)?"Raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, t":"T"
         document.getElementById("ngmmchalls").style.display=player.galacticSacrifice?"":"none"
         document.getElementById("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         document.getElementById("ngm4chall").style.display=player.aarexModifications.ngmX>3?"":"none"
@@ -1999,7 +1999,7 @@ function setOtherChallDisplay(){
 function setReplDisplay() {
 	document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
 	document.getElementById("replDesc").textContent = tmp.ngC ? "IP gain & all Normal Dimensions (after softcaps)" : "all Infinity Dimensions"
-	document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(player.timestudy.studies.includes(131)&&speedrunMilestonesReached<20?" (disabled)":"")
+	document.getElementById("replicantiresettoggle").textContent = "Auto galaxy " + (player.replicanti.galaxybuyer ? "ON" : "OFF") + (player.timestudy.studies.includes(131) && speedrunMilestonesReached < 20 && !tmp.ngC?" (disabled)":"")
 }
 
 function setTSDisplay(){
@@ -2008,7 +2008,8 @@ function setTSDisplay(){
         document.getElementById("61desc").innerHTML=tsMults[61]()+"x more EP"
         document.getElementById("62desc").textContent=tsMults[62]()
         document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
-        document.getElementById("181desc").textContent = "You gain " + (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch") + " each second."
+        document.getElementById("131desc").textContent = tmp.ngC ? "You can get 50% more replicanti galaxies" : "Automatic replicanti galaxies are disabled, but you can get 50% more"
+        document.getElementById("181desc").textContent = "You gain " + (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch") + " each second" + (tmp.ngC ? ", and the first three IP softcaps are 90% weaker":"")
         document.getElementById("191desc").textContent = "You bank 5% of your Infinities on Eternity."
         document.getElementById("211desc").textContent=tsMults[211]()
         document.getElementById("213desc").textContent=tsMults[213]()
@@ -2379,40 +2380,7 @@ function load_game(noOffline, init) {
 		if (break_infinity_js) Decimal = Decimal_BI
 		initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
 		costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-		nextAt = {postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),
-					postc2:new Decimal("1e5000"), postc2_ngC:new Decimal("1e5860"),
-					postc3:new Decimal("1e12000"), postc3_ngC:new Decimal("1e7175"),
-					postc4:new Decimal("1e14000"), postc4_ngC:new Decimal("1e8475"),
-					postc5:new Decimal("1e18000"), postc5_ngm3:new Decimal("1e21500"), postc5_ngC:new Decimal("1e21000"),
-					postc6:new Decimal("1e20000"), postc6_ngm3:new Decimal("1e23000"), postc6_ngC:new Decimal("1e21000"),
-					postc7:new Decimal("1e23000"), postc7_ngm3:new Decimal("1e25500"), postc7_ngC:new Decimal("1e32000"),
-					postc8:new Decimal("1e28000"), postc8_ngm3:new Decimal("1e39000"), postc8_ngC:new Decimal("1e37500"),
-					postcngmm_1:new Decimal("1e750"), postcngmm_1_ngm3:new Decimal("1e1080"),
-					postcngmm_2:new Decimal("1e1350"),
-					postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
-					postcngm3_1:new Decimal("1e1560"),
-					postcngm3_2:new Decimal("1e2085"),
-					postcngm3_3:new Decimal("1e8421"),
-					postcngm3_4:new Decimal("1e17000"),
-					postcngc_1:new Decimal("1e38000"),
-					postcngc_2:new Decimal("1e42250")}
-		goals = {postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"), postc1_ngm4:new Decimal("1e575"),
-					postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngm4:new Decimal("1e4675"), postc2_ngC:new Decimal("1e5850"),
-					postc3:new Decimal("1e5000"), postc3_ngC:new Decimal("1e2675"), 
-					postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"), postc4_ngC:new Decimal("1e5750"),
-					postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"), postc5_ngC:new Decimal("1e2400"),
-					postc6:new Decimal("2e22222"), postc6_ngC:new Decimal("2.1e21111"),
-					postc7:new Decimal("1e10000"), postc7_ngmm:new Decimal("1e15000"), postc7_ngm3:new Decimal("1e5100"), postc7_ngC:new Decimal("1e4300"),
-					postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
-					postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
-					postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
-					postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1425"),
-					postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
-					postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
-					postcngm3_3:new Decimal("8e888"), postcngm3_4:new Decimal("1e1500"),
-					postcngm3_4:new Decimal("1e12345"),
-					postcngc_1:new Decimal("1e10525"),
-					postcngc_2:new Decimal("1e27225")}
+		loadICData()
 		setUnlocks = [Decimal.pow(Number.MAX_VALUE, 2.9)]
 	}
 	if (infiniteCheck) exportInfiniteSave()

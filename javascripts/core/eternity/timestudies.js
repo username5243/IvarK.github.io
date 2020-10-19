@@ -154,7 +154,7 @@ function hasRow(row) {
 }
 
 function hasTS(num){
-	return player.timestudy.studies.includes(num)
+	return hasTimeStudy(num)
 }
 
 function canBuyStudy(name) {

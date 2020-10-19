@@ -31,14 +31,24 @@ function getIPGain(){
 	return gainedInfinityPoints()
 }
 
-function gainedInfinityPoints(next) {
+function getIPGainDiv(){
 	let div = 308;
-	if (hasTimeStudy(111)) div = 285;
+	if (hasTS(111)) {
+		let newDiv = tmp.ngC ? 50 : 285;
+		if (hasTS(197) && tmp.ngC) newDiv /= 1.5
+		div = newDiv
+	}
 	else if (player.achievements.includes("r103")) div = 307.8;
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined) div -= galIP()
+	return div
+}
 
-	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(getIPMult())
-	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(getIPMult())
+function gainedInfinityPoints(next) {
+	let div = getIPGainDiv()
+	let uIPM = player.dilation.upgrades.includes("ngp3c5") && tmp.ngC
+
+	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(uIPM ? 1 : getIPMult())
+	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(uIPM ? 1 : getIPMult())
 	if (hasTimeStudy(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
 	if (hasTimeStudy(51)) ret = ret.times(tsMults[51]())
 	if (hasTimeStudy(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
@@ -57,6 +67,7 @@ function gainedInfinityPoints(next) {
 		ret = softcap(ret, "ip_ngC")
 		if (player.infinityUpgrades.includes("postinfi80")) ret = ret.times(ngC.breakInfUpgs[80]())
 		if (player.replicanti.unl) ret = ret.times(getIDReplMult())
+		if (uIPM) ret = ret.times(getIPMult())
 	}
 	return ret.floor()
 }

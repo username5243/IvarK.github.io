@@ -688,10 +688,47 @@ var softcap_data = {
 		},
 	},
 	tds_ngC: {
+		name: "Time Dimensions (NG Condnesed)",
 		1: {
 			func: "pow",
 			start: new Decimal("1e5000"),
 			pow: 1/3,
+			derv: false,
+		},
+	},
+	dt_ngC: {
+		name: "Dilated Time (NG Condnesed)",
+		1: {
+			func: "pow",
+			start: new Decimal(1e6),
+			pow: 1/2,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(1e100),
+			pow: 1/3,
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e2000"),
+			pow: 1/4,
+			derv: false,
+		},
+	},
+	tp_ngC: {
+		name: "Tachyon Particles (NG Condensed)",
+		1: {
+			func: "pow",
+			start: new Decimal(1e10),
+			pow: 1/3,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
 			derv: false,
 		},
 	},
@@ -832,6 +869,8 @@ function getSoftcapAmtFromId(id){
 		rep_ngC: () => player.replicanti.amount,
 		ep_ngC: () => gainedEternityPoints(),
 		tds_ngC: () => getTimeDimensionPower(1),
+		dt_ngC: () => getDilatedTimeGainPerSecond(),
+		tp_ngC: () => player.dilation.tachyonParticles,
 
 		//NGmX
 
@@ -986,6 +1025,8 @@ function updateSoftcapStatsTab(){
 		ids_ngC: "softcap_C_id",
 		ep_ngC: "softcap_C_ep",
 		tds_ngC: "softcap_C_td",
+		dt_ngC: "softcap_C_dt",
+		tp_ngC: "softcap_C_tp",
 		//NGmX
 		ids_ngm4: "softcap_m4_id",
 	}

@@ -875,6 +875,9 @@
 						<td>
 							<button id="dil14" onclick="buyDilationUpgrade(14)"><span id="dil14desc"></span><br><span id="dil14cost"></span></button>
 						</td>
+						<td>
+							<button id="dil16" onclick="buyDilationUpgrade(16)">Purchase a Dilation Condenser<br><span id="dil16cost"></span></button>
+						</td>
 					</tr>
 				</table>
 				<table>
@@ -899,13 +902,16 @@
 							<button id="dil21" onclick="buyDilationUpgrade(21)">Gain twice as many free galaxies.<br><span id="dil21cost"></span></button>
 						</td>
 						<td>
-							<button id="dil22" onclick="buyDilationUpgrade(22)">Time Dimensions are affected by replicanti multiplier ^ 0.1.<br><span id="dil22cost"></span></button>
+							<button id="dil22" onclick="buyDilationUpgrade(22)"><span id="dil22desc">lul bug</span><br><span id="dil22cost"></span></button>
 						</td>
 						<td>
 							<button id="dil23" onclick="buyDilationUpgrade(23)">Normal Dimensions gain a multiplier based on dilated time, unaffected by time dilation.<br><span id="dil23cost"></span></button>
 						</td>
 						<td>
 							<button id="dil24" onclick="buyDilationUpgrade(24)">Replicanti increases faster based on dilated time.<br><span id="dil24cost"></span></button>
+						</td>
+						<td>
+							<button id="dil26" onclick="buyDilationUpgrade(26)" style="font-size: 8px;">Time Condensers are stronger based on your Tachyon Particles, and Dilated Time is gained 50x faster (after obscurements).<br><span id="dil26desc"></span><br><span id="dil26cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -915,15 +921,36 @@
 							<button id="dil31" onclick="buyDilationUpgrade(31)">Gain a multiplier to IP based on dilated time.<br><span id="dil31desc"></span><br><span id="dil31cost"></span></button>
 						</td>
 						<td>
-							<button id="dil32" onclick="buyDilationUpgrade(32)">Unlock the ability to pick all the study paths from the first split.<br><span id="dil32cost"></span></button>
+							<button id="dil32" onclick="buyDilationUpgrade(32)"><span id="dil32desc">Unlock the ability to pick all the study paths from the first split.</span><br><span id="dil32cost"></span></button>
 						</td>
 						<td>
 							<button id="dil33" onclick="buyDilationUpgrade(33)">Reduce the dilation penalty. (^ 1.05 after reduction)<br><span id="dil33cost"></span></button>
 						</td>
 						<td>
-							<button id="dil34" onclick="buyDilationUpgrade(34)">Eternities and dilated time power up each other.<br><span id="dil34cost"></span></button>
+							<button id="dil34" onclick="buyDilationUpgrade(34)"><span id="dil34desc"></span><br><span id="dil34cost"></span></button>
+						</td>
+						<td>
+							<button id="dil36" onclick="buyDilationUpgrade(36)" style="font-size: 7px;">Get free Infinity/Time Condensers based on your Dilated Time, Infinity Condensers are thrice as strong, and Dilated Time is gained 100x faster (after obscurements).<br><span id="dil36desc"></span><br><span id="dil36cost"></span></button>
 						</td>
 					</tr>
+				</table>
+				<table>
+					<tr>
+						<td>
+							<button id="dil81" onclick="buyDilationUpgrade(81)">The Replicanti limit is multiplied by your Dilated Time ^2,500<br><span id="dil81cost"></span></button>
+						</td>
+						<td>
+							<button id="dil82" onclick="buyDilationUpgrade(82)">The IP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil82cost"></span></button>
+						</td>
+						<td>
+							<button id="dil83" onclick="buyDilationUpgrade(83)" style="font-size: 10px;">Unspent EP boosts TP gain (unaffected by Obscurements)<br><span id="dil83desc"></span><br><span id="dil83cost"></span></button>
+						</td>
+						<td>
+							<button id="dil84" onclick="buyDilationUpgrade(84)">The EP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil84cost"></span></button>
+						</td>
+						<td>
+							<button id="dil85" onclick="buyDilationUpgrade(85)" style="font-size: 9px;">All Repeatable Dilation Upgrades and Dilated Condensers are all stronger based on your TP<br><span id="dil85desc"></span><br><span id="dil85cost"></span></button>
+						</td>
 				</table>
 				<table>
 					<tr>
@@ -958,11 +985,26 @@
 						<td>
 							<button id="dil45" onclick="buyDilationUpgrade(45)" style='font-size:10px'>Buff the black hole upgrade effect based on your Eternity points.<br><span id="dil45desc"></span><br><span id="dil45cost"></span></button>
 						</td>
+						<td>
+							<button id="dil46" onclick="buyDilationUpgrade(46)" style="font-size: 9px;">TS25 is stronger based on your Dilated Time, and you gain 10x more TP (after obscurements).<br><span id="dil46desc"></span><br><span id="dil46cost"></span></button>
+						</td>
 				</table>
 				<table>
 					<tr>
+						<td id="n5">
+							<button id="dil61" onclick="buyDilationUpgrade(61)">Gain 5% more Tachyon particles for each <span id="dil61oom"></span>x replicanti.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
+						</td>
+						<td id="n6">
+							<button id="dil62" onclick="buyDilationUpgrade(62)">Eternities and dilated time boost each other by ^0.1.<br><span id="dil62cost"></span></button>
+						</td>
+						<td id="n7">
+							<button id="dil63" onclick="buyDilationUpgrade(63)">Boost the ex-dilation gain.<br><span id="dil63cost"></span></button>
+						</td>
+						<td id="n8">
+							<button id="dil64" onclick="buyDilationUpgrade(64)" style='font-size:10px'>Buff the black hole upgrade effect based on your Eternity points.<br><span id="dil64desc"></span><br><span id="dil64cost"></span></button>
+						</td>
 						<td>
-							<button id="dil61" onclick="buyDilationUpgrade(61)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
+							<button id="dil65" onclick="buyDilationUpgrade(65)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil65desc"></span><br><span id="dil65cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -1813,6 +1855,8 @@
 				<div id="softcap_C_rep"></div>
 				<div id="softcap_C_ep"></div>
 				<div id="softcap_C_td"></div>
+				<div id="softcap_C_dt"></div>
+				<div id="softcap_C_tp"></div>
 				<div id="softcap_m4_id"></div>
 				<br>
 			</div>

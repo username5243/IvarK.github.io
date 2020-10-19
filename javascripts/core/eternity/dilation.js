@@ -54,7 +54,14 @@ function getDilTimeGainPerSecond() {
 		}
 	}
 
-	return gain.times(Decimal.pow(2, getDilUpgPower(1)))	
+	gain = gain.times(Decimal.pow(2, getDilUpgPower(1)))	
+
+	if (player.dilation.rebuyables[6] && tmp.ngC) gain = gain.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
+	if (tmp.ngC) gain = softcap(gain, "dt_ngC")
+	if (player.dilation.upgrades.includes("ngp3c1") && tmp.ngC) gain = gain.times(50)
+	if (player.dilation.upgrades.includes("ngp3c2") && tmp.ngC) gain = gain.times(100)
+
+	return gain
 }
 
 function getDTGainExp() {
@@ -80,6 +87,8 @@ function getDilPower() {
 		if (GUActive("br1")) ret = ret.times(getBR1Effect())
 		if (masteryStudies.has(341)) ret = ret.times(getMTSMult(341))
 	}
+	if (player.dilation.rebuyables[6] && tmp.ngC) ret = ret.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
+	if (player.dilation.upgrades.includes("ngpp2") && tmp.ngC) ret = ret.times(Decimal.mul(nA(getEternitied(), 1), player.dilation.dilatedTime.plus(1).sqrt()).log10()+1)
 	return ret
 }
 
@@ -87,13 +96,21 @@ function getDilUpgPower(x) {
 	let r = player.dilation.rebuyables[x] || 0
 	if (player.aarexModifications.nguspV) r += exDilationUpgradeStrength(x)
 	else if (player.exdilation != undefined && !player.aarexModifications.ngudpV) r *= exDilationUpgradeStrength(x)
+	if (player.dilation.upgrades.includes("ngp3c8") && tmp.ngC && x != 3) r *= getDil85Mult()
 	return r
 }
 
 function getDil3Power() {
 	let ret = 3
 	if (player.aarexModifications.nguspV) ret += getDilUpgPower(4) / 2
+	if (player.dilation.upgrades.includes("ngp3c8") && tmp.ngC) ret = Decimal.pow(ret, getDil85Mult())
 	return ret
+}
+
+function getDil6Base() {
+	if (!tmp.ngC) return 1;
+	let base = Math.sqrt(player.dilation.dilatedTime.plus(1).log10()+1)
+	return base;
 }
 
 function getDilationTPFormulaExp(disable){
@@ -122,7 +139,12 @@ function getTotalTachyonParticleGain(){
 function getDilGain() {
 	if (inQCModifier("ad") || player.money.lt(10)) return new Decimal(0)
 	let log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
-	return Decimal.pow(10, log)
+	let gain = Decimal.pow(10, log)
+
+	if (tmp.ngC) gain = softcap(gain, "tp_ngC")
+	if (player.dilation.upgrades.includes("ngp3c3") && tmp.ngC) gain = gain.times(10)
+	if (player.dilation.upgrades.includes("ngp3c6") && tmp.ngC) gain = gain.times(getDil83Mult())
+	return gain;
 }
 
 function getReqForTPGain() {
@@ -152,6 +174,10 @@ function getEternityBoostToDT(){
 		gain = gain.times(e.max(10).log10()).times(Math.pow(e.max(1e7).log10() - 6,3))
 		if (e.gt(1e14)) gain = gain.times(Math.sqrt(e.log10()))
 		if (e.gt(1e20)) gain = gain.pow(Math.max(Math.pow(e.log10(), .005) - .01, 1.05))
+	}
+	if (tmp.ngC) {
+		gain = gain.times(gain.log10() * 5 + 1)
+		gain = gain.times(Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, eterExp))
 	}
 	return gain
 }
@@ -201,13 +227,14 @@ function dilationPowerStrength() {
  */
 
 const DIL_UPGS = []
-const DIL_UPG_SIZES = [5, 6]
+const DIL_UPG_SIZES = [6, 8]
 const DIL_UPG_COSTS = {
 	r1: [1e5, 10, 1/0],
 	r2: [1e6, 100, 1/0],
 	r3: [1e7, 20, 72],
 	r4: [1e8, 1e4, 24],
 	r5: [1e16, 10, 1/0],
+	r6: [5e6, 50, 1],
 	4: 5e6,
 	5: 1e9,
 	6: 5e7,
@@ -227,9 +254,20 @@ const DIL_UPG_COSTS = {
 	ngpp4_usp: 1e84,
 	ngpp5_usp: 1e89,
 	ngpp6_usp: 1e100,
+	ngpp1_p3c: 1e18,
+	ngpp2_p3c: 5e18,
 	ngusp1: 1e50,
 	ngusp2: 1e55,
-	ngusp3: 1e94
+	ngusp3: 1e94,
+	ngusp3: 1e94,
+	ngp3c1: 2.5e10,
+	ngp3c2: 5e13,
+	ngp3c3: 1e16,
+	ngp3c4: 5e20,
+	ngp3c5: 1.5e21,
+	ngp3c6: 4e21,
+	ngp3c7: 3e23,
+	ngp3c8: 1e24,
 }
 
 const DIL_UPG_OLD_POS_IDS = {
@@ -254,12 +292,13 @@ const DIL_UPG_OLD_POS_IDS = {
 }
 
 const DIL_UPG_POS_IDS = {
-	11: "r1",    12: "r2",    13: "r3",    14: "r4",     
-	21: 4,       22: 5,       23: 6,       24: "ngpp1",
-	31: 7,       32: 8,       33: 9,       34: "ngpp2",
-	51: "ngpp3", 52: "ngpp4", 53: "ngpp5", 54: "ngpp6",
-	41: 10,      42: "ngud1", 43: "ngud2", 44: "ngusp1", 45: "ngusp2",
-	61: "ngusp3"
+	11: "r1",     12: "r2",     13: "r3",     14: "r4",     16: "r6",    
+	21: 4,        22: 5,        23: 6,        24: "ngpp1",  26: "ngp3c1",
+	31: 7,        32: 8,        33: 9,        34: "ngpp2",  36: "ngp3c2",
+	81: "ngp3c4", 82: "ngp3c5", 83: "ngp3c6", 84: "ngp3c7",               85: "ngp3c8",
+	51: "ngpp3",  52: "ngpp4",  53: "ngpp5",  54: "ngpp6",
+	41: 10,       46: "ngp3c3",
+	61: "ngud1",  62: "ngud2",  63: "ngusp1", 64: "ngusp2", 65: "ngusp3",
 }
 
 const DIL_UPG_ID_POS = {}
@@ -289,7 +328,9 @@ function isDilUpgUnlocked(id) {
 	id = toString(id)
 	let ngpp = id.split("ngpp")[1]
 	let ngmm = id.split("ngmm")[1]
+	let ngc = id.split("ngc")[1]
 	if (id == "r4") return player.meta !== undefined
+	if (id == "r6") return tmp.ngC
 	if (ngpp) {
 		ngpp = parseInt(ngpp)
 		let r = player.meta !== undefined
@@ -306,6 +347,7 @@ function isDilUpgUnlocked(id) {
 		if (id != "ngusp1") r = r && player.dilation.studies.includes(6)
 		return r
 	}
+	if (ngc) return tmp.ngC
 	return true
 }
 
@@ -317,6 +359,9 @@ function getDilUpgCost(id) {
 	if (ngpp) {
 		ngpp = parseInt(ngpp)
 		if (ngpp >= 3 && player.aarexModifications.nguspV !== undefined) cost = DIL_UPG_COSTS[id + "_usp"]
+	}
+	if (tmp.ngC && ngpp) {
+		if (ngpp < 3) cost = DIL_UPG_COSTS[id + "_p3c"]
 	}
 	return cost
 }
@@ -364,7 +409,7 @@ function buyDilationUpgrade(pos, max, isId) {
 		if (player.aarexModifications.nguspV !== undefined && !player.dilation.autoUpgrades.includes(id)) player.dilation.autoUpgrades.push(id)
 		if (id == 4 || id == "ngmm1") player.dilation.freeGalaxies *= 2 // Double the current galaxies
 		if (id == 10 && tmp.ngp3) tmp.qu.wasted = false
-		if (id == "ngpp3" && tmp.ngp3) {
+		if (id == "ngpp3" && tmp.ngp3 && !tmp.ngC) {
 			updateMilestones()
 			if (getEternitied() >= 1e9) player.dbPower = new Decimal(getDimensionBoostPower())
 		}
@@ -418,8 +463,11 @@ function updateDilationUpgradeButtons() {
 	}
 	var genSpeed = getPassiveTTGen()
 	var power = getDil3Power()
-	document.getElementById("dil13desc").textContent = power > 3 ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
+	document.getElementById("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
+	document.getElementById("dil22desc").textContent = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Time Dimensions are affected by replicanti multiplier ^ 0.1."
 	document.getElementById("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
+	document.getElementById("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
+	document.getElementById("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
 	document.getElementById("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
 	if (player.dilation.studies.includes(6)) {
 		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
@@ -431,6 +479,13 @@ function updateDilationUpgradeButtons() {
 	if (isDilUpgUnlocked("ngusp2")) {
 		document.getElementById("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
 		document.getElementById("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
+	}
+	if (tmp.ngC) {
+		document.getElementById("dil26desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
+		document.getElementById("dil36desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
+		document.getElementById("dil46desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
+		document.getElementById("dil83desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
+		document.getElementById("dil85desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
 	}
 }
 
@@ -536,4 +591,31 @@ function updateDilationDisplay() {
 
 function getDilationTotalTTReq() {
 	return tmp.ngC ? 13500 : (tmp.ngex ? 12950 : 13000)
+}
+
+function getDil26Mult() {
+	let mult = Math.pow(10, Math.pow(Math.log10(player.dilation.tachyonParticles.plus(1).log10()/5+1)+1, 1/4)-1)
+	return mult;
+}
+
+function getDil36Mult() {
+	let mult = Math.pow(player.dilation.dilatedTime.plus(1).log10()+1, 1/5)*5
+	return mult;
+}
+
+function getDil46Mult() {
+	let mult = Math.pow(Math.log10(player.dilation.dilatedTime.plus(1).log10()+1)+1, 2);
+	return mult;
+}
+
+function getDil83Mult() {
+	let mult = Decimal.pow(player.eternityPoints.plus(1).log10()+1, 0.75);
+	return mult;
+}
+
+function getDil85Mult() {
+	let tp = player.dilation.tachyonParticles
+	if (tp.gte(Number.MAX_VALUE)) tp = tp.sqrt().times(Decimal.sqrt(Number.MAX_VALUE))
+	let mult = Math.pow(tp.plus(1).log10()+1, 0.165)
+	return mult;
 }

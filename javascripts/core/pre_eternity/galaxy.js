@@ -137,6 +137,7 @@ function getGalaxyReqMultiplier() {
 	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
+	if (tmp.ngC) ret = 25
 	if (player.galacticSacrifice !== undefined) {
 		if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
 	} else if (hasTimeStudy(42)) ret *= tsMults[42]()
@@ -171,7 +172,14 @@ function getDistantScalingStart() {
 	return n
 }
 
+function getDistantPower() {
+	let power = 1
+	if (hasTS(194) && tmp.ngC) power = .5
+	return power;
+}
+
 function getDistantAdd(x) {
+	x *= getDistantPower()
 	if (player.galacticSacrifice !== undefined && player.tickspeedBoosts == undefined) return Math.pow(x, 1.5) + x
 	return (x + 1) * x
 }
@@ -183,6 +191,7 @@ function getRemoteScalingStart(galaxies) {
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2
 	}
 	else if (player.galacticSacrifice != undefined) n += 1e7
+	if (player.dilation.upgrades.includes(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t < 254; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
 		if (masteryStudies.has(301)) n += getMTSMult(301)

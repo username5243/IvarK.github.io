@@ -27,7 +27,6 @@ function maxAllID() {
 			dim.power = dim.power.times(Decimal.pow(getInfBuy10Mult(t),toBuy))
 			dim.cost = dim.cost.times(Decimal.pow(costMult,toBuy))
 		}
-
 		if (tmp.ngC) ngC.condense.ids.max(t)
 	}
 }
@@ -93,7 +92,7 @@ function infDimensionProduction(tier) {
 	if (inQC(4) && tier == 1) ret = ret.plus(player.infinityDimension2.amount.floor())
 	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
 	if (player.currentEternityChall == "eterc11") return ret
-	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.tickspeed.dividedBy(1000)))
+	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(100)
 	ret = ret.times(infDimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
@@ -141,7 +140,7 @@ function infDimensionPower(tier) {
   	let dim = player["infinityDimension" + tier]
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
-  	if (player.currentEternityChall == 'eterc14') return getIDReplMult()
+  	if (player.currentEternityChall == 'eterc14') return tmp.ngC ? new Decimal(1) : getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
   
 	let mult = getStartingIDPower(tier)
@@ -159,7 +158,7 @@ function infDimensionPower(tier) {
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
 
-	if (tmp.ngC && player.currentChallenge != "postngc_1") {
+	if (tmp.ngC) {
 		let cEff = ngC.condense.ids.eff(tier)
 		if (player.currentChallenge == "postngc_2") return cEff
 		mult = mult.times(cEff)
@@ -315,8 +314,11 @@ function getInfinityPowerEffectExp() {
 	}
 	if (x > 100) x = 50 * Math.log10(x)
 	if (hasPU(34)) x *= puMults[34]()
-	if (player.dilation.upgrades.includes("ngmm5")) x += getDil44Mult()
-	if (tmp.ngC) x *= 0.85
+	if (tmp.ngC) {
+		x *= 0.85
+		if (hasTS(191)) x += tsMults[191]()
+	}
+	
 	return x
 }
 
@@ -394,12 +396,13 @@ function getEU2Mult() {
 
 function getEU3Mult() {
 	if (player.boughtDims) return player.timeShards.div(1e12).plus(1)
+	if (tmp.ngC) return Decimal.pow(6250 / Math.max(Math.min(infchallengeTimes, 6250), 6.1), 500 / Math.max(infchallengeTimes, 6.1))
 	return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
 }
 
 function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if (player.galacticSacrifice && player.pSac == undefined) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
+	if ((player.galacticSacrifice && player.pSac == undefined) || tmp.ngC) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {

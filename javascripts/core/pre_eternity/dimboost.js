@@ -17,6 +17,7 @@ function getDimensionBoostPower(next, focusOn) {
 		if (player.currentChallenge == "postc7" || inQC(6) || hasTimeStudy(81)) ret = Math.pow(ret , 3)
 		else if (player.challenges.includes("postc7")) ret = Math.pow(ret,2)
 	}
+	if (hasTS(152) && tmp.ngC) ret = Decimal.mul(ret, tsMults[152]())
 	if (hasDilationStudy(6) && player.currentEternityChall != "eterc14" && !inQC(3) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
 	return new Decimal(ret)
 }
@@ -100,8 +101,6 @@ function maxBuyDimBoosts(manual) {
 	let maxamount = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
 	
 	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || manual) {
-		
-		// O(log(x)) is not much worse than O(sqrt(log(x))) so :shrug:
 		let x = 1
 		let r = 0
 		while (maxamount >= getFixedShiftReq(player.resets + x * 2 - 1)) x *= 2
@@ -126,7 +125,7 @@ function getShiftRequirement(bulk) {
 	let mult = getDimboostCostIncrease()
 	var resetNum = player.resets + bulk
 	var maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
-	tier = Math.min(resetNum + 4, maxTier)
+	let tier = Math.min(resetNum + 4, maxTier)
 	if (player.aarexModifications.ngmX > 3 && player.pSac == undefined) amount = 10
 	if (tier == maxTier) amount += Math.max(resetNum + (player.galacticSacrifice && player.tickspeedBoosts === undefined && player.galacticSacrifice.upgrades.includes(21) ? 2 : 4) - maxTier, 0) * mult
 	var costStart = getSupersonicStart()
@@ -186,6 +185,7 @@ function getSupersonicStart() {
 function getSupersonicMultIncrease() {
 	if (inQC(5)) return 20
 	let r = 4
+	if (hasTS(194) && tmp.ngC) r = 2
 	if (player.masterystudies) if (masteryStudies.has(331)) r = 1
 	return r
 }

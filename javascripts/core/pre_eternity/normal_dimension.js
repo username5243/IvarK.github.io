@@ -61,14 +61,14 @@ function getNormalDimensionVanillaAchievementBonus(tier){
 
 function getNormalDimensionVanillaTimeStudyBonus(tier){
 	var mult = new Decimal(1)
-	if (hasTimeStudy(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
-	if (hasTimeStudy(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
+	if (hasTS(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
+	if (hasTS(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
 	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (hasTimeStudy(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
-	if (hasTimeStudy(234) && tier == 1) mult = mult.times(tmp.sacPow)
-	if (hasTimeStudy(193)) mult = mult.times(Decimal.pow(1.03, getEternitied()).min("1e13000"))
-	if (tier == 8 && hasTimeStudy(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
+	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
+	if (hasTS(234) && tier == 1) mult = mult.times(tmp.sacPow)
+	if (hasTS(193)) mult = mult.times(Decimal.pow(1.03, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1)).min("1e13000"))
+	if (tier == 8 && hasTS(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
 	return mult
 }
 
@@ -168,7 +168,7 @@ function getDimensionFinalMultiplier(tier) {
 		return mult
 	}
 
-	mult = getStartingNDMult(tier)
+	mult = getStartingNDMult(tier) //contains sac
 	if (tmp.ngC && player.currentChallenge != "postngc_1") mult = mult.times(ngC.condense.nds.eff(tier))
 
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
@@ -606,7 +606,11 @@ function infUpg13Pow() {
 }
 
 function dimMults() {
-	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1),(player.galacticSacrifice ? 2 : 1) * (hasTimeStudy(31) ? 4 : 1))
+	let exp = 1
+	if (tmp.ngC) exp *= Decimal.log10(nA(getInfinitied(), 1)) + 1
+	if (player.galacticSacrifice) exp *= 2
+	if (hasTS(31)) exp *= 4
+	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1), exp)
 }
 
 function getInfinitiedMult() {
