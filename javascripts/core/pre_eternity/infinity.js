@@ -55,7 +55,7 @@ function gainedInfinityPoints(next) {
 	if (player.tickspeedBoosts != undefined && player.achievements.includes("r95") && player.eightAmount > 5000) ret = ret.times(Decimal.pow(player.eightAmount, 2))
 	if (tmp.ngC) {
 		ret = softcap(ret, "ip_ngC")
-		ret = ret.times(ngC.breakInfUpgs[80]())
+		if (player.infinityUpgrades.includes("postinfi80")) ret = ret.times(ngC.breakInfUpgs[80]())
 		if (player.replicanti.unl) ret = ret.times(getIDReplMult())
 	}
 	return ret.floor()
