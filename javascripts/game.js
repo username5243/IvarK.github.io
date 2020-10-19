@@ -2118,6 +2118,12 @@ function toggle_mod(id) {
 		if (ngp3ex) $.notify("A space crystal begins to collide with reality...")
 		modes.ngp3ex = ngp3ex
 	}
+	/* 
+	this function is a MESS someone needs to clean it up
+	Also, id=NGC should force NG+++ and not NG+, 
+	NGC being on, and id = ngpp then NG+ off
+	I also dont know how to do this and this is supa ugly so pls fix
+	*/
 }
 
 function show_mods() {

@@ -2109,8 +2109,8 @@ function updateNGModeMessage(){
 	if (player.aarexModifications.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
 	if (player.aarexModifications.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
 	if (condensed) {
-		ngModeMessages.push("WARNING! NG Condensed is in Beta! Some content aren't balanced yet. Currently, everything is balanced until first Infinity.")
-		ngModeMessages.push("Welcome to NG Condensed, made by Jacorb! This mode rebalances the game, including NG+++, to speed it up while also adding new features along the way. Have fun! :)")
+		ngModeMessages.push("WARNING! NG Condensed is in Beta! Some content aren't balanced yet. Currently, everything is balanced until Meta Dimensions (only ported until ECs).")
+		ngModeMessages.push("Welcome to NG Condensed, made by Jacorb! This mode significantly changes the game, including NG+++, to speed it up while also adding new features along the way. Have fun! :)")
 	}
 	if (player.meta!==undefined||player.exdilation!==undefined) {
 		if (!player.aarexModifications.newGamePlusVersion && !condensed) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")

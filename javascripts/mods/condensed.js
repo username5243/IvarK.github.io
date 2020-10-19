@@ -109,7 +109,9 @@ let CONDENSED = {
 			costScale() {
 				let x = 1
 				if (player.infinityUpgrades.includes("postinfi70")) x *= 0.6
-				if (player.eternityUpgrades.includes(12)) s *= 2/3
+				if (player.eternityUpgrades.includes(12)) x *= 2/3 
+				//uh wtf is this supposed to be s
+				//so i changed it cause im almost certain its wrong but feel free to change back
 				return Math.pow(1.5, x) + 1
 			},
 			costDiv() {
@@ -130,7 +132,7 @@ let CONDENSED = {
 			},
 			pow() {
 				let pow = 1
-				if (player.galaxies>=2) pow *= (Math.sqrt(player.galaxies * 2) * 2) / 3
+				if (player.galaxies >= 2) pow *= (Math.sqrt(player.galaxies * 2) * 2) / 3
 				if (player.infinityUpgrades.includes("postinfi70")) pow *= ngC.breakInfUpgs[70]()
 				if (player.infinityUpgrades.includes("postinfi72")) pow *= ngC.breakInfUpgs[72]()
 				if (player.challenges.includes("postc4")) pow *= 1.25

@@ -271,6 +271,8 @@ function multiplySameCosts(cost) {
 		if (player[tiers[i] + "Cost"].e == cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
 	}
 	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(getTickspeedCostMultiplier())
+	//the above line is broken in C9 in NGC&NG+++, but i think its a bug elsewhere
+	// the bug is getTickspeedCostMultiplier is not defined
 }
 
 function multiplyPC5Costs(cost, tier) {
