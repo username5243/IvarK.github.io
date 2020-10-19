@@ -152,44 +152,54 @@
 				<button class="storebtn" onclick="fillAll()" id="fillAll" style="width:150px; height: 40px; font-size: 10px; margin: auto">Buy all time studies</button>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button class="timestudylocked" id="13" onclick="buyTimeStudy(13)">Infinity Condensers are stronger based on your Normal Galaxies<span id="13eff">Currently: 1x</span>Cost: 5 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="12" onclick="buyTimeStudy(12)">Dimension Boosts also affect Tickspeed<span>Cost: 6 Time Theorems</button></td>
 						<td><button class="timestudylocked" id="11" onclick="buyTimeStudy(11)">Tickspeed affects 1st Time Dimension with reduced effect<span id="11desc">Currently: 1x</span>Cost: 1 Time Theorem</button></td>
 						<td><button class="timestudybought" id="secretstudy" style="opacity: 0; cursor: pointer; transition-duration: 2s;">Unlock a secret achievement<span>Cost: 0 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 					</tr>
 				</table>
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="21" onclick="buyTimeStudy(21)">Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)<span>Cost: 3 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="25" onclick="buyTimeStudy(25)" style="font-size: 9px;">Infinity Power makes the Tick interval decrease by more each purchase<span id="25eff"></span>Cost: 20 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="23" onclick="buyTimeStudy(23)">Replicated Condensers' first effect uses a better formula<span>Cost: 6 Time Theorems</button></td>
+						<td><button id="21" onclick="buyTimeStudy(21)"><span id="ts21desc">Replicanti multiplier formula is better (log2(x)^2 -> x^0.032)</span><span>Cost: 3 Time Theorems</button></td>
 						<td><button id="22" onclick="buyTimeStudy(22)">Replicanti interval limit 50ms -> 1ms<span>Cost: 2 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="24" onclick="buyTimeStudy(24)">Replicated Condensers' second effect uses a better formula<span>Cost: 7 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="33" onclick="buyTimeStudy(33)">You keep half of your replicanti galaxies on infinity<span>Cost: 2 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your replicanti galaxies on infinity</span><span>Cost: 2 Time Theorems</button></td>
 						<td><button id="31" onclick="buyTimeStudy(31)">Powers up bonuses that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
 						<td><button id="32" onclick="buyTimeStudy(32)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="34" onclick="buyTimeStudy(34)">Gain x10 eternitied stat<span>Cost: 5 Time Theorems</button></td>
+						<td><button id="35" onclick="buyTimeStudy(35)" style="font-size: 8px;">Gain more infinitied & eternitied stat based on your IP, and Break Infinity Upgrade 7 is impacted by infinitied stat gain multipliers<span id="35eff"></span>Cost: 10 Time Theorems<span id="35req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button id="43" onclick="buyTimeStudy(43)">Replicated Condensers are 2% stronger for each Replicated Galaxy (additive)<span>Cost: 4 Time Theorems</button></td>
 						<td><button id="41" onclick="buyTimeStudy(41)">You gain <span id="41desc" style="display:inline"></span>x more IP per galaxy.<span>Cost: 4 Time Theorems</button></td>
 						<td><button id="42" onclick="buyTimeStudy(42)"><span id="42desc"></span>Cost: 6 Time Theorems</button></td>
+						<td><button id="44" onclick="buyTimeStudy(44)">Get 3 of each Infinity Condenser for free.<span>Cost: 2 Time Theorems</button></td>
 					</tr>
 				</table>
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="52" onclick="buyTimeStudy(52)" style="font-size: 9px;">The Replicanti limit is raised to an exponent based on your RGs (but Replicanti gain slows down after 1.8e308)<span>Cost: 9 Time Theorems</button></td>
 						<td><button id="51" onclick="buyTimeStudy(51)"><span id="51desc">You gain 1e15 times more IP</span>Cost: 3 Time Theorems</button></td>
 						<td><button class="eternitychallengestudy" id="ec5unl">Eternity Challenge 5<span>Requirement: 200 galaxies<span>Cost: 100 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
-						<td><button id="61" onclick="buyTimeStudy(61)">You gain <span id="61desc" style="display:inline"></span>x more EP<span>Cost: 3 Time Theorems</button></td>
+						<td><button id="63" onclick="buyTimeStudy(63)" style="font-size: 9px;">OS_ND_1 & 2 start later based on your unspent EP, and are 50% weaker<span id="63eff"></span>Cost: 7 Time Theorems</button></td>
+						<td><button id="61" onclick="buyTimeStudy(61)" style="font-size: 9px;">You gain <span id="61desc" style="display:inline"></span><span>Cost: 3 Time Theorems<span id="61req"></span></button></td>
 						<td><button id="62" onclick="buyTimeStudy(62)">You gain replicanti <span id="62desc" style="display:inline"></span> times faster<span>Cost: 3 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -219,9 +229,11 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="eternitychallengestudy" id="ec7unl">Eternity Challenge 7<span>Requirement: 1e550,000 antimatter<span>Cost: 115 Time Theorems</button></td>
-						<td><button id="111" onclick="buyTimeStudy(111, 12)">Make the IP formula better<span>Cost: 12 Time Theorems</button></td>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button class="eternitychallengestudy" id="ec7unl">Eternity Challenge 7<span>Requirement: 1e550,000 antimatter<span>Cost: 115 Time Theorems</button></td>
+						<td><button id="111" onclick="buyTimeStudy(111)">Make the IP formula better<span>Cost: 12 Time Theorems</button></td>
+						<td><button id="112" onclick="buyTimeStudy(112)">Make the EP formula better<span>Cost: 12 Time Theorems<span>Req: 250 Total Time Theorems</button></td>
+						<td><button id="113" onclick="buyTimeStudy(113)">Make the EP formula even better<span>Cost: 24 Time Theorems<span>Req: 1,800 Total Time Theorems</button></td>
 					</tr>
 				</table>
 				<br>
@@ -235,7 +247,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="eternitychallengestudy" id="ec6unl">Eternity Challenge 6<span>Requirement: 40 replicanti galaxies<span>Cost: 100 Time Theorems</button></td>
-						<td><button id="131" onclick="buyTimeStudy(131)">Automatic replicanti galaxies are disabled, but you can get 50% more<span>Cost: 5 Time Theorems</button></td>
+						<td><button id="131" onclick="buyTimeStudy(131)"><span id="131desc">Automatic replicanti galaxies are disabled, but you can get 50% more</span>Cost: 5 Time Theorems</button></td>
 						<td><button id="132" onclick="buyTimeStudy(132)">Replicanti galaxies are 40% more effective<span>Cost: 5 Time Theorems</button></td>
 						<td><button id="133" onclick="buyTimeStudy(133)">Replicanti are 10x slower until infinity, but their galaxies are 50% stronger<span>Cost: 5 Time Theorems</button></td>
 						<td><button class="eternitychallengestudy" id="ec8unl">Eternity Challenge 8<span>Cost: 100 Time Theorems</button></td>
@@ -251,9 +263,9 @@
 				<br>
 				<table class="table" id="studytable">
 					<tr>
-						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="152" onclick="buyTimeStudy(152)" style="font-size: 9px;"><span id="152eff"></span>Cost: 25 Time Theorems<span>Req: 20 Eternity Challenge completions</button></td>
 						<td><button class="eternitychallengestudy" id="ec9unl">Eternity Challenge 9<span>Requirement: 1e6000 infinity power<span>Cost: 100 Time Theorems</button></td>
-						<td><button id="151" onclick="buyTimeStudy(151)"><span id="151desc">1e4x multiplier on all Time Dimensions</span>Cost: 8 Time Theorems</button></td>
+						<td><button id="151" onclick="buyTimeStudy(151)"><span id="151desc">1e4x multiplier on all Time Dimensions</span>Cost: 8 Time Theorems<span id="151req"></span></button></td>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button class="eternitychallengestudy" id="ec4unl">Eternity Challenge 4<span>Requirement: 100,000,000 infinities<span>Cost: 85 Time Theorems</button></td>
 					</tr>
@@ -266,7 +278,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="171" onclick="buyTimeStudy(171)">Time Shard requirement for the next tickspeed upgrade is reduced<span>Cost: 15 Time Theorems</button></td>
+						<td><button id="172" onclick="buyTimeStudy(172)" style="font-size: 8px;">Replicanti boosts EP gain (after obscurements), and TS52 is 50% stronger<span id="172eff"></span><span>Cost: 10 Time Theorems<span>Req: 10 Eternity Challenge completions</button></td>
+						<td><button id="171" onclick="buyTimeStudy(171)" style="font-size: 9px;">Time Shard requirement for the next tickspeed upgrade is reduced<span>Cost: 15 Time Theorems<span id="171req"></span></button></td>
+						<td><button id="173" onclick="buyTimeStudy(173)">All Galaxies are 200% stronger<span>Cost: 25 Time Theorems<span>Req: 20 Eternity Challenge completions</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -278,7 +292,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="181" onclick="buyTimeStudy(181)">You gain <span id="181desc" style="display:inline"></span> each second.<span>Cost: 200 Time Theorems</button></td>
+						<td><button id="181" onclick="buyTimeStudy(181)"><span id="181desc" style="display:inline"></span><span>Cost: 200 Time Theorems</button></td>
 					</tr>
 					<tr>
 						<td><button class="eternitychallengestudy" id="ec10unl">Eternity Challenge 10<span>Requirement: 1e100 EP<span>Cost: 200 Time Theorems</button></td>
@@ -286,14 +300,22 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button id="191" onclick="buyTimeStudy(191)">You bank 5% of your Infinities on Eternity.<span>Cost: 400 Time Theorems</button></td>
+						<td><button id="196" onclick="buyTimeStudy(196)">OS_SAC_1 & 2 are 80% weaker, and sacrifice is 1,900% more efficient<span>Cost: 450 Time Theorems</button></td>
+						<td><button id="194" onclick="buyTimeStudy(194)">Dimension Supersonic and Distant Galaxy scalings are 50% weaker<span>Cost: 375 Time Theorems</button></td>
+						<td><button id="191" onclick="buyTimeStudy(191)" style="font-size: 9px;"><span id="191desc"></span>Cost: 400 Time Theorems</button></td>
 						<td><button id="192" onclick="buyTimeStudy(192)" style="font-size: 10px;"><span id="192desc"></span>Cost: 730 Time Theorems</button></td>
 						<td><button id="193" onclick="buyTimeStudy(193)">Normal Dimensions gain a multiplier based on your Eternities<span id="193desc">Currently: 1x</span>Cost: 300 Time Theorems</button></td>
+						<td><button id="195" onclick="buyTimeStudy(195)">Time Condensers are 4,900% stronger<span>Cost: 375 Time Theorems</button></td>
+						<td><button id="197" onclick="buyTimeStudy(197)">TS24, TS25, TS32, TS43, & TS111 are 3x as powerful, and TS172 uses a better formula<span>Cost: 500 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button id="202" onclick="buyTimeStudy(202)" style="font-size: 10px;">Normal Condensers are cheaper based on their amount<span id="202eff"></span>Cost: 200 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
 						<td><button id="201" onclick="buyTimeStudy(201)">Pick another path from the first split<span>Cost: 900 Time Theorems</button></td>
+						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
+						<td><button id="203" onclick="buyTimeStudy(203)">Time Condensers are cheaper based on their amount<span id="203eff"></span>Cost: 200 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -306,14 +328,14 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr class="wideRow">
-						<td><button id="221" onclick="buyTimeStudy(221)">Dimension Boosts affect Time Dimensions with reduced power.<span id="221desc"></span><span>Cost: 900 Time Theorems</button></td>
-						<td><button id="222" onclick="buyTimeStudy(222)">Dimension Boost costs scale by another <span id="222desc" style="display:inline"></span> less.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="223" onclick="buyTimeStudy(223)">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="224" onclick="buyTimeStudy(224)">Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="225" onclick="buyTimeStudy(225)">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="226" onclick="buyTimeStudy(226)">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems</button></td>
-						<td><button id="227" onclick="buyTimeStudy(227)">Sacrifice affects the 4th Time Dimension with reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems</button></td>
-						<td><button id="228" onclick="buyTimeStudy(228)">Sacrifice scales better.<span>Cost: 900 Time Theorems</button></td>
+						<td><button id="221" onclick="buyTimeStudy(221)" style="font-size: 8px;">Dimension Boosts affect Time Dimensions with reduced power.<span id="221desc"></span><span>Cost: 900 Time Theorems<span id="221req"></span></button></td>
+						<td><button id="222" onclick="buyTimeStudy(222)" style="font-size: 8px;">Dimension Boost costs scale by another <span id="222desc" style="display:inline"></span> less.<span>Cost: 900 Time Theorems<span id="222req"></span></button></td>
+						<td><button id="223" onclick="buyTimeStudy(223)" style="font-size: 8px;">Galaxy cost scaling starts 7 galaxies later.<span>Cost: 900 Time Theorems<span id="223req"></span></button></td>
+						<td><button id="224" onclick="buyTimeStudy(224)" style="font-size: 8px;">Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts.<span>Cost: 900 Time Theorems<span id="224req"></span></button></td>
+						<td><button id="225" onclick="buyTimeStudy(225)" style="font-size: 8px;">You gain extra RGs based on how high above infinity your replicanti are.<span>Cost: 900 Time Theorems<span id="225req"></span></button></td>
+						<td><button id="226" onclick="buyTimeStudy(226)" style="font-size: 8px;">You gain extra RGs based on your max RGs.<span>Cost: 900 Time Theorems<span id="226req"></span></button></td>
+						<td><button id="227" onclick="buyTimeStudy(227)" style="font-size: 8px;">Sacrifice affects the 4th Time Dimension with reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems<span id="227req"></span></button></td>
+						<td><button id="228" onclick="buyTimeStudy(228)" style="font-size: 8px;">Sacrifice scales better.<span>Cost: 900 Time Theorems<span id="228req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -332,7 +354,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1, 5e3)">Unlock time dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1, (tmp.ngC?3e3:5e3))">Unlock time dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -656,6 +678,17 @@
 						</td>
 						<td>
 							<button id="eter9" class="eternityupbtn" onclick="buyEternityUpgrade(9, new Decimal('1e3000'))">Dilated time gain is boosted by eternity points<br>Currently: Xx<br>Cost: 1e3000 EP</button>
+						</td>
+					</tr>
+					<tr id="eterrowcond">
+						<td>
+							<button id="eter10" class="eternityupbtn" onclick="buyEternityUpgrade(10, new Decimal('1e625'))">You can buy all studies in all three-way splits<br>Cost: 1e625 EP</button>
+						</td>
+						<td>
+							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11, new Decimal('1e870'))">You can buy all black & white studies, and TS35 has no requirement<br>Cost: 1e870 EP</button>
+						</td>
+						<td>
+							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1350'))">The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: 1e1350 EP</button>
 						</td>
 					</tr>
 					<tr>
@@ -1221,144 +1254,7 @@
 				</div>
 				<div id="infPowPerSec">You are getting 0 Infinity Power per second.</div>
 				<button id="maxAllID" class="storebtn" style="font-size: 12px" onclick="maxAllID()">Max all</Button>
-				<table class="table" >
-					<tr style="font-size: 16px" id="infRow1">
-						<td id="infD1" width="41%">
-							First Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount1">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto1" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(1)" class="storebtn">Auto: ON</button>
-						</td>
-						<td align="right" width="10%">
-							<button id="infMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyManyInfinityDimension(1)">Cost: 10</button>
-						</td>
-						<td id="infCndCont1" style="display: none;" align="right" width="10%">
-							<button id="infCnd1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(1)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow2" style="display: none; font-size: 16px">
-						<td id="infD2">
-							Second Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount2" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto2" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(2)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax2" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(2)">Cost: 10</button>
-						</td>
-						<td id="infCndCont2" style="display: none;" align="right" width="10%">
-							<button id="infCnd2" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(2)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow3" style="display: none; font-size: 16px">
-						<td id="infD3">
-							Third Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount3" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto3" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(3)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax3" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(3)">Cost: 10</button>
-						</td>
-						<td id="infCndCont3" style="display: none;" align="right" width="10%">
-							<button id="infCnd3" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(3)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow4" style="display: none; font-size: 16px">
-						<td id="infD4">
-							Fourth Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount4" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto4" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(4)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax4" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(4)">Cost: 10</button>
-						</td>
-						<td id="infCndCont4" style="display: none;" align="right" width="10%">
-							<button id="infCnd4" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(4)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow5" style="display: none; font-size: 16px">
-						<td id="infD5">
-							Fourth Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount5" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto5" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(5)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax5" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(5)">Cost: 10</button>
-						</td>
-						<td id="infCndCont5" style="display: none;" align="right" width="10%">
-							<button id="infCnd5" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(5)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow6" style="display: none; font-size: 16px">
-						<td id="infD6">
-							Fourth Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount6" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto6" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(6)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax6" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(6)">Cost: 10</button>
-						</td>
-						<td id="infCndCont6" style="display: none;" align="right" width="10%">
-							<button id="infCnd6" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(6)">Cost: 10</button>
-						</td>
-					</tr>
-					<tr id="infRow7" style="display: none; font-size: 16px">
-						<td id="infD7">
-							Fourth Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount7" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto7" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(7)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax7" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(7)">Cost: 10</button>
-						</td>
-						<td id="infCndCont7" style="display: none;" align="right" width="10%">
-							<button id="infCnd7" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(7)">Cost: 10</button>
-						</td>
-					</tr>
-				<tr id="infRow8" style="display: none; font-size: 16px">
-						<td id="infD8">
-							Fourth Infinity Dimension x1
-						</td>
-						<td>
-							<div id="infAmount8" align="left">0 (0)</div>
-						</td>
-						<td>
-							<button id="infauto8" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(8)" class="storebtn">Auto: ON</button>
-						</td>
-						<td>
-							<button id="infMax8" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyManyInfinityDimension(8)">Cost: 10</button>
-						</td>
-						<td id="infCndCont8" style="display: none;" align="right" width="10%">
-							<button id="infCnd8" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(8)">Cost: 10</button>
-						</td>
-					</tr>
-				</table>
+				<table class="table" id="idTable"></table>
 				<div id="eterc8ids" style="display: none;"></div>
 				<button id="toggleallinfdims"style="width:140px; height: 30px; font-size: 12px; visibility: hidden" onclick="toggleAllInfDims()" class="storebtn">Toggle all ON/OFF</button>
 			</div>
@@ -1370,120 +1266,8 @@
 						</div>
 
 						<div id="timeShardsPerSec">You are getting 0 Time Shards per second.</div>
-						<button id="maxTimeDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxTimeDimensions()">Max all</Button>
-						<table class="table" >
-							<tr style="font-size: 17px" id="timeRow1">
-								<td id="timeD1" width="43%">
-									First Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount1">0 (0)</div>
-								</td>
-								<td>
-									<button id="td1auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td1')" class="storebtn">Auto: ON</button>
-								</td>
-								<td align="right" width="10%">
-									<button id="timeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimension(1)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow2" style="font-size: 17px">
-								<td id="timeD2">
-									Second Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount2" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td2auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td2')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax2" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(2)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow3" style="font-size: 17px">
-								<td id="timeD3">
-									Third Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount3" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td3auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td3')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax3" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(3)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow4" style="font-size: 17px">
-								<td id="timeD4">
-									Fourth Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount4" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td4auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td4')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax4" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(4)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow5" style="font-size: 17px">
-								<td id="timeD5">
-									Fifth Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount5" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td5auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td5')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax5" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(5)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow6" style="font-size: 17px">
-								<td id="timeD6">
-									Sixth Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount6" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td6auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td6')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax6" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(6)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow7" style="font-size: 17px">
-								<td id="timeD7">
-									Seventh Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount7" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td7auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td7')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax7" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(7)">Cost: 10</button>
-								</td>
-							</tr>
-							<tr id="timeRow8" style="font-size: 17px">
-								<td id="timeD8">
-									Eighth Time Dimension x1
-								</td>
-								<td>
-									<div id="timeAmount8" align="left">0 (0)</div>
-								</td>
-								<td>
-									<button id="td8auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter('td8')" class="storebtn">Auto: ON</button>
-								</td>
-								<td>
-									<button id="timeMax8" style="color:black; width:195px; height:30px" class="storebtn" onclick="buyTimeDimension(8)">Cost: 10</button>
-								</td>
-							</tr>
+						<button id="maxTimeDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxTimeDimensions()">Max all</button>
+						<table class="table" id="tdTable">
 							<tr id="tdReset" style="font-size: 17px">
 								<td id="tdResetLabel" colspan=3></td>
 								<td><button id="tdResetBtn" style="color:black; width: 195px; height: 25px; font-size: 9px" class="storebtn" onclick="buyMaxTDB()"></button></td>
@@ -1895,7 +1679,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 19)</span>
+				<span class="warning">(Test server: Beta 19.01)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2025,8 +1809,10 @@
 				<div id="softcap_C_ts"></div>
 				<div id="softcap_C_sac"></div>
 				<div id="softcap_C_ip"></div>
+				<div id="softcap_C_id"></div>
 				<div id="softcap_C_rep"></div>
 				<div id="softcap_C_ep"></div>
+				<div id="softcap_C_td"></div>
 				<div id="softcap_m4_id"></div>
 				<br>
 			</div>

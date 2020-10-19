@@ -82,7 +82,7 @@ function getTimeDimensionPower(tier) {
 	var ret = dim.power.pow(player.boughtDims ? 1 : 2)
 
 	if (hasPU(32)) ret = ret.times(puMults[32]())
-	if (player.aarexModifications.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier,ret)
+	if (player.aarexModifications.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier, ret)
 
 	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
 	
@@ -105,7 +105,10 @@ function getTimeDimensionPower(tier) {
 	ret = dilates(ret, 1)
 	if (tmp.quActive) ret = ret.times(colorBoosts.dim.b)
 	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
+	if (tmp.ngC && ngC.tmp) ret = ret.times(ngC.condense.tds.eff(tier))
+
 	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
+	if (tmp.ngC) ret = softcap(ret, "tds_ngC")
 
 	return ret
 }
@@ -176,6 +179,7 @@ function updateTimeDimensions() {
 				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) document.getElementById("timeMax"+tier).className = "storebtn"
 			else document.getElementById("timeMax" + tier).className = "unavailablebtn"
 			} else document.getElementById("timeRow" + tier).style.display = "none"
+			if (tmp.ngC) ngC.condense.tds.update(tier)
 		}
 		if (player.aarexModifications.ngmX > 3) {
 			var isShift = player.tdBoosts < (inNC(4) ? 5 : 7)

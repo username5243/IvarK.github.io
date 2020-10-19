@@ -12,6 +12,7 @@ let CONDENSED = {
 		if (ngC.save.normal === undefined) ngC.resetNDs()
 		if (ngC.save.inf === undefined) ngC.resetIDs()
 		if (ngC.save.repl === undefined) ngC.resetRepl()
+		if (ngC.save.time === undefined) ngC.resetTDs()
 	},
 	updateTmp() {
 		if (!tmp.ngC) {
@@ -35,13 +36,20 @@ let CONDENSED = {
 			data2.eff2 = Decimal.max(rep, 1).log10() * Math.pow(c2, 0.95) / 7.5 + 1
 		}
 
-		data.ids = {}
-		data.ids.pow = ngC.condense.ids.pow()
-		for (let i = 1; i <= 8; i++) data.ids[i] = ngC.condense.ids.eff(i)
+		data.tds = {
+			pow: ngC.condense.tds.pow(),
+			free: ngC.condense.tds.free()
+		}
 
-		data.nds = {}
-		data.nds.pow = ngC.condense.nds.pow()
-		for (let i = 1; i <= 8; i++) data.nds[i] = ngC.condense.nds.eff(i)
+		data.ids = {
+			pow: ngC.condense.ids.pow(),
+			free: ngC.condense.ids.free()
+		}
+
+		data.nds = {
+			pow: ngC.condense.nds.pow(),
+			free: ngC.condense.nds.free()
+		}
 	},
 	resetDims(type) {
 		let data = [0]
@@ -54,6 +62,9 @@ let CONDENSED = {
 	resetIDs(type) {
 		ngC.resetDims("inf")
 	},
+	resetTDs(type) {
+		ngC.resetDims("time")
+	},
 	resetRepl(type) {
 		ngC.save.repl = 0
 	},
@@ -61,6 +72,7 @@ let CONDENSED = {
 		for (var d = 1; d <= 8; d++) {
 			document.getElementById("CondenseDiv" + d).style.display = tmp.ngC ? "" : "none"
 			document.getElementById("infCndCont" + d).style.display = tmp.ngC ? "" : "none"
+			document.getElementById("timeCndCont" + d).style.display = tmp.ngC ? "" : "none"
 		}
 		document.getElementById("postinfir7").style.display = tmp.ngC ? "" : "none"
 		document.getElementById("postinfir8").style.display = tmp.ngC ? "" : "none"
@@ -90,16 +102,31 @@ let CONDENSED = {
 		nds: {
 			cost(x) {
 				let bought = ngC.save.normal[x]
-				return Decimal.pow(ngC.condense.costBaseMult[x], Math.pow(bought, this.costScale())).times(ngC.condense.costStart[x])
+				return Decimal.pow(ngC.condense.costBaseMult[x], Math.pow(bought, this.costScale()))
+					.times(ngC.condense.costStart[x])
+					.div(this.costDiv())
 			},
 			costScale() {
-				let x = 1.5
-				if (player.infinityUpgrades.includes("postinfi70")) x = Math.pow(x, 0.6)
-				return x + 1
+				let x = 1
+				if (player.infinityUpgrades.includes("postinfi70")) x *= 0.6
+				if (player.eternityUpgrades.includes(12)) s *= 2/3
+				return Math.pow(1.5, x) + 1
+			},
+			costDiv() {
+				let div = 1
+				if (player.timestudy.studies.includes(202)) div = tsMults[202]()
+				return div
 			},
 			target(x) {
 				let res = getOrSubResource(x)
-				return Math.floor(Math.pow(res.div(ngC.condense.costStart[x]).max(1).log10() / Math.log10(ngC.condense.costBaseMult[x]), 1 / this.costScale()) + 1)
+				return Math.floor(Math.pow(
+					res.times(this.costDiv())
+						.div(ngC.condense.costStart[x])
+						.log(ngC.condense.costBaseMult[x])
+				, 1 / this.costScale()) + 1)
+			},
+			free() {
+				return 0
 			},
 			pow() {
 				let pow = 1
@@ -111,7 +138,9 @@ let CONDENSED = {
 				return pow
 			},
 			eff(x) {
-				return Decimal.pow(player.money.plus(1).log10() + 1, ngC.save.normal[x] * ngC.tmp.nds.pow)
+				if (!ngC.tmp) return new Decimal(1)
+				let amt = ngC.save.normal[x] + ngC.tmp.nds.free
+				return Decimal.pow(player.money.plus(1).log10() + 1, amt * ngC.tmp.nds.pow)
 			},
 			update(x) {
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
@@ -144,7 +173,14 @@ let CONDENSED = {
 		ids: {
 			cost(x) {
 				let bought = ngC.save.inf[x]
-				return Decimal.pow(ngC.condense.costBaseMult[x], Decimal.pow(bought, 3.5)).times(Decimal.pow(ngC.condense.costStart[x], 2.5)).div(this.costDiv())
+				return Decimal.pow(ngC.condense.costBaseMult[x], Math.pow(bought, 3.5) * this.costScale())
+					.times(Math.pow(ngC.condense.costStart[x], 2.5))
+					.div(this.costDiv())
+			},
+			costScale() {
+				let x = 1
+				if (player.eternityUpgrades.includes(12)) x *= 2/3
+				return x
 			},
 			costDiv() {
 				let div = new Decimal(1)
@@ -153,16 +189,28 @@ let CONDENSED = {
 			},
 			target(x) {
 				let res = player.infinityPoints
-				return Math.floor(Math.pow(res.times(this.costDiv()).div(Decimal.pow(ngC.condense.costStart[x], 2.5)).max(1).log10()/Math.log10(ngC.condense.costBaseMult[x]), 1/3.5)+1)
+				return Math.floor(Math.pow(
+					res.times(this.costDiv())
+						.div(Math.pow(ngC.condense.costStart[x], 2.5))
+						.log(ngC.condense.costBaseMult[x])
+					/ this.costScale()
+				, 1 / 3.5) + 1)
+			},
+			free() {
+				return 0
 			},
 			pow() {
 				let ret = 1
 				if (player.challenges.includes("postcngc_1")) ret *= ngC.ic9Eff()
 				if (player.challenges.includes("postcngc_2")) ret *= 1.15
+				if (player.timestudy.studies.includes(13)) ret *= tsMults[13]()
+				if (player.dilation.upgrades.includes("ngp3c2")) ret *= 3
 				return ret
 			},
 			eff(x) {
-				return Decimal.pow(player.infinityPower.plus(1).log10() + 1, ngC.save.inf[x] * ngC.tmp.ids.pow)
+				if (!ngC.tmp) return new Decimal(1)
+				let amt = ngC.save.inf[x] + ngC.tmp.ids.free
+				return Decimal.pow(player.infinityPower.plus(1).log10() + 1, amt * ngC.tmp.ids.pow)
 			},
 			update(x) {
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
@@ -209,7 +257,69 @@ let CONDENSED = {
 				player.replicanti.amount = new Decimal(1)
 				ngC.save.repl++
 			}
-		}
+		},
+		tds: {
+			cost(x) {
+				let bought = ngC.save.time[x]
+				return Decimal.pow(ngC.condense.costBaseMult[x], Math.pow(bought, 4) * this.costScale())
+					.times(ngC.condense.costStart[x] / 10)
+					.div(this.costDiv())
+			},
+			costScale() {
+				let x = 1
+				if (player.eternityUpgrades.includes(12)) x *= 2/3
+				return x
+			},
+			costDiv() {
+				let div = new Decimal(1)
+				if (player.timestudy.studies.includes(203)) div = tsMults[203]()
+				return div
+			},
+			target(x) {
+				let res = player.eternityPoints
+				return Math.floor(Math.pow(
+					res.times(this.costDiv())
+						.div(ngC.condense.costStart[x] / 10)
+						.log(ngC.condense.costBaseMult[x])
+					/ this.costScale()
+				, 1 / 4) + 1)
+			},
+			free() {
+				return 0
+			},
+			pow() {
+				let ret = 1
+				return ret
+			},
+			eff(x) {
+				if (!ngC.tmp) return new Decimal(1)
+				let amt = ngC.save.time[x] + ngC.tmp.tds.free
+				return Decimal.pow(player.timeShards.plus(1).log10() + 1, amt * ngC.tmp.tds.pow)
+			},
+			update(x) {
+				let costPart = ph.did("quantum") ? '' : 'Condense: '
+				let cost = this.cost(x)
+				let resource = player.eternityPoints
+				document.getElementById("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost)
+				document.getElementById("timeCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
+			},
+			buy(x) {
+				let res = player.eternityPoints
+				let cost = this.cost(x)
+				if (res.lt(cost)) return
+
+				ngC.save.time[x]++
+				player.eternityPoints = player.eternityPoints.sub(cost)
+			},
+			max(x) {
+				let res = player.eternityPoints
+				let cost = this.cost(x)
+				if (res.lt(cost)) return
+
+				ngC.save.time[x] = Math.max(ngC.save.time[x], this.target(x))
+				player.eternityPoints = player.eternityPoints.sub(cost)
+			}
+		},
 	},
 	getSacrificeExpBoost() {
 		let x = 1

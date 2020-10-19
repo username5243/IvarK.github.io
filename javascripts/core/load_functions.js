@@ -2005,15 +2005,14 @@ function setReplDisplay() {
 function setTSDisplay(){
         document.getElementById("41desc").textContent=tsMults[41]()
         document.getElementById("42desc").textContent=player.galacticSacrifice?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by "+(60*tsMults[42]())+" 8ths instead of 60."
-        document.getElementById("61desc").innerHTML=tsMults[61]()
+        document.getElementById("61desc").innerHTML=tsMults[61]()+"x more EP"
         document.getElementById("62desc").textContent=tsMults[62]()
         document.getElementById("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
-        document.getElementById("181desc").textContent = player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch"
+        document.getElementById("181desc").textContent = "You gain " + (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch") + " each second."
+        document.getElementById("191desc").textContent = "You bank 5% of your Infinities on Eternity."
         document.getElementById("211desc").textContent=tsMults[211]()
         document.getElementById("213desc").textContent=tsMults[213]()
-        document.getElementById("221").style["font-size"] = tmp.ngp3 ? "0.45rem" : "0.55rem"
         document.getElementById("222desc").textContent=tsMults[222]()
-        document.getElementById("231").style["font-size"] = tmp.ngp3 ? "0.55rem" : "0.65rem"
 }
 
 function updateNGp3DisplayStuff(){
@@ -2182,7 +2181,7 @@ function onLoad(noOffline) {
 	ph.reset()
 	ls.reset()
 
-	updateBoughtTimeStudies()
+	setupTimeStudies()
 	performedTS = false
 	updateVersionsONLOAD()
 	transformSaveToDecimal()

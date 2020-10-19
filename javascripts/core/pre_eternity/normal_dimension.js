@@ -153,20 +153,25 @@ function getStartingNDMult(tier) {
 }
 
 function getDimensionFinalMultiplier(tier) {
-	let mult = getStartingNDMult(tier)
-
-	if (tmp.ngC && ngC.tmp && player.currentChallenge != "postngc_1") {
-		if (player.currentChallenge == "postngc_2") return ngC.tmp.nds[tier]
-		mult = mult.times(ngC.tmp.nds[tier])
-	}
-	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if (!tmp.infPow) updateInfinityPowerEffects()
-	if (player.currentChallenge == "postcngm3_2") return tmp.infPow.max(1e100)
-	if (player.currentEternityChall == "eterc11") {
-		let x = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
-		if (tmp.quActive) x = x.times(colorBoosts.dim.r)
-		return x
+	let mult = new Decimal(1)
+
+	if (player.currentChallenge == "postcngc_2" || player.currentChallenge == "postcngm3_2" || player.currentEternityChall == "eterc11") {
+		if (player.currentChallenge == "postcngc_2") mult = ngC.condense.nds.eff(tier)
+		else if (player.currentChallenge == "postcngm3_2") mult = tmp.infPow.max(1e100)
+		else if (player.currentEternityChall == "eterc11") {
+			mult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+			if (tmp.quActive) x = x.times(colorBoosts.dim.r)
+		}
+
+		if (tmp.ngC) mult = softcap(mult, "nds_ngC")
+		return mult
 	}
+
+	mult = getStartingNDMult(tier)
+	if (tmp.ngC && player.currentChallenge != "postngc_1") mult = mult.times(ngC.condense.nds.eff(tier))
+
+	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
 		if (tier == 4) mult = mult.pow(1.4)
 		if (tier == 2) mult = mult.pow(1.7)
@@ -218,7 +223,7 @@ function getDimensionFinalMultiplier(tier) {
 
 	if (tmp.ngC) {
 		mult = softcap(mult, "nds_ngC")
-		if (player.replicanti.unl) mult = mult.times(getIDReplMult())
+		if (player.replicanti.unl) mult = mult.times(tmp.rm)
 	}
 
 	return mult

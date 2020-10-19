@@ -186,37 +186,65 @@ function setupPCTableHTMLandData(){
 			} else col.id = "pc" + r + c
 		}
 	}
+}
+
+function setupDimensionsHTML() {
 	var ndsDiv = document.getElementById("parent")
-	var pdsDiv = document.getElementById("pdTable")
-	var edsDiv = document.getElementById("empDimTable")
-	for (let d = 1; d < 9; d++) {
+	for (let d = 1; d <= 8; d++) {
 		var row = ndsDiv.insertRow(d - 1)
 		row.id = d + "Row"
 		row.style["font-size"] = "15px"
-		var html = '<td class="rel" id="D' + d + '" align="right" width="32%"> </td>'
-		html += '<td id="A' + d + '"></td>'
-		html += '<td align="right" width="10%"><button id="B' + d + '" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn" onclick="buyOneDimension(' + d + ')"></button></td>'
-		html += '<td align="right" width="10%"><button id="M' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="buyManyDimension(' + d + ')"></button></td>'
-		html += '<td id="CondenseDiv'+d+'" style="display: none;" align="right" width="10%"><button id="Condense' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="ngC.condense.nds.buy(' + d + ')"></button></td>'
-		row.innerHTML = html
-		
-		var row=pdsDiv.insertRow(d-1)
+		row.innerHTML = '<td class="rel" id="D' + d + '" align="right" width="32%"> </td>' +
+			'<td id="A' + d + '"></td>' +
+			'<td align="right" width="10%"><button id="B' + d + '" style="color:black; height: 25px; font-size: 10px; width: 135px" class="storebtn" onclick="buyOneDimension(' + d + ')"></button></td>' +
+			'<td align="right" width="10%"><button id="M' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="buyManyDimension(' + d + ')"></button></td>' +
+			'<td id="CondenseDiv'+d+'" align="right" width="10%"><button id="Condense' + d + '" style="color:black; width:210px; height: 25px; font-size: 10px" class="storebtn" onclick="ngC.condense.nds.buy(' + d + ')"></button></td>'
+	}
+
+	var idsDiv = document.getElementById("idTable")
+	for (let d = 1; d <= 8; d++) {
+		var row = idsDiv.insertRow(d - 1)
+		row.id = "infRow" + d
+		row.style["font-size"] = "16px"
+		row.innerHTML = '<td id="infD' + d + '" width="41%"></td>' +
+			'<td id="infAmount' + d + '"></td>' +
+			'<td><button id="infauto' + d + '" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="switchAutoInf(' + d + ')" class="storebtn"></button></td>' +
+			'<td align="right" width="10%"><button id="infMax' + d + '" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyManyInfinityDimension(' + d + ')"></button></td>' +
+			'<td id="infCndCont' + d + '" align="right" width="10%"><button id="infCnd' + d + '" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.ids.buy(' + d + ')"></button></td>'
+	}
+
+	var tdsDiv = document.getElementById("tdTable")
+	for (let d = 1; d <= 8; d++) {
+		var row = tdsDiv.insertRow(d - 1)
+		row.id = "timeRow" + d
+		row.style["font-size"] = "17px"
+		row.innerHTML = '<td id="timeD' + d + '" width="43%"></td>' +
+			'<td id="timeAmount' + d + '"></td>' +
+			'<td><button id="td' + d + 'auto" style="width:70px; font-size: 10px; float: right; visibility: hidden" onclick="toggleAutoEter(\'td' + d + '\')" class="storebtn"></button></td>' +
+			'<td align="right" width="10%"><button id="timeMax' + d + '" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimension(' + d + ')"></button></td>' +
+			'<td id="timeCndCont' + d + '" align="right" width="10%"><button id="timeCnd' + d + '" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="ngC.condense.tds.buy(' + d + ')"></button></td>'
+	}
+
+	var pdsDiv = document.getElementById("pdTable")
+	for (let d = 1; d <= 8; d++) {
+		var row = pdsDiv.insertRow(d-1)
 		row.id = "pR" + d
 		row.style["font-size"] = "16px"
-		var html = '<td id="pD' + d + '" width="41%">' + DISPLAY_NAMES[d] + ' Paradox Dimension x1</td>'
-		html += '<td id="pA' + d + '">0 (0)</td>'
-		html += '<td align="right" width="10%"><button id="pB'+d+'" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyPD('+d+')">Cost: ??? Px</button></td></tr>'
-		row.innerHTML = html
-		
+		row.innerHTML = '<td id="pD' + d + '" width="41%"></td>' +
+			'<td id="pA' + d + '"></td>' +
+			'<td align="right" width="10%"><button id="pB'+d+'" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyPD('+d+')"></button></td></tr>'
+	}
+
+	var edsDiv = document.getElementById("empDimTable")
+	for (let d = 1; d <= 8; d++) {
 		var row=edsDiv.insertRow(d - 1)
 		row.id = "empRow" + d
 		row.style["font-size"] = "15px"
-		var html = '<td id="empD' + d + '" width="41%">' + DISPLAY_NAMES[d] + ' Emperor Dimension x1</td>'
-		html += '<td id="empAmount' + d + '"></td>'
-		html += '<td><span class="empQuarks" id="empQuarks' + d + '">0</span> preons/s</td>'
-		html += '<td align="right" width="2.5%"><button id="empFeedMax' + d + '" style="color:black; width:70px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+', true)">Max</button></td>'
-		html += '<td align="right" width="7.5%"><button id="empFeed' + d + '" style="color:black; width:195px; height:25px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+')">Feed (0%)</button></td>'
-		row.innerHTML = html
+		row.innerHTML = '<td id="empD' + d + '" width="41%"></td>' +
+			'<td id="empAmount' + d + '"></td>' +
+			'<td><span class="empQuarks" id="empQuarks' + d + '">0</span> preons/s</td>' +
+			'<td align="right" width="2.5%"><button id="empFeedMax' + d + '" style="color:black; width:70px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+', true)">Max</button></td>' +
+			'<td align="right" width="7.5%"><button id="empFeed' + d + '" style="color:black; width:195px; height:25px; font-size:10px" class="storebtn" align="right" onclick="feedReplicant('+d+')">Feed (0%)</button></td>'
 	}
 }
 
@@ -347,6 +375,7 @@ function setupBosonicRunes(){
 
 function setupHTMLAndData() {
 	setupFooterHTML()
+	setupDimensionsHTML()
 	setupBreakInfUpgHTMLandData()
 	ph.setupHTML()
 	setupParadoxUpgrades()
@@ -3781,17 +3810,22 @@ function doPerSecondNGP3Stuff(){
 function ghostifyAutomationUpdatingPerSecond() {
 	if (!isAutoGhostsSafe) return
 
+	//Ghostify Layer
+	//Priorities: GD Boost -> Light Empowerment -> Higgs Bosons -> Rest
+	if (isAutoGhostActive(25)) GDs.gdBoost()
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
+	if (isAutoGhostActive(24)) higgsReset(true)
 	if (player.ghostify.wzb.unl) {
 		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
-		if (isAutoGhostActive(24)) higgsReset(true)
-		if (isAutoGhostActive(25)) GDs.gdBoost()
 	}
 	if (isAutoGhostActive(16)) {
 		maxNeutrinoMult()
 		maxGHPMult()
 	}
+
+	//Quantum Layer
+	if (!tmp.quUnl) return
 	if (isAutoGhostActive(14)) maxBuyBEEPMult()
 	if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode=="t") rotateAutoUnstable()
 	if (isAutoGhostActive(10)) maxBuyLimit()
@@ -4084,47 +4118,9 @@ function dimensionButtonDisplayUpdating(){
 }
 
 function ghostifyAutomationUpdating(diff){
-	if (!ph.did("ghostify")) return
 	if (!isAutoGhostsSafe) return
 
-	var colorShorthands=["r", "g", "b"]
-	for (var c = 1; c <= 3; c++) {
-		var shorthand = colorShorthands[c - 1]
-		if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
-		if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
-			unstableQuarks(shorthand)
-			radioactiveDecay(shorthand)
-		}
-		if (isAutoGhostActive(5)) maxBranchUpg(shorthand)
-	}
-	if (isAutoGhostActive(6)) maxTreeUpg()
-	if (isAutoGhostActive(11)) {
-		let ag = player.ghostify.automatorGhosts[11]
-		ag.t = (ag.t || 0) + diff
-
-		let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
-		if (tmp.qu.nanofield.producingCharge != start) {
-			startProduceQuarkCharge()
-			if (start) ag.t = 0
-		}
-	}
-	if (isAutoGhostActive(13)) {
-		if (tmp.qu.bigRip.active) {
-			if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u*10) quantumReset(true,true,0,false)
-		} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t*10&&tmp.qu.bigRip.times<(player.ghostify.automatorGhosts[13].o||1/0)) bigRip(true)
-	}
-	if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
-	if (isAutoGhostActive(17)) extract()
-	if (isAutoGhostActive(19)) {
-		let ag = player.ghostify.automatorGhosts[19]
-		let perSec = (player.achievements.includes("ng3p103") ? 10 : 1) / 2
-		ag.t = (ag.t || 0) + diff * perSec
-		let times = Math.floor(ag.t)
-		if (times > 0) {
-			autoMaxAllEnchants(times)
-			ag.t = ag.t - times
-		}
-	}
+	//Ghostify Layer
 	if (player.ghostify.wzb.unl && isAutoGhostActive(21)) {
 		let ag = player.ghostify.automatorGhosts[21]
 		let data = player.ghostify.wzb
@@ -4145,6 +4141,50 @@ function ghostifyAutomationUpdating(diff){
 		if (data.dPUse == 2) {
 			useAntiPreon(1)
 			ag.t = 0
+		}
+	}
+	if (isAutoGhostActive(19)) {
+		let ag = player.ghostify.automatorGhosts[19]
+		let perSec = (player.achievements.includes("ng3p103") ? 10 : 1) / 2
+		ag.t = (ag.t || 0) + diff * perSec
+		let times = Math.floor(ag.t)
+		if (times > 0) {
+			autoMaxAllEnchants(times)
+			ag.t = ag.t - times
+		}
+	}
+	if (isAutoGhostActive(17)) extract()
+	if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
+
+	//Quantum Layer
+	if (player.masterystudies.includes("d13") && isAutoGhostActive(13)) {
+		if (tmp.qu.bigRip.active) {
+			if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u * 10) quantumReset(true, true)
+		} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < (player.ghostify.automatorGhosts[13].o || 1/0)) bigRip(true)
+	}
+
+	if (!tmp.quActive) return
+	if (player.masterystudies.includes("d12")) {
+		let colorShorthands = ["r", "g", "b"]
+		for (let c = 1; c <= 3; c++) {
+			let shorthand = colorShorthands[c - 1]
+			if (isAutoGhostActive(c) && tmp.qu.usedQuarks[shorthand].gt(0) && tmp.qu.tod[shorthand].quarks.eq(0)) unstableQuarks(shorthand)
+			if (isAutoGhostActive(12) && getUnstableGain(shorthand).max(tmp.qu.tod[shorthand].quarks).gte(Decimal.pow(10, Math.pow(2, 50)))) {
+				unstableQuarks(shorthand)
+				radioactiveDecay(shorthand)
+			}
+			if (isAutoGhostActive(5)) maxBranchUpg(shorthand)
+		}
+		if (isAutoGhostActive(6)) maxTreeUpg()
+	}
+	if (player.masterystudies.includes("d11") && isAutoGhostActive(11)) {
+		let ag = player.ghostify.automatorGhosts[11]
+		ag.t = (ag.t || 0) + diff
+
+		let start = tmp.qu.nanofield.producingCharge ? ag.t <= ag.cw : ag.t >= ag.pw
+		if (tmp.qu.nanofield.producingCharge != start) {
+			startProduceQuarkCharge()
+			if (start) ag.t = 0
 		}
 	}
 }

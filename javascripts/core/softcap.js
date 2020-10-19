@@ -503,17 +503,29 @@ var softcap_data = {
 
 	//NG Condensed
 	nds_ngC: {
-		name: "Normal Dimensions (condensed)",
+		name: "Normal Dimensions (NG Condensed)",
 		1: {
 			func: "pow",
-			start: 1e50,
-			pow: 1/3,
+			start() {
+				let x = 1e50
+				if (hasTimeStudy(63)) x = tsMults[63]().times(x)
+				return x
+			},
+			pow() {
+				return hasTimeStudy(63) ? Math.sqrt(1/3) : 1/3
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
-			pow: 1/4,
+			start() {
+				let x = Number.MAX_VALUE
+				if (hasTimeStudy(63)) x = tsMults[63]().times(x)
+				return x
+			},
+			pow() {
+				return hasTimeStudy(63) ? Math.sqrt(1/4) : 1/4
+			},
 			derv: false,
 		},
 		3: {
@@ -521,10 +533,16 @@ var softcap_data = {
 			start: new Decimal("1e10000"),
 			pow: 1/7,
 			derv: false,
+		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e25000000"),
+			pow: 1/11,
+			derv: false,
 		}
 	},
 	ts_ngC: {
-		name: "Tickspeed (condensed)",
+		name: "Tickspeed (NG Condensed)",
 		1: {
 			func: "pow",
 			start: Number.MAX_VALUE,
@@ -541,29 +559,42 @@ var softcap_data = {
 			},
 			derv: false,
 		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e25000"),
+			pow: 1/7,
+			derv: false,
+		},
 	},
 	sac_ngC: {
-		name: "Sacrifice (condensed)",
+		name: "Sacrifice (NG Condensed)",
 		1: {
 			func: "pow",
 			start: 1e25,
-			pow: 1/3,
+			pow() {
+				return hasTimeStudy(196) ? Math.pow(1/3, .2) : 1/3
+			},
 			derv: false,
 		},
 		2: {
 			func: "pow",
-			start: new Decimal(Number.MAX_VALUE),
-			pow: 1/4,
+			start: Number.MAX_VALUE,
+			pow() {
+				return hasTimeStudy(196) ? Math.pow(1/4, .2) : 1/4
+			},
 			derv: false,
 		},
 	},
 	ip_ngC: {
-		name: "Infinity Points (condensed)",
+		name: "Infinity Points (NG Condensed)",
 		1: {
 			func: "pow",
 			start: 1e10,
 			pow() {
-				return player.challenges.includes("postc6") ? .875 : .5
+				let x = .5
+				if (player.challenges.includes("postc6")) x = 7/8
+				if (hasTimeStudy(181)) x = Math.pow(x, .1)
+				return x
 			},
 			derv: false,
 		},
@@ -571,13 +602,51 @@ var softcap_data = {
 			func: "pow",
 			start: 1e30,
 			pow() {
-				return player.challenges.includes("postc6") ? 5/6 : 1/3
+				let x = 1/3
+				if (player.challenges.includes("postc6")) x = 5/6
+				if (hasTimeStudy(181)) x = Math.pow(x, .1)
+				return x
 			},
+			derv: false,
+		},
+		3: {
+			func: "pow",
+			start: new Decimal("1e10000"),
+			pow() {
+				return hasTimeStudy(181) ? Math.pow(1/4, .1) : 1/4
+			},
+			derv: false,
+		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e100000"),
+			pow: 1/5,
+			derv: false,
+		},
+		5: {
+			func: "pow",
+			start: new Decimal("1e950000"),
+			pow: 1/23,
+			derv: false,
+		},
+	},
+	ids_ngC: {
+		name: "Infinity Dimensions (NG Condensed)",
+		1: {
+			func: "pow",
+			start: new Decimal("1e7500"),
+			pow: 0.1,
+			derv: false,
+		},
+		2: {
+			func: "pow",
+			start: new Decimal("1e50000"),
+			pow: 0.08,
 			derv: false,
 		},
 	},
 	rep_ngC: {
-		name: "Replicanti in Replicanti to Infinity Point amount (condensed)",
+		name: "Replicanti in Replicanti to Infinity Point amount (NG Condensed)",
 		1: {
 			func: "pow",
 			start: 1e6,
@@ -592,7 +661,7 @@ var softcap_data = {
 		},
 	},
 	ep_ngC: {
-		name: "Eternity Points (condensed)",
+		name: "Eternity Points (NG Condensed)",
 		1: {
 			func: "pow",
 			start: 1e10,
@@ -601,14 +670,34 @@ var softcap_data = {
 		},
 		2: {
 			func: "pow",
+			start: 1e100,
+			pow: 1/3,
+			derv: false,
+		},
+		3: {
+			func: "pow",
 			start: new Decimal(Number.MAX_VALUE),
+			pow: 1/4,
+			derv: false,
+		},
+		4: {
+			func: "pow",
+			start: new Decimal("1e800"),
+			pow: 1/7,
+			derv: false,
+		},
+	},
+	tds_ngC: {
+		1: {
+			func: "pow",
+			start: new Decimal("1e5000"),
 			pow: 1/3,
 			derv: false,
 		},
 	},
 
-	//NGmX Mods:
-	id_ngm4: {
+	//NG-x Hell:
+	ids_ngm4: {
 		name: "infinity dimension multiplier (NG-4)",
 		1: {
 			func: "pow",
@@ -639,17 +728,21 @@ var softcap_funcs = {
 		return x
 	},
 	log(x, pow = 1, mul = 1, add = 0) {
-		var x2 = Math.pow(Math.log10(x) * mul + add, pow)
+		let x2 = Math.pow(Math.log10(x) * mul + add, pow)
 		return Math.min(x, x2)
 	},
 	log_decimal(x, pow = 1, mul = 1, add = 0) { 
 		//dont we want to return a Decimal since x is a Decimal
-		var x2 = Decimal.pow(x.log10() * mul + add, pow)
+		let x2 = Decimal.pow(x.log10() * mul + add, pow)
 		return Decimal.min(x, x2)
 	},
 	logshift: function (x, shift, pow, add = 0){
-		var x2 = Math.pow(Math.log10(x * shift), pow) + add
+		let x2 = Math.pow(Math.log10(x * shift), pow) + add
 		return Math.min(x, x2)
+	},
+	logshift_decimal: function (x, shift, pow, add = 0){
+		let x2 = Decimal.pow(x.times(shift).log10(), pow).add(add)
+		return Decimal.min(x, x2)
 	}
 }
 
@@ -660,15 +753,19 @@ function do_softcap(x, data, num) {
 	var func = data.func
 	var vars = softcap_vars[func]
 
+	var start = 0
 	var v = [data[vars[0]], data[vars[1]], data[vars[2]], data.active]
-	for (let i = 0; i < 4; i++) if (typeof v[i] == "function") v[i] = v[i]()
+	for (let i = 0; i < 4; i++) {
+		if (typeof v[i] == "function") v[i] = v[i]()
+		if (vars[i] == "start") start = v[i]
+	}
 
-	if (v[4] == false) return x //DO NOT change to if (!v[4])  cause we DONT want undefined to return on this line
+	if (v[4] === false) return x //DO NOT change to if (!v[4])  cause we DONT want undefined to return on this line
 
 	var decimal = false
 	var canSoftcap = false
 	if (x.l != undefined || x.e != undefined) decimal = true
-	if (decimal ? x.gt(data["start"]) : x > data["start"]) canSoftcap = true
+	if (!start || (decimal ? x.gt(start) : x > start)) canSoftcap = true
 
 	if (canSoftcap) return softcap_funcs[func + (decimal ? "_decimal" : "")](x, v[0], v[1], v[2])
 	return "stop"
@@ -731,12 +828,14 @@ function getSoftcapAmtFromId(id){
 		ts_ngC: () => getTickspeed().pow(-1),
 		sac_ngC: () => calcSacrificeBoost(),
 		ip_ngC: () => getInfinityPointGain(),
-		rep_ngC: () => player.replicanti.amount, 
+		ids_ngC: () => getBestUsedIDPower(),
+		rep_ngC: () => player.replicanti.amount,
 		ep_ngC: () => gainedEternityPoints(),
+		tds_ngC: () => getTimeDimensionPower(1),
 
 		//NGmX
 
-		id_ngm4: () => getBestUsedIDPower(),
+		ids_ngm4: () => getBestUsedIDPower(),
 		//this is actually wrong, need to make sure to only take the softcaps of the ones you have unlocked--make a function for it
 	}[id]()
 
@@ -884,9 +983,11 @@ function updateSoftcapStatsTab(){
 		sac_ngC: "softcap_C_sac",
 		ip_ngC: "softcap_C_ip",
 		rep_ngC: "softcap_C_rep",
+		ids_ngC: "softcap_C_id",
 		ep_ngC: "softcap_C_ep",
+		tds_ngC: "softcap_C_td",
 		//NGmX
-		id_ngm4: "softcap_m4_id",
+		ids_ngm4: "softcap_m4_id",
 	}
 	let n = Object.keys(names)
 	let anyActive = false

@@ -143,24 +143,25 @@ function DimensionPower(tier) {
   	if (inQC(3)) return getExtraDimensionBoostPower()
   
 	var mult = getStartingIDPower(tier)
-
-	if (tmp.ngC && ngC.tmp && player.currentChallenge != "postngc_1") {
-		if (player.currentChallenge == "postngc_2") return ngC.tmp.ids[tier]
-		mult = mult.times(ngC.tmp.ids[tier])
-	}
   	mult = mult.times(infDimPow)
 
   	if (hasPU(31)) mult = mult.times(puMults[31]())
-  	if (player.pSac !== undefined) if (tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+  	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
 
 	let replUnl = !tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
-  	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
-  	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow);
+  	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2)
+  	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow)
   	if (player.achievements.includes("r66") && player.galacticSacrifice !== undefined) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
   	if (replUnl && player.galacticSacrifice === undefined) mult = mult.times(getIDReplMult())
 
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
+
+	if (tmp.ngC && player.currentChallenge != "postngc_1") {
+		let cEff = ngC.condense.ids.eff(tier)
+		if (player.currentChallenge == "postngc_2") return cEff
+		mult = mult.times(cEff)
+	}
 
 	if (player.aarexModifications.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
@@ -179,9 +180,8 @@ function DimensionPower(tier) {
   	mult = dilates(mult, 1)
   	if (tmp.quActive) mult = mult.times(colorBoosts.dim.g)
 
-	if (player.aarexModifications.ngmX >= 4){
-		mult = softcap(mult, "id_ngm4")
-	}
+	if (tmp.ngC) mult = softcap(mult, "ids_ngC")
+	if (tmp.ngmX >= 4) mult = softcap(mult, "ids_ngm4")
 
   	return mult
 }
