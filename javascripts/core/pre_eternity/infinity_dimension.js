@@ -1,30 +1,31 @@
 //infinity dimensions
 
 function getInfinityDimensionFinalMultiplier(tier){
-	return DimensionPower(tier)
+	return infDimensionPower(tier)
 }
 
 function getInfinityDimensionMultiplier(tier){
-	return DimensionPower(tier)
+	return infDimensionPower(tier)
 }
 
 function maxAllID() {
 	if (player.pSac !== undefined) maxAllIDswithAM()
-	for (var t = 1; t <= 8; t++) {
-		var dim = player["infinityDimension"+t]
-		var cost = getIDCost(t)
-		if (player.infDimensionsUnlocked[t - 1] && player.infinityPoints.gte(dim.cost)) {
-			var costMult = getIDCostMult(t)
+	for (let t = 1; t <= 8; t++) {
+		let dim = player["infinityDimension"+t]
+		let cost = getIDCost(t)
+		if (player.infDimensionsUnlocked[t - 1] && player.infinityPoints.gte(cost)) {
+			let costMult = getIDCostMult(t)
+			let toBuy
 			if (player.infinityPoints.lt(Decimal.pow(10, 1e10))) {
-				var toBuy = Math.max(Math.floor(player.infinityPoints.div(9 - t).div(cost).times(costMult - 1).add(1).log(costMult)), 1)
-				var toSpend = Decimal.pow(costMult, toBuy).sub(1).div(costMult-1).times(cost).round()
+				toBuy = Math.max(Math.floor(player.infinityPoints.div(9 - t).div(cost).times(costMult - 1).add(1).log(costMult)), 1)
+				let toSpend = Decimal.pow(costMult, toBuy).sub(1).div(costMult-1).times(cost).round()
 				if (toSpend.gt(player.infinityPoints)) player.infinityPoints = new Decimal(0)
 				else player.infinityPoints = player.infinityPoints.sub(toSpend)
-			} else var toBuy = Math.floor(player.infinityPoints.div(cost).log(costMult))
+			} else toBuy = Math.floor(player.infinityPoints.div(cost).log(costMult))
 			dim.amount = dim.amount.add(toBuy * 10)
 			dim.baseAmount += toBuy * 10
-			dim.power=dim.power.times(Decimal.pow(getInfBuy10Mult(t),toBuy))
-			dim.cost=dim.cost.times(Decimal.pow(costMult,toBuy))
+			dim.power = dim.power.times(Decimal.pow(getInfBuy10Mult(t),toBuy))
+			dim.cost = dim.cost.times(Decimal.pow(costMult,toBuy))
 		}
 
 		if (tmp.ngC) ngC.condense.ids.max(t)
@@ -33,11 +34,11 @@ function maxAllID() {
 
 function hideMaxIDButton(onLoad = false) {
 	if (!onLoad) if (!tmp.ngp3) return
-	var hide = true
+	let hide = true
 	if (tmp.ngp3 && player.currentEterChall != "eterc8") {
 		hide = false
 		if (player.eternities > 17) {
-			for (var d = 0; d < 8; d++) {
+			for (let d = 0; d < 8; d++) {
 				if (player.infDimBuyers[d] && d > 6) hide = true
 				else break
 			}
@@ -47,20 +48,21 @@ function hideMaxIDButton(onLoad = false) {
 	document.getElementById("maxAllID").style.display = hide ? "none" : ""
 }
 
-function DimensionDescription(tier) {
+function infDimensionDescription(tier) {
 	if (tier > (inQC(4) || player.pSac != undefined ? 6 : 7) && (ECTimesCompleted("eterc7") === 0 || player.timeDimension1.amount.eq(0) || tier == 7) && player.currentEternityChall != "eterc7") return getFullExpansion(Math.round(player["infinityDimension" + tier].amount.toNumber()));
 	else if (player.infinityPower.l > 1e7) return shortenDimensions(player['infinityDimension' + tier].amount)
-	else return shortenDimensions(player['infinityDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, DimensionRateOfChange(tier), 2, 2) + dimDescEnd;
+	else return shortenDimensions(player['infinityDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, infDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
 }
 
-function DimensionRateOfChange(tier) {
-	var toGain = DimensionProduction(tier + ((inQC(4) || player.pSac !== undefined) && tier < 8 ? 2 : 1))
+function infDimensionRateOfChange(tier) {
+	let toGain = infDimensionProduction(tier + ((inQC(4) || player.pSac !== undefined) && tier < 8 ? 2 : 1))
 	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
-	var current = Decimal.max(player["infinityDimension"+tier].amount, 1);
+	let current = Decimal.max(player["infinityDimension"+tier].amount, 1);
+	let change
 	if (player.aarexModifications.logRateChange) {
-		var change = current.add(toGain.div(10)).log10()-current.log10()
+		change = current.add(toGain.div(10)).log10()-current.log10()
 		if (change < 0 || isNaN(change)) change = 0
-	} else var change  = toGain.times(tier > 7 ? 1 : 10).dividedBy(current);
+	} else change = toGain.times(tier > 7 ? 1 : 10).dividedBy(current);
 	return change;
 }
 
@@ -68,11 +70,11 @@ function updateInfinityDimensions() {
 	if (document.getElementById("dimensions").style.display == "block" && document.getElementById("infinitydimensions").style.display == "block") {
 		updateInfPower()
 		for (let tier = 1; tier <= 8; ++tier) {
-			var unl = player.infDimensionsUnlocked[tier-1]
+			let unl = player.infDimensionsUnlocked[tier-1]
 			document.getElementById("infRow" + tier).style.display = unl ? "" : "none"
 			if (unl) {
-				document.getElementById("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(DimensionPower(tier));
-				document.getElementById("infAmount" + tier).textContent = DimensionDescription(tier);
+				document.getElementById("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
+				document.getElementById("infAmount" + tier).textContent = infDimensionDescription(tier);
 				document.getElementById("infMax" + tier).textContent = (ph.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
 				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) document.getElementById("infMax"+tier).className = "storebtn"
 				else document.getElementById("infMax" + tier).className = "unavailablebtn"
@@ -83,24 +85,24 @@ function updateInfinityDimensions() {
 	}
 }
 
-function DimensionProduction(tier) {
+function infDimensionProduction(tier) {
 	if (inQC(8)) return new Decimal(0)
 	if (tier == 9) return getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7") * 0.2).max(1).minus(1)
-	var dim = player["infinityDimension" + tier]
-	var ret = dim.amount
+	let dim = player["infinityDimension" + tier]
+	let ret = dim.amount
 	if (inQC(4) && tier == 1) ret = ret.plus(player.infinityDimension2.amount.floor())
 	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
 	if (player.currentEternityChall == "eterc11") return ret
 	if (player.currentEternityChall == "eterc7") ret = dilates(ret.dividedBy(player.tickspeed.dividedBy(1000)))
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(100)
-	ret = ret.times(DimensionPower(tier))
+	ret = ret.times(infDimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
 	if (player.challenges.includes("postc6") && !inQC(3)) return ret.times(Decimal.div(1000, dilates(player.tickspeed)).pow(0.0005))
 	return ret
 }
 
 function getTotalIDEUMult(){
-	var mult = new Decimal(1)
+	let mult = new Decimal(1)
 	if (hasEternityUpg(1)) mult = mult.times(player.eternityPoints.plus(1))
 	if (hasEternityUpg(2)) mult = mult.times(getEU2Mult())
 	if (hasEternityUpg(3)) mult = mult.times(getEU3Mult())
@@ -108,7 +110,7 @@ function getTotalIDEUMult(){
 }
 
 function getInfDimPathIDMult(tier){
-	var mult = new Decimal(1)
+	let mult = new Decimal(1)
 	if (hasTimeStudy(72) && tier == 4) mult = mult.times(tmp.sacPow.pow(0.04).max(1).min("1e30000"))
 	if (hasTimeStudy(82)) mult = mult.times(Decimal.pow(1.0000109, Math.pow(player.resets, 2)).min(player.meta == undefined ? 1 / 0 : '1e80000'))
 	if (hasTimeStudy(92)) mult = mult.times(Decimal.pow(2, 600 / Math.max(player.bestEternity, 20)))
@@ -119,30 +121,30 @@ function getInfDimPathIDMult(tier){
 function getBestUsedIDPower(){
 	let p = new Decimal(1)
 	for (let i = 1; i <= 8; i++){
-		if (player.infinityDimension1.amount.gt(0)) p = p.max(DimensionPower(i))
+		if (player.infinityDimension1.amount.gt(0)) p = p.max(infDimensionPower(i))
 	}
 	return p
 }
 
 function getStartingIDPower(tier){
-	var dim = player["infinityDimension" + tier]
-	var mult = dim.power
-	if (mult.gt(1)){
-		var log = mult.log10()
+	let dim = player["infinityDimension" + tier]
+	let mult = dim.power
+	if (mult.gt(1) && tmp.ngp3){
+		let log = mult.log10()
 		log = softcap(log, "idbase")
 		mult = Decimal.pow(10, log)
 	}
 	return mult
 }
 
-function DimensionPower(tier) {
-  	var dim = player["infinityDimension" + tier]
+function infDimensionPower(tier) {
+  	let dim = player["infinityDimension" + tier]
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
   	if (player.currentEternityChall == 'eterc14') return getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
   
-	var mult = getStartingIDPower(tier)
+	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
 
   	if (hasPU(31)) mult = mult.times(puMults[31]())
@@ -167,7 +169,7 @@ function DimensionPower(tier) {
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
 
-  	var ec9 = new Decimal(1)
+  	let ec9 = new Decimal(1)
   	if (ECTimesCompleted("eterc9") !== 0) ec9 = getECReward(9)
   	if (player.galacticSacrifice === undefined) mult = mult.times(ec9)
 
@@ -188,7 +190,7 @@ function DimensionPower(tier) {
 
 function resetInfDimensions(full) {
 	player.infinityPower = new Decimal(0)
-	for (var t = 1; t < 9; t++) {
+	for (let t = 1; t < 9; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
 			dim.cost = new Decimal(infBaseCost[t])
@@ -204,7 +206,7 @@ function resetInfDimensions(full) {
 function resetInfDimUnlocked() {
 	let value = player != undefined && getEternitied() >= 25 && player.achievements.includes("ng3p21")
 	let data = []
-	for (var d = 1; d <= 8; d++) data.push(value)
+	for (let d = 1; d <= 8; d++) data.push(value)
 	if (player != undefined && player.pSac != undefined) data[0] = true
 	return data
 }
@@ -247,8 +249,8 @@ function getInfBuy10Mult(tier) {
 function buyManyInfinityDimension(tier, auto) {
   	if (player.pSac !== undefined) buyIDwithAM(tier, auto)
   	if (player.eterc8ids <= 0 && player.currentEternityChall == "eterc8") return false
-  	var dim = player["infinityDimension" + tier]
-  	var cost = getIDCost(tier)
+  	let dim = player["infinityDimension" + tier]
+  	let cost = getIDCost(tier)
   	if (player.infinityPoints.lt(cost)) return false
   	if (!player.infDimensionsUnlocked[tier - 1]) return false
 	if (player.eterc8ids == 0) return false
@@ -268,13 +270,13 @@ function buyManyInfinityDimension(tier, auto) {
 function buyMaxInfDims(tier, auto) {
 	if (tmp.ngC) ngC.condense.ids.max(tier)
 
-	var dim = player["infinityDimension"+tier]
-	var cost = getIDCost(tier)
+	let dim = player["infinityDimension"+tier]
+	let cost = getIDCost(tier)
 	if (player.infinityPoints.lt(cost)) return false
 	if (!player.infDimensionsUnlocked[tier-1]) return false
 
-	var costMult = getIDCostMult(tier)
-	var toBuy = Math.floor(player.infinityPoints.div(cost).log10() / Math.log10(costMult))
+	let costMult = getIDCostMult(tier)
+	let toBuy = Math.floor(player.infinityPoints.div(cost).log10() / Math.log10(costMult))
 	dim.cost = dim.cost.times(Decimal.pow(costMult, toBuy-1))
 	if (player.infinityPoints.lt(Decimal.pow(10, 1e10))) player.infinityPoints = player.infinityPoints.minus(getIDCost(tier).min(player.infinityPoints))
 	dim.cost = dim.cost.times(costMult)
@@ -331,12 +333,12 @@ function switchAutoInf(tier) {
 
 function toggleAllInfDims() {
 	if (player.infDimBuyers[0]) {
-		for (var i = 1; i <= 8; i++) {
+		for (let i = 1; i <= 8; i++) {
 			player.infDimBuyers[i - 1] = false
 			document.getElementById("infauto" + i).textContent = "Auto: OFF"
 		}
 	} else {
-		for (var i=1; i <= 8; i++) {
+		for (let i=1; i <= 8; i++) {
 			if (getEternitied() - 10 >= i) {
 				player.infDimBuyers[i - 1] = true
 				document.getElementById("infauto" + i).textContent = "Auto: ON"
@@ -347,7 +349,7 @@ function toggleAllInfDims() {
 }
 
 function loadInfAutoBuyers() {
-	for (var i = 1; i <= 8; i++) {
+	for (let i = 1; i <= 8; i++) {
 		if (player.infDimBuyers[i - 1]) document.getElementById("infauto" + i).textContent = "Auto: ON"
 		else document.getElementById("infauto" + i).textContent = "Auto: OFF"
 	}
@@ -368,7 +370,7 @@ function getEU2Eternities(){
 }
 
 function getEU2Mult() {
-	var e = getEU2Eternities() 
+	let e = getEU2Eternities() 
 	/*
 	the reason I softcapped eternities is because they caused balance issues 
 	when you got a lot of eternities (from tmp.e50kdt being true <==> that broken DT upgrade)
@@ -379,10 +381,10 @@ function getEU2Mult() {
 	*/
 	if (typeof(e) == "number" && isNaN(e)) e = 0
 	if (player.boughtDims) return Decimal.pow(e, Decimal.times(e,2).add(1).log(4))
-	var cap = nMn(e, 1e5)
-	var soft = 0
+	let cap = nMn(e, 1e5)
+	let soft = 0
 	if (e > 1e5) soft = nS(e, cap)
-	var achReward = 1
+	let achReward = 1
 	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(Decimal.add(e, 10)), 4.75))
 	let div1 = tmp.ngC ? 100 : 200
 	let div2 = tmp.ngC ? 2 : 4
@@ -399,9 +401,9 @@ function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
 	if (player.galacticSacrifice && player.pSac == undefined) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
-	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(DimensionProduction(1))+" Seventh Dimensions per second."
+	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
-		let r = DimensionProduction(1)
+		let r = infDimensionProduction(1)
 		if (player.pSac != undefined) r = r.div(tmp.ec12Mult)
 		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per second."
 	}
@@ -434,7 +436,6 @@ function getNewInfReq() {
 		reqs[6] = new Decimal("1e40500")
 		reqs[7] = new Decimal("1e53000")
 	}
-	for (var tier = 1; tier < 8; tier++) if (!player.infDimensionsUnlocked[tier - 1]) return {money: reqs[tier - 1], tier: tier}
-	return {money: reqs[7], tier: 8}
+	for (let tier = 1; tier <= 8; tier++) if (!player.infDimensionsUnlocked[tier - 1] || tier == 8) return {money: reqs[tier - 1], tier: tier}
 }
 

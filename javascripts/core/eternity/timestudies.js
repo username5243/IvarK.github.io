@@ -125,10 +125,6 @@ function buyTimeStudy(name, quickBuy) {
 	}
 }
 
-function getDilationTotalTTReq() {
-	return tmp.ngex ? 12950 : 13000
-}
-
 function buyDilationStudy(name, cost) {
 	if (player.timestudy.theorem >= cost && !player.dilation.studies.includes(name) && (player.dilation.studies.includes(name - 1) || name < 2)) {
 		if (name < 2) {
@@ -151,33 +147,105 @@ function buyDilationStudy(name, cost) {
 }
 
 function hasRow(row) {
-	for (var i=0; i<player.timestudy.studies.length; i++) {
+	for (let i = 0; i < player.timestudy.studies.length; i++) {
 		if (Math.floor(player.timestudy.studies[i]/10) == row) return true
 	}
+	return false
+}
+
+function hasTS(num){
+	return player.timestudy.studies.includes(num)
 }
 
 function canBuyStudy(name) {
-	var row = Math.floor(name / 10)
-	var col = name % 10
+	let row = Math.floor(name / 10)
+	let col = name % 10
+	let total = getTotalTT(player)
+	let totalChalls = tmp.ec
 
-	if (name == 33) {
-		return player.timestudy.studies.includes(21) 
-	}
+	if (name == 33) return player.timestudy.studies.includes(21) 
+	
 	if (name == 62) {
-		return player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42)
+		return player.eternityChalls.eterc5 !== undefined && hasTS(42)
 	}
-	if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) {
-		return false;
-	}
-	if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) {
-		return false;
-	}
+	if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) return false;
+
+	if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) return false;
+
 	if (name == 181) {
 		return player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)
 	}
-	if (name == 201) return player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)
-	if (name == 211 || name == 212) return player.timestudy.studies.includes(191)
-	if (name == 213 || name == 214) return player.timestudy.studies.includes(193)
+	if (name == 201) return hasTS(192) && !player.dilation.upgrades.includes(8)
+	if (name == 211 || name == 212) return hasTS(191)
+	if (name == 213 || name == 214) return hasTS(193)
+
+	if (ngcStudies.includes(name)) {
+		if (!tmp.ngC) return false
+		switch(name) {
+			case 12: 
+				return hasTS(11)
+				break;
+			case 23:
+				return hasTS(21)
+				break; 
+			case 24: 
+			case 34:
+				return hasTS(22)
+				break; 
+			case 25: 
+				return hasTS(13)
+				break; 
+			case 35: 
+				return hasTS(34) && (player.infinityPoints.plus(1).log10() >= 9000 || player.eternityUpgrades.includes(11))
+				break;
+			case 43: 
+				return hasTS(33)
+				break;
+			case 44: 
+				return hasTS(34)
+				break;
+			case 52: 
+				return hasTS(41)
+				break;
+			case 63:
+				return hasTS(52) || hasTS(61)
+				break;
+			case 112:
+				return total >= 250 && hasTS(111)
+				break;
+			case 113:
+				return total >= 1800 && hasTS(112)
+				break; 
+			case 152:
+				return totalChalls >= 20 && hasTS(141)
+				break;
+			case 172:
+				return totalChalls >= 10 && hasTS(161)
+				break;
+			case 173:
+				return totalChalls >= 20 && hasTS(162)
+				break; 
+			case 194:
+				return hasTS(191)
+				break;
+			case 195:
+			case 196:
+			case 197:
+				return hasTS(name - 2)
+				break;
+			case 202:
+			case 203:
+				return hasTS(name - 8)
+				break;
+
+		}
+	}
+
+	if (tmp.ngC) {
+		if (name == 61 && total < 18) return false
+		if (name == 151 && total < 195) return false
+		if (name == 171 && total < 200) return false
+	}
 
 	switch(row) {
 
@@ -203,12 +271,13 @@ function canBuyStudy(name) {
 			if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
 			break;
 		case 12:
-			if (hasRow(row-1) && (!hasRow(row) || (player.masterystudies ? player.masterystudies.includes("t272") : false))) return true; else return false
+			if (hasRow(row-1) && (!hasRow(row) || (player.eternityUpgrades.includes(10) && tmp.ngC) || (player.masterystudies ? player.masterystudies.includes("t272") : false))) return true; else return false
 			break;
 		case 7:
 			if (!player.timestudy.studies.includes(61)) return false;
 			if (player.dilation.upgrades.includes(8)) return true;
-			var have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
+			if (player.eternityUpgrades.includes(10) && tmp.ngC) return true;
+			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
 			if (player.timestudy.studies.includes(201)) return have < 2;
 			return have < 1;
 			break;
@@ -218,11 +287,12 @@ function canBuyStudy(name) {
 			break;
 
 		case 22:
-			return player.timestudy.studies.includes(210 + Math.round(col/2)) && (((name%2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1)) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
+			if (tmp.ngC && total < 4500) return false;
+			return player.timestudy.studies.includes(210 + Math.round(col/2)) && (((name % 2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1)) || (player.eternityUpgrades.includes(11) && tmp.ngC) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
 			break;
 
 		case 23:
-			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
+			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
 			break;
 	}
 }
@@ -308,7 +378,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 		if (!player.timestudy.studies.includes(id)) updateTimeStudyClass(id, canBuyStudy(id) && player.timestudy.theorem >= studyCosts[id] ? "" : "locked")
 	}
 
-	for (var i = 1; i < 7; i++) {
+	for (let i = 1; i < 7; i++) {
 		if (player.dilation.studies.includes(i)) document.getElementById("dilstudy"+i).className = "dilationupgbought"
 		else if (player.timestudy.theorem >= ([null, 5e3, 1e6, 1e7, 1e8, 1e9, 1e24])[i] && (player.dilation.studies.includes(i - 1) || (i < 2 && ECTimesCompleted("eterc11") > 4 && ECTimesCompleted("eterc12") > 4 && getTotalTT(player) >= 13e3))) document.getElementById("dilstudy" + i).className = "dilationupg"
 		else document.getElementById("dilstudy" + i).className = "timestudylocked"
@@ -338,7 +408,7 @@ function updateBoughtTimeStudy(id) {
 }
 
 function updateBoughtTimeStudies() {
-	for (var i = 0; i < player.timestudy.studies.length; i++) {
+	for (let i = 0; i < player.timestudy.studies.length; i++) {
 		let id = player.timestudy.studies[i]
 		if (typeof(id) != "number") id = parseInt(id)
 		if (!all.includes(id)) continue
@@ -347,17 +417,17 @@ function updateBoughtTimeStudies() {
 }
 
 function studiesUntil(id) {
-	var col = id % 10;
-	var row = Math.floor(id / 10);
-	var path = [0,0];
-	for (var i = 1; i < 4; i++){
+	let col = id % 10;
+	let row = Math.floor(id / 10);
+	let path = [0,0];
+	for (let i = 1; i < 4; i++){
 		if (player.timestudy.studies.includes(70 + i)) path[0] = i;
 		if (player.timestudy.studies.includes(120 + i)) path[1] = i;
 	}
 	if ((row > 10 && path[0] === 0) || (row > 14 && path[1] === 0)) {
 		return;
 	}
-	for (var i = 1; i < row; i++) {
+	for (let i = 1; i < row; i++) {
 		var chosenPath = path[i > 11 ? 1 : 0];
 		if (row > 6 && row < 11) var secondPath = col;
 		if ((i > 6 && i < 11) || (i > 11 && i < 15)) buyTimeStudy(i * 10 + (chosenPath === 0 ? col : chosenPath), true);
@@ -444,13 +514,13 @@ function respecUnbuyableTimeStudies() {
 
 function getTotalTT(tree) {
 	tree = tree.timestudy
-	var result = tree.theorem
+	let result = tree.theorem
 	if (tree.boughtDims) {
-		for (var id = 1; id < 7; id++) result += tree.ers_studies[id] * (tree.ers_studies[id] + 1) / 2
+		for (let id = 1; id < 7; id++) result += tree.ers_studies[id] * (tree.ers_studies[id] + 1) / 2
 		return result
 	} else {
-		var ecCosts = [null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1]
-		for (var id = 0; id < all.length; id++) if (tree.studies.includes(all[id])) result += studyCosts[all[id]]
+		let ecCosts = [null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1]
+		for (let id = 0; id < all.length; id++) if (tree.studies.includes(all[id])) result += studyCosts[all[id]]
 		return result + ecCosts[player.eternityChallUnlocked]
 	}
 }
@@ -773,20 +843,29 @@ let tsMults = {
 		return Decimal.pow(10, log)
 	},
 	32() {
-		return Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1)
+		let ret = Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1)
+		if (player.timestudy.studies.includes(197) && tmp.ngC) ret = Math.pow(ret, 3)
+		return ret
 	},
 	41() {
+		if (tmp.ngC) return 1.1
 		return player.aarexModifications.newGameExpVersion ? 1.5 : 1.2
 	},
 	42() {
+		if (tmp.ngC) return 29/30
 		return (player.aarexModifications.newGameExpVersion ? 12 : 13) / 15
 	},
+	51(){
+		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * (player.replicanti.galaxies + 1), 160)
+		return player.aarexModifications.newGameExpVersion ? 1e30 : 1e15
+	},
 	61() {
-		return player.aarexModifications.newGameExpVersion ? 100 : 10
+		return tmp.ngC ? Decimal.pow(25, Math.log10(player.replicanti.amount.max(1).log10()/308.25+1)/Math.log10(2)) : (tmp.newNGP3E ? 100 : 10)
 	},
 	62() {
 		let r = player.aarexModifications.newGameExpVersion ? 4 : 3
 		if (tmp.ngex) r--
+		if (tmp.ngC) r/=2
 		return r
 	},
 	211() {
@@ -794,11 +873,11 @@ let tsMults = {
 	},
 	212() {
 		let r = player.timeShards.max(2).log2()
-		if (player.aarexModifications.newGameExpVersion) return Math.min(Math.pow(r, 0.006), 1.15)
+		if (player.aarexModifications.newGameExpVersion || tmp.ngC) return Math.min(Math.pow(r, 0.006), 1.15)
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213() {
-		return tmp.ngex ? 10 : 20
+		return tmp.ngC ? 2 : (tmp.ngex ? 10 : 20)
 	},
 	222() {
 		return player.galacticSacrifice === undefined ? 2 : .5
@@ -821,7 +900,7 @@ let tsMults = {
 		ip = ip.div("1e9500")
 
 		let x = Decimal.pow(ip.plus(1).log10()/100+1, 4).max(10)
-		if (reached && ip.lt(1)) x = new Decimal(10)
+		if (reached && ip.lt(1)) x = new Decimal(10) //this does nothing?
 		return x
 	},
 	43() {
@@ -858,12 +937,12 @@ let tsMults = {
 	},
 	202() {
 		let cond = player.condensed.normal.reduce((a,c) => (a||0)+(c||0))
-		let x = Decimal.pow("1e25000", Math.sqrt(cond))
+		let x = Decimal.pow(10, 25000 * Math.sqrt(cond))
 		return x
 	},
 	203() {
 		let cond = player.condensed.time.reduce((a,c) => (a||0)+(c||0))
-		let x = Decimal.pow(1e50, Math.sqrt(cond))
+		let x = Decimal.pow(10, 50 * Math.sqrt(cond))
 		return x
 	}
 }

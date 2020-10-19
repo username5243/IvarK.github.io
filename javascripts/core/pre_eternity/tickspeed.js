@@ -1,6 +1,7 @@
 function getTickSpeedMultiplier() {
 	let ret = new Decimal(getGalaxyTickSpeedMultiplier())
 	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(5)) ret = ret.div(getBreakUpgMult(5))
+	if (tmp.ngC && player.timestudy.studies.includes(25)) ret = ret.div(tsMults[25]())
 	if (inNC(6, 2)) ret = ret.add(player.resets * 1e-3)
 	return ret.min(1)
 }
@@ -45,6 +46,7 @@ function getGalaxyPower(ng, bi, noDil) {
 	let galaxyPower = ng
 	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
 	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) galaxyPower *= galaxyPower
+	if (player.timestudy.studies.includes(173) && tmp.ngC) galaxyPower *= 3
 	return galaxyPower
 }
 
@@ -82,6 +84,7 @@ function getGalaxyEff(bi) {
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (hasTimeStudy(212)) eff *= tsMults[212]()
 	if (hasTimeStudy(232) && bi) eff *= tmp.ts232
+	if (tmp.ngC) eff *= getECReward(11) || 1 // yeah this'll be issues
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r
@@ -101,7 +104,7 @@ function getGalaxyTickSpeedMultiplier() {
 	let g = initialGalaxies()
 	if ((player.currentChallenge == "postc3" || isIC3Trapped()) && !tmp.be) {
 		if (player.currentChallenge == "postcngmm_3" || player.challenges.includes("postcngmm_3")) {
-			var base = player.tickspeedBoosts != undefined ? 0.9995 : 0.998
+			let base = player.tickspeedBoosts != undefined ? 0.9995 : 0.998
 			if (player.aarexModifications.ngmX >= 4 && player.challenges.includes("postcngmm_3")) base = .9998
 			return Decimal.pow(base, getGalaxyPower(g) * getGalaxyEff(true))
 		}
@@ -133,7 +136,7 @@ function getGalaxyTickSpeedMultiplier() {
 	}
 	let perGalaxy = player.infinityUpgradesRespecced != undefined ? 0.98 : 0.965
 
-	var log = Math.log10(perGalaxy)*(galaxies-linearGalaxies)+Math.log10(baseMultiplier)
+	let log = Math.log10(perGalaxy)*(galaxies-linearGalaxies)+Math.log10(baseMultiplier)
 	if (log < 0) log = -softcap(-log, "ts_reduce_log")
 	return Decimal.pow(10, log)
 }
@@ -159,7 +162,7 @@ function getPostC3Base() {
 		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
 		else perGalaxy *= tmp.cp / 5 + .8
 	}
-	var g=initialGalaxies()
+	let g = initialGalaxies()
 	perGalaxy *= getGalaxyEff()
 	let ret = getGalaxyPower(g) * perGalaxy + 1.05
 	if (inNC(6, 1) || player.currentChallenge == "postc1") ret -= player.aarexModifications.ngmX > 3 ? 0.02 : 0.05
@@ -256,7 +259,7 @@ function getTickSpeedCostMultiplierIncrease() {
 	if (!tmp.quActive && GUBought("gb4")) ret = 1.65
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)
 	else if (player.challenges.includes('postcngmm_2')) {
-		var galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
+		let galeff = (1 + Math.pow(player.galaxies, 0.7) / 10)
 		if (player.aarexModifications.ngmX >= 4) galeff = Math.pow(galeff, .2)
 		ret = Math.pow(ret, exp / galeff)
 	}
@@ -264,14 +267,14 @@ function getTickSpeedCostMultiplierIncrease() {
 }
 
 function buyMaxPostInfTickSpeed(mult) {
-	var mi = getTickSpeedCostMultiplierIncrease()
-	var a = Math.log10(Math.sqrt(mi))
-	var b = player.tickspeedMultiplier.dividedBy(Math.sqrt(mi)).log10()
-	var c = player.tickSpeedCost.dividedBy(player.money).log10()
-	var discriminant = Math.pow(b, 2) - (c * a * 4)
+	let mi = getTickSpeedCostMultiplierIncrease()
+	let a = Math.log10(Math.sqrt(mi))
+	let b = player.tickspeedMultiplier.dividedBy(Math.sqrt(mi)).log10()
+	let c = player.tickSpeedCost.dividedBy(player.money).log10()
+	let discriminant = Math.pow(b, 2) - (c * a * 4)
 	if (discriminant < 0) return false
 
-	var buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1
+	let buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1
 	if (buying <= 0) return false
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
 	reduceMatter(buying)
@@ -303,7 +306,7 @@ function buyMaxTickSpeed() {
 		let base = player.tickspeedMultiplier.toNumber()
 		let max = Number.POSITIVE_INFINITY
 		if (!inNC(10) && player.currentChallenge != "postc1" && player.infinityUpgradesRespecced == undefined) max = Math.ceil(Decimal.div(Number.MAX_VALUE, cost).log(base))
-		var toBuy = Math.min(Math.floor(player.money.div(cost).times(base - 1).add(1).log(base)), max)
+		let toBuy = Math.min(Math.floor(player.money.div(cost).times(base - 1).add(1).log(base)), max)
 		getOrSubResource(1, Decimal.pow(base, toBuy).sub(1).div(base - 1).times(cost))
 		reduceMatter(toBuy)
 		if (!tmp.be || player.currentEternityChall == "eterc10") {
@@ -314,7 +317,7 @@ function buyMaxTickSpeed() {
 		player.postC8Mult = new Decimal(1)
 		if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
 	}
-	var mult = tmp.tsReduce
+	let mult = tmp.tsReduce
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
 	if (cannotUsePostInfTickSpeed()) {
 		while (player.money.gt(player.tickSpeedCost) && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined))) {
@@ -338,7 +341,7 @@ function buyMaxTickSpeed() {
 }
 
 function getTickspeed() {
-	var tick = player.tickspeed
+	let tick = player.tickspeed
 	if (player.infinityUpgradesRespecced != undefined) {
 		tick = Decimal.div(1000, tick)
 		if (tick.gt(1e25)) tick = Decimal.pow(10, Math.sqrt(tick.log10()) * 5)
@@ -346,34 +349,36 @@ function getTickspeed() {
 		tick = Decimal.div(1000, tick)
 	}
 	if (tmp.ngp3) {
-		var log = -tick.log10()
+		let log = -tick.log10()
 		log = softcap(log, "working_ts")
 		tick = Decimal.pow(10, -log)
 	}
 	if (tmp.ngC) {
-		for (let i=1;i<=4;i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
+		for (let i = 1; i <= 4; i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
 		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
+		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), player.resets))
 		tick = softcap(tick.pow(-1), "ts_ngC").pow(-1)
+		if (player.currentEternityChall=="eterc7") return new Decimal(1000)
 	}
 	return tick
 }
 
 function getTickspeedText(ts) {
-	var exp = ts.e
+	let exp = ts.e
 	if (isNaN(exp)) return 'Infinite'
 	if (exp > 1) return ts.toFixed(0)
 
-	var expExp = Math.max(Math.min(Math.ceil(15 - Math.log10(2 - exp)), 3), 0)
+	let expExp = Math.max(Math.min(Math.ceil(15 - Math.log10(2 - exp)), 3), 0)
 	if (expExp == 0) return shortenCosts(Decimal.div(1000, ts)) + "/s"
 	return Math.min(ts.m * Math.pow(10, expExp - 1), Math.pow(10, expExp) - 1).toFixed(0) + ' / ' + shortenCosts(Decimal.pow(10, 2 - exp))
 }
 
 function updateTickspeed() {
-	var showTickspeed = player.tickspeed.lt(1e3) || (player.currentChallenge != "postc3" && !isIC3Trapped()) || player.currentChallenge == "postcngmm_3" || (player.challenges.includes("postcngmm_3") && player.tickspeedBoosts === undefined) || tmp.be
-	var label = ""
+	let showTickspeed = player.tickspeed.lt(1e3) || (player.currentChallenge != "postc3" && !isIC3Trapped()) || player.currentChallenge == "postcngmm_3" || (player.challenges.includes("postcngmm_3") && player.tickspeedBoosts === undefined) || tmp.be
+	let label = ""
 	if (showTickspeed) {
-		var tick = getTickspeed()
-		var name = tick.e <= -1e15 ? "Ticks" : "Tickspeed"
+		let tick = getTickspeed()
+		let name = tick.e <= -1e15 ? "Ticks" : "Tickspeed"
 		if (tick.gt(player.tickspeed)) name = "Working " + name
 		label = name + ": " + getTickspeedText(tick)
 	}
@@ -392,7 +397,7 @@ function updateTickspeed() {
 	if (speeds.length >= 1) label += ", Game speed: " + factorizeDescs(speeds, speedDescs) + (tmp.gameSpeed < 1 ? shorten(1 / tmp.gameSpeed) + "x slower" : shorten(tmp.gameSpeed) + "x faster")
 
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && inNC(14)) {
-		label += "<br>You have "+(308-player.tickBoughtThisInf.current)+" tickspeed purchases left."
+		label += "<br>You have " + (308 - player.tickBoughtThisInf.current) + " tickspeed purchases left."
 		document.getElementById("tickSpeedAmount").innerHTML = label
 	} else document.getElementById("tickSpeedAmount").textContent = label
 }

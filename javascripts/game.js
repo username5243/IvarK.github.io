@@ -2283,13 +2283,22 @@ function reset_game() {
 	startInterval()
 };
 
+function getEPGainBase() {
+	let base = 308
+	if (player.achievements.includes("ng3p23")) base = 307.8
+	if (hasTS(112) && tmp.ngC) base /= 2
+	if (hasTS(113) && tmp.ngC) base /= 1.5
+	return base;
+}
+
 function gainedEternityPoints() {
-	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / (player.achievements.includes("ng3p23") ? 307.8 : 308) - 0.7).times(player.epmult)
+	let uEPM = player.dilation.upgrades.includes("ngp3c7") && tmp.ngC
+	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(uEPM ? 1 : player.epmult)
 	if (player.aarexModifications.newGameExpVersion) ret = ret.times(10)
 	if (hasTimeStudy(61)) ret = ret.times(tsMults[61]())
-	if (hasTimeStudy(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
-	else if (hasTimeStudy(122)) ret = ret.times(35)
-	else if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
+	if (hasTimeStudy(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
+	if (hasTimeStudy(122)) ret = ret.times(35)
+	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3) {
 		if (player.quantum.bigRip.active) {
@@ -2298,6 +2307,9 @@ function gainedEternityPoints() {
 		}
 		if (tmp.be) ret = ret.times(getBreakUpgMult(7))
 	}
+	if (tmp.ngC) ret = softcap(ret, "ep_ngC")
+	if (hasTS(172) && tmp.ngC) ret = ret.times(tsMults[172]())
+	if (uEPM) ret = ret.times(player.epmult)
 	return ret.floor()
 }
 
@@ -2555,6 +2567,7 @@ function calcSacrificeBoostBeforeSoftcap() {
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(player.aarexModifications.ngmX>3?0.05:0.04).max(1)).max(1)
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + player.timestudy.ers_studies[1] / 5)))
 	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
+	if (hasTS(196)) ret = ret.pow(20)
 	return ret
 }
 
@@ -2578,6 +2591,7 @@ function calcTotalSacrificeBoostBeforeSoftcap(next) {
 	} else ret = player.chall11Pow 
 	if (player.boughtDims) ret = ret.pow(1 + Math.log(1 + Math.log(1 + (player.timestudy.ers_studies[1] + (next ? 1 : 0))/ 5)))
 	if (tmp.ngC) ret = ret.pow(ngC.getSacrificeExpBoost())
+	if (hasTS(196)) ret = ret.pow(20)
 	return ret
 }
 
@@ -2586,6 +2600,7 @@ function calcSacrificeBoost() {
 	if (tmp.ngC) {
 		let total = calcTotalSacrificeBoostBeforeSoftcap()
 		ret = softcap(ret.times(total), "sac_ngC").div(tmp.sacPow)
+		if (hasTS(196)) ret = ret.pow(20)
 	}
 	return ret.max(1)
 }
@@ -2593,6 +2608,7 @@ function calcSacrificeBoost() {
 function calcTotalSacrificeBoost(next) {
 	let ret = calcTotalSacrificeBoostBeforeSoftcap(next)
 	if (tmp.ngC) ret = softcap(ret, "sac_ngC")
+	if (hasTS(196)) ret = ret.pow(20)	
 	return ret
 }
 
@@ -3472,9 +3488,12 @@ function gainEternitiedStat() {
 	if (ph.did("ghostify")) {
 		if (hasNU(9)) ret = nM(ret, tmp.qu.bigRip.spaceShards.max(1).pow(.1))
 	}
+	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
+	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
 	if (ph.did("quantum") && player.eternities < 1e5) ret = Math.max(ret, 20)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
+	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
 	if (typeof(ret) == "number") ret = Math.floor(ret)
 	return ret
 }
@@ -3647,7 +3666,7 @@ function updateNGpp17Reward(){
 }
 
 function updateNGpp16Reward(){
-	document.getElementById('replicantibulkmodetoggle').style.display=player.achievements.includes("ngpp16")?"inline-block":"none"
+	document.getElementById('replicantibulkmodetoggle').style.display = (player.achievements.includes("ngpp16") || (tmp.ngC && player.eternityUpgrades.includes(6))) ? "inline-block" : "none"
 }
 
 function notifyQuantumMilestones(){
@@ -4014,13 +4033,19 @@ function passiveIPupdating(diff){
 }
 
 function passiveInfinitiesUpdating(diff){
-	if (typeof(player.infinitied) != "number") return 
-	if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") player.partInfinitied += diff / player.bestInfinityTime;
-	if (player.partInfinitied >= 1/2) {
-		let x = Math.floor(player.partInfinitied*2)
-		player.partInfinitied -= x/2
-		player.infinitied += x;
+	let tempPA = player.partInfinitied || 0
+	if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") {
+		let gain = diff / player.bestInfinityTime;
+		if (player.eternities>0) gain = diff / 50;
+		if (hasTS(35) && tmp.ngC) gain = nM(gain, getInfinitiedGain());
+		tempPA = nA(tempPA, gain);
 	}
+	if (nG(tempPA, 1/2)) {
+		let x = Decimal.floor(nM(tempPA, 2))
+		tempPA = nS(tempPA, nD(x, 2))
+		player.infinitied = nA(player.infinitied || 0, x);
+	}
+	player.partInfinitied = Math.max(Math.min(new Decimal(tempPA||0).toNumber(), 1), 0);
 }
 
 function infinityRespeccedDMUpdating(diff){
@@ -4406,7 +4431,7 @@ function infinityTimeMetaBlackHoleDimUpdating(diff){
 	var stepT = inNC(7) && player.aarexModifications.ngmX >= 4 ? 2 : step
 	for (let tier = 1 ; tier <= 8; tier++) {
 		if (tier < 9 - step){
-			player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(DimensionProduction(tier+step).times(diff / 10))
+			player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier+step).times(diff / 10))
 			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier+step).times(diff / 10))
 			if (isBHDimUnlocked(tier + step)) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + step).times(diff / 10))
 		}
@@ -4427,12 +4452,12 @@ function dimensionPageTabsUpdating(){
 }
 
 function otherDimsUpdating(diff){
-	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(DimensionProduction(1).times(diff))
-   	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(DimensionProduction(1).times(diff))
+	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infDimensionProduction(1).times(diff))
+   	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infDimensionProduction(1).times(diff))
 
    	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff))
    	else {
-		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(DimensionProduction(9).times(diff))
+		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(infDimensionProduction(9).times(diff))
 		player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff)).max(getTimeDimensionProduction(1).times(0))
 	}
 }
@@ -4544,6 +4569,7 @@ function replicantiIncrease(diff) {
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
 
 	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
+	if (player.replicanti.galaxybuyer && tmp.ngC) ngC.condense.rep.buy()
 	if (player.replicanti.galaxybuyer && canGetReplicatedGalaxy() && canAutoReplicatedGalaxy()) replicantiGalaxy()
 }
 
@@ -4832,12 +4858,13 @@ function ECRewardDisplayUpdating(){
 	document.getElementById("ec8reward").textContent = "Reward: Infinity Power powers up replicanti galaxies. Currently: " + (getECReward(8) * 100 - 100).toFixed(2) + "%"
 	document.getElementById("ec9reward").textContent = "Reward: Infinity Dimensions gain a " + (player.galacticSacrifice ? "post dilation " : "") + " multiplier based on your Time Shards. Currently: "+shortenMoney(getECReward(9))+"x "
 	document.getElementById("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
-	document.getElementById("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x "
+	document.getElementById("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
 	document.getElementById("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
 	document.getElementById("ec13reward").textContent = "Reward: Increase the exponent of meta-antimatter's effect. (" + (getECReward(13)+9) + "x)"
 	document.getElementById("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger."
 
 	document.getElementById("ec10span").textContent = shortenMoney(ec10bonus) + "x"
+	document.getElementById("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
 }
 
 function bigRipUpgradeUpdating(){

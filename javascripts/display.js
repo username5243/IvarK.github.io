@@ -526,20 +526,31 @@ function INFINITYUPGRADESDisplay(){
 	}
 }
 
-function eternityUpgradesDisplay(){
-	var eu2formula = "(x/200) ^ log4(2x)"
+function getEU2FormulaText(){
+	let eu2formula = "(x/200) ^ log4(2x)"
+	if (tmp.ngC) eu2formula = "(x/100) ^ log2(4x)"
 	if (player.boughtDims !== undefined) eu2formula = "x ^ log4(2x)"
-	else if (player.achievements.includes("ngpp15")) eu2formula = "x ^ log10(x) ^ 3.75"
+	else if (player.achievements.includes("ngpp15")) eu2formula = tmp.ngC ? "x ^ log10(x) ^ 2" : "x ^ log10(x) ^ 3.75"
+	return eu2formula
+}
+
+function eternityUpgradesDisplay(){
+	let eu2formula = getEU2FormulaText()
 	document.getElementById("eter1").innerHTML = "Infinity Dimension multiplier based on unspent EP (x + 1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
 	document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on Eternities (" + eu2formula + ")<br>Currently: "+shortenMoney(getEU2Mult())+"x<br>Cost: 10 EP"
-	document.getElementById("eter3").innerHTML = "Infinity Dimension multiplier based on "+(player.boughtDims ? "Time Shards (x/"+shortenCosts(1e12)+"+1)":"sum of Infinity Challenge times")+"<br>Currently: "+shortenMoney(getEU3Mult())+"x<br>Cost: "+shortenCosts(50e3)+" EP"
-	document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
-	document.getElementById("eter5").innerHTML = "Time Dimensions gain a multiplier based on your unspent Time Theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
-	document.getElementById("eter6").innerHTML = "Time Dimensions gain a multiplier based on days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
+	document.getElementById("eter3").innerHTML = "Infinity Dimension multiplier based on "+(player.boughtDims ? "Time Shards (x / "+shortenCosts(1e12) + "+1)" : "sum of Infinity Challenge times")+"<br>Currently: "+shortenMoney(getEU3Mult())+"x<br>Cost: "+shortenCosts(50e3)+" EP"
+	document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: " + shortenCosts(1e16) + " EP"
+	document.getElementById("eter5").innerHTML = "Time Dimensions gain a multiplier based on your unspent Time Theorems" + "<br>Cost: "+shortenCosts(1e40)+" EP"
+	document.getElementById("eter6").innerHTML = "Time Dimensions gain a multiplier based on days played" + (tmp.ngC ? " and you can buy max RGs" : "") + "<br>Cost: "+shortenCosts(1e50)+" EP"
 	if (player.exdilation != undefined && player.dilation.studies.includes(1)) {
 		document.getElementById("eter7").innerHTML = "Dilated time gain is boosted by antimatter<br>Currently: "+(1 + Math.log10(Math.max(1, player.money.log(10))) / 40).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e1500"))+" EP"
 		document.getElementById("eter8").innerHTML = "Dilated time gain is boosted by Infinity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e2000"))+" EP"
 		document.getElementById("eter9").innerHTML = "Dilated time gain is boosted by Eternity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.eternityPoints.log(10))) / 10).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e3000"))+" EP"
+	}
+	if (tmp.ngC) {
+		document.getElementById("eter10").innerHTML = "You can buy all studies in all three-way splits<br>Cost: "+shortenCosts(new Decimal("1e625"))+" EP"
+		document.getElementById("eter11").innerHTML = "You can buy all black & white studies, and TS35 has no requirement<br>Cost: "+shortenCosts(new Decimal("1e870"))+" EP"
+		document.getElementById("eter12").innerHTML = "The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: "+shortenCosts(new Decimal("1e1350"))+" EP"
 	}
 }
 
@@ -547,7 +558,7 @@ function uponDilationDisplay(){
 	let gain = getDilGain()
 	let msg = "Disable dilation"
 	if (player.infinityPoints.lt(Number.MAX_VALUE)||inQCModifier("ad")) {}
-	else if (player.dilation.totalTachyonParticles.gt(gain)) msg += ".<br>Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon particles"
+	else if (player.dilation.totalTachyonParticles.gt(gain)) msg += ".<br>" + tmp.ngC ? "<br>Get more antimatter to gain more Tachyon Particles" : ("Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon particles")
 	else msg += " for " + shortenMoney(gain.sub(player.dilation.totalTachyonParticles)) + " Tachyon particles"
 	document.getElementById("enabledilation").innerHTML = msg + "."
 }
@@ -630,17 +641,18 @@ function replicantiDisplay() {
 	if (player.replicanti.unl) {
 		let replGalOver = getMaxRG() - player.replicanti.gal
 		let chance = Decimal.times(tmp.rep.chance, 100)
-		document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount)
+		document.getElementById("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (tmp.ngC ? (" / ") + shortenDimensions(getReplicantiLimit()) : "")
 		document.getElementById("replicantimult").textContent = shorten(getIDReplMult())
 		
-		var chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
+		let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
 		document.getElementById("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber()))+"%") + chanceDisplayEnding
 		document.getElementById("replicantiinterval").innerHTML = "Interval: "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100), true, 3) + (isIntervalAffordable() ? "<br>-> "+timeDisplayShort(Decimal.times(tmp.rep.interval, 100 * 0.9), true, 3)+" Cost: "+shortenCosts(player.replicanti.intervalCost)+" IP" : "")
-		var replGal = player.replicanti.gal
-		var replGalName = player.replicanti.gal < 100 ? "Max Replicanti galaxies" : getGalaxyScaleName((replGal > 399 ? 2 : replGal > 99 ? 1 : 0) + (tmp.ngp3 && player.masterystudies.includes("t266") ? (replGal > 12e4 ? 3 : replGal > 58198 ? 2 : replGal > 2998 ? 1 : 0) : 0)) + "Replicated Galaxies"
-		var replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
+		let replGal = player.replicanti.gal
+		let replGalName = player.replicanti.gal < 100 ? "Max Replicanti galaxies" : getGalaxyScaleName((replGal > 399 ? 2 : replGal > 99 ? 1 : 0) + (tmp.ngp3 && player.masterystudies.includes("t266") ? (replGal > 12e4 ? 3 : replGal > 58198 ? 2 : replGal > 2998 ? 1 : 0) : 0)) + "Replicated Galaxies"
+		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		document.getElementById("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
-		document.getElementById("replicantireset").innerHTML = (player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16") ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ") + "1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
+		let rgtextvar = (player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16")||(player.aarexModifications.ngp3c && player.eternityUpgrades.includes(6)))
+		document.getElementById("replicantireset").innerHTML = (rgtextvar ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ") + "1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 		document.getElementById("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
@@ -652,6 +664,7 @@ function replicantiDisplay() {
 		document.getElementById("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
 		document.getElementById("replicantireset").style.height = (player.achievements.includes("ngpp16") && (!player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		document.getElementById("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
 		if (tmp.ngC) ngC.condense.rep.update()
 	} else {
 		let cost = getReplUnlCost()
@@ -679,8 +692,8 @@ function initialTimeStudyDisplay(){
 	document.getElementById("151desc").textContent = shortenCosts(1e4) + "x multiplier on all Time Dimensions"
 	document.getElementById("161desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) *  ( player.aarexModifications.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
 	document.getElementById("162desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 234 : 11) * (player.aarexModifications.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
-	document.getElementById("192desc").textContent = "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
-	document.getElementById("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, getEternitied())).min("1e13000")) + "x"
+	document.getElementById("192desc").textContent = player.aarexModifications.ngp3c ? "The Replicanti limit is multiplied by your Time Shards." : "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
+	document.getElementById("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1))).min("1e13000")) + "x"
 	document.getElementById("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	document.getElementById("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
 	document.getElementById("metaCost").textContent = shortenCosts(getMetaUnlCost());

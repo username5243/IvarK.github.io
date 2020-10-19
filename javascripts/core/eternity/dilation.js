@@ -48,7 +48,7 @@ function getDilTimeGainPerSecond() {
 	else {
 		gain = getBaseDTProduction()
 		if (tmp.ngp3) {
-			var lgain = gain.log10()
+			let lgain = gain.log10()
 			lgain = softcap(lgain, "dt_log")
 			gain = Decimal.pow(10, lgain)
 		}
@@ -72,7 +72,7 @@ function getEternitiesAndDTBoostExp() {
 }
 
 function getDilPower() {
-	var ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
+	let ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
@@ -121,7 +121,7 @@ function getTotalTachyonParticleGain(){
 
 function getDilGain() {
 	if (inQCModifier("ad") || player.money.lt(10)) return new Decimal(0)
-	var log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
+	let log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
 	return Decimal.pow(10, log)
 }
 
@@ -131,7 +131,7 @@ function getReqForTPGain() {
 }
 
 function getNGUDTGain(){
-	var gain = new Decimal(1)
+	let gain = new Decimal(1)
 	gain = gain.times(getBlackholePowerEffect())
 	if (hasEternityUpg(7)) gain = gain.times(1 + Math.log10(Math.max(1, player.money.log(10))) / 40)
 	if (hasEternityUpg(8)) gain = gain.times(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20)
@@ -144,7 +144,7 @@ function getDilatedTimeGainPerSecond(){
 }
 
 function getEternityBoostToDT(){
-	var gain = new Decimal(1)
+	let gain = new Decimal(1)
 	let eterExp = getEternitiesAndDTBoostExp()
 	if (eterExp > 0) gain = gain.times(Decimal.max(getEternitied(), 1).pow(eterExp))
 	if (hasDilationUpg('ngpp2') && tmp.newNGP3E) {
@@ -322,8 +322,8 @@ function getDilUpgCost(id) {
 }
 
 function getRebuyableDilUpgCost(id) {
-	var costGroup = DIL_UPG_COSTS["r"+id]
-	var amount = player.dilation.rebuyables[id] || 0
+	let costGroup = DIL_UPG_COSTS["r"+id]
+	let amount = player.dilation.rebuyables[id] || 0
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1],amount))
 	if (player.aarexModifications.nguspV) {
 		if (id > 3) cost = cost.times(1e7)
@@ -446,7 +446,7 @@ function updateDilationUpgradeCost(pos, id) {
 }
 
 function updateDilationUpgradeCosts() {
-	for (var i = 0; i < DIL_UPGS.length; i++) {
+	for (let i = 0; i < DIL_UPGS.length; i++) {
 		var pos = DIL_UPGS[i]
 		var id = getDilUpgId(pos)
 		if (DIL_UPG_UNLOCKED[id]) updateDilationUpgradeCost(pos, id)
@@ -532,4 +532,8 @@ function updateDilationDisplay() {
 		document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
 		document.getElementById("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
 	}
+}
+
+function getDilationTotalTTReq() {
+	return tmp.ngC ? 13500 : (tmp.ngex ? 12950 : 13000)
 }

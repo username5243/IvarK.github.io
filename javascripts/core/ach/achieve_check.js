@@ -39,7 +39,7 @@ function checkMarathon(){
 }
 
 function checkMarathon2(){
-	if (DimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !player.achievements.includes("r113")) {
+	if (infDimensionProduction(1).gt(player.infinityPower) && player.currentEternityChall != "eterc7" && !player.achievements.includes("r113")) {
 		Marathon2+=player.options.updateRate/1000;
 		if (Marathon2 >= 60) giveAchievement("Long lasting relationship");
 	} else {
@@ -73,7 +73,7 @@ function checkForEndMe() {
 
 function checkYoDawg(){
 	if (!player.achievements.includes("r111") && player.lastTenRuns[9][1].neq(0)) {
-		var n = 0;
+		let n = 0;
 		for (i = 0; i < 9; i++) {
 			if (player.lastTenRuns[i][1].gte(player.lastTenRuns[i+1][1].times(Number.MAX_VALUE))) n++
 		}
@@ -159,7 +159,7 @@ function checkTickspeedReqAchieve(){
 }
 
 function newDimension() {
-	var req = getNewInfReq()
+	let req = getNewInfReq()
 	if (player.money.lt(req.money)) return
 	player.infDimensionsUnlocked[req.tier-1] = true
 	if (req.tier == 4) giveAchievement("NEW DIMENSIONS???")

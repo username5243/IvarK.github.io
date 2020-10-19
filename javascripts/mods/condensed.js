@@ -26,14 +26,24 @@ let CONDENSED = {
 		data.rep = {}
 		if (player.replicanti.unl) {
 			let data2 = data.rep
+			data2.pow = ngC.condense.rep.pow()
 			let rep = player.replicanti.amount
 			rep = softcap(rep, "rep_ngC")
-			data2.eff1 = Decimal.pow(Decimal.max(rep, 1).log10() / 3 + 1, Math.sqrt(ngC.save.repl) / 4)
-			if (data2.eff1.gte(10)) data2.eff1 = Decimal.pow(10, new Decimal(data2.eff1.log10()).sqrt())
+			
+			data2.eff1 = Decimal.pow(rep.max(1).log10() / 3 + 1, Math.sqrt(ngC.save.repl * data2.pow) / 4)
 
 			let c2 = ngC.save.repl
 			if (c2 > 2) c2 = Math.cbrt(c2 * 4)
-			data2.eff2 = Decimal.max(rep, 1).log10() * Math.pow(c2, 0.95) / 7.5 + 1
+			if (c2 > 9) c2 = Math.pow(c2 / 9, 3) * 9
+
+			let mult = player.timestudy.studies.includes(197) ? (rep.plus(1).log10() + 2) : 2
+			data2.eff2 = new Decimal(rep.max(1).log10())
+					.div(3)
+					.times(Math.pow(c2 * data2.pow, 0.95) / 2.5)
+					.times(player.timestudy.studies.includes(24) ? mult : 1)
+					.plus(1)
+
+			if (player.timestudy.studies.includes(23)) data2.eff1 = data2.eff1.plus(data2.eff2.sub(1).max(0))
 		}
 
 		data.tds = {
@@ -236,7 +246,7 @@ let CONDENSED = {
 
 				ngC.save.inf[x] = Math.max(ngC.save.inf[x], this.target(x))
 				player.infinityPoints = player.infinityPoints.sub(cost)
-			}
+			},
 		},
 		rep: {
 			cost() {
@@ -258,7 +268,10 @@ let CONDENSED = {
 				if (player.replicanti.amount.lt(cost)) return;
 				player.replicanti.amount = new Decimal(1)
 				ngC.save.repl++
-			}
+			},
+			pow() {
+				return 1 //this is incorrect and needs ot be changed
+			},
 		},
 		tds: {
 			cost(x) {
