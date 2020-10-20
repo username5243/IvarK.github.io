@@ -169,7 +169,7 @@ function getDimensionFinalMultiplier(tier) {
 	}
 
 	mult = getStartingNDMult(tier) //contains sac
-	if (tmp.ngC && player.currentChallenge != "postngc_1") mult = mult.times(ngC.condense.nds.eff(tier))
+	if (tmp.ngC && player.currentChallenge != "postcngc_1") mult = mult.times(ngC.condense.nds.eff(tier))
 
 	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {

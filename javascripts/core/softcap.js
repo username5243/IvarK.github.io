@@ -861,9 +861,9 @@ function getSoftcapAmtFromId(id){
 		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
 		// Condensened: () =>
-		nds_ngC: () => getDimensionFinalMultiplier(1).div(getIDReplMult()),
+		nds_ngC: () => getDimensionFinalMultiplier(1),
 		ts_ngC: () => getTickspeed().pow(-1),
-		sac_ngC: () => calcSacrificeBoost(),
+		sac_ngC: () => calcTotalSacrificeBoost(),
 		ip_ngC: () => getInfinityPointGain(),
 		ids_ngC: () => getBestUsedIDPower(),
 		rep_ngC: () => player.replicanti.amount,

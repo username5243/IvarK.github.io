@@ -160,8 +160,8 @@ function infDimensionPower(tier) {
 
 	if (tmp.ngC) {
 		let cEff = ngC.condense.ids.eff(tier)
-		if (player.currentChallenge == "postngc_2") return cEff
-		mult = mult.times(cEff)
+		if (player.currentChallenge == "postcngc_2") return cEff
+		if (player.currentChallenge != "postcngc_1") mult = mult.times(cEff)
 	}
 
 	if (player.aarexModifications.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))

@@ -137,7 +137,6 @@ function getGalaxyReqMultiplier() {
 	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
-	if (tmp.ngC) ret = 25
 	if (player.galacticSacrifice !== undefined) {
 		if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
 	} else if (hasTimeStudy(42)) ret *= tsMults[42]()

@@ -27,7 +27,7 @@ function getReplMult(next) {
 		exp += (player.timestudy.ers_studies[3] + (next ? 1 : 0)) / 2
 		if (player.achievements.includes('r108')) exp *= 1.09;
 	}
-	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2
+	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (hasTimeStudy(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
@@ -248,7 +248,6 @@ function getReplicantiInterval() {
 	if (GUActive("gb1")) interval /= getGB1Effect()
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
-	if (tmp.ngC) interval /= 20
 	interval /= ls.mult("rep")
 
 	interval = new Decimal(interval)

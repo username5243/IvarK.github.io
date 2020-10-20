@@ -227,7 +227,7 @@ function getGoal(chall) {
 		if (retMod) ret = retMod
 	}
 	if (tmp.ngC) {
-		let retMod = nextAt[chall+"_ngC"]
+		let retMod = goals[chall+"_ngC"]
 		if (retMod) ret = retMod
 	}
 	return ret

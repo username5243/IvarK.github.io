@@ -375,8 +375,8 @@ let CONDENSED = {
 		},
 		70() {
 			let r = Math.sqrt(player.resets)
-			if (r > 1e3) r = Math.log10(r * 100) * 200
-			let mult = Math.pow(1.02, Math.sqrt(r))
+			//if (r > 1e3) r = Math.log10(r * 100) * 200
+			let mult = Math.pow(1.02, r)
 			return mult;
 		},
 		72() {
