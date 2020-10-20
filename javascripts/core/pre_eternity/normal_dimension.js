@@ -270,7 +270,7 @@ function multiplySameCosts(cost) {
 	for (let i = 1; i <= 8; i++) {
 		if (player[tiers[i] + "Cost"].e == cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
 	}
-	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(getTickspeedCostMultiplier())
+	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	//the above line is broken in C9 in NGC&NG+++, but i think its a bug elsewhere
 	// the bug is getTickspeedCostMultiplier is not defined
 }
