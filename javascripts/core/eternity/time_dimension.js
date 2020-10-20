@@ -276,7 +276,7 @@ function buyMaxTimeDimension(tier, bulk) {
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
 		reduceMatter(toBuy)
 	} else {
-		let toBuy = 0
+		var toBuy = 0
 		let increment = 1
 		while (player.eternityPoints.gte(timeDimCost(tier, dim.bought + increment - 1))) increment *= 2
 		while (increment>=1) {
