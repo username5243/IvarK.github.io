@@ -42,16 +42,11 @@ function getBaseDTProduction(){
 }
 
 function getDilTimeGainPerSecond() {
-	let gain
-
-	if (tmp.bE50kDT) gain = colorBoosts.b
-	else {
-		gain = getBaseDTProduction()
-		if (tmp.ngp3) {
-			let lgain = gain.log10()
-			lgain = softcap(lgain, "dt_log")
-			gain = Decimal.pow(10, lgain)
-		}
+	let gain = getBaseDTProduction()
+	if (tmp.ngp3) {
+		let lgain = gain.log10()
+		lgain = softcap(lgain, "dt_log")
+		gain = Decimal.pow(10, lgain)
 	}
 
 	gain = gain.times(Decimal.pow(2, getDilUpgPower(1)))	
@@ -233,7 +228,6 @@ const DIL_UPG_COSTS = {
 	r2: [1e6, 100, 1/0],
 	r3: [1e7, 20, 72],
 	r4: [1e8, 1e4, 24],
-	r5: [1e16, 10, 1/0],
 	r6: [5e6, 50, 1],
 	4: 5e6,
 	5: 1e9,
@@ -254,8 +248,8 @@ const DIL_UPG_COSTS = {
 	ngpp4_usp: 1e84,
 	ngpp5_usp: 1e89,
 	ngpp6_usp: 1e100,
-	ngpp1_p3c: 1e18,
-	ngpp2_p3c: 5e18,
+	ngpp1_c: 1e18,
+	ngpp2_c: 5e18,
 	ngusp1: 1e50,
 	ngusp2: 1e55,
 	ngusp3: 1e94,
@@ -268,6 +262,7 @@ const DIL_UPG_COSTS = {
 	ngp3c6: 4e21,
 	ngp3c7: 3e23,
 	ngp3c8: 1e24,
+	ngp3c9: 1/0,
 }
 
 const DIL_UPG_OLD_POS_IDS = {
@@ -292,13 +287,13 @@ const DIL_UPG_OLD_POS_IDS = {
 }
 
 const DIL_UPG_POS_IDS = {
-	11: "r1",     12: "r2",     13: "r3",     14: "r4",     16: "r6",    
-	21: 4,        22: 5,        23: 6,        24: "ngpp1",  26: "ngp3c1",
-	31: 7,        32: 8,        33: 9,        34: "ngpp2",  36: "ngp3c2",
-	81: "ngp3c4", 82: "ngp3c5", 83: "ngp3c6", 84: "ngp3c7",               85: "ngp3c8",
-	51: "ngpp3",  52: "ngpp4",  53: "ngpp5",  54: "ngpp6",
-	41: 10,       46: "ngp3c3",
-	61: "ngud1",  62: "ngud2",  63: "ngusp1", 64: "ngusp2", 65: "ngusp3",
+	11: "r1",     12: "r2",     13: "r3",     14: "r4",     15: "r6",    
+	21: 4,        22: 5,        23: 6,        24: "ngpp1",  25: "ngp3c1",
+	31: 7,        32: 8,        33: 9,        34: "ngpp2",  35: "ngp3c2",
+	71: "ngp3c4", 72: "ngp3c5", 73: "ngp3c6", 74: "ngp3c7", 75: "ngp3c8",
+	51: "ngpp3",  52: "ngpp4",  53: "ngpp5",  54: "ngpp6",  55: "ngp3c9",
+	41: 10,       42: "ngud1",  43: "ngud2",  44: "ngusp1", 45: "ngusp2", 46: "ngp3c3",
+	61: "ngusp3",
 }
 
 const DIL_UPG_ID_POS = {}
@@ -325,12 +320,12 @@ function getDilUpgId(x) {
 }
 
 function isDilUpgUnlocked(id) {
+	if (id == "r4") return player.meta !== undefined
+	if (id == "r6") return tmp.ngC
+
 	id = toString(id)
 	let ngpp = id.split("ngpp")[1]
 	let ngmm = id.split("ngmm")[1]
-	let ngc = id.split("ngc")[1]
-	if (id == "r4") return player.meta !== undefined
-	if (id == "r6") return tmp.ngC
 	if (ngpp) {
 		ngpp = parseInt(ngpp)
 		let r = player.meta !== undefined
@@ -347,7 +342,11 @@ function isDilUpgUnlocked(id) {
 		if (id != "ngusp1") r = r && player.dilation.studies.includes(6)
 		return r
 	}
-	if (ngc) return tmp.ngC
+	if (id.split("ngp3c")[1]) {
+		let r = tmp.ngC
+		if (id == "ngp3c9") r = r && player.dilation.studies.includes(6)
+		return r
+	}
 	return true
 }
 
@@ -361,7 +360,7 @@ function getDilUpgCost(id) {
 		if (ngpp >= 3 && player.aarexModifications.nguspV !== undefined) cost = DIL_UPG_COSTS[id + "_usp"]
 	}
 	if (tmp.ngC && ngpp) {
-		if (ngpp < 3) cost = DIL_UPG_COSTS[id + "_p3c"]
+		if (ngpp < 3) cost = DIL_UPG_COSTS[id + "_c"]
 	}
 	return cost
 }
@@ -481,11 +480,11 @@ function updateDilationUpgradeButtons() {
 		document.getElementById("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
 	}
 	if (tmp.ngC) {
-		document.getElementById("dil26desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
-		document.getElementById("dil36desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
-		document.getElementById("dil46desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
-		document.getElementById("dil83desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
-		document.getElementById("dil85desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
+		document.getElementById("dil25desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
+		document.getElementById("dil35desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
+		document.getElementById("dil45desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
+		document.getElementById("dil73desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
+		document.getElementById("dil75desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
 	}
 }
 

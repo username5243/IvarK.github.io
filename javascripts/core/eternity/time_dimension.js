@@ -263,20 +263,27 @@ function getOrSubResourceTD(tier, sub) {
 }
 
 function buyMaxTimeDimension(tier, bulk) {
+	if (!isTDUnlocked(tier)) return
+
 	let dim = player['timeDimension' + tier]
 	let res = getOrSubResourceTD(tier)
-	if (player.aarexModifications.ngmX > 3 && getAmount(1) < 1) return
+	if (!res.gte(dim.cost)) return
+
+	if (tmp.ngmX >= 4 && getAmount(1) < 1) return
 	if (player.aarexModifications.maxHighestTD && tier < 8 && player["timeDimension" + (tier + 1)].bought > 0) return
-	if (!isTDUnlocked(tier)) return
-	if (res.lt(dim.cost)) return
-	if (player.aarexModifications.ngmX > 3) {
-		let toBuy = Math.floor(res.div(dim.cost).times(timeDimCostMults[1][tier] - 1).add(1).log(timeDimCostMults[1][tier]))
-		if (bulk) toBuy = Math.min(toBuy,bulk)
-		getOrSubResourceTD(tier, Decimal.pow(timeDimCostMults[1][tier], toBuy).sub(1).div(timeDimCostMults[1][tier] - 1).times(dim.cost))
+
+	let toBuy = 0
+	if (tmp.ngmX >= 4) {
+		let mult = timeDimCostMults[1][tier]
+
+		toBuy = Math.floor(res.div(dim.cost).times(mult - 1).add(1).log(mult))
+		if (bulk) toBuy = Math.min(toBuy, bulk)
+
+		getOrSubResourceTD(tier, Decimal.pow(mult, toBuy).sub(1).div(mult - 1).times(dim.cost))
+
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
 		reduceMatter(toBuy)
 	} else {
-		var toBuy = 0
 		let increment = 1
 		while (player.eternityPoints.gte(timeDimCost(tier, dim.bought + increment - 1))) increment *= 2
 		while (increment>=1) {
@@ -298,10 +305,11 @@ function buyMaxTimeDimension(tier, bulk) {
 		player.eternityPoints = newEP
 		if (isNaN(newEP.e)) player.eternityPoints = new Decimal(0)
 	}
+
 	dim.amount = dim.amount.plus(toBuy);
 	dim.bought += toBuy
-	if (player.aarexModifications.ngmX > 3) {
-		dim.power = Decimal.sqrt(getDimensionPowerMultiplier()).times(dim.power)
+	if (tmp.ngmX >= 4) {
+		dim.power = Decimal.pow(getDimensionPowerMultiplier(), toBuy / 2).times(dim.power)
 		dim.cost = dim.cost.times(Decimal.pow(timeDimCostMults[1][tier], toBuy))
 	} else {
 		dim.cost = timeDimCost(tier, dim.bought)
@@ -313,7 +321,7 @@ function buyMaxTimeDimension(tier, bulk) {
 
 function buyMaxTimeDimensions() {
 	for (let i = 1; i <= 8; i++) {
-		if (tmp.ngC) ngC.condense.tds.max(tier)
+		if (tmp.ngC) ngC.condense.tds.max(i)
 		buyMaxTimeDimension(i)
 	}
 }

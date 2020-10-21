@@ -5105,7 +5105,7 @@ function gameLoop(diff) {
 	else document.getElementById("iplimit").style.display = "none"
 	document.getElementById("IPPeakDiv").style.display = (player.break && player.boughtDims) ? "" : "none"
    	if (player.galacticSacrifice) {
-	    try {document.getElementsByClassName("GPAmount")[0].textContent = shorten(player.galacticSacrifice.galaxyPoints)}
+	    try {document.getElementsByClassName("GPAmount")[0].textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)}
 	    finally {}
     	}
 
@@ -5136,11 +5136,6 @@ function gameLoop(diff) {
 
 	if (hasDilationStudy(1)) {
 		let gain = getDilTimeGainPerSecond()
-		if (!tmp.bE50kDT && gain.gt("1e50000")) {
-			tmp.bE50kDT = true
-			updateColorPowers()
-			gain = getDilTimeGainPerSecond()
-		}
 		player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
 		gainDilationGalaxies()
 	}
@@ -5476,7 +5471,7 @@ function autoBuyerTick() {
 						if (tmp.ngC) ngC.condense.nds.max(priority[i].target)
 						buyOneDimension(priority[i].target)
 					}
-					if (player.aarexModifications.ngmX>3) buyMaxTimeDimension(priority[i].target % 10, priority[i].bulk)
+					if (tmp.ngmX >= 4) buyMaxTimeDimension(priority[i].target % 10, priority[i].bulk)
 				}
 				priority[i].ticks = 0;
 			}

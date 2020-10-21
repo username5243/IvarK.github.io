@@ -36,14 +36,14 @@ let CONDENSED = {
 			if (c2 > 2) c2 = Math.cbrt(c2 * 4)
 			if (c2 > 9) c2 = Math.pow(c2 / 9, 3) * 9
 
-			let mult = player.timestudy.studies.includes(197) ? (rep.plus(1).log10() + 2) : 2
+			let mult = hasTimeStudy(197) ? (rep.plus(1).log10() + 2) : 2
 			data2.eff2 = new Decimal(rep.max(1).log10())
 					.div(3)
 					.times(Math.pow(c2 * data2.pow, 0.95) / 2.5)
-					.times(player.timestudy.studies.includes(24) ? mult : 1)
+					.times(hasTimeStudy(24) ? mult : 1)
 					.plus(1)
 
-			if (player.timestudy.studies.includes(23)) data2.eff1 = data2.eff1.plus(data2.eff2.sub(1).max(0))
+			if (hasTimeStudy(23)) data2.eff1 = data2.eff1.plus(data2.eff2.sub(1).max(0))
 		}
 
 		data.tds = {
@@ -119,14 +119,14 @@ let CONDENSED = {
 			costScale() {
 				let x = 1
 				if (player.infinityUpgrades.includes("postinfi70")) x *= 0.6
-				if (player.eternityUpgrades.includes(12)) x *= 2/3 
+				if (hasEternityUpg(12)) x *= 2/3 
 				//uh wtf is this supposed to be s
 				//so i changed it cause im almost certain its wrong but feel free to change back
 				return Math.pow(1.5, x) + 1
 			},
 			costDiv() {
 				let div = 1
-				if (player.timestudy.studies.includes(202)) div = tsMults[202]()
+				if (hasTimeStudy(202)) div = tsMults[202]()
 				return div
 			},
 			target(x) {
@@ -191,7 +191,7 @@ let CONDENSED = {
 			},
 			costScale() {
 				let x = 1
-				if (player.eternityUpgrades.includes(12)) x *= 2/3
+				if (hasEternityUpg(12)) x *= 2/3
 				return x
 			},
 			costDiv() {
@@ -215,8 +215,8 @@ let CONDENSED = {
 				let ret = 1
 				if (player.challenges.includes("postcngc_1")) ret *= ngC.ic9Eff()
 				if (player.challenges.includes("postcngc_2")) ret *= 1.15
-				if (player.timestudy.studies.includes(13)) ret *= tsMults[13]()
-				if (player.dilation.upgrades.includes("ngp3c2")) ret *= 3
+				if (hasTimeStudy(13)) ret *= tsMults[13]()
+				if (hasDilationUpg("ngp3c2")) ret *= 3
 				return ret
 			},
 			eff(x) {
@@ -282,12 +282,12 @@ let CONDENSED = {
 			},
 			costScale() {
 				let x = 1
-				if (player.eternityUpgrades.includes(12)) x *= 2/3
+				if (hasEternityUpg(12)) x *= 2/3
 				return x
 			},
 			costDiv() {
 				let div = new Decimal(1)
-				if (player.timestudy.studies.includes(203)) div = tsMults[203]()
+				if (hasTimeStudy(203)) div = tsMults[203]()
 				return div
 			},
 			target(x) {

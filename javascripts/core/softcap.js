@@ -268,37 +268,61 @@ var softcap_data = {
 		1: {
 			func: "pow",
 			start: new Decimal(1e80),
-			pow: 0.9,
+			pow() {
+				let x = 0.9
+				if (hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		},
 		2: {
 			func: "pow",
 			start: new Decimal(1e90),
-			pow: 0.8,
+			pow() {
+				let x = 0.8
+				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		},
 		3: {
 			func: "pow",
 			start: new Decimal(1e100),
-			pow: 0.7,
+			pow() {
+				let x = 0.7
+				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		},
 		4: {
 			func: "pow",
 			start: new Decimal(1e110),
-			pow: 0.6,
+			pow() {
+				let x = 0.6
+				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		},
 		5: {
 			func: "pow",
 			start: new Decimal(1e120),
-			pow: 0.5,
+			pow() {
+				let x = 0.5
+				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		},
 		6: {
 			func: "pow",
 			start: new Decimal(1e130),
-			pow: 0.4,
+			pow() {
+				let x = 0.4
+				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
+				return x
+			},
 			derv: true
 		}
 	},

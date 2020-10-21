@@ -329,14 +329,14 @@ function galacticUpgradeButtonTypeDisplay () {
 					} else {
 						e.className = 'infinistorebtnlocked'
 					}
-					if (galMults["u"+i+j] !== undefined) {
-						a = 0
-						if (i * 10 + j == 11 || i * 10 + j == 15) {
-							if (player.infinitied > 0 || player.eternities !== 0 || quantumed) document.getElementById('galspan' + i + j).textContent = shortenDimensions(galMults["u" + i + j]())
-						} else if (i * 10 + j == 31 || i * 10 + j == 25) document.getElementById("galspan" + i + j).textContent = galMults["u" + i + j]().toFixed(2)
-						else if (i * 10 + j == 43 && player.aarexModifications.ngmX >= 4) a = 0
-						else if (i * 10 + j == 46 && player.aarexModifications.ngmX >= 4) document.getElementById("galspan46").textContent = shorten(galMults["u46"]() * 100 - 100)
-						else document.getElementById("galspan" + i + j).textContent = shorten(galMults["u" + i + j]())
+					let upgId = i * 10 + j
+					let mult = galMults["u" + upgId]
+					let elm = document.getElementById('galspan' + upgId)
+
+					if (mult && elm) {
+						let display = galMultDisplays["u" + upgId]
+						mult = mult()
+						document.getElementById('galspan' + upgId).textContent = display ? display(mult) : shorten(mult)
 					}
 				} else c.style.display = "none"
 			}
@@ -643,6 +643,27 @@ let galMults = {
 		if (r > 2) return 2
 		return r
 	}
+}
+
+let galMultDisplays = {
+	u11: function(x) {
+		return shortenDimensions(x)
+	},
+	u15: function(x) {
+		return shortenDimensions(x)
+	},
+	u31: function(x) {
+		return x.toFixed(2)
+	},
+	u25: function(x) {
+		return x.toFixed(2)
+	},
+	u43: function(x) {
+		return x.toFixed(2)
+	},
+	u46: function(x) {
+		return (x * 100 - 100).toFixed(2)
+	},
 }
 
 let galConditions = {

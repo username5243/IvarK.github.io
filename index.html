@@ -26,7 +26,7 @@
 		</div>
 		<div style="position: relative">
 			<div id="vel">You have <span class='vel'>0</span> Velocity.</div>
-			<button id="accReset" class="storebtn" onclick="ngm6.accelerate()">Accelerate your tickspeed for ??? Velocity.</button>
+			<button id="accReset" class="storebtn" onclick="ngm6.accelerate()">Accelerate the vector of time for X Velocity.</button>
 		</div>
 		<div style="position: relative">
 			<div id="px">You have <span class='pxAmount'>0</span> Paradoxes.</div>
@@ -80,9 +80,9 @@
 			</button>
 		</div>
 		<div style="position: relative">
-			<div id="planckinfo">You have <b class="pl" id="decayedFoam">0</b> Nulli Foam.</div>
+			<div id="planckinfo">You have a Planck Tier of <b class="pl" id="plTier">0</b>.</div>
 			<button onclick="pl.reset()" id="planck">
-				<b>It's time to supercharge... I want to reduce the universe to Planck Scale.</b>
+				<b id="plMsg">See beyond the forces of Quantum... I want to go deeper into Planck Scale.</b>
 			</button>
 		</div>
 		<div id='quantumBlock' style='height:120px'></div>
@@ -876,7 +876,7 @@
 							<button id="dil14" onclick="buyDilationUpgrade(14)"><span id="dil14desc"></span><br><span id="dil14cost"></span></button>
 						</td>
 						<td>
-							<button id="dil16" onclick="buyDilationUpgrade(16)">Purchase a Dilation Condenser<br><span id="dil16cost"></span></button>
+							<button id="dil15" onclick="buyDilationUpgrade(15)">Purchase a Dilation Condenser<br><span id="dil15cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -893,6 +893,9 @@
 						</td>
 						<td>
 							<button id="xd4" style="height: 50px;" onclick="boostDilationUpgrade(4)">Boost the upgrade above with ex-dilation<br><span id="xd4span">1x -> 1.5x</span></button>
+						</td>
+						<td>
+							<button id="xd5" style="height: 50px;" onclick="boostDilationUpgrade(6)">Boost the upgrade above with ex-dilation<br><span id="xd5span">1x -> 1.5x</span></button>
 						</td>
 					</tr>
 				</table>
@@ -911,7 +914,7 @@
 							<button id="dil24" onclick="buyDilationUpgrade(24)">Replicanti increases faster based on dilated time.<br><span id="dil24cost"></span></button>
 						</td>
 						<td>
-							<button id="dil26" onclick="buyDilationUpgrade(26)" style="font-size: 8px;">Time Condensers are stronger based on your Tachyon Particles, and Dilated Time is gained 50x faster (after obscurements).<br><span id="dil26desc"></span><br><span id="dil26cost"></span></button>
+							<button id="dil25" onclick="buyDilationUpgrade(25)" style="font-size: 8px;">Time Condensers are stronger based on your Tachyon Particles, and Dilated Time is gained 50x faster (after obscurements).<br><span id="dil25desc"></span><br><span id="dil25cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -930,26 +933,26 @@
 							<button id="dil34" onclick="buyDilationUpgrade(34)"><span id="dil34desc"></span><br><span id="dil34cost"></span></button>
 						</td>
 						<td>
-							<button id="dil36" onclick="buyDilationUpgrade(36)" style="font-size: 7px;">Get free Infinity/Time Condensers based on your Dilated Time, Infinity Condensers are thrice as strong, and Dilated Time is gained 100x faster (after obscurements).<br><span id="dil36desc"></span><br><span id="dil36cost"></span></button>
+							<button id="dil35" onclick="buyDilationUpgrade(35)" style="font-size: 7px;">Get free Infinity/Time Condensers based on your Dilated Time, Infinity Condensers are thrice as strong, and Dilated Time is gained 100x faster (after obscurements).<br><span id="dil35desc"></span><br><span id="dil35cost"></span></button>
 						</td>
 					</tr>
 				</table>
 				<table>
 					<tr>
 						<td>
-							<button id="dil81" onclick="buyDilationUpgrade(81)">The Replicanti limit is multiplied by your Dilated Time ^2,500<br><span id="dil81cost"></span></button>
+							<button id="dil71" onclick="buyDilationUpgrade(71)">The Replicanti limit is multiplied by your Dilated Time ^2,500<br><span id="dil71cost"></span></button>
 						</td>
 						<td>
-							<button id="dil82" onclick="buyDilationUpgrade(82)">The IP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil82cost"></span></button>
+							<button id="dil72" onclick="buyDilationUpgrade(72)">The IP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil72cost"></span></button>
 						</td>
 						<td>
-							<button id="dil83" onclick="buyDilationUpgrade(83)" style="font-size: 10px;">Unspent EP boosts TP gain (unaffected by Obscurements)<br><span id="dil83desc"></span><br><span id="dil83cost"></span></button>
+							<button id="dil73" onclick="buyDilationUpgrade(73)" style="font-size: 10px;">Unspent EP boosts TP gain (unaffected by Obscurements)<br><span id="dil73desc"></span><br><span id="dil73cost"></span></button>
 						</td>
 						<td>
-							<button id="dil84" onclick="buyDilationUpgrade(84)">The EP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil84cost"></span></button>
+							<button id="dil74" onclick="buyDilationUpgrade(74)">The EP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil74cost"></span></button>
 						</td>
 						<td>
-							<button id="dil85" onclick="buyDilationUpgrade(85)" style="font-size: 9px;">All Repeatable Dilation Upgrades and Dilated Condensers are all stronger based on your TP<br><span id="dil85desc"></span><br><span id="dil85cost"></span></button>
+							<button id="dil75" onclick="buyDilationUpgrade(75)" style="font-size: 9px;">All Repeatable Dilation Upgrades and Dilated Condensers are all stronger based on your TP<br><span id="dil75desc"></span><br><span id="dil75cost"></span></button>
 						</td>
 				</table>
 				<table>
@@ -965,6 +968,9 @@
 						</td>
 						<td>
 							<button id="dil54" onclick="buyDilationUpgrade(54)" style='font-size:10px'>Dilated time production is boosted based on best meta-antimatter.<br><span id="dil54formula"></span><br><span id="dil54desc"></span><br><span id="dil54cost"></span></button>
+						</td>
+						<td>
+							<button id="dil55" onclick="buyDilationUpgrade(55)" style='font-size:10px'>???<br><span id="dil55cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -991,20 +997,8 @@
 				</table>
 				<table>
 					<tr>
-						<td id="n5">
-							<button id="dil61" onclick="buyDilationUpgrade(61)">Gain 5% more Tachyon particles for each <span id="dil61oom"></span>x replicanti.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
-						</td>
-						<td id="n6">
-							<button id="dil62" onclick="buyDilationUpgrade(62)">Eternities and dilated time boost each other by ^0.1.<br><span id="dil62cost"></span></button>
-						</td>
-						<td id="n7">
-							<button id="dil63" onclick="buyDilationUpgrade(63)">Boost the ex-dilation gain.<br><span id="dil63cost"></span></button>
-						</td>
-						<td id="n8">
-							<button id="dil64" onclick="buyDilationUpgrade(64)" style='font-size:10px'>Buff the black hole upgrade effect based on your Eternity points.<br><span id="dil64desc"></span><br><span id="dil64cost"></span></button>
-						</td>
 						<td>
-							<button id="dil65" onclick="buyDilationUpgrade(65)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil65desc"></span><br><span id="dil65cost"></span></button>
+							<button id="dil61" onclick="buyDilationUpgrade(61)" style='font-size:10px'>You gain more dilated time based on your meta-antimatter.<br><span id="dil61desc"></span><br><span id="dil61cost"></span></button>
 						</td>
 					</tr>
 				</table>
@@ -1721,7 +1715,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 19.01)</span>
+				<span class="warning">(Test server: Beta 20)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -5446,7 +5440,7 @@
 						</td>
 					</tr><tr id="bosonicResets">
 						<td>
-							You have <span class="yellow" id="hb" style="font-size:35px">0</span> Higgs Bosons.
+							You have <span id="hb" style="font-size:35px">0</span> Higgs Bosons.
 							<br>
 							<button class="gluonupgrade hb" id="hbReset" onclick="higgsReset()">Reset Bosonic Lab for <span id="hbResetGain">1</span> Higgs.<br>(Requires <span id="hbResetReq"></span> Bosonic Antimatter)</button>
 						</td>
@@ -5521,28 +5515,32 @@
 			<div class="footer"></div>
 		</div>
 		<div class="tab" id="plTab">
-			You have a Planck Tier of <span class="pl" id="plTier" style="font-size: 35px">1</span>.
 			<br>
-			<button id="plTierUp" class="gluonupgrade planckbtn" onclick="pl.tier()">
-				Level up your Planck Tier, but compress the universe.
+			<button id="plTierUp" class="gluonupgrade planckbtn" onclick="pl.tier()" style="width: 300px; height: 120px">
+				<b style="font-size: 15px">Tier up the Planck Scale!</b>
 				<br>
-				Requires <span id="plTierReq"></span> antimatter.
+				By compressing the universe, feel the superpower of charging.
+				<br><br>
+				This requires <span id="plTierReq"></span> antimatter in the Planck Scale.
 			</button>
-			<button id="plExit" onclick="pl.exit()">
-				Enlargen the Universe back to normal.
+			<button id="plExit" onclick="pl.exit()" style="width: 300px; height: 120px">
+				<b style="font-size: 15px">Scale yourself up to Quantum again.</b>
+				<br>
+				"The anomaly of Matteria Foam is already discovered, but only in the Planck Scale..."
 			</button>
 			<br><br>
 			<table class="table" align="center" style="margin: auto">
 				<tr>
-					<td><button class="secondarytabbtn">Matteria Decay</button></td>
-					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn">Dark Empowerments</button></td>
+					<td><button class="secondarytabbtn" onclick="pl.showTab('null')">Foam Nullify</button></td>
+					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn" onclick="pl.showTab('hf')">Higgs Field</button></td>
+					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn" onclick="pl.showTab('dark')">Endarkenments</button></td>
 				</tr>
 			</table>
-			<div id="MatteriaDecayTab">
-				You have <span class="pl" id="decayedFoam2" style="font-size: 35px"></span> Nulli Foam.
+			<div class="pltab" id="pl_null">
+				You have <span class="pl" id="nulliFoam" style="font-size: 35px"></span> Nulli Foam.
 				<br>
 				<button class="gluonupgrade planckbtn" id="mfDecay" onclick="pl.decay()">
-					Decay all your Matteria Foam for x<span id="dfGain">1.00</span> Nulli Foam.
+					Nullify all your Matteria Foam for x<span id="dfGain">1.00</span> Nulli Foam.
 				</button>
 				<button class="gluonupgrade planckbtn" onclick="pl.annihilate()">
 					Annilhilate all your Nulli Foam.

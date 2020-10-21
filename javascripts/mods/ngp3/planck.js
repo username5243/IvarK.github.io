@@ -10,6 +10,7 @@ let pl = {
 		}
 
 		pl.save = data
+		pl.showTab('null')
 		return data
 	},
 	compile() {
@@ -31,6 +32,9 @@ let pl = {
 
 		pl.updateTmp()
 		pl.updateDisplay()
+
+		let tabsSave = player.aarexModifications.tabsSave
+		pl.showTab((tabsSave.on && tabsSave.tabPl) || 'null')
 	},
 	updateTmp() {
 		let data = {}
@@ -40,7 +44,7 @@ let pl = {
 
 		data.buffNeutral = Math.log10(eff / 5 + 1) + 1
 		data.buffNeutral2 = eff + 1
-		data.nerfNeutral = 1 / (eff / 20 + 1) + 1
+		data.nerfNeutral = 1.5 / (eff / 20 + 1) + 1
 		data.nerfNeutral2 = eff + 1
 
 		data.buffOmega = eff / data.nerfNeutral2
@@ -55,11 +59,16 @@ let pl = {
 		return "250.0 PC Ranking and 50.0 Gravity Energy"
 	},
 	on() {
-		return ph.did("planck") && pl.save.on
+		return tmp.ngpX >= 5 && pl.save.on
 	},
 	reset() {
+		if (pl.on()) {
+			pl.tier()
+			return
+		}
+
 		if (!pl.can()) return
-		if (pl.save.conf && !confirm(pl.conf())) return
+		if ((tmp.ngpX < 5 || pl.save.conf) && !confirm(pl.conf())) return
 		if (!pl.did()) {
 			for (let x = 0; x < pl.warnings.length; x++) if (!confirm(pl.warnings[x])) return
 			convertToNGP5()
@@ -134,25 +143,45 @@ let pl = {
 	},
 	updateDisplay() {
 		if (!ph.did("planck")) return
+		document.getElementById("planck").style.display = ph.can("planck") ? "" : "none"
+		document.getElementById("plMsg").textContent = pl.on() ? "Tier up the Planck Scale to " + getFullExpansion(pl.save.layer + 1) + " and supercharge!" : "See beyond the forces of Quantum... I want to go deeper into Planck scale."
+
 		document.getElementById("plExit").className = "gluonupgrade " + (pl.on() ? "ghostifybtn" : "unavailablebtn")
 		document.getElementById("plTier").textContent = getFullExpansion(pl.save.layer)
 		document.getElementById("plTierReq").textContent = shortenMoney(pl.tierReq())
 
-		document.getElementById("decayedFoam").textContent = shortenDimensions(pl.save.df.amt)
-		document.getElementById("decayedFoam2").textContent = shortenDimensions(pl.save.df.amt)
+		document.getElementById("nulliFoam").textContent = shortenDimensions(pl.save.df.amt)
 
 		document.getElementById("mfDecay").className = "gluonupgrade " + (pl.on() ? "planckbtn" : "unavailablebtn")
 	},
 	updateDisplayOnTick() {
-		document.getElementById("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
-		document.getElementById("dfGain").textContent = shorten(pl.decayGain())
+		let tab = player.aarexModifications.tabsSave.tabPl
+		if (tab == "null") {
+			document.getElementById("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
+			document.getElementById("dfGain").textContent = shorten(pl.decayGain())
 
-		let types = ["Omega", "Mu", "Neutral", "Neutral2"]
-		for (let x = 1; x <= 4; x++) {
-			let type = types[x - 1]
-			document.getElementById("dfBuff" + type).textContent = pl.tmp["buff" + type].toFixed(2)
-			document.getElementById("dfNerf" + type).textContent = pl.tmp["nerf" + type].toFixed(2)
+			let types = ["Omega", "Mu", "Neutral", "Neutral2"]
+			for (let x = 1; x <= 4; x++) {
+				let type = types[x - 1]
+				document.getElementById("dfBuff" + type).textContent = pl.tmp["buff" + type].toFixed(2)
+				document.getElementById("dfNerf" + type).textContent = pl.tmp["nerf" + type].toFixed(2)
+			}
 		}
+	},
+	showTab(x) {
+		//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+		let tabName = "pl_" + x
+		let tabs = document.getElementsByClassName('pltab')
+		let tab
+		let oldTab
+
+		for (var i = 0; i < tabs.length; i++) {
+			tab = tabs[i]
+			if (tab.style.display == 'block') oldTab = tab.id
+			tab.style.display = tab.id == tabName ? 'block' : 'none'
+		}
+		if (!oldTab || oldTab != x) player.aarexModifications.tabsSave.tabPl = x
+		closeToolTip()
 	},
 	radioactivityToMatter() {
 		return GDs.radioactivity(1) + 1

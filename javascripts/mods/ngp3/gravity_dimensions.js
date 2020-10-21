@@ -44,6 +44,10 @@ let GDs = {
 
 		data.gdm = GDs.gdMult() //Determine the initial multiplier for Gravity Dimensions.
 
+		//Gravity Dimension Boosts
+		data.gdbPow = 1
+		if (tmp.blu && hasBosonicUpg(64)) data.gdbPow *= tmp.blu[64]
+
 		//Gravity Power
 		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
 		if (isEnchantUsed(35)) gp += tmp.bEn[35]
@@ -185,7 +189,8 @@ let GDs = {
 		return tmp.bl.speed.max(1).log10() / 3 + 1
 	},
 	gdExp(dim) {
-		let x = (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) + 1
+		let x = 1
+		x += (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) * GDs.tmp.gdbPow
 		if (dim == 4 && hasBosonicUpg(54)) x += tmp.blu[54]
 		return x
 	},
@@ -281,7 +286,7 @@ let GDs = {
 		return x
 	},
 	superchargeMult() {
-		return ph.did("planck") ? (pl.save.layer - 1) / 5 : 0
+		return tmp.ngpX >= 5 ? (pl.save.layer - 1) / 5 : 0
 	},
 	chargeBoost(id) {
 		if (GDs.save.gc == id) return

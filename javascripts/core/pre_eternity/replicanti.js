@@ -68,7 +68,7 @@ function getReplicantiLimit(cap = false) {
 	if (player.boughtDims) return player.replicanti.limit
 	if (tmp.ngC && cap) {
 		let lim = new Decimal(Number.MAX_VALUE);
-		if (hasTS(52)) lim = lim.pow(ts52Eff())
+		if (hasTS(52)) lim = lim.pow(tsMults[52]())
 		if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
 		if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
 		return lim;

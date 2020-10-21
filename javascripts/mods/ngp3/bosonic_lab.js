@@ -817,9 +817,9 @@ var bu = {
 		55: "Remove the limit of Replicantis.",
 		61: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
-		63: "Higgs Bosons raise the Blue Power effect to an exponent before the softcaps.",
-		64: "The Electrons softcap is weaker. (x^0.5 -> x^0.6)",
-		65: "Square the main Orange Light effect.",
+		63: "Reduce the softcap of Bosonic Antimatter production.",
+		64: "Gravity Dimension Boosts are stronger.",
+		65: "Higgs Bosons strengthen 2 previous upgrades.",
 	},
 	effects: {
 		11() {
@@ -954,8 +954,14 @@ var bu = {
 			return Math.sqrt(GDs.radioactivity(1)) / 100
 		},
 		63() {
-			//Log10 of that effect ((log(g)+2)^h)
-			return Math.pow(player.ghostify.hb.higgs, 2)
+			let x = 0.5
+			if (hasBosonicUpg(65)) x = Math.pow(x, Math.sqrt(1 + player.ghostify.hb.higgs / 1e3))
+			return x
+		},
+		64() {
+			let x = 1.5
+			if (hasBosonicUpg(65)) x = Math.sqrt(2.25 + player.ghostify.hb.higgs / 500)
+			return x
 		}
 	},
 	effectDescs: {
@@ -1011,8 +1017,11 @@ var bu = {
 			return "+" + shorten(x)
 		},
 		63(x) {
-			return tmp.bE50kDT ? "^Infinite (and Beyond!)" : "^" + shorten(Decimal.pow(10, x))
+			return (100 - x * 100).toFixed(2) + "% weaker"
 		},
+		64(x) {
+			return (x * 100 - 100).toFixed(2) + "% stronger"
+		}
 	}
 }
 

@@ -297,7 +297,7 @@ function getNanoRewardReq(additional) {
 }
 
 function isNanoScalingActive(x) {
-	if (x == 0) return true
+	if (x == 1) return true
 	return nanoRewards.scaling[x].active === undefined || nanoRewards.scaling[x].active()
 }
 

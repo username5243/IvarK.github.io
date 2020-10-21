@@ -277,15 +277,16 @@ function updateExdilation() {
 	document.getElementById("exdilationConfirmBtn").style.display = "inline"
 	document.getElementById("exDilationAmount").textContent = shortenDimensions(player.exdilation.unspent)
 	document.getElementById("exDilationBenefit").textContent = (player.aarexModifications.nguspV ? exDilationBenefit() * 100 : exDilationBenefit() / 0.0075).toFixed(1)
-	for (var i = 1; i <= 4; i++) {
-		let unl = isDilUpgUnlocked("r" + i)
+	for (var i = 1; i <= 5; i++) {
+		let id = i == 5 ? 6 : i
+		let unl = isDilUpgUnlocked("r" + id)
 		if (unl) {
 			document.getElementById("xd" + i).style.height = player.aarexModifications.nguspV ? "60px" : "50px"
 			document.getElementById("xd" + i).className = player.exdilation.unspent.eq(0) ? "dilationupgrebuyablelocked" : "dilationupgrebuyable";
-			if (player.aarexModifications.nguspV !== undefined) document.getElementById("xd" + i + "span").textContent = '+' + exDilationUpgradeStrength(i).toFixed(1) + ' free upgrades -> +' + exDilationUpgradeStrength(i,player.exdilation.unspent).toFixed(1)
-			else document.getElementById("xd" + i + "span").textContent = exDilationUpgradeStrength(i).toFixed(2) + 'x -> ' + exDilationUpgradeStrength(i,player.exdilation.unspent).toFixed(2) + 'x'
+			if (player.aarexModifications.nguspV !== undefined) document.getElementById("xd" + i + "span").textContent = '+' + exDilationUpgradeStrength(id).toFixed(1) + ' free upgrades -> +' + exDilationUpgradeStrength(id, player.exdilation.unspent).toFixed(1)
+			else document.getElementById("xd" + i + "span").textContent = exDilationUpgradeStrength(id).toFixed(2) + 'x -> ' + exDilationUpgradeStrength(id, player.exdilation.unspent).toFixed(2) + 'x'
 		}
-		document.getElementById("xd"+i).style.display = unl ? "" : "none"
+		document.getElementById("xd"+i).parentElement.style.display = unl ? "" : "none"
 	}
 }
 
@@ -356,7 +357,6 @@ function reverseDilation () {
 	}
 	if (player.meta !== undefined) player.dilation.rebuyables[4] = 0
 	resetBlackhole();
-	updateDilation();
 	updateDilationUpgradeButtons();
 	updateDilationUpgradeCosts();
 	updateExdilation()
@@ -371,7 +371,6 @@ function toggleExdilaConf() {
 function boostDilationUpgrade(x) {
 	player.exdilation.spent[x] = Decimal.plus(player.exdilation.spent[x] || 0, player.exdilation.unspent).round();
 	player.exdilation.unspent = new Decimal(0);
-	updateDilation();
 	updateDilationUpgradeButtons();
 	updateExdilation();
 	if (x == 2 && player.aarexModifications.nguspV) resetDilationGalaxies()

@@ -289,7 +289,7 @@ function updatePCCompletions() {
 let qcRewards = {
 	effects: {
 		1: function(comps) {
-			if (comps == 0 || tmp.bE50kDT) return 1
+			if (comps == 0) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
 			if (hasBosonicUpg(62)) exp *= 1.1

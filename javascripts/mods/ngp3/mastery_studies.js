@@ -109,7 +109,6 @@ var masteryStudies = {
 			return Decimal.pow(r, exp)
 		},
 		263() {
-			if (tmp.bE50kDT) return 1
 			let x = player.meta.resets
 			x = x * (x + 10) / 60
 			return x + 1
@@ -139,7 +138,6 @@ var masteryStudies = {
 			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(player.galaxies, 1)), 1.5))
 		},
 		322() {
-			if (tmp.bE50kDT) return 1
 			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
 			if (log > 1e3 && player.aarexModifications.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)

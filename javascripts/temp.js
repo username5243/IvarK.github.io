@@ -32,7 +32,6 @@ function updateTemp() {
 	tmp.nrm = 1
 	if (player.timestudy.studies.includes(101)) tmp.nrm = player.replicanti.amount.max(1)
 	tmp.rg4 = false
-	tmp.bE50kDT = false
 	if (tmp.ngpX >= 5) pl.updateTmp()
 	if (tmp.ngp3) {
 		updateGhostifyTempStuff()
@@ -93,7 +92,6 @@ function updateRedLightBoostTemp(){
 function updateOrangeLightBoostTemp(){
 	if (tmp.effL[1] > 64) big = tmp.newNGP3E ? 10 + Math.pow(tmp.effL[1], 1/3) : Math.log10(tmp.effL[1] / 64) + 14
 	tmp.le[1] = tmp.effL[1] > 64 ? big : tmp.effL[1] > 8 ? Math.sqrt(tmp.effL[1]) + 6 : tmp.effL[1] + 1
-	if (hasBosonicUpg(65)) tmp.le[1] = Math.pow(tmp.le[1], 2)
 }
 
 function updateYellowLightBoostTemp(){
@@ -328,7 +326,6 @@ function updatePPTITemp(){
 
 function updateQuantumTempStuff() {
 	if (tmp.quActive) {
-		tmp.bE50kDT = player.dilation.dilatedTime.gt("1e50000")
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
 		if (tmp.nrm !== 1 && tmp.qu.bigRip.active) {
@@ -706,6 +703,7 @@ function updateNanoRewardEffects() {
 function updateNanoRewardScaling() {
 	let d = nanoRewards.scaling
 	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
+	tmp.nf.scale -= 1
 }
 
 function updateNanoRewardTemp() {

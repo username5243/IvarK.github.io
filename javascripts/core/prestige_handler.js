@@ -32,21 +32,21 @@ let Prestiges = {
 			return tmp.qu.bigRip.active ? this.quantum() : hasNU(16) || pl.on()
 		},
 		planck() {
-			return pl.can()
+			return pl.on() ? pl.canTier() : pl.can()
 		}
 	},
 	modReqs: {
 		paradox() {
-			return player.pSac !== undefined
+			return tmp.ngmX >= 5
 		},
 		accelerate() {
 			return tmp.ngmX >= 6
 		},
 		galaxy() {
-			return player.galacticSacrifice !== undefined
+			return tmp.ngmX >= 2
 		},
 		interreality() {
-			return player.galacticSacrifice !== undefined
+			return tmp.ngmX >= 2
 		},
 		quantum() {
 			return player.meta !== undefined
@@ -55,7 +55,7 @@ let Prestiges = {
 			return tmp.ngp3
 		},
 		planck() {
-			return tmp.ngpX >= 5
+			return tmp.ngp3
 		}
 	},
 	can(id) {
@@ -108,9 +108,13 @@ let Prestiges = {
 		planck: ["planck", "planckinfo", "plancktabbtn"],
 	},
 	shown(id) {
+		if (!ph.tmp[id]) return false
+		if (!ph.tmp[id].did) return true
+
 		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
-		return ph.tmp[id] && !player.aarexModifications.layerHidden[id]
+
+		return !player.aarexModifications.layerHidden[id]
 	},
 	tmp: {},
 	reset() {
@@ -136,17 +140,15 @@ let Prestiges = {
 			var tabShown = false
 			var shown = false
 
-			if (ph.tmp[p] !== undefined && ph.shown(p)) {
+			if (ph.shown(p)) {
 				if (ph.can(p)) prestigeShown = true
 				if (ph.tmp[p].did) tabShown = true
-				if (prestigeShown || tabShown) {
-					shown = true
-					ph.tmp.shown++
-				}
+				if (prestigeShown || tabShown) shown = true
 			}
 			if (ph.tmp[p] !== undefined) {
+				if (shown) ph.tmp.shown++
 				ph.tmp[p].shown = shown
-				ph.tmp[p].order = ph.tmp.shown + (shown ? 0 : 1)
+				ph.tmp[p].order = ph.tmp.shown
 			}
 
 			document.getElementById(d[0]).style.display = prestigeShown ? "" : "none"
@@ -158,14 +160,13 @@ let Prestiges = {
 		}
 
 		//Infinity Dimension unlocks
-		if (player.break && getEternitied() < 25) {
-			newDimPresPos = ph.shown("eternity") ? ph.tmp.eternity.order : ph.tmp.shown + 1
-			if (!ph.shown("eternity")) ph.tmp.shown++
+		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {
+			newDimPresPos = ph.tmp.eternity.shown ? ph.tmp.eternity.order : ph.tmp.shown + 1
+			if (!ph.tmp.eternity.shown) ph.tmp.shown++
 		}
 
-		let bigRipAndQuantum = (pl && pl.save) ? (!pl.save.on && !hasNU(16)) : false
-
 		//Quantum (after Neutrino Upgrade 16)
+		let bigRipAndQuantum = (pl && pl.save) ? (!pl.save.on && !hasNU(16)) : true
 		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"
 
 		//Big Rip

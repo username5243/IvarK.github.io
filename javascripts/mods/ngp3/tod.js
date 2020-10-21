@@ -352,7 +352,6 @@ function getTreeUpgradeEffect(upg) {
 		return Decimal.pow(2, lvl)
 	}
 	if (upg == 7) {
-		if (tmp.bE50kDT) return 1
 		return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
 	}
 	if (upg == 8) {
