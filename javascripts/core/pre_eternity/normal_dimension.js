@@ -371,10 +371,7 @@ function getNormalDimensionCostMults() {
 	if (inNC(10)) x = [null, 1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
 	else x = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
 
-	if (tmp.ngmR) {
-		for (let d = 1; d <= 8; d++) x[d] = Math.pow(x[d], ngmR.cost_scales.nds)
-		if (player.galaxies > 0) for (let d = 1; d <= 8; d++) x[d] = Decimal.pow(1.1, player.galaxies).times(x[d])
-	}
+	if (tmp.ngmR) for (let d = 1; d <= 8; d++) x[d] = ngmR.adjustCostScale(x[d])
 
 	return x
 }
@@ -632,7 +629,6 @@ function getDimensionProductionPerSecond(tier) {
 	}
 	ret = ret.times(getDimensionFinalMultiplier(tier))
 
-	if (tmp.ngmR) ret = ret.div(2)
 	if ((tmp.ngC || tmp.ez) && tier == 1) ret = ret.times(3)
 	if (tmp.ez && tier != 1) ret = ret.times(10)
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) ret = ret.times(player.chall2Pow)

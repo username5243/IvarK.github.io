@@ -4,6 +4,8 @@ let CONDENSED = {
 		player.condensed = {}
 	},
 	compile() {
+		delete ngC.tmp
+
 		tmp.ngC = player.condensed !== undefined
 		ngC.save = player.condensed
 		ngC.resetHTML()
@@ -15,11 +17,6 @@ let CONDENSED = {
 		if (ngC.save.time === undefined) ngC.resetTDs()
 	},
 	updateTmp() {
-		if (!tmp.ngC) {
-			delete ngC.tmp
-			return
-		}
-	
 		let data = {}
 		ngC.tmp = data
 

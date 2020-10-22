@@ -244,14 +244,14 @@ function infinityUpgradesDisplay(){
 	
 	let infiCol1And2Middle = tmp.ngC ? " and Tickspeed " : ""
 
-	document.getElementById("infi11").innerHTML = "Normal Dimensions gain a multiplier based on time played" + (tmp.ngC ? " and antimatter" : "") + "<br>Currently: " + shorten(infUpg11Pow()) + "x<br>Cost: 1 IP"
-	document.getElementById("infi12").innerHTML = "First and Eighth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi13").innerHTML = "Third and Sixth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi22").innerHTML = "Second and Seventh Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi23").innerHTML = "Fourth and Fifth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x<br>Cost: 1 IP"
-	document.getElementById("infi31").innerHTML = "Normal Dimensions gain a multiplier based on time spent in this Infinity" + (tmp.ngC ? " and total antimatter" : "") + "<br>Currently: " + shorten(infUpg13Pow()) + "x<br>Cost: 3 IP"
+	document.getElementById("infi11desc").innerHTML = "Normal Dimensions gain a multiplier based on time played" + (tmp.ngC ? " and antimatter" : "") + "<br>Currently: " + shorten(infUpg11Pow()) + "x"
+	document.getElementById("infi12desc").innerHTML = "First and Eighth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
+	document.getElementById("infi13desc").innerHTML = "Third and Sixth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
+	document.getElementById("infi22desc").innerHTML = "Second and Seventh Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
+	document.getElementById("infi23desc").innerHTML = "Fourth and Fifth Dimensions" + infiCol1And2Middle + " gain a multiplier based on your Infinities<br>Currently: " + formatValue(player.options.notation, dimMults(), 1, 1) + "x"
+	document.getElementById("infi31desc").innerHTML = "Normal Dimensions gain a multiplier based on time spent in this Infinity" + (tmp.ngC ? " and total antimatter" : "") + "<br>Currently: " + shorten(infUpg13Pow()) + "x"
 	var infi32middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? " <br> Currently: " + formatValue(player.options.notation, getUnspentBonus(), 2, 2) + "x" : ""
-	document.getElementById("infi32").innerHTML = "1st Dimension gets a multiplier based on unspent IP " + infi32middle + "<br>Cost: 5 IP"
+	document.getElementById("infi32desc").innerHTML = "1st Dimension gets a multiplier based on unspent IP " + infi32middle
 }
 
 function preBreakUpgradeDisplay(){
@@ -269,13 +269,13 @@ function preBreakUpgradeDisplay(){
 		if (tmp.ngC) based.push("your antimatter")
 		if (based.length > 0) {
 			var base = getMPTPreInfBase()
-			document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions based on " + wordizeList(based) + "<br>" + base + "x -> "+(infUpg12Pow() * base).toPrecision(4) + "x<br>Cost: 1 IP"
+			document.getElementById("infi21desc").innerHTML = "Increase the multiplier for buying 10 Dimensions based on " + wordizeList(based) + "<br>" + base + "x -> "+(infUpg12Pow() * base).toPrecision(4) + "x"
 		}
 
-		if (player.galacticSacrifice !== undefined) document.getElementById("infi33").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x<br>Cost: 7 IP"
+		if (player.galacticSacrifice !== undefined) document.getElementById("infi33desc").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x"
 
 		var infi34Middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>Currently: " + shortenDimensions(getIPMult()) + " every " + timeDisplay(player.bestInfinityTime * 10) : ""
-		document.getElementById("infi34").innerHTML = "Generate IP based on your fastest Infinity " + infi34Middle + "<br>Cost: 10 IP"
+		document.getElementById("infi34desc").innerHTML = "Generate IP based on your fastest Infinity " + infi34Middle
 	}
 	document.getElementById("lockedset1").style.display = "none"
 	if (player.setsUnlocked > 0) {
@@ -793,6 +793,16 @@ function replicantiShopABDisplay(){
 	else document.getElementById("replauto3").style.visibility = "hidden"
 }
 
+function setStatsDisplay(toggle) {
+	if (toggle) player.aarexModifications.hideStats = !player.aarexModifications.hideStats
+	document.getElementById("showStats").textContent = (player.aarexModifications.hideStats ? "Show" : "Hide") + " statistics"
+}
+
+function setAchsDisplay(toggle) {
+	if (toggle) player.aarexModifications.hideAchs = !player.aarexModifications.hideAchs
+	document.getElementById("showAchs").textContent = (player.aarexModifications.hideAchs ? "Show" : "Hide") + " achievements"
+}
+
 function primaryStatsDisplayResetLayers(){
 	if (!ph.shown("eternity")) document.getElementById("pasteternities").style.display = "none"
 	else document.getElementById("pasteternities").style.display = "inline-block"
@@ -804,7 +814,8 @@ function primaryStatsDisplayResetLayers(){
 	var showStats = (ph.shown("infinity") && player.challenges.length >= 2) || ph.shown("eternity") || ph.shown("quantum") || ph.shown("ghostify") ? "" : "none"
 	document.getElementById("brfilter").style.display = showStats
 	document.getElementById("statstabs").style.display = showStats
-	var display = player.aarexModifications.hideSecretAchs?"none":""
+
+	var display = player.aarexModifications.hideSecretAchs ? "none " : ""
 	document.getElementById("achTabButtons").style.display=display
 	document.getElementById("secretachsbtn").style.display=display
 }

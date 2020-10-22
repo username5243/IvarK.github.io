@@ -475,6 +475,12 @@ button {
 	top: 280px;
 }
 
+.presPos10 {
+	position: absolute;
+	left: 75%;
+	top: 400px;
+}
+
 .presCurrency1 {
     left: 75%;
     position: absolute;
@@ -545,6 +551,14 @@ button {
 	transform: translate(105px, 0);
 	width: 210px;
 	font-size: 12px;
+}
+
+.presCurrency10 {
+    left: 75%;
+	top: 360px;
+    position: absolute;
+    font-size: 12px;
+    width: 210px;
 }
 
 .presBtn {
@@ -822,6 +836,21 @@ button {
     background: white;
 }
 
+.singularitybtn {
+    background: black;
+    border: 2px solid #7f7f7f;
+	border-radius: 4px;
+    color: #bfbfbf;
+	font-family: Typewriter;
+	font-weight: bold;
+	transition-duration: 0.2s;
+	cursor: pointer
+}
+
+.singularitybtn:hover {
+    color: #1f1f1f;
+    background: white;
+}
 
 .interrealitybtn {
 	background: linear-gradient(90deg, #007f00, #000000, #003f7f);

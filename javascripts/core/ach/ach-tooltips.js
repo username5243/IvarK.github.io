@@ -404,13 +404,13 @@ function setR19Tooltip() {
 }
 
 function setR20Tooltip() {
-	// Row 20 (ng3p6) (7/8)
+	// Row 20 (ng3p6) (6/8)
 	//ng3p61/////
 	let finite = document.getElementById("Finite Time")
 	//ng3p63/////
 	let really = document.getElementById("Really?")
 	let grind = document.getElementById("But I don't want to grind!")
-	let oppose = document.getElementById("I rather oppose the theory of everything")
+	//ng3p65/////
 	let willenough = document.getElementById("Will it be enough?")
 	let pls = document.getElementById("Please answer me why you are dying.")
 
@@ -426,8 +426,7 @@ function setR20Tooltip() {
 	really.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 5000)) + " matter in Big Rip. Reward: Buying Electron upgrades doesn't consume Meta-Dimension Boosts.")
 	grind.setAttribute('ach-tooltip', "Get the 21st Nanofield reward without having Tree Upgrades. Reward: Gain more Quarks based on Radioactive Decays.")
 	willenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, player.aarexModifications.ngudpV ? 268435456 : 36000000))+" replicanti." + (willenoughReward != "" ? " Reward: " + willenoughReward + "." : ""))
-	oppose.setAttribute('ach-tooltip', "Become a ghost with at most 1x quantumed stat. Reward: You gain more Quarks based on your quantumed stat.")
-	pls.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 9.5e5)) + " IP in Big Rip while dilated, with no EP multiplier upgrades, time studies, and Break Eternity within this Ghostify. Reward: Each time you become a ghost, you gain " + shortenDimensions(2e3) + " galaxies worth of generated neutrinos, multiplied by your best-ever galaxy amount across all Big Rips.")
+	pls.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 9.4e5)) + " IP in Big Rip while dilated, with no EP multiplier upgrades, time studies, and Break Eternity within this Ghostify. Reward: Each time you become a ghost, you gain " + shortenDimensions(2e3) + " galaxies worth of generated neutrinos, multiplied by your best-ever galaxy amount across all Big Rips.")
 }
 
 function setBMTooltip() {

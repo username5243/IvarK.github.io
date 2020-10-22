@@ -51,6 +51,10 @@
 			</button>
 		</div>
 		<div style="position: relative">
+			<div id="sgEmpty"></div>
+			<button id="sgReset" class="storebtn" onclick="ngSg.reset()">See the event horizon... I want to go Singularity.</button>
+		</div>
+		<div style="position: relative">
 			<div id="irEmpty"></div>
 			<button id="irReset" class="storebtn" onclick="showTab('irTab')">A new rift has formed... Enter the Interreality.</button>
 		</div>
@@ -119,6 +123,7 @@
 			<button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('infinity')">Infinity</button>
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
+			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
 			<button id="quantumtabbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="quantumbtn" onclick='showTab("quantumtab")'>Quantum</button>
 			<button id="ghostifytabbtn" style="font-family: Typewriter; font-size: 20px" class="ghostifybtn" onclick='showTab("ghostify")'>Ghostify</button>
 			<button id="plancktabbtn" style="font-family: Typewriter; font-size: 20px" class="planckbtn" onclick='showTab("plTab")'>Planck</button>
@@ -1715,7 +1720,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 20)</span>
+				<span class="warning">(Test server: Beta 21)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -2525,7 +2530,7 @@
 								<div id="But I don't want to grind!" class="achievement achievementlocked" style="background-image: url(images/155.png)" ach-tooltip="Get the 21st Nanofield reward without having Tree Upgrades. Reward: Gain more quarks based on radioactive decays."></div>
 							</td>
 							<td>
-								<div id="I rather oppose the theory of everything" class="achievement achievementlocked" style="background-image: url(images/156.png)"></div>
+								<div id="I rather oppose the theory of everything" class="achievement achievementlocked" style="background-image: url(images/156.png)" ach-tooltip="Become a ghost with at most 1x quantumed stat. Reward: You gain more Quarks based on your quantumed stat and you can auto-disable your 'Automatic Quantum' autobuyer with a specific amount of quantumed stat."></div>
 							</td>
 							<td>
 								<div id="Will it be enough?" class="achievement achievementlocked" style="background-image: url(images/157.png)"></div>
@@ -4038,16 +4043,20 @@
 							<input type="checkbox" onchange="updateAutobuyers()"  id="dilatedeternityison"></input>
 						</div>
 					</div></td>
-					<td id="autoBuyerQuantum">
-						<div class="autoBuyerDiv" style="display:block">
-							<div>Automatic Quantum</div>
-							<div><span id='autoquantumtext'></span>
-							<input type="text" onchange="updatePriorities()" id="priorityquantum"></input></div>
+					<td id="autoBuyerQuantum"><div class="autoBuyerDiv" style="display:block">
+						<div>Automatic Quantum</div>
+						<div><span id='autoquantumtext'></span>
+						<input type="text" onchange="updatePriorities()" id="priorityquantum"></input></div>
+						<br>
+						<span style="font-size: 80%">Is active</span>
+						<input type="checkbox" onchange="updateAutobuyers()"  id="quantumison"></input>
+						<div id='autoDisableQuantum'>
+							Disable at times quantumed stat:
+							<input type="text" onchange="updatePriorities()" id="priorityAutoDisableQuantum"></input>
 							<br>
-							<span style="font-size: 80%">Is active</span>
-							<input type="checkbox" onchange="updateAutobuyers()"  id="quantumison"></input>
+							(0 = always)
 						</div>
-					</td>
+					</div></td>
 				</tr>
 				<tr>
 					<td>
@@ -5051,7 +5060,7 @@
 					<tr>
 						<td><button id="neutrinoUnlock" class="gluonupgrade unavailablebtn" onclick="unlockNeutrinoBoost()">Unlock a new boost based on your neutrinos.<br>Cost: <span id="neutrinoUnlockCost">2</span> GhP</button></td>
 						<td><button id="neutrinoMultUpg" class="gluonupgrade unavailablebtn" onclick="buyNeutrinoMult()">You gain 5x more neutrinos.<br>Currently: <span id="neutrinoMult">1</span>x<br>Cost: <span id="neutrinoMultUpgCost">3</span> GhP</button><br><button class="storebtn" onclick='maxNeutrinoMult()' style='width:190px'>Max Neutrino mult</button></td>
-						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2.5x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
+						<td><button id="ghpMultUpg" class="gluonupgrade unavailablebtn" onclick="buyGHPMult()">You gain 2.22x more GhP.<br>Currently: <span id="ghpMult"></span>x<br>Cost: <span id="ghpMultUpgCost"></span> of any neutrinos</button><br><button class="storebtn" onclick='maxGHPMult()' style='width:190px'>Max GhP mult</button></td>
 					</tr>
 					<tr>
 						<td><button class="gluonupgrade unavailablebtn" id="neutrinoUpg1" onclick="buyNeutrinoUpg(1)" style="font-size: 10px">Meta-Dimension Boosts cost cheaper.<br>Currently: -<span id="neutrinoUpg1Pow"></span><br>Cost: <span id="neutrinoUpg1Cost"></span> of any neutrinos</button></td>
@@ -5697,7 +5706,9 @@
 			<button id="footerBtn" onclick="showHideFooter(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="newsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="progressBarBtn" onclick="toggleProgressBar()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<button id="showStats" onclick="setStatsDisplay(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideRepresentation" onclick="toggleRepresentation()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<button id="showAchs" onclick="setAchsDisplay(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showAchRowNums" onclick="toggleAchRowNums()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideCompletedAchs" onclick="toggleCompletedAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideSecretAchs" onclick="toggleSecretAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
@@ -5878,6 +5889,7 @@
 <script type="text/javascript" src="javascripts/mods/ngudp.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngusp.js"></script>
 <script type="text/javascript" src="javascripts/mods/quantum.js"></script>
+<script type="text/javascript" src="javascripts/mods/singularity.js"></script>
 
 <script type="text/javascript" src="javascripts/convert.js"></script>
 <script type="text/javascript" src="javascripts/display.js"></script>

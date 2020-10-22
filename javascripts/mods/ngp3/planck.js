@@ -71,7 +71,6 @@ let pl = {
 		if ((tmp.ngpX < 5 || pl.save.conf) && !confirm(pl.conf())) return
 		if (!pl.did()) {
 			for (let x = 0; x < pl.warnings.length; x++) if (!confirm(pl.warnings[x])) return
-			convertToNGP5()
 		}
 
 		ph.onPrestige("planck")
@@ -89,6 +88,7 @@ let pl = {
 		if (!pl.save) {
 			convertToNGP5()
 			if (player.exdilation !== undefined) exitNGUd()
+			if (tmp.ngSg) ngSg.exit()
 		}
 
 		if (pl.on()) pl.save.layer++
@@ -131,7 +131,11 @@ let pl = {
 		ph.updateDisplay()
 	},
 	conf() {
-		return "You will reset everything except Brave Milestones, Automator Ghosts, and all Ghostify unlocks, for a big boost / twist to Ghostify. Be warned: " + (player.exdilation !== undefined ? "NGUd content won't work anymore after your first Planck! " : "") + "Eternity and Quantum don't work in this reduced universe. Ghost scientists researched that there's a little bit of matter that grows itself. Are you ready, again?"
+		let exit = []
+		if (tmp.ngSg !== undefined) exit.push("NGSg")
+		if (player.exdilation !== undefined) exit.push("NGUd")
+
+		return "You will reset everything except Brave Milestones, Automator Ghosts, and all Ghostify unlocks, for a big boost / twist to Ghostify. Be warned: " + (exit.length ? wordizeList(exit) + " content won't work anymore after your first Planck! " : "") + "Eternity and Quantum don't work in this reduced universe. Ghost scientists researched that there's a little bit of matter that grows itself. Are you ready, again?"
 	},
 	exitConf: "You will bring the universe back to normal, but matter won't appear until you reduce it again. Are you sure?",
 	warnings: [

@@ -1,5 +1,5 @@
 let Prestiges = {
-	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "quantum", "ghostify", "planck"],
+	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "ghostify", "planck"],
 	reqs: {
 		paradox() {
 			return player.matter.max(player.money).gte(1e3) && player.totalTickGained && !tmp.ri
@@ -20,6 +20,9 @@ let Prestiges = {
 		},
 		interreality() {
 			return ECTimesCompleted("eterc10") >= 1
+		},
+		singularity() {
+			return ngSg.can()
 		},
 		quantum() {
 			return player.money.log10() >= getQCGoalLog() &&
@@ -47,6 +50,9 @@ let Prestiges = {
 		},
 		interreality() {
 			return tmp.ngmX >= 2
+		},
+		singularity() {
+			return tmp.ngSg
 		},
 		quantum() {
 			return player.meta !== undefined
@@ -80,6 +86,9 @@ let Prestiges = {
 		interreality() {
 			return false
 		},
+		singularity() {
+			return ngSg.save.times >= 1
+		},
 		quantum() {
 			return tmp.qu.times >= 1
 		},
@@ -87,7 +96,7 @@ let Prestiges = {
 			return player.ghostify.times >= 1
 		},
 		planck() {
-			return tmp.ngpX >= 5
+			return player.achievements.includes("ng3p111")
 		}
 	},
 	did(id) {
@@ -103,6 +112,7 @@ let Prestiges = {
 		infinity: ["postInfinityButton", "infinityPoints2", "infinitybtn"],
 		eternity: ["eternitybtn", "eternityPoints2", "eternitystorebtn"],
 		interreality: ["irReset", "irEmpty", "irTabBtn"],
+		singularity: ["sgReset", "sgEmpty", "sgTabBtn"],
 		quantum: ["quantumbtn", "quantumInfo", "quantumtabbtn"],
 		ghostify: ["ghostifybtn", "ghostparticles", "ghostifytabbtn"],
 		planck: ["planck", "planckinfo", "plancktabbtn"],
@@ -126,8 +136,7 @@ let Prestiges = {
 				ph.tmp[p] = {}
 				if (!did && ph.didData[p]()) did = true
 				if (did) ph.onPrestige(p)
-				document.getElementById("hide" + p).style.display = did ? "" : "none"
-				document.getElementById("hide" + p).innerHTML = (player.aarexModifications.layerHidden[p] ? "Show" : "Hide") + " " + p
+				else document.getElementById("hide" + p).style.display = "none"
 			} else document.getElementById("hide" + p).style.display = "none"
 		}
 	},
@@ -189,6 +198,7 @@ let Prestiges = {
 		ph.tmp[layer].did = true
 		ph.tmp.layers++
 		document.getElementById("hide" + layer).style.display = ""
+		document.getElementById("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	},
 	setupHTML(layer) {
 		var html = ""

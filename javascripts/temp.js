@@ -53,7 +53,7 @@ function updateTemp() {
 		tmp.ig = tmp.ig.times(tmp.blu[41].ig)
 	}
 
-	ngC.updateTmp()
+	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
 	updateExtraReplGalaxies()

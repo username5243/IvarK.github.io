@@ -1856,7 +1856,9 @@ function setOptionsDisplaysStuff1(){
         document.getElementById("decimalMode").textContent = "Big number library: "+(break_infinity_js?"break_infinity (slow)":"logarithmica_numerus (fast)")
         document.getElementById("decimalMode").style.visibility = Decimal.gt(player.totalmoney,Decimal.pow(10, 9e15)) ? "hidden" : ""
         document.getElementById("hideProductionTab").textContent = (player.aarexModifications.hideProductionTab?"Show":"Hide")+" production tab"
+		setStatsDisplay()
         document.getElementById("hideRepresentation").textContent=(player.aarexModifications.hideRepresentation?"Show":"Hide")+" antimatter representation"
+		setAchsDisplay()
         document.getElementById("showAchRowNums").textContent=(player.aarexModifications.showAchRowNums?"Hide":"Show")+" achievement row info"
         document.getElementById("hideCompletedAchs").textContent=(player.aarexModifications.hideCompletedAchs?"Show":"Hide")+" completed achievement rows"
         document.getElementById("hideSecretAchs").textContent=(player.aarexModifications.hideSecretAchs?"Show":"Hide")+" secret achievements"
@@ -1877,13 +1879,25 @@ function setDisplaysStuff1(){
 		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce "+(player.infinitied>0||getEternitied()!==0||ph.did("quantum")?"faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
-		if (!tmp.ngC) document.getElementById("infi21").innerHTML = "Increase the multiplier for buying 10 Dimensions<br>" + base.toFixed(1) + "x -> " + (base * infUpg12Pow()).toFixed(1) + "x<br>Cost: 1 IP"
-		document.getElementById("infi33").innerHTML = "Increase Dimension Boost multiplier<br>2x -> 2.5x<br>Cost: 7 IP"
+		if (!tmp.ngC) document.getElementById("infi21desc").innerHTML = "Increase the multiplier for buying 10 Dimensions.<br>" + base.toFixed(1) + "x -> " + (base * infUpg12Pow()).toFixed(1) + "x"
+		document.getElementById("infi33desc").innerHTML = "Increase the multiplier for each Dimension Boost.<br>2x -> 2.5x"
 	}
-	document.getElementById("infi24").innerHTML = "Antimatter Galaxies are " + (tmp.ngC ? "quadruple" : "twice") + " as effective<br>Cost: 2 IP"
-	var resetSkipCosts=[20,40,80]
-	for (u=1;u<4;u++) document.getElementById("infi4"+u).innerHTML="You start with the "+(u+4)+"th dimension unlocked"+(player.tickspeedBoosts==undefined?"":" and "+(u*4)+" tickspeed boosts")+"<br>Cost: "+resetSkipCosts[u-1]+" IP"
-	document.getElementById("infi44").innerHTML="You start with the 8th dimension unlocked"+(player.tickspeedBoosts==undefined?"":", 16 tickspeed boosts")+", and a Galaxy<br>Cost: 500 IP"
+	document.getElementById("infi24desc").textContent = "Antimatter Galaxies are " + (tmp.ngC ? "quadruple" : "twice") + " as effective."
+
+	for (let u = 1; u <= 4; u++) {
+		let benefits = [(u + 4) + "th Dimension unlocked"]
+		if (tmp.ngmX >= 3) benefits.push((u * 5) + " Tickspeed Boosts")
+		if (u == 4) benefits.push("a Antimatter Galaxy")
+		document.getElementById("infi4" + u + "desc").textContent = "Start with " +
+		wordizeList(benefits) + "."
+	}
+
+	for (let r = 1; r <= 4; r++) {
+		for (let c = 1; c <= 4; c++) {
+			let id = c * 10 + r
+			document.getElementById("infi" + id + "cost").textContent = INF_UPGS.normal.getCost(id)
+		}
+	}
 }
 
 function setChallengeDisplay(){
@@ -2178,6 +2192,7 @@ function onLoad(noOffline) {
 	if (tmp.ngmX) player.aarexModifications.ngmX = tmp.ngmX
 	ngC.compile()
 	tmp.ez = player.aarexModifications.ez
+	ngSg.compile()
 
 	ph.reset()
 	ls.reset()
@@ -2247,6 +2262,7 @@ function onLoad(noOffline) {
 	document.getElementById('toggleallmetadims').style.display=speedrunMilestonesReached>7?"":"none"
 	document.getElementById('metaboostauto').style.display=speedrunMilestonesReached>14?"":"none"
 	document.getElementById("autoBuyerQuantum").style.display=speedrunMilestonesReached>22?"":"none"
+	document.getElementById('autoDisableQuantum').style.display=player.achievements.includes("ng3p66")?"":"none"
 	document.getElementById("quarksAnimBtn").style.display=ph.did("quantum")&&player.masterystudies?"inline-block":"none"
 	document.getElementById("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
 	document.getElementById("maxTimeDimensions").style.display=removeMaxTD?"none":""
@@ -2347,7 +2363,7 @@ function setupNGP31Versions() {
 		player.quantum.electrons.percentage = 1
 	} else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
-		if (tmp.ngpX < 5) delete player.pl
+		if (!player.achievements.includes("ng3p111") && tmp.ngpX < 5) delete player.pl
 	}
 	player.aarexModifications.newGame3PlusVersion = 3
 }
@@ -2977,9 +2993,13 @@ function loadAutoBuyerSettings() {
         }
         if (player.masterystudies) {
                 document.getElementById("prioritydil").value = player.eternityBuyer.dilationPerAmount
-                if (tmp.qu) if (tmp.qu.autobuyer) {
-                        if (isNaN(break_infinity_js ? tmp.qu.autobuyer.limit : tmp.qu.autobuyer.limit.l)) tmp.qu.autobuyer.limit = new Decimal(1)
-                        document.getElementById("priorityquantum").value = tmp.qu.autobuyer.mode == "amount" || tmp.qu.autobuyer.mode == "relative" ? formatValue("Scientific", tmp.qu.autobuyer.limit, 2, 0) : tmp.qu.autobuyer.limit
+                if (tmp.qu) {
+					let data = tmp.qu.autobuyer
+					if (data) {
+                        if (isNaN(break_infinity_js ? data.limit : data.limit.l)) data.limit = new Decimal(1)
+                        document.getElementById("priorityquantum").value = data.mode == "amount" || data.mode == "relative" ? formatValue("Scientific", data.limit, 2, 0) : data.limit
+                        document.getElementById("priorityAutoDisableQuantum").value = data.autoDisable || 0
+					}
                 }
         }
 }

@@ -9,8 +9,10 @@ let ngmR = {
 	compile() {
 		tmp.ngmR = player.aarexModifications.ngmR !== undefined
 	},
-	cost_scales: {
-		nds: 1.2,
-		ts: 1.3
+	adjustCostScale(x) {
+		let exp = 1.05
+		if (player.galaxies > 0) exp = 1 + 1 / (player.galaxies * 10 + 20)
+
+		return Math.pow(x, exp)
 	}
 }

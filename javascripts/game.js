@@ -145,16 +145,20 @@ function setupAutobuyerHTMLandData(){
 }
 
 function setupInfUpgHTMLandData(){
-	var iut = document.getElementById("preinfupgrades")
+	let iut = document.getElementById("preinfupgrades")
 	for (let r = 1; r <= 4; r++) {
 		let row = iut.insertRow(r - 1)
 		for (let c = 1; c <= 4; c++) {
-			var col = row.insertCell(c - 1)
-			col.innerHTML = "<button class='infinistorebtn" + c + "' id='infi" + (c * 10 + r) + "' onclick='INF_UPGS.normal.buy(" + (c * 10 + r) + ")'></button>"
+			let col = row.insertCell(c - 1)
+			let id = c * 10 + r
+			col.innerHTML = "<button id='infi" + id + "' onclick='INF_UPGS.normal.buy(" + id + ")'>" +
+				"<span id='infi" + id+ "desc'></span>" +
+				"<br>Cost: <span id='infi" + id + "cost'></span> IP" +
+			"</button>"
 		}
 	}
 
-	document.getElementById("infi14").innerHTML = "Decrease the number of Dimensions needed for Dimension Boosts and Galaxies by 9<br>Cost: 1 IP"
+	document.getElementById("infi14desc").textContent = "Decrease the number of Dimensions needed for Dimension Boosts and Galaxies by 9."
 }
 
 function setupParadoxUpgrades(){
@@ -728,6 +732,7 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngex) player.aarexModifications.ngexV = 0.1
 	if (modesChosen.aau) {
 		player.aarexModifications.aau = 1
+		player.aarexModifications.hideAchs = true
 		dev.giveAllAchievements(true)
 	}
 	if (modesChosen.ls) player.aarexModifications.ls = {}
@@ -1911,14 +1916,21 @@ function changeSaveDesc(saveId, placement) {
 		if (ngmX >= 4) msg += "-" + ngmX
 		else if (ngmX) msg += "-".repeat(ngmX)
 		var ex=temp.aarexModifications.ngexV
+		if (ngmX < 2 && temp.aarexModifications.ngmR !== undefined) msg = msg != "" || ex ? msg + "-R" : msg + "- Remade"
 		if (temp.condensed !== undefined) msg = msg != "" || ex ? msg + "C" : msg + " Condensed"
 		if (temp.boughtDims) msg = msg != "" || ex ? "ER" + msg : "Eternity Respecced"
 		else if (temp.singularity) msg = msg != "" || ex ? "IR" + msg : "Infinity Respecced"
 		else msg = "NG" + msg
 		if (ex) msg = msg == "NG" ? "Expert Mode" : msg + "Ex"
-		if (temp.galacticSacrifice && temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
-		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", no NG+ features"
-		msg = (msg == "NG" ? "" : msg + "<br>") + (isSaveCurrent ? "Selected<br>" : "Played for " + timeDisplayShort(temp.totalTimePlayed) + "<br>")
+		if (temp.galacticSacrifice) {
+			if (temp.aarexModifications.ngmR) msg += ", NG-R"
+			if (temp.aarexModifications.newGameMinusVersion) msg += ", NG-"
+		}
+		if (temp.aarexModifications.ez) msg = (msg == "NG" ? "" : msg + ", ") + "Barrier-Easing"
+		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", The Grand Run [No NG+]"
+		if (temp.aarexModifications.aau) msg = (msg == "NG" ? "" : msg + ", ") + "AAU"
+		if (temp.aarexModifications.ls) msg = (msg == "NG" ? "" : msg + ", ") + "Light Speed"
+		msg = (msg == "NG" ? "" : "(<b>" + msg + "</b>)<br><br>") + (isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>"
 		var originalBreak = player.break
 		var originalNotation = player.options.notation
 		var originalCommas = player.options.commas
@@ -1929,7 +1941,10 @@ function changeSaveDesc(saveId, placement) {
 		}
 		var isSaveGhostified = temp.ghostify ? temp.ghostify.times > 0 : false
 		var isSaveQuantumed = temp.quantum ? temp.quantum.times > 0 : false
-		if (isSaveGhostified) {
+		var isSavePlancked = temp.aarexModifications.ngpX >= 5
+		if (isSavePlancked) {
+			msg += "Planck Tier: " + getFullExpansion(temp.pl.layer)
+		} else if (isSaveGhostified) {
 			if (temp.achievements.includes("ng3p101")) {
 				var data=temp.ghostify.gds
 				msg+="Gravitons: "+shorten(new Decimal(data.gv))+", Gravity Dimension Shifts / Boosts: "+getFullExpansion(data.gdBoosts)
@@ -3113,12 +3128,16 @@ function updatePriorities() {
 			player.eternityBuyer.dilationPerAmount = dilValue
 			if (player.achievements.includes("ng3p52")) document.getElementById("autoDilValue").value = dilValue
 		}
+	
 		const quantumValue = fromValue(document.getElementById("priorityquantum").value)
 		if (!isNaN(break_infinity_js ? quantumValue : quantumValue.l) && tmp.qu.autobuyer) tmp.qu.autobuyer.limit = quantumValue
 		if (player.eternityBuyer.isOn&&player.eternityBuyer.dilationMode&&player.eternityBuyer.statBeforeDilation>=player.eternityBuyer.dilationPerAmount&&!player.eternityBuyer.slowStopped&&player.eternityBuyer.dilMode=="amount") {
 			startDilatedEternity(true)
 			return
 		}
+
+		const autoDisableQuantum = parseFloat(document.getElementById("priorityAutoDisableQuantum").value)
+		if (autoDisableQuantum == Math.round(autoDisableQuantum) && autoDisableQuantum >= 0) tmp.qu.autobuyer.autoDisable = autoDisableQuantum
 	}
 	priorityOrder()
 }
@@ -3282,6 +3301,7 @@ function eternity(force, auto, presetLoad, dilated) {
 		updateBreakEternity()
 	}
 	addEternityTime(array)
+	player.thisEternity = 0
 	var forceRespec = doCheckECCompletionStuff()
 	for (var i = 0; i < player.challenges.length; i++) {
 		if (!player.challenges[i].includes("post") && getEternitied() > 1) temp.push(player.challenges[i])
@@ -4111,7 +4131,9 @@ function requiredInfinityUpdating(diff){
 }
 
 function chall2PowerUpdating(diff){
-	var div = 1800 / puMults[11](hasPU(11, true, true))
+	var div = 180
+	if (tmp.ngmX >= 5) div /= puMults[11](hasPU(11, true, true))
+	if (tmp.ngmR) div /= 100
 	player.chall2Pow = Math.min(player.chall2Pow + diff / div, 1);
 }
 
@@ -4188,10 +4210,10 @@ function ghostifyAutomationUpdating(diff){
 	if (isAutoGhostActive(15)) if (tmp.qu.bigRip.active && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
 
 	//Quantum Layer
-	if (player.masterystudies.includes("d13") && isAutoGhostActive(13)) {
+	if (player.masterystudies.includes("d13") && isAutoGhostActive(13) && tmp.qu.bigRip.times < (player.ghostify.automatorGhosts[13].o || 1/0)) {
 		if (tmp.qu.bigRip.active) {
 			if (tmp.qu.time>=player.ghostify.automatorGhosts[13].u * 10) quantumReset(true, true)
-		} else if (tmp.qu.time>=player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < (player.ghostify.automatorGhosts[13].o || 1/0)) bigRip(true)
+		} else if (tmp.qu.time >= player.ghostify.automatorGhosts[13].t * 10) bigRip(true)
 	}
 
 	if (!tmp.quActive) return
@@ -4575,7 +4597,7 @@ function replicantiIncrease(diff) {
 
 function IPMultBuyUpdating() {
 	if (player.infMultBuyer && (!player.boughtDims || canBuyIPMult())) {
-		var dif = Math.floor(player.infinityPoints.div(player.infMultCost).log(player.aarexModifications.newGameExpVersion?4:10)) + 1
+		var dif = Math.floor(player.infinityPoints.div(player.infMultCost).log(player.aarexModifications.newGameExpVersion ? 4 : 10)) + 1
 		if (dif > 0) {
 			player.infMult = player.infMult.times(Decimal.pow(getIPMultPower(), dif))
 			player.infMultCost = player.infMultCost.times(Decimal.pow(ipMultCostIncrease, dif))
@@ -4721,8 +4743,8 @@ function isEmptinessDisplayChanges(){
 	} else {
 		document.getElementById("dimensionsbtn").style.display = "inline-block";
 		document.getElementById("optionsbtn").style.display = "inline-block";
-		document.getElementById("statisticsbtn").style.display = "inline-block";
-		document.getElementById("achievementsbtn").style.display = "inline-block";
+		document.getElementById("statisticsbtn").style.display = player.aarexModifications.hideStats ? "none" : "inline-block";
+		document.getElementById("achievementsbtn").style.display = player.aarexModifications.hideAchs ? "none" : "inline-block";
 	}
 }
 
@@ -5316,17 +5338,20 @@ function dimBoolean() {
 	return true
 }
 
-function autoQuantumABTick(){
-	if (tmp.qu.autobuyer.mode == "amount") {
-		if (quarkGain().gte(Decimal.round(tmp.qu.autobuyer.limit))) quantum(true, false, 0)
-	} else if (tmp.qu.autobuyer.mode == "relative") {
-		if (quarkGain().gte(Decimal.round(tmp.qu.autobuyer.limit).times(tmp.qu.last10[0][1]))) quantum(true, false, 0)
-	} else if (tmp.qu.autobuyer.mode == "time") {
-		if (tmp.qu.time / 10 >= new Decimal(tmp.qu.autobuyer.limit).toNumber()) quantum(true, false, 0)
-	} else if (tmp.qu.autobuyer.mode == "peak") {
-		if (tmp.qu.autobuyer.peakTime >= new Decimal(tmp.qu.autobuyer.limit).toNumber()) quantum(true, false, 0)
-	} else if (tmp.qu.autobuyer.mode == "dilation") {
-		if (player.dilation.times >= Math.round(new Decimal(tmp.qu.autobuyer.limit).toNumber())) quantum(true, false, 0)
+function autoQuantumABTick() {
+	let data = tmp.qu.autobuyer
+
+	if (data.autoDisable && tmp.qu.times >= data.autoDisable) return
+	if (data.mode == "amount") {
+		if (quarkGain().gte(Decimal.round(data.limit))) quantum(true, false, 0)
+	} else if (data.mode == "relative") {
+		if (quarkGain().gte(Decimal.round(data.limit).times(tmp.qu.last10[0][1]))) quantum(true, false, 0)
+	} else if (data.mode == "time") {
+		if (tmp.qu.time / 10 >= new Decimal(data.limit).toNumber()) quantum(true, false, 0)
+	} else if (data.mode == "peak") {
+		if (data.peakTime >= new Decimal(data.limit).toNumber()) quantum(true, false, 0)
+	} else if (data.mode == "dilation") {
+		if (player.dilation.times >= Math.round(new Decimal(data.limit).toNumber())) quantum(true, false, 0)
 	}
 }
 

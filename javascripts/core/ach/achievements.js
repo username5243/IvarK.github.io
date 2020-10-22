@@ -410,6 +410,7 @@ function giveAchievement(name, noUpdate) {
 			if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
 		}
 	}
+	if (name == "I rather to oppose the theory of everything") document.getElementById('autoDisableQuantum').style.display = ""
 	if (name == "Even Ghostlier than before") {
 		for (let i = 1; i <= 8; i++){
 			if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
@@ -418,13 +419,13 @@ function giveAchievement(name, noUpdate) {
 			if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
 		}
 	}
-        if (name == "The Power of Relativity") {
-                for (let i = 1; i <= 8; i++){
+	if (name == "The Power of Relativity") {
+		for (let i = 1; i <= 8; i++){
 			if (!player.achievements.includes("ng3p7" + i)) player.achievements.push("ng3p7" + i)
 			if (!player.achievements.includes("ng3p8" + i)) player.achievements.push("ng3p8" + i)
 		}
-                updateBosonicLimits()
-        }
+		updateBosonicLimits()
+	}
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()
 	if (name == "Not-so-very-challenging") updateQuantumChallenges()

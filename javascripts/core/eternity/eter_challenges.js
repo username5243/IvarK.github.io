@@ -260,6 +260,7 @@ function startEternityChallenge(n) {
 	let oldStat = getEternitied()
 	player.eternities = nA(player.eternities, gainEternitiedStat())
 	updateBankedEter()
+	player.thisEternity = 0
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
 	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
 	else player.infinityPoints = new Decimal(0);

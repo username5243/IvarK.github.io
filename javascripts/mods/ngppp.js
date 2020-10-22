@@ -456,7 +456,7 @@ function getGHPGain() {
 }
 
 function getGHPBaseMult() {
-	return Decimal.pow(2.5, player.ghostify.multPower - 1)
+	return Decimal.pow(20/9, player.ghostify.multPower - 1)
 }
 
 function getGHPMult() {
@@ -709,7 +709,7 @@ function setupAutomaticGhostsData() {
 
 var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,40,40,40,45]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,2,2,0.5,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,10,3,3,0]
+var powerConsumptions=[0,1,1,1,1,1,1.5,1,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,10,3,3,0]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {

@@ -348,24 +348,39 @@ let INF_UPGS = {
 			11: 1,
 			21: 1,
 			31: 3,
-			41: 20,
+			41() {
+				return tmp.ez ? 2 : 20
+			},
 			12: 1,
 			22: 1,
 			32: 5,
-			42: 40,
+			42() {
+				return tmp.ez ? 3 : 40
+			},
 			13: 1,
 			23: 1,
 			33: 7,
-			43: 80,
+			43() {
+				return tmp.ez ? 5 : 80
+			},
 			14: 1,
 			24: 2,
 			34: 10,
-			44: 500,
+			44() {
+				return tmp.ez ? 8 : 500
+			}
+		},
+		getCost(x) {
+			x = this.costs[x]
+			if (typeof(x) == "function") x = x()
+
+			if (tmp.ngmR && x % 10 > 2) x *= 2
+			return x
 		},
 		can(x) {
 			let y = x % 10
 			if (y > 1 && !player.infinityUpgrades.includes(this.ids[x - 1])) return false
-			return player.infinityPoints.gte(this.costs[x])
+			return player.infinityPoints.gte(this.getCost(x))
 		},
 		buy(x) {
 			let id = this.ids[x]
@@ -373,7 +388,7 @@ let INF_UPGS = {
 			if (!this.can(x)) return
 
 			player.infinityUpgrades.push(id)
-			player.infinityPoints = player.infinityPoints.minus(this.costs[x])
+			player.infinityPoints = player.infinityPoints.minus(this.getCost(x))
 		}
 	}
 }

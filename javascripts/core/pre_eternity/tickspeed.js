@@ -239,6 +239,7 @@ function resetTickspeed() {
 	if (player.achievements.includes("r45")) x *= 0.98
 	if (player.achievements.includes("r66")) x *= 0.98
 	if (player.achievements.includes("r83")) x = Decimal.pow(0.95, player.galaxies).times(x)
+	if (tmp.ngmR) x = Decimal.pow(1.5, -player.galaxies).times(x)
 	player.tickspeed = new Decimal(x)
 
 	divideTickspeedIC5()
@@ -248,7 +249,7 @@ function resetTickspeed() {
 
 	//Tickspeed cost multiplier
 	let y = 10
-	if (tmp.ngmR) y = Math.pow(y, ngmR.cost_scales.ts)
+	if (tmp.ngmR) y = ngmR.adjustCostScale(y)
 	player.tickspeedMultiplier = new Decimal(y)
 }
 

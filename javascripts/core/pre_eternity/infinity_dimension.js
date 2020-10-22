@@ -199,7 +199,6 @@ function resetInfDimensions(full) {
 		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
 	}
 	if (full) resetInfDimUnlocked()
-	if (player.aarexModifications.ngmX >= 5) resetIDs_ngm5()
 }
 
 function resetInfDimUnlocked() {
