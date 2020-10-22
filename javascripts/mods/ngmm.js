@@ -168,7 +168,7 @@ function galacticSacrifice(auto, force, chall) {
 
 function resetGalacticSacrifice(eternity) {
 	return player.galacticSacrifice ? {
-		galaxyPoints: player.achievements.includes("r33") && !eternity ? player.infinityPoints.div(10).pow(2) : new Decimal(0),
+		galaxyPoints: player.achievements.includes("r33") && !eternity ? new Decimal(getInfinitied()).div(10).pow(2) : new Decimal(0),
 		time: 0,
 		times: 0,
 		upgrades: []
