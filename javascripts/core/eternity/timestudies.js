@@ -38,7 +38,7 @@ function buyWithEP() {
 }
 
 function canBuyTTWithEP() {
-	return player.timeDimension1.bought || (player.masterystudies !== undefined && tmp.qu.bigRip.active)
+	return player.timeDimension1.bought || inBigRip()
 }
 
 function maxTheorems() {
@@ -707,7 +707,7 @@ function save_preset(id) {
 function load_preset(id, reset) {
 	if (reset) {
 		var id7unlocked = player.infDimensionsUnlocked[7]
-		if (player.masterystudies !== undefined) if (player.quantum.bigRip.active) id7unlocked = true
+		if (inBigRip()) id7unlocked = true
 		if (player.infinityPoints.lt(player.eternityChallGoal) || !id7unlocked) return
 		player.respec = true
 		player.respecMastery = true
@@ -830,7 +830,7 @@ function hasTimeStudy(x) {
 //Time Study Effects
 let tsMults = {
 	11() {
-		let bigRipped = tmp.ngp3 && tmp.qu.bigRip.active
+		let bigRipped = inBigRip()
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
 		if (bigRipped && log > 900) log = Math.sqrt(log * 900)
 		else if (player.aarexModifications.newGameExpVersion) log = Math.min(log, 25000) // buff to NG+++^

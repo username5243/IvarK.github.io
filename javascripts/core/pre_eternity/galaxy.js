@@ -20,7 +20,7 @@ function galaxyReset(bulk) {
 		player.resets = 4;
 	}
 	setInitialResetPower();
-	
+
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
@@ -155,9 +155,9 @@ function getDistantScalingStart() {
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
 	if (hasTimeStudy(224)) n += Math.floor(player.resets/2000)
-	if (tmp.ngp3 && tmp.qu.bigRip !== undefined && tmp.qu.bigRip.active && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
+	if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
-	if (pl.on()) n -= pl.tmp.nerfMu
+	if (pl.on()) n -= fNu.tmp.nerfMu
 
 	if (tmp.grd.galaxies >= tmp.grd.darkStart) {
 		let push = 5 / tmp.grd.speed

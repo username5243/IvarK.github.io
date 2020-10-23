@@ -786,6 +786,8 @@ function getMTSMult(id, uses = "") {
 
 function updateMasteryStudyTemp() {
 	tmp.mts = {}
+	if (!tmp.eterUnl) return
+
 	let studies = masteryStudies.unlocked
 	for (var s = 0; s <= studies.length; s++) {
 		var study = studies[s]

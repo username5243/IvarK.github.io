@@ -19,10 +19,10 @@ function updateBLUnlockDisplay() {
 
 function getBosonicWattGain() {
 	let x = Math.max(player.money.log10() / 2e16 - 1, 0)
-	if (pl.on()) x += pl.tmp.buffOmega
+	if (pl.on()) x += fNu.tmp.buffOmega
 	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
 	if (isEnchantUsed(34)) x *= tmp.bEn[34]
-	if (pl.on()) x *= pl.tmp.buffMu
+	if (pl.on()) x *= fNu.tmp.buffMu
 	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
 	return x
 }
@@ -881,6 +881,7 @@ var bu = {
 				div = 2e3
 				add = 1.5
 			}
+			if (!tmp.quActive) return add
 			return Math.pow(tmp.qu.electrons.amount + 1, exp) / div + add
 		},
 		31() {
@@ -913,8 +914,8 @@ var bu = {
 		},
 		41() {
 			return {
-				ig: Decimal.pow(tmp.qu.bigRip.active ? 1e5 : 1.05, Math.pow(Decimal.max(tmp.it, 1).log10(), 2)),
-				it: Decimal.pow(tmp.qu.bigRip.active ? 1.01 : 5, Math.sqrt(Decimal.max(tmp.ig, 1).log10()))
+				ig: Decimal.pow(inBigRip() ? 1e5 : 1.05, Math.pow(Decimal.max(tmp.it, 1).log10(), 2)),
+				it: Decimal.pow(inBigRip() ? 1.01 : 5, Math.sqrt(Decimal.max(tmp.ig, 1).log10()))
 			}
 		},
 		42() {
@@ -924,7 +925,7 @@ var bu = {
 		},
 		43() {
 			if (!tmp.quActive) return 1
-			return Math.sqrt(colorBoosts.g + tmp.pe) / (tmp.qu.bigRip.active ? 100 : 40) + 1
+			return Math.sqrt(colorBoosts.g + tmp.pe) / (inBigRip() ? 100 : 40) + 1
 		},
 		44() {
 			if (!tmp.quActive) return 0
@@ -940,8 +941,8 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = player.quantum.bigRip.active ? 1e9 : 2e8
-			let div2 = player.quantum.bigRip.active ? 100 : 40
+			let div1 = inBigRip() ? 1e9 : 2e8
+			let div2 = inBigRip() ? 100 : 40
 			return {
 				ig: Math.pow(log / div1 + 1, 0.1),
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
@@ -972,7 +973,7 @@ var bu = {
 			return "-" + x.toFixed(5)
 		},
 		14(x) {
-			return getFullExpansion(x) + (x > tmp.qu.electrons.sacGals && !tmp.qu.bigRip.active ? " (+" + getFullExpansion(Math.max(x - tmp.qu.electrons.sacGals, 0)) + " Antielectronic Galaxies)" : "")
+			return getFullExpansion(x) + (x > tmp.qu.electrons.sacGals && !inBigRip() ? " (+" + getFullExpansion(Math.max(x - tmp.qu.electrons.sacGals, 0)) + " Antielectronic Galaxies)" : "")
 		},
 		15(x) {
 			return shorten(x.gh) + "x more Ghostifies & " + shorten(x.dt) + "x more DT"

@@ -84,6 +84,7 @@ let CONDENSED = {
 		document.getElementById("postinfir7").style.display = tmp.ngC ? "" : "none"
 		document.getElementById("postinfir8").style.display = tmp.ngC ? "" : "none"
 		document.getElementById("replNGC").style.display = tmp.ngC ? "" : "none"
+		document.getElementById("eterrowcond").style.display = tmp.ngC ? "" : "none"
 	},
 	condense: {
 		costStart: {

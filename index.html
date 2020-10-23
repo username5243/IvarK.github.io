@@ -1720,7 +1720,7 @@
 				<br>
 				(Update v2.4: The Gravitons update)
 				<br>
-				<span class="warning">(Test server: Beta 21)</span>
+				<span class="warning">(Test server: Beta 21.01)</span>
 			</p>
 			<div class="footer"></div>
 		</div>
@@ -5541,17 +5541,18 @@
 			<table class="table" align="center" style="margin: auto">
 				<tr>
 					<td><button class="secondarytabbtn" onclick="pl.showTab('null')">Foam Nullify</button></td>
-					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn" onclick="pl.showTab('hf')">Higgs Field</button></td>
-					<td><button ach-tooltip="Coming soon!" class="secondarytabbtn" onclick="pl.showTab('dark')">Endarkenments</button></td>
+					<td id="plBtn_entangle"><button class="secondarytabbtn" onclick="pl.showTab('entangle')">Entanglement</button></td>
+					<td id="plBtn_higgs"><button class="secondarytabbtn" onclick="pl.showTab('higgs')">Higgs Field</button></td>
+					<td id="plBtn_dark"><button class="secondarytabbtn" onclick="pl.showTab('dark')">Endarkenments</button></td>
 				</tr>
 			</table>
 			<div class="pltab" id="pl_null">
 				You have <span class="pl" id="nulliFoam" style="font-size: 35px"></span> Nulli Foam.
 				<br>
-				<button class="gluonupgrade planckbtn" id="mfDecay" onclick="pl.decay()">
+				<button class="gluonupgrade planckbtn" id="mfDecay" onclick="fNu.decay()">
 					Nullify all your Matteria Foam for x<span id="dfGain">1.00</span> Nulli Foam.
 				</button>
-				<button class="gluonupgrade planckbtn" onclick="pl.annihilate()">
+				<button class="gluonupgrade planckbtn" onclick="fNu.annihilate()">
 					Annilhilate all your Nulli Foam.
 					<br>
 					(resets this mechanic)

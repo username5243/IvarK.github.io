@@ -35,7 +35,7 @@ function updateTemp() {
 	if (tmp.ngpX >= 5) pl.updateTmp()
 	if (tmp.ngp3) {
 		updateGhostifyTempStuff()
-		updateQuantumTempStuff()
+		updateNGP3TempStuff()
 	} else tmp.be = false
 	tmp.sacPow = calcTotalSacrificeBoost()
 	updateQCRewardsTemp()
@@ -176,8 +176,8 @@ function updateInfiniteTimeTemp() {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
-		if (!player.dilation.active) {
-			if (tmp.qu.breakEternity.upgrades.includes(tmp.qu.bigRip.active ? 8 : 11)) x *= getBreakUpgMult(8)
+		if (!player.dilation.active && tmp.quActive) {
+			if (tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
 		}
 		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
@@ -195,10 +195,10 @@ function updateIntergalacticTemp() {
 	}
 
 	let x = Math.max(player.galaxies, 1)
-	if (isLEBoostUnlocked(3) && !player.quantum.bigRip.active) x *= tmp.leBonus[3]
+	if (isLEBoostUnlocked(3) && !inBigRip()) x *= tmp.leBonus[3]
 	if (tmp.be && player.dilation.active && tmp.qu.breakEternity.upgrades.includes(10)) x *= getBreakUpgMult(10)
 	x += tmp.effAeg
-	if (pl.on()) x *= pl.tmp.buffNeutral
+	if (pl.on()) x *= fNu.tmp.buffNeutral
 	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
 	if (player.achievements.includes("ng3p114")) x = Decimal.times(x, 1.3)
 	tmp.igg = x
@@ -206,7 +206,7 @@ function updateIntergalacticTemp() {
 	let igLog = Decimal.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
 	tmp.igs = 0 //Intergalactic Scaling: Used in the display text
 
-	if (tmp.qu.bigRip.active) { //Big Rip
+	if (inBigRip()) { //Big Rip
 		if (igLog.gt(1e9)) { //Distant
 			igLog = igLog.times(1e3).pow(.75)
 			tmp.igs++
@@ -233,7 +233,8 @@ function updateIntergalacticTemp() {
 
 function updateAntiElectronGalaxiesTemp(){
 	tmp.aeg = 0
-	if (hasBosonicUpg(14) && !player.quantum.bigRip.active) tmp.aeg = Math.max(tmp.blu[14] - tmp.qu.electrons.sacGals, 0)
+	if (!tmp.quActive) return
+	if (hasBosonicUpg(14) && !tmp.qu.bigRip.active) tmp.aeg = Math.max(tmp.blu[14] - tmp.qu.electrons.sacGals, 0)
 	tmp.effAeg = tmp.aeg
 	if (tmp.aeg > 0) if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
 }
@@ -265,7 +266,7 @@ function updateMatterSpeed(){
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 	if (GDs.boostUnl('mf')) {
-		let exp = GDs.tmp.mf * pl.radioactivityToMatter() / pl.tmp.nerfOmega
+		let exp = GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 }
@@ -324,11 +325,16 @@ function updatePPTITemp(){
 	tmp.ppti = x
 }
 
-function updateQuantumTempStuff() {
+function updateNGP3TempStuff() {
+	if (!tmp.quUnl) {
+		updateMasteryStudyTemp()
+		return
+	}
+
 	if (tmp.quActive) {
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
-		if (tmp.nrm !== 1 && tmp.qu.bigRip.active) {
+		if (tmp.nrm !== 1 && inBigRip()) {
 			if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
 			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
 		}
@@ -354,20 +360,16 @@ function updateQuantumTempStuff() {
 			}
 		}
 		if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
-		tmp.be = player.quantum.bigRip.active && tmp.qu.breakEternity.break
+		tmp.be = inBigRip() && tmp.qu.breakEternity.break
 		tmp.tue = getTreeUpgradeEfficiency()
 	}
 	tmp.rg4 = tmp.quActive && tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || inQC(1) || QCIntensity(1))
-	tmp.qcComps = 0
-	if (player.quantum.pairedChallenges && player.quantum.pairedChallenges.completions){
-		tmp.qcComps = Object.keys(player.quantum.pairedChallenges.completions).length
-	}
 }
 
 function updateGhostifyTempStuff(){
 	GDs.updateTmp()
 	updateBosonicLabTemp()
-	tmp.apgw = tmp.qu.nanofield.apgWoke || getAntiPreonGhostWake()
+	tmp.apgw = (tmp.quActive && tmp.qu.nanofield.apgWoke) || getAntiPreonGhostWake()
 	updatePPTITemp() //preon power threshold increase
 	if (player.ghostify.ghostlyPhotons.unl) {
 		tmp.phF = getPhotonicFlow()
@@ -528,7 +530,7 @@ function updateBreakEternityUpgradesTemp() {
 
 function updateBRU1Temp() {
 	tmp.bru[1] = new Decimal(1)
-	if (!tmp.qu.bigRip.active) return
+	if (!inBigRip()) return
 	let exp = 1
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
 	if (tmp.qu.breakEternity.upgrades.includes(13)) exp *= tmp.beu[13]
@@ -540,13 +542,13 @@ function updateBRU1Temp() {
 
 function updateBRU8Temp() {
 	tmp.bru[8] = 1
-	if (!tmp.qu.bigRip.active) return
+	if (!inBigRip()) return
 	tmp.bru[8] = Decimal.pow(2,getTotalRG()) // BRU8
 	if (!hasNU(11)) tmp.bru[8] = tmp.bru[8].min(Number.MAX_VALUE)
 }
 
 function updateBRU14Temp() {
-	if (!tmp.qu.bigRip.active) {
+	if (!inBigRip()) {
 		tmp.bru[14] = 1
 		return
 	}
@@ -559,12 +561,12 @@ function updateBRU14Temp() {
 function updateBRU15Temp() {
 	let r = Math.sqrt(player.eternityPoints.add(1).log10()) * 3.55
 	if (r > 1e4) r = Math.sqrt(r * 1e4)
-	if (!player.quantum.bigRip.active) r = 0
+	if (!tmp.qu.bigRip.active) r = 0
 	tmp.bru[15] = r
 }
 
 function updateBRU16Temp() {
-	if (!tmp.qu.bigRip.active) {
+	if (!inBigRip()) {
 		tmp.bru[16] = new Decimal(1)
 		return
 	}
@@ -585,7 +587,7 @@ function updateBigRipUpgradesTemp(){
 }
 
 function updatePhotonsUnlockedBRUpgrades(){
-	if (!tmp.qu.bigRip.active) {
+	if (!inBigRip()) {
 		tmp.bru[18] = new Decimal(1)
 		tmp.bru[19] = new Decimal(1)
 		return

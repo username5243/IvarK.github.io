@@ -18,6 +18,10 @@ function bigRip(auto) {
 	}
 }
 
+function inBigRip() {
+	return tmp.quUnl && tmp.qu && tmp.qu.bigRip.active
+}
+
 function setPCsForBigRip() {
 	let pcOrder = [null, 1, 2, 3, 4, 5, 7, 6, 8]
 	for (var c = 1; c <= 9; c++) if (QCIntensity(c)) tmp.qu.challenges[c] = c > 8 ? 1 : 2

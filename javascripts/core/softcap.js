@@ -838,7 +838,7 @@ function softcap(x, id) {
 	change some softcaps to just not being active
 	*/
 	var data = softcap_data[id]
-	if (tmp.ngp3 && tmp.qu.bigRip.active) {
+	if (inBigRip()) {
 		let big_rip_data = softcap_data[id + "_big_rip"]
 		if (big_rip_data !== undefined) data = big_rip_data
 	}
@@ -932,7 +932,7 @@ function hasSoftcapStarted(id, num){
 		if (!isNaN(int)) if (!(tmp.ngmX >= int)) return false
 	}
 	if (!player.dilation.active && l > 9 && id.slice(l - 9, l) == "_dilation") return false
-	if (tmp.ngp3 && !tmp.qu.bigRip.active && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
+	if (!inBigRip() && l > 8 && id.slice(l - 8, l) == "_big_rip") return false
 	if (check[id] !== undefined && !check[id]) return false
 	
 	let amt = getSoftcapAmtFromId(id)

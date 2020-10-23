@@ -10,7 +10,7 @@ function updateGPHUnlocks() {
 
 function getGPHProduction() {
 	let ret = new Decimal(0)
-	if (tmp.qu.bigRip.active) ret = player.dilation.dilatedTime.div("1e480")
+	if (inBigRip()) ret = player.dilation.dilatedTime.div("1e480")
 	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())
@@ -18,7 +18,7 @@ function getGPHProduction() {
 
 function getDMProduction() {
 	let ret = new Decimal(0)
-	if (!tmp.qu.bigRip.active) ret = player.dilation.dilatedTime.div("1e930")
+	if (!inBigRip()) ret = player.dilation.dilatedTime.div("1e930")
 	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())
@@ -53,7 +53,7 @@ function getLightThresholdIncrease(l) {
 
 function getPhotonicFlow() {
 	let x = new Decimal(1)
-	if (player.achievements.includes("ng3p81")) x = new Decimal(pl.on() ? pl.tmp.nerfNeutral : 2.5)
+	if (player.achievements.includes("ng3p81")) x = new Decimal(pl.on() ? fNu.tmp.nerfNeutral : 2.5)
 	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
 	return x
 }
@@ -74,9 +74,9 @@ function updatePhotonsTab(){
 function updateRaysPhotonsDisplay(){
 	let gphData = player.ghostify.ghostlyPhotons
 	document.getElementById("dtGPH").textContent = shorten(player.dilation.dilatedTime)
-	document.getElementById("gphProduction").textContent = shorten(tmp.qu.bigRip.active ? getGPHProduction() : getDMProduction())
-	document.getElementById("gphProduction").className = (tmp.qu.bigRip.active ? "gph" : "dm") + "Amount"
-	document.getElementById("gphProductionType").textContent = tmp.qu.bigRip.active ? "Ghostly Photons" : "Dark Matter"
+	document.getElementById("gphProduction").textContent = shorten(inBigRip() ? getGPHProduction() : getDMProduction())
+	document.getElementById("gphProduction").className = (inBigRip() ? "gph" : "dm") + "Amount"
+	document.getElementById("gphProductionType").textContent = inBigRip() ? "Ghostly Photons" : "Dark Matter"
 	document.getElementById("gph").textContent = shortenMoney(gphData.amount)
 	document.getElementById("dm").textContent = shortenMoney(gphData.darkMatter)
 	document.getElementById("ghrProduction").textContent = shortenMoney(getGHRProduction())

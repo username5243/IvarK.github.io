@@ -96,7 +96,7 @@ let Prestiges = {
 			return player.ghostify.times >= 1
 		},
 		planck() {
-			return player.achievements.includes("ng3p111")
+			return pl.did()
 		}
 	},
 	did(id) {

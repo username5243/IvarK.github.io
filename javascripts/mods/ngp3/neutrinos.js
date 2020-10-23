@@ -208,7 +208,7 @@ var neutrinoBoosts = {
 			var nb6neutrinos = Math.pow(nt[0].add(1).log10(), 2) + Math.pow(nt[1].add(1).log10(), 2) + Math.pow(nt[2].add(1).log10(), 2)
 			var nb6exp1 = .25
 			if (tmp.newNGP3E) nb6exp1 = .26
-			let nb6 = Math.pow(Math.pow(nb6neutrinos, nb6exp1) * 0.525 + 1, tmp.qu.bigRip.active ? 0.5 : 1)
+			let nb6 = Math.pow(Math.pow(nb6neutrinos, nb6exp1) * 0.525 + 1, inBigRip() ? 0.5 : 1)
 			if (isLEBoostUnlocked(9)) nb6 *= tmp.leBonus[7]
 			return nb6
 		}
@@ -217,7 +217,7 @@ var neutrinoBoosts = {
 		eff(nt) {
 			let nb7exp = .5
 			if (tmp.newNGP3E) nb7exp = .6
-			if (!tmp.qu.bigRip.active && hasBosonicUpg(61)) nb7exp /= 2
+			if (!inBigRip() && hasBosonicUpg(61)) nb7exp /= 2
 			let nb7neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp) * 2.35
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
@@ -272,7 +272,7 @@ var neutrinoUpgrades = {
 	1: {
 		eff() {
 			let x = 110
-			if (!tmp.qu.bigRip.active) x = Math.max(x - player.meta.resets, 0)
+			if (!inBigRip()) x = Math.max(x - player.meta.resets, 0)
 			return x
 		},
 		effDesc(x) {
