@@ -54,8 +54,8 @@ let GDs = {
 
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
-			let layer = Math.floor(Math.log2(gp / 10 + 1))
-			gp = layer * 10 + (gp / 10 - Math.pow(2, layer) + 1) / Math.pow(2, layer) * 10
+			let layer = Math.floor(Math.sqrt(gp / 10))
+			gp = layer * 10 + (gp / 10 - layer * layer) / (layer * 2 + 1) * 10
 			data.gpr = layer
 		} else data.gpr = 0
 		data.gp = gp
@@ -179,10 +179,10 @@ let GDs = {
 		return GDs.save && GDs.save.unl
 	},
 	gdTick(diff) {
-		for (var d = Math.min(GDs.totalGDBs() + 1, 4); d >= 1; d--) {
+		for (let d = Math.min(GDs.totalGDBs() + 1, 4); d >= 1; d--) {
 			let add = Decimal.pow(GDs.tmp.gdm, GDs.gdExp(d)).times(GDs.save["gd" + d])
 			if (d == 1) GDs.save.gv = GDs.save.gv.add(add.times(diff))
-			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(diff / 10))
+			else GDs.save["gd" + (d - 1)] = GDs.save["gd" + (d - 1)].add(add.times(tmp.ez ? diff : diff / 10))
 		}
 	},
 	gdMult() {
@@ -207,11 +207,11 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.pow(e, hasBosonicUpg(61) ? 1.5 : 2) * 5 + 50
+		return Math.pow(e, hasBosonicUpg(61) ? 1.5 : 2) * 5 + 45
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.floor(Math.pow(Math.max(h - 50, 0) / 5, hasBosonicUpg(61) ? 2 / 3 : 0.5))
+		let target = Math.floor(Math.pow(Math.max(h - 45, 0) / 5, hasBosonicUpg(61) ? 2 / 3 : 0.5))
 		let toAdd = Math.max(target - GDs.save.extraGDBs + 1, 0)
 		if (toAdd < 1) return
 
@@ -346,14 +346,14 @@ let GDs = {
 			eff(x) {
 				return Math.pow(x / 2 + 1, 1/3)
 			},
-			rdExp: 1
+			rdExp: 2
 		},
 		gph: {
 			desc: "^{{x}} to Photonic Flow",
 			eff(x) {
 				return x / 2 + 1
 			},
-			rdExp: 2
+			rdExp: 1.5
 		},
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",

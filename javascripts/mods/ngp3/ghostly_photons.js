@@ -180,9 +180,6 @@ function getLightEmpowermentBoost() {
 var leBoosts = {
 	max: 8,
 	1: {
-		req() {
-			return true
-		},
 		leThreshold: 1,
 		eff() {
 			let le1exp = 0.75
@@ -201,9 +198,6 @@ var leBoosts = {
 		}
 	},
 	2: {
-		req() {
-			return true
-		},
 		leThreshold: 2,
 		eff() {
 			return Math.log10(tmp.effL[4] * 10 + 1) / 4 + 1
@@ -213,9 +207,6 @@ var leBoosts = {
 		}
 	},
 	3: {
-		req() {
-			return true
-		},
 		leThreshold: 3,
 		eff() {
 			return Math.pow(tmp.effL[0].normal + 1, 0.1) * 2 - 1

@@ -175,7 +175,7 @@ let Prestiges = {
 		}
 
 		//Quantum (after Neutrino Upgrade 16)
-		let bigRipAndQuantum = (pl && pl.save) ? (!pl.save.on && !hasNU(16)) : true
+		let bigRipAndQuantum = !hasNU(16) && !pl.on()
 		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"
 
 		//Big Rip

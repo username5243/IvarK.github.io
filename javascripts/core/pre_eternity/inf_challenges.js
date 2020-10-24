@@ -144,31 +144,25 @@ function updateChallenges() {
 		buttons[i].textContent = "Start"
 	}
 
-	tmp.cp=0
-	infDimPow=1
+	tmp.cp = 0
 	for (var i=0; i < player.challenges.length; i++) {
 		document.getElementById(player.challenges[i]).className = "completedchallengesbtn";
 		document.getElementById(player.challenges[i]).textContent = "Completed"
-		if (player.challenges[i].search("postc")==0) tmp.cp++
-		if (player.challenges.includes("postc1")) if (player.challenges[i].split("postc")[1]) infDimPow*=player.galacticSacrifice?2:1.3
-	}
-	
-	var challengeRunning
-	if (player.currentChallenge === "") {
-		if (!player.challenges.includes("challenge1")) challengeRunning="challenge1"
-	} else challengeRunning=player.currentChallenge
-	if (challengeRunning!==undefined) {
-		document.getElementById(challengeRunning).className = "onchallengebtn";
-		document.getElementById(challengeRunning).textContent = "Running"
+		if (player.challenges[i].search("postc") == 0) tmp.cp++
 	}
 
-	if (player.aarexModifications.ngmX>3) {
-		var chall=player.galacticSacrifice.chall
-		if (chall) {
-			chall="challenge"+chall
-			document.getElementById(chall).className = "onchallengebtn";
-			document.getElementById(chall).textContent = "Running"
-		}
+	let running = []
+	if (player.currentChallenge === "") {
+		if (!player.challenges.includes("challenge1")) running.push("challenge1")
+	} else running.push(player.currentChallenge)
+	if (tmp.ngmX >= 4) {
+		var chall = player.galacticSacrifice.chall
+		if (chall) running.push(chall)
+	}
+	for (var i = 0; i < running.length; i++) {
+		var chall = running[i]
+		document.getElementById(chall).className = "onchallengebtn";
+		document.getElementById(chall).textContent = "Running"
 	}
 
 	document.getElementById("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !ph.did("quantum") ? "none" : ""
@@ -189,6 +183,8 @@ function updateChallenges() {
 
 	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
 	for (c = 0; c < order.length; c++) document.getElementById(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
+
+	resetIC1Reward()
 }
 
 function getNextAt(chall) {
@@ -263,6 +259,15 @@ function checkICID(name) {
 		var split = name.split("postc")
 		if (split[1] != undefined) return parseInt(split[1])
 	}
+}
+
+function resetIC1Reward() {
+	infDimPow = 1
+	if (!player.challenges.includes("postc1")) return
+
+	let ics = 0
+	for (var i = 0; i < player.challenges.length; i++) if (player.challenges[i].split("postc")[1]) ics++
+	infDimPow = Math.pow(tmp.ngmX >= 2 ? 2 : 1.3, ics)
 }
 
 var challNames = [null, null, "Second Dimension Autobuyer Challenge", "Third Dimension Autobuyer Challenge", "Fourth Dimension Autobuyer Challenge", "Fifth Dimension Autobuyer Challenge", "Sixth Dimension Autobuyer Challenge", "Seventh Dimension Autobuyer Challenge", "Eighth Dimension Autobuyer Challenge", "Tickspeed Autobuyer Challenge", "Automated Dimension Boosts Challenge", "Automated Galaxies Challenge", "Automated Big Crunches Challenge", "Automated Dimensional Sacrifice Challenge", "Automated Galactic Sacrifice Challenge", "Automated Tickspeed Boosts Challenge", "Automated Time Dimension Boosts Challenge"]

@@ -783,9 +783,9 @@ var bu = {
 			g3: 2e12
 		},
 		52: {
-			am: 2e150,
-			g2: 2e170,
-			g5: 2e155
+			am: 2e115,
+			g2: 2e40,
+			g5: 2e20
 		},
 	},
 	reqData: {},
@@ -941,8 +941,8 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = inBigRip() ? 1e9 : 2e8
-			let div2 = inBigRip() ? 100 : 40
+			let div1 = 1e9
+			let div2 = inBigRip() ? 1e3 : 100
 			return {
 				ig: Math.pow(log / div1 + 1, 0.1),
 				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)

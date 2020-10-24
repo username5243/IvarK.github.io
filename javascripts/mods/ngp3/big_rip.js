@@ -19,7 +19,7 @@ function bigRip(auto) {
 }
 
 function inBigRip() {
-	return tmp.quUnl && tmp.qu && tmp.qu.bigRip.active
+	return tmp.quUnl && tmp.qu.bigRip.active
 }
 
 function setPCsForBigRip() {

@@ -439,7 +439,7 @@ function switchAB() {
 }
 
 function getAMforGHPGain(){
-	return tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun.log10() : Math.pow(player.money.plus(1).log10(), 0.6)
+	return tmp.qu.bigRip.active ? tmp.qu.bigRip.bestThisRun.log10() : player.money.plus(1).log10() / 2e6
 }
 
 function getGHPGain() {

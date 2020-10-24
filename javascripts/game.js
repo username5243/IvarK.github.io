@@ -2577,6 +2577,7 @@ function calcSacrificeBoostBeforeSoftcap() {
 		if (player.achievements.includes("r32")) pow += player.tickspeedBoosts != undefined ? 2 : 0.2
 		if (player.achievements.includes("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
+		if (tmp.ngmR) pow *= 1.5
 		if (tmp.ez) pow *= 1.5
 		ret = Decimal.pow(Math.max(player.firstAmount.e / 10, 1) / Math.max(player.sacrificed.e / 10, 1), pow).max(1)
 	} else ret = player.firstAmount.pow(0.05).dividedBy(player.sacrificed.pow(player.aarexModifications.ngmX>3?0.05:0.04).max(1)).max(1)
@@ -2601,6 +2602,7 @@ function calcTotalSacrificeBoostBeforeSoftcap(next) {
 		if (player.achievements.includes("r32")) pow += player.tickspeedBoosts != undefined ? 2 : 0.2
 		if (player.achievements.includes("r57")) pow += player.boughtDims ? 0.3 : 0.2 //this upgrade was too OP lol
 		if (player.infinityUpgradesRespecced) pow *= getInfUpgPow(5)
+		if (tmp.ngmR) pow *= 1.5
 		if (tmp.ez) pow *= 1.5
 		ret = Decimal.pow(Math.max(player.sacrificed.e / 10, 1), pow)
 	} else ret = player.chall11Pow 
@@ -4552,26 +4554,31 @@ function bigCrunchButtonUpdating(){
 }
 
 function nextICUnlockUpdating(){
-	var nextUnlock = getNextAt(order[player.postChallUnlocked])
-	if (nextUnlock == undefined) document.getElementById("nextchall").textContent = " "
-	else if (!player.achievements.includes("r133")) {
-		document.getElementById("nextchall").textContent = "Next challenge unlocks at "+ shortenCosts(nextUnlock) + " antimatter."
-		while (player.money.gte(nextUnlock) && nextUnlock != undefined) {
-			if (getEternitied() > 6) {
-				player.challenges.push(order[player.postChallUnlocked])
-				if (order[player.postChallUnlocked] == "postc1") for (var i = 0; i < player.challenges.length; i++) if (player.challenges[i].split("postc")[1]) infDimPow *= player.galacticSacrifice ? 2 : 1.3
-				tmp.cp++
-			}
-			player.postChallUnlocked++
-			nextUnlock = getNextAt(order[player.postChallUnlocked])
-			updateChallenges()
-		}
-		if (getEternitied() > 6 && player.postChallUnlocked >= 8) {
-			ndAutobuyersUsed = 0
-			for (i = 0; i <= 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].isOn) ndAutobuyersUsed++
-			document.getElementById("maxall").style.display = ndAutobuyersUsed > 8 && player.challenges.includes("postc8") ? "none" : ""
-		}
+	let nextUnlock = getNextAt(order[player.postChallUnlocked])
+	if (player.achievements.includes("r133")) {
+		document.getElementById("nextchall").textContent = ""
+		return
 	}
+
+	let newChallsUnlocked = false
+	while (player.money.gte(nextUnlock) && nextUnlock) {
+		player.postChallUnlocked++
+		if (getEternitied() >= 7) player.challenges.push(order[player.postChallUnlocked])
+
+		nextUnlock = getNextAt(order[player.postChallUnlocked])
+		newChallsUnlocked = true
+	}
+
+	document.getElementById("nextchall").textContent = !nextUnlock ? "" :
+		"Get " + shortenCosts(nextUnlock) + " antimatter to unlock Infinity Challenge " + (player.postChallUnlocked + 1) + "."
+
+	if (!newChallsUnlocked) return
+	if (getEternitied() >= 7 && player.postChallUnlocked >= 8) {
+		ndAutobuyersUsed = 0
+		for (i = 0; i <= 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].isOn) ndAutobuyersUsed++
+		document.getElementById("maxall").style.display = ndAutobuyersUsed > 8 && player.challenges.includes("postc8") ? "none" : ""
+	}
+	updateChallenges()
 }
 
 function passiveIPperMUpdating(diff){

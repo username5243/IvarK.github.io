@@ -74,7 +74,7 @@ function updateNeutrinosTab(){
 	updateNeutrinoBoostDisplay()
 	updateNeutrinoUpgradeDisplay()
 	
-	if (player.ghostify.ghostParticles.gte(tmp.nbc[player.ghostify.neutrinos.boosts])) document.getElementById("neutrinoUnlock").className = "gluonupgrade neutrinoupg"
+	if (player.ghostify.ghostParticles.gte(getNeutrinoBoostCost())) document.getElementById("neutrinoUnlock").className = "gluonupgrade neutrinoupg"
 	else document.getElementById("neutrinoUnlock").className = "gluonupgrade unavailablebtn"
 	if (player.ghostify.ghostParticles.gte(Decimal.pow(4,player.ghostify.neutrinos.multPower-1).times(2))) document.getElementById("neutrinoMultUpg").className = "gluonupgrade neutrinoupg"
 	else document.getElementById("neutrinoMultUpg").className = "gluonupgrade unavailablebtn"
@@ -84,7 +84,7 @@ function updateNeutrinosTab(){
 
 function onNotationChangeNeutrinos() {
 	if (player.masterystudies == undefined) return
-	document.getElementById("neutrinoUnlockCost").textContent=shortenDimensions(new Decimal(tmp.nbc[player.ghostify.neutrinos.boosts]))
+	document.getElementById("neutrinoUnlockCost").textContent=shortenDimensions(getNeutrinoBoostCost())
 	document.getElementById("neutrinoMult").textContent=shortenDimensions(Decimal.pow(5, player.ghostify.neutrinos.multPower - 1))
 	document.getElementById("neutrinoMultUpgCost").textContent=shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower-1).times(2))
 	document.getElementById("ghpMult").textContent = shortenMoney(getGHPBaseMult())
@@ -116,25 +116,23 @@ function buyNeutrinoUpg(id) {
 
 function updateNeutrinoBoosts() {
 	for (var b = 1; b <= neutrinoBoosts.max; b++) document.getElementById("neutrinoBoost" + (b % 3 == 1 ? "Row" + (b + 2) / 3 : "Cell" + b)).style.display = player.ghostify.neutrinos.boosts >= b ? "" : "none"
-	document.getElementById("neutrinoUnlock").style.display = player.ghostify.neutrinos.boosts >= getMaxUnlockedNeutrinoBoosts() ? "none" : ""
-	document.getElementById("neutrinoUnlockCost").textContent = shortenDimensions(new Decimal(tmp.nbc[player.ghostify.neutrinos.boosts]))
+	document.getElementById("neutrinoUnlock").style.display = player.ghostify.neutrinos.boosts >= 12 ? "none" : ""
+	document.getElementById("neutrinoUnlockCost").textContent = shortenDimensions(getNeutrinoBoostCost())
+}
+
+function getNeutrinoBoostCost() {
+	let data = neutrinoBoosts[player.ghostify.neutrinos.boosts + 1]
+	let x = data ? data.cost : 1/0
+	return new Decimal(x)
 }
 
 function unlockNeutrinoBoost() {
-	var cost = tmp.nbc[player.ghostify.neutrinos.boosts]
-	if (!player.ghostify.ghostParticles.gte(cost) || player.ghostify.neutrinos.boosts>=getMaxUnlockedNeutrinoBoosts()) return
+	var cost = getNeutrinoBoostCost()
+	if (!player.ghostify.ghostParticles.gte(cost) || player.ghostify.neutrinos.boosts >= 12) return
 	player.ghostify.ghostParticles=player.ghostify.ghostParticles.sub(cost).round()
 	player.ghostify.neutrinos.boosts++
 	updateNeutrinoBoosts()
 	updateTemp()
-}
-
-function getMaxUnlockedNeutrinoBoosts() {
-	let x = 9
-	if (player.ghostify.wzb.unl) x++
-	if (player.ghostify.hb.higgs > 0) x++
-	if (GDs.unlocked()) x++
-	return x
 }
 
 function hasNU(id) {
@@ -161,7 +159,7 @@ function maxNeutrinoMult() {
 	document.getElementById("neutrinoMultUpgCost").textContent = shortenDimensions(Decimal.pow(4, player.ghostify.neutrinos.multPower - 1).times(2))
 }
 
-var neutrinoBoosts = {
+let neutrinoBoosts = {
 	max: 12,
 	1: {
 		eff(nt) {
@@ -170,14 +168,16 @@ var neutrinoBoosts = {
 			if (isLEBoostUnlocked(7)) nb1mult *= tmp.leBonus[7]
 			let nb1neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			return Math.log10(1+nb1neutrinos)*nb1mult
-		}
+		},
+		cost: 1
 	},
 	2: {
 		eff(nt) {
 			let nb2neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			let nb2 = Math.pow(nb2neutrinos, .25) * 1.5
 			return nb2 
-		}
+		},
+		cost: 2
 	},
 	3: {
 		eff(nt) {
@@ -188,20 +188,23 @@ var neutrinoBoosts = {
 			)
 			let nb3 = Math.sqrt(nb3neutrinos + 625) / 25
 			return nb3
-		}
+		},
+		cost: 4
 	},
 	4: {
 		eff(nt) {
 			var nb4neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
 			var nb4 = Math.pow(nb4neutrinos, .25) * 0.07 + 1
 			return nb4
-		}
+		},
+		cost: 6
 	},
 	5: {
 		eff(nt) {
 			var nb5neutrinos = nt[0].max(1).log10()+nt[1].max(1).log10()+nt[2].max(1).log10()
 			return Math.min(nb5neutrinos / 33, 1)
-		}
+		},
+		cost: 15
 	},
 	6: {
 		eff(nt) {
@@ -211,7 +214,8 @@ var neutrinoBoosts = {
 			let nb6 = Math.pow(Math.pow(nb6neutrinos, nb6exp1) * 0.525 + 1, inBigRip() ? 0.5 : 1)
 			if (isLEBoostUnlocked(9)) nb6 *= tmp.leBonus[7]
 			return nb6
-		}
+		},
+		cost: 50
 	},
 	7: {
 		eff(nt) {
@@ -223,7 +227,8 @@ var neutrinoBoosts = {
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
 			if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
 			return nb7
-		}
+		},
+		cost: 1e3
 	},
 	8: {
 		eff(nt) {
@@ -233,14 +238,16 @@ var neutrinoBoosts = {
 			var nb8 = Math.pow(nb8neutrinos, nb8exp) / 10 + 1
 			if (nb8 > 11) nb8 = 7 + Math.log2(nb8 + 5)
 			return nb8
-		}
+		},
+		cost: 1e14
 	},
 	9: {
 		eff(nt) {
 			var nb9 = (nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10())/10
 			if (isLEBoostUnlocked(9)) nb9 *= tmp.leBonus[7]
 			return nb9
-		}
+		},
+		cost: 1e35
 	},
 	10: {
 		eff(nt) {
@@ -248,7 +255,8 @@ var neutrinoBoosts = {
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
 			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
 			return nb10
-		}
+		},
+		cost: "1e900"
 	},
 	11: {
 		eff(nt) {
@@ -256,14 +264,16 @@ var neutrinoBoosts = {
 			let exp = Math.pow(nb11neutrinos, 0.5)
 
 			return Decimal.pow(1.15, exp)
-		}
+		},
+		cost: "1e3000"
 	},
 	12: {
 		eff(nt) {
 			let nb12neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
 			let nb12 = nb12neutrinos / 100 + 1
 			return nb12
-		}
+		},
+		cost: 1/0
 	}
 }
 
