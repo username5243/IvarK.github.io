@@ -190,6 +190,13 @@ function getBosonicAMProduction() {
 	return ret
 }
 
+function getBosonicAMProductionSoftcapExp(x) {
+	let frac = 10
+	if (tmp.blu && hasBosonicUpg(63)) frac *= tmp.blu[63]
+
+	return 1 - x / frac
+}
+
 function getBosonicAMFinalProduction() {
 	let r = getBosonicAMProduction()
 	if (player.ghostify.bl.am.gt(tmp.badm.start)) r = r.div(tmp.badm.preDim)

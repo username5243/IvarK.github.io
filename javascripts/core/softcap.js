@@ -269,9 +269,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e80),
 			pow() {
-				let x = 0.9
-				if (hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(1)
 			},
 			derv: true
 		},
@@ -279,9 +277,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e90),
 			pow() {
-				let x = 0.8
-				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(2)
 			},
 			derv: true
 		},
@@ -289,9 +285,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e100),
 			pow() {
-				let x = 0.7
-				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(3)
 			},
 			derv: true
 		},
@@ -299,9 +293,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e110),
 			pow() {
-				let x = 0.6
-				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(4)
 			},
 			derv: true
 		},
@@ -309,9 +301,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e120),
 			pow() {
-				let x = 0.5
-				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(5)
 			},
 			derv: true
 		},
@@ -319,9 +309,7 @@ var softcap_data = {
 			func: "pow",
 			start: new Decimal(1e130),
 			pow() {
-				let x = 0.4
-				if (tmp.blu && hasBosonicUpg(63)) x = Math.pow(x, tmp.blu[63])
-				return x
+				return getBosonicAMProductionSoftcapExp(6)
 			},
 			derv: true
 		}

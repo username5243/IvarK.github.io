@@ -704,6 +704,9 @@ function setupAutomaticGhostsData() {
 	data[11].cw = 10
 	data[15].a = 1
 	data[19].t = 0
+	data[22].i = 3
+	data[24].i = 5
+	data[24].m = 1.1
 	return data
 }
 
@@ -746,6 +749,8 @@ function updateAutoGhosts(load) {
 		document.getElementById("autoGhost13o").value = data[13].o
 		document.getElementById("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
 		document.getElementById("autoGhost22t").value = data[22].time
+		document.getElementById("autoGhost24i").value = data[24].i
+		document.getElementById("autoGhost24m").value = data[24].m
 	}
 	document.getElementById("consumedPower").textContent = powerConsumed.toFixed(2)
 	isAutoGhostsSafe = data.power >= powerConsumed
@@ -790,6 +795,12 @@ function changeAutoGhost(o) {
 	} else if (o == "22t") {
 		var num = parseFloat(document.getElementById("autoGhost22t").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[22].time = num
+	} else if (o == "24i") {
+		var num = parseFloat(document.getElementById("autoGhost24i").value)
+		if (num == Math.round(num) && num > 0) player.ghostify.automatorGhosts[24].i = num
+	} else if (o == "24m") {
+		var num = parseFloat(document.getElementById("autoGhost24m").value)
+		if (!isNaN(num) && num > 1) player.ghostify.automatorGhosts[24].m = num
 	}
 }
 

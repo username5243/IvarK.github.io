@@ -3865,7 +3865,13 @@ function ghostifyAutomationUpdatingPerSecond() {
 	//Priorities: GD Boost -> Light Empowerment -> Higgs Bosons -> Rest
 	if (isAutoGhostActive(25)) GDs.gdBoost()
 	if (player.ghostify.ghostlyPhotons.unl && isAutoGhostActive(23)) lightEmpowerment(true)
-	if (isAutoGhostActive(24)) higgsReset(true)
+	if (isAutoGhostActive(24)) {
+		let data = player.ghostify.automatorGhosts[24]
+		let higgs = player.ghostify.hb.higgs
+		let gain = getHiggsGain()
+
+		if (gain >= data.i && (higgs + gain) / higgs >= data.m) higgsReset(true)
+	}
 	if (player.ghostify.wzb.unl) {
 		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
@@ -4184,23 +4190,11 @@ function ghostifyAutomationUpdating(diff){
 		let ag = player.ghostify.automatorGhosts[21]
 		let data = player.ghostify.wzb
 		let hasWNB = data.wnb.gt(0)
-		ag.t = (ag.t || 0) + diff
-		if (data.dPUse == 0 && data.dP.gt(0)) {
-			useAntiPreon(hasWNB ? 3 : 1)
-			ag.t = 0
-		}
-		if (data.dPUse == 1) {
-			useAntiPreon(hasWNB ? 3 : 2)
-			ag.t = 0
-		}
-		if (data.dPUse == 3 && !hasWNB) {
-			useAntiPreon(2)
-			ag.t = 0
-		}
-		if (data.dPUse == 2) {
-			useAntiPreon(1)
-			ag.t = 0
-		}
+
+		if (data.dPUse == 0 && data.dP.gt(0)) useAntiPreon(hasWNB ? 3 : 1)
+		if (data.dPUse == 1) useAntiPreon(hasWNB ? 3 : 2)
+		if (data.dPUse == 2) useAntiPreon(1)
+		if (data.dPUse == 3 && !hasWNB) useAntiPreon(2)
 	}
 	if (isAutoGhostActive(19)) {
 		let ag = player.ghostify.automatorGhosts[19]
