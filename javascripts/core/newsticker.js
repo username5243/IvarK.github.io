@@ -210,6 +210,8 @@ newsArray = [//always true
 //missable / pay req
 ["How dare you actually get zero deaths on a first run?", 'player.achievements.includes("r43") && player.infinitied == 1 && player.eternities == 0', "s1"],
 ["Legend says the ninth dimension is supposed to be found here, but I don't see anything.", "player.money.e >= 41900 && !player.replicanti.unl && player.eternities == 0", "s2"],
+]
+amNewsArray = [
 //Aarex's Modifications
 ["A brave man tried NG- and NG-- modes at the same time, but he will be dead before he would complete this mode.", 'player.aarexModifications.newGameMinusVersion && player.galacticSacrifice', "am1"],
 ["You would be dead if you started writing down your antimatter amount", 'player.money.gt(Decimal.pow(10, 3 * 86400 * 365.2425 * 79.3 / 10))', "am2"],
@@ -419,6 +421,8 @@ newsArray = [//always true
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
 var scrollTimeouts = [];
 var nextMsgIndex;
+var nextMsgCond;
+var nextMsgId;
 function scrollNextMessage() {
         //don't run if hidden to save performance
         if (typeof (player) == "undefined") return
@@ -429,7 +433,15 @@ function scrollNextMessage() {
         
         //select a message at random
         try {
-                do {nextMsgIndex = Math.floor(Math.random() * newsArray.length)} while (!eval(newsArray[nextMsgIndex][1]) || (newsArray[nextMsgIndex][2].indexOf("am") > -1 && !player.achievements.includes("r22")))
+			nextMsgCond = false
+			while (!nextMsgCond) {
+				var array = newsArray
+				if (player.achievements.includes("r22") && Math.random() > 0.5) array = amNewsArray
+
+				nextMsgIndex = Math.floor(Math.random() * array.length)
+				nextMsgCond = eval(array[nextMsgIndex][1])
+				nextMsgId = array[nextMsgIndex][2]
+			}
         } catch(e) {
                 console.log("Newsarray doesn't work at idx " + nextMsgIndex)
         }
@@ -438,7 +450,7 @@ function scrollNextMessage() {
         
         //set the text
         var m = newsArray[nextMsgIndex][0];
-        if (newsArray[nextMsgIndex][2] == "am37") {
+        if (nextMsgId == "am37") {
                 //coded by Naruyoko
                 var m = ""
                 for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
@@ -460,8 +472,8 @@ function scrollNextMessage() {
                 let dist = s.parentElement.clientWidth + s.clientWidth + 20; //20 is div_container padding
                 let rate = 100; //change this value to change the scroll speed
                 let transformDuration = dist / rate;
-                if (!player.options.newsHidden && !player.newsArray.includes(newsArray[nextMsgIndex][2])) {
-                        player.newsArray.push(newsArray[nextMsgIndex][2]);
+                if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
+                        player.newsArray.push(nextMsgId);
                         if (player.newsArray.length>=50) giveAchievement("Fake News")
                         if (player.newsArray.length>=400) giveAchievement("400% Breaking News")
                 }
@@ -475,7 +487,7 @@ function scrollNextMessage() {
                 //automatically start the next message scrolling after this one finishes
                 //you could add more time to this timeout if you wanted to have some time between messages
                 scrollTimeouts.push(setTimeout(function() {
-		        if (newsArray[nextMsgIndex][2] == "am104") {
+		        if (nextMsgId == "am104") {
 			        tmp.blankedOut=true
 			        setTimeout(scrollNextMessage, 60e3)
 		        } else scrollNextMessage()
