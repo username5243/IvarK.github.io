@@ -102,7 +102,7 @@ function bosonicLabReset() {
 
 function higgsReset(auto) {
 	let oldHiggs = player.ghostify.hb.higgs
-	let resetNothing = true //pl.on() && player.achievements.includes("ng3p112")
+	let resetNothing = pl.on() && player.achievements.includes("ng3p112")
 	if (!player.ghostify.bl.am.gte(getHiggsRequirement())) return
 	if (!auto && !resetNothing && !player.aarexModifications.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
 	addHiggs(getHiggsGain())
@@ -122,7 +122,7 @@ function restartHiggs() {
 
 function getHiggsRequirementBase() {
 	var div = new Decimal(1)
-	if (isEnchantUsed(14)) div = div.times(tmp.bEn[14].higgs || 1/0)
+	if (isEnchantUsed(14)) div = div.times(tmp.bEn[14].higgs || 1)
 	return new Decimal(1e18).divide(div)
 }
 
