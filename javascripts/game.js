@@ -3870,7 +3870,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 		let higgs = player.ghostify.hb.higgs
 		let gain = getHiggsGain()
 
-		if (gain >= data.i && (higgs + gain) / higgs >= data.m) higgsReset(true)
+		if (gain >= data.i || (higgs + gain) / higgs >= data.m) higgsReset(true)
 	}
 	if (player.ghostify.wzb.unl) {
 		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)

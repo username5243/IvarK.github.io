@@ -323,12 +323,14 @@ function updateBosonicLabTemp() {
 	tmp.blu = {}
 	tmp.wzb = {}
 
-	if (!tmp.ngp3) return 
+	if (!ph.did("ghostify")) return 
 	if (!player.ghostify.wzb.unl) return 
 
 	updateBosonicEnchantsTemp()
 	updateBosonicUpgradesTemp()
 	updateWZBosonsTemp()
+
+	if (!tmp.badm) updateBosonicAMDimReturnsTemp()
 }
 
 //Bosonic Extractor / Bosonic Runes
@@ -484,7 +486,7 @@ var bEn = {
 		24: [1e6, 10],
 		34: [1, 0],
 		15: [2e21, 20],
-		25: [2e200, 2e180],
+		25: [2e110, 2e90],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -790,9 +792,9 @@ var bu = {
 			g3: 2e12
 		},
 		52: {
-			am: 2e115,
-			g2: 2e40,
-			g5: 2e20
+			am: 2e130,
+			g2: 2e100,
+			g5: 2e80
 		},
 	},
 	reqData: {},
@@ -948,11 +950,11 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = 1e9
-			let div2 = inBigRip() ? 1e3 : 100
+			let div1 = 7.5e8
+			let div2 = inBigRip() ? 200 : 1e3
 			return {
 				ig: Math.pow(log / div1 + 1, 0.1),
-				it: Math.sqrt(Math.log10(log + 1) / div2 + 1)
+				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
 		53() {

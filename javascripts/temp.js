@@ -604,7 +604,7 @@ function updateBosonicAMDimReturnsTemp() {
 	var data = {}
 	tmp.badm = data
 
-	if (!tmp.ngp3) return
+	if (!ph.did("ghostify")) return
 	if (!player.ghostify.wzb.unl) return
 
 	data.start = getHiggsRequirement()

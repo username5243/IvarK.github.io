@@ -415,7 +415,9 @@ amNewsArray = [
 ["Matter Decay goes brrr!", "ph.did('planck')", "am202"],
 ["We recently proved that dark matter exists. We still don't know why.", "player.achievements.includes('ng3p71')", "am203"],
 ["Wait... Ghosts should live in spooky places, not our universe.", "ph.did('ghostify')", "am204"],
-/*NEXT ID: am205*/
+["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "ph.did('ghostify')", "am205"],
+["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
+/*NEXT ID: am207*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
