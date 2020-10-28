@@ -1,6 +1,6 @@
 var quantumChallenges = {
 	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
-	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 1/0]
+	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 9e16]
 }
 
 var assigned
@@ -338,10 +338,11 @@ let qcRewards = {
 		},
 		9: function(comps) {
 			comps = ((tmp.pcc && tmp.pcc.c9) || 0) + 1
-			let x = Math.log10(player.replicanti.amount.plus(1).log10() + 1) * Math.sqrt(comps)
+			let x = player.replicanti.amount.log10()
+			if (comps > 1 && x > 1e10) x *= Math.pow(Math.log10(x) / 10, comps - 1)
 			return {
-				ri: Math.pow(Math.max(x / 2, 1), 2),
-				ge: x / 20
+				ri: Math.cbrt(x / 1e8),
+				ge: Math.sqrt(x / 1e10)
 			}
 		}
 	}
