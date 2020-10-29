@@ -712,7 +712,7 @@ function setupAutomaticGhostsData() {
 
 var autoGhostRequirements=[2,4,4,4.5,5,5,6,6.5,7,7,7.5,8,20,22.5,25,27.5,30,35,40,40,40,45]
 var powerConsumed
-var powerConsumptions=[0,1,1,1,1,1,1.5,1,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,10,3,3,0]
+var powerConsumptions=[0,1,1,1,1,1,1.5,1,0.5,0.5,1,0.5,0.5,0.5,0.5,0.5,2,3,4,4,5,7,4,3,4,2]
 function updateAutoGhosts(load) {
 	var data = player.ghostify.automatorGhosts
 	if (load) {
@@ -832,10 +832,16 @@ let AUTO_QC = {
 		}
 	},
 	on() {
-		this.auto.sweep = [0, 1]
+		if (!isAutoGhostsSafe) {
+			$.notify("Please reduce your usage of Automator Ghosts before continuing!")
+			return
+		}
+		if (AUTO_QC.auto.on) return
+
 		this.next()
 	},
 	next() {
+		if (!this.auto.sweep.length) this.auto.sweep = [0, 1]
 		while (true) {
 			let data = this.auto.sweep
 			data[0]++
@@ -880,6 +886,7 @@ let AUTO_QC = {
 			quantum(false, true)
 		}
 		$.notify("Auto-Challenge Sweeper Ghost has done sweeping all possible PC1 combinations!", "success")
+		updateAutomatorGhosts()
 	}
 }
 
