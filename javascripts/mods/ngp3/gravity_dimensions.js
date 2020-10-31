@@ -207,11 +207,11 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.pow(e, hasBosonicUpg(61) ? 1.5 : 2) * 5 + 45
+		return Math.pow(e, hasBosonicUpg(53) ? 1.5 : 2) * 5 + 45
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.floor(Math.pow(Math.max(h - 45, 0) / 5, hasBosonicUpg(61) ? 2 / 3 : 0.5))
+		let target = Math.floor(Math.pow(Math.max(h - 45, 0) / 5, hasBosonicUpg(53) ? 2 / 3 : 0.5))
 		let toAdd = Math.max(target - GDs.save.extraGDBs + 1, 0)
 		if (toAdd < 1) return
 

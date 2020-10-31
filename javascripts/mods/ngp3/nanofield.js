@@ -329,6 +329,6 @@ function updateNextPreonEnergyThreshold(){
 
 function getAntiPreonGhostWake() {
 	let x = 104
-	if (hasBosonicUpg(53)) x += Math.floor(tmp.blu[53])
+	if (hasNU(18)) x += Math.floor(tmp.nu[18])
 	return x
 }

@@ -429,11 +429,12 @@ function updateEnchantDescs() {
 		var id = g1 * 10 + g2
 		if (bEn.action == "upgrade" || bEn.action == "max") document.getElementById("bEn" + id).className = "gluonupgrade "  +(canBuyEnchant(id) ? "bl" : "unavailablebtn")
 		else if (bEn.action == "use") document.getElementById("bEn" + id).className = "gluonupgrade " + (canUseEnchant(id) ? "storebtn" : "unavailablebtn")
-		if (id == 14) document.getElementById("bEn14").style = "font-size: 8px"
-		if (shiftDown) document.getElementById("bEnLvl" + id).textContent = "Enchant id: " + id
-		else document.getElementById("bEnLvl" + id).textContent = "Level: " + shortenDimensions(tmp.bEn.lvl[id])
-		if (bEn.action == "max") document.getElementById("bEnOn"+id).textContent = "+" + shortenDimensions(getMaxEnchantLevelGain(id)) + " levels"
-		else document.getElementById("bEnOn" + id).textContent = data.usedEnchants.includes(id) ? "Enabled" : "Disabled"
+		document.getElementById("bEnLvl" + id).textContent = bEn.action == "max" ?
+			"+" + shortenDimensions(getMaxEnchantLevelGain(id)) + " levels" :
+			"Level: " + shortenDimensions(tmp.bEn.lvl[id])
+		document.getElementById("bEnOn" + id).textContent = bEn.action == "use" ?
+			(data.usedEnchants.includes(id) ? "Disable" : !canUseEnchant(id) ? "Disabled" : "Enable") :
+			(data.usedEnchants.includes(id) ? "Enabled" : "Disabled")
 		if (tmp.bEn[id] != undefined) {
 			let effect = getEnchantEffect(id, true)
 			let effectDesc = bEn.effectDescs[id]
@@ -504,7 +505,7 @@ var bEn = {
 		12(l) {
 			let exp = 0.75
 			if (tmp.newNGP3E) exp += .025
-			if (l.gt(1e10)) exp *= Decimal.log10(l) / 20 + 0.5
+			if (l.gt(1e10)) exp *= Math.sqrt(Decimal.log10(l) / 10)
 
 			return Decimal.pow(l, exp).div(bEn.autoScalings[player.ghostify.bl.typeToExtract])
 		},
@@ -534,11 +535,11 @@ var bEn = {
 			let x = player.ghostify.hb.higgs
 			if (!tmp.newNGP3E) x = Math.sqrt(x / 2)
 
-			return x * Math.log10(l.plus(10).log10()) + 1
+			return x * Math.log10(l.times(1e3).max(1).log10() + 1) + 1
 		},
 		15(l) {
-			let eff = Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
-			return eff
+			if (hasBosonicUpg(61)) return Math.cbrt(l.add(1).log10() / 10)
+			return Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
 		},
 		25(l) {
 			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 30 + 1)
@@ -615,7 +616,7 @@ var bEn = {
 		2: 3,
 		3: 12,
 		4: 1e6,
-		5: 1e18
+		5: 1e17
 	}
 }
 
@@ -796,6 +797,11 @@ var bu = {
 			g2: 2e100,
 			g5: 2e80
 		},
+		53: {
+			am: 2e155,
+			g3: 2e250,
+			g4: 1/0 //2e245
+		},
 	},
 	reqData: {},
 	descs: {
@@ -821,10 +827,10 @@ var bu = {
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
-		53: "Higgs Bosons make Antipretus wakes up later.",
+		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
 		54: "The Radioactivity of Gravity Well adds the exponent of Fourth Gravity Dimensions.",
 		55: "Remove the limit of Replicantis.",
-		61: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
+		61: "You gain even more Gravity Energy from Bosonic Enchants.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
 		63: "Reduce the softcap of Bosonic Antimatter production.",
 		64: "Gravity Dimension Boosts are stronger.",
@@ -957,9 +963,6 @@ var bu = {
 				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
-		53() {
-			return player.ghostify.hb.higgs / 3
-		},
 		54() {
 			return Math.sqrt(GDs.radioactivity(1)) / 100
 		},
@@ -1019,9 +1022,6 @@ var bu = {
 		},
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
-		},
-		53(x) {
-			return "Starts " + x.toFixed(1) + " later"
 		},
 		54(x) {
 			return "+" + shorten(x)

@@ -608,7 +608,7 @@ function getMaximumUnstableQuarks() {
 
 function getTreeUpgradeEfficiencyText(){
 	let text = ""
-	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
+	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
 	if (text == "") return "No multipliers currently"
@@ -617,7 +617,7 @@ function getTreeUpgradeEfficiencyText(){
 
 function getTreeUpgradeEfficiency(mod) {
 	let r = 1
-	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasBosonicUpg(61) || mod == "br") && mod != "noNB") r += tmp.nb[7]
+	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]
 	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
 	return r

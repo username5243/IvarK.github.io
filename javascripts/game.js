@@ -330,11 +330,13 @@ function setupBosonicExtraction(){
 		for (var g1 = 1; g1 < g2; g1++) {
 			var col = row.insertCell(g1 - 1)
 			var id = (g1 * 10 + g2)
-			col.innerHTML = "<button id='bEn" + id + "' class='gluonupgrade unavailablebtn' style='font-size: 9px' onclick='takeEnchantAction("+id+")'>"+(bEn.descs[id]||"???")+"<br>"+
-			"Currently: <span id='bEnEffect" + id + "'>???</span><br>"+
-			"<span id='bEnLvl" + id + "'></span><br>" +
-			"<span id='bEnOn" + id + "'></span><br>" +
-			"Cost: <span id='bEnG1Cost" + id + "'></span> <div class='bRune' type='" + g1 + "'></div> & <span id='bEnG2Cost" + id + "'></span> <div class='bRune' type='" + g2 + "'></div></button><br>"
+			col.innerHTML = "<button id='bEn" + id + "' class='gluonupgrade unavailablebtn' style='width: 240px; height: 120px; font-size: 10px' onclick='takeEnchantAction("+id+")'>" +
+				(bEn.descs[id] || "???") + "<br>" +
+				"Currently: <span id='bEnEffect" + id + "'>???</span><br><br>" +
+				"<span id='bEnLvl" + id + "'></span> | <span id='bEnOn" + id + "'></span><br>" +
+				"Cost: <span id='bEnG1Cost" + id + "'></span> <div class='bRune' type='" + g1 + "'></div>" + 
+				" & <span id='bEnG2Cost" + id + "'></span> <div class='bRune' type='" + g2 + "'></div>" +
+			"</button><br>"
 		}
 	}
 	var toeDiv = ""
@@ -4219,6 +4221,15 @@ function ghostifyAutomationUpdating(diff){
 		} else if (tmp.qu.time >= player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < limit) bigRip(true)
 	}
 
+	if (!tmp.quUnl) return
+	if (AUTO_QC.auto.on) {
+		if (isQuantumReached()) {
+			tmp.preQCMods = tmp.qu.qcsMods.current
+			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
+			AUTO_QC.next()
+		} else if (tmp.qu.time > AUTO_QC.auto.time * 10) AUTO_QC.next()
+	}
+
 	if (!tmp.quActive) return
 	if (player.masterystudies.includes("d12")) {
 		let colorShorthands = ["r", "g", "b"]
@@ -4242,13 +4253,6 @@ function ghostifyAutomationUpdating(diff){
 			startProduceQuarkCharge()
 			if (start) ag.t = 0
 		}
-	}
-	if (AUTO_QC.auto.on) {
-		if (isQuantumReached()) {
-			tmp.preQCMods = tmp.qu.qcsMods.current
-			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
-			AUTO_QC.next()
-		} else if (tmp.qu.time > AUTO_QC.auto.time * 10) AUTO_QC.next()
 	}
 }
 
@@ -4927,7 +4931,7 @@ function challengeOverallDisplayUpdating(){
 			if (tmp.qu.autoOptions.sacrifice) document.getElementById("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<=9;c++) {
 				let x = tmp.qcRewards[c]
-				if (c==9) document.getElementById("qc9reward").textContent = "^" + x.ri.toFixed(2) + " to interval, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
+				if (c==9) document.getElementById("qc9reward").textContent = "+" + x.ri.toFixed(2) + " base OoMs to interval scaling, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
 				else if (c==5) document.getElementById("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
 				else if (c!=2&&c!=8) document.getElementById("qc"+c+"reward").textContent = shorten(x)
 			}

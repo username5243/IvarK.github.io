@@ -337,12 +337,11 @@ let qcRewards = {
 			return comps + 2
 		},
 		9: function(comps) {
-			comps = ((tmp.pcc && tmp.pcc.c9) || 0) + 1
+			let compEff = Math.cbrt(((tmp.pcc && tmp.pcc.c9) || 0) + 1)
 			let x = player.replicanti.amount.log10()
-			if (comps > 1 && x > 1e8) x *= Math.pow(Math.log10(x) / 8, comps - 1)
 			return {
-				ri: Math.cbrt(x / 1e8),
-				ge: Math.sqrt(x / 1e10)
+				ri: x / 1e8 * compEff,
+				ge: Math.sqrt(x / 1e10) * compEff
 			}
 		}
 	}

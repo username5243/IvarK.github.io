@@ -54,8 +54,8 @@ function isNeutrinoUpgUnlocked(u) {
 
 function updateNeutrinoUpgradeUnlock(u) {
 	let unl = isNeutrinoUpgUnlocked(u)
-	if (u % 3 == 1) document.getElementById("neutrinoUpg"+u).parentElement.parentElement.style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
-	else document.getElementById("neutrinoUpg"+u).style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+	if (u % 3 == 1) document.getElementById("neutrinoUpg" + u).parentElement.parentElement.style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
+	else document.getElementById("neutrinoUpg" + u).style.display = isNeutrinoUpgUnlocked(u) ? "" : "none"
 }
 
 function updateNeutrinoUpgradeUnlocks(rangeMin, rangeMax) {
@@ -221,11 +221,11 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb7exp = .5
 			if (tmp.newNGP3E) nb7exp = .6
-			if (!inBigRip() && hasBosonicUpg(61)) nb7exp /= 2
 			let nb7neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb7 = Math.pow(Math.log10(1 + nb7neutrinos), nb7exp) * 2.35
 			if (nb7 > 4) nb7 = 2 * Math.log2(nb7)
 			if (nb7 > 5) nb7 = 2 + Math.log2(nb7 + 3)
+			if (!inBigRip() && hasNU(17)) nb7 = Math.pow(nb7 + 1, tmp.nu[17]) - 1
 			return nb7
 		},
 		cost: 1e3
@@ -358,6 +358,22 @@ var neutrinoUpgrades = {
 		},
 		effDesc(x) {
 			return shorten(x)
+		}
+	},
+	17: {
+		eff() {
+			return 1 - 1 / (getTotalRadioactiveDecays() / 500 + 1)
+		},
+		effDesc(x) {
+			return x.toFixed(3)
+		}
+	},
+	18: {
+		eff() {
+			return player.ghostify.hb.higgs / 3
+		},
+		effDesc(x) {
+			return  "Wakes up " + x.toFixed(2) + " later"
 		}
 	}
 }

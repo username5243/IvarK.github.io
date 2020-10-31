@@ -58,7 +58,7 @@ function bosonicLabReset() {
 		glyphs: [],
 		enchants: {},
 		usedEnchants: tmp.bl.usedEnchants,
-		upgrades: [],
+		upgrades: player.achievements.includes("ng3p104") ? oldUpgs : [],
 		battery: new Decimal(0),
 		odSpeed: player.ghostify.bl.odSpeed
 	}
@@ -77,15 +77,15 @@ function bosonicLabReset() {
 	}
 	delete tmp.qu.nanofield.apgWoke
 
-	//tmp.bl.upgrades needs to be updated (also 12 needs to be added)
-	let order = [11, 12, 13, 15, 14, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
 	for (let g = 1; g <= br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(new Decimal(0))
-	for (let i = 0; i < startingEnchants; i++) {
-		if (i == order.length) break //this needs to make sure that it doesnt give you upgrades you havent unlocked yet
-		player.ghostify.bl.upgrades.push(order[i])
+	if (!player.achievements.includes("ng3p104")) {
+		let order = [11, 12, 13, 15, 14, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
+		for (let i = 0; i < startingEnchants; i++) {
+			if (i == order.length) break //this needs to make sure that it doesnt give you upgrades you havent unlocked yet
+			player.ghostify.bl.upgrades.push(order[i])
+		}
+		if (oldUpgs.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
 	}
-	if (oldUpgs.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
-	if (oldUpgs.includes(53) && player.achievements.includes("ng3p104")) player.ghostify.bl.upgrades.push(53)
 
 	if (player.achievements.includes("ng3p98")) {
 		player.ghostify.wzb.wpb = Decimal.pow(3, player.ghostify.hb.higgs)
