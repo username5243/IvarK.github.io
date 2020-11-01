@@ -1,6 +1,6 @@
 var quantumChallenges = {
 	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
-	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 9e16]
+	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 7.5e16]
 }
 
 var assigned
@@ -337,10 +337,10 @@ let qcRewards = {
 			return comps + 2
 		},
 		9: function(comps) {
-			let compEff = Math.cbrt(((tmp.pcc && tmp.pcc.c9) || 0) + 1)
+			let compEff = Math.sqrt(((tmp.pcc && tmp.pcc.c9) || 0) + 1)
 			let x = player.replicanti.amount.log10()
 			return {
-				ri: x / 1e8 * compEff,
+				ri: Math.sqrt(x / 1e7) * compEff,
 				ge: Math.sqrt(x / 1e10) * compEff
 			}
 		}
@@ -459,7 +459,7 @@ var qcm = {
 	rewards: {
 		ms: {
 			eff(x) {
-				return Math.pow(tmp.pcc.ms / 100 + 1, 0.75)
+				return Math.pow(tmp.pcc.ms / 1e3 + 1, 3)
 			},
 			desc(x) {
 				return "Boost all Emperor Dimensions by " + (x * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension."

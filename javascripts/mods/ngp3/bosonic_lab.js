@@ -62,10 +62,10 @@ function getBosonicFinalSpeed() {
 	return Decimal.times(player.ghostify.bl.speed, getOverdriveSpeedDisplay()).times(ls.mult("bl"))
 }
 
-function updateBAMAmount(diff = 0){
+function updateBAMAmount(diff = 0) {
 	let data = player.ghostify.bl
 	var newBA = data.am
-	var baAdded = getBosonicAMProduction().times(diff)
+	var baAdded = diff ? getBosonicAMProduction().times(diff) : 0
 	if (tmp.badm.start !== undefined && data.am.gt(tmp.badm.start) && tmp.badm.postDim <= Number.MAX_VALUE) data.am = tmp.badm.preDim.times(tmp.badm.start)
 	updateBosonicAMDimReturnsTemp()
 	newBA = data.am.add(baAdded)
@@ -251,7 +251,7 @@ function showBLTab(tabName) {
 	closeToolTip()
 }
 
-function getEstimatedNetBatteryGain(){
+function getEstimatedNetBatteryGain() {
 	let pos = (tmp.batteryGainLast || new Decimal(0)).times(1000)
 	if (player.ghostify.wzb.dPUse != 1) pos = new Decimal(0)
 	let neg = getBosonicBatteryLoss().times(player.ghostify.bl.speed)
@@ -454,6 +454,7 @@ function autoMaxEnchant(id, times) {
 	let toAdd = getMaxEnchantLevelGain(id).times(times)
 	if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(toAdd)
 	else data.enchants[id] = data.enchants[id].add(toAdd).round()
+	bEn.onBuy(id)
 }
 
 function autoMaxAllEnchants(times) {
@@ -498,8 +499,8 @@ var bEn = {
 		34: "Higgs Bosons boost Bosonic Watts.",
 		15: "You gain more Gravity Energy.",
 		25: "Z Bosons give a stronger boost to W Bosons.",
-		35: "Gain extra Gravity Power before Radioactivity.",
-		45: "Multiply the gain of Gravity Energy, but reduce the charging effect."
+		35: "Gain extra Gravity Power, but before Radioactivity.",
+		45: "Multiply the gain of Gravity Energy, but reduce the charging effect.",
 	},
 	effects: {
 		12(l) {
@@ -581,6 +582,7 @@ var bEn = {
 			data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(getBosonicFinalCost(costData[1])).round()
 			if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(1)
 			else data.enchants[id] = data.enchants[id].add(1).round()
+			bEn.onBuy(id)
 		},
 		max(id) {
 			if (!canBuyEnchant(id)) return
@@ -594,6 +596,7 @@ var bEn = {
 			data.glyphs[g2 - 1] = data.glyphs[g2 - 1].sub(lvl.times(getBosonicFinalCost(costData[1])).min(data.glyphs[g2 - 1])).round()
 			if (data.enchants[id] == undefined) data.enchants[id] = new Decimal(lvl)
 			else data.enchants[id] = data.enchants[id].add(lvl).round()
+			bEn.onBuy(id)
 		},
 		use(id) {
 			if (!canUseEnchant(id)) return
@@ -609,6 +612,9 @@ var bEn = {
 			}
 			if (id == 14) updateBAMAmount()
 		}
+	},
+	onBuy(id) {
+		if (id == 14) updateBAMAmount()
 	},
 	limits: [0, 2, 5, 9],
 	autoScalings:{
@@ -794,13 +800,13 @@ var bu = {
 		},
 		52: {
 			am: 2e130,
-			g2: 2e100,
-			g5: 2e80
+			g2: 2e85,
+			g5: 2e65
 		},
 		53: {
-			am: 2e155,
-			g3: 2e250,
-			g4: 1/0 //2e245
+			am: 1/0,
+			g3: 2e270,
+			g4: 2e265
 		},
 	},
 	reqData: {},
@@ -828,7 +834,7 @@ var bu = {
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
-		54: "The Radioactivity of Gravity Well adds the exponent of Fourth Gravity Dimensions.",
+		54: "Neutrino Boost 10 is stronger.",
 		55: "Remove the limit of Replicantis.",
 		61: "You gain even more Gravity Energy from Bosonic Enchants.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
@@ -963,9 +969,6 @@ var bu = {
 				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
-		54() {
-			return Math.sqrt(GDs.radioactivity(1)) / 100
-		},
 		63() {
 			let x = 0.5
 			if (hasBosonicUpg(65)) x = Math.pow(x, Math.sqrt(1 + player.ghostify.hb.higgs / 1e3))
@@ -1022,9 +1025,6 @@ var bu = {
 		},
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
-		},
-		54(x) {
-			return "+" + shorten(x)
 		},
 		63(x) {
 			return (100 - x * 100).toFixed(2) + "% weaker"

@@ -105,7 +105,7 @@ let GDs = {
 
 		GDs.getExtraGDBs()
 		let totalGDBs = GDs.totalGDBs()
-		document.getElementById("gdBoost").textContent = GDs.save.gdBoosts >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
+		document.getElementById("gdBoost").textContent = totalGDBs >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
 		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (totalGDBs >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + " + " + getFullExpansion(GDs.save.extraGDBs) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
 		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
 		let nameofthing = totalGDBs > 3 ? "Boost" : "Shift"
@@ -191,7 +191,6 @@ let GDs = {
 	gdExp(dim) {
 		let x = 1
 		x += (GDs.totalGDBs() - dim + 1) / Math.sqrt(dim) * GDs.tmp.gdbPow
-		if (dim == 4 && hasBosonicUpg(54)) x += tmp.blu[54]
 		return x
 	},
 	gdBoost(x) {
@@ -207,7 +206,7 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.pow(e, hasBosonicUpg(53) ? 1.5 : 2) * 5 + 45
+		return Math.ceil(Math.pow(e, hasBosonicUpg(53) ? 1.5 : 2) * 5 + 45)
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs

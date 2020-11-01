@@ -261,7 +261,8 @@ let neutrinoBoosts = {
 	11: {
 		eff(nt) {
 			let nb11neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
-			let exp = Math.pow(nb11neutrinos, 0.5)
+			let exp = Math.sqrt(nb11neutrinos)
+			if (hasBosonicUpg(54)) exp = Math.max(Math.pow(nb11neutrinos, 0.75) / 5, exp)
 
 			return Decimal.pow(1.15, exp)
 		},
