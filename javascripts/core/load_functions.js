@@ -2305,7 +2305,8 @@ function onLoad(noOffline) {
 	document.getElementById("secretoptionsbtn").style.display=player.options.secrets?"":"none"
 	document.getElementById("ghostlynewsbtn").textContent=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?"Hide":"Show")+" ghostly news ticker"
 	resetUP()
-	if (player.aarexModifications.offlineProgress && !noOffline) {
+	pauseGame(true)
+	if (player.aarexModifications.offlineProgress && !player.aarexModifications.pause && !noOffline) {
 		let diff = new Date().getTime() - player.lastUpdate
 		if (diff > 1000*1000) simulateTime(diff/1000)
 	} else player.lastUpdate = new Date().getTime()
@@ -3014,6 +3015,12 @@ function get_save(id) {
                 if (dimensionSave !== null) dimensionSave = JSON.parse(atob(dimensionSave, function(k, v) { return (v === Infinity) ? "Infinity" : v; }))
                 return dimensionSave
         } catch(e) { }
+}
+
+function pauseGame(load) {
+	if (!load) player.aarexModifications.pause = !player.aarexModifications.pause
+	if (player.aarexModifications.pause) alert("YOUR GAME IS PAUSED! The time has stopped, which means production and automation don't work. However, you can manually do something without automation.")
+	document.getElementById("pauseStatus").textContent = player.aarexModifications.pause ? "Unpause" : "Pause"
 }
 
 function initiateMetaSave() {

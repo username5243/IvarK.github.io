@@ -3939,18 +3939,15 @@ setInterval(function() {
 	metaAchMultLabelUpdate()
 	bWtAchMultLabelUpdate()
 
-	// AB Stuff
+	// AB Display
 	updateReplicantiGalaxyToggels()
 	ABTypeDisplay()
 	dimboostABTypeDisplay()
 	IDABDisplayCorrection()
 	replicantiShopABDisplay()
-	replicantiShopABRun()
-	runIDBuyersTick()
-	doAutoEterTick()
-	dilationStuffABTick()
-	updateNGpp17Reward()
-	updateNGpp16Reward()
+
+	// AB Stuff
+	autoPerSecond()
 
 	// Button Displays
 	infPoints2Display()
@@ -3972,7 +3969,6 @@ setInterval(function() {
 	updateChallTabDisplay()
 	updateOrderGoals()
 	bankedInfinityDisplay()
-	doPerSecondNGP3Stuff()
 	notifyQuantumMilestones()
 	updateQuantumWorth()
 	updateNGM2RewardDisplay()
@@ -3987,6 +3983,18 @@ setInterval(function() {
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
 }, 1000)
+
+function autoPerSecond() {
+	if (player.aarexModifications.pause) return
+
+	replicantiShopABRun()
+	runIDBuyersTick()
+	doAutoEterTick()
+	dilationStuffABTick()
+	updateNGpp17Reward()
+	updateNGpp16Reward()
+	doPerSecondNGP3Stuff()
+}
 
 var postC2Count = 0;
 var IPminpeak = new Decimal(0)
@@ -5099,11 +5107,12 @@ function infUpgPassiveIPGain(diff){
 
 function gameLoop(diff) {
 	var thisUpdate = new Date().getTime();
-	if (thisUpdate - player.lastUpdate >= 21600000) giveAchievement("Don't you dare sleep")
-		if (typeof diff === 'undefined') {
+	if (typeof diff === 'undefined') {
 		if (player.options.secrets && player.options.secrets.ghostlyNews) nextGhostlyNewsTickerMsg()
-		var diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
+		diff = Math.min(thisUpdate - player.lastUpdate, 21600000);
 	}
+	if (diff >= 21600000) giveAchievement("Don't you dare sleep")
+	player.lastUpdate = thisUpdate
 
 	diff = Math.max(diff / 1e3, 0)
 	if (tmp.gameSpeed != 1) diff = diff * tmp.gameSpeed
@@ -5115,24 +5124,58 @@ function gameLoop(diff) {
 	updateTemp()
 	infUpgPassiveIPGain(diff)
 
-	incrementParadoxUpdating(diff)
-	checkMatter(diff)
-	passiveIPupdating(diff)
-	passiveInfinitiesUpdating(diff)
-	requiredInfinityUpdating(diff)
-	normalChallPowerUpdating(diff)
-	passiveIPperMUpdating(diff)
-	incrementTimesUpdating(diffStat)
-	dimensionButtonDisplayUpdating()
+	if (!player.aarexModifications.pause) {
+		incrementParadoxUpdating(diff)
+		checkMatter(diff)
+		passiveIPupdating(diff)
+		passiveInfinitiesUpdating(diff)
+		requiredInfinityUpdating(diff)
+		normalChallPowerUpdating(diff)
+		passiveIPperMUpdating(diff)
+		incrementTimesUpdating(diffStat)
+		dimensionButtonDisplayUpdating()
 
-	if (player.meta) metaDimsUpdating(diff)
-	infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims
-	otherDimsUpdating(diff)
-	giveBlackHolePowerUpdating(diff)
-	freeTickspeedUpdating()
-	IPonCrunchPassiveGain(diff)
-	EPonEternityPassiveGain(diff)
-	TTpassiveGain(diff)
+		if (player.meta) metaDimsUpdating(diff)
+		infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims
+		otherDimsUpdating(diff)
+		giveBlackHolePowerUpdating(diff)
+		freeTickspeedUpdating()
+
+		passiveGPGen(diff)
+		IPonCrunchPassiveGain(diff)
+		EPonEternityPassiveGain(diff)
+		TTpassiveGain(diff)
+		if (hasDilationStudy(1)) {
+			let gain = getDilTimeGainPerSecond()
+			player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
+			gainDilationGalaxies()
+		}
+
+		if (tmp.ngp3) {
+			if (hasDilationStudy(1)) {
+				if (tmp.qu.bigRip.upgrades.includes(20)) {
+					let gain = getDilGain()
+					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
+				} else if (player.dilation.active) ngp3DilationUpdating()
+			}
+			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
+			if (masteryStudies.has(291)) updateEternityUpgrades() // to fix the 5ep upg display
+			if (ph.did("ghostify")) {
+				if (GDs.unlocked()) {
+					// Gravity Dimensions
+					GDs.gdTick(diff)
+					GDs.gainRDTicks()
+					if (document.getElementById("gdims").style.display != "none") GDs.updateDisplay()
+				}
+				if (player.ghostify.wzb.unl) WZBosonsUpdating(diff) // Bosonic Lab
+				if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
+				ghostifyAutomationUpdating(diff)
+			}
+			if (ph.did("quantum")) quantumOverallUpdating(diff)
+		}
+
+		replicantiIncrease(diff * 10)
+	}
 
 	infDimTabUpdating()
 	dimensionPageTabsUpdating()
@@ -5146,13 +5189,12 @@ function gameLoop(diff) {
    	if (player.galacticSacrifice) {
 	    try {document.getElementsByClassName("GPAmount")[0].textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)}
 	    finally {}
-    	}
+    }
 
 	if (tmp.tickUpdate) {
 		updateTickspeed()
 		tmp.tickUpdate = false
 	}
-	replicantiIncrease(diff * 10)
 	IPMultBuyUpdating()
 	doEternityButtonDisplayUpdating(diff)
 	doQuantumButtonDisplayUpdating(diff)	
@@ -5173,13 +5215,6 @@ function gameLoop(diff) {
 	tickspeedButtonDisplay()
 	updateCosts()
 
-	if (hasDilationStudy(1)) {
-		let gain = getDilTimeGainPerSecond()
-		player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
-		gainDilationGalaxies()
-	}
-
-	passiveGPGen(diff)
 	normalSacDisplay()
 	sacLayersDisplay()
 	d8SacDisplay()
@@ -5202,29 +5237,6 @@ function gameLoop(diff) {
 	updateConvertSave(eligibleConvert())
 
 	if (isNaN(player.totalmoney.e)) player.totalmoney = new Decimal(10)
-	
-	if (tmp.ngp3) {
-		if (hasDilationStudy(1)) {
-			if (tmp.qu.bigRip.upgrades.includes(20)) {
-				let gain = getDilGain()
-				if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
-			} else if (player.dilation.active) ngp3DilationUpdating()
-		}
-		if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
-		if (masteryStudies.has(291)) updateEternityUpgrades() // to fix the 5ep upg display
-		if (ph.did("ghostify")) {
-			if (GDs.unlocked()) {
-				// Gravity Dimensions
-				GDs.gdTick(diff)
-				GDs.gainRDTicks()
-				if (document.getElementById("gdims").style.display != "none") GDs.updateDisplay()
-			}
-			if (player.ghostify.wzb.unl) WZBosonsUpdating(diff) // Bosonic Lab
-			if (player.ghostify.ghostlyPhotons.unl) ghostlyPhotonsUpdating(diff) // Ghostly Photons
-			ghostifyAutomationUpdating(diff)
-		}
-		if (ph.did("quantum")) quantumOverallUpdating(diff)
-	}
 
 	thisQuantumTimeUpdating()
 	var s = shortenDimensions(player.infinityPoints)
@@ -5232,8 +5244,6 @@ function gameLoop(diff) {
 	document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+s+"</span> Infinity points."
 
 	if (document.getElementById("loadmenu").style.display == "block") changeSaveDesc(metaSave.current, savePlacement)
-
-	player.lastUpdate = thisUpdate;
 }
 
 function simulateTime(seconds, real, id) {

@@ -488,7 +488,7 @@ var bEn = {
 		24: [1e6, 10],
 		34: [1, 0],
 		15: [2e21, 20],
-		25: [2e105, 2e90],
+		25: [2e105, 2e85],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -614,7 +614,7 @@ var bEn = {
 		}
 	},
 	onBuy(id) {
-		if (id == 14) updateBAMAmount()
+		if (id == 14 && isEnchantUsed(14)) updateBAMAmount()
 	},
 	limits: [0, 2, 5, 9],
 	autoScalings:{
