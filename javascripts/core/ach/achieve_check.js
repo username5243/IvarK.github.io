@@ -175,7 +175,7 @@ function checkOtherPreNGp3Achieve() {
 	if (infchallengeTimes < 7.5) giveAchievement("Never again")
 	if (player.totalTimePlayed >= 10 * 60 * 60 * 24 * 8) giveAchievement("One for each dimension")
 	if (Math.random() < 0.00001) giveAchievement("Do you feel lucky? Well do ya punk?")
-	//starting here we need i need to move checks into the correct function:
+	//starting here i need to move checks into the correct function:
 	if (player.galaxies >= 50) giveAchievement("YOU CAN GET 50 GALAXIES!??")
 	if (player.galaxies >= 2) giveAchievement("Double Galaxy");
 	if (player.galaxies >= 1) giveAchievement("You got past The Big Wall");
@@ -345,7 +345,7 @@ function ALLACHIEVECHECK(){
 		checkMatterAMNDReqAchieve() //AM/ND/Matter Req
 		checkInfPowerReqAchieve() //IPo Req
 		checkTickspeedReqAchieve() //Tickspeed/tick upgs based
-		checkOtherPreNGp3Achieve()
+		checkOtherPreNGp3Achieve() //Other
 
 		if (player.exdilation) checkNGUdAchieve()
 		if (player.meta) checkNGp2Achieve()
