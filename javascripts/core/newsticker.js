@@ -417,7 +417,8 @@ amNewsArray = [
 ["Wait... Ghosts should live in spooky places, not our universe.", "ph.did('ghostify')", "am204"],
 ["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "ph.did('ghostify')", "am205"],
 ["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
-/*NEXT ID: am207*/
+["To do for the next update: Procastinate, procastinate, procastinate, do a small development build, ...", "true", "am207"],
+/*NEXT ID: am208*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
