@@ -6,15 +6,15 @@ function canUnlockBosonicLab() {
   
 function updateBLUnlocks() {
 	let unl = player.ghostify.wzb.unl
-	document.getElementById("blUnl").style.display = unl ? "none" : ""
-	document.getElementById("blDiv").style.display = unl ? "" : "none"
-	document.getElementById("nftabs").style.display = unl ? "" : "none"
+	getEl("blUnl").style.display = unl ? "none" : ""
+	getEl("blDiv").style.display = unl ? "" : "none"
+	getEl("nftabs").style.display = unl ? "" : "none"
 	if (!unl) updateBLUnlockDisplay()
 	updateBosonicLimits()
 }
 
 function updateBLUnlockDisplay() {
-	document.getElementById("blUnl").textContent = "To unlock Bosonic Lab, you need to get " + shortenCosts(Decimal.pow(10, 5e10)) + " " + getUQName(5) + " quarks and 3 Light Empowerments first."
+	getEl("blUnl").textContent = "To unlock Bosonic Lab, you need to get " + shortenCosts(Decimal.pow(10, 5e10)) + " " + getUQName(5) + " quarks and 3 Light Empowerments first."
 }
 
 function getBosonicWattGain() {
@@ -222,15 +222,15 @@ function updateBosonicLimits() {
 
 	var width = 100 / br.limit
 	for (var r = 1; r <= br.limits[maxBLLvl]; r++) {
-		document.getElementById("bRuneCol" + r).style = "min-width:" + width + "%;width:" + width + "%;max-width:" + width + "%"
+		getEl("bRuneCol" + r).style = "min-width:" + width + "%;width:" + width + "%;max-width:" + width + "%"
 		if (r > 3) {
 			var shown = br.limit >= r
-			document.getElementById("bRuneCol" + r).style.display = shown ? "" : "none"
-			document.getElementById("typeToExtract" + r).style.display = shown ? "" : "none"
-			document.getElementById("bEnRow" + (r - 1)).style.display = shown ? "" : "none"
+			getEl("bRuneCol" + r).style.display = shown ? "" : "none"
+			getEl("typeToExtract" + r).style.display = shown ? "" : "none"
+			getEl("bEnRow" + (r - 1)).style.display = shown ? "" : "none"
 		}
 	}
-	for (var r = 3; r <= bu.limits[maxBLLvl]; r++) document.getElementById("bUpgRow" + r).style.display = bu.rows >= r ? "" : "none"
+	for (var r = 3; r <= bu.limits[maxBLLvl]; r++) getEl("bUpgRow" + r).style.display = bu.rows >= r ? "" : "none"
 }
 
 function showBLTab(tabName) {
@@ -262,34 +262,34 @@ function getEstimatedNetBatteryGain() {
 function updateBosonicLabTab(){
 	let data = player.ghostify.bl
 	let speed = getBosonicFinalSpeed()
-	document.getElementById("bWatt").textContent = shorten(data.watt)
-	document.getElementById("bSpeed").textContent = shorten(data.speed)
-	document.getElementById("bTotalSpeed").textContent = shorten(speed)
-	document.getElementById("bTicks").textContent = shorten(data.ticks)
-	document.getElementById("bAM").textContent = shorten(data.am)
-	document.getElementById("bAMProduction").textContent = "+" + shorten(getBosonicAMFinalProduction().times(speed)) + "/s"
-	document.getElementById("bAMProductionReduced").style.display = data.am.gt(tmp.badm.start) ? "" : "none"
-	document.getElementById("bAMProductionReduced").textContent = "(reduced by " + shorten(tmp.badm.preDim) + "x)"
-	document.getElementById("bBt").textContent = shorten(data.battery)
+	getEl("bWatt").textContent = shorten(data.watt)
+	getEl("bSpeed").textContent = shorten(data.speed)
+	getEl("bTotalSpeed").textContent = shorten(speed)
+	getEl("bTicks").textContent = shorten(data.ticks)
+	getEl("bAM").textContent = shorten(data.am)
+	getEl("bAMProduction").textContent = "+" + shorten(getBosonicAMFinalProduction().times(speed)) + "/s"
+	getEl("bAMProductionReduced").style.display = data.am.gt(tmp.badm.start) ? "" : "none"
+	getEl("bAMProductionReduced").textContent = "(reduced by " + shorten(tmp.badm.preDim) + "x)"
+	getEl("bBt").textContent = shorten(data.battery)
 	let x = getEstimatedNetBatteryGain()
 	s = shorten(x[1]) + "/s"
 	if (!x[0]) s = "-" + s
-	document.getElementById("bBtProduction").textContent = s
-	document.getElementById("odSpeed").textContent = shorten(getOverdriveSpeedDisplay()) + "x"
-	document.getElementById("odSpeedWBBt").style.display = data.battery.eq(0) && data.odSpeed > 1 ? "" : "none"
-	document.getElementById("odSpeedWBBt").textContent = " (" + shorten(getOverdriveFinalSpeed()) + "x if you have Bosonic Battery)"
-	for (var g = 1;g <= br.limit; g++) document.getElementById("bRune"+g).textContent = shortenDimensions(data.glyphs[g-1])
-	if (document.getElementById("bextab").style.display=="block") updateBosonExtractorTab()
-	if (document.getElementById("butab").style.display=="block") updateBosonicUpgradeDescs()
-	if (document.getElementById("wzbtab").style.display=="block") updateWZBosonsTab()
+	getEl("bBtProduction").textContent = s
+	getEl("odSpeed").textContent = shorten(getOverdriveSpeedDisplay()) + "x"
+	getEl("odSpeedWBBt").style.display = data.battery.eq(0) && data.odSpeed > 1 ? "" : "none"
+	getEl("odSpeedWBBt").textContent = " (" + shorten(getOverdriveFinalSpeed()) + "x if you have Bosonic Battery)"
+	for (var g = 1;g <= br.limit; g++) getEl("bRune"+g).textContent = shortenDimensions(data.glyphs[g-1])
+	if (getEl("bextab").style.display=="block") updateBosonExtractorTab()
+	if (getEl("butab").style.display=="block") updateBosonicUpgradeDescs()
+	if (getEl("wzbtab").style.display=="block") updateWZBosonsTab()
 	if (player.ghostify.hb.unl) {
 		let req = getHiggsRequirement()
-		document.getElementById("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
-		document.getElementById("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
-		document.getElementById("hbResetReq").textContent = shorten(req)
-		document.getElementById("hbResetGain").textContent = getFullExpansion(getHiggsGain())
+		getEl("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
+		getEl("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
+		getEl("hbResetReq").textContent = shorten(req)
+		getEl("hbResetGain").textContent = getFullExpansion(getHiggsGain())
 	}
-	if (GDs.unlocked()) document.getElementById("gvBlAmount").textContent = shortenMoney(GDs.save.gv)
+	if (GDs.unlocked()) getEl("gvBlAmount").textContent = shortenMoney(GDs.save.gv)
 }
 
 function teleportToBL() {
@@ -301,14 +301,14 @@ function updateBosonicStuffCosts() {
 	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) {
 		var id = g1 * 10 + g2
 		var data = bEn.costs[id]
-		document.getElementById("bEnG1Cost" + id).textContent = (data !== undefined && data[0] !== undefined && shortenDimensions(getBosonicFinalCost(data[0]))) || "???"
-		document.getElementById("bEnG2Cost" + id).textContent = (data !== undefined && data[1] !== undefined && shortenDimensions(getBosonicFinalCost(data[1]))) || "???"
+		getEl("bEnG1Cost" + id).textContent = (data !== undefined && data[0] !== undefined && shortenDimensions(getBosonicFinalCost(data[0]))) || "???"
+		getEl("bEnG2Cost" + id).textContent = (data !== undefined && data[1] !== undefined && shortenDimensions(getBosonicFinalCost(data[1]))) || "???"
 	}
 	for (var r = 1; r <= bu.rows; r++) for (var c = 1; c < 6; c++) {
 		var id = r * 10 + c
 		var data = bu.reqData[id]
-		document.getElementById("bUpgCost" + id).textContent = (data[0] !== undefined && shorten(getBosonicFinalCost(data[0]))) || "???"
-		for (var g = 1; g < 3; g++) document.getElementById("bUpgG" + g + "Req" + id).textContent = (data[g * 2 - 1] !== undefined && shortenDimensions(getBosonicFinalCost(data[g * 2 - 1]))) || "???"
+		getEl("bUpgCost" + id).textContent = (data[0] !== undefined && shorten(getBosonicFinalCost(data[0]))) || "???"
+		for (var g = 1; g < 3; g++) getEl("bUpgG" + g + "Req" + id).textContent = (data[g * 2 - 1] !== undefined && shortenDimensions(getBosonicFinalCost(data[g * 2 - 1]))) || "???"
 	}
 }
 
@@ -356,8 +356,8 @@ function getExtractTime() {
 function changeTypeToExtract(x) {
 	let data = player.ghostify.bl
 	if (data.typeToExtract == x) return
-	document.getElementById("typeToExtract" + data.typeToExtract).className = "storebtn"
-	document.getElementById("typeToExtract" + x).className = "chosenbtn"
+	getEl("typeToExtract" + data.typeToExtract).className = "storebtn"
+	getEl("typeToExtract" + x).className = "chosenbtn"
 	data.typeToExtract = x
 	data.extracting = false
 	data.extractProgress = new Decimal(0)
@@ -415,11 +415,11 @@ function updateBosonExtractorTab(){
 	let data = player.ghostify.bl
 	let speed = getBosonicFinalSpeed()
 	let time = getExtractTime().div(speed)
-	if (data.extracting) document.getElementById("extract").textContent = "Extracting" + (time.lt(0.1)?"":" ("+data.extractProgress.times(100).toFixed(1)+"%)")
-	else document.getElementById("extract").textContent="Extract"
-	if (time.lt(0.1)) document.getElementById("extractTime").textContent="This would automatically take "+shorten(Decimal.div(1,time))+" runes per second."
-	else if (data.extracting) document.getElementById("extractTime").textContent=shorten(time.times(Decimal.sub(1,data.extractProgress)))+" seconds left to extract."
-	else document.getElementById("extractTime").textContent="This will take "+shorten(time)+" seconds."
+	if (data.extracting) getEl("extract").textContent = "Extracting" + (time.lt(0.1)?"":" ("+data.extractProgress.times(100).toFixed(1)+"%)")
+	else getEl("extract").textContent="Extract"
+	if (time.lt(0.1)) getEl("extractTime").textContent="This would automatically take "+shorten(Decimal.div(1,time))+" runes per second."
+	else if (data.extracting) getEl("extractTime").textContent=shorten(time.times(Decimal.sub(1,data.extractProgress)))+" seconds left to extract."
+	else getEl("extractTime").textContent="This will take "+shorten(time)+" seconds."
 	updateEnchantDescs()
 }
 
@@ -427,21 +427,21 @@ function updateEnchantDescs() {
 	let data = player.ghostify.bl
 	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) {
 		var id = g1 * 10 + g2
-		if (bEn.action == "upgrade" || bEn.action == "max") document.getElementById("bEn" + id).className = "gluonupgrade "  +(canBuyEnchant(id) ? "bl" : "unavailablebtn")
-		else if (bEn.action == "use") document.getElementById("bEn" + id).className = "gluonupgrade " + (canUseEnchant(id) ? "storebtn" : "unavailablebtn")
-		document.getElementById("bEnLvl" + id).textContent = bEn.action == "max" ?
+		if (bEn.action == "upgrade" || bEn.action == "max") getEl("bEn" + id).className = "gluonupgrade "  +(canBuyEnchant(id) ? "bl" : "unavailablebtn")
+		else if (bEn.action == "use") getEl("bEn" + id).className = "gluonupgrade " + (canUseEnchant(id) ? "storebtn" : "unavailablebtn")
+		getEl("bEnLvl" + id).textContent = bEn.action == "max" ?
 			"+" + shortenDimensions(getMaxEnchantLevelGain(id)) + " levels" :
 			"Level: " + shortenDimensions(tmp.bEn.lvl[id])
-		document.getElementById("bEnOn" + id).textContent = bEn.action == "use" ?
+		getEl("bEnOn" + id).textContent = bEn.action == "use" ?
 			(data.usedEnchants.includes(id) ? "Disable" : !canUseEnchant(id) ? "Disabled" : "Enable") :
 			(data.usedEnchants.includes(id) ? "Enabled" : "Disabled")
 		if (tmp.bEn[id] != undefined) {
 			let effect = getEnchantEffect(id, true)
 			let effectDesc = bEn.effectDescs[id]
-			document.getElementById("bEnEffect" + id).textContent = effectDesc !== undefined ? effectDesc(effect) : shorten(effect) + "x"	
+			getEl("bEnEffect" + id).textContent = effectDesc !== undefined ? effectDesc(effect) : shorten(effect) + "x"	
 		}
 	}
-	document.getElementById("usedEnchants").textContent = "You have used " + data.usedEnchants.length + " / " + bEn.limit + " Bosonic Enchants."
+	getEl("usedEnchants").textContent = "You have used " + data.usedEnchants.length + " / " + bEn.limit + " Bosonic Enchants."
 }
 
 function autoMaxEnchant(id, times) {
@@ -685,8 +685,8 @@ function hasBosonicUpg(id) {
 function updateBosonicUpgradeDescs() {
 	for (var r = 1; r <= bu.rows; r++) for (var c = 1; c <= 5; c++) {
 		var id = r * 10 + c
-		document.getElementById("bUpg" + id).className = player.ghostify.bl.upgrades.includes(id) ? "gluonupgradebought bl" : canBuyBosonicUpg(id) ? "gluonupgrade bl" : "gluonupgrade unavailablebtn"
-		if (tmp.blu[id] !== undefined) document.getElementById("bUpgEffect"+id).textContent = (bu.effectDescs[id] !== undefined && bu.effectDescs[id](tmp.blu[id])) || shorten(tmp.blu[id]) + "x"
+		getEl("bUpg" + id).className = player.ghostify.bl.upgrades.includes(id) ? "gluonupgradebought bl" : canBuyBosonicUpg(id) ? "gluonupgrade bl" : "gluonupgrade unavailablebtn"
+		if (tmp.blu[id] !== undefined) getEl("bUpgEffect"+id).textContent = (bu.effectDescs[id] !== undefined && bu.effectDescs[id](tmp.blu[id])) || shorten(tmp.blu[id]) + "x"
 	}
 }
 
@@ -1042,7 +1042,7 @@ function getBosonicBatteryLoss() {
 }
 
 function changeOverdriveSpeed() {
-	player.ghostify.bl.odSpeed = document.getElementById("odSlider").value / 50 * 4 + 1
+	player.ghostify.bl.odSpeed = getEl("odSlider").value / 50 * 4 + 1
 }
 
 //W & Z Bosons
@@ -1079,25 +1079,25 @@ function updateWZBosonsTab() {
 	let show0 = data3.dPUse == 1 && Decimal.div(getAntiPreonLoss(), aplScalings[1]).times(speed).times(tmp.wzb.zbs).gte(10)
 	let gainSpeed = getOscillateGainSpeed()
 	let r = speed.times(data3.dPUse ? getAntiPreonLoss() : getAntiPreonProduction())
-	document.getElementById("ap").textContent = shorten(data3.dP)
-	document.getElementById("apProduction").textContent = (data3.dPUse ? "-" : "+") + shorten(r) + "/s"
-	document.getElementById("apUse").textContent = data3.dPUse == 0 ? "" : "You are currently consuming Anti-Preons to " + (["", "decay W Bosons", "oscillate Z Bosons", "convert W- to W+ Bosons"])[data3.dPUse] + "."
-	document.getElementById("wQkType").textContent = data3.wQkUp ? "positive" : "negative"
-	document.getElementById("wQkProgress").textContent = data3.wQkProgress.times(100).toFixed(1) + "% to turn W Boson to a" + (data3.wQkUp ? " negative" : " positive")+" Boson."
-	document.getElementById("wQk").className = show0 ? "zero" : data3.wQkUp ? "up" : "down"
-	document.getElementById("wQkSymbol").textContent = show0 ? "0" : data3.wQkUp ? "+" : "−"
-	document.getElementById("wpb").textContent = shortenDimensions(data3.wpb)
-	document.getElementById("wnb").textContent = shortenDimensions(data3.wnb)
-	document.getElementById("wbTime").textContent = shorten(data2.wbt)
-	document.getElementById("wbOscillate").textContent = shorten(data2.wbo)
-	document.getElementById("wbProduction").textContent = shorten(data2.wbp)
-	document.getElementById("zNeGen").textContent = (["electron", "Mu", "Tau"])[data3.zNeGen - 1]
-	document.getElementById("zNeProgress").textContent = data3.zNeProgress.times(100).toFixed(1) + "% to oscillate Z Boson to " + (["Mu", "Tau", "electron"])[data3.zNeGen-1] + "."
-	document.getElementById("zNeReq").textContent = "Oscillate progress gain speed is currently " + (gainSpeed.gt(1) ? shorten(gainSpeed) : "1 / " + shorten(Decimal.div(1, gainSpeed))) + "x."
-	document.getElementById("zNe").className = (["electron","mu","tau"])[data3.zNeGen - 1]
-	document.getElementById("zNeSymbol").textContent = (["e", "μ", "τ"])[data3.zNeGen - 1]
-	document.getElementById("zb").textContent = shortenDimensions(data3.zb)
-	document.getElementById("zbGain").textContent = "You will gain " + shortenDimensions(data3.zNeReq.pow(0.75)) + " Z Bosons on next oscillation."
-	document.getElementById("zbSpeed").textContent = shorten(data2.zbs)
+	getEl("ap").textContent = shorten(data3.dP)
+	getEl("apProduction").textContent = (data3.dPUse ? "-" : "+") + shorten(r) + "/s"
+	getEl("apUse").textContent = data3.dPUse == 0 ? "" : "You are currently consuming Anti-Preons to " + (["", "decay W Bosons", "oscillate Z Bosons", "convert W- to W+ Bosons"])[data3.dPUse] + "."
+	getEl("wQkType").textContent = data3.wQkUp ? "positive" : "negative"
+	getEl("wQkProgress").textContent = data3.wQkProgress.times(100).toFixed(1) + "% to turn W Boson to a" + (data3.wQkUp ? " negative" : " positive")+" Boson."
+	getEl("wQk").className = show0 ? "zero" : data3.wQkUp ? "up" : "down"
+	getEl("wQkSymbol").textContent = show0 ? "0" : data3.wQkUp ? "+" : "−"
+	getEl("wpb").textContent = shortenDimensions(data3.wpb)
+	getEl("wnb").textContent = shortenDimensions(data3.wnb)
+	getEl("wbTime").textContent = shorten(data2.wbt)
+	getEl("wbOscillate").textContent = shorten(data2.wbo)
+	getEl("wbProduction").textContent = shorten(data2.wbp)
+	getEl("zNeGen").textContent = (["electron", "Mu", "Tau"])[data3.zNeGen - 1]
+	getEl("zNeProgress").textContent = data3.zNeProgress.times(100).toFixed(1) + "% to oscillate Z Boson to " + (["Mu", "Tau", "electron"])[data3.zNeGen-1] + "."
+	getEl("zNeReq").textContent = "Oscillate progress gain speed is currently " + (gainSpeed.gt(1) ? shorten(gainSpeed) : "1 / " + shorten(Decimal.div(1, gainSpeed))) + "x."
+	getEl("zNe").className = (["electron","mu","tau"])[data3.zNeGen - 1]
+	getEl("zNeSymbol").textContent = (["e", "μ", "τ"])[data3.zNeGen - 1]
+	getEl("zb").textContent = shortenDimensions(data3.zb)
+	getEl("zbGain").textContent = "You will gain " + shortenDimensions(data3.zNeReq.pow(0.75)) + " Z Bosons on next oscillation."
+	getEl("zbSpeed").textContent = shorten(data2.zbs)
 }
 

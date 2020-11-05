@@ -22,7 +22,7 @@ function canUnlockHiggs() {
 
 function updateHiggsUnlocks() {
 	let unl = player.ghostify.hb.unl
-	document.getElementById("bosonicResets").style.display = unl ? "" : "none"
+	getEl("bosonicResets").style.display = unl ? "" : "none"
 	updateBosonUnlockDisplay()
 }
 
@@ -31,7 +31,7 @@ function updateBosonUnlockDisplay() {
 	if (!player.ghostify.hb.unl) txt = "To unlock the next particle (Higgs Bosons), you need to get " + shortenCosts(Decimal.pow(10, 2e17)) + " antimatter and " + shortenCosts(getHiggsRequirement()) + " Bosonic Antimatter first."
 	else if (!GDs.unlocked()) txt = "To unlock the next type of Dimensions (Gravity Dimensions), which contains Gravitons, you need to get " + GDs.reqText() + " first."
 
-	document.getElementById("nextParticle").textContent = txt
+	getEl("nextParticle").textContent = txt
 }
 
 function bosonicLabReset() {

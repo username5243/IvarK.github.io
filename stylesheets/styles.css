@@ -2903,6 +2903,79 @@ td.subFactorH {
 	color: #0f1529
 }
 
+#plAni {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+    font-family: Typewriter;
+    src: url('MonospaceTypewriter.ttf')
+}
+
+#plAniBg {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 1;
+	background: transparent;
+	animation: plAniBg 2s ease
+}
+
+@keyframes plAniBg {
+	0% { height: 0%; top: 50%; background: black }
+	50% { height: 100%; top: 0; background: white }
+	100% { height: 100%; top: 0; background: transparent }
+}
+
+#plAniBg2 {
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	background: linear-gradient(#000000, #2f3f00, #000000);
+	background-size: 50% 100%;
+	box-shadow: inset 0px 0px 12px 0px #2f3f00;
+	animation: plAniBg2 3s ease
+}
+
+@keyframes plAniBg2 {
+	0% { background-size: 50% 50% }
+	100% { background-size: 50% 100% }
+}
+
+#plAniTxt {
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	background: rgba(0, 0, 0, 0.25);
+	box-shadow: 0px 0px 12px 0px black;
+	color: #bfff00;
+	text-shadow: 0px 0px 3px #bfff00;
+	text-align: center;
+	animation: plAniTxt 4s ease
+}
+
+@keyframes plAniTxt {
+	0% { top: 0%; transform: translateY(-100%) }
+	75% { top: 50%; transform: translateY(-50%) }
+	100% { top: 100%; transform: translateY(0%) }
+}
+
+#plAniTier {
+	font-size: 36px
+}
+
+#plAniTitle {
+	font-size: 60px
+}
+
+@keyframes plEnd {
+	0% { top: 0% }
+	50% { top: 100% }
+	100% { top: 100% }
+}
+
 .nulliPows td {
 	font-size: 25px
 }

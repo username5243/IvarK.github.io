@@ -139,9 +139,9 @@ let PLANCK = {
 			return player.achievements.includes("ng3p111") && pl.save
 		},
 		updateDisplay() {
-			document.getElementById("planck").style.display = ph.can("planck") ? "" : "none"
-			document.getElementById("plExit").className = "gluonupgrade " + (pl.on() ? "quantumbtn" : "unavailablebtn")
-			document.getElementById("plMsg").textContent = pl.on() ? "Tier up the Planck Scale to " + getFullExpansion(pl.save.layer + 1) + " and supercharge!" : "See beyond the forces of Quantum... I want to go deeper into Planck scale."
+			getEl("planck").style.display = ph.can("planck") ? "" : "none"
+			getEl("plExit").className = "gluonupgrade " + (pl.on() ? "quantumbtn" : "unavailablebtn")
+			getEl("plMsg").textContent = pl.on() ? "Tier up the Planck Scale to " + getFullExpansion(pl.save.layer + 1) + " and supercharge!" : "See beyond the forces of Quantum... I want to go deeper into Planck scale."
 
 			fNu.updateDisplay()
 			sEt.updateDisplay()
@@ -149,7 +149,7 @@ let PLANCK = {
 			eDk.updateDisplay()
 		},
 		updateDisplayOnTick() {
-			document.getElementById("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
+			getEl("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
 			PLANCK[player.aarexModifications.tabsSave.tabPl].updateDisplayOnTick()
 		},
 		showTab(x) {
@@ -176,7 +176,33 @@ let PLANCK = {
 		tier() {
 			if (!pl.canTier()) return
 			if (!confirm("You will be rewarded with extremely powerful boosts, but you will make the Planck layer harder. Are you sure?")) return
-			pl.onReset()
+			if (false) {
+				pl.tierAni()
+				setTimeout(function() {
+					pl.onReset()
+				}, 2000)
+			} else pl.onReset()
+		},
+		tierAni() {
+			getEl("plAniTier").textContent = "Tier " + getFullExpansion(pl.save.layer) + " -> " + getFullExpansion(pl.save.layer + 1)
+
+			getEl("plAniBg").style.display = ""
+			getEl("plAniBg2").style.display = "none"
+			getEl("plAniTxt").style.display = "none"
+
+			getEl("plAni").style.display = ""
+			setTimeout(function() {
+				getEl("plAniBg2").style.display = ""
+				getEl("plAniTxt").style.display = ""
+			}, 1000)
+			setTimeout(function() {
+				getEl("plAni").style.animation = "plEnd 2s ease"
+			}, 4000)
+			setTimeout(function() {
+				getEl("plAni").style.display = "none"
+				getEl("plAni").style.animation = ""
+				getEl("plAniBg").style.display = "none"
+			}, 5000)
 		},
 		unlCheck() {
 			sEt.unl()
@@ -223,17 +249,17 @@ let PLANCK = {
 			data.nerfMu = eff * data.buffNeutral2
 		},
 		updateDisplay() {
-			document.getElementById("nulliFoam").textContent = shortenDimensions(fNu.save.amt)
-			document.getElementById("mfDecay").className = "gluonupgrade " + (pl.on() ? "planckbtn" : "unavailablebtn")
+			getEl("nulliFoam").textContent = shortenDimensions(fNu.save.amt)
+			getEl("mfDecay").className = "gluonupgrade " + (pl.on() ? "planckbtn" : "unavailablebtn")
 		},
 		updateDisplayOnTick() {
-			document.getElementById("dfGain").textContent = shorten(fNu.decayGain())
+			getEl("dfGain").textContent = shorten(fNu.decayGain())
 
 			let types = ["Omega", "Mu", "Neutral", "Neutral2"]
 			for (let x = 1; x <= 4; x++) {
 				let type = types[x - 1]
-				document.getElementById("dfBuff" + type).textContent = fNu.tmp["buff" + type].toFixed(2)
-				document.getElementById("dfNerf" + type).textContent = fNu.tmp["nerf" + type].toFixed(2)
+				getEl("dfBuff" + type).textContent = fNu.tmp["buff" + type].toFixed(2)
+				getEl("dfNerf" + type).textContent = fNu.tmp["nerf" + type].toFixed(2)
 			}
 		},
 		radioactivityToMatter() {
@@ -277,7 +303,7 @@ let PLANCK = {
 			sEt.save = data
 		},
 		updateDisplay() {
-			document.getElementById("plBtn_entangle").style.display = sEt.save.unl ? "" : "none"
+			getEl("plBtn_entangle").style.display = sEt.save.unl ? "" : "none"
 		},
 		updateTmp() {
 			sEt.tmp = {}
@@ -315,7 +341,7 @@ let PLANCK = {
 			hf.save = data
 		},
 		updateDisplay() {
-			document.getElementById("plBtn_higgs").style.display = hf.save.unl ? "" : "none"
+			getEl("plBtn_higgs").style.display = hf.save.unl ? "" : "none"
 		},
 		updateTmp() {
 			hf.tmp = {}
@@ -355,7 +381,7 @@ let PLANCK = {
 			eDk.save = data
 		},
 		updateDisplay() {
-			document.getElementById("plBtn_dark").style.display = eDk.save.unl ? "" : "none"
+			getEl("plBtn_dark").style.display = eDk.save.unl ? "" : "none"
 		},
 		updateTmp() {
 			eDk.tmp = {}

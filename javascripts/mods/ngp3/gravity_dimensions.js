@@ -83,7 +83,7 @@ let GDs = {
 				'<td style="text-align: right"><button id="gvCharge_' + b + '" onclick="GDs.chargeBoost(\'' + b + '\')">Charge</button></td>' +
 				'</tr>'
 		}
-		document.getElementById("gvBoosts").innerHTML = html
+		getEl("gvBoosts").innerHTML = html
 	},
 	setupDisplays() {
 		GDs.updateDisplay()
@@ -93,55 +93,55 @@ let GDs = {
 	updateDisplay() {
 		if (!GDs.unlocked()) return
 
-		document.getElementById("gvCharge").textContent = (GDs.tmp.gc * 100).toFixed(2) + "%"
-		document.getElementById("gvSupercharge").textContent = (GDs.tmp.gsc * 100).toFixed(2) + "%"
+		getEl("gvCharge").textContent = (GDs.tmp.gc * 100).toFixed(2) + "%"
+		getEl("gvSupercharge").textContent = (GDs.tmp.gsc * 100).toFixed(2) + "%"
 		
-		document.getElementById("plReq").textContent = pl.reqText()
+		getEl("plReq").textContent = pl.reqText()
 	},
 	updateDisplayOnTick() {
-		document.getElementById("gdWatt").textContent = shorten(tmp.bl.speed)
-		document.getElementById("gdMult").textContent = shorten(GDs.tmp.gdm)
-		document.getElementById("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
+		getEl("gdWatt").textContent = shorten(tmp.bl.speed)
+		getEl("gdMult").textContent = shorten(GDs.tmp.gdm)
+		getEl("gvRate").textContent = "+" + shortenMoney(Decimal.pow(GDs.tmp.gdm, GDs.gdExp(1)).times(GDs.save.gd1)) + "/s"
 
 		GDs.getExtraGDBs()
 		let totalGDBs = GDs.totalGDBs()
-		document.getElementById("gdBoost").textContent = totalGDBs >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
-		document.getElementById("gdBoostDesc").textContent = "Gravity Dimension " + (totalGDBs >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + " + " + getFullExpansion(GDs.save.extraGDBs) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
-		document.getElementById("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
+		getEl("gdBoost").textContent = totalGDBs >= 3 ? "Boost all Gravity Dimensions" : "Unlock a new Dimension"
+		getEl("gdBoostDesc").textContent = "Gravity Dimension " + (totalGDBs >= 3 ? "Boost" : "Shift") + " (" + getFullExpansion(GDs.save.gdBoosts) + " + " + getFullExpansion(GDs.save.extraGDBs) + "): requires " + shortenDimensions(GDs.gdBoostReq()) + " Gravity Radiation"
+		getEl("gdBoost").className = GDs.save.gr.gte(GDs.gdBoostReq()) ? "storebtn gv" : "unavailablebtn"
 		let nameofthing = totalGDBs > 3 ? "Boost" : "Shift"
-		document.getElementById("extraGDB").textContent = "The next extra Gravity Dimension " + nameofthing + " is at " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons. (You have " + getFullExpansion(player.ghostify.hb.higgs) + ")"
+		getEl("extraGDB").textContent = "The next extra Gravity Dimension " + nameofthing + " is at " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons. (You have " + getFullExpansion(player.ghostify.hb.higgs) + ")"
 	
-		document.getElementById("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
-		document.getElementById("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
+		getEl("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
+		getEl("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
 		for (var d = 1; d <= 4; d++) {
 			if (d <= totalGDBs + 1) {
-				document.getElementById("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
-				document.getElementById("gd" + d + "Amount").textContent = shortenDimensions(GDs.save["gd" + d])
+				getEl("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
+				getEl("gd" + d + "Amount").textContent = shortenDimensions(GDs.save["gd" + d])
 			}
-			document.getElementById("rd" + d + "Amount").textContent = shortenDimensions(GDs.save["rd" + d])
+			getEl("rd" + d + "Amount").textContent = shortenDimensions(GDs.save["rd" + d])
 		}
 
-		document.getElementById("gv").textContent = shortenMoney(GDs.save.gv)
-		document.getElementById("gr").textContent = shortenMoney(GDs.save.gr)
-		document.getElementById("gvPow").textContent = GDs.tmp.gp.toFixed(2)
-		document.getElementById("gvPowScaling").textContent = (GDs.tmp.gpr == 0 ? "" : GDs.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(GDs.tmp.gpr) + " ") + "Power"
-		document.getElementById("gvEne").textContent = GDs.tmp.ge.toFixed(2)
-		document.getElementById("gvEneMult").textContent = GDs.tmp.gem.toFixed(2)
+		getEl("gv").textContent = shortenMoney(GDs.save.gv)
+		getEl("gr").textContent = shortenMoney(GDs.save.gr)
+		getEl("gvPow").textContent = GDs.tmp.gp.toFixed(2)
+		getEl("gvPowScaling").textContent = (GDs.tmp.gpr == 0 ? "" : GDs.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(GDs.tmp.gpr) + " ") + "Power"
+		getEl("gvEne").textContent = GDs.tmp.ge.toFixed(2)
+		getEl("gvEneMult").textContent = GDs.tmp.gem.toFixed(2)
 
-		document.getElementById("gvNoPow").style.display = GDs.tmp.gp == 0 ? "" : "none"
-		if (GDs.tmp.gp == 0) document.getElementById("gvPowStart").textContent = shortenMoney(Decimal.pow(10, Math.pow(GDs.save.gr.add(10).log10(), 2/3)))
+		getEl("gvNoPow").style.display = GDs.tmp.gp == 0 ? "" : "none"
+		if (GDs.tmp.gp == 0) getEl("gvPowStart").textContent = shortenMoney(Decimal.pow(10, Math.pow(GDs.save.gr.add(10).log10(), 2/3)))
 
-		document.getElementById("gvRadio").style.display = GDs.tmp.gpr >= 1 ? "" : "none"
+		getEl("gvRadio").style.display = GDs.tmp.gpr >= 1 ? "" : "none"
 		if (GDs.tmp.gpr >= 1) {
-			document.getElementById("gvRadioExp").textContent = GDs.tmp.gpr >= 2 ? "^" + getFullExpansion(GDs.tmp.gpr) : ""
-			document.getElementById("gvRadioPow").textContent = getFullExpansion(Math.floor(GDs.radioactivity(GDs.tmp.gpr)))
+			getEl("gvRadioExp").textContent = GDs.tmp.gpr >= 2 ? "^" + getFullExpansion(GDs.tmp.gpr) : ""
+			getEl("gvRadioPow").textContent = getFullExpansion(Math.floor(GDs.radioactivity(GDs.tmp.gpr)))
 		}
 
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
 			let u = GDs.tmp[b] !== undefined
-			document.getElementById("gvRow_" + b).style.display = u ? "" : "none"
-			if (u) document.getElementById("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
+			getEl("gvRow_" + b).style.display = u ? "" : "none"
+			if (u) getEl("gvTo_" + b).textContent = GDs.tmp[b].toFixed(2)
 		}
 	},
 	teleport() {
@@ -168,9 +168,9 @@ let GDs = {
 	},
 	unlDisplay() {
 		let unl = GDs.unlocked()
-		document.getElementById("gdtabbtn").style.display = unl ? "" : "none"
-		document.getElementById("gvBlCell").style.display = unl ? "" : "none"
-		document.getElementById("breakUpgR4").style.display = unl ? "" : "none"
+		getEl("gdtabbtn").style.display = unl ? "" : "none"
+		getEl("gvBlCell").style.display = unl ? "" : "none"
+		getEl("breakUpgR4").style.display = unl ? "" : "none"
 		updateNeutrinoUpgradeUnlocks(16, 18)
 
 		if (unl) GDs.setupDisplays()
@@ -244,7 +244,7 @@ let GDs = {
 	},
 	dimDisplay() {
 		let totalGDBs = GDs.totalGDBs()
-		for (var d = 1; d <= 4; d++) document.getElementById("gd" + d + "Row").style.visibility = d <= totalGDBs + 1 ? "" : "hidden"
+		for (var d = 1; d <= 4; d++) getEl("gd" + d + "Row").style.visibility = d <= totalGDBs + 1 ? "" : "hidden"
 	},
 	dimReset() {
 		let data = GDs.save
@@ -292,8 +292,8 @@ let GDs = {
 		if (!confirm("You will charge up a boost, but this requires a Higgs reset and a reset to all Gravity / Radiation Dimensions. Be warned: You will let Radiation goes up more. Are you sure?")) return
 		this.save.gdBoosts = 0
 		bosonicLabReset()
-		document.getElementById("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn gv"
-		document.getElementById("gvCharge_" + id).className = "chosenbtn"
+		getEl("gv" + (GDs.save.gc ? "Charge_" + GDs.save.gc : "Uncharge")).className = "storebtn gv"
+		getEl("gvCharge_" + id).className = "chosenbtn"
 		GDs.dimDisplay()
 		GDs.save.gc = id
 	},
@@ -302,8 +302,8 @@ let GDs = {
 		if (!confirm("This discharges all your boosts, but this will reset everything that charging resets. Are you sure?")) return
 		this.save.gdBoosts = 0
 		bosonicLabReset()
-		document.getElementById("gvCharge_" + GDs.save.gc).className = "storebtn gv"
-		document.getElementById("gvUncharge").className = "chosenbtn"
+		getEl("gvCharge_" + GDs.save.gc).className = "storebtn gv"
+		getEl("gvUncharge").className = "chosenbtn"
 		GDs.dimDisplay()
 		delete GDs.save.gc
 	},
@@ -311,9 +311,9 @@ let GDs = {
 		let c = GDs.save.gc
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
-			document.getElementById("gvCharge_" + b).className = c == b ? "chosenbtn" : "storebtn gv"
+			getEl("gvCharge_" + b).className = c == b ? "chosenbtn" : "storebtn gv"
 		}
-		document.getElementById("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
+		getEl("gvUncharge").className = !c ? "chosenbtn" : "storebtn gv"
 	},
 	boosts: {
 		list: ["rep", "nf", "tod", "gph", "bl", "mf"],
@@ -376,7 +376,7 @@ let GDs = {
 		return GDs.unlocked() && GDs.tmp[x]
 	},
 	reset(unl) {
-		if (!unl && document.getElementById("gdims").style.display != "none") showDimTab("antimatterdimensions")
+		if (!unl && getEl("gdims").style.display != "none") showDimTab("antimatterdimensions")
 		player.ghostify.gv = GDs.setup()
 		GDs.save.unl = unl
 		GDs.unlDisplay()

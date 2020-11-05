@@ -23,6 +23,9 @@ var modes = {}
 var gameSpeed = 1
 var testHarderNGp3 = false
 
+function getEl(x) {
+	return document.getElementById(x)
+}
 
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
