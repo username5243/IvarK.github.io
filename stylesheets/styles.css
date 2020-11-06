@@ -2910,6 +2910,7 @@ td.subFactorH {
 	height: 100%;
 	width: 100%;
 	margin: 0;
+	overflow: hidden;
     font-family: Typewriter;
     src: url('MonospaceTypewriter.ttf')
 }
