@@ -271,10 +271,10 @@ let neutrinoBoosts = {
 	12: {
 		eff(nt) {
 			let nb12neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
-			let nb12 = nb12neutrinos / 100 + 1
+			let nb12 = Math.pow(nb12neutrinos / 1e4 + 1, 2)
 			return nb12
 		},
-		cost: 1/0
+		cost: "1e10000"
 	}
 }
 
@@ -363,7 +363,7 @@ var neutrinoUpgrades = {
 	},
 	17: {
 		eff() {
-			return 1 - 1 / (getTotalRadioactiveDecays() / 500 + 1)
+			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 80, 1)
 		},
 		effDesc(x) {
 			return x.toFixed(3)

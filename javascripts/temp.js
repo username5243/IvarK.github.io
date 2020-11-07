@@ -11,7 +11,7 @@ let tmp = {
 	beu: {},
 	bm: [200,175,150,100,50,40,30,25,20,15,10,5,4,3,2,1],
 	nu: {},
-	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,"1e8000","1e15000",1/0],
+	nuc: [null,1e6,1e7,1e8,2e8,5e8,2e9,5e9,75e8,1e10,7e12,1e18,1e55,1e125,1e160,1e280,"1e8000","1e12500",1/0],
 	lt: [12800,16e4,48e4,16e5,6e6,5e7,24e7,125e7],
 	lti: [2,4,1.5,10,4,1e3,2.5,3],
 	effL: [0,0,0,0,0,0,0],
@@ -486,16 +486,14 @@ function updateBreakEternityUpgrade9Temp(){
 	tmp.beu[9] = x.toNumber()
 }
 
-function updateBreakEternityUpgrade10Temp(){
+function updateBreakEternityUpgrade10Temp() {
 	let ep = player.eternityPoints
 	tmp.beu[10] = Math.max(Math.log10(ep.add(1).log10() + 1) - 1, 1)
 }
 
-function updateBreakEternityUpgrade12Temp(){
+function updateBreakEternityUpgrade12Temp() {
 	let em = tmp.qu.breakEternity.eternalMatter
-	let r = Math.sqrt(em.max(1).log10()) / 30
-	if (r > 1.5) r = Math.log10(6 * r + 1) + .5
-	if (r > 5/3) r = Math.sqrt(r * 15) / 3
+	let r = Math.sqrt(em.max(1).log10()) / 20
 	tmp.beu[12] = Math.max(r, 1)
 }
 
