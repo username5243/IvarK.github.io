@@ -1313,7 +1313,6 @@ function doNGp3v21tov221(){
                 alert("Welcome to the NG+3.1 update! You are receiving this message because this save has been made before the update. This update changes and rebalances NG+3 significantly. The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
                 var oldBRUpg20Bought = tmp.qu.bigRip.upgrades.pop()
                 if (oldBRUpg20Bought != 20) tmp.qu.bigRip.upgrades.push(oldBRUpg20Bought)
-                player.aarexModifications.newGame3PlusVersion = 2.21 // Keep that line forever due to NG+3.1 / NG+3L compatibility
         }
         if (tmp.ngp3) setupNGP31Versions()
         if (player.aarexModifications.newGameMinusMinusVersion === undefined && !player.meta) {
@@ -2370,7 +2369,7 @@ function setupNGP31Versions() {
 }
 
 function checkNGM(imported) {
-	var temp = (imported) ? imported : player
+	var temp = imported || player
 	var td1PowerDiv = Decimal.pow(2, player.timeDimension1.bought).div(player.timeDimension1.power).toNumber()
 	if (Math.round(td1PowerDiv) == 100) return 2.2
 	if (Math.round(td1PowerDiv*8) == 5) return 2.1

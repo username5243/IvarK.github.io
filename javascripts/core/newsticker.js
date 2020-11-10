@@ -418,7 +418,8 @@ amNewsArray = [
 ["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "ph.did('ghostify')", "am205"],
 ["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
 ["To do for the next update: Procastinate, procastinate, procastinate, do a small development build, ...", "true", "am207"],
-/*NEXT ID: am208*/
+["Tired for waiting minutes / hours to progress? Try Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
+/*NEXT ID: am209*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
