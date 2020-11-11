@@ -459,7 +459,7 @@ var qcm = {
 	rewards: {
 		ms: {
 			eff(x) {
-				return Math.pow(tmp.pcc.ms / 1e3 + 1, 3)
+				return Math.pow(tmp.pcc.ms / 500 + 1, 2)
 			},
 			desc(x) {
 				return "Boost all Emperor Dimensions by " + (x * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension."
