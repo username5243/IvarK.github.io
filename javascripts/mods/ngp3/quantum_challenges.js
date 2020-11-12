@@ -337,7 +337,10 @@ let qcRewards = {
 			return comps + 2
 		},
 		9: function(comps) {
-			let compEff = Math.sqrt(((tmp.pcc && tmp.pcc.c9) || 0) + 1)
+			let compEff = Math.sqrt(
+				(((tmp.pcc && tmp.pcc.c9) || 0) + 1) *
+				QCIntensity(9)
+			)
 			let x = player.replicanti.amount.log10()
 			return {
 				ri: Math.sqrt(x / 1e7) * compEff,
