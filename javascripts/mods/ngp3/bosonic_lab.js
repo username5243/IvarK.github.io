@@ -28,9 +28,7 @@ function getBosonicWattGain() {
 }
 
 function getAchBWtMult() {
-	let exp = Math.round(player.achPow.log(1.5) - 20)
-	if (exp >= 1) return Math.pow(1.5, exp * (exp + 1) / 2)
-	return 1
+	return player.achPow.div(Decimal.pow(1.5, 21))
 }
 
 function getBatteryGainPerSecond(toSub){

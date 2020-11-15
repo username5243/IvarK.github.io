@@ -186,7 +186,7 @@ function getSupersonicMultIncrease() {
 	if (inQC(5)) return 20
 	let r = 4
 	if (hasTS(194) && tmp.ngC) r = 2
-	if (player.masterystudies) if (masteryStudies.has(331)) r = 1
+	if (masteryStudies.has(331)) r = 1
 	return r
 }
 

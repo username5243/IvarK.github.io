@@ -419,7 +419,8 @@ amNewsArray = [
 ["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
 ["To do for the next update: Procastinate, procastinate, procastinate, do a small development build, ...", "true", "am207"],
 ["Tired for waiting minutes / hours to progress? Try Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
-/*NEXT ID: am209*/
+['In ng+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
+/*NEXT ID: am210*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);

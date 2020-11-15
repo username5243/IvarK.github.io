@@ -206,11 +206,11 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.ceil(Math.pow(e, hasBosonicUpg(53) ? 4 / 3 : 2) * 5 + 50)
+		return Math.ceil(Math.pow(e, hasBosonicUpg(53) ? 1.25 : 2) * 5 + 50)
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.floor(Math.pow(Math.max(h - 50, 0) / 5, hasBosonicUpg(53) ? .75 : .5))
+		let target = Math.floor(Math.pow(Math.max(h - 50, 0) / 5, hasBosonicUpg(53) ? .8 : .5))
 		let toAdd = Math.max(target - GDs.save.extraGDBs + 1, 0)
 		if (toAdd < 1) return
 
@@ -357,7 +357,7 @@ let GDs = {
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return Math.pow(x / 3 + 1, .5)
+				return Math.sqrt(x * 4 / 11 + 1)
 			},
 			rdExp: 1
 		},
