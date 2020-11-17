@@ -329,6 +329,6 @@ function updateNextPreonEnergyThreshold(){
 
 function getAntiPreonGhostWake() {
 	let x = 104
-	if (hasNU(18)) x += Math.floor(tmp.nu[18])
+	if (tmp.pce && tmp.pce.ms) x += Math.floor(tmp.pce.ms.ap)
 	return x
 }

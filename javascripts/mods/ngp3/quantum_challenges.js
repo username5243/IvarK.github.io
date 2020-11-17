@@ -462,10 +462,14 @@ var qcm = {
 	rewards: {
 		ms: {
 			eff(x) {
-				return Math.pow(tmp.pcc.ms / 500 + 1, 2)
+				return {
+					eds: Math.pow(x / 500 + 1, 2),
+					ol: 1 - x / 100, 
+					ap: player.ghostify.hb.higgs * Math.sqrt(x / 100),
+				}
 			},
 			desc(x) {
-				return "Boost all Emperor Dimensions by " + (x * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension."
+				return "Boost all Emperor Dimensions by " + (x.eds * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension, reduce the logarithmic softcap of orange Light effect by " + (100 - 100 * x.ol).toFixed(1) + "%, and make Higgs Bosons wake up " + x.ap.toFixed(1) + " later."
 			}
 		},
 		/*

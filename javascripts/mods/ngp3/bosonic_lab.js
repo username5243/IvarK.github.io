@@ -834,7 +834,7 @@ var bu = {
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
-		54: "Neutrino Boost 10 is stronger.",
+		54: "All row-4 Neutrino Boosts are stronger.",
 		55: "Remove the limit of Replicantis.",
 		61: "You gain even more Gravity Energy from Bosonic Enchants.",
 		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 

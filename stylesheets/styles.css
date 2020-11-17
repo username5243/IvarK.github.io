@@ -1126,13 +1126,16 @@ button {
 #welcomeMessage { font-size:12px; }
 
 .footer {
+    pointer-events: none;
+	display: var(--footer)
+}
+
+.footer.bottom {
     left: 0;
     bottom: 0;
     position: fixed;
     width: 100%;
-    z-index: 1;
-    pointer-events: none;
-	display: var(--footer)
+    z-index: 1
 }
 
 #footer {

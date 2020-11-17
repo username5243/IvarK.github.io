@@ -253,7 +253,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
-			if (nb10 > 0.1) nb10 = Math.log10(nb10 * 100) / 10
+			if (hasBosonicUpg(54)) nb10 = Math.pow(nb10neutrinos / 1e5, 2)
 			return nb10
 		},
 		cost: "1e900"
@@ -272,6 +272,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb12neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
 			let nb12 = Math.pow(nb12neutrinos / 1e4 + 1, 2)
+			if (hasBosonicUpg(54)) nb12 = Math.pow(nb12, 1.25)
 			return nb12
 		},
 		cost: "1e10000"
@@ -371,10 +372,10 @@ var neutrinoUpgrades = {
 	},
 	18: {
 		eff() {
-			return player.ghostify.hb.higgs / 3
+			return tmp.ns ? Math.sqrt(Decimal.log10(tmp.ns) / 1e3 + 1) : 1
 		},
 		effDesc(x) {
-			return  "Wakes up " + x.toFixed(2) + " later"
+			return (100 - 100 / x).toFixed(1) + "%"
 		}
 	}
 }

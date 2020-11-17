@@ -88,9 +88,19 @@ function updateRedLightBoostTemp(){
 	tmp.le[0] = lighteffect0
 }
 
-function updateOrangeLightBoostTemp(){
-	if (tmp.effL[1] > 64) big = tmp.newNGP3E ? 10 + Math.pow(tmp.effL[1], 1/3) : Math.log10(tmp.effL[1] / 64) + 14
-	tmp.le[1] = tmp.effL[1] > 64 ? big : tmp.effL[1] > 8 ? Math.sqrt(tmp.effL[1]) + 6 : tmp.effL[1] + 1
+function updateOrangeLightBoostTemp() {
+	let eff = tmp.effL[1] + 1
+	let small = eff > 9 ? Math.sqrt(eff) + 6 : eff
+	let x = small
+
+	if (tmp.effL[1] > 64) {
+		let big = tmp.newNGP3E ? 10 + Math.pow(eff, 1/3) : Math.log10(eff / 64) + 14
+
+		x = big
+		if (tmp.pce && tmp.pce.ms) x = Math.pow(small, 1 - tmp.pce.ms.ol) * Math.pow(big, tmp.pce.ms.ol)
+	}
+
+	tmp.le[1] = x
 }
 
 function updateYellowLightBoostTemp(){

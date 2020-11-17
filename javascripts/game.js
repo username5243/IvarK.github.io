@@ -31,10 +31,11 @@ function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
 			"<a href='about.html' target='_newtab'>About</a> | " + 
-			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
+			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " + 
 			"<a>Test server</a> (You are in it!) | " + 
-			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a>" + 
-			"</div></tr></td></table>"
+			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
+			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
+		"</div></tr></td></table>"
 
 	var footers = document.getElementsByClassName("footer")
 	for (var f = 0; f < footers.length; f++) footers[f].innerHTML = html
