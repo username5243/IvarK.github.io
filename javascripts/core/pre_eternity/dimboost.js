@@ -89,7 +89,7 @@ function setInitialResetPower() {
 
 	var tickspeedPower = player.totalTickGained
 	if (player.infinityUpgradesRespecced!=undefined) tickspeedPower += player.infinityUpgradesRespecced[1] * 10
-	player.tickspeed = Decimal.pow(getTickSpeedMultiplier(), tickspeedPower).times(player.aarexModifications.newGameExpVersion ? 500 : 1e3)
+	player.tickspeed = Decimal.pow(getTickspeedMultiplier(), tickspeedPower).times(player.aarexModifications.newGameExpVersion ? 500 : 1e3)
 
 	ic3Power = getInitPostC3Power()
 	player.postC3Reward = Decimal.pow(getPostC3Mult(), ic3Power)

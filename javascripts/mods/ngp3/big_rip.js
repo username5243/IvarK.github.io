@@ -237,7 +237,7 @@ function getEMGain() {
 	return Decimal.pow(10, log).floor()
 }
 
-var breakUpgCosts = [1, 1e3, 2e6, 2e11, 8e17, 1e45, null, 1e290, new Decimal("1e350"), new Decimal("1e375"), new Decimal("1e2130"), new Decimal("1e2500"), 1/0]
+var breakUpgCosts = [1, 1e3, 2e6, 2e11, 8e17, 1e45, null, 1e290, new Decimal("1e350"), new Decimal("1e375"), new Decimal("1e2130"), new Decimal("2.727272727272727e2727"), 1/0]
 function getBreakUpgCost(id) {
 	if (id == 7) return Decimal.pow(2, tmp.qu.breakEternity.epMultPower).times(1e5)
 	return breakUpgCosts[id - 1]

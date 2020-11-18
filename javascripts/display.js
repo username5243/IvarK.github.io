@@ -62,17 +62,26 @@ function dimensionTabDisplay(){
 
 function tickspeedDisplay(){
 	if (canBuyDimension(3) || player.currentEternityChall == "eterc9") {
-		var tickmult = tmp.tsReduce
-		var tickmultNum = tickmult.toNumber()
-		var ticklabel
-		var e = Math.floor(Math.log10(Math.round(1/tickmultNum)))
-		if (isNaN(tickmultNum)) ticklabel = 'Break the tick interval by Infinite';
-		else if (e >= 9) ticklabel = "Divide the tick interval by " + shortenDimensions(Decimal.recip(tickmult))
-		else if (tickmultNum > .9) ticklabel = 'Reduce the tick interval by ' + shorten((1 - tickmultNum) * 100) + '%'
-		else ticklabel = 'Reduce the tick interval by ' + ((1 - tickmultNum) * 100).toFixed(e) + '%'
-		let ic3mult=getPostC3Mult()
-		if (player.galacticSacrifice || player.currentChallenge == "postc3" || isIC3Trapped()) document.getElementById("tickLabel").innerHTML = ((isIC3Trapped() || player.currentChallenge == "postc3") && player.currentChallenge != "postcngmm_3" && !player.challenges.includes("postcngmm_3") && !tmp.be ? "M" : ticklabel + '<br>and m') + 'ultiply all dimensions by ' + (ic3mult > 999.95 ? shorten(ic3mult) : new Decimal(ic3mult).toNumber().toPrecision(4)) + '.'
-		else document.getElementById("tickLabel").textContent = ticklabel + '.'
+		let mult = tmp.tsReduce
+		let multNum = mult.toNumber()
+		let labels = []
+		let e = Math.floor(Math.log10(Math.round(1/multNum)))
+
+		var label
+		if (isNaN(multNum)) label = 'break the tick interval by Infinite';
+		else if (e >= 9) label = "divide the tick interval by " + shortenDimensions(Decimal.recip(mult))
+		else if (multNum > .9) label = 'reduce the tick interval by ' + shorten((1 - multNum) * 100) + '%'
+		else label = 'reduce the tick interval by ' + ((1 - multNum) * 100).toFixed(e) + '%'
+		if (tmp.galRed < 1) label += " (Redshifted galaxies by " + (100 - 100 * tmp.galRed).toFixed(1) + "%)"
+		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + (100 * tmp.galRed - 100).toFixed(1) + "%)"
+		labels.push(label)
+
+		if (player.currentChallenge == "postc3" || (tmp.ngmX >= 2 && player.challenges.includes("postc3")) || inQC(6)) {
+			let ic3 = getPostC3Mult()
+			labels.push("multiply all Dimensions by " + (ic3 > 999.95 ? shorten(ic3) : new Decimal(ic3).toNumber().toPrecision(4)) + "x")
+		}
+
+		document.getElementById("tickLabel").innerHTML = wordizeList(labels, true) + "."
 
 		document.getElementById("tickSpeed").style.visibility = "visible";
 		document.getElementById("tickSpeedMax").style.visibility = "visible";

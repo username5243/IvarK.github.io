@@ -320,7 +320,7 @@ let GDs = {
 		rep: {
 			desc: "x{{x}} OoMs to replicate interval increase",
 			unl() {
-				return hasBosonicUpg(55) || !pl.on()
+				return hasBosonicUpg(63) || !pl.on()
 			},
 			eff(x) {
 				return Math.pow(x + 1, 1/3)

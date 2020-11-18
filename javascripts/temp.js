@@ -58,7 +58,15 @@ function updateTemp() {
 	updateExtraReplGalaxies()
 	updateTS232Temp()
 
-	tmp.tsReduce = getTickSpeedMultiplier()
+	tmp.ts = {}
+	if (!isTickDisabled()) {
+		tmp.ts.pre1 = getTickspeedBeforeSoftcap()
+		tmp.ts.pre2 = getTickspeedBeforePostMults()
+		tmp.ts.faster = getFasterTickspeed()
+	}
+
+	tmp.tsReduce = getTickspeedMultiplier()
+
 	updateMatterSpeed()
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()

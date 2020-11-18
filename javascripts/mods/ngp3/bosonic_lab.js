@@ -192,7 +192,7 @@ function getBosonicAMProduction() {
 
 function getBosonicAMProductionSoftcapExp(x) {
 	let frac = 10
-	if (tmp.blu && hasBosonicUpg(63)) frac *= tmp.blu[63]
+	if (tmp.blu && hasBosonicUpg(55)) frac *= tmp.blu[55].ba
 
 	return 1 - x / frac
 }
@@ -835,12 +835,12 @@ var bu = {
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
 		54: "All row-4 Neutrino Boosts are stronger.",
-		55: "Remove the limit of Replicantis.",
+		55: "Greenshift Galaxies (which reduces Redshifted Galaxies) and reduce all softcaps of BA production.",
 		61: "You gain even more Gravity Energy from Bosonic Enchants.",
-		62: "Quantum Challenges 1, 3, 5, and 6 are stronger.", 
-		63: "Reduce the softcap of Bosonic Antimatter production.",
+		62: "Quantum Challenges 1, 3, and 5 are stronger.", 
+		63: "Remove the limit of Replicantis.",
 		64: "Gravity Dimension Boosts are stronger.",
-		65: "Higgs Bosons strengthen 2 previous upgrades.",
+		65: "Higgs Bosons strengthen 'Greenshift Galaxies' and 'Stronger GDBs' upgrades.",
 	},
 	effects: {
 		11() {
@@ -969,10 +969,11 @@ var bu = {
 				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
-		63() {
-			let x = 0.5
-			if (hasBosonicUpg(65)) x = Math.pow(x, Math.sqrt(1 + player.ghostify.hb.higgs / 1e3))
-			return x
+		55() {
+			return {
+				rs: hasBosonicUpg(65) ? -1 : 0.9,
+				ba: hasBosonicUpg(65) ? Math.pow(x, Math.sqrt(1 + player.ghostify.hb.higgs / 1e3)) : 0.5
+			}
 		},
 		64() {
 			let x = 1.5
@@ -1026,8 +1027,11 @@ var bu = {
 		52(x) {
 			return "^" + formatValue(player.options.notation, x.ig, 3, 3) + " to Intergalactic, ^" + formatValue(player.options.notation, x.it, 3, 3) + " to Infinite Time"
 		},
-		63(x) {
-			return (100 - x * 100).toFixed(2) + "% weaker"
+		55(x) {
+			return (
+				x.rs < 0 ? "^" + (-x.rs).toFixed(3) + " to Blueshifted Galaxies" :
+				"^" + x.rs.toFixed(3) + " to Redshifted Galaxies"
+			) + ", " + (100 - x.ba * 100).toFixed(2) + "% weaker softcaps to BA production"
 		},
 		64(x) {
 			return (x * 100 - 100).toFixed(2) + "% stronger"

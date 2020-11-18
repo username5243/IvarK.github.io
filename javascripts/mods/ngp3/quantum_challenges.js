@@ -325,7 +325,6 @@ let qcRewards = {
 		6: function(comps) {
 			if (comps == 0) return 1
 			let exp = comps * 2 - 1
-			if (hasBosonicUpg(62)) exp *= player.achPow.sqrt().toNumber()
 			return player.achPow.pow(exp)
 		},
 		7: function(comps) {
