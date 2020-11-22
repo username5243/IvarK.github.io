@@ -1,6 +1,6 @@
 var quantumChallenges = {
 	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
-	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 7.5e16]
+	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 8e16]
 }
 
 var assigned
@@ -462,9 +462,9 @@ var qcm = {
 		ms: {
 			eff(x) {
 				return {
-					eds: Math.pow(x / 500 + 1, 2),
-					ol: 1 - x / 100, 
-					ap: player.ghostify.hb.higgs * Math.sqrt(x / 100),
+					eds: Math.pow(x / 300 + 1, 2),
+					ol: 1 - x / 36, 
+					ap: Math.sqrt(player.ghostify.hb.higgs * x / 20),
 				}
 			},
 			desc(x) {

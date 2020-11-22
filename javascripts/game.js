@@ -1953,7 +1953,7 @@ function changeSaveDesc(saveId, placement) {
 		} else if (isSaveGhostified) {
 			if (temp.achievements.includes("ng3p101")) {
 				var data=temp.ghostify.gds
-				msg+="Gravitons: "+shorten(new Decimal(data.gv))+", Gravity Dimension Shifts / Boosts: "+getFullExpansion(data.gdBoosts)
+				msg+="Gravitons: "+shorten(new Decimal(data.gv))+", Extra Gravity Dimension Shifts / Boosts: "+getFullExpansion(data.extraGDBs || 0)
 			} else if (temp.achievements.includes("ng3p91")) {
 				var data=temp.ghostify.hb
 				msg+="Bosonic Antimatter: "+shorten(new Decimal(temp.ghostify.bl.am))+", Higgs Bosons: "+getFullExpansion(data.higgs)
@@ -3986,7 +3986,7 @@ setInterval(function() {
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 1000)
+}, 1e3)
 
 function autoPerSecond() {
 	if (player.aarexModifications.pause) return
@@ -4236,6 +4236,7 @@ function ghostifyAutomationUpdating(diff){
 	if (!tmp.quUnl) return
 	if (AUTO_QC.auto.on) {
 		if (isQuantumReached()) {
+			$.notify("QCs " + tmp.inQCs[0] + " and " + tmp.inQCs[1] + " has been automatically completed by Auto-Challenge Sweeper Ghost!", "success")
 			tmp.preQCMods = tmp.qu.qcsMods.current
 			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
 			AUTO_QC.next()

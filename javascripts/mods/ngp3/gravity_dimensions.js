@@ -357,7 +357,7 @@ let GDs = {
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return Math.sqrt(x * 4 / 11 + 1)
+				return Math.sqrt(x / 3 + 1)
 			},
 			rdExp: 1
 		},

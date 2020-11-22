@@ -488,7 +488,7 @@ var bEn = {
 		24: [1e6, 10],
 		34: [1, 0],
 		15: [2e21, 20],
-		25: [2e105, 2e85],
+		25: [2e210, 2e190],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -543,7 +543,7 @@ var bEn = {
 			return Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
 		},
 		25(l) {
-			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 30 + 1)
+			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 50 + 1)
 		},
 		35(l) {
 			return l.plus(1).log10() / 3
@@ -614,7 +614,10 @@ var bEn = {
 		}
 	},
 	onBuy(id) {
-		if (id == 14 && isEnchantUsed(14)) updateBAMAmount()
+		if (id == 14 && isEnchantUsed(14)) {
+			tmp.bEn[14] = getEnchantEffect(14)
+			updateBAMAmount()
+		}
 	},
 	limits: [0, 2, 5, 9],
 	autoScalings:{
@@ -799,14 +802,19 @@ var bu = {
 			g3: 2e12
 		},
 		52: {
-			am: 2e130,
-			g2: 2e85,
-			g5: 2e65
+			am: 2e150,
+			g2: 2e170,
+			g5: 2e150
 		},
 		53: {
-			am: 2e150,
-			g3: 2e110,
-			g4: 2e105
+			am: 1/0,
+			g3: 1/0,
+			g4: 1/0
+		},
+		54: {
+			am: 1/0,
+			g3: 1/0,
+			g5: 1/0
 		},
 	},
 	reqData: {},

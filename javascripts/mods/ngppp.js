@@ -886,7 +886,7 @@ let AUTO_QC = {
 			quantum(false, true)
 		}
 		$.notify("Auto-Challenge Sweeper Ghost has done sweeping all possible PC1 combinations!", "success")
-		updateAutomatorGhosts()
+		updateAutoGhosts()
 	}
 }
 

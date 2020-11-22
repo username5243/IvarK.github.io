@@ -253,7 +253,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb10neutrinos = nt[0].add(1).log10()+nt[1].add(1).log10()+nt[2].add(1).log10()
 			let nb10 = Math.max(nb10neutrinos - 3e3, 0) / 75e4
-			if (hasBosonicUpg(54)) nb10 = Math.pow(nb10neutrinos / 1e5, 2)
+			if (hasBosonicUpg(54)) nb10 = Math.pow(nb10neutrinos / 3e5, 2)
 			return nb10
 		},
 		cost: "1e900"
@@ -262,7 +262,7 @@ let neutrinoBoosts = {
 		eff(nt) {
 			let nb11neutrinos = nt[0].add(nt[1]).add(nt[2]).add(1).log10()
 			let exp = Math.sqrt(nb11neutrinos)
-			if (hasBosonicUpg(54)) exp = Math.max(Math.pow(nb11neutrinos, 0.75) / 5, exp)
+			if (hasBosonicUpg(54)) exp = Math.max(Math.pow(nb11neutrinos, 0.75) / 10, exp)
 
 			return Decimal.pow(1.15, exp)
 		},
@@ -364,7 +364,7 @@ var neutrinoUpgrades = {
 	},
 	17: {
 		eff() {
-			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 80, 1)
+			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 180, 1)
 		},
 		effDesc(x) {
 			return x.toFixed(3)
