@@ -4216,7 +4216,9 @@ function ghostifyAutomationUpdating(diff){
 		ag.t = (ag.t || 0) + diff * perSec
 		let times = Math.floor(ag.t)
 		if (times > 0) {
-			autoMaxAllEnchants(times)
+			let max = times
+			if (isEnchantUsed(35)) max = tmp.bEn[35].times(max)
+			autoMaxAllEnchants(max)
 			ag.t = ag.t - times
 		}
 	}

@@ -364,7 +364,7 @@ var neutrinoUpgrades = {
 	},
 	17: {
 		eff() {
-			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 180, 1)
+			return 1 - 1 / Math.max(player.ghostify.hb.higgs / 150, 1)
 		},
 		effDesc(x) {
 			return x.toFixed(3)

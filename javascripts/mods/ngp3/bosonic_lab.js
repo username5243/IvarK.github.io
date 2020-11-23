@@ -458,9 +458,7 @@ function autoMaxEnchant(id, times) {
 }
 
 function autoMaxAllEnchants(times) {
-	for (var g2 = 2; g2 <= br.limit; g2++) {
-		for (var g1 = 1; g1 < g2; g1++) autoMaxEnchant(g1 * 10 + g2, times)
-	}
+	for (let g2 = 2; g2 <= br.limit; g2++) for (let g1 = 1; g1 < g2; g1++) autoMaxEnchant(g1 * 10 + g2, times)
 }
 
 function isEnchantUsed(x) {
@@ -489,17 +487,18 @@ var bEn = {
 		34: [1, 0],
 		15: [2e21, 20],
 		25: [2e210, 2e190],
+		35: [1e12, 1],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
 		13: "Things that consume Anti-Preons are stronger.",
 		23: "Bosonic Antimatter boosts oscillate speed.",
-		14: "Divide the requirement of Higgs and start with some Bosonic Upgrades even it is inactive.",
+		14: "Reduce the Higgs requirement and start with Bosonic Upgrades, even it is disabled.",
 		24: "You gain more Bosonic Battery.",
 		34: "Higgs Bosons boost Bosonic Watts.",
 		15: "You gain more Gravity Energy.",
 		25: "Z Bosons give a stronger boost to W Bosons.",
-		35: "Gain extra Gravity Power, but before Radioactivity.",
+		35: "Above 200, Higgs Bosons multiples the efficiency of Auto-Enchanter Ghost.",
 		45: "Multiply the gain of Gravity Energy, but reduce the charging effect.",
 	},
 	effects: {
@@ -546,7 +545,9 @@ var bEn = {
 			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 50 + 1)
 		},
 		35(l) {
-			return l.plus(1).log10() / 3
+			let hb = player.ghostify.hb.higgs
+			if (hb <= 200) return 1
+			return Decimal.pow(10, Math.pow(hb / 200 - 1, 1/4) * Math.sqrt(l.add(1).log10()))
 		},
 		45(l) {
 			return 2 - 1 / (Math.log10(l.max(10).log10()) / 3 + 1)
@@ -565,7 +566,7 @@ var bEn = {
 			return "x^0.500 -> x^" + x.toFixed(3)
 		},
 		35(x) {
-			return "+" + shorten(x)
+			return shorten(x) + "x"
 		}
 	},
 	action: "upgrade",
@@ -807,9 +808,9 @@ var bu = {
 			g5: 2e150
 		},
 		53: {
-			am: 1/0,
-			g3: 1/0,
-			g4: 1/0
+			am: 2e180,
+			g3: "2e455",
+			g4: "2e450"
 		},
 		54: {
 			am: 1/0,

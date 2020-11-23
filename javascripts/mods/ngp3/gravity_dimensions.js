@@ -50,7 +50,6 @@ let GDs = {
 
 		//Gravity Power
 		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
-		if (isEnchantUsed(35)) gp += tmp.bEn[35]
 
 		if (gp > 10) {
 			//Endless Radioactive softcaps! :D
@@ -112,7 +111,8 @@ let GDs = {
 		getEl("extraGDB").textContent = "The next extra Gravity Dimension " + nameofthing + " is at " + getFullExpansion(GDs.extraGDBReq()) + " Higgs Bosons. (You have " + getFullExpansion(player.ghostify.hb.higgs) + ")"
 	
 		getEl("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
-		getEl("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
+		getEl("rdNextTickDiv").style.display = GDs.save.rdTick.gte(100) ? "none" : ""
+		if (GDs.save.rdTick.gte(100)) getEl("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
 		for (var d = 1; d <= 4; d++) {
 			if (d <= totalGDBs + 1) {
 				getEl("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
@@ -206,11 +206,18 @@ let GDs = {
 	},
 	extraGDBReq() {
 		let e = GDs.save.extraGDBs
-		return Math.ceil(Math.pow(e, hasBosonicUpg(53) ? 1.25 : 2) * 5 + 50)
+		let x
+		if (hasBosonicUpg(53)) x = e * 15
+		else x = Math.pow(e, 2) * 5
+		x += 50
+		return Math.ceil(x)
 	},
 	getExtraGDBs() {
 		let h = player.ghostify.hb.higgs
-		let target = Math.floor(Math.pow(Math.max(h - 50, 0) / 5, hasBosonicUpg(53) ? .8 : .5))
+		let target = h - 50
+		if (hasBosonicUpg(53)) target = target / 15
+		else target = Math.sqrt(target / 5)
+		target = Math.floor(target)
 		let toAdd = Math.max(target - GDs.save.extraGDBs + 1, 0)
 		if (toAdd < 1) return
 
