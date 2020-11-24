@@ -85,7 +85,7 @@ function getTimeDimensionPower(tier) {
 	if (player.aarexModifications.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier, ret)
 
 	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
-	
+
 	if (player.achievements.includes("r105")) ret = ret.times(tmp.it)
 	ret = ret.times(getERTDAchMults())
 

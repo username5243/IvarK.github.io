@@ -357,7 +357,7 @@ function setupBosonicUpgrades(){
 		for (c = 1; c < 6; c++) {
 			var col = row.insertCell(c - 1)
 			var id = (r * 10 + c)
-			col.innerHTML = "<button id='bUpg" + id + "' class='gluonupgrade unavailablebtn' style='font-size:" + (id == 51 || id == 52 || id == 55 ? 8 : 9) + "px' onclick='buyBosonicUpgrade(" + id + ")'>" + (bu.descs[id] || "???") + "<br>" +
+			col.innerHTML = "<button id='bUpg" + id + "' class='gluonupgrade unavailablebtn' style='font-size:" + (id == 51 || id == 52 ? 8 : 9) + "px' onclick='buyBosonicUpgrade(" + id + ")'>" + (bu.descs[id] || "???") + "<br>" +
 				(bu.effects[id] !== undefined ? "Currently: <span id='bUpgEffect" + id + "'>0</span><br>" : "") +
 				"Cost: <span id='bUpgCost" + id + "'></span> Bosonic Antimatter<br>" +
 				"Requires: <span id='bUpgG1Req" + id + "'></span> <div class='bRune' type='" + bu.reqData[id][2] + "'></div> & <span id='bUpgG2Req" + id + "'></span> <div class='bRune' type='" + bu.reqData[id][4] + "'></div></button>"
@@ -3986,7 +3986,7 @@ setInterval(function() {
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 1e3)
+}, 1000)
 
 function autoPerSecond() {
 	if (player.aarexModifications.pause) return
@@ -5540,11 +5540,13 @@ function autoBuyerTick() {
 
 
 setInterval(function() {
+	if (player.aarexModifications.pause) return
 	timer += 0.05
 	if (player) if (!player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
 }, 100)
 
 setInterval(function() {
+	if (player.aarexModifications.pause) return
 	if (player) if (player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
 }, 50)
 
@@ -5941,6 +5943,7 @@ function resetUP() {
 }
 
 setInterval(function() {
+	if (player.aarexModifications.pause) return
 	if (isAutoGhostActive && isAutoGhostActive(17) && player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
 }, 100)
 

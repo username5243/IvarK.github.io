@@ -149,7 +149,7 @@ function redShiftTickspeedMultiplier(x) {
 	if (log < 0) {
 		log = -softcap(-log, "ts_reduce_log")
 		tmp.galRed = log / oldLog
-		if (hasBosonicUpg(55)) tmp.galRed = Math.pow(tmp.galRed, tmp.blu[55].rs)
+		if (hasBosonicUpg(55)) tmp.galRed = Math.pow(tmp.galRed, tmp.blu[55])
 
 		x = Decimal.pow(10, oldLog * tmp.galRed)
 	}

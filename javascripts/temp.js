@@ -193,9 +193,7 @@ function updateInfiniteTimeTemp() {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
-		if (!player.dilation.active && tmp.quActive) {
-			if (tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
-		}
+		if (!player.dilation.active && tmp.quActive && tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
 		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
 		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
 		x = softcap(x, "inf_time_log")
@@ -515,11 +513,6 @@ function updateBreakEternityUpgrade12Temp() {
 	tmp.beu[12] = Math.max(r, 1)
 }
 
-function updateBreakEternityUpgrade13Temp(){
-	let em = tmp.qu.breakEternity.eternalMatter
-	tmp.beu[13] = Math.sqrt(em.add(1).log10() / 10 + 1)
-}
-
 function updateBreakEternityUpgradesTemp() {
 	//Setup
 	updateBreakEternityUpgrade1Temp()
@@ -537,10 +530,7 @@ function updateBreakEternityUpgradesTemp() {
 		updateBreakEternityUpgrade9Temp()
 		updateBreakEternityUpgrade10Temp()
 	}
-	if (player.achievements.includes("ng3p101")) {
-		updateBreakEternityUpgrade12Temp()
-		updateBreakEternityUpgrade13Temp()
-	}
+	if (player.achievements.includes("ng3p101")) updateBreakEternityUpgrade12Temp()
 }
 
 function updateBRU1Temp() {
@@ -548,7 +538,6 @@ function updateBRU1Temp() {
 	if (!inBigRip()) return
 	let exp = 1
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
-	if (tmp.qu.breakEternity.upgrades.includes(13)) exp *= tmp.beu[13]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
 	exp *= player.infinityPoints.max(1).log10()
 	exp = softcap(exp, "bru1_log")

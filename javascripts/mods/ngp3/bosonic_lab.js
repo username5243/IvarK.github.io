@@ -192,7 +192,6 @@ function getBosonicAMProduction() {
 
 function getBosonicAMProductionSoftcapExp(x) {
 	let frac = 10
-	if (tmp.blu && hasBosonicUpg(55)) frac *= tmp.blu[55].ba
 
 	return 1 - x / frac
 }
@@ -547,7 +546,7 @@ var bEn = {
 		35(l) {
 			let hb = player.ghostify.hb.higgs
 			if (hb <= 200) return 1
-			return Decimal.pow(10, Math.pow(hb / 200 - 1, 1/4) * Math.sqrt(l.add(1).log10()))
+			return Decimal.pow(100, Math.sqrt(hb / 100 - 2) * Math.pow(l.add(1).log10(), 1/3))
 		},
 		45(l) {
 			return 2 - 1 / (Math.log10(l.max(10).log10()) / 3 + 1)
@@ -813,9 +812,14 @@ var bu = {
 			g4: "2e450"
 		},
 		54: {
-			am: 1/0,
-			g3: 1/0,
-			g5: 1/0
+			am: 2e205,
+			g3: "2e680",
+			g5: "2e660"
+		},
+		55: {
+			am: 1e208,
+			g1: "2e700",
+			g2: "2e700"
 		},
 	},
 	reqData: {},
@@ -844,8 +848,8 @@ var bu = {
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
 		53: "Reduce the cost scaling of extra Gravity Dimension Boosts.",
 		54: "All row-4 Neutrino Boosts are stronger.",
-		55: "Greenshift Galaxies (which reduces Redshifted Galaxies) and reduce all softcaps of BA production.",
-		61: "You gain even more Gravity Energy from Bosonic Enchants.",
+		55: "Greenshift Galaxies, which reduces Redshifted Galaxies.",
+		61: "Gain more Gravity Energy from Bosonic Enchants.",
 		62: "Quantum Challenges 1, 3, and 5 are stronger.", 
 		63: "Remove the limit of Replicantis.",
 		64: "Gravity Dimension Boosts are stronger.",
@@ -979,10 +983,7 @@ var bu = {
 			}
 		},
 		55() {
-			return {
-				rs: hasBosonicUpg(65) ? -1 : 0.9,
-				ba: hasBosonicUpg(65) ? Math.pow(x, Math.sqrt(1 + player.ghostify.hb.higgs / 1e3)) : 0.5
-			}
+			return hasBosonicUpg(65) ? -1 : 0.95
 		},
 		64() {
 			let x = 1.5
@@ -1038,9 +1039,9 @@ var bu = {
 		},
 		55(x) {
 			return (
-				x.rs < 0 ? "^" + (-x.rs).toFixed(3) + " to Blueshifted Galaxies" :
-				"^" + x.rs.toFixed(3) + " to Redshifted Galaxies"
-			) + ", " + (100 - x.ba * 100).toFixed(2) + "% weaker softcaps to BA production"
+				x < 0 ? "^" + (-x).toFixed(3) + " to Blueshifted Galaxies" :
+				"^" + x.toFixed(3) + " to Redshifted Galaxies"
+			)
 		},
 		64(x) {
 			return (x * 100 - 100).toFixed(2) + "% stronger"
