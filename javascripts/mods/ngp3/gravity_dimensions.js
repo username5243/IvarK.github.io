@@ -55,8 +55,8 @@ let GDs = {
 			//Endless Radioactive softcaps! :D
 			let layer = Math.floor(Math.sqrt(gp / 10))
 			gp = layer * 10 + (gp / 10 - layer * layer) / (layer * 2 + 1) * 10
-			data.gpr = layer
-		} else data.gpr = 0
+			data.gpr = true
+		} else data.gpr = false
 		data.gp = gp
 
 		//Gravity Energy
@@ -112,7 +112,7 @@ let GDs = {
 	
 		getEl("rdTick").textContent = shortenDimensions(GDs.save.rdTick)
 		getEl("rdNextTickDiv").style.display = GDs.save.rdTick.gte(100) ? "none" : ""
-		if (GDs.save.rdTick.gte(100)) getEl("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
+		if (GDs.save.rdTick.lt(100)) getEl("rdNextTick").textContent = shorten(GDs.rdNextTickAt())
 		for (var d = 1; d <= 4; d++) {
 			if (d <= totalGDBs + 1) {
 				getEl("gd" + d).textContent = DISPLAY_NAMES[d] + " Gravity Dimension ^" + GDs.gdExp(d).toFixed(2)
@@ -124,18 +124,12 @@ let GDs = {
 		getEl("gv").textContent = shortenMoney(GDs.save.gv)
 		getEl("gr").textContent = shortenMoney(GDs.save.gr)
 		getEl("gvPow").textContent = GDs.tmp.gp.toFixed(2)
-		getEl("gvPowScaling").textContent = (GDs.tmp.gpr == 0 ? "" : GDs.tmp.gpr == 1 ? "Radioactive " : "Radioactive^" + getFullExpansion(GDs.tmp.gpr) + " ") + "Power"
+		getEl("gvPowScaling").textContent = (GDs.tmp.gpr ? "Radioactive " : "") + "Power"
 		getEl("gvEne").textContent = GDs.tmp.ge.toFixed(2)
 		getEl("gvEneMult").textContent = GDs.tmp.gem.toFixed(2)
 
 		getEl("gvNoPow").style.display = GDs.tmp.gp == 0 ? "" : "none"
 		if (GDs.tmp.gp == 0) getEl("gvPowStart").textContent = shortenMoney(Decimal.pow(10, Math.pow(GDs.save.gr.add(10).log10(), 2/3)))
-
-		getEl("gvRadio").style.display = GDs.tmp.gpr >= 1 ? "" : "none"
-		if (GDs.tmp.gpr >= 1) {
-			getEl("gvRadioExp").textContent = GDs.tmp.gpr >= 2 ? "^" + getFullExpansion(GDs.tmp.gpr) : ""
-			getEl("gvRadioPow").textContent = getFullExpansion(Math.floor(GDs.radioactivity(GDs.tmp.gpr)))
-		}
 
 		for (let i = 0; i < GDs.boosts.list.length; i++) {
 			let b = GDs.boosts.list[i]
@@ -264,13 +258,6 @@ let GDs = {
 			data["gd" + d] = new Decimal(1)
 			data["rd" + d] = new Decimal(1)
 		}
-	},
-	isRadioactiveActive(layer) {
-		return GDs.tmp.gpr >= layer
-	},
-	radioactivity(layer) {
-		if (!GDs.isRadioactiveActive(layer)) return 0
-		return (GDs.tmp.gp - layer * 10) * Math.pow(GDs.save.gr.max(1).log10(), 2)
 	},
 	energyMult() {
 		let x = 1
