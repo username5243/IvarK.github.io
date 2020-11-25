@@ -286,7 +286,7 @@ function updateBosonicLabTab(){
 		getEl("hb").textContent = getFullExpansion(player.ghostify.hb.higgs)
 		getEl("hbReset").className = "gluonupgrade " + (player.ghostify.bl.am.gte(req) ? "hb" : "unavailablebtn")
 		getEl("hbResetReq").textContent = shorten(req)
-		getEl("hbResetGain").textContent = getFullExpansion(getHiggsGain())
+		getEl("hbResetGain").textContent = player.ghostify.bl.am.gte(req) && player.ghostify.hb.higgs ? "+" + getFullExpansion(getHiggsGain()) : ""
 	}
 	if (GDs.unlocked()) getEl("gvBlAmount").textContent = shortenMoney(GDs.save.gv)
 }

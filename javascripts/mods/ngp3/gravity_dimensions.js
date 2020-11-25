@@ -350,7 +350,7 @@ let GDs = {
 				return !pl.on()
 			},
 			eff(x) {
-				return Math.pow(x / 2 + 1, 1/3)
+				return hasNU(18) ? Math.sqrt(x / 8 + 1) : Math.pow(x / 2 + 1, 1/3)
 			},
 			rdExp: 2
 		},

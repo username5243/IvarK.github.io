@@ -171,6 +171,7 @@ function onQCCompletion(qcs, am, time, dilTimes) {
 			for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("pc" + pcid, tmp.qu.pairedChallenges.current, tmp.preQCMods[m])
 			if (tmp.qu.pairedChallenges.fastest[pcid] === undefined) tmp.qu.pairedChallenges.fastest[pcid] = time
 			else tmp.qu.pairedChallenges.fastest[pcid] = tmp.qu.pairedChallenges.fastest[pcid] = Math.min(tmp.qu.pairedChallenges.fastest[pcid], time)
+			if (tmp.preQCMods.length >= 3) giveAchievement("Brutally Challenging")
 		}
 	}
 	if (intensity == 1) {

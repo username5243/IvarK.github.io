@@ -369,14 +369,6 @@ var neutrinoUpgrades = {
 		effDesc(x) {
 			return x.toFixed(3)
 		}
-	},
-	18: {
-		eff() {
-			return tmp.ns ? Math.sqrt(Decimal.log10(tmp.ns) / 1e3 + 1) : 1
-		},
-		effDesc(x) {
-			return (100 - 100 / x).toFixed(1) + "%"
-		}
 	}
 }
 
