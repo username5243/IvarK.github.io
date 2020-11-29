@@ -1418,8 +1418,7 @@ function setTheme(name) {
 	document.getElementById("chosenTheme").textContent="Current theme: " + themeName;
 	
 	if (name === undefined) return;
-	if (name === "Aarex's Modifications") name = "Aarexs Modifications"
-	if (name === "Aarex's Mods II") name = "Aarexs Mods II"
+	name = name.replace("'", "")
 	
 	var head = document.head;
 	var link = document.createElement('link');
