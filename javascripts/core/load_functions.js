@@ -2012,7 +2012,7 @@ function setOtherChallDisplay(){
 function setReplDisplay() {
 	document.getElementById("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
 	document.getElementById("replDesc").textContent = tmp.ngC ? "IP gain & all Normal Dimensions (after softcaps)" : "all Infinity Dimensions"
-	document.getElementById("replicantiresettoggle").textContent = "Auto galaxy " + (player.replicanti.galaxybuyer ? "ON" : "OFF") + (player.timestudy.studies.includes(131) && speedrunMilestonesReached < 20 && !tmp.ngC?" (disabled)":"")
+	document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
 function setTSDisplay(){

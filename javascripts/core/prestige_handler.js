@@ -119,7 +119,7 @@ let Prestiges = {
 	},
 	shown(id) {
 		if (!ph.tmp[id]) return false
-		if (!ph.tmp[id].did) return true
+		if (!ph.tmp[id].did) return false
 
 		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
@@ -149,11 +149,10 @@ let Prestiges = {
 			var tabShown = false
 			var shown = false
 
-			if (ph.shown(p)) {
-				if (ph.can(p)) prestigeShown = true
-				if (ph.tmp[p].did) tabShown = true
-				if (prestigeShown || tabShown) shown = true
-			}
+			if (ph.can(p)) prestigeShown = true
+			if (ph.shown(p)) tabShown = true
+			if (prestigeShown || tabShown) shown = true
+
 			if (ph.tmp[p] !== undefined) {
 				if (shown) ph.tmp.shown++
 				ph.tmp[p].shown = shown

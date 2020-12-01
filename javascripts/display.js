@@ -148,7 +148,7 @@ function galaxySacDisplay(){
 
 function bestInfinityDisplay(){
 	document.getElementById("infinityStatistics").style.display = "none"
-	if (!ph.shown("infinity") || player.bestInfinityTime >= 9999999999) {
+	if (!ph.shown("infinity")) {
 		document.getElementById("bestInfinity").textContent = ""
 		document.getElementById("thisInfinity").textContent = ""
 		document.getElementById("infinitied").textContent = ""

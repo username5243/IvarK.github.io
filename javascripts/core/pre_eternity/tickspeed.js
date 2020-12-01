@@ -42,7 +42,7 @@ function getGalaxyPower(ng, bi, noDil) {
 		if (hasBosonicUpg(34)) dilGals *= tmp.blu[34]
 		otherGalPower += dilGals * ((player.masterystudies ? player.masterystudies.includes("t343") : false) ? replGalEff : 1)
 	}
-	otherGalPower += tmp.effAeg
+	otherGalPower += tmp.effAeg || 0
 
 	let galaxyPower = ng
 	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
@@ -124,6 +124,7 @@ function getGalaxyTickSpeedMultiplier() {
 		useLinear = true
 	}
 	if (useLinear) {
+		tmp.galRed = 1
 		baseMultiplier = 0.9;
 		if (inRS && galaxies == 0) baseMultiplier = 0.89
 		else if (g == 0) baseMultiplier = 0.89
@@ -374,7 +375,7 @@ function getTickspeedBeforePostMults() {
 		var log = 3 - tick.log10()
 		if (log > 25) tick = Decimal.pow(10, 3 - Math.sqrt(log) * 5)
 	}
-	if (tmp.ngp3) tick = Decimal.pow(10, -softcap(-tick.log10(), "working_ts"))
+	if (tmp.ngp3 && tick.log10() < -1e15) tick = Decimal.pow(10, -softcap(-tick.log10(), "working_ts"))
 	if (tmp.ngC) tick = softcap(tick.pow(-1), "ts_ngC").pow(-1)
 	return tick
 }
@@ -412,7 +413,7 @@ function updateTickspeed() {
 		let tick = getTickspeed()
 		let name = 
 		label = (tick.e <= -1e12 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
-		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (Compressed by " + (100 - 100 * tmp.ts.pre2.log10() / tmp.ts.pre1.log10()).toFixed(1) + "%)"
+		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (Decimated by " + (100 - 100 * tmp.ts.pre2.log10() / tmp.ts.pre1.log10()).toFixed(1) + "%)"
 	}
 	if (player.galacticSacrifice || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 

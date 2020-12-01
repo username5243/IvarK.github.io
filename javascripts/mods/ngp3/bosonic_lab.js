@@ -31,12 +31,12 @@ function getAchBWtMult() {
 	return player.achPow.div(Decimal.pow(1.5, 21))
 }
 
-function getBatteryGainPerSecond(toSub){
+function getBatteryGainPerSecond(toSub) {
 	let batteryMult = new Decimal(1)
 	if (isEnchantUsed(24)) batteryMult = batteryMult.times(tmp.bEn[24])
 
 	let toAdd = toSub.div(2e6).times(batteryMult)
-	if (toAdd.gt(100)) toAdd = Decimal.pow(toAdd.log10() + 8, 3).div(10)
+	if (toAdd.gt(1e3)) toAdd = Decimal.pow(toAdd.log10() + 7, 3)
 
 	return toAdd
 }
@@ -112,8 +112,8 @@ function bosonicTick(diff) {
 				lData.wnb = lData.wnb.add(toSub.add(lData.wQkUp ? 0 : 1).div(2).floor())
 				if (toSub.mod(2).gt(0)) lData.wQkUp = !lData.wQkUp
 				lData.wQkProgress = lData.wQkProgress.sub(toSub.min(lData.wQkProgress))
-				
-				let toAdd = getBatteryGainPerSecond(toSub)
+
+				let toAdd = getBatteryGainPerSecond(toSub.div(diff)).times(diff)
 
 				data.battery = data.battery.add(toAdd.times(diff))
 				tmp.batteryGainLast = toAdd
@@ -273,6 +273,7 @@ function updateBosonicLabTab(){
 	let x = getEstimatedNetBatteryGain()
 	s = shorten(x[1]) + "/s"
 	if (!x[0]) s = "-" + s
+	else s = "" //Visualizing the positive production rate is currently broken for now.
 	getEl("bBtProduction").textContent = s
 	getEl("odSpeed").textContent = shorten(getOverdriveSpeedDisplay()) + "x"
 	getEl("odSpeedWBBt").style.display = data.battery.eq(0) && data.odSpeed > 1 ? "" : "none"
