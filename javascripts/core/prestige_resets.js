@@ -57,7 +57,6 @@ function doQuantumResetStuff(bigRip, isQC){
 
 	player.money = new Decimal(10)
 	resetNormalDimensions()
-	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.sacrificed = new Decimal(0)
 	player.challenges = keepABnICs ? player.challenges : []
@@ -187,7 +186,6 @@ function resetNormalDimensions(){
 function doGalaxyResetStuff(bulk){
 	player.money = player.achievements.includes("r111") ? player.money : new Decimal(10)
 	resetNormalDimensions()
-	resetTickspeed()
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	player.sacrificed = new Decimal(0)
 	player.totalBoughtDims = resetTotalBought()
@@ -206,7 +204,6 @@ function doGalaxyResetStuff(bulk){
 function doNormalChallengeResetStuff(){
 	player.money = new Decimal(10)
 	resetNormalDimensions()
-	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -322,7 +319,6 @@ function doCrunchResetStuff() {
 	player.galacticSacrifice = newGalacticDataOnInfinity()
 	player.money = new Decimal(10)
 	resetNormalDimensions()
-	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -343,7 +339,6 @@ function doCrunchResetStuff() {
 
 function doEternityResetStuff() {
 	player.money = new Decimal(10)
-	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	resetNormalDimensions()
 	player.infinitied = 0
@@ -585,7 +580,6 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.galacticSacrifice = resetGalacticSacrifice()
 	player.money = onQuantumAM()
 	resetNormalDimensions()
-	resetTickspeed()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)

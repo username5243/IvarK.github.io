@@ -1227,9 +1227,9 @@
 						<p id="totaltickgained">You've gained 0 tickspeed upgrades.</p>
 							<p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> Time Shards. The next tickspeed upgrade is at <span id="tickThreshold" style="font-size:35px; color: black">0</span></p>
 						</div>
-
 						<div id="timeShardsPerSec">You are getting 0 Time Shards per second.</div>
 						<button id="maxTimeDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxTimeDimensions()">Max all</button>
+						<div id="tdCostLimit">You can spend up to antimatter to Time Dimensions.</div>
 						<table class="table" id="tdTable">
 							<tr id="tdReset" style="font-size: 17px">
 								<td id="tdResetLabel" colspan=3></td>
@@ -1612,7 +1612,7 @@
 				<br>
 				(Update v3.0: The Gravitons & Planck update)
 				<br>
-				<span class="warning">(Test server: Beta 37.03)</span>
+				<span class="warning">(Test server: Beta 38)</span>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -5025,8 +5025,9 @@
 						</div></td>
 						<td id="autoGhost17"><div class="autoBuyerDiv" style="display:block">
 							<b>Auto-Extractor Ghost</b><br>
-							(also rotates the type of Bosonic Runes every second)<br>
 							Power usage: <span id="ghostcost17">bug</span><br>
+							This also changes runes at a complete extraction on <span id="autoGhost17c">1</span>s after last change<br>
+							or change immediately at X seconds remaining for extracting: <input id="autoGhost17s" onchange="changeAutoGhost('17s')"></input><br>
 							Is active: <input id="isAutoGhostOn17" type="checkbox" onchange="toggleAutoGhost(17)"></input>
 						</div></td>
 						<td id="autoGhost18"><div class="autoBuyerDiv" style="display:block">

@@ -2060,7 +2060,8 @@ function updateNGp3DisplayStuff(){
 	updateBLUnlockDisplay()
 	document.getElementById("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
 	for (var g=1;g<=br.limit;g++) document.getElementById("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
-        handleDisplaysOnQuantum(tmp.qu.bigRip.active)
+
+	handleDisplaysOnQuantum()
 	updateBraveMilestones()
 	updateNeutrinoBoosts()
 	updateNeutrinoUpgradeUnlocks(5, 12)

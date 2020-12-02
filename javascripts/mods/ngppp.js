@@ -703,6 +703,7 @@ function setupAutomaticGhostsData() {
 	data[11].pw = 10
 	data[11].cw = 10
 	data[15].a = 1
+	data[17].s = 60
 	data[19].t = 0
 	data[22].i = 3
 	data[24].i = 5
@@ -748,6 +749,7 @@ function updateAutoGhosts(load) {
 		document.getElementById("autoGhost13u").value = data[13].u
 		document.getElementById("autoGhost13o").value = data[13].o
 		document.getElementById("autoGhost15a").value = formatValue("Scientific", data[15].a, 2, 1)
+		document.getElementById("autoGhost17s").value = data[17].s || 60
 		document.getElementById("autoGhost22t").value = data[22].time
 		document.getElementById("autoGhost24i").value = data[24].i
 		document.getElementById("autoGhost24m").value = data[24].m
@@ -792,6 +794,9 @@ function changeAutoGhost(o) {
 	} else if (o == "15a") {
 		var num = fromValue(document.getElementById("autoGhost15a").value)
 		if (!isNaN(break_infinity_js ? num : num.l)) player.ghostify.automatorGhosts[15].a = num
+	} else if (o == "17s") {
+		var num = parseFloat(document.getElementById("autoGhost24m").value)
+		if (!isNaN(num) && num > 1) player.ghostify.automatorGhosts[17].s = num
 	} else if (o == "22t") {
 		var num = parseFloat(document.getElementById("autoGhost22t").value)
 		if (!isNaN(num) && num > 0) player.ghostify.automatorGhosts[22].time = num
@@ -909,7 +914,6 @@ function getGHPMultCost(offset = 0) {
 }
 
 function getGHPMultCostScalingStart() {
-	if (hasNU(18)) return 1/0
 	return 85
 }
 

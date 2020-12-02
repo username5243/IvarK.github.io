@@ -113,3 +113,7 @@ function canBuyElectronUpg(id) {
 	if (id > 1) return player.dilation.dilatedTime.gte(getElectronUpgCost(2))
 	return player.timestudy.theorem >= getElectronUpgCost(1)
 }
+
+function getBaseAelcGalaxyEff() {
+	return 1
+}

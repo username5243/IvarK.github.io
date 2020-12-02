@@ -37,7 +37,6 @@ function softReset(bulk, tier = 1) {
 	}
 	resetDimensions()
 	player.totalBoughtDims = resetTotalBought()
-	resetTickspeed()
 	player.sacrificed = new Decimal(0)
 	player.chall3Pow = new Decimal(0.01)
 	player.matter = new Decimal(0)
@@ -55,7 +54,7 @@ function softReset(bulk, tier = 1) {
 		player.eightAmount = new Decimal(1);
 		player.eightBought = 1;
 	}
-	setInitialResetPower();
+	setInitialResetPower()
 
 	if (player.resets > 4) {
 		document.getElementById("confirmation").style.display = "inline-block";
@@ -83,16 +82,19 @@ function setInitialMoney() {
 	player.money = new Decimal(x)
 }
 
+function setInitialTickspeed() {
+	resetTickspeed()
+
+	//IC3 Multiplier
+	ic3Power = getInitPostC3Power()
+	player.postC3Reward = Decimal.pow(getPostC3Mult(), ic3Power)
+}
+
 function setInitialResetPower() {
 	var dimensionBoostPower = getDimensionBoostPower()
 	if (tmp.ngp3 && getEternitied() >= 1e9 && player.dilation.upgrades.includes("ngpp6")) player.dbPower = dimensionBoostPower
 
-	var tickspeedPower = player.totalTickGained
-	if (player.infinityUpgradesRespecced!=undefined) tickspeedPower += player.infinityUpgradesRespecced[1] * 10
-	player.tickspeed = Decimal.pow(getTickspeedMultiplier(), tickspeedPower).times(player.aarexModifications.newGameExpVersion ? 500 : 1e3)
-
-	ic3Power = getInitPostC3Power()
-	player.postC3Reward = Decimal.pow(getPostC3Mult(), ic3Power)
+	setInitialTickspeed()
 }
 
 function maxBuyDimBoosts(manual) {

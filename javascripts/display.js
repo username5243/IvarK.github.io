@@ -76,7 +76,7 @@ function tickspeedDisplay(){
 		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + (100 * tmp.galRed - 100).toFixed(1) + "%)"
 		labels.push(label)
 
-		if (player.currentChallenge == "postc3" || (tmp.ngmX >= 2 && player.challenges.includes("postc3")) || inQC(6)) {
+		if (tmp.ngmX >= 2 || player.currentChallenge == "postc3" || player.challenges.includes("postc3") || inQC(6)) {
 			let ic3 = getPostC3Mult()
 			labels.push("multiply all Dimensions by " + (ic3 > 999.95 ? shorten(ic3) : new Decimal(ic3).toNumber().toPrecision(4)) + "x")
 		}

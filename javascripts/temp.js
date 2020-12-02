@@ -45,6 +45,7 @@ function updateTemp() {
 	updatePostInfiTemp()
 	updateInfiniteTimeTemp()
 	updateAntiElectronGalaxiesTemp()
+	updateEffectiveAntiElectronGalaxiesTemp()
 	updateIntergalacticTemp() // starts with if (tmp.ngp3)
 	if (hasBosonicUpg(41)) {
 		tmp.blu[41] = bu.effects[41]()
@@ -249,9 +250,15 @@ function updateIntergalacticTemp() {
 function updateAntiElectronGalaxiesTemp(){
 	tmp.aeg = 0
 	if (!tmp.quActive) return
+
 	if (hasBosonicUpg(14) && !tmp.qu.bigRip.active) tmp.aeg = Math.max(tmp.blu[14] - tmp.qu.electrons.sacGals, 0)
+}
+
+function updateEffectiveAntiElectronGalaxiesTemp() {
 	tmp.effAeg = tmp.aeg
-	if (tmp.aeg > 0) if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
+	if (tmp.aeg == 0) return
+
+	if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
 }
 
 function updateTS232Temp() {
@@ -536,6 +543,7 @@ function updateBreakEternityUpgradesTemp() {
 function updateBRU1Temp() {
 	tmp.bru[1] = new Decimal(1)
 	if (!inBigRip()) return
+
 	let exp = 1
 	if (tmp.qu.bigRip.upgrades.includes(17)) exp = tmp.bru[17]
 	if (ghostified && player.ghostify.neutrinos.boosts > 7) exp *= tmp.nb[8]
@@ -545,9 +553,10 @@ function updateBRU1Temp() {
 }
 
 function updateBRU8Temp() {
-	tmp.bru[8] = 1
+	tmp.bru[8] = new Decimal(1)
 	if (!inBigRip()) return
-	tmp.bru[8] = Decimal.pow(2,getTotalRG()) // BRU8
+
+	tmp.bru[8] = Decimal.pow(2, getTotalRG()) // BRU8
 	if (!hasNU(11)) tmp.bru[8] = tmp.bru[8].min(Number.MAX_VALUE)
 }
 

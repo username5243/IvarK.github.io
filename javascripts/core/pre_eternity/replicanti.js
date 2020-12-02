@@ -210,6 +210,18 @@ function getTotalRG() {
 	return player.replicanti.galaxies + extraReplGalaxies
 }
 
+function getReplGalaxyEff() {
+	let x = 1
+	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2)/10
+	else if (ECTimesCompleted("eterc8") > 0) x = getECReward(8)
+	if (tmp.ngp3) {
+		if (masteryStudies.has(344)) x *= getMTSMult(344)
+		if (hasBosonicUpg(34)) x *= tmp.blu[34]
+	}
+
+	return x
+}
+
 function replicantiGalaxyAutoToggle() {
 	player.replicanti.galaxybuyer=!player.replicanti.galaxybuyer
 	document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")

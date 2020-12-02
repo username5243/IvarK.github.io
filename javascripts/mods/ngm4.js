@@ -65,3 +65,26 @@ function maxHighestTD() {
 	player.aarexModifications.maxHighestTD=!player.aarexModifications.maxHighestTD
 	document.getElementById("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
 }
+
+function getMaxTDCost() {
+	if (!player.achievements.includes("r36")) return Number.MAX_VALUE
+	let x = Decimal.pow(Number.MAX_VALUE, 10)
+
+	if (player.currentChallenge == "postcngm3_1") x = new Decimal(1e60)
+	else if (player.currentChallenge != "") x = Decimal.pow(10, 1000)
+
+	if (player.infinityUpgrades.includes("postinfi53")) x = x.pow(1 + tmp.cp / 3)
+
+	return x
+}
+
+function getNGM4GalaxyEff() {
+	let e = new Decimal(1)
+	if (player.achievements.includes("r66")) {
+		e = e.times(Math.log10(player.galacticSacrifice.galaxyPoints.max(1e86).log10() + 14) / 2)
+		if (player.galacticSacrifice.galaxyPoints.gt(1e86)) e = e.add(player.galacticSacrifice.galaxyPoints.div(1e86).minus(1).min(10).div(100))
+	}
+
+	if (e.gt(1.5)) e = Decimal.add(e.times(6).add(1).log10(), .5)
+	return e.toNumber()
+}

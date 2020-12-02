@@ -130,7 +130,7 @@ function getQCGoalLog(QCs, bigRip) {
 	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
 	if (player.achievements.includes("ng3p102") && !bigRip) mult *= 0.5
 	if (player.achievements.includes("ng3p118") && !bigRip) mult *= 0.75
-	if (mods.includes("ms")) mult *= 8e3
+	if (mods.includes("ms")) mult *= 6e3
 	//if (mods.includes("tb")) mult *= 100
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
 	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
@@ -456,7 +456,7 @@ var qcm = {
 	descs: {
 		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
 		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies.",
-		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 8,000. Good luck! :)",
+		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 6,000. Good luck! :)",
 		//tb: "All Eternity features are disabled. All QC goals are raised to the power of 100. >:)"
 	},
 	rewards: {
@@ -469,7 +469,7 @@ var qcm = {
 				}
 			},
 			desc(x) {
-				return "Boost all Emperor Dimensions by " + (x.eds * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension, reduce the logarithmic softcap of orange Light effect by " + (100 - 100 * x.ol).toFixed(1) + "%, and make Higgs Bosons wake up " + x.ap.toFixed(1) + " later."
+				return "Boost all Emperor Dimensions by " + (x.eds * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension, reduce the logarithmic softcap of orange Light effect by " + (100 - 100 * x.ol).toFixed(1) + "%, and Higgs Bosons make Anti-Preonitus wakes up " + x.ap.toFixed(1) + " later."
 			}
 		},
 		/*

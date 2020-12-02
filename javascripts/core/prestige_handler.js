@@ -149,7 +149,7 @@ let Prestiges = {
 			var tabShown = false
 			var shown = false
 
-			if (ph.can(p)) prestigeShown = true
+			if (ph.can(p) && !player.aarexModifications.layerHidden[p]) prestigeShown = true
 			if (ph.shown(p)) tabShown = true
 			if (prestigeShown || tabShown) shown = true
 

@@ -3421,8 +3421,6 @@ function eternity(force, auto, presetLoad, dilated) {
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
@@ -3877,10 +3875,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 
 		if (gain >= data.i || (higgs + gain) / higgs >= data.m) higgsReset(true)
 	}
-	if (player.ghostify.wzb.unl) {
-		if (isAutoGhostActive(17) && !player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
-		if (isAutoGhostActive(20)) buyMaxBosonicUpgrades()
-	}
+	if (player.ghostify.wzb.unl && isAutoGhostActive(20)) buyMaxBosonicUpgrades()
 	if (isAutoGhostActive(16)) {
 		maxNeutrinoMult()
 		maxGHPMult()
@@ -4199,15 +4194,25 @@ function ghostifyAutomationUpdating(diff){
 	if (!isAutoGhostsSafe) return
 
 	//Ghostify Layer
-	if (player.ghostify.wzb.unl && isAutoGhostActive(21)) {
-		let ag = player.ghostify.automatorGhosts[21]
-		let data = player.ghostify.wzb
-		let hasWNB = data.wnb.gt(0)
+	if (player.ghostify.wzb.unl) {
+		if (isAutoGhostActive(17)) {
+			let ag = player.ghostify.automatorGhosts[17]
 
-		if (data.dPUse == 0 && data.dP.gt(0)) useAntiPreon(hasWNB ? 3 : 1)
-		if (data.dPUse == 1) useAntiPreon(hasWNB ? 3 : 2)
-		if (data.dPUse == 2) useAntiPreon(1)
-		if (data.dPUse == 3 && !hasWNB) useAntiPreon(2)
+			let change = getRemainingExtractTime().gte(ag.s || 60)
+			if (!change) change = ag.oc && ag.t >= 1 / (player.achievements.includes("ng3p103") ? 10 : 1)
+			if (change) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
+
+			if (!tmp.bl.extracting) extract()
+		}
+		if (isAutoGhostActive(21)) {
+			let data = player.ghostify.wzb
+			let hasWNB = data.wnb.gt(0)
+
+			if (data.dPUse == 0 && data.dP.gt(0)) useAntiPreon(hasWNB ? 3 : 1)
+			if (data.dPUse == 1) useAntiPreon(hasWNB ? 3 : 2)
+			if (data.dPUse == 2) useAntiPreon(1)
+			if (data.dPUse == 3 && !hasWNB) useAntiPreon(2)
+		}
 	}
 	if (isAutoGhostActive(19)) {
 		let ag = player.ghostify.automatorGhosts[19]
@@ -4221,7 +4226,6 @@ function ghostifyAutomationUpdating(diff){
 			ag.t = ag.t - times
 		}
 	}
-	if (isAutoGhostActive(17)) extract()
 	if (isAutoGhostActive(15)) if ((hasNU(16) || inBigRip()) && getGHPGain().gte(player.ghostify.automatorGhosts[15].a)) ghostify(true)
 
 	//Quantum Layer
@@ -4271,6 +4275,8 @@ function ghostifyAutomationUpdating(diff){
 }
 
 function WZBosonsUpdating(diff){
+	player.ghostify.automatorGhosts[17].t += diff
+
 	var data = player.ghostify.bl
 	var wattGained = Decimal.max(getBosonicWattGain(), data.watt).sub(data.watt)
 	data.watt = wattGained.add(data.watt)
@@ -5940,11 +5946,6 @@ function resetUP() {
 	mult18 = 1
 	updatePowerInt = setInterval(updatePowers, 100)
 }
-
-setInterval(function() {
-	if (player.aarexModifications.pause) return
-	if (isAutoGhostActive && isAutoGhostActive(17) && player.achievements.includes("ng3p103")) changeTypeToExtract(tmp.bl.typeToExtract % br.limit + 1)
-}, 100)
 
 function switchDecimalMode() {
 	if (confirm('You will change the number library preference to ' + (player.aarexModifications.breakInfinity ? 'logarithmica_numerus_lite':'break_infinity.min') + '.js. This requires the webpage to reload for this to take effect. Are you sure you want to do this?')) {

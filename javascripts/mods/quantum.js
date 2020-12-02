@@ -599,6 +599,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 
 function handleDisplaysOnQuantum(bigRip, prestige) {
 	if (!tmp.ngp3) return
+	if (!bigRip) bigRip = inBigRip()
 	
 	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
 
@@ -644,6 +645,8 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 }
 
 function handleDisplaysOutOfQuantum(bigRip) {
+	if (!bigRip) bigRip = inBigRip()
+
 	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
 	let keepQCs = ph.shown("quantum") && tmp.quUnl && speedrunMilestonesReached >= 16 && player.masterystudies.includes("d8")
 	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
@@ -656,6 +659,8 @@ function handleDisplaysOutOfQuantum(bigRip) {
 	document.getElementById("qctabbtn").style.display = keepQCs ? "" : "none"
 	document.getElementById("edtabbtn").style.display = keepEDs ? "" : "none"
 	document.getElementById("breakEternityTabbtn").style.display = keepBE? "" : "none"
+
+	updatePCCompletions()
 }
 
 function handleQuantumDisplays(prestige) {
@@ -676,7 +681,6 @@ function handleQuantumDisplays(prestige) {
 
 	updateQuantumChallenges()
 	updateQCTimes()
-	updatePCCompletions()
 
 	updateReplicants(prestige ? "prestige" : "")
 

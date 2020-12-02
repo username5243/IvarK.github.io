@@ -556,6 +556,13 @@ function resetDilationGalaxies() {
 	gainDilationGalaxies()
 }
 
+function getBaseDilGalaxyEff() {
+	let x = 1
+	if (hasBosonicUpg(34)) x *= tmp.blu[34]
+
+	return x
+}
+
 var failsafeDilateTime = false
 function startDilatedEternity(auto, shortcut) {
 	if (shortcut && player.dilation.active) return

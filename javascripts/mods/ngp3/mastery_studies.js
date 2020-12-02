@@ -243,9 +243,7 @@ var masteryStudies = {
 			var eff = Decimal.pow(effectBase, effectExp)
 			if (tmp.newNGP3E) eff = eff.times(eff.plus(9).log10())
 
-			var log = eff.log10()
-
-			return Decimal.pow(10, log)
+			return eff
 		}
 	},
 	timeStudyDescs: {

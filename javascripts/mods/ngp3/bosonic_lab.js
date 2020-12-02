@@ -162,6 +162,7 @@ function bosonicTick(diff) {
 			data.extracting = false
 			data.extractProgress = new Decimal(0)
 		}
+		player.ghostify.automatorGhosts[17].oc = true
 	}
 	if (data.extracting && data.extractProgress.lt(1)) {
 		dynuta.check = false
@@ -353,6 +354,13 @@ function getExtractTime() {
 	return r
 }
 
+function getRemainingExtractTime() {
+	let data = player.ghostify.bl
+	let x = getExtractTime().div(data.speed)
+	if (data.extracting) x = x.times(Decimal.sub(1, data.extractProgress))
+	return x
+}
+
 function changeTypeToExtract(x) {
 	let data = player.ghostify.bl
 	if (data.typeToExtract == x) return
@@ -362,6 +370,9 @@ function changeTypeToExtract(x) {
 	data.extracting = false
 	data.extractProgress = new Decimal(0)
 	data.autoExtract = new Decimal(1)
+
+	player.ghostify.automatorGhosts[17].t = 0
+	delete player.ghostify.automatorGhosts[17].oc
 }
 
 function canBuyEnchant(id) {
@@ -418,7 +429,7 @@ function updateBosonExtractorTab(){
 	if (data.extracting) getEl("extract").textContent = "Extracting" + (time.lt(0.1)?"":" ("+data.extractProgress.times(100).toFixed(1)+"%)")
 	else getEl("extract").textContent="Extract"
 	if (time.lt(0.1)) getEl("extractTime").textContent="This would automatically take "+shorten(Decimal.div(1,time))+" runes per second."
-	else if (data.extracting) getEl("extractTime").textContent=shorten(time.times(Decimal.sub(1,data.extractProgress)))+" seconds left to extract."
+	else if (data.extracting) getEl("extractTime").textContent=shorten(time.times(Decimal.sub(1, data.extractProgress)))+" seconds left to extract."
 	else getEl("extractTime").textContent="This will take "+shorten(time)+" seconds."
 	updateEnchantDescs()
 }
@@ -819,8 +830,8 @@ var bu = {
 		},
 		55: {
 			am: 1e208,
-			g1: "2e700",
-			g2: "2e700"
+			g1: "2e745",
+			g2: "2e745"
 		},
 	},
 	reqData: {},

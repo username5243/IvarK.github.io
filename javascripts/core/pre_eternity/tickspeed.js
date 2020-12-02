@@ -21,34 +21,11 @@ function initialGalaxies() {
 }
 
 function getGalaxyPower(ng, bi, noDil) {
-	let replGalEff = 1
-	if (player.boughtDims) replGalEff = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2)/10
-	else if (ECTimesCompleted("eterc8") > 0) replGalEff = getECReward(8)
-	if (tmp.ngp3) {
-		if (player.masterystudies.includes("t344")) replGalEff *= getMTSMult(344)
-		if (hasBosonicUpg(34)) replGalEff *= tmp.blu[34]
-	}
-	
-	let extraReplGalPower = 0
-	if (hasTimeStudy(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
-	if (hasTimeStudy(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
-	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
-
-	let otherGalPower = player.replicanti.galaxies
-	if (player.masterystudies ? player.masterystudies.includes("t342") : false) otherGalPower = (otherGalPower + extraReplGalPower) * replGalEff
-	else otherGalPower += Math.min(player.replicanti.galaxies, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
-	if (!noDil) {
-		let dilGals = Math.floor(player.dilation.freeGalaxies)
-		if (hasBosonicUpg(34)) dilGals *= tmp.blu[34]
-		otherGalPower += dilGals * ((player.masterystudies ? player.masterystudies.includes("t343") : false) ? replGalEff : 1)
-	}
-	otherGalPower += tmp.effAeg || 0
-
-	let galaxyPower = ng
-	if (!tmp.be) galaxyPower = Math.max(ng - (bi ? 2 : 0), 0) + otherGalPower
-	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) galaxyPower *= galaxyPower
-	if (player.timestudy.studies.includes(173) && tmp.ngC) galaxyPower *= 3
-	return galaxyPower
+	let x = ng
+	if (!tmp.be) x = Math.max(ng - (bi ? 2 : 0), 0) + getExtraGalaxyPower(noDil)
+	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) x *= x
+	if (player.timestudy.studies.includes(173) && tmp.ngC) x *= 3
+	return x
 }
 
 function getGalaxyEff(bi) {
@@ -69,16 +46,7 @@ function getGalaxyEff(bi) {
 			if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
 			eff += .07 * x
 		}
-		if (player.aarexModifications.ngmX >= 4) {
-			let e = 1
-			if (player.achievements.includes("r66")) {
-				e *= Math.log10(player.galacticSacrifice.galaxyPoints.max(1e86).log10() + 14) / 2
-				if (player.galacticSacrifice.galaxyPoints.gt(1e86)) e += player.galacticSacrifice.galaxyPoints.div(1e86).minus(1).min(10).div(100).toNumber()
-			}
-			
-			if (e > 1.5) e = Math.log10(e*6 + 1) + .5
-			eff *= e
-		}
+		if (player.aarexModifications.ngmX >= 4) eff *= getNGM4GalaxyEff()
 	}
 	if (tmp.ngmR) eff *= 1.2
 	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
@@ -99,6 +67,42 @@ function getPostGalaxyEff() {
 	let ret = player.tickspeedBoosts != undefined ? 1.1 : player.galacticSacrifice ? 1.7 : 1.5
 	if (player.aarexModifications.ngexV && !player.challenges.includes("postc5")) ret -= 0.05
 	return ret
+}
+
+function getExtraGalaxyPower(noDil) {
+	let x = 0
+
+	//Replicated
+	let extraReplGalPower = 0
+	if (hasTimeStudy(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
+	if (hasTimeStudy(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
+	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
+
+	let replPower = player.replicanti.galaxies
+	let replGalEff = getReplGalaxyEff()
+	if (masteryStudies.has(342)) replPower = (replPower + extraReplGalPower) * replGalEff
+	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
+	x += replPower
+
+	//Dilation
+	let dilGalEff = 1
+	if (hasDilationStudy(1) && !noDil) {
+		dilGalEff = getBaseDilGalaxyEff()
+		if (masteryStudies.has(343)) dilGalEff *= replGalEff
+
+		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
+	}
+
+	//Antielectronic
+	let aelcGalEff = 1
+	if (tmp.aeg > 0) {
+		aelcGalEff = getBaseAelcGalaxyEff()
+		if (false) aelcGalEff *= dilGalEff
+		//Coming soon...
+
+		x += tmp.effAeg * aelcGalEff
+	}
+	return x
 }
 
 function getGalaxyTickSpeedMultiplier() {
@@ -259,6 +263,10 @@ function resetTickspeed() {
 	player.tickspeed = new Decimal(x)
 
 	divideTickspeedIC5()
+
+	let pow = player.totalTickGained
+	if (player.infinityUpgradesRespecced != undefined) pow += player.infinityUpgradesRespecced[1] * 10
+	player.tickspeed = Decimal.pow(getTickspeedMultiplier(), pow).times(player.tickspeed)
 
 	//Tickspeed cost
 	player.tickSpeedCost = new Decimal(1e3)

@@ -111,7 +111,6 @@ function buyNeutrinoUpg(id) {
 		document.getElementById("workerReplWhat").textContent="babies"
 	}
 	if (id == 5) updateElectrons(true)
-	if (id == 18) document.getElementById("ghpMultUpgCost").textContent = shortenDimensions(getGHPMultCost())
 }
 
 function updateNeutrinoBoosts() {
