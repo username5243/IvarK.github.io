@@ -510,7 +510,7 @@ function setR24Tooltip() {
 
 	//ACHIEVEMENT ROW 24
 	einstein.setAttribute('ach-tooltip', "Get " + shortenMoney(Decimal.pow(10, 5e3)) + " Ghost Particles. Reward: You passively generate Ghost Particles while in Big Rip, Light Empowerments reset nothing, and Auto-Extractor and Auto-Enchanter Ghosts are 10x faster.")
-	x.setAttribute('ach-tooltip', 'Get 234 PC ranking. Reward: Start with ' + shortenCosts(1e25) + ' Space Shards and Eternal Matter.')
+	x.setAttribute('ach-tooltip', 'Get 250 PC ranking. Reward: Start with ' + shortenCosts(1e25) + ' Space Shards and Eternal Matter.')
 	how.setAttribute('ach-tooltip', 'Reach ' + shortenCosts(Decimal.pow(10, Math.sqrt(2) * 1e12)) + ' antimatter in Big Rips.')
 }
 

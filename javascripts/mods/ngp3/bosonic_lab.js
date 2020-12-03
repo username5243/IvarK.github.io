@@ -549,8 +549,9 @@ var bEn = {
 			return x * Math.log10(l.times(1e3).max(1).log10() + 1) + 1
 		},
 		15(l) {
-			if (hasBosonicUpg(61)) return Math.cbrt(l.add(1).log10() / 10)
-			return Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
+			let x = Math.pow(Math.log10(l.add(1).log10() + 1) / 5 + 1, 2)
+			if (hasBosonicUpg(61)) x = Math.max(Math.cbrt(l.add(1).log10() / 25 + 1), x)
+			return x
 		},
 		25(l) {
 			return 0.65 - 0.15 / Math.sqrt(l.add(1).log10() / 50 + 1)
@@ -829,9 +830,14 @@ var bu = {
 			g5: "2e660"
 		},
 		55: {
-			am: 1e208,
-			g1: "2e745",
-			g2: "2e745"
+			am: 2e210,
+			g1: "2e750",
+			g2: "2e750"
+		},
+		61: {
+			am: 2e213,
+			g1: "2e763",
+			g2: "2e763"
 		},
 	},
 	reqData: {},
@@ -863,9 +869,9 @@ var bu = {
 		55: "Greenshift Galaxies, which reduces Redshifted Galaxies.",
 		61: "Gain more Gravity Energy from Bosonic Enchants.",
 		62: "Quantum Challenges 1, 3, and 5 are stronger.", 
-		63: "Remove the limit of Replicantis.",
-		64: "Gravity Dimension Boosts are stronger.",
-		65: "Higgs Bosons strengthen 'Greenshift Galaxies' and 'Stronger GDBs' upgrades.",
+		63: "Time spent on Ghostify boosts Gravity Dimension Boosts.",
+		64: "Higgs Bosons strengthen 'Greenshift Galaxies' and 'Strengthen GDBs' upgrades.",
+		65: "Remove the limit of Replicantis, no matter what.",
 	},
 	effects: {
 		11() {
@@ -995,11 +1001,12 @@ var bu = {
 			}
 		},
 		55() {
-			return hasBosonicUpg(65) ? -1 : 0.95
+			return hasBosonicUpg(64) ? Math.max(1 - Math.log10(player.ghostify.hb.higgs / 50 + 1), -1) : 0.95
 		},
-		64() {
-			let x = 1.5
-			if (hasBosonicUpg(65)) x = Math.sqrt(2.25 + player.ghostify.hb.higgs / 500)
+		63() {
+			let x = Math.log10(player.ghostify.time + 1) / 5
+			if (hasBosonicUpg(64)) x *= Math.log10(player.ghostify.hb.higgs / 10 + 1) / 3 + 1
+			x += 1
 			return x
 		}
 	},
@@ -1055,7 +1062,7 @@ var bu = {
 				"^" + x.toFixed(3) + " to Redshifted Galaxies"
 			)
 		},
-		64(x) {
+		63(x) {
 			return (x * 100 - 100).toFixed(2) + "% stronger"
 		}
 	}

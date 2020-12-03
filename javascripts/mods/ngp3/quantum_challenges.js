@@ -127,9 +127,12 @@ function getQCGoalLog(QCs, bigRip) {
 	so im thinking we just multiply their goals (this is not tested at all)
 	feel free to never uncomment this :) but i think it might be a good idea for balance
 	*/
-	if (player.achievements.includes("ng3p96") && !bigRip) mult *= 0.95
-	if (player.achievements.includes("ng3p102") && !bigRip) mult *= 0.5
-	if (player.achievements.includes("ng3p118") && !bigRip) mult *= 0.75
+	if (!bigRip) {
+		if (player.achievements.includes("ng3p96")) mult *= 0.95
+		if (player.achievements.includes("ng3p102")) mult /= Math.log10(tmp.qu.bigRip.totalAntimatter.add(1).log10() + 1) / 50 + 1
+		if (player.achievements.includes("ng3p107")) mult *= 0.8
+		if (player.achievements.includes("ng3p118")) mult *= 0.75
+	}
 	if (mods.includes("ms")) mult *= 6e3
 	//if (mods.includes("tb")) mult *= 100
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
@@ -262,7 +265,7 @@ function updatePCCompletions() {
 
 	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
 	document.getElementById("pccranking").textContent = r.toFixed(1)
-	document.getElementById("pccrankingMax").textContent = Math.sqrt(11250 * (2 + qcm.modifiers.length)).toFixed(1)
+	document.getElementById("pccrankingMax").textContent = (Math.sqrt(4 * (2 + qcm.modifiers.length)) * 36 * 100 / 56).toFixed(1)
 	updatePCTable()
 	for (var m = 0; m < qcm.modifiers.length; m++) {
 		var id = qcm.modifiers[m]

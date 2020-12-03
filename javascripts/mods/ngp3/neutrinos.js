@@ -22,7 +22,7 @@ function updateNeutrinoBoostDisplay(){
 	if (player.ghostify.neutrinos.boosts >= 9) document.getElementById("neutrinoBoost9").textContent = shorten(tmp.nb[9])
 	if (player.ghostify.neutrinos.boosts >= 10) document.getElementById("neutrinoBoost10").textContent = tmp.nb[10].toFixed(4)
 	if (player.ghostify.neutrinos.boosts >= 11) document.getElementById("neutrinoBoost11").textContent = shorten(tmp.nb[11])
-	if (player.ghostify.neutrinos.boosts >= 12) document.getElementById("neutrinoBoost12").textContent = shorten(tmp.nb[12])
+	if (player.ghostify.neutrinos.boosts >= 12) document.getElementById("neutrinoBoost12").textContent = "^" + shorten(tmp.nb[12])
 }
 
 function updateNeutrinoAmountDisplay(){

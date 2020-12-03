@@ -32,7 +32,10 @@ function setupFooterHTML() {
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
 			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " + 
-			"<a>Test server</a> (You are in it!) | " + 
+			(betaId != "" ?
+				"<a>Test server</a> (You are in it!) | " +
+				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
+			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are in it!) | ") + 
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
 		"</div></tr></td></table>"
@@ -3660,6 +3663,12 @@ function TPAnimationBtn(){
 	else document.getElementById("tachyonParticleAnimBtn").style.display = "none"
 }
 
+function dilAndBHDisplay() {
+	document.getElementById("dilationTabbtn").style.display = (player.dilation.studies.includes(1)) ? "table-cell" : "none"
+	document.getElementById("blackHoleTabbtn").style.display = player.dilation.studies.includes(1) && player.exdilation != undefined ? "table-cell" : "none"
+	updateDilationUpgradeButtons()
+}
+
 function replicantiShopABRun() {
 	if (getEternitied() >= 40 && player.replicanti.auto[0] && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
 		var chance = Math.round(player.replicanti.chance * 100)
@@ -3716,10 +3725,6 @@ function dilationStuffABTick(){
 	document.getElementById('dilUpgsauto').style.display = canAutoUpgs ? "" : "none"
 	document.getElementById('distribEx').style.display = player.achievements.includes("ngud14") && player.aarexModifications.nguspV !== undefined ? "" : "none"
 	if (canAutoUpgs && player.autoEterOptions.dilUpgs) autoBuyDilUpgs()
-
-	document.getElementById("dilationTabbtn").style.display = (player.dilation.studies.includes(1)) ? "table-cell" : "none"
-	document.getElementById("blackHoleTabbtn").style.display = player.dilation.studies.includes(1) && player.exdilation != undefined ? "table-cell" : "none"
-	updateDilationUpgradeButtons()
 }
 
 function doBosonsUnlockStuff() {
@@ -3955,6 +3960,7 @@ setInterval(function() {
 	primaryStatsDisplayResetLayers()
 	crunchAnimationBtn()
 	TPAnimationBtn()
+	dilAndBHDisplay()
 
 	// EC Stuff
 	ECCompletionsDisplay()

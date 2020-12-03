@@ -46,7 +46,7 @@ let GDs = {
 
 		//Gravity Dimension Boosts
 		data.gdbPow = 1
-		if (tmp.blu && hasBosonicUpg(64)) data.gdbPow *= tmp.blu[64]
+		if (tmp.blu && hasBosonicUpg(63)) data.gdbPow *= tmp.blu[63]
 
 		//Gravity Power
 		let gp = Math.pow(Math.max(Math.pow(GDs.save.gv.max(1).log10(), tmp.newNGP3E ? 2 : 3/2) - GDs.save.gr.add(10).log10(), 0), 2/3)
@@ -337,7 +337,9 @@ let GDs = {
 				return !pl.on()
 			},
 			eff(x) {
-				return hasNU(18) ? Math.pow(x / 12 + 1, 2/3) : Math.pow(x / 2 + 1, 1/3)
+				let e = Math.pow(x / 2 + 1, 1/3)
+				if (hasNU(18)) e = Math.max(Math.pow(x / 18 + 1, 2/3), e)
+				return e
 			},
 			rdExp: 2
 		},
