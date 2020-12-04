@@ -639,7 +639,7 @@ function updateBosonicEnchantsTemp(){
 }
 
 function updateBosonicUpgradesTemp(){
-	for (var r = bu.rows; r >= 1; r--) for (var c = 1; c < 6; c++) {
+	for (var r = bu.rows; r >= 1; r--) for (var c = 5; c >= 1; c--) {
 		var id = r * 10 + c
 		if (bu.effects[id] !== undefined) tmp.blu[id] = bu.effects[id]()
 	}

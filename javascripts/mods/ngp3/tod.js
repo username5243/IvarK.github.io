@@ -346,7 +346,10 @@ function getTreeUpgradeEffect(upg) {
 		if (!tmp.eterUnl) return new Decimal(1)
 		let MA = player.meta.bestOverQuantums
 		if (player.achievements.includes("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
-		return Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
+
+		let x = Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
+		if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
+		return x
 	}
 	if (upg == 6) {
 		return Decimal.pow(2, lvl)

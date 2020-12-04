@@ -353,7 +353,9 @@ let GDs = {
 		bl: {
 			desc: "^{{x}} to Bosonic Watts and Overdrive Speed",
 			eff(x) {
-				return Math.sqrt(x / 3 + 1)
+				x = Math.sqrt(x / 3 + 1)
+				if (bu62.active("tod")) x += tmp.blu[62] || 0
+				return x
 			},
 			rdExp: 1
 		},
@@ -376,5 +378,58 @@ let GDs = {
 		player.ghostify.gv = GDs.setup()
 		GDs.save.unl = unl
 		GDs.unlDisplay()
+	}
+}
+
+//Bosonic Upgrade 27 / r62 (Secondary Charging)
+let bu62 = {
+	eff: {
+		none() {
+			return 1
+		},
+		rep() {
+			return 1
+		},
+		nf() {
+			return Math.sqrt(tmp.qu.nanofield.rewards / 400 + 1)
+		},
+		tod() {
+			return Math.sqrt(getTotalRadioactiveDecays() / 100)
+		},
+		gph() {
+			return 1
+		},
+		bl() {
+			return 1
+		},
+		mf() {
+			return 1
+		},
+	},
+	desc: {
+		none(x) {
+			return "Charge one to activate this upgrade! :/"
+		},
+		rep(x) {
+			return "Replicantis raise Intergalactic multiplier further."
+		},
+		nf(x) {
+			return "Outside of Big Rips, Nanorewards reduce QC goals by " + (100 - 100 / x).toFixed(1) + "%."
+		},
+		tod(x) {
+			return "Radioactive Decays add the Bosonic Watt gain exponent by +" + shorten(x) + "."
+		},
+		gph(x) {
+			return "Lights scale 50% slower, but Light Enpowerments are 2x as expensive."
+		},
+		bl(x) {
+			return "No secondary bonus. :'("
+		},
+		mf(x) {
+			return "???"
+		},
+	},
+	active(x) {
+		return hasBosonicUpg(62) && GDs.save.gc == x
 	}
 }

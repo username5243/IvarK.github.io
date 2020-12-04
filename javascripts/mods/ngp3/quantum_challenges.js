@@ -129,9 +129,8 @@ function getQCGoalLog(QCs, bigRip) {
 	*/
 	if (!bigRip) {
 		if (player.achievements.includes("ng3p96")) mult *= 0.95
-		if (player.achievements.includes("ng3p102")) mult /= Math.log10(tmp.qu.bigRip.totalAntimatter.add(1).log10() + 1) / 50 + 1
 		if (player.achievements.includes("ng3p107")) mult *= 0.8
-		if (player.achievements.includes("ng3p118")) mult *= 0.75
+		if (bu62.active("nf")) mult /= tmp.blu[62]
 	}
 	if (mods.includes("ms")) mult *= 6e3
 	//if (mods.includes("tb")) mult *= 100
@@ -296,7 +295,6 @@ let qcRewards = {
 			if (comps == 0) return 1
 			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
 			let exp = 0.225 + comps * .025
-			if (hasBosonicUpg(62)) exp *= 1.1
 			return Decimal.pow(10, Math.pow(base, exp) / 200)
 		},
 		2: function(comps) {
@@ -307,7 +305,7 @@ let qcRewards = {
 		3: function(comps) {
 			if (comps == 0) return 1
 			let ipow = player.infinityPower.plus(1).log10()
-			let exp = hasBosonicUpg(62) ? 1 : 0.5
+			let exp = 0.5
 			if (tmp.newNGP3E) exp += Math.sqrt(exp) / 10
 			
 			let log = Math.pow(ipow / 2e8, exp) 
@@ -324,7 +322,7 @@ let qcRewards = {
 		},
 		5: function(comps) {
 			if (comps == 0) return 0
-			return Math.log10(1 + player.resets) * Math.pow(comps, hasBosonicUpg(62) ? 1 : 0.4)
+			return Math.log10(1 + player.resets) * comps
 		},
 		6: function(comps) {
 			if (comps == 0) return 1

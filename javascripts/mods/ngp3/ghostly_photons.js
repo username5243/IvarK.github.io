@@ -48,6 +48,7 @@ function getLightThresholdIncrease(l) {
 		let y = 1 / tmp.nf.effects.light_threshold_speed
 		if (y < 1) x = Math.pow(x, y)
 	}
+	if (bu62.active("gph")) x = Math.sqrt(x)
 	return x
 }
 
@@ -128,6 +129,7 @@ function getLightEmpowermentReq(le) {
 
 	if (player.achievements.includes("ng3p116")) x /= 2
 	if (player.achievements.includes("ng3p95")) x -= 1
+	if (bu62.active("gph")) x *= 2
 
 	tmp.leReqScale = scale
 	return Math.floor(x)

@@ -187,7 +187,7 @@ function bestGhostifyDisplay(){
 	else {
 		document.getElementById("ghostifyStatistics").style.display = ""
 		document.getElementById("ghostified").textContent = "You have became a ghost and passed Big Ripped universes " + getFullExpansion(player.ghostify.times) + " times."
-		document.getElementById("thisGhostify").textContent = "You have spent " + timeDisplay(player.ghostify.time) + " in this Ghostify."
+		document.getElementById("thisGhostify").textContent = "You have spent " + timeDisplay(player.ghostify.time) + (hasBosonicUpg(64) ? " (+" + timeDisplayShort(tmp.blu[64].gh * 10) + ")" : "") + " in this Ghostify."
 		document.getElementById("bestGhostify").textContent = "Your fastest Ghostify is in " + timeDisplay(player.ghostify.best) + "."
 	}
 }
@@ -596,7 +596,7 @@ function mainDilationDisplay(){
 
 function breakEternityDisplay(){
 	document.getElementById("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
-	for (var u = 1; u <= (player.achievements.includes("ng3p101") ? 12 : player.ghostify.ghostlyPhotons.unl ? 10 : 7); u++) {
+	for (var u = 1; u <= (player.achievements.includes("ng3p101") ? 13 : player.ghostify.ghostlyPhotons.unl ? 10 : 7); u++) {
 		document.getElementById("breakUpg" + u).className = (tmp.qu.breakEternity.upgrades.includes(u) && u != 7) ? "eternityupbtnbought" : tmp.qu.breakEternity.eternalMatter.gte(getBreakUpgCost(u)) ? "eternityupbtn" : "eternityupbtnlocked"
 		if (u == 8) document.getElementById("breakUpg" + u + "Mult").textContent = (getBreakUpgMult(u) * 100 - 100).toFixed(1)
 		else if (u != 7 && u <= 10) document.getElementById("breakUpg" + u + "Mult").textContent = shortenMoney(getBreakUpgMult(u))

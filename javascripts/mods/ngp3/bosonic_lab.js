@@ -839,6 +839,16 @@ var bu = {
 			g1: "2e763",
 			g2: "2e763"
 		},
+		62: {
+			am: 2e235,
+			g1: "2e950",
+			g2: "2e950"
+		},
+		63: {
+			am: 2e245,
+			g1: "2e1060",
+			g2: "2e1060"
+		},
 	},
 	reqData: {},
 	descs: {
@@ -868,9 +878,9 @@ var bu = {
 		54: "All row-4 Neutrino Boosts are stronger.",
 		55: "Greenshift Galaxies, which reduces Redshifted Galaxies.",
 		61: "Gain more Gravity Energy from Bosonic Enchants.",
-		62: "Quantum Challenges 1, 3, and 5 are stronger.", 
+		62: "Charging one gives a secondary bonus from it.", 
 		63: "Time spent on Ghostify boosts Gravity Dimension Boosts.",
-		64: "Higgs Bosons strengthen 'Greenshift Galaxies' and 'Strengthen GDBs' upgrades.",
+		64: "Higgs Bosons greenshifts Galaxies more and give bonus to your Ghostify time.",
 		65: "Remove the limit of Replicantis, no matter what.",
 	},
 	effects: {
@@ -995,19 +1005,28 @@ var bu = {
 			let log = player.replicanti.amount.max(1).log10()
 			let div1 = 7.5e8
 			let div2 = inBigRip() ? 200 : 1e3
+
 			return {
-				ig: Math.pow(log / div1 + 1, 0.1),
+				ig: Math.pow(log / div1 + 1, bu62.active("rep") ? 0.125 : 0.1),
 				it: Math.log10(log + 1) / div2 + 1
 			}
 		},
 		55() {
-			return hasBosonicUpg(64) ? Math.max(1 - Math.log10(player.ghostify.hb.higgs / 50 + 1), -1) : 0.95
+			return hasBosonicUpg(64) ? tmp.blu[64].gs : 0.95
+		},
+		62() {
+			return bu62.eff[GDs.save.gc || "none"]()
 		},
 		63() {
-			let x = Math.log10(player.ghostify.time + 1) / 5
-			if (hasBosonicUpg(64)) x *= Math.log10(player.ghostify.hb.higgs / 10 + 1) / 3 + 1
-			x += 1
-			return x
+			let x = player.ghostify.time
+			if (hasBosonicUpg(64)) x += tmp.blu[64].gh
+			return Math.log2(x / 100 + 1) / 50 + 1
+		},
+		64() {
+			return {
+				gs: Math.max(1 - Math.log10(player.ghostify.hb.higgs / 50 + 1), -1),
+				gh: player.ghostify.hb.higgs * 10,
+			}
 		}
 	},
 	effectDescs: {
@@ -1062,7 +1081,16 @@ var bu = {
 				"^" + x.toFixed(3) + " to Redshifted Galaxies"
 			)
 		},
+		62(x) {
+			return bu62.desc[GDs.save.gc || "none"](x)
+		},
 		63(x) {
+			return (x * 100 - 100).toFixed(2) + "% stronger"
+		},
+		64(x) {
+			return "^0.950 greenshift -> ^" + x.gs.toFixed(3) + ", +" + timeDisplayShort(x.gh * 10) + " bonus time"
+		},
+		65(x) {
 			return (x * 100 - 100).toFixed(2) + "% stronger"
 		}
 	}
@@ -1133,4 +1161,3 @@ function updateWZBosonsTab() {
 	getEl("zbGain").textContent = "You will gain " + shortenDimensions(data3.zNeReq.pow(0.75)) + " Z Bosons on next oscillation."
 	getEl("zbSpeed").textContent = shorten(data2.zbs)
 }
-
