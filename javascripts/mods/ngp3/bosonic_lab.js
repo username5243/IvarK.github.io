@@ -695,7 +695,7 @@ function buyMaxBosonicUpgrades() {
 }
 
 function hasBosonicUpg(id) {
-	return tmp.ngp3 && id <= bu.rows * 10 + 10 && player.ghostify.bl.upgrades.includes(id)
+	return tmp.ngp3 && tmp.blu && id <= bu.rows * 10 + 10 && player.ghostify.bl.upgrades.includes(id)
 }
 
 function updateBosonicUpgradeDescs() {
@@ -1020,7 +1020,7 @@ var bu = {
 		63() {
 			let x = player.ghostify.time
 			if (hasBosonicUpg(64)) x += tmp.blu[64].gh
-			return Math.log2(x / 100 + 1) / 50 + 1
+			return Math.log2(x / 30 + 1) / 100 + 1
 		},
 		64() {
 			return {

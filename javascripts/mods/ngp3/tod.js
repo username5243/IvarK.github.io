@@ -313,6 +313,7 @@ function getTreeUpgradeLevel(upg) {
 function getEffectiveTreeUpgLevel(upg){
 	lvl = getTreeUpgradeLevel(upg) * tmp.tue
 	if (upg == 2) if (lvl > 64) lvl = (lvl + 128) / 3
+	if (upg == 3) if (lvl > 81e3 && !inBigRip()) lvl = Math.sqrt(lvl * 81e3)
 	if (upg == 5) if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
 	/*
 	if (upg == 1) if (lvl >= 500) lvl = 500 * Math.pow(lvl / 500, .9)

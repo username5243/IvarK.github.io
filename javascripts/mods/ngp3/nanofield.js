@@ -161,6 +161,7 @@ var nanoRewards = {
 		meta_boost_power: function(x) {
 			let y = 2
 			if (player.dilation.upgrades.includes("ngpp4")) y = getDil15Bonus()
+
 			return x * 1.34 + y
 		},
 		remote_start: function(x) {
