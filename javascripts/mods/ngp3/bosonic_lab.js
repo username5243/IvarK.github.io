@@ -558,7 +558,7 @@ var bEn = {
 		},
 		35(l) {
 			let hb = player.ghostify.hb.higgs
-			if (hb <= 200) return 1
+			if (hb <= 200) return new Decimal(1)
 			return Decimal.pow(100, Math.sqrt(hb / 100 - 2) * Math.pow(l.add(1).log10(), 1/3))
 		},
 		45(l) {
@@ -849,6 +849,11 @@ var bu = {
 			g1: "2e1060",
 			g2: "2e1060"
 		},
+		64: {
+			am: 2e260,
+			g1: "2e1070",
+			g2: "2e1070"
+		},
 	},
 	reqData: {},
 	descs: {
@@ -881,7 +886,7 @@ var bu = {
 		62: "Charging one gives a secondary bonus from it.", 
 		63: "Time spent on Ghostify boosts Gravity Dimension Boosts.",
 		64: "Higgs Bosons greenshifts Galaxies more and give bonus to your Ghostify time.",
-		65: "Remove the limit of Replicantis, no matter what.",
+		65: "You can passively gain Tachyon particles, no matter what.",
 	},
 	effects: {
 		11() {

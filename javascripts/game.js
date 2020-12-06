@@ -4246,7 +4246,7 @@ function ghostifyAutomationUpdating(diff){
 
 	if (!tmp.quUnl) return
 	if (AUTO_QC.auto.on) {
-		if (isQuantumReached()) {
+		if (tmp.inQCs.length == 2 && isQuantumReached()) {
 			$.notify("QCs " + tmp.inQCs[0] + " and " + tmp.inQCs[1] + " has been automatically completed by Auto-Challenge Sweeper Ghost!", "success")
 			tmp.preQCMods = tmp.qu.qcsMods.current
 			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
@@ -5171,7 +5171,7 @@ function gameLoop(diff) {
 
 		if (tmp.ngp3) {
 			if (hasDilationStudy(1)) {
-				if (isBigRipUpgradeActive(20)) {
+				if (isBigRipUpgradeActive(20) || hasBosonicUpg(65)) {
 					let gain = getDilGain()
 					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
 				} else if (player.dilation.active) ngp3DilationUpdating()
