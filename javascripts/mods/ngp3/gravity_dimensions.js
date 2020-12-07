@@ -391,10 +391,10 @@ let bu62 = {
 			return 1
 		},
 		nf() {
-			return Math.sqrt(tmp.qu.nanofield.rewards / 400 + 1)
+			return Math.pow(tmp.qu.nanofield.rewards / 15000 + 1, 10)
 		},
 		tod() {
-			return Math.sqrt(getTotalRadioactiveDecays() / 100)
+			return getTotalRadioactiveDecays() / 250
 		},
 		gph() {
 			return 1
@@ -414,13 +414,13 @@ let bu62 = {
 			return "Replicantis raise Intergalactic multiplier further."
 		},
 		nf(x) {
-			return "Outside of Big Rips, Nanorewards reduce QC goals by " + (100 - 100 / x).toFixed(1) + "%."
+			return "Outside of Big Rips, Nanorewards reduce QC goals by " + shorten(x) + "x."
 		},
 		tod(x) {
 			return "Radioactive Decays add the Bosonic Watt gain exponent by +" + shorten(x) + "."
 		},
 		gph(x) {
-			return "Lights scale 50% slower, but Light Enpowerments are 2x as expensive."
+			return "Strengthen Bosonic Upgrade 3, but you can't get Light Empowerments."
 		},
 		bl(x) {
 			return "No secondary bonus. :'("

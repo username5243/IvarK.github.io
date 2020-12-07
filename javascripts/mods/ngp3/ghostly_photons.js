@@ -48,7 +48,6 @@ function getLightThresholdIncrease(l) {
 		let y = 1 / tmp.nf.effects.light_threshold_speed
 		if (y < 1) x = Math.pow(x, y)
 	}
-	if (bu62.active("gph")) x = Math.sqrt(x)
 	return x
 }
 
@@ -91,8 +90,8 @@ function updateLightBoostDisplay(){
 	getEl("lightBoost1").textContent = tmp.le[0].toFixed(3)
 	getEl("lightBoost2").textContent = tmp.le[1].toFixed(2)
 	getEl("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
-	getEl("lightBoost4").textContent = (tmp.le[3] * 100 - 100).toFixed(1)
-	getEl("lightBoost5").textContent = (tmp.le[4] * 100).toFixed(1) + (hasBosonicUpg(11) ? "+" + (tmp.blu[11] * 100).toFixed(1) : "")
+	getEl("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
+	getEl("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
 	getEl("lightBoost6").textContent = shorten(tmp.le[5])
 	getEl("lightBoost7").textContent = shorten(tmp.le[6])
 }
@@ -129,7 +128,7 @@ function getLightEmpowermentReq(le) {
 
 	if (player.achievements.includes("ng3p116")) x /= 2
 	if (player.achievements.includes("ng3p95")) x -= 1
-	if (bu62.active("gph")) x *= 2
+	if (bu62.active("gph")) x = 1/0
 
 	tmp.leReqScale = scale
 	return Math.floor(x)
@@ -205,7 +204,7 @@ var leBoosts = {
 			return Math.log10(tmp.effL[4] * 10 + 1) / 4 + 1
 		},
 		effDesc(x) {
-			return (x * 100 - 100).toFixed(1)
+			return formatPercentage(x - 1)
 		}
 	},
 	3: {
@@ -263,7 +262,7 @@ var leBoosts = {
 			return Math.pow(tmp.effL[5] / 150 + 1, 0.25)
 		},
 		effDesc(x) {
-			return (x * 100).toFixed(1)
+			return formatPercentage(x - 1)
 		}
 	},
 	8: {
@@ -275,7 +274,7 @@ var leBoosts = {
 			return Math.pow(tmp.effL[6] / 500 + 1, 0.125)
 		},
 		effDesc(x) {
-			return (x * 100).toFixed(1)
+			return formatPercentage(x - 1)
 		}
 	}
 }

@@ -446,10 +446,9 @@ function updateQuarksTab(tab) {
 	document.getElementById("redPower").textContent=shortenMoney(tmp.qu.colorPowers.r)
 	document.getElementById("greenPower").textContent=shortenMoney(tmp.qu.colorPowers.g)
 	document.getElementById("bluePower").textContent=shortenMoney(tmp.qu.colorPowers.b)
-	document.getElementById("redTranslation").textContent=((colorBoosts.r-1)*100).toFixed(1)
-	var msg = getFullExpansion(Math.round((colorBoosts.g-1)*100))+(tmp.pe>0?"+"+getFullExpansion(Math.round(tmp.pe*100)):"")
-	document.getElementById("greenTranslation").textContent=msg
-	document.getElementById("blueTranslation").textContent=shortenMoney(colorBoosts.b)
+	document.getElementById("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
+	document.getElementById("greenTranslation").textContent = formatPercentage(colorBoosts.g - 1) + (tmp.pe ? "+" + formatPercentage(tmp.pe) :"")
+	document.getElementById("blueTranslation").textContent = shortenMoney(colorBoosts.b)
 	document.getElementById("redDimTranslation").textContent=shortenMoney(colorBoosts.dim.r)
 	document.getElementById("greenDimTranslation").textContent=shortenMoney(colorBoosts.dim.g)
 	document.getElementById("blueDimTranslation").textContent=shortenMoney(colorBoosts.dim.b)

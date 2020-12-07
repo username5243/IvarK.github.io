@@ -659,12 +659,13 @@ function iroha (n, depth) {
   return iroha_special[prefix(num)] + (rec.eq(1) ? '' : iroha(rec, depth - 1));
 }
 
+let FORMAT_INTS_DIFFERENTLY = ["Greek", "Morse code", "Symbols", "Lines", "Simplified Written"]
 function getFullExpansion(num) {
 	if (num === null) return "NaN"
 	if (isNaN(num)) return "NaN"
 	if (!break_infinity_js && typeof(num) != "number") if (isNaN(num.logarithm)) return "NaN"
 	if (num > 1e12) return shorten(num)
-	if (player.options.notation === "Greek" || player.options.notation === "Morse code" || player.options.notation === "Symbols" || player.options.notation === "Lines" || player.options.notation === "Simplified Written") return convTo(player.options.notation, num)
+	if (FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return convTo(player.options.notation, num)
 	return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
@@ -754,4 +755,12 @@ function timeDisplayShort(time, rep, places) {
 	if (time < 315569520) return Math.floor(time / 31556952) + ' y & ' + ((time / 86400) % 365.2425).toFixed(1) + ' d'
 	if (time < 31556952e100) return shorten(time / 315569520) + ' y'
 	return shorten(time / 31556952e100) + ' ae' //1 ae = 1 aeon = Estimated lifespan of a observable universe = e100 years
+}
+
+function formatPercentage(x, digits = 1) {
+	x *= 100
+
+	let n = x.toFixed(digits)
+	if (parseFloat(n) < 1e3 && !FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return n
+	return getFullExpansion(Math.round(x))
 }

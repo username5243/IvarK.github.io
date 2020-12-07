@@ -312,7 +312,7 @@ function atGravDimsAchCheck(){
 	if (tmp.pcc.normal >= 35) giveAchievement("The Forbidden Challenge")
 	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
 	if (tmp.qu.nanofield.rewards >= 250) giveAchievement("Gigafield")
-	if (ranking >= 250) giveAchievement("X-Ranked")
+	if (ranking >= 242.4) giveAchievement("X-Ranked")
 	if (tmp.qu.bigRip.bestThisRun.plus(1).log10() >= Math.sqrt(2) * 1e12) giveAchievement("Do you even how to?")
 	// Brutally Challenging is on quantum_challenges.js
 	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")

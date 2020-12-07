@@ -313,39 +313,23 @@ function getTreeUpgradeLevel(upg) {
 function getEffectiveTreeUpgLevel(upg){
 	lvl = getTreeUpgradeLevel(upg) * tmp.tue
 	if (upg == 2) if (lvl > 64) lvl = (lvl + 128) / 3
-	if (upg == 3) {
-		let start = inBigRip() ? 162e3 : 81e3
-		if (lvl > start) lvl = Math.sqrt(lvl * start)
-	}
 	if (upg == 5) if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
-	if (upg == 8) if (lvl > 1e5) lvl = Math.sqrt(lvl * 1e5)
-	/*
-	if (upg == 1) if (lvl >= 500) lvl = 500 * Math.pow(lvl / 500, .9)
-	if (upg == 7) if (lvl > 100) lvl -= Math.sqrt(lvl) - 10
-	*/
+	if (upg == 8) if (lvl > 1e5) lvl = Math.pow(lvl * 10, 2/3) * 10
 	return lvl
 }
 
 function getTotalNumOfToDUpgrades(){
 	let power = 0
-	for (var upg = 1; upg < 9; upg++) power += getTreeUpgradeLevel(upg)
+	for (var upg = 1; upg <= 8; upg++) power += getTreeUpgradeLevel(upg)
 	return power
 }
 
 function getTreeUpgradeEffect(upg) {
 	let lvl = getEffectiveTreeUpgLevel(upg)
-	if (upg == 1) {
-		return Math.floor(lvl * 30)
-	}
-	if (upg == 2) {
-		return lvl * 0.25
-	}
-	if (upg == 3) {
-		return Decimal.pow(2, Math.sqrt(Math.sqrt(Math.max(lvl * 3 - 2, 0)) * Math.max(getTotalNumOfToDUpgrades() - 10, 0)))
-	}
-	if (upg == 4) {
-		return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
-	}
+	if (upg == 1) return Math.floor(lvl * 30)
+	if (upg == 2) return lvl * 0.25
+	if (upg == 3) return Decimal.pow(2, Math.sqrt(Math.sqrt(Math.max(lvl * 3 - 2, 0)) * Math.max(getTotalNumOfToDUpgrades() - 10, 0)))
+	if (upg == 4) return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
 	if (upg == 5) {
 		if (!tmp.eterUnl) return new Decimal(1)
 		let MA = player.meta.bestOverQuantums
@@ -355,15 +339,9 @@ function getTreeUpgradeEffect(upg) {
 		if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
 		return x
 	}
-	if (upg == 6) {
-		return Decimal.pow(2, lvl)
-	}
-	if (upg == 7) {
-		return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
-	}
-	if (upg == 8) {
-		return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
-	}
+	if (upg == 6) return Decimal.pow(2, lvl)
+	if (upg == 7) return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
+	if (upg == 8) return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
 	return 0
 }
 

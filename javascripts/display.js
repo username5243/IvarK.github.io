@@ -187,7 +187,7 @@ function bestGhostifyDisplay(){
 	else {
 		getEl("ghostifyStatistics").style.display = ""
 		getEl("ghostified").textContent = "You have became a ghost and passed Big Ripped universes " + getFullExpansion(player.ghostify.times) + " times."
-		getEl("thisGhostify").textContent = "You have spent " + timeDisplay(player.ghostify.time) + (hasBosonicUpg(64) ? " (+" + timeDisplayShort(tmp.blu[64].gh * 10) + ")" : "") + " in this Ghostify."
+		getEl("thisGhostify").textContent = "You have spent " + timeDisplay(player.ghostify.time) + (hasBosonicUpg(64) ? " (+" + timeDisplayShort(tmp.blu[64].gh) + ")" : "") + " in this Ghostify."
 		getEl("bestGhostify").textContent = "Your fastest Ghostify is in " + timeDisplay(player.ghostify.best) + "."
 	}
 }

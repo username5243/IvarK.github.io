@@ -499,6 +499,7 @@ var bEn = {
 		15: [2e21, 20],
 		25: [2e210, 2e190],
 		35: [1e12, 1],
+		45: [1, "1e1225"],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -562,7 +563,7 @@ var bEn = {
 			return Decimal.pow(100, Math.sqrt(hb / 100 - 2) * Math.pow(l.add(1).log10(), 1/3))
 		},
 		45(l) {
-			return 2 - 1 / (Math.log10(l.max(10).log10()) / 3 + 1)
+			return 1
 		}
 	},
 	effectDescs: {
@@ -841,18 +842,23 @@ var bu = {
 		},
 		62: {
 			am: 2e235,
-			g1: "2e950",
-			g2: "2e950"
+			g3: "2e950",
+			g5: "2e930"
 		},
 		63: {
 			am: 2e245,
-			g1: "2e1060",
-			g2: "2e1060"
+			g1: "2e1050",
+			g3: "2e1050"
 		},
 		64: {
-			am: 2e260,
-			g1: "2e1070",
-			g2: "2e1070"
+			am: 2e265,
+			g3: "2e1200",
+			g4: "2e1200"
+		},
+		65: {
+			am: 2e270,
+			g4: "2e1250",
+			g5: "2e1250"
 		},
 	},
 	reqData: {},
@@ -868,7 +874,7 @@ var bu = {
 		24: "You produce 1% of Space Shards on Big Rip per second, but Break Eternity upgrades that boost space shard gain are nerfed.",
 		25: "Electrons boost the per-ten Meta Dimensions multiplier.",
 		31: "Bosonic Antimatter boosts all Nanorewards.",
-		32: "Unlock a new boost until every third LE from LE7 until LE22.",
+		32: "You unlock more boosts from Light Empowerments.",
 		33: "Higgs Bosons reduce the costs of all electron upgrades.",
 		34: "All types of galaxies boost each other.",
 		35: "Replicantis and Emperor Dimensions boost each other.",
@@ -886,7 +892,7 @@ var bu = {
 		62: "Charging one gives a secondary bonus from it.", 
 		63: "Time spent on Ghostify boosts Gravity Dimension Boosts.",
 		64: "Higgs Bosons greenshifts Galaxies more and give bonus to your Ghostify time.",
-		65: "You can passively gain Tachyon particles, no matter what.",
+		65: "You can passively gain Tachyon particles, no matter what. (doesn't work for now...)",
 	},
 	effects: {
 		11() {
@@ -908,10 +914,11 @@ var bu = {
 			if (!tmp.quActive) return 1
 
 			let decays = getRadioactiveDecays('r') + getRadioactiveDecays('g') + getRadioactiveDecays('b')
-			let x
+			let exp = bu62.active("gph") ? 2/3 : 0.5
+			let x = Math.pow(decays, exp)
 
-			if (tmp.newNGP3E) x = Math.sqrt(decays) + 1
-			else x = Math.sqrt(decays) / 3 + .6
+			if (tmp.newNGP3E) x = x + 1
+			else x = x / 3 + .6
 
 			return Math.max(x, 1)
 		},
@@ -1008,7 +1015,7 @@ var bu = {
 		},
 		52() {
 			let log = player.replicanti.amount.max(1).log10()
-			let div1 = 7.5e8
+			let div1 = bu62.active("rep") ? 5e8 : 7.5e8
 			let div2 = inBigRip() ? 200 : 1e3
 
 			return {
@@ -1025,18 +1032,18 @@ var bu = {
 		63() {
 			let x = player.ghostify.time
 			if (hasBosonicUpg(64)) x += tmp.blu[64].gh
-			return Math.log2(x / 30 + 1) / 100 + 1
+			return Math.log2(x / 50 + 1) / 50 + 1
 		},
 		64() {
 			return {
-				gs: Math.max(1 - Math.log10(player.ghostify.hb.higgs / 50 + 1), -1),
-				gh: player.ghostify.hb.higgs * 10,
+				gs: 1.5 / (player.ghostify.hb.higgs / 8e3 + 1) - 0.5,
+				gh: player.ghostify.hb.higgs * 3
 			}
 		}
 	},
 	effectDescs: {
 		11(x) {
-			return (x * 100).toFixed(1) + "%"
+			return formatPercentage(x) + "%"
 		},
 		12(x) {
 			return "-" + x.toFixed(5)
@@ -1051,13 +1058,13 @@ var bu = {
 			return "^" + x.toFixed(2)
 		},
 		31(x) {
-			return (x * 100 - 100).toFixed(1) + "% stronger"
+			return formatPercentage(x - 1) + "% stronger"
 		},
 		33(x) {
 			return "-" + x.toFixed(2) + " levels worth"
 		},
 		34(x) {
-			return (x * 100 - 100).toFixed(2) + "% stronger"
+			return formatPercentage(x - 1, 2) + "% stronger"
 		},
 		35(x) {
 			return "+" + shorten(x.rep) + " OoMs to replicate interval increase, " + shorten(x.eds) + "x to all EDs"
@@ -1066,10 +1073,10 @@ var bu = {
 			return shorten(x.ig) + "x to Intergalactic, " + shorten(x.it) + "x to Infinite Time"
 		},
 		42(x) {
-			return (x * 100).toFixed(2) + "% to growth and softcap slowdown"
+			return formatPercentage(x, 2) + "% to growth and softcap slowdown"
 		},
 		43(x) {
-			return (x * 100).toFixed(2) + "%"
+			return formatPercentage(x, 2) + "%"
 		},
 		44(x) {
 			return "+" + x.toFixed(1) + " OoMs"
@@ -1090,13 +1097,10 @@ var bu = {
 			return bu62.desc[GDs.save.gc || "none"](x)
 		},
 		63(x) {
-			return (x * 100 - 100).toFixed(2) + "% stronger"
+			return formatPercentage(x - 1, 2) + "% stronger"
 		},
 		64(x) {
-			return "^0.950 greenshift -> ^" + x.gs.toFixed(3) + ", +" + timeDisplayShort(x.gh * 10) + " bonus time"
-		},
-		65(x) {
-			return (x * 100 - 100).toFixed(2) + "% stronger"
+			return "^0.950 greenshift -> ^" + x.gs.toFixed(3) + ", +" + timeDisplayShort(x.gh) + " bonus time"
 		}
 	}
 }

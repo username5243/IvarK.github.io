@@ -105,7 +105,7 @@ function updateInQCs() {
 
 function getQCGoalLog(QCs, bigRip) {
 	if (player.masterystudies == undefined) return 0
-	let mods
+	let mods = tmp.qu.qcsMods.current
 	let mult = 1
 	let c1 = 0
 	let c2 = 0
@@ -113,11 +113,10 @@ function getQCGoalLog(QCs, bigRip) {
 		let data = tmp.inQCs
 		if (data[0]) c1 = data[0]
 		if (data[1]) c2 = data[1]
-		mods = tmp.qu.qcsMods.current
 	} else {
 		c1 = QCs[0] || 0
 		c2 = QCs[1] || 0
-		mods = qcm.on
+		if (bigRip != "ghp_gain") mods = qcm.on
 	}
 	let cs = [c1, c2]
 	
@@ -132,8 +131,10 @@ function getQCGoalLog(QCs, bigRip) {
 		if (player.achievements.includes("ng3p107")) mult *= 0.8
 		if (bu62.active("nf")) mult /= tmp.blu[62]
 	}
-	if (mods.includes("ms")) mult *= 6e3
-	//if (mods.includes("tb")) mult *= 100
+	if (bigRip != "ghp_gain") {
+		if (mods.includes("ms")) mult *= 6e3
+		//if (mods.includes("tb")) mult *= 100
+	}
 	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
 	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
 

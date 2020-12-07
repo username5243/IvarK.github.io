@@ -4246,7 +4246,8 @@ function ghostifyAutomationUpdating(diff){
 
 	if (!tmp.quUnl) return
 	if (AUTO_QC.auto.on) {
-		if (tmp.inQCs.length == 2 && isQuantumReached()) {
+		if (tmp.inQCs.length != 2) AUTO_QC.next()
+		else if (isQuantumReached()) {
 			$.notify("QCs " + tmp.inQCs[0] + " and " + tmp.inQCs[1] + " has been automatically completed by Auto-Challenge Sweeper Ghost!", "success")
 			tmp.preQCMods = tmp.qu.qcsMods.current
 			onQCCompletion(tmp.inQCs, player.money, tmp.qu.time, player.dilation.times)
@@ -4281,14 +4282,19 @@ function ghostifyAutomationUpdating(diff){
 }
 
 function WZBosonsUpdating(diff){
+	diff *= ls.mult("bl")
+
 	player.ghostify.automatorGhosts[17].t += diff
 
-	var data = player.ghostify.bl
-	var wattGained = Decimal.max(getBosonicWattGain(), data.watt).sub(data.watt)
-	data.watt = wattGained.add(data.watt)
-	data.speed = wattGained.times(10).add(data.speed).min(data.watt)
+	var data = tmp.bl
+	var wattGain = new Decimal(getBosonicWattGain())
+	if (wattGain.gt(data.watt)) {
+		if (wattGain.gt(data.speed)) data.speed = wattGain.sub(data.watt).times(10).add(data.speed).min(wattGain)
+		data.watt = wattGain
+	}
+
 	if (data.speed > 0) {
-		var limitDiff = data.speed.times(14400).min(diff * ls.mult("bl")).toNumber()
+		var limitDiff = data.speed.times(14400).min(diff).toNumber()
 		bosonicTick(data.speed.sub(limitDiff / 28800).times(limitDiff))
 		data.speed = data.speed.max(limitDiff / 14400).sub(limitDiff / 14400)
 	}
@@ -5171,7 +5177,7 @@ function gameLoop(diff) {
 
 		if (tmp.ngp3) {
 			if (hasDilationStudy(1)) {
-				if (isBigRipUpgradeActive(20) || hasBosonicUpg(65)) {
+				if (isBigRipUpgradeActive(20) || false /*hasBosonicUpg(65)*/) {
 					let gain = getDilGain()
 					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
 				} else if (player.dilation.active) ngp3DilationUpdating()
