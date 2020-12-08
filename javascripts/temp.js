@@ -56,7 +56,10 @@ function updateTemp() {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	updateExtraReplGalaxies()
+	updateExtraReplMult()
+	updateExtraReplBase()
+	extraReplGalaxies = Math.floor(extraReplBase * extraReplMulti)
+
 	updateTS232Temp()
 
 	tmp.ts = {}

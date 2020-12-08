@@ -660,8 +660,17 @@ function replicantiDisplay() {
 		let replGalName = player.replicanti.gal < 100 ? "Max Replicanti galaxies" : getGalaxyScaleName((replGal > 399 ? 2 : replGal > 99 ? 1 : 0) + (tmp.ngp3 && player.masterystudies.includes("t266") ? (replGal > 12e4 ? 3 : replGal > 58198 ? 2 : replGal > 2998 ? 1 : 0) : 0)) + "Replicated Galaxies"
 		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
-		let rgtextvar = (player.achievements.includes("ng3p67") ? "Get " : player.achievements.includes("ngpp16")||(player.aarexModifications.ngp3c && player.eternityUpgrades.includes(6)))
-		getEl("replicantireset").innerHTML = (rgtextvar ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get " : "Reset replicanti amount, but get ") + "1 free galaxy.<br>" + getFullExpansion(player.replicanti.galaxies) + (extraReplGalaxies ? "+" + getFullExpansion(extraReplGalaxies) : "") + " replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
+		getEl("replicantireset").innerHTML = (
+			player.achievements.includes("ng3p67") ? "Get "
+			: player.achievements.includes("ngpp16") || (player.aarexModifications.ngp3c && hasEternityUpg(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+			: "Reset replicanti amount, but get "
+		) + "1 free galaxy.<br>" +
+			getFullExpansion(player.replicanti.galaxies) +
+			(extraReplGalaxies ? " + " + (
+				shiftDown ? shortenMoney(extraReplBase) + " x " + shortenMoney(extraReplMulti)
+				: getFullExpansion(extraReplGalaxies)
+			) + (extraReplBase > 325 ? " (softcapped)" : "") : "") +
+			" replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 		getEl("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
@@ -705,6 +714,13 @@ function initialTimeStudyDisplay(){
 	getEl("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1))).min("1e13000")) + "x"
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
+
+	let ts225 = tsMults[225]()
+	getEl("225desc").textContent = "Currently: +" + getFullExpansion(ts225) + " extra RGs" + (ts225 > 100 ? " (softcapped)" : "")
+
+	let ts226 = tsMults[226]()
+	getEl("226desc").textContent = "Currently: +" + getFullExpansion(ts226) + " extra RGs" + (ts226 > 100 ? " (softcapped)" : "")
+
 	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost());
 }
 

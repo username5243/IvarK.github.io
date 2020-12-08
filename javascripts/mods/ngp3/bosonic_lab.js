@@ -396,7 +396,7 @@ function getMaxEnchantLevelGain(id) {
 	let lvl2 = data.glyphs[g2 - 1].div(getBosonicFinalCost(costData[1])).floor()
 	if (costData[0] == 0) lvl1 = 1/0
 	if (costData[1] == 0) lvl2 = 1/0
-	return lvl1.min(lvl2)
+	return Decimal.min(lvl1, lvl2)
 }
 
 function canUseEnchant(id) {
@@ -499,7 +499,7 @@ var bEn = {
 		15: [2e21, 20],
 		25: [2e210, 2e190],
 		35: [1e12, 1],
-		45: [1, "1e1225"],
+		45: [0, "2e1250"],
 	},
 	descs: {
 		12: "You automatically extract Bosonic Runes.",
@@ -563,7 +563,7 @@ var bEn = {
 			return Decimal.pow(100, Math.sqrt(hb / 100 - 2) * Math.pow(l.add(1).log10(), 1/3))
 		},
 		45(l) {
-			return 1
+			return 2.5 - 1.5 / (Math.log10(l.add(1).log10() / 300 + 1) / 2 + 1)
 		}
 	},
 	effectDescs: {
@@ -856,9 +856,9 @@ var bu = {
 			g4: "2e1200"
 		},
 		65: {
-			am: 2e270,
-			g4: "2e1250",
-			g5: "2e1250"
+			am: 2e280,
+			g4: 1/0,
+			g5: "1e1350"
 		},
 	},
 	reqData: {},
@@ -892,7 +892,7 @@ var bu = {
 		62: "Charging one gives a secondary bonus from it.", 
 		63: "Time spent on Ghostify boosts Gravity Dimension Boosts.",
 		64: "Higgs Bosons greenshifts Galaxies more and give bonus to your Ghostify time.",
-		65: "You can passively gain Tachyon particles, no matter what. (doesn't work for now...)",
+		65: "Higgs Bosons make the linear scaling of Gravity Dimension Boosts starts earlier.",
 	},
 	effects: {
 		11() {
@@ -1039,6 +1039,9 @@ var bu = {
 				gs: 1.5 / (player.ghostify.hb.higgs / 8e3 + 1) - 0.5,
 				gh: player.ghostify.hb.higgs * 3
 			}
+		},
+		65() {
+			return Math.max(15 - player.ghostify.hb.higgs / 1e3, 0)
 		}
 	},
 	effectDescs: {
@@ -1101,6 +1104,9 @@ var bu = {
 		},
 		64(x) {
 			return "^0.950 greenshift -> ^" + x.gs.toFixed(3) + ", +" + timeDisplayShort(x.gh) + " bonus time"
+		},
+		65(x) {
+			return "Starts at " + x.toFixed(2) + " GDBs"
 		}
 	}
 }

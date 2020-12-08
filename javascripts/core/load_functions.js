@@ -3019,7 +3019,7 @@ function get_save(id) {
 
 function pauseGame(load) {
 	if (!load) player.aarexModifications.pause = !player.aarexModifications.pause
-	if (player.aarexModifications.pause) alert("YOUR GAME IS PAUSED! The time has stopped, which means production and automation don't work. However, you can manually do something without automation.")
+	if (isGamePaused()) alert("YOUR GAME IS PAUSED! The time has stopped, which means production and automation don't work. However, you can manually do something without automation.")
 	document.getElementById("pauseStatus").textContent = player.aarexModifications.pause ? "Unpause" : "Pause"
 }
 

@@ -96,7 +96,7 @@ function infDimensionProduction(tier) {
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(100)
 	ret = ret.times(infDimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
-	if (player.challenges.includes("postc6") && !inQC(3)) return ret.times(Decimal.div(1000, dilates(player.tickspeed)).pow(0.0005))
+	if (player.challenges.includes("postc6") && !inQC(3)) return ret.times(Decimal.div(1000, dilates(getTickspeed())).pow(0.0005))
 	return ret
 }
 

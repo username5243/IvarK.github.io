@@ -944,5 +944,21 @@ let tsMults = {
 		let cond = player.condensed.time.reduce((a,c) => (a||0)+(c||0))
 		let x = Decimal.pow(10, 50 * Math.sqrt(cond))
 		return x
+	},
+	225() {
+		let x = Math.floor(player.replicanti.amount.e / 1e3)
+		let softcapEff = 2
+		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
+
+		if (x >= 100) x = Math.floor(Math.sqrt(0.25 + (x - 99) * softcapEff) + 98.5)
+		return x
+	},
+	226() {
+		let x = Math.floor(player.replicanti.gal / 15)
+		let softcapEff = 2
+		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
+
+		if (x >= 100) x = Math.floor(Math.sqrt(0.25 + (x - 99) * softcapEff) + 98.5)
+		return x
 	}
 }

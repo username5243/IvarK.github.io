@@ -195,7 +195,7 @@ let GDs = {
 	},
 	gdBoostReq(x) {
 		if (x === undefined) x = GDs.save.gdBoosts
-		let y = Decimal.pow(10, (x * Math.min(x, 15) * 0.25 + x * 2.75 + 5) * GDs.rdExp() * 2)
+		let y = Decimal.pow(10, (x * Math.min(x, hasBosonicUpg(65) ? tmp.blu[65] : 15) * 0.25 + x * 2.75 + 5) * GDs.rdExp() * 2)
 		return y
 	},
 	extraGDBReq() {

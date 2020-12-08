@@ -3989,7 +3989,7 @@ setInterval(function() {
 }, 1000)
 
 function autoPerSecond() {
-	if (player.aarexModifications.pause) return
+	if (isGamePaused()) return
 
 	replicantiShopABRun()
 	runIDBuyersTick()
@@ -4190,9 +4190,10 @@ function incrementParadoxUpdating(diff){
 	}
 }
 
-function dimensionButtonDisplayUpdating(){
+function dimensionButtonDisplayUpdating() {
 	document.getElementById("pdtabbtn").style.display = ph.shown("paradox") ? "" : "none"
-	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || player.aarexModifications.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
+   	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && ph.shown("infinity")) ? "" : "none"
+	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || tmp.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
 	document.getElementById("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
 }
 
@@ -4972,10 +4973,6 @@ function challengeOverallDisplayUpdating(){
 	}
 }
 
-function infDimTabUpdating(){
-   	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && ph.shown("infinity")) ? "" : "none"
-}
-
 function chall23PowerUpdating(){
 	document.getElementById("chall2Pow").textContent = (player.chall2Pow*100).toFixed(2) + "%"
 	document.getElementById("chall3Pow").textContent = shorten(player.chall3Pow*100) + "%"
@@ -5148,7 +5145,7 @@ function gameLoop(diff) {
 	updateTemp()
 	infUpgPassiveIPGain(diff)
 
-	if (!player.aarexModifications.pause) {
+	if (!isGamePaused()) {
 		incrementParadoxUpdating(diff)
 		checkMatter(diff)
 		passiveIPupdating(diff)
@@ -5157,7 +5154,6 @@ function gameLoop(diff) {
 		normalChallPowerUpdating(diff)
 		passiveIPperMUpdating(diff)
 		incrementTimesUpdating(diffStat)
-		dimensionButtonDisplayUpdating()
 
 		if (player.meta) metaDimsUpdating(diff)
 		infinityTimeMetaBlackHoleDimUpdating(diff) //production of those dims
@@ -5201,7 +5197,7 @@ function gameLoop(diff) {
 		replicantiIncrease(diff * 10)
 	}
 
-	infDimTabUpdating()
+	dimensionButtonDisplayUpdating()
 	dimensionPageTabsUpdating()
 	bigCrunchButtonUpdating()
 	IRsetsUnlockUpdating()
@@ -5268,6 +5264,10 @@ function gameLoop(diff) {
 	document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+s+"</span> Infinity points."
 
 	if (document.getElementById("loadmenu").style.display == "block") changeSaveDesc(metaSave.current, savePlacement)
+}
+
+function isGamePaused() {
+	return player.aarexModifications && player.aarexModifications.pause
 }
 
 function simulateTime(seconds, real, id) {
@@ -5557,13 +5557,13 @@ function autoBuyerTick() {
 
 
 setInterval(function() {
-	if (player.aarexModifications.pause) return
+	if (isGamePaused()) return
 	timer += 0.05
 	if (player) if (!player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
 }, 100)
 
 setInterval(function() {
-	if (player.aarexModifications.pause) return
+	if (isGamePaused()) return
 	if (player) if (player.infinityUpgrades.includes("autoBuyerUpgrade")) autoBuyerTick()
 }, 50)
 

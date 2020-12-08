@@ -178,21 +178,17 @@ function autoBuyRG() {
 	player.replicanti.gal += toBuy2
 }
 
-function updateExtraReplGalaxies() {
-	let ts225Eff = 0
-	let ts226Eff = 0
-	let speed = 2
-	if (isQCRewardActive(8)) speed *= tmp.qcRewards[8]
-	if (hasTimeStudy(225)) {
-		ts225Eff = Math.floor(player.replicanti.amount.e / 1e3)
-		if (ts225Eff > 99) ts225Eff = Math.floor(Math.sqrt(0.25 + (ts225Eff - 99) * speed) + 98.5)
-	}
-	if (hasTimeStudy(226)) {
-		ts226Eff = Math.floor(player.replicanti.gal / 15)
-		if (ts226Eff > 99) ts226Eff = Math.floor(Math.sqrt(0.25 + (ts226Eff - 99) * speed) + 98.5)
-	}
-	extraReplGalaxies = ts225Eff + ts226Eff
-	if (extraReplGalaxies > 325) extraReplGalaxies = (Math.sqrt(0.9216 + 0.16 * (extraReplGalaxies - 324)) - 0.96) / 0.08 + 324
+var extraReplBase = 0
+function updateExtraReplBase() {
+	extraReplBase = 0
+	if (hasTimeStudy(225)) extraReplBase += tsMults[225]()
+	if (hasTimeStudy(226)) extraReplBase += tsMults[226]()
+	if (extraReplBase > 325) extraReplBase = (Math.sqrt(0.9216 + 0.16 * (extraReplBase - 324)) - 0.96) / 0.08 + 324
+}
+
+var extraReplMulti = 1
+function updateExtraReplMult() {
+	let x = 1
 	if (tmp.quActive) {
 		let exp = 1/3
 		if (masteryStudies.has(362)) exp = .4
@@ -201,9 +197,10 @@ function updateExtraReplGalaxies() {
 		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(),exp)
 		tmp.pe *= 0.67 * (masteryStudies.has(412) ? 1.25 : 1)
 		if (player.ghostify.ghostlyPhotons.unl) tmp.pe *= tmp.le[3]
-		extraReplGalaxies *= colorBoosts.g + tmp.pe
+
+		x *= colorBoosts.g + tmp.pe
 	}
-	extraReplGalaxies = Math.floor(extraReplGalaxies)
+	extraReplMulti = x
 }
 
 function getTotalRG() {
