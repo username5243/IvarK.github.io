@@ -3126,7 +3126,7 @@ function updatePriorities() {
 		player.autobuyers[14].priority = parseInt(document.getElementById("priority16").value)
 		player.autobuyers[14].overXGals = parseInt(document.getElementById("overGalaxiesTDBoost").value)
 	}
-	player.autobuyers[10].bulk = parseFloat(document.getElementById("bulkgalaxy").value)
+	player.autobuyers[10].bulk = parseInt(document.getElementById("bulkgalaxy").value)
 	const eterValue = fromValue(document.getElementById("priority13").value)
 	if (!isNaN(break_infinity_js ? eterValue : eterValue.l)) {
 		player.eternityBuyer.limit = eterValue
@@ -5440,17 +5440,26 @@ function galSacABTick(){
 }
 
 function galaxyABTick(){
-	if (player.autobuyers[10].ticks*100 >= player.autobuyers[10].interval && getAmount(inNC(4)||player.pSac != undefined?6:8) >= getGalaxyRequirement() && (!inNC(14) || !(player.aarexModifications.ngmX > 3))) {
-		if (getEternitied() < 9) {
-			if (player.autobuyers[10].isOn && player.autobuyers[10].priority > player.galaxies) {
+	if (
+		player.autobuyers[10].isOn &&
+		player.autobuyers[10].ticks * 100 >= player.autobuyers[10].interval &&
+		getAmount(inNC(4) || player.pSac != undefined ? 6 : 8) >= getGalaxyRequirement() &&
+		(!inNC(14) || tmp.ngmX <= 3)
+	) {
+		if (getEternitied() >= 9) {
+			if (
+				player.autobuyers[10].bulk == 0 ||
+				Math.round(timer * 100) % Math.round(player.autobuyers[10].bulk * 100) == 0
+			) maxBuyGalaxies()
+		} else {
+			if (player.autobuyers[10].priority > player.galaxies) {
 				autoS = false;
 				document.getElementById("secondSoftReset").click()
-				player.autobuyers[10].ticks = 1;
+				player.autobuyers[10].ticks = 0
 			}
-		} else if (player.autobuyers[10].isOn && (player.autobuyers[10].bulk == 0 || (Math.round(timer * 100))%(Math.round(player.autobuyers[10].bulk * 100)) == 0)){
-			maxBuyGalaxies()
 		}
-	} else player.autobuyers[10].ticks += 1;
+	}
+	player.autobuyers[10].ticks += 1
 }
 
 function TSBoostABTick(){

@@ -86,7 +86,7 @@ function updateTreeOfDecayTab(){
 			let effLvl = getEffectiveTreeUpgLevel(u)
 			document.getElementById("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
 			document.getElementById("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
-			let scalingsActive = (lvl >= 1e4 ? 1 : 0) //+ (cost.log10() > 25e3 ? 1 : 0)
+			let scalingsActive = (lvl >= 1e4 ? 1 : 0) + TREE_UPGRADES[u].scaleAdd(lvl)
 			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
 			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
@@ -266,23 +266,142 @@ function getQuarkSpinProduction(branch) {
 	return ret
 }
 
+let TREE_UPGRADES = {
+	1: {
+		baseCost(lvl) {
+			return Decimal.pow(2, lvl * 2 + Math.max(lvl - 35, 0) * (lvl - 34) / 2).times(50)
+		},
+		scaleAdd(lvl) {
+			if (lvl > 35) return 1
+			return 0
+		},
+		effLvl(lvl) {
+			return lvl
+		},
+		eff(lvl) {
+			return Math.floor(lvl * 30)
+		}
+	},
+	2: {
+		baseCost(lvl) {
+			return Decimal.pow(4, lvl * (lvl + 3) / 2).times(600)
+		},
+		scaleAdd(lvl) {
+			return 0
+		},
+		effLvl(lvl) {
+			if (lvl > 64) lvl = (lvl + 128) / 3
+			return lvl
+		},
+		eff(lvl) {
+			return lvl * 0.25
+		}
+	},
+	3: {
+		baseCost(lvl) {
+			return Decimal.pow(32, lvl).times(3e9)
+		},
+		scaleAdd(lvl) {
+			return 0
+		},
+		effLvl(lvl) {
+			return lvl
+		},
+		eff(lvl) {
+			return Decimal.pow(2, Math.sqrt(Math.sqrt(Math.max(lvl * 3 - 2, 0)) * Math.max(getTotalNumOfToDUpgrades() - 10, 0)))
+		}
+	},
+	4: {
+		baseCost(lvl) {
+			return Decimal.pow(2, lvl + Math.max(lvl - 37, 0) * (lvl - 36) / 2).times(1e12)
+		},
+		scaleAdd(lvl) {
+			if (lvl > 37) return 1
+			return 0
+		},
+		effLvl(lvl) {
+			return lvl
+		},
+		eff(lvl) {
+			return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
+		}
+	},
+	5: {
+		baseCost(lvl) {
+			let exp = Math.pow(Math.max(0, lvl - 50), 1.5) + lvl
+			if (!player.achievements.includes("ng3p87")) exp += Math.max(lvl - 35, 0) * (lvl - 34) / 2
+			return Decimal.pow(2, exp).times(4e12)
+		},
+		scaleAdd(lvl) {
+			if (lvl > 50) return 2
+			if (lvl > 35 && !player.achievements.includes("ng3p87")) return 1
+			return 0
+		},
+		effLvl(lvl) {
+			if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
+			return lvl
+		},
+		eff(lvl) {
+			if (!tmp.eterUnl) return new Decimal(1)
+			let MA = player.meta.bestOverQuantums
+			if (player.achievements.includes("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
+
+			let x = Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
+			if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
+			return x
+		}
+	},
+	6: {
+		baseCost(lvl) {
+			return Decimal.pow(4, lvl * (lvl + 3) / 2).times(6e22)
+		},
+		scaleAdd(lvl) {
+			return 0
+		},
+		effLvl(lvl) {
+			return lvl
+		},
+		eff(lvl) {
+			return Decimal.pow(2, lvl)
+		}
+	},
+	7: {
+		baseCost(lvl) {
+			return Decimal.pow(16, lvl * lvl).times(4e22)
+		},
+		scaleAdd(lvl) {
+			return 0
+		},
+		effLvl(lvl) {
+			return lvl
+		},
+		eff(lvl) {
+			return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
+		}
+	},
+	8: {
+		baseCost(lvl) {
+			return Decimal.pow(2, lvl).times(3e23)
+		},
+		scaleAdd(lvl) {
+			return 0
+		},
+		effLvl(lvl) {
+			if (lvl > 1e5) lvl = Math.pow(lvl * 10, 2/3) * 10
+			return lvl
+		},
+		eff(lvl) {
+			return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
+		}
+	}
+}
+
 function getTreeUpgradeCost(upg, add) {
 	let lvl = getTreeUpgradeLevel(upg)
-	let x = new Decimal(1)
 	if (add !== undefined) lvl += add
-	if (upg == 1) x = Decimal.pow(2, lvl * 2 + Math.max(lvl - 35, 0) * (lvl - 34) / 2).times(50)
-	if (upg == 2) x = Decimal.pow(4, lvl * (lvl + 3) / 2).times(600)
-	if (upg == 3) x = Decimal.pow(32, lvl).times(3e9)
-	if (upg == 4) x = Decimal.pow(2, lvl + Math.max(lvl - 37, 0) * (lvl - 36) / 2).times(1e12)
-	if (upg == 5) {
-		if (player.achievements.includes("ng3p87")) x = Decimal.pow(2, lvl + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
-		else x = Decimal.pow(2, lvl + Math.max(lvl - 35, 0) * (lvl - 34) / 2 + Math.pow(Math.max(0, lvl - 50), 1.5)).times(4e12)
-	}
-	if (upg == 6) x = Decimal.pow(4, lvl * (lvl + 3) / 2).times(6e22)
-	if (upg == 7) x = Decimal.pow(16, lvl * lvl).times(4e22)
-	if (upg == 8) x = Decimal.pow(2, lvl).times(3e23)
+	x = TREE_UPGRADES[upg].baseCost(lvl)
+
 	let y = x.log10()
-	//if (y > 25e3) y = Math.pow(y, 2) / 25e3
 	if (lvl > 1e4) y *= lvl / 1e4
 	return Decimal.pow(10, y)
 }
@@ -311,11 +430,7 @@ function getTreeUpgradeLevel(upg) {
 }
 
 function getEffectiveTreeUpgLevel(upg){
-	lvl = getTreeUpgradeLevel(upg) * tmp.tue
-	if (upg == 2) if (lvl > 64) lvl = (lvl + 128) / 3
-	if (upg == 5) if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
-	if (upg == 8) if (lvl > 1e5) lvl = Math.pow(lvl * 10, 2/3) * 10
-	return lvl
+	return TREE_UPGRADES[upg].effLvl(getTreeUpgradeLevel(upg) * tmp.tue)
 }
 
 function getTotalNumOfToDUpgrades(){
@@ -325,24 +440,7 @@ function getTotalNumOfToDUpgrades(){
 }
 
 function getTreeUpgradeEffect(upg) {
-	let lvl = getEffectiveTreeUpgLevel(upg)
-	if (upg == 1) return Math.floor(lvl * 30)
-	if (upg == 2) return lvl * 0.25
-	if (upg == 3) return Decimal.pow(2, Math.sqrt(Math.sqrt(Math.max(lvl * 3 - 2, 0)) * Math.max(getTotalNumOfToDUpgrades() - 10, 0)))
-	if (upg == 4) return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
-	if (upg == 5) {
-		if (!tmp.eterUnl) return new Decimal(1)
-		let MA = player.meta.bestOverQuantums
-		if (player.achievements.includes("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
-
-		let x = Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
-		if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
-		return x
-	}
-	if (upg == 6) return Decimal.pow(2, lvl)
-	if (upg == 7) return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
-	if (upg == 8) return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
-	return 0
+	return TREE_UPGRADES[upg].eff(getEffectiveTreeUpgLevel(upg))
 }
 
 function getTreeUpgradeEffectDesc(upg) {

@@ -945,6 +945,9 @@ let tsMults = {
 		let x = Decimal.pow(10, 50 * Math.sqrt(cond))
 		return x
 	},
+	221() {
+		return Decimal.pow(1.0025, player.resets)
+	},
 	225() {
 		let x = Math.floor(player.replicanti.amount.e / 1e3)
 		let softcapEff = 2
@@ -960,5 +963,20 @@ let tsMults = {
 
 		if (x >= 100) x = Math.floor(Math.sqrt(0.25 + (x - 99) * softcapEff) + 98.5)
 		return x
+	},
+	227() {
+		return Math.pow(tmp.sacPow.max(10).log10(), 10)
+	},
+	231() {
+		return Decimal.pow(Math.max(player.resets, 1), 0.3)
+	},
+	232() {
+		var exp = 0.2
+		if (tmp.ngp3) {
+			if (player.ghostify.ghostlyPhotons.unl) exp = tmp.be ? 0.2 : 0
+			else if (player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3, 0)
+		}
+		if (exp == 0) return 1
+		return Math.pow(1 + initialGalaxies() / 1000, exp)
 	}
 }

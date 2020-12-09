@@ -60,8 +60,6 @@ function updateTemp() {
 	updateExtraReplBase()
 	extraReplGalaxies = Math.floor(extraReplBase * extraReplMulti)
 
-	updateTS232Temp()
-
 	tmp.ts = {}
 	if (!isTickDisabled()) {
 		tmp.ts.pre1 = getTickspeedBeforeSoftcap()
@@ -262,17 +260,6 @@ function updateEffectiveAntiElectronGalaxiesTemp() {
 	if (tmp.aeg == 0) return
 
 	if (hasBosonicUpg(34)) tmp.effAeg *= tmp.blu[34]
-}
-
-function updateTS232Temp() {
-	var exp = 0.2
-	if (!tmp.ngp3) {
-		tmp.ts232 = Math.pow(1 + initialGalaxies() / 1000, exp)
-		return
-	}
-	if (player.ghostify.ghostlyPhotons.unl) exp = tmp.be ? .2 : 0
-	else if (player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3,0)
-	tmp.ts232 = Math.pow(1 + initialGalaxies() / 1000, exp)
 }
 
 function updateTS431ExtraGalTemp() {

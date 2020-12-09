@@ -1036,7 +1036,7 @@ var bu = {
 		},
 		64() {
 			return {
-				gs: 1.5 / (player.ghostify.hb.higgs / 8e3 + 1) - 0.5,
+				gs: 0.95 / (Math.log10(player.ghostify.hb.higgs / 2e3 + 1) / 10 + 1),
 				gh: player.ghostify.hb.higgs * 3
 			}
 		},
@@ -1079,7 +1079,7 @@ var bu = {
 			return formatPercentage(x, 2) + "% to growth and softcap slowdown"
 		},
 		43(x) {
-			return formatPercentage(x, 2) + "%"
+			return formatPercentage(x - 1, 2) + "% stronger"
 		},
 		44(x) {
 			return "+" + x.toFixed(1) + " OoMs"

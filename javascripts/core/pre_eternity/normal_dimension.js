@@ -637,7 +637,7 @@ function getDimensionProductionPerSecond(tier) {
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(10)
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 
-	let tick = dilates(Decimal.div(1e3,getTickspeed()), "tick")
+	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)
 	ret = ret.times(tick)
 	return ret

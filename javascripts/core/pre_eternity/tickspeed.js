@@ -52,7 +52,7 @@ function getGalaxyEff(bi) {
 	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (hasTimeStudy(212)) eff *= tsMults[212]()
-	if (hasTimeStudy(232) && bi) eff *= tmp.ts232
+	if (hasTimeStudy(232) && bi) eff *= tsMults[232]()
 	if (tmp.ngC) eff *= getECReward(11) || 1 // yeah this'll be issues
 
 	if (player.aarexModifications.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1

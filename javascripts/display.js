@@ -714,12 +714,17 @@ function initialTimeStudyDisplay(){
 	getEl("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1))).min("1e13000")) + "x"
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
 	getEl("214desc").textContent = "Currently: " + shortenMoney(((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1)).div(tmp.sacPow)).max(1).min(new Decimal("1e125000"))) + "x"
+	getEl("221desc").textContent = "Currently: " + shorten(tsMults[221]()) + "x"
 
 	let ts225 = tsMults[225]()
 	getEl("225desc").textContent = "Currently: +" + getFullExpansion(ts225) + " extra RGs" + (ts225 > 100 ? " (softcapped)" : "")
 
 	let ts226 = tsMults[226]()
 	getEl("226desc").textContent = "Currently: +" + getFullExpansion(ts226) + " extra RGs" + (ts226 > 100 ? " (softcapped)" : "")
+
+	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"
+	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]()) + "x power"
+	getEl("232desc").textContent = "Currently: " + formatPercentage(tsMults[232]() - 1) + "%"
 
 	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost());
 }
@@ -755,13 +760,6 @@ function mainTimeStudyDisplay(){
 	initialTimeStudyDisplay()
 	eternityChallengeUnlockDisplay()
 	getEl("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(5e3) + " Time Theorems"
-	if (tmp.ngp3) {
-		var ts232display = tmp.ts232 * 100 - 100
-		getEl("221desc").textContent = "Currently: "+shorten(Decimal.pow(1.0025, player.resets))+"x"
-		getEl("227desc").textContent = "Currently: "+shorten(Math.pow(tmp.sacPow.max(10).log10(), 10))+"x"
-		getEl("231desc").textContent = "Currently: "+shorten(Decimal.pow(Math.max(player.resets, 1), 0.3))+"x more power"
-		getEl("232desc").textContent = "Currently: "+(ts232display>=999.95?getFullExpansion(Math.floor(ts232display)):ts232display.toFixed(1))+"%"
-	}
 }
 
 function ABTypeDisplay(){

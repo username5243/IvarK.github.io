@@ -64,8 +64,8 @@ function calcVanillaTSTDMult(tier){
 	if (hasTimeStudy(93)) ret = ret.times(Decimal.pow(player.totalTickGained, 0.25).max(1))
 	if (hasTimeStudy(103)) ret = ret.times(Math.max(player.replicanti.galaxies, 1))
 	if (hasTimeStudy(151)) ret = ret.times(1e4)
-	if (hasTimeStudy(221)) ret = ret.times(Decimal.pow(1.0025, player.resets))
-	if (hasTimeStudy(227) && tier == 4) ret = ret.times(Math.pow(tmp.sacPow.max(10).log10(), 10))
+	if (hasTimeStudy(221)) ret = ret.times(tsMults[221]())
+	if (hasTimeStudy(227) && tier == 4) ret = ret.times(tsMults[227]())
 	return ret
 }
 

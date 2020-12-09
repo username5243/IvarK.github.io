@@ -2947,13 +2947,14 @@ function transformSaveToDecimal() {
 
 
 function loadAutoBuyerSettings() {
-        for (var i=0; i<9; i++) {
+        for (var i=0; i <= 8; i++) {
                 document.getElementById("priority" + (i+1)).selectedIndex = player.autobuyers[i].priority-1
                 if (i == 8 && player.autobuyers[i].target == 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys max"
                 else if (i == 8 && player.autobuyers[i].target !== 10) document.getElementById("toggleBtnTickSpeed").textContent = "Buys singles"
                 else if (player.autobuyers[i].target > 10) document.getElementById("toggleBtn" + (i+1)).textContent = "Buys until 10"
                 else document.getElementById("toggleBtn" + (i+1)).textContent = "Buys singles"
         }
+		document.getElementById("autoGalMax").textContent = "Max Galaxies" + (tmp.ngp3 ? " (0 to max all galaxies)" : "") + ":"
         document.getElementById("priority10").value = player.autobuyers[9].priority
         document.getElementById("priority11").value = player.autobuyers[10].priority
         document.getElementById("priority12").value = player.autoCrunchMode == "amount" ? formatValue("Scientific", player.autobuyers[11].priority, 2, 0) : player.autobuyers[11].priority
