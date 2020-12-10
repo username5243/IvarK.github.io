@@ -251,10 +251,10 @@ function resetTimeDimensions(full) {
 	player.timeShards = new Decimal(0)
 	player.tickThreshold = new Decimal(ngm4 ? 0.01 : 1)
 	player.totalTickGained = 0
-	for (var t = 1; t < 9; t++) {
+	for (var t = 1; t <= 8; t++) {
 		let dim = player["timeDimension" + t]
 		if (full || ngm4) {
-			dim.cost = new Decimal(timeDimStartCosts[ngm4 ? 1 : 0][t])
+			dim.cost = TIME_DIM_COSTS[t].cost()
 			dim.power = ngm4 ? Decimal.pow(boostPower, player.tdBoosts - t + 1) : new Decimal(1)
 			dim.bought = 0
 		}

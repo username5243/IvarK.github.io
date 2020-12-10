@@ -209,22 +209,109 @@ function updateTimeShards() {
 	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Timeshards per second."
 }
 
-var timeDimCostMults = [[null, 3, 9, 27, 81, 243, 729, 2187, 6561], [null, 1.5, 2, 3, 20, 150, 1e5, 3e6, 1e8]]
-var timeDimStartCosts = [[null, 1, 5, 100, 1000, "1e2350", "1e2650", "1e3000", "1e3350"], [null, 10, 20, 40, 80, 160, 1e8, 1e12, 1e18]]
+var TIME_DIM_COSTS = {
+	1: {
+		cost() {
+			if (tmp.ngmX >= 4) return 10
+			return 1
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 1.5
+			return 3
+		}
+	},
+	2: {
+		cost() {
+			if (tmp.ngmX >= 4) return 20
+			return 5
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 2
+			return 9
+		}
+	},
+	3: {
+		cost() {
+			if (tmp.ngmX >= 4) return 40
+			return 100
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 3
+			return 27
+		}
+	},
+	4: {
+		cost() {
+			if (tmp.ngmX >= 4) return 80
+			return 1e3
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 20
+			return 81
+		}
+	},
+	5: {
+		cost() {
+			let x = tmp.ngmX >= 4 ? 160 : player.aarexModifications.newGamePlusVersion ? "1e2300" : "1e2350"
+			if (tmp.ngC) x = Decimal.pow(x, .25)
+			return new Decimal(x)
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 150
+			return 243
+		}
+	},
+	6: {
+		cost() {
+			let x = tmp.ngmX >= 4 ? 1e8 : player.aarexModifications.newGamePlusVersion ? "1e2500" : "1e2650"
+			if (tmp.ngC) x = Decimal.pow(x, .25)
+			return new Decimal(x)
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 1e5
+			return 729
+		}
+	},
+	7: {
+		cost() {
+			let x = tmp.ngmX >= 4 ? 1e12 : player.aarexModifications.newGamePlusVersion ? "1e2700" : "1e3000"
+			if (tmp.ngC) x = Decimal.pow(x, .25)
+			return new Decimal(x)
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 3e6
+			return 2143
+		}
+	},
+	8: {
+		cost() {
+			let x = tmp.ngmX >= 4 ? 1e18 : player.aarexModifications.newGamePlusVersion ? "1e3000" : "1e3350"
+			if (tmp.ngC) x = Decimal.pow(x, .25)
+			return new Decimal(x)
+		},
+		mult() {
+			if (tmp.ngmX >= 4) return 1e8
+			return 6561
+		}
+	},
+}
 
 function timeDimCost(tier, bought) {
-	let start = timeDimStartCosts[0][tier]
-	if (tmp.ngC && tier > 4) start = Decimal.pow(start, 1/4)
-	let cost = Decimal.pow(timeDimCostMults[0][tier], bought).times(start)
+	let base = TIME_DIM_COSTS[tier].cost()
+	let mult = TIME_DIM_COSTS[tier].mult()
+
+	let cost = Decimal.pow(mult, bought).times(base)
 	if (player.galacticSacrifice !== undefined) return cost
-	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(timeDimCostMults[0][tier]*1.5, bought).times(start)
-	if (cost.gte("1e1300")) cost = Decimal.pow(timeDimCostMults[0][tier]*2.2, bought).times(start)
-	if (tier > 4) cost = Decimal.pow(timeDimCostMults[0][tier]*100, bought).times(start)
-	if (cost.gte(tier > 4 ? "1e300000" : "1e20000")) {
+
+	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(mult * 1.5, bought).times(base)
+	if (cost.gte("1e1300")) cost = Decimal.pow(mult * 2.2, bought).times(base)
+	if (tier >= 5) cost = Decimal.pow(mult * 100, bought).times(base)
+
+	let superScaleStartLog = tier >= 5 ? 3e5 : 2e4
+	if (cost.log10() >= superScaleStartLog) {
 		// rather than fixed cost scaling as before, quadratic cost scaling
 		// to avoid exponential growth
-		cost = cost.times(Decimal.pow(new Decimal('1e1000'),
-		Math.pow(cost.log(10) / 1000 - (tier > 4 ? 300 : 20), 2)));
+		cost = cost.times(Decimal.pow(10, Math.pow((cost.log10() - superScaleStartLog) / 1e3, 2) * 1e3))
 	}
 	return cost
 }
@@ -243,7 +330,7 @@ function buyTimeDimension(tier) {
 	dim.bought += 1
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	if (tmp.ngmX >= 4) {
-		dim.cost = dim.cost.times(timeDimCostMults[1][tier])
+		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
 		reduceMatter(1)
 	} else {
@@ -276,7 +363,7 @@ function buyMaxTimeDimension(tier, bulk) {
 
 	let toBuy = 0
 	if (tmp.ngmX >= 4) {
-		let mult = timeDimCostMults[1][tier]
+		let mult = TIME_DIM_COSTS[tier].mult()
 
 		toBuy = Math.floor(res.div(dim.cost).times(mult - 1).add(1).log(mult))
 		if (bulk) toBuy = Math.min(toBuy, bulk)
