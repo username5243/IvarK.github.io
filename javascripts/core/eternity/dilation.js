@@ -36,8 +36,11 @@ function getBaseDTProduction(){
 		gain = gain.times(getDTMultPostBRU11())
 	}
 	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
-	if (tmp.newNGP3E && player.achievements.includes("r138") && gain.lt(1e100)) gain = gain.times(3).min(1e100)
-	if (tmp.ngp3 && player.achievements.includes("ngpp13")) gain = gain.times(2)
+
+	if (tmp.ngp3) {
+		if (player.achievements.includes("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
+		if (player.achievements.includes("ngpp13")) gain = gain.times(2)
+	}
 	return gain
 }
 

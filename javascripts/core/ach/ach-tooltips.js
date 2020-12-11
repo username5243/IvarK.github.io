@@ -243,8 +243,8 @@ function setR13Tooltip() {
 	let thisis = document.getElementById("This is what I have to do to get rid of you.")
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
-	if (player.galacticSacrifice!==undefined) thisisReward.push("g23 is more effective based on your best IP in dilation")
-	if (tmp.newNGP3E) thisisReward.push("You gain 3x more DT while you produce less than "+shortenCosts(1e100)+" DT/second")
+	if (player.galacticSacrifice !== undefined) thisisReward.push("g23 is more effective based on your best IP in dilation")
+	if (tmp.ngp3) thisisReward.push("you produce dilated time " + (tmp.newNGP3E ? 3 : 2) + "x faster")
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
@@ -252,7 +252,7 @@ function setR13Tooltip() {
 	infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed" + (player.meta ? ", and your Infinity gain is multiplied by dilated time^(1/4)." : "."))
 	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal(tmp.ngex?"1e15000":"1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti.")
 	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while dilated. Reward: Multiply dilated time gain based on replicanti.")
-	thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e20000'))+" IP without any time studies while dilated."+(thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
+	thisis.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal('1e20000')) + " IP without any time studies while dilated." + (thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
 }
 
 function setR13p5Tooltip() {
@@ -282,7 +282,7 @@ function setR14Tooltip() {
 	let harmony = document.getElementById("Universal harmony")
 
 	let onlywarReward = [] // for the achievement "In the grim darkness of the far endgame"
-	if (tmp.ngp3 || tmp.newNGP3E) onlywarReward.push("You get 2x more DT")
+	if (tmp.ngp3) onlywarReward.push("you produce dilated time 2x faster")
 	if (player.aarexModifications.nguspV !== undefined) onlywarReward.push("you can auto-buy Dilation upgrades every second if you have at least " + shortenMoney(new Decimal('1e40000')) + " EP")
 	onlywarReward = wordizeList(onlywarReward, true)
 
