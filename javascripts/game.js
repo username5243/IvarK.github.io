@@ -1551,7 +1551,7 @@ function updateMoney() {
 	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) {
 		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
 		var extra = getExtraTime()
-		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv).mult(10) * getEC12Mult(),0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)" //I added a 10x multiplier to matter increase timer until we can sort out what is wrong with the matter timer. I doubt this will be permanent. 
+		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * 10 * getEC12Mult(),0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)" //I added a 10x multiplier to matter increase timer until we can sort out what is wrong with the matter timer. I doubt this will be permanent. 
 		element2.innerHTML = txt
 	}
 	var element3 = document.getElementById("chall13Mult");
