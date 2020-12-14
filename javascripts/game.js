@@ -5236,6 +5236,8 @@ function otherDimsUpdating(diff){
 
    	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff))
    	else {
+		var TimeProduction = getTimeDimensionProduction(1)
+		if (player.pSac !==undefined) TimeProduction = TimeProduction.plus(getTimeDimensionProduction(2))
 		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(DimensionProduction(9).times(diff))
 		player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff)).max(getTimeDimensionProduction(1).times(0))
 	}
