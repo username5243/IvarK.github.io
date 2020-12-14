@@ -3588,7 +3588,7 @@ function doIRCrunchResetStuff(){
 function doGPUpgCrunchUpdating(g11MultShown){
 	var showg11Mult = player.infinitied > 0 || player.eternities !== 0 || quantumed
 	if (player.galacticSacrifice && (showg11Mult != g11MultShown)) {
-		document.getElementById("galaxy11").innerHTML = "Normal" + (player.aarexModifications.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
+		document.getElementById("galaxy11").innerHTML = "Normal" + (player.aarexModifications.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":(player.pSac !== undefined ? "90% cheaper" : "99% cheaper."))+"<br>Cost: 1 GP"
 		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (showg11Mult ? "faster based on your infinitied stat.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
 	}
 }

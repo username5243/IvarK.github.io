@@ -270,7 +270,7 @@ function updateMatterSpeed(){
 	//mv: Matter speed
 	tmp.mv = 1.03 + player.resets/200 + player.galaxies/100
 	if (player.pSac !== undefined) {
-		var exp = 10 / puMults[12](hasPU(12, true, true))
+		var exp = 100 / puMults[12](hasPU(12, true, true)) //I added a 0. remove this code and potentially that 0 when we're done here. 
 		tmp.mv = Decimal.pow(tmp.mv, exp)
 	}
 }

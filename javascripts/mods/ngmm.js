@@ -228,7 +228,7 @@ function buyGalaxyUpgrade(i) {
 			for (var d = 1; d < 9; d++) {
 				var name = TIER_NAMES[d]
 				player[name + "Cost"] = player[name + "Cost"].times(10)
-				if (player.aarexModifications.ngmX > 3) player["timeDimension" + d].cost = player["timeDimension" + d].cost.times(10)
+				if (player.aarexModifications.ngmX > 3) player["timeDimension" + d].cost = player["timeDimension" + d].cost.times(10) //do we want to make g11 affect infinity dimensions in NG-5? I doubt it, but something to consider.
 			}
 		}
 		reduceDimCosts(true)
@@ -518,7 +518,8 @@ let galMults = {
 			var l = 0
 			if (player.infinityUpgrades.includes("postinfi61")) l = Math.log10(getInfinitied() + 1)
 			if (l > 2) return Decimal.pow(10, l * Math.min(l, 6) * Math.min(l, 4))
-			return Decimal.pow(10, 2 + Math.min(4, getInfinitied())).pow(exp)
+			var p = player.pSac !== undefined ? 1 : 2
+			return Decimal.pow(10, p + Math.min(4, getInfinitied())).pow(exp)
 		}
 		if (tmp.ec > 53) return Decimal.pow(10, 2e4)
 		let x = getG11Infinities()
