@@ -268,8 +268,8 @@ function inPxC(x) {
 }
 
 //Paradox Dimensions
-var pdBaseCosts = [null, 1, 2, 4, 16, 1/0, 1/0, 1e250, 1e280]
-var pdCostMults = [null, 3, 16, 64, 4096, 1/0, 1/0, 1e250, 1e280]
+var pdBaseCosts = [null, 1, 2, 4, 16, 256, 2048, 1e250, 1e280]
+var pdCostMults = [null, 3, 16, 64, 4096, 8192, 32768, 1e250, 1e280]
 
 function buyPD(d) {
 	var ps = player.pSac
