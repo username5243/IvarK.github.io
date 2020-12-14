@@ -12,11 +12,6 @@ function breakInfinity() {
 		player.break = true
 		document.getElementById("break").textContent = "FIX INFINITY"
 	}
-	if (player.galacticSacrifice) if (player.eternities==0&&player.infinityPoints.lt(Number.MAX_VALUE)&&!quantumed) {
-		document.getElementById("quantumBlock").style.display=player.break?"":"none"
-		document.getElementById("sacpos").className=player.break?"quantumpos":"eterpos"
-		document.getElementById("galaxyPoints2").className=player.break?"QK":"EP"
-	}
 }
 
 function onPostBreak() {
