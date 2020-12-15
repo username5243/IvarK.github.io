@@ -187,7 +187,7 @@ function updateTimeDimensions() {
 		}
 
 		if (tmp.ngmX >= 4) {
-			var isShift = player.tdBoosts < (inNC(4) ? 5 : 7)
+			var isShift = player.tdBoosts < (inNC(4) || tmp.ngmX >= 5 ? 5 : 7)
 			var req = getTDBoostReq()
 			document.getElementById("tdReset").style.display = ""
 			document.getElementById("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
@@ -201,7 +201,9 @@ function updateTimeDimensions() {
 
 function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
+	if (tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
+
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)

@@ -272,15 +272,12 @@ function updateTS431ExtraGalTemp() {
 
 function updateMatterSpeed(){
 	//mv: Matter speed
+	let exp = 1
+	if (tmp.ngmX >= 5) exp = 100 / puMults[12](hasPU(12, true, true)) //I added a 0. remove this code and potentially that 0 when we're done here.
+	if (GDs.boostUnl('mf')) exp *= GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
+
 	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
-	if (player.pSac !== undefined) {
-		var exp = 10 / puMults[12](hasPU(12, true, true))
-		tmp.mv = Decimal.pow(tmp.mv, exp)
-	}
-	if (GDs.boostUnl('mf')) {
-		let exp = GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
-		tmp.mv = Decimal.pow(tmp.mv, exp)
-	}
+	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
 }
 
 function updateReplicantiTemp() {

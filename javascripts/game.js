@@ -721,7 +721,10 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngm === 2) ngmR.setup()
 	if (modesChosen.ngp) doNGPlusOneNewPlayer()
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
-	if (modesChosen.ngmm) doNGMinusTwoNewPlayer()
+	if (modesChosen.ngmm) {
+		tmp.ngmX = modesChosen.ngmm + 1
+		doNGMinusTwoNewPlayer()
+	}
 	if (modesChosen.ngpp > 1) doNGPlusThreeNewPlayer()
 	if (modesChosen.rs == 1) doEternityRespeccedNewPlayer()
 	if (modesChosen.ngmm > 1) doNGMinusThreeNewPlayer()
@@ -1505,7 +1508,7 @@ function updateMoney() {
 	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
 		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."
 		var extra = getExtraTime()
-		if (player.pSac !== undefined && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * tmp.ec12Mult,0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * tmp.ec12Mult) : "") + " left until matter reset)"
+		if (tmp.ngmX >= 5 && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * getEC12Mult() * 10, 0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)" //I added a 10x multiplier to matter increase timer until we can sort out what is wrong with the matter timer. I doubt this will be permanent.
 		element2.innerHTML = txt
 	}
 	var element3 = document.getElementById("chall13Mult");
@@ -4192,7 +4195,7 @@ function incrementParadoxUpdating(diff){
 
 function dimensionButtonDisplayUpdating() {
 	document.getElementById("pdtabbtn").style.display = ph.shown("paradox") ? "" : "none"
-   	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && ph.shown("infinity")) ? "" : "none"
+   	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && (tmp.ngmX >= 5 || ph.shown("infinity"))) ? "" : "none"
 	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || tmp.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
 	document.getElementById("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
 }
@@ -4514,13 +4517,21 @@ function dimensionPageTabsUpdating(){
 }
 
 function otherDimsUpdating(diff){
-	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infDimensionProduction(1).times(diff))
-   	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infDimensionProduction(1).times(diff))
+	//Infinity Dimensions
+	let infProd = infDimensionProduction(1)
+	if (tmp.ngmX >= 5) infProd = infDimensionProduction(2).add(infProd)
 
-   	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(getTimeDimensionProduction(1).times(diff))
+	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infProd.times(diff))
+	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
+
+	//Time Dimensions
+	let timeProd = getTimeDimensionProduction(1)
+	if (tmp.ngmX >= 5) timeProd = getTimeDimensionProduction(2).add(timeProd)
+
+   	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(timeProd.times(diff))
    	else {
 		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(infDimensionProduction(9).times(diff))
-		player.timeShards = player.timeShards.plus(getTimeDimensionProduction(1).times(diff)).max(getTimeDimensionProduction(1).times(0))
+		player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
 	}
 }
 
@@ -5556,8 +5567,8 @@ function autoBuyerTick() {
 						if (tmp.ngC) ngC.condense.nds.max(priority[i].target)
 						buyOneDimension(priority[i].target)
 					}
-					if (tmp.ngmX >= 4) buyMaxTimeDimension(priority[i].target % 10, priority[i].bulk)
 				}
+				if (tmp.ngmX >= 4) buyMaxTimeDimension(priority[i].tier, priority[i].bulk)
 				priority[i].ticks = 0;
 			}
 		} else priority[i].ticks += 1;
