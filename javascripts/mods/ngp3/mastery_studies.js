@@ -740,7 +740,7 @@ function drawMasteryBranch(id1, id2) {
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 			var mult = getMasteryStudyCostMult(id2.split("study")[1])
-			var msg = id2.split("study")[1] + " (" + (mult>1e3?shorten(mult):mult) + "x)"
+			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + shortenMoney(mult) + "x)"
 			msctx.fillStyle = 'white';
 			msctx.strokeStyle = 'black';
 			msctx.lineWidth = 3;

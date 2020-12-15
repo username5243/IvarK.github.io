@@ -70,16 +70,16 @@ function getDistantScalingEffect(){
 
 function getGalaxyRequirement(offset = 0, display) {
 	tmp.grd = {} //Galaxy requirement data
-	tmp.grd.galaxies = player.galaxies + offset
+	tmp.grd.gals = player.galaxies + offset
 	let mult = getGalaxyReqMultiplier()
-	let base = tmp.grd.galaxies * mult
+	let base = tmp.grd.gals * mult
 	let amount = 80 + base
 	let scaling = 0
-	if (player.galacticSacrifice != undefined) amount -= (player.galacticSacrifice.upgrades.includes(22) && player.galaxies > 0) ? 80 : 60
-	else if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies < 2) amount -= tmp.grd.galaxies == 1 ? 40 : 50
+	if (player.galacticSacrifice != undefined) amount -= (player.galacticSacrifice.upgrades.includes(22) && tmp.grd.gals >= 1) ? 80 : 60
+	else if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
 	if (player.aarexModifications.ngmX > 3) amount -= 10
-	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies >= 2) amount -= 2 * mult
-	if (inNC(4) || player.pSac !== undefined) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (player.aarexModifications.ngmX > 3 ? 20 : -30)
+	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
+	if (inNC(4) || player.pSac !== undefined) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (tmp.ngmX >= 4 ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
 		if (tmp.qu.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
@@ -87,42 +87,47 @@ function getGalaxyRequirement(offset = 0, display) {
 	}
 	if (!player.boughtDims) {
 		tmp.grd.speed = 1
-		let ghostlySpeed = tmp.be ? 55 : 1
-		let div = 1e4
-		let over = tmp.grd.galaxies / (302500 / ghostlySpeed)
-		if (over >= 1) {
-			if (over >= 3) {
-				div /= Math.pow(over, 6) / 729
-				scaling = Math.max(scaling, 6)
+		if (tmp.ngp3) {
+			let ghostlySpeed = tmp.be ? 55 : 1
+			let div = 1e4
+			let over = tmp.grd.gals / (302500 / ghostlySpeed)
+			if (over >= 1) {
+				if (over >= 3) {
+					div /= Math.pow(over, 6) / 729
+					scaling = Math.max(scaling, 6)
+				}
+				if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
+				tmp.grd.speed = Math.pow(2, (tmp.grd.gals + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
+				scaling = Math.max(scaling, 5)
 			}
-			if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
-			tmp.grd.speed = Math.pow(2, (tmp.grd.galaxies + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
-			scaling = Math.max(scaling, 5)
 		}
 
 		let distantStart = getDistantScalingStart()
-		if (tmp.grd.galaxies >= distantStart) {
+		if (tmp.grd.gals >= distantStart) {
 			let speed = tmp.grd.speed
 			speed *= getDistantScalingEffect()
-			amount += getDistantAdd(tmp.grd.galaxies - distantStart + 1) * speed
-			if (tmp.grd.galaxies >= distantStart * 2.5 && player.galacticSacrifice != undefined) {
+			amount += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
+			if (tmp.grd.gals >= distantStart * 2.5 && player.galacticSacrifice != undefined) {
 				// 5 times worse scaling
-				amount += 4 * speed * getDistantAdd(tmp.grd.galaxies-distantStart * 2.5 + 1)
+				amount += 4 * speed * getDistantAdd(tmp.grd.gals-distantStart * 2.5 + 1)
 				scaling = Math.max(scaling, 2)
 			} else scaling = Math.max(scaling, 1)
 		}
 
-		let remoteStart = getRemoteScalingStart()
-		if (tmp.grd.galaxies >= remoteStart && !tmp.be && !hasNU(6) && !player.achievements.includes("ng3p117")) {
-			let speed2 = tmp.grd.speed
-			if (GUActive("rg7")) speed2 *= 0.9
-			if (GUActive("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100
-			if (GUActive("br7")) speed2 /= 1 + Math.log10(1 + player.eternityPoints.max(1).log10()) / 80
-			amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (player.aarexModifications.ngmX > 3 ? 10 : 1e3), (tmp.grd.galaxies - remoteStart + 1) * speed2)
-			scaling = Math.max(scaling, 3)
+		let hasRemote = !tmp.be && !hasNU(6) && !player.achievements.includes("ng3p117")
+		if (hasRemote) {
+			let remoteStart = getRemoteScalingStart()
+			if (tmp.grd.gals >= remoteStart) {
+				let speed2 = tmp.grd.speed
+				if (GUActive("rg7")) speed2 *= 0.9
+				if (GUActive("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100
+				if (GUActive("br7")) speed2 /= 1 + Math.log10(1 + player.eternityPoints.max(1).log10()) / 80
+				amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (player.aarexModifications.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
+				scaling = Math.max(scaling, 3)
+			}
 		}
 
-		if (tmp.grd.galaxies >= tmp.grd.darkStart) scaling = Math.max(scaling, 4)
+		if (tmp.grd.gals >= tmp.grd.darkStart) scaling = Math.max(scaling, 4)
 	}
 	amount = Math.ceil(amount)
 
@@ -134,7 +139,7 @@ function getGalaxyRequirement(offset = 0, display) {
 }
 
 function getGalaxyReqMultiplier() {
-	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.galaxies <= 2) return 0
+	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
 	if (player.galacticSacrifice !== undefined) {
@@ -159,12 +164,12 @@ function getDistantScalingStart() {
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
 	if (pl.on()) n -= fNu.tmp.nerfMu
 
-	if (tmp.grd.galaxies >= tmp.grd.darkStart) {
+	if (tmp.grd.gals >= tmp.grd.darkStart) {
 		let push = 5 / tmp.grd.speed
 		if (GUActive("rg5")) push *= 1.13
 		if (GUActive("gb5")) push *= 1 + Math.sqrt(player.replicanti.galaxies) / 550
 		if (GUActive("br5")) push *= getBR5Effect()
-		n -= Math.ceil((tmp.grd.galaxies - tmp.grd.darkStart + 1) / push)
+		n -= Math.ceil((tmp.grd.gals - tmp.grd.darkStart + 1) / push)
 	}
 
 	if (tmp.grd.speed == 1) return Math.max(n, 0)

@@ -210,8 +210,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x,r,nq) {
-	let e = player.pSac != undefined && !(nq && player.aarexModifications.quickReset)
+function hasPU(x, r, nq) {
+	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -297,7 +297,7 @@ function maxPDs() {
 }
 
 function getPDPower(d) {
-	let r=player.pSac.dims[d].power
+	let r = player.pSac.dims[d].power
 	if (d < 8) {
 		var pu = ((d - 1) % 3) + 22
 		if (hasPU(pu)) r = r.times(puMults[pu]())
@@ -345,9 +345,9 @@ function getExtraTime() {
 
 //Paradox Layer Reset
 function resetPSac() {
-	if (player.aarexModifications.ngmX > 4) {
+	if (tmp.ngmX >= 5) {
 		PXminpeak = new Decimal(0)
-		let keepPU
+		let keepPU = false //Wait until the next update comes.
 		player.pSac = {
 			time: 0,
 			times: 0,
@@ -366,7 +366,7 @@ function resetPSac() {
 
 //v0.51
 function haveExtraTime() {
-	return player.pSac !== undefined && !player.aarexModifications.quickReset
+	return tmp.ngmX >= 5 && !player.aarexModifications.quickReset
 }
 
 function quickMReset() {

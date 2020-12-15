@@ -561,13 +561,13 @@ function exportStudyTree() {
 		output.value = l.join('/');
 	} else {
 		var mtsstudies=[]
-		if (player.masterystudies) {
+		if (tmp.ngp3) {
 			for (id = 0; id < player.masterystudies.length; id++) {
 				var t = player.masterystudies[id].split("t")[1]
-				if (t) mtsstudies.push(t)
+				if (t) mtsstudies.push(t - 230)
 			}
 		}
-		output.value = player.timestudy.studies + (mtsstudies.length > 0 ? "," + mtsstudies + "|" : "|") + player.eternityChallUnlocked;
+		output.value = player.timestudy.studies + (mtsstudies.length ? "|ms" + mtsstudies : "") + "|" + player.eternityChallUnlocked
 	}
 	output.onblur = function() { parent.style.display = "none";}
 	output.focus();
@@ -598,26 +598,43 @@ function importStudyTree(input) {
 			}
 		}
 	} else {
-		var studiesToBuy = input.split("|")[0].split(",");
+		var splits = input.split("|")
+		var oldLength = player.timestudy.studies.length
+		var oldLengthMS = tmp.ngp3 && player.masterystudies.length
+
+		//Time studies
+		var studiesToBuy = splits[0].split(",");
 		var secondSplitPick = 0
 		var laterSecondSplits = []
 		var earlyDLStudies = []
 		var laterDLStudies = []
-		var oldLength = player.timestudy.length
-		if (player.masterystudies) var oldLengthMS = player.masterystudies.length
 		for (var i = 0; i < studiesToBuy.length; i++) {
-			var study=parseInt(studiesToBuy[i])
+			var study = parseInt(studiesToBuy[i])
 			if ((study < 120 || study > 150 || (secondSplitPick < 1 || study % 10 == secondSplitPick)) && (study < 220 || study > 240 || earlyDLStudies.includes(study + (study % 2 > 0 ? - 1 : 1)))) {
 				if (study > 120 && study < 150) secondSplitPick = study % 10
 				else if (study > 220 && study < 240) earlyDLStudies.push(study)
-				if (study > 240) buyMasteryStudy("t", study, true)
-				else buyTimeStudy(study, true);
+				if (study > 240) {
+					//Old format compatability
+					buyMasteryStudy("t", study, true)
+				} else buyTimeStudy(study, true);
 			} else if (study < 150) laterSecondSplits.push(study)
 			else laterDLStudies.push(study)
 		}
 		for (var i=0; i < laterSecondSplits.length; i++) buyTimeStudy(laterSecondSplits[i], true)
 		for (var i=0; i < laterDLStudies.length; i++) buyTimeStudy(laterDLStudies[i], true)
-		var ec = parseInt(input.split("|")[1])
+
+		//Mastery Studies
+		if (splits.length == 3) {
+			var studiesToBuy = splits[1].split(",");
+			for (var i = 0; i < studiesToBuy.length; i++) {
+				var study = studiesToBuy[i]
+				if (study == "ms11") buyMasteryStudy("t", 241, true)
+				else buyMasteryStudy("t", parseInt(study) + 230, true)
+			}
+		}
+
+		//Eternity Challenges
+		var ec = parseInt(splits[splits.length - 1])
 		if (ec > 0) {
 			justImported = true;
 			if (ec > 12) {
@@ -626,7 +643,7 @@ function importStudyTree(input) {
 			} else document.getElementById("ec" + parseInt(input.split("|")[1]) + "unl").click();
 			setTimeout(function(){ justImported = false; }, 100);
 		}
-		if (player.masterystudies.length > oldLengthMS) {
+		if (tmp.ngp3 && player.masterystudies.length > oldLengthMS) {
 			updateMasteryStudyCosts()
 			updateMasteryStudyButtons()
 			updateMasteryStudyTextDisplay()
