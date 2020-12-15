@@ -187,16 +187,30 @@ function setupInfUpgHTMLandData(){
 	}
 }
 
-function setupParadoxUpgrades(){
-	var pu = document.getElementById("pUpgs")
-	for (let r = 1; r <= puSizes.y; r++) {
-		let row = pu.insertRow(r - 1)
-		for (let c = 1; c <= puSizes.x; c++) {
-			var col = row.insertCell(c - 1)
-			var id = (r * 10 + c)
-			col.innerHTML = "<button id='pu" + id + "' class='infinistorebtn1' onclick='buyPU("+id+","+(r<2)+")'>"+(typeof(puDescs[id])=="function"?"<span id='pud"+id+"'></span>":puDescs[id]||"???")+(puMults[id]?"<br>Currently: <span id='pue"+id+"'></span>":"")+"<br><span id='puc"+id+"'></span></button>"
-		}
-	}
+function setupParadoxUpgrades() {
+  var pu = document.getElementById("pUpgs");
+  for (let r = 1; r <= puSizes.y; r++) {
+    let row = pu.insertRow(r - 1);
+    for (let c = 1; c <= puSizes.x; c++) {
+      var col = row.insertCell(c - 1);
+      var id = r * 10 + c;
+      col.innerHTML =
+        "<button id='pu" +
+        id +
+        "' class='infinistorebtn1' onclick='buyPU(" +
+        id +
+        "," +
+        (r < 2) +
+        ")'>" +
+        (typeof puDescs[id] == "function"
+          ? "<span id='pud" + id + "'></span>"
+          : puDescs[id] || "???") +
+        (puMults[id] ? "<br>Currently: <span id='pue" + id + "'></span>" : "") +
+        "<br><span id='puc" +
+        id +
+        "'></span></button>";
+    }
+  }
 }
 
 function setupPCTableHTMLandData(){
