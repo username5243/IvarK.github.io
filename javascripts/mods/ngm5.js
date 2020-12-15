@@ -22,16 +22,17 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	reduceMatter(1)
 }
 
-function maxIDwithAM(t,bulk) {
+function maxIDwithAM(t, bulk) {
 	let d = player["infinityDimension" + t]
 	let c = d.costAM
 	let m = idCostMults[t]
 	if (getAmount(1) < 1) return
 	if (!player.infDimensionsUnlocked[t - 1]) return
 	if (!player.money.gte(c)) return
+
 	let tb = Math.floor(player.money.div(c).times(m - 1).add(1).log(m))
 	if (bulk) tb = Math.min(tb, bulk)
-	let ts=Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
+	let ts = Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
 	player.money = player.money.sub(ts.min(player.money))
 	d.costAM = d.costAM.times(Decimal.pow(m, tb))
 	d.bought += 10*tb
@@ -42,19 +43,11 @@ function maxIDwithAM(t,bulk) {
 }
 
 function maxAllIDswithAM() {
-	for (var d = 1; d < 9; d++) maxIDwithAM(d)
+	for (var d = 1; d <= 8; d++) maxIDwithAM(d)
 }
 
-function resetIDs_ngm5() {
-	if (player.pSac == undefined) return
-	for (var t = 1; t < 9; t++) {
-		var d = player["infinityDimension" + t]
-		d.amount = new Decimal(d.baseAmount)
-		d.power = Decimal.pow(getInfBuy10Mult(t), d.baseAmount)
-		d.costAM = new Decimal(idBaseCosts[t])
-		d.boughtAM = 0
-	}
-	player.infinityPower = new Decimal(1)
+function resetIDsOnNGM5() {
+	if (player.pSac !== undefined) resetInfDimensions()
 }
 
 //Global Dimension unlocks
@@ -71,7 +64,7 @@ function getPxGain() {
 }
 
 function canPSac() {
-	return player.pSac != undefined && !tmp.ri && player.matter.max(player.money).gte(1e3) && player.totalTickGained
+	return ph.can("paradox")
 }
 
 function pSac(chall) {
@@ -92,6 +85,7 @@ function pSacReset(force, chall, pxGain) {
 	resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
+	ph.onPrestige("paradox")
 }
 
 function pSacrificed() {
@@ -139,26 +133,18 @@ let puMults = {
 	},
 
 	41: function() {
-		return 1 //Todo
+		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
 	42: function() {
-		return Math.pow(10, player.tickspeedBoosts) //Todo
-	},
-	43: function() {
-		return 1 //Todo
+		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
 	},
 	44: function() {
-		return 1 //Todo
+		return player.timeShards.log(100)
 	},
 
-	51: function() {
-		return 1 //Todo
-	},
 	52: function() {
-		return 1 //Todo
-	},
-	53: function() {
-		return 1 //Todo
+		if (player.infinitied>0||player.eternities>0||quantumed) return 1.5
+		return Math.max(1+player.galaxies/20, 1.5) //Todo
 	},
 	54: function() {
 		return 1 //Todo
@@ -177,7 +163,7 @@ let puMults = {
 		return 1 //Todo
 	},
 } 
-let puDescs = { //I'm not that dumb
+let puDescs = { 
 	11: "Dimension multiplier increases 2x faster.",
 	12: "Matter increases slower.",
 	13: "Second Dimension multiplier is raised to a power.",
@@ -198,12 +184,13 @@ let puDescs = { //I'm not that dumb
 	41: "Paradoxes add the power to Dimension Boosts.",
 	42: "Tickspeed Boosts boost Infinity Dimensions.",
 	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "Time Dimensions boost Paradox gain",
-	51: "Reduce timeshard requirement multiplier based on Time dimension boosts.", 
-	52()  { // but yeah, thats how every other thing does it
-   return "Tickspeed Boosts " + (player.infinitied>0||player.eternities>0||quantumed ? "are 2x stronger." : "are stronger based on galaxies.") 
+	44: "Time shards boost Paradox gain",
+
+	51: "Reduce timeshard requirement multiplier to 1.3", 
+	52()  { 
+   return "Tickspeed Boosts are stronger" + (player.infinitied>0||player.eternities>0||quantumed ? " based on galaxies." : ".") 
   },
-	53: "Galaxies are twice as powerful.",
+	53: "Galaxies are twice as powerful.", //Might have to change this one, but eh. 
 	54: "Gain 1 galaxy for every 5 tickspeed boosts bought", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
 	61: "Total gained Paradoxes boost paradox gain",
 	62: "Paradox upgrade 34 is stronger based on total antimatter.",
@@ -236,7 +223,10 @@ let puCosts = {
 	31: 1,
 	32: 2,
 	33: 8,
-	34: 512
+	34: 512,
+
+	41: Math.pow(2, 26),
+	42: 1e9
 }
 let puCaps = {
 	11: 100,
@@ -244,7 +234,57 @@ let puCaps = {
 	13: 100,
 	14: 100
 }
-
+let puShown = {
+  11: true,
+  12: true,
+  13: true,
+  14: true,
+  21: true,
+  22: true,
+  23: true,
+  24: true,
+  31: true,
+  32: true,
+  33: true,
+  34: true,
+  get 41() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 42() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 43() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 44() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 51() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 52() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 53() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 54() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 61() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 62() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 63() {
+    return player.galacticSacrifice.times > 0
+  },
+  get 64() {
+    return player.galacticSacrifice.times > 0
+  },
+  
+}
 function buyPU(x,r) {
 	//x = upgrade id, r = is repeatable
 	if (hasPU(x,r) == (!r || puCaps[x] || 1/0)) return
@@ -265,8 +305,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x,r,nq) {
-	let e = player.pSac != undefined && !(nq && player.aarexModifications.quickReset)
+function hasPU(x, r, nq) {
+	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -276,6 +316,7 @@ function updateParadoxUpgrades() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			document.getElementById("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
+      document.getElementById("pu" + id).style.display = (puShown[id]) ? "" : "none"
 			document.getElementById("puc" + id).style.display = hasPU(id, true) >= puCaps[id] ? "none" : ""
 			if (typeof(puDescs[id]) == "function") document.getElementById("pud" + id).textContent = puDescs[id]()
 		}
@@ -352,7 +393,7 @@ function maxPDs() {
 }
 
 function getPDPower(d) {
-	let r=player.pSac.dims[d].power
+	let r = player.pSac.dims[d].power
 	if (d < 8) {
 		var pu = ((d - 1) % 3) + 22
 		if (hasPU(pu)) r = r.times(puMults[pu]())
@@ -376,7 +417,7 @@ function getPDDesc(d) {
 }
 
 function getPDRate(d) {
-	let toGain = getPDProduction(d + 2).div(getEC12Mult())
+	let toGain = getPDProduction(d + 2).div(tmp.ec12Mult)
 	var current = player.pSac.dims[d].amount.max(1)
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
@@ -400,9 +441,9 @@ function getExtraTime() {
 
 //Paradox Layer Reset
 function resetPSac() {
-	if (player.aarexModifications.ngmX > 4) {
+	if (tmp.ngmX >= 5) {
 		PXminpeak = new Decimal(0)
-		let keepPU
+		let keepPU = false //Wait until the next update comes.
 		player.pSac = {
 			time: 0,
 			times: 0,
@@ -421,7 +462,7 @@ function resetPSac() {
 
 //v0.51
 function haveExtraTime() {
-	return player.pSac !== undefined && !player.aarexModifications.quickReset
+	return tmp.ngmX >= 5 && !player.aarexModifications.quickReset
 }
 
 function quickMReset() {
