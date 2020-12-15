@@ -2713,7 +2713,7 @@ function conToDeciPreEter(){
         }
         if (player.pSac !== undefined) {
                 player.pSac.px = new Decimal(player.pSac.px)
-                for (var d=1;d<9;d++) player["infinityDimension"+d].costAM = new Decimal(player["infinityDimension"+d].costAM)
+                for (var d=1;d<=8;d++) player["infinityDimension"+d].costAM = Decimal.max(player["infinityDimension"+d].costAM, idBaseCosts[d])
                 if (player.pSac.dims !== undefined) {
                         player.pSac.dims.power = new Decimal(player.pSac.dims.power)
                         for (var d=1;d<9;d++) {

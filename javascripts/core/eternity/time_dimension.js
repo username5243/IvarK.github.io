@@ -358,6 +358,7 @@ function buyMaxTimeDimension(tier, bulk) {
 
 	let dim = player['timeDimension' + tier]
 	let res = getOrSubResourceTD(tier)
+	let mult = TIME_DIM_COSTS[tier].mult()
 	if (!res.gte(dim.cost)) return
 
 	if (tmp.ngmX >= 4 && getAmount(1) < 1) return
@@ -365,8 +366,6 @@ function buyMaxTimeDimension(tier, bulk) {
 
 	let toBuy = 0
 	if (tmp.ngmX >= 4) {
-		let mult = TIME_DIM_COSTS[tier].mult()
-
 		toBuy = Math.floor(res.div(dim.cost).times(mult - 1).add(1).log(mult))
 		if (bulk) toBuy = Math.min(toBuy, bulk)
 
@@ -397,11 +396,11 @@ function buyMaxTimeDimension(tier, bulk) {
 		if (isNaN(newEP.e)) player.eternityPoints = new Decimal(0)
 	}
 
-	dim.amount = dim.amount.plus(toBuy);
+	dim.amount = dim.amount.plus(toBuy)
 	dim.bought += toBuy
 	if (tmp.ngmX >= 4) {
 		dim.power = Decimal.pow(getDimensionPowerMultiplier(), toBuy / 2).times(dim.power)
-		dim.cost = dim.cost.times(Decimal.pow(timeDimCostMults[1][tier], toBuy))
+		dim.cost = dim.cost.times(Decimal.pow(mult, toBuy))
 	} else {
 		dim.cost = timeDimCost(tier, dim.bought)
 		dim.power = dim.power.times(Decimal.pow(player.boughtDims ? 3 : 2, toBuy))

@@ -22,16 +22,17 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	reduceMatter(1)
 }
 
-function maxIDwithAM(t,bulk) {
+function maxIDwithAM(t, bulk) {
 	let d = player["infinityDimension" + t]
 	let c = d.costAM
 	let m = idCostMults[t]
 	if (getAmount(1) < 1) return
 	if (!player.infDimensionsUnlocked[t - 1]) return
 	if (!player.money.gte(c)) return
+
 	let tb = Math.floor(player.money.div(c).times(m - 1).add(1).log(m))
 	if (bulk) tb = Math.min(tb, bulk)
-	let ts=Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
+	let ts = Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
 	player.money = player.money.sub(ts.min(player.money))
 	d.costAM = d.costAM.times(Decimal.pow(m, tb))
 	d.bought += 10*tb
@@ -42,7 +43,7 @@ function maxIDwithAM(t,bulk) {
 }
 
 function maxAllIDswithAM() {
-	for (var d = 1; d < 9; d++) maxIDwithAM(d)
+	for (var d = 1; d <= 8; d++) maxIDwithAM(d)
 }
 
 function resetIDsOnNGM5() {

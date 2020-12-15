@@ -191,7 +191,7 @@ function infDimensionPower(tier) {
 
 function resetInfDimensions(full) {
 	player.infinityPower = new Decimal(0)
-	for (let t = 1; t < 9; t++) {
+	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
 			dim.cost = new Decimal(infBaseCost[t])
@@ -199,6 +199,7 @@ function resetInfDimensions(full) {
 			dim.baseAmount = 0
 		}
 		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
+		if (tmp.ngmX >= 5) dim.costAM = new Decimal(idBaseCosts[t])
 	}
 	if (full) resetInfDimUnlocked()
 }
@@ -207,7 +208,7 @@ function resetInfDimUnlocked() {
 	let value = player != undefined && getEternitied() >= 25 && player.achievements.includes("ng3p21")
 	let data = []
 	for (let d = 1; d <= 8; d++) data.push(value)
-	if (player != undefined && player.pSac != undefined) data[0] = true
+	if (player != undefined && tmp.ngmX >= 5) data[0] = true
 	return data
 }
 
