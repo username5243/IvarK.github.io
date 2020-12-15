@@ -139,26 +139,18 @@ let puMults = {
 	},
 
 	41: function() {
-		return 1 //Todo
+		return Math.cbrt(player.pSac.px.log10()) //Todo
 	},
 	42: function() {
-		return Math.pow(10, player.tickspeedBoosts) //Todo
-	},
-	43: function() {
-		return 1 //Todo
+		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
 	},
 	44: function() {
-		return 1 //Todo
+		return player.timeShards.log(100)
 	},
 
-	51: function() {
-		return 1 //Todo
-	},
 	52: function() {
-		return 1 //Todo
-	},
-	53: function() {
-		return 1 //Todo
+		if (player.infinitied>0||player.eternities>0||quantumed) return 1.5
+		return Math.max(1+player.galaxies/20, 1.5) //Todo
 	},
 	54: function() {
 		return 1 //Todo
@@ -198,12 +190,13 @@ let puDescs = { //I'm not that dumb
 	41: "Paradoxes add the power to Dimension Boosts.",
 	42: "Tickspeed Boosts boost Infinity Dimensions.",
 	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "Time Dimensions boost Paradox gain",
-	51: "Reduce timeshard requirement multiplier based on Time dimension boosts.", 
-	52()  { // but yeah, thats how every other thing does it
-   return "Tickspeed Boosts " + (player.infinitied>0||player.eternities>0||quantumed ? "are 2x stronger." : "are stronger based on galaxies.") 
+	44: "Time shards boost Paradox gain",
+
+	51: "Reduce timeshard requirement multiplier to 1.3", 
+	52()  { 
+   return "Tickspeed Boosts are stronger" + (player.infinitied>0||player.eternities>0||quantumed ? " based on galaxies." : ".") 
   },
-	53: "Galaxies are twice as powerful.",
+	53: "Galaxies are twice as powerful.", //Might have to change this one, but eh. 
 	54: "Gain 1 galaxy for every 5 tickspeed boosts bought", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
 	61: "Total gained Paradoxes boost paradox gain",
 	62: "Paradox upgrade 34 is stronger based on total antimatter.",
@@ -236,7 +229,9 @@ let puCosts = {
 	31: 1,
 	32: 2,
 	33: 8,
-	34: 512
+	34: 512,
+
+	41: Math.pow(2, 26),
 }
 let puCaps = {
 	11: 100,
