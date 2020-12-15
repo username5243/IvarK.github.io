@@ -132,7 +132,7 @@ let puMults = {
 	},
 
 	41: function() {
-		return Math.cbrt(player.pSac.px.log10()) //Todo
+		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
 	42: function() {
 		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
@@ -162,7 +162,7 @@ let puMults = {
 		return 1 //Todo
 	},
 } 
-let puDescs = { //I'm not that dumb
+let puDescs = { 
 	11: "Dimension multiplier increases 2x faster.",
 	12: "Matter increases slower.",
 	13: "Second Dimension multiplier is raised to a power.",
@@ -225,6 +225,7 @@ let puCosts = {
 	34: 512,
 
 	41: Math.pow(2, 26),
+	42: 1e9
 }
 let puCaps = {
 	11: 100,
