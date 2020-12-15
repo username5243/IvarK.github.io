@@ -142,10 +142,10 @@ let puMults = {
 		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
 	42: function() {
-		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
+		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion, may need to be softcapped in the future. 
 	},
 	44: function() {
-		return player.timeShards.log(100)
+		return player.timeShards.log10() / 10 
 	},
 
 	52: function() {
@@ -232,7 +232,9 @@ let puCosts = {
 	34: 512,
 
 	41: Math.pow(2, 26),
-	42: 1e9
+	42: 1e9,
+	43: Math.pow(2, 32),
+	44: 1e11,
 }
 let puCaps = {
 	11: 100,
