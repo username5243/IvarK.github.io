@@ -146,10 +146,9 @@ function infDimensionPower(tier) {
 	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
 
-  	if (hasPU(31)) mult = mult.times(puMults[31]())
-	if (hasPU(42)) mult = mult.times(puMults[42]()) 
-
-  	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+	if (hasPU(31)) mult = mult.times(puMults[31]())
+	if (hasPU(42)) mult = mult.times(puMults[42]())  
+  	if (player.pSac !== undefined && tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
 
 	let replUnl = !tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2)

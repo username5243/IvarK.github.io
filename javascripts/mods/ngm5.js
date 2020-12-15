@@ -136,10 +136,10 @@ let puMults = {
 		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
 	42: function() {
-		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
+		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion, may need to be softcapped in the future. 
 	},
 	44: function() {
-		return player.timeShards.log(100)
+		return player.timeShards.log10() / 10 
 	},
 
 	52: function() {
@@ -226,7 +226,9 @@ let puCosts = {
 	34: 512,
 
 	41: Math.pow(2, 26),
-	42: 1e9
+	42: 1e9,
+	43: Math.pow(2, 32),
+	44: 1e11,
 }
 let puCaps = {
 	11: 100,
@@ -305,8 +307,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x, r, nq) {
-	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
+function hasPU(x,r,nq) { //x = upgrade, r = Repeatable? nq = Not quick matter reset
+	let e = player.pSac != undefined && !(nq && player.aarexModifications.quickReset)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
