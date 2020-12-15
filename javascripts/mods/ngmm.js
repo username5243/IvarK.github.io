@@ -152,6 +152,7 @@ function galacticSacrifice(auto, force, chall) {
 		updateChallengeTimes()
 		updateAutobuyers()
 	}
+  if (player.pSac!==undefined) player.infDimensionsUnlocked[2] = true
 	GPminpeak = new Decimal(0)
 	player.galacticSacrifice.time = 0
 	resetPSac()

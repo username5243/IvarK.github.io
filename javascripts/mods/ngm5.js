@@ -97,9 +97,9 @@ function pSacReset(force, chall, pxGain) {
 function pSacrificed() {
 	return player.pSac != undefined && !isEmptiness && (player.pSac.times || player.galacticSacrifice.times || player.infinitied > 0 || getEternitied() > 0 || quantumed)
 }
-
+// yeah llolo;
 //Paradox Upgrades
-let puSizes = {x: 4, y: 3}
+let puSizes = {x: 4, y: 6}
 let puMults = {
 	11: function(l) {
 		//l - upgrade level
@@ -114,6 +114,7 @@ let puMults = {
 	14: function(l) {
 		return Math.min(Math.pow(2, l), 1e3)
 	},
+
 	22: function() {
 		return player.money.add(1).pow(0.2)
 	},
@@ -123,6 +124,7 @@ let puMults = {
 	24: function() {
 		return player.timeShards.add(1).pow(0.1)
 	},
+
 	31: function() {
 		return Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
 	},
@@ -134,38 +136,82 @@ let puMults = {
 	},
 	34: function() {
 		return player.postC3Reward.log10() / 3 + 1
-	}
-}
-let puDescs = {
+	},
+
+	41: function() {
+		return 1 //Todo
+	},
+	42: function() {
+		return Math.pow(10, player.tickspeedBoosts) //Todo
+	},
+	43: function() {
+		return 1 //Todo
+	},
+	44: function() {
+		return 1 //Todo
+	},
+
+	51: function() {
+		return 1 //Todo
+	},
+	52: function() {
+		return 1 //Todo
+	},
+	53: function() {
+		return 1 //Todo
+	},
+	54: function() {
+		return 1 //Todo
+	},
+
+	61: function() {
+		return 1 //Todo
+	},
+	62: function() {
+		return 1 //Todo
+	},
+	63: function() {
+		return 1 //Todo
+	},
+	64: function() {
+		return 1 //Todo
+	},
+} 
+let puDescs = { //I'm not that dumb
 	11: "Dimension multiplier increases 2x faster.",
 	12: "Matter increases slower.",
 	13: "Second Dimension multiplier is raised to a power.",
 	14: "Time speed is 2x faster.",
+
 	21: "Buying something reduces matter.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
 	23: "Infinity power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
+
 	31: function() {
 		return "Gain a multiplier to Infinity Dimensions"+(player.galacticSacrifice.times>0||player.infinitied>0||player.eternities>0||quantumed?" based on your Galactic Sacrificed stat.":".")
 	},
 	32: "Infinity Power boosts Time Dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
+
 	41: "Paradoxes add the power to Dimension Boosts.",
-	42: "Dimension Boosts boost Infinity Dimensions.",
-	43: "Reduce Time Dimension Boost cost multiplier to 1.5.",
-	44: "Time Dimension Boosts are stronger based on your Paradoxes.",
-	51: "Tickspeed multiplier boost to Time Dimensions is stronger based on your Tickspeed Boosts.",
-	52: "Tickspeed Boosts are 2x stronger.",
-	53: "Galaxies boost Dimension Sacrifice.",
-	54: "You get 1 extra galaxy for every 1 Tickspeed Boost.",
-	61: "Paradoxes make you start with less matter.",
-	62: "Paradoxes boost Normal Dimensions.",
+	42: "Tickspeed Boosts boost Infinity Dimensions.",
+	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
+	44: "Time Dimensions boost Paradox gain",
+	51: "Reduce timeshard requirement multiplier based on Time dimension boosts.", 
+	52()  { // but yeah, thats how every other thing does it
+   return "Tickspeed Boosts " + (player.infinitied>0||player.eternities>0||quantumed ? "are 2x stronger." : "are stronger based on galaxies.") 
+  },
+	53: "Galaxies are twice as powerful.",
+	54: "Gain 1 galaxy for every 5 tickspeed boosts bought", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
+	61: "Total gained Paradoxes boost paradox gain",
+	62: "Paradox upgrade 34 is stronger based on total antimatter.",
 	63: function() {
-		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "You gain more Galaxy points based on your Paradoxes." : "???"
+		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Paradoxes boost Galaxy Point gain." : "???"
 	},
 	64: function() {
-		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Time Dimension Boosts multiply Dimension Boosts amount boost to Galaxy points gain." : "???"
+		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Time Dimension Boosts and Dimension Boosts boost each other." : "???"
 	}
 }
 let puCosts = {
@@ -181,10 +227,12 @@ let puCosts = {
 	14: function(l) {
 		return Decimal.pow(3,Math.pow(2, l) - 1)
 	},
+
 	21: 256,
 	22: 8,
 	23: 32,
 	24: 64,
+
 	31: 1,
 	32: 2,
 	33: 8,
