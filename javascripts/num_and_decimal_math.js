@@ -1,10 +1,6 @@
 function nP(a) {
-	if (typeof a == "string") {
-		return nN(new Decimal(a))
-	}
-	if (!a.e) return a
-	a = nN(a)
-	return a
+	if (typeof(a)=="number") return a
+	return new Decimal(a)
 }
 
 function nN(a) {
