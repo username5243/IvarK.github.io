@@ -1,7 +1,7 @@
 function getTDBoostReq() {
 	let amount = player.tdBoosts > 2 || player.pSac != undefined ? 10 : 2
 	let maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
-	let mult = inNC(4) || player.pSac != undefined ? 3 : 2
+	let mult = hasPU(43) ? 1.5 : inNC(4) || tmp.ngmX >= 5 ? 3 : 2
 	return {amount: Math.ceil(amount + Math.max(player.tdBoosts + (player.pSac ? 0 : 1 - maxTier), 0) * mult), mult: mult, tier: Math.min(player.tdBoosts + 1, maxTier)}
 }
 
@@ -54,7 +54,7 @@ function autoTDBoostBoolean() {
 
 //v2.11
 function cantReset() {
-	return player.aarexModifications.ngmX > 3 && inNC(14) && getTotalResets() > 9
+	return tmp.ngmX >= 4 && inNC(14) && getTotalResets() >= 10
 }
 
 document.getElementById("buyerBtnTDBoost").onclick = function () {

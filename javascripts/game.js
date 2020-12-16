@@ -5250,7 +5250,7 @@ function gameLoop(diff) {
 	sacLayersDisplay()
 	d8SacDisplay()
 
-	document.getElementById("challengesbtn").style.display = ph.did("infinity") && !isEmptiness ? "inline-block" : "none"
+	document.getElementById("challengesbtn").style.display = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"
 
 	isEmptinessDisplayChanges()
 	DimBoostBulkDisplay()
@@ -5278,7 +5278,7 @@ function gameLoop(diff) {
 }
 
 function isGamePaused() {
-	return player.aarexModifications && player.aarexModifications.pause
+	return player && player.aarexModifications && player.aarexModifications.pause
 }
 
 function simulateTime(seconds, real, id) {

@@ -59,7 +59,8 @@ function isDimUnlocked(d) {
 //Paradox Sacrifices
 function getPxGain() {
 	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
-	for (var d = 1; d < 9; d++) r=r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 1))
+	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 1))
+	if (hasPU(44)) r = r.times(puMults[44]())
 	return r.floor()
 }
 
@@ -136,15 +137,16 @@ let puMults = {
 		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
 	42: function() {
-		return Math.pow(2, (Math.pow(3 * player.tickspeedBoosts, 0.75))) //Aarex's suggestion
+		let x = player.tickspeedBoosts
+		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
 	44: function() {
-		return player.timeShards.log(100)
+		return player.timeShards.add(1).log10() / 10 + 1
 	},
 
 	52: function() {
-		if (player.infinitied>0||player.eternities>0||quantumed) return 1.5
-		return Math.max(1+player.galaxies/20, 1.5) //Todo
+		if (!ph.did("infinity")) return 1.5
+		return Math.max(1 + player.galaxies / 20, 1.5) //Todo
 	},
 	54: function() {
 		return 1 //Todo
@@ -169,13 +171,13 @@ let puDescs = {
 	13: "Second Dimension multiplier is raised to a power.",
 	14: "Time speed is 2x faster.",
 
-	21: "Buying something reduces matter.",
+	21: "Reduce the amount of matter for each bought Dimension and Tickspeed upgrade.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
-	23: "Infinity power boosts Paradox Dimensions 2 & 5.",
+	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
 
 	31: function() {
-		return "Gain a multiplier to Infinity Dimensions"+(player.galacticSacrifice.times>0||player.infinitied>0||player.eternities>0||quantumed?" based on your Galactic Sacrificed stat.":".")
+		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	32: "Infinity Power boosts Time Dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
@@ -183,10 +185,10 @@ let puDescs = {
 
 	41: "Paradoxes add the power to Dimension Boosts.",
 	42: "Tickspeed Boosts boost Infinity Dimensions.",
-	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "Time shards boost Paradox gain",
+	43: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
+	44: "You gain more Paradoxes based on your Time Shards.",
 
-	51: "Reduce timeshard requirement multiplier to 1.3", 
+	51: "Reduce the tickspeed threshold multiplier to 1.3x.", 
 	52()  { 
    return "Tickspeed Boosts are stronger" + (player.infinitied>0||player.eternities>0||quantumed ? " based on galaxies." : ".") 
   },
@@ -226,13 +228,15 @@ let puCosts = {
 	34: 512,
 
 	41: Math.pow(2, 26),
-	42: 1e9
+	42: 1e9,
+	43: Math.pow(2, 32),
+	44: 1e11
 }
 let puCaps = {
-	11: 100,
+	11: 8,
 	12: 100,
 	13: 100,
-	14: 100
+	14: 10
 }
 
 function buyPU(x,r) {
