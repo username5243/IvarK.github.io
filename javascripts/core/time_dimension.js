@@ -171,8 +171,9 @@ function updateTimeDimensions() {
 			else document.getElementById("timeMax" + tier).className = "unavailablebtn"
 			} else document.getElementById("timeRow" + tier).style.display = "none"
 		}
-		if (player.aarexModifications.ngmX > 3) {
-			var isShift = player.tdBoosts < (inNC(4)||player.pSac!==undefined ? 5 : 7)
+
+		if (tmp.ngmX >= 4) {
+			var isShift = player.tdBoosts < (inNC(4) || tmp.ngmX >= 5 ? 5 : 7)
 			var req = getTDBoostReq()
 			document.getElementById("tdReset").style.display = ""
 			document.getElementById("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
