@@ -103,6 +103,14 @@ const allAchievements = {
   r136 : "I told you already, time is relative",
   r137 : "Now you're thinking with dilation!",
   r138 : "This is what I have to do to get rid of you.",
+  ngm5p11 : "Accelerated",
+  ngm5p12 : "Make Antimatter Great Again!",
+  ngm5p13 : "Out of luck",
+  ngm5p14 : "TICK OVERDRIVE",
+  ngm5p15 : "The hardest of sacrifices",
+  ngm5p16 : "Impossible Equations",
+  ngm5p17 : "Logic is an illusion",
+  ngm5p18 : "Time Paradox",
   ngud11 : "A newer beginning.",
   ngud12 : "1 million is still a lot",
   ngud13 : "Time is absolute",
@@ -386,11 +394,13 @@ function updateAchievements() {
 	var amount = 0
 	var rowsShown = 0
 	var rowsNum = 0
-	for (var i = 1; i < 25; i++) {
+	for (var i = 1; i < 25; i++) { 
 		var shown=true
 		var rowid = i
-		var rownum = i
-		if (i > 15) {
+        var rownum = i
+        if (false) {
+            rowid = "ngm5" //I will eventually add this in. until then, deal with achievements now showing up properly. 
+        } else if (i > 15) {
 			shown =! (!player.masterystudies)
 			rownum = i - 15
 			if (rownum > 8) shown = shown && !tmp.ngp3l
