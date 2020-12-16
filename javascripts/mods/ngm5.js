@@ -7,7 +7,7 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	let c = d.costAM
 	if (getAmount(1) < 1) {
 		if (!auto) {
-		alert("You need to have at least 1 First Dimension to be able to buy Infinity Dimensions.")
+		alert("You need to have at least 1 First Normal Dimension to be able to buy Infinity Dimensions.")
 		}
 		return
 	}
@@ -164,21 +164,23 @@ let puMults = {
 	64: function() {
 		return 1 //Todo
 	},
-} 
-let puDescs = { 
-	11: "Dimension multiplier increases 2x faster.",
-	12: "Matter increases slower.",
-	13: "Second Dimension multiplier is raised to a power.",
-	14: "Time speed is 2x faster.",
+}
 
-	21: "Reduce the amount of matter for each bought Dimension and Tickspeed upgrade.",
+let puDescs = { 
+	11: "Normal Dimension multipliers increase 2x faster.",
+	12: "Matter increases slower.",
+	13: "Increase the Second Normal Dimension multiplier",
+	14: "Time speed is 2x faster.",
+	
+	21: "Buying Dimensions or Tickspeed divides matter by 1.01.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
 	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
-
+	
 	31: function() {
 		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
+	
 	32: "Infinity Power boosts Time Dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
@@ -188,14 +190,14 @@ let puDescs = {
 	43: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
 	44: "You gain more Paradoxes based on your Time Shards.",
 
-	51: "Reduce the tickspeed threshold multiplier to 1.3x.", 
+	51: "Reduce Time Shard requirement multiplier to 1.3", 
 	52()  { 
-   return "Tickspeed Boosts are stronger" + (player.infinitied>0||player.eternities>0||quantumed ? " based on galaxies." : ".") 
-  },
+   		return "Tickspeed Boosts are stronger" + (player.infinitied > 0 || player.eternities > 0 || quantumed ? " based on galaxies." : ".") 
+  	},
 	53: "Galaxies are twice as powerful.", //Might have to change this one, but eh. 
-	54: "Gain 1 galaxy for every 5 tickspeed boosts bought", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
-	61: "Total gained Paradoxes boost paradox gain",
-	62: "Paradox upgrade 34 is stronger based on total antimatter.",
+	54: "Gain 1 galaxy for every 5 tickspeed boosts bought.", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
+	61: "Total gained Paradoxes boost Paradox gain.",
+	62: "Paradox Upgrade 34 is stronger based on your total antimatter.",
 	63: function() {
 		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Paradoxes boost Galaxy Point gain." : "???"
 	},
