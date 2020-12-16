@@ -394,12 +394,14 @@ function updateAchievements() {
 	var amount = 0
 	var rowsShown = 0
 	var rowsNum = 0
-	for (var i = 1; i < 25; i++) { 
+	for (var i = 1; i < 26; i++) { 
 		var shown=true
 		var rowid = i
         var rownum = i
-        if (false) {
-            rowid = "ngm5" //I will eventually add this in. until then, deal with achievements now showing up properly. 
+        if (i > 24) {
+            shown = player.pSac
+            rownum = i - 24
+            rowid = "ngm5p" + rownum //This is a very Janky way to go about adding in the NG-5 row. There should be a better way to do this. 
         } else if (i > 15) {
 			shown =! (!player.masterystudies)
 			rownum = i - 15
@@ -416,7 +418,8 @@ function updateAchievements() {
 		var n = 0
 		if (shown) {
 			rowsNum++
-			var achNum = i * 10
+            var achNum = i * 10
+            if (i > 24) achNum -= 240 //Jank alert
 			for (var l = 0; l < 8; l++) {
 				achNum += 1;
 				var realAchNum = achNum
@@ -427,11 +430,12 @@ function updateAchievements() {
 					else if (realAchNum == 41) realAchNum = 76
 				}
 				var achId = "r" + achNum
-				if (achNum > 160) achId="ng3p" + (achNum - 150)
+				if (achNum > 160) achId = "ng3p" + (achNum - 150)
 				else if (achNum > 150) achId = "ngpp" + (achNum - 140)
 				else if (achNum == 145) achId = "ngpp13"
 				else if (achNum == 147) achId = "ngpp18"
-				else if (achNum > 140) achId = "ngud" + (achNum - 130)
+                else if (achNum > 140) achId = "ngud" + (achNum - 130)
+                else if (i > 24) achId = "ngm5p" + (achNum) //Jank alert
 				var name = allAchievements[achId]
 				if (player.achievements.includes(achId)) {
 					n++
