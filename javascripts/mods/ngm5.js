@@ -67,6 +67,7 @@ function isDimUnlocked(d) {
 function getPxGain() {
 	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
 	for (var d = 1; d < 9; d++) r=r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 1))
+	if (hasPU(44)) r *= puMults[44]()
 	return r.floor()
 }
 
@@ -139,16 +140,13 @@ let puMults = {
 	},
 
 	41: function() {
-		return 1 //Todo
+		return Math.max(1.1, player.pSac.px.log10() / 10) 
 	},
 	42: function() {
-		return Math.pow(10, player.tickspeedBoosts) //Todo
-	},
-	43: function() {
-		return 1 //Todo
+		return Math.pow(2.5, (Math.log(player.tickspeedBoosts + 1)/Math.log(2)) * Math.sqrt(player.tickspeedBoosts))//I have a very good feeling that this will break if/when this multiplier reaches e308. And I have no clue how to write this to prevent that. 
 	},
 	44: function() {
-		return 1 //Todo
+		return player.timeShards > 0 ? Math.sqrt(player.timeShards.log10() / 2) : 1   
 	},
 
 	51: function() {
@@ -177,7 +175,7 @@ let puMults = {
 		return 1 //Todo
 	},
 } 
-let puDescs = { //I'm not that dumb
+let puDescs = { 
 	11: "Dimension multiplier increases 2x faster.",
 	12: "Matter increases slower.",
 	13: "Second Dimension multiplier is raised to a power.",
@@ -195,10 +193,10 @@ let puDescs = { //I'm not that dumb
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
-	41: "Paradoxes add the power to Dimension Boosts.",
+	41: "Paradoxes boost Dimension Boosts.",
 	42: "Tickspeed Boosts boost Infinity Dimensions.",
 	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "Time Dimensions boost Paradox gain",
+	44: "Time Shards boost Paradox gain",
 	51: "Reduce timeshard requirement multiplier based on Time dimension boosts.", 
 	52()  { // but yeah, thats how every other thing does it
    return "Tickspeed Boosts " + (player.infinitied>0||player.eternities>0||quantumed ? "are 2x stronger." : "are stronger based on galaxies.") 
@@ -236,7 +234,12 @@ let puCosts = {
 	31: 1,
 	32: 2,
 	33: 8,
-	34: 512
+	34: 512,
+
+	41: Math.pow(2,26),
+	42: 1e9,
+	43: Math.pow(2,32),
+	44: 1e12,
 }
 let puCaps = {
 	11: 100,

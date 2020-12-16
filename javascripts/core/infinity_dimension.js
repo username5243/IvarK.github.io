@@ -125,7 +125,8 @@ function getStartingIDPower(tier){
 }
 
 function DimensionPower(tier) {
-  	var dim = player["infinityDimension" + tier]
+	var dim = player["infinityDimension" + tier]
+	//challenges 
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
   	if (player.currentEternityChall == 'eterc14') return getIDReplMult()
@@ -134,10 +135,13 @@ function DimensionPower(tier) {
 	var mult = getStartingIDPower(tier)
 	
   	mult = mult.times(infDimPow)
-
-  	if (hasPU(31)) mult = mult.times(puMults[31]())
-  	if (player.pSac !== undefined && tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
-
+	// NG-5
+	if (player.pSac !== undefined) {
+		if (hasPU(31)) mult = mult.times(puMults[31]())
+		if (hasPU(42)) mult = mult.times(puMults[42]())
+  		if (tier==2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+	}
+	// Achievements
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
   	if (player.achievements.includes("r75") && !player.boughtDims) mult = mult.times(player.achPow);
   	if (player.achievements.includes("r66") && player.galacticSacrifice !== undefined) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
@@ -145,7 +149,7 @@ function DimensionPower(tier) {
 
   	mult = mult.times(getInfDimPathIDMult(tier))
 	mult = mult.times(getTotalIDEUMult())
-	
+	//EC rewards
 	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
 

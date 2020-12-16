@@ -1,8 +1,12 @@
 function getTDBoostReq() {
-	let amount = player.tdBoosts > 2 || player.pSac != undefined ? 10 : 2
-	let maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
-	let mult = inNC(4) || player.pSac != undefined ? 3 : 2
-	return {amount: Math.ceil(amount + Math.max(player.tdBoosts + (player.pSac ? 0 : 1 - maxTier), 0) * mult), mult: mult, tier: Math.min(player.tdBoosts + 1, maxTier)}
+	let amount = player.tdBoosts > 2 || player.pSac !== undefined ? 10 : 2
+	let maxTier = inNC(4) || player.pSac !== undefined ? 6 : 8
+	let mult = inNC(4) || player.pSac !== undefined ? (hasPU(43) ? 1.5 : 3) : 2
+	return {
+		amount: Math.ceil(amount + Math.max(player.tdBoosts + (player.pSac ? 0 : 1 - maxTier), 0) * mult), 
+		mult: mult, 
+		tier: Math.min(player.tdBoosts + 1, maxTier)
+	}
 }
 
 function tdBoost(bulk) {
