@@ -76,10 +76,12 @@ function setInitialMoney() {
 	var x = 10
 	if (player.challenges.includes("challenge1")) x = 100
 	if (player.aarexModifications.ngmX > 3) x = 200
+	if (tmp.ngmX >= 5 && player.achievements.includes("ngm5p12")) x = 250
 	if (player.achievements.includes("r37")) x = 1000
 	if (player.achievements.includes("r54")) x = 2e5
 	if (player.achievements.includes("r55")) x = 1e10
 	if (player.achievements.includes("r78")) x = 2e25
+	if (tmp.ngmX >= 5 && player.achievements.includes("ngm5p12") && player.aarexModifications.quickReset) x = 199
 	player.money = new Decimal(x)
 }
 

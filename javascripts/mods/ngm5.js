@@ -95,7 +95,6 @@ function pSacReset(force, chall, pxGain) {
 function pSacrificed() {
 	return player.pSac != undefined && !isEmptiness && (player.pSac.times || player.galacticSacrifice.times || player.infinitied > 0 || getEternitied() > 0 || quantumed)
 }
-// yeah llolo;
 //Paradox Upgrades
 let puSizes = {x: 4, y: 6}
 let puMults = {
@@ -212,17 +211,19 @@ let puDescs = {
 	}
 }
 let puCosts = {
-	11: function(l) {
+	11: function(l) { //l is still costs
+		if (l >= 8) l *= Math.ceil(Math.sqrt(l - 6))
 		return Math.pow(4, l + 1)
 	},
 	12: function(l) {
-		return Math.pow(2, Math.pow(2, l))
+		return Math.pow(2, Math.pow(2, l)) //between the diminishing returns and terrible scaling, this one outta be good. 
 	},
 	13: function(l) {
+		if (l >= 10) l *= l - 9 //very harsh softcap as a compromise between Apeirogon and Aarex.
 		return Math.pow(4, l + 4)
 	},
 	14: function(l) {
-		return Decimal.pow(3,Math.pow(2, l) - 1)
+		return Decimal.pow(3,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
 	21: 256,
@@ -241,7 +242,7 @@ let puCosts = {
 	44: 1e11
 }
 let puCaps = {
-	11: 8,
+	11: 100,
 	12: 100,
 	13: 20,
 	14: 10

@@ -297,6 +297,7 @@ function getInfinityPowerEffect() {
 	let log = player.infinityPower.max(1).log10()
 	log *= tmp.infPowExp 
 	if (log > 10 && player.pSac !== undefined) log = Math.pow(log * 200 - 1e3, 1/3)
+	if (log >= 308.25 && player.pSac !== undefined) log = 308.25 //Will have to change this when we get around to break_infinity in NG-5.
 	return Decimal.pow(10, log)
 }
 
