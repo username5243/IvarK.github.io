@@ -7,7 +7,7 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	let c = d.costAM
 	if (getAmount(1) < 1) {
 		if (!auto) {
-		alert("You need to have at least 1 First Dimension to be able to buy Infinity Dimensions.")
+		alert("You need to have at least 1 First Normal Dimension to be able to buy Infinity Dimensions.")
 		}
 		return
 	}
@@ -22,16 +22,17 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	reduceMatter(1)
 }
 
-function maxIDwithAM(t,bulk) {
+function maxIDwithAM(t, bulk) {
 	let d = player["infinityDimension" + t]
 	let c = d.costAM
 	let m = idCostMults[t]
 	if (getAmount(1) < 1) return
 	if (!player.infDimensionsUnlocked[t - 1]) return
 	if (!player.money.gte(c)) return
+
 	let tb = Math.floor(player.money.div(c).times(m - 1).add(1).log(m))
 	if (bulk) tb = Math.min(tb, bulk)
-	let ts=Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
+	let ts = Decimal.pow(m, tb).sub(1).div(m - 1).times(c)
 	player.money = player.money.sub(ts.min(player.money))
 	d.costAM = d.costAM.times(Decimal.pow(m, tb))
 	d.bought += 10*tb
@@ -42,19 +43,11 @@ function maxIDwithAM(t,bulk) {
 }
 
 function maxAllIDswithAM() {
-	for (var d = 1; d < 9; d++) maxIDwithAM(d)
+	for (var d = 1; d <= 8; d++) maxIDwithAM(d)
 }
 
-function resetIDs_ngm5() {
-	if (player.pSac == undefined) return
-	for (var t = 1; t < 9; t++) {
-		var d = player["infinityDimension" + t]
-		d.amount = new Decimal(d.baseAmount)
-		d.power = Decimal.pow(getInfBuy10Mult(t), d.baseAmount)
-		d.costAM = new Decimal(idBaseCosts[t])
-		d.boughtAM = 0
-	}
-	player.infinityPower = new Decimal(1)
+function resetIDsOnNGM5() {
+	if (player.pSac !== undefined) resetInfDimensions()
 }
 
 //Global Dimension unlocks
@@ -66,13 +59,13 @@ function isDimUnlocked(d) {
 //Paradox Sacrifices
 function getPxGain() {
 	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
-	for (var d = 1; d < 9; d++) r=r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 1))
-	if (hasPU(44)) r *= puMults[44]()
+	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 1))
+	if (hasPU(44)) r = r.times(puMults[44]())
 	return r.floor()
 }
 
 function canPSac() {
-	return player.pSac != undefined && !tmp.ri && player.matter.max(player.money).gte(1e3) && player.totalTickGained
+	return ph.can("paradox")
 }
 
 function pSac(chall) {
@@ -96,6 +89,7 @@ function pSacReset(force, chall, pxGain) {
 	resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
+	ph.onPrestige("paradox")
 }
 
 function pSacrificed() {
@@ -146,20 +140,19 @@ let puMults = {
 		return Math.max(1.1, player.pSac.px.log10() / 10) 
 	},
 	42: function() {
-		return Math.pow(2.5, (Math.log(player.tickspeedBoosts + 1)/Math.log(2)) * Math.sqrt(player.tickspeedBoosts))//I have a very good feeling that this will break if/when this multiplier reaches e308. And I have no clue how to write this to prevent that. 
+		let x = player.tickspeedBoosts
+		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
 	44: function() {
-		return player.timeShards > 0 ? Math.sqrt(player.timeShards.log10() / 2) : 1   
+		return player.timeShards.add(1).log10() / 10 + 1
 	},
 
 	51: function() {
 		return 1 //Todo
 	},
 	52: function() {
-		return 1 //Todo
-	},
-	53: function() {
-		return 1 //Todo
+		if (!ph.did("infinity")) return 1.5 
+		return Math.max(1 + player.galaxies / 20, 1.5) //Quick note: I don't believe that you can get to 10 galaxies (the minimum required for this upgrade to increase) until after infinity is broken. Might change that in the future. 
 	},
 	54: function() {
 		return 1 //Todo
@@ -177,37 +170,40 @@ let puMults = {
 	64: function() {
 		return 1 //Todo
 	},
-} 
+}
+
 let puDescs = { 
-	11: "Dimension multiplier increases 2x faster.",
+	11: "Normal Dimension multipliers increase 2x faster.",
 	12: "Matter increases slower.",
-	13: "Second Dimension multiplier is raised to a power.",
+	13: "Increase the Second Normal Dimension multiplier",
 	14: "Time speed is 2x faster.",
-
-	21: "Buying something reduces matter.",
+	
+	21: "Buying Dimensions or Tickspeed divides matter by 1.01.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
-	23: "Infinity power boosts Paradox Dimensions 2 & 5.",
+	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
-
+	
 	31: function() {
-		return "Gain a multiplier to Infinity Dimensions"+(player.galacticSacrifice.times>0||player.infinitied>0||player.eternities>0||quantumed?" based on your Galactic Sacrificed stat.":".")
+		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
+	
 	32: "Infinity Power boosts Time Dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
 	41: "Paradoxes boost Dimension Boosts.",
 	42: "Tickspeed Boosts boost Infinity Dimensions.",
-	43: "Reduce Time Dimension Boost cost multiplier to 1.5.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "Time Shards boost Paradox gain",
-	51: "Reduce timeshard requirement multiplier based on Time dimension boosts.", 
-	52()  { // but yeah, thats how every other thing does it
-   return "Tickspeed Boosts " + (player.infinitied>0||player.eternities>0||quantumed ? "are 2x stronger." : "are stronger based on galaxies.") 
-  },
-	53: "Galaxies are twice as powerful.",
-	54: "Gain 1 galaxy for every 5 tickspeed boosts bought", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
-	61: "Total gained Paradoxes boost paradox gain",
-	62: "Paradox upgrade 34 is stronger based on total antimatter.",
+	43: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
+	44: "You gain more Paradoxes based on your Time Shards.",
+
+	51: "Reduce Time Shard requirement multiplier to 1.3", 
+	52()  { 
+   		return "Tickspeed Boosts are stronger" + (player.infinitied > 0 || player.eternities > 0 || quantumed ? " based on galaxies." : ".") 
+  	},
+	53: "Galaxies are twice as powerful.", //Might have to change this one, but eh. 
+	54: "Gain 1 galaxy for every 5 tickspeed boosts bought.", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
+	61: "Total gained Paradoxes boost Paradox gain.",
+	62: "Paradox Upgrade 34 is stronger based on your total antimatter.",
 	63: function() {
 		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Paradoxes boost Galaxy Point gain." : "???"
 	},
@@ -239,16 +235,16 @@ let puCosts = {
 	33: 8,
 	34: 512,
 
-	41: Math.pow(2,26),
+	41: Math.pow(2, 26),
 	42: 1e9,
-	43: Math.pow(2,32),
-	44: 1e12,
+	43: Math.pow(2, 32),
+	44: 1e11
 }
 let puCaps = {
-	11: 100,
+	11: 8,
 	12: 100,
-	13: 100,
-	14: 100
+	13: 20,
+	14: 10
 }
 
 function buyPU(x,r) {
@@ -271,8 +267,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x,r,nq) {
-	let e = player.pSac != undefined && !(nq && player.aarexModifications.quickReset)
+function hasPU(x, r, nq) { // x = upgrade id, r = level, nq = not quick matter reset
+	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -335,6 +331,7 @@ function buyPD(d) {
 	ps.dims[d].cost = ps.dims[d].cost.times(pdCostMults[d])
 	ps.dims[d].power = ps.dims[d].power.times(2)
 	updateParadoxUpgrades()
+
 	if (d === 3) giveAchievement("Impossible Equations")
 	if (d === 6) giveAchievement("Logic is an illusion")
 }
@@ -353,7 +350,8 @@ function maxPDs() {
 			ps.dims[d].amount = ps.dims[d].amount.add(tb)
 			ps.dims[d].cost = ps.dims[d].cost.times(Decimal.pow(m, tb))
 			ps.dims[d].power = ps.dims[d].power.times(Decimal.pow(2, tb))
-			upd=true
+			upd = true
+
 			if (d === 3) giveAchievement("Impossible Equations")
 			if (d === 6) giveAchievement("Logic is an illusion")
 		}
@@ -362,7 +360,7 @@ function maxPDs() {
 }
 
 function getPDPower(d) {
-	let r=player.pSac.dims[d].power
+	let r = player.pSac.dims[d].power
 	if (d < 8) {
 		var pu = ((d - 1) % 3) + 22
 		if (hasPU(pu)) r = r.times(puMults[pu]())
@@ -386,7 +384,7 @@ function getPDDesc(d) {
 }
 
 function getPDRate(d) {
-	let toGain = getPDProduction(d + 2).div(getEC12Mult())
+	let toGain = getPDProduction(d + 2).div(tmp.ec12Mult)
 	var current = player.pSac.dims[d].amount.max(1)
 	if (player.aarexModifications.logRateChange) {
 		var change = current.add(toGain.div(10)).log10()-current.log10()
@@ -410,9 +408,9 @@ function getExtraTime() {
 
 //Paradox Layer Reset
 function resetPSac() {
-	if (player.aarexModifications.ngmX > 4) {
+	if (tmp.ngmX >= 5) {
 		PXminpeak = new Decimal(0)
-		let keepPU
+		let keepPU = false //Wait until the next update comes.
 		player.pSac = {
 			time: 0,
 			times: 0,
@@ -431,7 +429,7 @@ function resetPSac() {
 
 //v0.51
 function haveExtraTime() {
-	return player.pSac !== undefined && !player.aarexModifications.quickReset
+	return tmp.ngmX >= 5 && !player.aarexModifications.quickReset
 }
 
 function quickMReset() {
