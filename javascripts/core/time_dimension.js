@@ -235,6 +235,9 @@ function buyTimeDimension(tier) {
 		dim.cost = timeDimCost(tier, dim.bought)
 		updateEternityUpgrades()
 	}
+
+	if (tier === 6) giveAchievement("Out of luck")
+
 	return true
 }
 

@@ -4986,6 +4986,7 @@ function incrementParadoxUpdating(diff){
 			if (!isDimUnlocked(t+2)) break
 			player.pSac.dims[t].amount=player.pSac.dims[t].amount.add(getPDProduction(t+2).times(diff))
 		}
+		if (player.pSac.dims.power.gte(1e10)) giveAchievement("Time Paradox")
 	}
 }
 

@@ -152,7 +152,10 @@ function galacticSacrifice(auto, force, chall) {
 		updateChallengeTimes()
 		updateAutobuyers()
 	}
-  if (player.pSac!==undefined) player.infDimensionsUnlocked[2] = true
+    if (player.pSac!==undefined) {
+		player.infDimensionsUnlocked[2] = true
+		giveAchievement("The hardest of sacrifices")
+	} 
 	GPminpeak = new Decimal(0)
 	player.galacticSacrifice.time = 0
 	resetPSac()
