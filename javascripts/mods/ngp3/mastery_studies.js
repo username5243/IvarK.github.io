@@ -6,7 +6,7 @@ var masteryStudies = {
 	},
 	costs: {
 		time: {},
-		time_mults: {241: 1, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
+		time_mults: {241: 1, 252: 5, 253: 1.5, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
 		ec: {},
 		dil: {}
 	},
@@ -84,8 +84,11 @@ var masteryStudies = {
 	},
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
+	unl() {
+		return tmp.ngp3 && tmp.eterUnl && player.dilation.upgrades.includes("ngpp6")
+	},
 	has(x) {
-		return tmp.ngp3 && tmp.eterUnl && (player.masterystudies.includes("t" + x) || (player.masterystudies.includes(x) && x[0] == "d"))
+		return this.unl() && (player.masterystudies.includes("t" + x) || (player.masterystudies.includes(x) && x[0] == "d"))
 	},
 	timeStudies: [],
 	timeStudyEffects: {
@@ -248,6 +251,8 @@ var masteryStudies = {
 	},
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.2x per upgrade.",
+		242: "You can pick 2 paths from the second split of Time Studies.",
+		243: "You can get all row-23 time studies.",
 		251: "Remote galaxy scaling starts 1 galaxy later per 3,000 dimension boosts.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
 		253: "Remote galaxy scaling starts 1 galaxy later per 4 total replicated galaxies.",
@@ -328,7 +333,7 @@ var masteryStudies = {
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
-	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: [291, 292, 302], 291: [301], 292: [303], 301: [311], 302: ["d10"], 303: [312], 311: [321], 312: [323], d10: [322], 322: [331, 332], 331: [342], 332: [343], 342: [341], 343: [344], 344: [351], 351: ["d11"], d11: [361, 362], 361: [371], 362: [373], 371: [372], 372: [381], 373: [382], 381: [391], 382: [383], 383: [393], 391: [392], 393: [392], 392: ["d12"], d12: [401, 402], 401: [411], 402: [412], 411: [421], 412: ["d13"], 421: ["d13"], d13: [431], 431: ["d14"]},
+	allConnections: {241: [242, 243, 251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: [291, 292, 302], 291: [301], 292: [303], 301: [311], 302: ["d10"], 303: [312], 311: [321], 312: [323], d10: [322], 322: [331, 332], 331: [342], 332: [343], 342: [341], 343: [344], 344: [351], 351: ["d11"], d11: [361, 362], 361: [371], 362: [373], 371: [372], 372: [381], 373: [382], 381: [391], 382: [383], 383: [393], 391: [392], 393: [392], 392: ["d12"], d12: [401, 402], 401: [411], 402: [412], 411: [421], 412: ["d13"], 421: ["d13"], d13: [431], 431: ["d14"]},
 	allConnections_legacy: {252: [263, 264, "d7"], ec13: [], ec14: []},
 	allUnlocks: {
 		d7() {
@@ -776,7 +781,7 @@ function getMTSMult(id, uses = "") {
 
 function updateMasteryStudyTemp() {
 	tmp.mts = {}
-	if (!tmp.eterUnl) return
+	if (!masteryStudies.unl()) return
 
 	let studies = masteryStudies.unlocked
 	for (var s = 0; s <= studies.length; s++) {

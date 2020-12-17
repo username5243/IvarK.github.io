@@ -223,10 +223,15 @@ let CONDENSED = {
 				return Decimal.pow(player.infinityPower.plus(1).log10() + 1, amt * ngC.tmp.ids.pow)
 			},
 			update(x) {
+				if (!ph.did("infinity")) {
+					document.getElementById("infCnd" + x).textContent = "Condense: LOCKED"
+					return
+				}
+
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.infinityPoints
-				document.getElementById("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost)
+				document.getElementById("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (tmp.ngmX >= 5 ? " IP" : "")
 				document.getElementById("infCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
@@ -310,10 +315,15 @@ let CONDENSED = {
 				return Decimal.pow(player.timeShards.plus(1).log10() + 1, amt * ngC.tmp.tds.pow)
 			},
 			update(x) {
+				if (!ph.did("eternity")) {
+					document.getElementById("timeCnd" + x).textContent = "Condense: LOCKED"
+					return
+				}
+
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.eternityPoints
-				document.getElementById("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost)
+				document.getElementById("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (tmp.ngmX >= 4 ? " EP" : "")
 				document.getElementById("timeCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
@@ -399,6 +409,13 @@ let CONDENSED = {
 		if (total>=25) total = 24+Math.log10(total)/Math.log10(24)
 		let mult = Math.log10(total+1)*2+1
 		return mult;
+	},
+	eterUpgs: {
+		display() {
+			document.getElementById("eter10").className = (player.eternityUpgrades.includes(10)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e625")) ? "eternityupbtn" : "eternityupbtnlocked"
+			document.getElementById("eter11").className = (player.eternityUpgrades.includes(11)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e875")) ? "eternityupbtn" : "eternityupbtnlocked"
+			document.getElementById("eter12").className = (player.eternityUpgrades.includes(12)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1350")) ? "eternityupbtn" : "eternityupbtnlocked"
+		}
 	}
 }
 let ngC = CONDENSED

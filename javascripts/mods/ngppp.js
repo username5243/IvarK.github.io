@@ -1,3 +1,12 @@
+function updateNGP3EterUpgs() {
+	if (masteryStudies.unl())  {
+		document.getElementById("eterrowMS").style.display = ""
+		document.getElementById("eter13").className = (player.eternityUpgrades.includes(13)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+		document.getElementById("eter14").className = (player.eternityUpgrades.includes(14)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+		document.getElementById("eter15").className = (player.eternityUpgrades.includes(15)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
+	} else document.getElementById("eterrowMS").style.display = "none"
+}
+
 //v1.5 
 function showQuantumTab(tabName) {
 	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName

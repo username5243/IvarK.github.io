@@ -1746,10 +1746,9 @@ function updateEternityUpgrades() {
 		document.getElementById("eter7").className = (player.eternityUpgrades.includes(7)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1500")) ? "eternityupbtn" : "eternityupbtnlocked"
 		document.getElementById("eter8").className = (player.eternityUpgrades.includes(8)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e2000")) ? "eternityupbtn" : "eternityupbtnlocked"
 		document.getElementById("eter9").className = (player.eternityUpgrades.includes(9)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e3000")) ? "eternityupbtn" : "eternityupbtnlocked"
-	} else {
-		document.getElementById("dilationeterupgrow").style.display = "none"
-		return
-	}
+	} else document.getElementById("dilationeterupgrow").style.display = "none"
+	if (tmp.ngC) ngC.eterUpgs.display()
+	updateNGP3EterUpgs()
 }
 
 function buyEternityUpgrade(name, cost) {
@@ -4182,7 +4181,7 @@ function normalChallPowerUpdating(diff){
 	}
 }
 
-function incrementParadoxUpdating(diff){
+function incrementParadoxUpdating(diff) {
 	if (player.pSac !== undefined) {
 		//Paradox Power
 		player.pSac.dims.power=player.pSac.dims.power.add(getPDProduction(1).times(diff))
@@ -4190,6 +4189,7 @@ function incrementParadoxUpdating(diff){
 			if (!isDimUnlocked(t+2)) break
 			player.pSac.dims[t].amount=player.pSac.dims[t].amount.add(getPDProduction(t+2).times(diff))
 		}
+		if (player.pSac.dims.power.gte(1e10)) giveAchievement("Time Paradox")
 	}
 }
 
@@ -5217,10 +5217,8 @@ function gameLoop(diff) {
 	if (player.break) document.getElementById("iplimit").style.display = "inline"
 	else document.getElementById("iplimit").style.display = "none"
 	document.getElementById("IPPeakDiv").style.display = (player.break && player.boughtDims) ? "" : "none"
-   	if (player.galacticSacrifice) {
-	    try {document.getElementsByClassName("GPAmount")[0].textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)}
-	    finally {}
-    }
+	if (tmp.ngmX >= 2 && ph.shown("galaxy")) getEl("GPAmount").textContent = shortenDimensions(player.galacticSacrifice.galaxyPoints)
+	if (tmp.ngmX >= 5 && ph.shown("paradox")) getEl("pxAmount").textContent = shortenDimensions(player.pSac.px)
 
 	if (tmp.tickUpdate) {
 		updateTickspeed()

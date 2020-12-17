@@ -79,7 +79,10 @@ function pSacReset(force, chall, pxGain) {
 		player.pSac.px = player.pSac.px.add(force?pxGain:getPxGain()).round()
 		player.pSac.times++
 		player.pSac[force ? "forcedTimes" : "normalTimes"]++
-		if (!force) player.infDimensionsUnlocked[1]=true
+		if (!force) {
+			player.infDimensionsUnlocked[1]=true
+			giveAchievement("Make Antimatter Great Again!")
+		}
 	}
 	player.pSac.time = 0
 	PXminpeak = new Decimal(0)
@@ -237,7 +240,7 @@ let puCosts = {
 let puCaps = {
 	11: 8,
 	12: 100,
-	13: 100,
+	13: 20,
 	14: 10
 }
 
@@ -325,6 +328,9 @@ function buyPD(d) {
 	ps.dims[d].cost = ps.dims[d].cost.times(pdCostMults[d])
 	ps.dims[d].power = ps.dims[d].power.times(2)
 	updateParadoxUpgrades()
+
+	if (d === 3) giveAchievement("Impossible Equations")
+	if (d === 6) giveAchievement("Logic is an illusion")
 }
 
 function maxPDs() {
@@ -341,7 +347,10 @@ function maxPDs() {
 			ps.dims[d].amount = ps.dims[d].amount.add(tb)
 			ps.dims[d].cost = ps.dims[d].cost.times(Decimal.pow(m, tb))
 			ps.dims[d].power = ps.dims[d].power.times(Decimal.pow(2, tb))
-			upd=true
+			upd = true
+
+			if (d === 3) giveAchievement("Impossible Equations")
+			if (d === 6) giveAchievement("Logic is an illusion")
 		}
 	}
 	if (upd) updateParadoxUpgrades()

@@ -67,6 +67,7 @@ function manualTickspeedBoost() {
 	if (!(amount >= req.amount)) return
 	if ((player.infinityUpgrades.includes("bulkBoost") || player.achievements.includes("r28")) && (!inNC(14) || !(player.aarexModifications.ngmX > 3))) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
 	else tickspeedBoost(1)
+	giveAchievement("TICK OVERDRIVE")
 }
 
 //v3.2

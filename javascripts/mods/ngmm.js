@@ -160,7 +160,10 @@ function galacticSacrifice(auto, force, chall) {
 		updateChallengeTimes()
 		updateAutobuyers()
 	}
-  if (player.pSac!==undefined) player.infDimensionsUnlocked[2] = true
+	if (tmp.ngmX >= 5) {
+		player.infDimensionsUnlocked[2] = true
+		giveAchievement("The hardest of sacrifices")
+	}
 	GPminpeak = new Decimal(0)
 	player.galacticSacrifice.time = 0
 	resetPSac()
@@ -221,9 +224,7 @@ let galCosts = {
 }
 
 function getGalaxyUpgradeCost(i){
-	if (player.aarexModifications.ngmX == 4){
-		if (galCosts[i+"ngm4"]) return new Decimal(galCosts[i+"ngm4"])
-	}
+	if (tmp.ngmX >= 4 && galCosts[i + "ngm4"]) return new Decimal(galCosts[i + "ngm4"])
 	return galCosts[i]
 }
 

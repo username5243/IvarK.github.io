@@ -25,15 +25,15 @@
 			<div id='news'>.</div>
 		</div>
 		<div style="position: relative">
-			<div id="vel">You have <span class='vel'>0</span> Velocity.</div>
+			<div id="vel">You have <span id="velAmount" class='vel'>0</span> Velocity.</div>
 			<button id="accReset" class="storebtn" onclick="ngm6.accelerate()">Accelerate the vector of time for X Velocity.</button>
 		</div>
 		<div style="position: relative">
-			<div id="px">You have <span class='pxAmount'>0</span> Paradoxes.</div>
+			<div id="px">You have <span id="pxAmount" class='pxAmount'>0</span> Paradoxes.</div>
 			<button id="pSac" class="storebtn" onclick="pSac()"></button>
 		</div>
 		<div style="position: relative">
-			<div id="galaxyPoints2">You have <span class='GPAmount'>0</span> Galaxy points.</div>
+			<div id="galaxyPoints2">You have <span id="GPAmount" class='GPAmount'>0</span> Galaxy points.</div>
 			<button id="sacrificebtn" class="storebtn" onclick="galacticSacrifice()"></button>
 		</div>
 		<div style="position: relative">
@@ -454,7 +454,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="timestudy242" onclick='buyMasteryStudy("t", 241)'></button></td>
 						<td><button class="timestudylocked" id="timestudy241" onclick='buyMasteryStudy("t", 241)'>The IP mult multiplies IP gain by 2.2x per upgrade.</button></td>
+						<td><button class="timestudylocked" id="timestudy243" onclick='buyMasteryStudy("t", 241)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -655,6 +657,17 @@
 						</td>
 						<td>
 							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1350'))">The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: 1e1350 EP</button>
+						</td>
+					</tr>
+					<tr id="eterrowMS">
+						<td>
+							<button id="eter13" class="eternityupbtn" onclick="buyEternityUpgrade(13, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
+						</td>
+						<td>
+							<button id="eter14" class="eternityupbtn" onclick="buyEternityUpgrade(14, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
+						</td>
+						<td>
+							<button id="eter15" class="eternityupbtn" onclick="buyEternityUpgrade(15, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
 						</td>
 					</tr>
 					<tr>
@@ -1616,7 +1629,7 @@
 				<br>
 				<b class="warning">WARNING! THIS UPDATE IS ON BETA!</b>
 				<br>
-				(Beta v0.02: Dawn of NG-5 Rejuvenate Day 2)
+				(Beta v0.1: Remastering the Studies - Alpha 1)
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1915,6 +1928,32 @@
 						</td>
 						<td>
 							<div id="90 degrees to infinity" class="achievement achievementlocked" style="background-image: url(images/8.png)" ach-tooltip="Buy a single Eighth Dimension."><br></div>
+						</td>
+					</tr>
+					<tr id="achRowngm5p1">
+						<td>
+							<div id="Accelerated" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Time Dimension Shift for the first time."><br></div>
+						</td>
+						<td>
+							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter, and 199 Antimatter if Quick Matter Reset is enabled."><br></div>
+						</td>
+						<td>
+							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
+						</td>
+						<td>
+							<div id="TICK OVERDRIVE" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy a tickspeed boost."><br></div>
+						</td>
+						<td>
+							<div id="The hardest of sacrifices" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Perform a Galacitc Sacrifice for the first time."><br></div>
+						</td>
+						<td>
+							<div id="Impossible Equations" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the third Paradox Dimension."><br></div>
+						</td>
+						<td>
+							<div id="Logic is an illusion" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the sixth Paradox Dimension."><br></div>
+						</td>
+						<td>
+							<div id="Time Paradox" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Get at least 2,000 extra seconds from Paradox Dimensions."><br></div>
 						</td>
 					</tr>
 					<tr id="achRow2">

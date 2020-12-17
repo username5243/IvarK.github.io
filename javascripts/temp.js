@@ -32,10 +32,10 @@ function updateTemp() {
 	if (player.timestudy.studies.includes(101)) tmp.nrm = player.replicanti.amount.max(1)
 	tmp.rg4 = false
 	if (tmp.ngpX >= 5) pl.updateTmp()
-	if (tmp.ngp3) {
-		updateGhostifyTempStuff()
-		updateNGP3TempStuff()
-	} else tmp.be = false
+
+	updateGhostifyTempStuff()
+	updateNGP3TempStuff()
+
 	tmp.sacPow = calcTotalSacrificeBoost()
 	updateQCRewardsTemp()
 
@@ -289,7 +289,7 @@ function updateReplicantiTemp() {
 	data.speeds = getReplSpeed()
 	data.interval = getReplicantiFinalInterval()
 
-	if (tmp.ngp3 && player.masterystudies.includes("t273")) {
+	if (masteryStudies.has(273)) {
 		data.chance = Decimal.pow(data.chance, tmp.mts[273])
 		data.freq = 0
 		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Math.log10(player.replicanti.chance + 1) / Math.log10(2))
@@ -303,7 +303,7 @@ function updatePostInfiTemp() {
 	var exp11 = player.galacticSacrifice !== undefined ? 2 : 0.5
 	var exp21 = player.galacticSacrifice !== undefined ? 2 : 0.5
 
-	if (player.aarexModifications.ngmX >= 4){
+	if (tmp.ngmX >= 4){
 		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
 		exp21 += player.money.plus(10).div(10).log10() / 1e4
 		base11 = player.totalmoney.plus(10).log10()
@@ -324,7 +324,7 @@ function updatePostInfiTemp() {
 	}
 }
 
-function updatePPTITemp(){
+function updatePPTITemp() {
 	if (!player.ghostify.ghostlyPhotons.unl) {
 		tmp.ppti = 1
 		return
@@ -335,11 +335,6 @@ function updatePPTITemp(){
 }
 
 function updateNGP3TempStuff() {
-	if (!tmp.quUnl) {
-		updateMasteryStudyTemp()
-		return
-	}
-
 	if (tmp.quActive) {
 		if (tmp.qu.breakEternity.unlocked) updateBreakEternityUpgradesTemp()
 		if (player.masterystudies.includes("d14")) updateBigRipUpgradesTemp()
@@ -347,11 +342,11 @@ function updateNGP3TempStuff() {
 			if (!player.dilation.active && tmp.qu.bigRip.upgrades.includes(14)) tmp.nrm = tmp.nrm.pow(tmp.bru[14])
 			if (tmp.nrm.log10() > 1e9) tmp.nrm = Decimal.pow(10, 1e9 * Math.pow(tmp.nrm.log10() / 1e9, 2/3))
 		}
-	}
-	if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
-	if (tmp.quActive && player.masterystudies.includes("d9")) {
-		tmp.twr = getTotalWorkers()
-		tmp.tra = getTotalReplicants()
+		if (player.masterystudies.includes("d13")) updateTS431ExtraGalTemp()
+		if (player.masterystudies.includes("d9")) {
+			tmp.twr = getTotalWorkers()
+			tmp.tra = getTotalReplicants()
+		}
 	}
 	updateMasteryStudyTemp()
 	if (tmp.quActive) {
@@ -371,16 +366,16 @@ function updateNGP3TempStuff() {
 		if (player.masterystudies.includes("d10")) tmp.edgm = getEmperorDimensionGlobalMultiplier() //Update global multiplier of all Emperor Dimensions
 		tmp.be = inBigRip() && tmp.qu.breakEternity.break
 		tmp.tue = getTreeUpgradeEfficiency()
-	}
+	} else tmp.be = false
 	tmp.rg4 = tmp.quActive && tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || inQC(1) || QCIntensity(1))
 }
 
-function updateGhostifyTempStuff(){
+function updateGhostifyTempStuff() {
 	GDs.updateTmp()
 	updateBosonicLabTemp()
 	tmp.apgw = (tmp.quActive && tmp.qu.nanofield.apgWoke) || getAntiPreonGhostWake()
-	updatePPTITemp() //preon power threshold increase
-	if (player.ghostify.ghostlyPhotons.unl) {
+	if (tmp.quActive) updatePPTITemp() //preon power threshold increase
+	if (ph.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
 		tmp.phF = getPhotonicFlow()
 
 		var x = getLightEmpowermentBoost()

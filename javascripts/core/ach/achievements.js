@@ -8,6 +8,15 @@ const allAchievements = {
         r17 : "Not a luck related achievement",
         r18 : "90 degrees to infinity",
 
+		ngm5p11 : "Accelerated",
+		ngm5p12 : "Make Antimatter Great Again!",
+		ngm5p13 : "Out of luck",
+		ngm5p14 : "TICK OVERDRIVE",
+		ngm5p15 : "The hardest of sacrifices",
+		ngm5p16 : "Impossible Equations",
+		ngm5p17 : "Logic is an illusion",
+		ngm5p18 : "Time Paradox",
+
         r21 : "To infinity!",
         r22 : "Fake News",
         r23 : "The 9th Dimension is a lie",
@@ -231,7 +240,6 @@ const allAchievements = {
         ng3p117 : "Universe Immortality",
         ng3p118 : "Chaos, Chaos, Chaos!",
 
-
         s11 : "The first one's always free",
         s12 : "Just in case",
         s13 : "It pays to have respect",
@@ -320,6 +328,28 @@ const secretAchievementTooltips = {
 };
 const allAchievementNums = Object.invert(allAchievements)
 // to retrieve by value: Object.keys(allAchievements).find(key => allAchievements[key] === "L4D: Left 4 Dimensions");
+const allAchievementRows = [
+	"r1", "ngm5p1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9", 
+	"r10", "r11", "r12", "r13", "ngud1", "ngpp1", "ng3p1", "ng3p2", "ng3p3", "ng3p4",
+	"ng3p5", "ng3p6", "ng3p7", "ng3p8", "ng3p9", "ng3p10", "ng3p11"
+]
+const allAchievementReplacements = {
+	r35() {
+		if (player.boughtDims) return "r22"
+	},
+	r76() {
+		if (player.boughtDims) return "r35"
+	},
+	r22() {
+		if (player.boughtDims) return "r41"
+	},
+	r41() {
+		if (player.boughtDims) return "r76"
+	},
+
+	ngud15: () => "ngpp13",
+	ngud17: () => "ngpp18",
+}
 
 function clearOldAchieves(){
     var toRemove = [];
@@ -346,34 +376,46 @@ function clearOldAchieves(){
     }
 }
 
+function checkAchievement(id) {
+	//Some achievements have different positions from some mods.
+	if (id == "ngpp13" || id == "ngpp18") return player.exdilation != undefined && player.meta != undefined
+
+	//Mod check
+	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
+	if (id.split("ngud")[1]) return player.exdilation != undefined
+	if (id.split("ngpp")[1]) return player.meta != undefined
+	if (id.split("ng3p")[1]) return tmp.ngp3
+
+	//Vanilla check
+	let r = parseInt(id.split("r")[1])
+	if (r == 105 || (r != 117 && r > 110)) return player.boughtDims === undefined
+
+	return true
+}
+
+function checkAchievementRow(id) {
+	//Mod check
+	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
+	if (id.split("ngud")[1]) return player.exdilation != undefined
+	if (id.split("ngpp")[1]) return player.meta != undefined
+	if (id.split("ng3p")[1]) return tmp.ngp3
+
+	//Vanilla check
+	let r = parseInt(id.split("r")[1])
+	if (r >= 11) return player.boughtDims === undefined
+
+	return true
+}
+
 function giveAchievement(name, noUpdate) {
-	if (player.achievements.includes(name)){ clearOldAchieves(); }
+	if (player.achievements.includes(name)) clearOldAchieves()
 
-	if (player.achievements.includes(allAchievementNums[name])) return false
+	let id = allAchievementNums[name]
+	if (player.achievements.includes(id)) return false
+	if (!checkAchievement(id)) return false
 
-        if (allAchievementNums[name] == undefined) {
-                console.log(name)
-        }
+	player.achievements.push(id)
 
-	var ngudAchId = allAchievementNums[name].split("ngud")[1]
-	if (ngudAchId != undefined) if (player.exdilation == undefined) return
-
-	var ngppAchId = allAchievementNums[name].split("ngpp")[1]
-	if (ngppAchId != undefined) {
-		ngppAchId = parseInt(ngppAchId)
-		if (player.meta == undefined && (player.exdilation == undefined || (ngppAchId != 13 && ngppAchId != 18))) return
-	}
-
-	if (allAchievementNums[name].split("ng3p")[1] && !tmp.ngp3) return false
-
-	if (player.boughtDims) {
-		var r = allAchievementNums[name].split("r")[1]
-		if (r < 0) r = 0
-		else r = parseInt(allAchievementNums[name].split("r")[1])
-		if (r == 105 || (r != 117 && r > 110)) return false
-	}
-
-	player.achievements.push(allAchievementNums[name])
 	if (name == "All your IP are belong to us" || name == "MAXIMUM OVERDRIVE") {
 		player.infMult = player.infMult.times(4);
 		player.autoIP = player.autoIP.times(4);
@@ -429,7 +471,8 @@ function giveAchievement(name, noUpdate) {
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()
 	if (name == "Not-so-very-challenging") updateQuantumChallenges()
-        if (!noUpdate) {
+
+	if (!noUpdate) {
 		if (name == "A sound financial decision") localStorage.setItem(btoa("dsAM_asfd"),"")
 		else $.notify(name, "success");
 		updateAchievements()
@@ -440,44 +483,21 @@ function updateAchievements() {
 	var amount = 0
 	var rowsShown = 0
 	var rowsNum = 0
-	for (var i = 1; i <= 26; i++) {
-		var shown=true
-		var rowid = i
-		var rownum = i
-		if (i > 15) {
-			shown =! (!player.masterystudies)
-			rownum = i - 15
-			if (rownum > 8) shown = shown
-			rowid = "ng3p" + rownum
-		} else if (i > 14) {
-			shown = player.meta
-			rowid = "ngpp1"
-		} else if (i > 13) {
-			shown = player.exdilation
-			rowid = "ngud1"
-		} else if (i > 10) shown = !player.boughtDims
-		rowid="achRow" + rowid
+	for (var i = 1; i <= allAchievementRows.length; i++) {
+		var rowId = allAchievementRows[i - 1]
+		var rowHTML = "achRow" + rowId
+		if (rowId[0] == "r") rowHTML = "achRow" + rowId.replace("r", "")
+
+		var shown = checkAchievementRow(rowId)
 		var n = 0
 		if (shown) {
 			rowsNum++
-			var achNum = i * 10
-			for (var l = 0; l < 8; l++) {
-				achNum += 1;
-				var realAchNum = achNum
-				if (player.boughtDims) { // Eternity Respecced
-					if (realAchNum == 35) realAchNum = 22
-					else if (realAchNum == 76) realAchNum = 35
-					else if (realAchNum == 22) realAchNum = 41
-					else if (realAchNum == 41) realAchNum = 76
-				}
-				var achId = "r" + achNum
-				if (achNum > 160) achId="ng3p" + (achNum - 150)
-				else if (achNum > 150) achId = "ngpp" + (achNum - 140)
-				else if (achNum == 145) achId = "ngpp13"
-				else if (achNum == 147) achId = "ngpp18"
-				else if (achNum > 140) achId = "ngud" + (achNum - 130)
-				var name = allAchievements[achId]
-				if (player.achievements.includes(achId)) {
+			for (var l = 1; l <= 8; l++) {
+				var id = rowId + l
+				id = (allAchievementReplacements[id] && allAchievementReplacements[id]()) || id
+
+				var name = allAchievements[id]
+				if (player.achievements.includes(id)) {
 					n++
 					document.getElementById(name).className = "achievementunlocked"
 				} else {
@@ -485,24 +505,25 @@ function updateAchievements() {
 				}
 			}
 			if (n == 8) {
-				document.getElementById(rowid).className = "completedrow"
+				document.getElementById(rowHTML).className = "completedrow"
 				if (player.aarexModifications.hideCompletedAchs) shown = false
 				amount++
-			} else document.getElementById(rowid).className = ""
+			} else document.getElementById(rowHTML).className = ""
 		}
-		document.getElementById(rowid).style.display = shown ? "" : "none"
+		document.getElementById(rowHTML).style.display = shown ? "" : "none"
+
 		if (shown) {
 			rowsShown++
-			var numberelement = document.getElementById(rowid + "number")
+			var numberelement = document.getElementById(rowId + "number")
 			if (numberelement === null) {
-				document.getElementById(rowid).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowid + 'number"></div>'
-				numberelement = document.getElementById(rowid + "number")
+				document.getElementById(rowHTML).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
+				numberelement = document.getElementById(rowId + "number")
 			}
 			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
 			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
 		}
 	}
-    player.achPow = Decimal.pow(player.aarexModifications.newGameMinusMinusVersion ? 5 : 1.5, amount)
+    player.achPow = Decimal.pow(tmp.ngmX >= 5 ? 20 : tmp.ngmX >= 2 ? 5 : 1.5, amount)
     document.getElementById("achmultlabel").textContent = "Current achievement multiplier on " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
 	document.getElementById("nothingness").style.display = rowsShown ? "none" : ""
 
@@ -510,11 +531,11 @@ function updateAchievements() {
 	rowsNum = 0
 	for (var i = 1; i <= document.getElementById("secretachievementtable").children[0].children.length; i++) {
 		var shown = true
-		var rowid = "secretAchRow" + i
+		var rowId = "secretAchRow" + i
 		if (i > 3) {
 			shown = tmp.ngp3
 			if (shown && i > 4) shown = true
-			rowid = "secretAchRowng3p" + (i - 3)
+			rowId = "secretAchRowng3p" + (i - 3)
 		}
 		var n = 0
 		if (shown) {
@@ -535,21 +556,21 @@ function updateAchievements() {
 				}
 			}
 			if (n == 8) {
-				document.getElementById(rowid).className = "completedrow"
+				document.getElementById(rowId).className = "completedrow"
 				if (player.aarexModifications.hideCompletedAchs) shown = false
 				amount++
-			} else document.getElementById(rowid).className = ""
+			} else document.getElementById(rowId).className = ""
 		}
-		document.getElementById(rowid).style.display = shown ? "" : "none"
+		document.getElementById(rowId).style.display = shown ? "" : "none"
 		if (shown) {
 			rowsShown++
-			var numberelement = document.getElementById(rowid + "number")
+			var numberelement = document.getElementById(rowId + "number")
 			if (numberelement === null) {
-				document.getElementById(rowid).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowid + 'number"></div>'
-				numberelement = document.getElementById(rowid + "number")
+				document.getElementById(rowId).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
+				numberelement = document.getElementById(rowId + "number")
 			}
 			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
-			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
+			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
 		}
 	}
 	document.getElementById("nothingnessSecret").style.display = rowsShown ? "none" : ""
