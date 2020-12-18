@@ -29,7 +29,9 @@ function getBaseDTProduction(){
 	
 	if (player.exdilation != undefined) gain = gain.times(getNGUDTGain())
 	gain = gain.times(getEternityBoostToDT())
-	
+
+	if (hasEternityUpg(13)) gain = gain.times(ETER_UPGS[13].mult())
+
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
 	if (tmp.ngp3 && (!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11))) {

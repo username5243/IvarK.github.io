@@ -617,57 +617,57 @@
 				<table class="table" style="margin: 0 auto">
 					<tr>
 						<td>
-							<button id="eter1" class="eternityupbtn" onclick="buyEternityUpgrade(1, 5)">Infinity Dimensions multiplier equal to unspent EP to the power of 5.<br>Currently: x<br>Cost: 5 EP</button>
+							<button id="eter1" class="eternityupbtn" onclick="buyEternityUpgrade(1)"></button>
 						</td>
 						<td>
-							<button id="eter2" class="eternityupbtn" onclick="buyEternityUpgrade(2, 10)">You gain Infinity Dimension multiplier based on Eternities (x^log4(2x))<br>Currently: x<br>Cost: 10 EP</button>
+							<button id="eter2" class="eternityupbtn" onclick="buyEternityUpgrade(2)"></button>
 						</td>
 						<td>
-							<button id="eter3" class="eternityupbtn" onclick="buyEternityUpgrade(3, 50e3)">Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: Xx<br>Cost: 50 K EP</button>
-						</td>
-					</tr>
-					<tr id="eterrow2">
-						<td>
-							<button id="eter4" class="eternityupbtn" onclick="buyEternityUpgrade(4, 1e16)">Your achievement bonus affects Time Dimensions<br>Cost: 1e16 EP</button>
-						</td>
-						<td>
-							<button id="eter5" class="eternityupbtn" onclick="buyEternityUpgrade(5, 1e40)">Time Dimensions gain a mulitplier based on your unspent Time Theorems<br>Cost: 1e40 EP</button>
-						</td>
-						<td>
-							<button id="eter6" class="eternityupbtn" onclick="buyEternityUpgrade(6, 1e50)">Time Dimensions gain a mulitplier based on days played<br>Cost: 1e50 EP</button>
+							<button id="eter3" class="eternityupbtn" onclick="buyEternityUpgrade(3)"></button>
 						</td>
 					</tr>
-					<tr id="dilationeterupgrow">
+					<tr>
 						<td>
-							<button id="eter7" class="eternityupbtn" onclick="buyEternityUpgrade(7, new Decimal('1e1500'))">Dilated time gain is boosted by antimatter<br>Currently: Xx<br>Cost: 1e1500 EP</button>
+							<button id="eter4" class="eternityupbtn" onclick="buyEternityUpgrade(4)"></button>
 						</td>
 						<td>
-							<button id="eter8" class="eternityupbtn" onclick="buyEternityUpgrade(8, new Decimal('1e2000'))">Dilated time gain is boosted by infinity points<br>Currently: Xx<br>Cost: 1e2000 EP</button>
+							<button id="eter5" class="eternityupbtn" onclick="buyEternityUpgrade(5)"></button>
 						</td>
 						<td>
-							<button id="eter9" class="eternityupbtn" onclick="buyEternityUpgrade(9, new Decimal('1e3000'))">Dilated time gain is boosted by eternity points<br>Currently: Xx<br>Cost: 1e3000 EP</button>
-						</td>
-					</tr>
-					<tr id="eterrowcond">
-						<td>
-							<button id="eter10" class="eternityupbtn" onclick="buyEternityUpgrade(10, new Decimal('1e625'))">You can buy all studies in all three-way splits<br>Cost: 1e625 EP</button>
-						</td>
-						<td>
-							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11, new Decimal('1e870'))">You can buy all black & white studies, and TS35 has no requirement<br>Cost: 1e870 EP</button>
-						</td>
-						<td>
-							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12, new Decimal('1e1350'))">The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: 1e1350 EP</button>
+							<button id="eter6" class="eternityupbtn" onclick="buyEternityUpgrade(6)"></button>
 						</td>
 					</tr>
-					<tr id="eterrowMS">
+					<tr>
 						<td>
-							<button id="eter13" class="eternityupbtn" onclick="buyEternityUpgrade(13, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
+							<button id="eter7" class="eternityupbtn" onclick="buyEternityUpgrade(7)"></button>
 						</td>
 						<td>
-							<button id="eter14" class="eternityupbtn" onclick="buyEternityUpgrade(14, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
+							<button id="eter8" class="eternityupbtn" onclick="buyEternityUpgrade(8)"></button>
 						</td>
 						<td>
-							<button id="eter15" class="eternityupbtn" onclick="buyEternityUpgrade(15, new Decimal(1/0))">???<br>Cost: Infinite EP</button>
+							<button id="eter9" class="eternityupbtn" onclick="buyEternityUpgrade(9)"></button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button id="eter10" class="eternityupbtn" onclick="buyEternityUpgrade(10)"></button>
+						</td>
+						<td>
+							<button id="eter11" class="eternityupbtn" onclick="buyEternityUpgrade(11)"></button>
+						</td>
+						<td>
+							<button id="eter12" class="eternityupbtn" onclick="buyEternityUpgrade(12)"></button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button id="eter13" class="eternityupbtn" onclick="buyEternityUpgrade(13)"></button>
+						</td>
+						<td>
+							<button id="eter14" class="eternityupbtn" onclick="buyEternityUpgrade(14)"></button>
+						</td>
+						<td>
+							<button id="eter15" class="eternityupbtn" onclick="buyEternityUpgrade(15)"></button>
 						</td>
 					</tr>
 					<tr>
@@ -1629,7 +1629,7 @@
 				<br>
 				<b class="warning">WARNING! THIS UPDATE IS ON BETA!</b>
 				<br>
-				(Beta v0.1: Remastering the Studies - Alpha 1)
+				(Beta v0.1: Remastering the Studies - Alpha 2)
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -5721,6 +5721,7 @@
 <script type="text/javascript" src="javascripts/core/eternity/auto_eternity.js"></script>
 <script type="text/javascript" src="javascripts/core/eternity/dilation.js"></script>
 <script type="text/javascript" src="javascripts/core/eternity/eter_challenges.js"></script>
+<script type="text/javascript" src="javascripts/core/eternity/eter_upgrades.js"></script>
 <script type="text/javascript" src="javascripts/core/eternity/time_dimension.js"></script>
 <script type="text/javascript" src="javascripts/core/eternity/timestudies.js"></script>
 

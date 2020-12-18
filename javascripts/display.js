@@ -544,23 +544,7 @@ function getEU2FormulaText(){
 }
 
 function eternityUpgradesDisplay(){
-	let eu2formula = getEU2FormulaText()
-	getEl("eter1").innerHTML = "Infinity Dimension multiplier based on unspent EP (x + 1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
-	getEl("eter2").innerHTML = "Infinity Dimension multiplier based on Eternities (" + eu2formula + ")<br>Currently: "+shortenMoney(getEU2Mult())+"x<br>Cost: 10 EP"
-	getEl("eter3").innerHTML = "Infinity Dimension multiplier based on "+(player.boughtDims ? "Time Shards (x / "+shortenCosts(1e12) + "+1)" : "sum of Infinity Challenge times")+"<br>Currently: "+shortenMoney(getEU3Mult())+"x<br>Cost: "+shortenCosts(50e3)+" EP"
-	getEl("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: " + shortenCosts(1e16) + " EP"
-	getEl("eter5").innerHTML = "Time Dimensions gain a multiplier based on your unspent Time Theorems" + "<br>Cost: "+shortenCosts(1e40)+" EP"
-	getEl("eter6").innerHTML = "Time Dimensions gain a multiplier based on days played" + (tmp.ngC ? " and you can buy max RGs" : "") + "<br>Cost: "+shortenCosts(1e50)+" EP"
-	if (player.exdilation != undefined && player.dilation.studies.includes(1)) {
-		getEl("eter7").innerHTML = "Dilated time gain is boosted by antimatter<br>Currently: "+(1 + Math.log10(Math.max(1, player.money.log(10))) / 40).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e1500"))+" EP"
-		getEl("eter8").innerHTML = "Dilated time gain is boosted by Infinity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e2000"))+" EP"
-		getEl("eter9").innerHTML = "Dilated time gain is boosted by Eternity Points<br>Currently: "+(1 + Math.log10(Math.max(1, player.eternityPoints.log(10))) / 10).toFixed(3)+"x<br>Cost: "+shortenCosts(new Decimal("1e3000"))+" EP"
-	}
-	if (tmp.ngC) {
-		getEl("eter10").innerHTML = "You can buy all studies in all three-way splits<br>Cost: "+shortenCosts(new Decimal("1e625"))+" EP"
-		getEl("eter11").innerHTML = "You can buy all black & white studies, and TS35 has no requirement<br>Cost: "+shortenCosts(new Decimal("1e870"))+" EP"
-		getEl("eter12").innerHTML = "The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker<br>Cost: "+shortenCosts(new Decimal("1e1350"))+" EP"
-	}
+	ETER_UPGS.updateDisplayOnTick()
 }
 
 function uponDilationDisplay(){
@@ -675,7 +659,7 @@ function replicantiDisplay() {
 			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
 			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
 			"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)" :
-			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10) + " Until Infinite Replicanti"
+			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * getEC12Mult()) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
 
 		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"

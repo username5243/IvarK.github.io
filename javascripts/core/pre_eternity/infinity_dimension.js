@@ -102,9 +102,9 @@ function infDimensionProduction(tier) {
 
 function getTotalIDEUMult(){
 	let mult = new Decimal(1)
-	if (hasEternityUpg(1)) mult = mult.times(player.eternityPoints.plus(1))
-	if (hasEternityUpg(2)) mult = mult.times(getEU2Mult())
-	if (hasEternityUpg(3)) mult = mult.times(getEU3Mult())
+	if (hasEternityUpg(1)) mult = mult.times(ETER_UPGS[1].mult())
+	if (hasEternityUpg(2)) mult = mult.times(ETER_UPGS[2].mult())
+	if (hasEternityUpg(3)) mult = mult.times(ETER_UPGS[3].mult())
 	return mult
 }
 
@@ -367,44 +367,9 @@ function getIDReplMult() {
 	return tmp.rm
 }
 
-function getEU2Eternities(){
-	let e = nMx(getEternitied(), 0)
-	if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(new Decimal(e).log10() / 4 * Math.log2(10), 128)
-	return e
-}
-
-function getEU2Mult() {
-	let e = getEU2Eternities() 
-	/*
-	the reason I softcapped eternities is because they caused balance issues 
-	when you got a lot of eternities (from tmp.e50kdt being true <==> that broken DT upgrade)
-	you get a TON of IPo so much so that you supa-inflate, and this should stop most of it 
-	note: it was giving me about 95% of the mult to ID which is.... a LOT
-	note2: that being said, you can softcap it later, but it it gets to e1000 then the multiplier is
-	about ee14 to IDs = BROKEN (e5k = e50DT ==> e3e17 to IDs = BROKEN BROKEN GOOD)
-	*/
-	if (typeof(e) == "number" && isNaN(e)) e = 0
-	if (player.boughtDims) return Decimal.pow(e, Decimal.times(e,2).add(1).log(4))
-	let cap = nMn(e, 1e5)
-	let soft = 0
-	if (e > 1e5) soft = nS(e, cap)
-	let achReward = 1
-	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(Decimal.add(e, 10)), 4.75))
-	let div1 = tmp.ngC ? 100 : 200
-	let div2 = tmp.ngC ? 2 : 4
-	let tim1 = tmp.ngC ? 4 : 2
-	return Decimal.pow(cap / div1 + 1, Math.log(cap * tim1 + 1) / Math.log(div2)).times(Decimal.div(soft, div1).add(1).times(Decimal.times(soft, div2).add(1).log(div2)).max(1)).max(achReward)
-}
-
-function getEU3Mult() {
-	if (player.boughtDims) return player.timeShards.div(1e12).plus(1)
-	if (tmp.ngC) return Decimal.pow(6250 / Math.max(Math.min(infchallengeTimes, 6250), 6.1), 500 / Math.max(infchallengeTimes, 6.1))
-	return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
-}
-
 function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if ((player.galacticSacrifice && player.pSac == undefined) || tmp.ngC) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
+	if (getEl("infPowEffectPower")) getEl("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
