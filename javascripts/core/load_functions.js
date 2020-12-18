@@ -2221,7 +2221,8 @@ function onLoad(noOffline) {
 	setSomeQuantumAutomationDisplay()
 	if (player.pSac !== undefined) {
 		updateParadoxUpgrades()
-		updatePUCosts()
+                updatePUCosts()
+                updateGalaxySpeedruns()
 	}
 	if (tmp.ngp3) updateNGp3DisplayStuff()
 	handleDisplaysOutOfQuantum()
@@ -2293,7 +2294,8 @@ function onLoad(noOffline) {
 	showDimTab((tabsSave.on && tabsSave.tabDims) || 'antimatterdimensions')
 	showStatsTab((tabsSave.on && tabsSave.tabStats) || 'stats')
 	showAchTab((tabsSave.on && (tabsSave.tabAchs == 'normalachievements' || tabsSave.tabAchs == 'secretachievements') && tabsSave.tabAchs) || 'normalachievements')
-	showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
+        showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
+        showGalaxyTab("galUpgrades")
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
 	showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')

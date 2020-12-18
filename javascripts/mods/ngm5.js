@@ -438,3 +438,38 @@ function quickMReset() {
 	player.aarexModifications.quickReset = !player.aarexModifications.quickReset
 	document.getElementById("quickMReset").textContent = "Quick matter reset: O" + (player.aarexModifications.quickReset ? "N" : "FF")
 }
+
+//v0.6
+function showGalaxyTab(tabName) { //might move this to NG-2, but... its for NG-5, so uh
+	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+	var tabs = document.getElementsByClassName('galaxyTab');
+	var tab;
+	var oldTab
+	for (var i = 0; i < tabs.length; i++) {
+		tab = tabs.item(i);
+		if (tab.style.display == 'block') oldTab = tab.id
+		if (tab.id === tabName) { 
+			tab.style.display = 'block';
+		} else {
+			tab.style.display = 'none';
+		}
+	}
+	closeToolTip()
+}
+
+var galRunMilestonesReached
+var galRunMilestones = [null, 43200, 21600, 10800, 3600, 1800, 600, 300, 180, 60]
+function updateGalaxySpeedruns() {
+	galRunMilestonesReached = 0
+	if (!(tmp.ngmX >= 5)) return
+	//if (player.ghostify.milestones >= 1) speedrunMilestonesReached = 28 //I'll hold onto this line until we get into infinity. 
+	else {
+		for (var i = 1; i <= 9; i++) {
+			if (true) break
+			galRunMilestonesReached++
+		}
+	}
+	for (var i = 1; i <= 9; i++) document.getElementById("galRunMilestone"+i).className = "achievement achievement" + (galRunMilestonesReached >= i ? "un" : "") + "locked"
+	for (var i = 1; i <= 3; i++) document.getElementById("galRunRow"+i).className = galRunMilestonesReached < ( i > 3 ? 28 : i * 8) ? "" : "completedrow"
+	//if (speedrunMilestonesReached >= 26) document.getElementById('rebuyupgmax').style.display = "none"
+}

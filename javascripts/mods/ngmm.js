@@ -163,6 +163,7 @@ function galacticSacrifice(auto, force, chall) {
 	if (tmp.ngmX >= 5) {
 		player.infDimensionsUnlocked[2] = true
 		giveAchievement("The hardest of sacrifices")
+		updateGalaxySpeedruns()
 	}
 	GPminpeak = new Decimal(0)
 	player.galacticSacrifice.time = 0
