@@ -45,7 +45,7 @@ function softReset(bulk, tier = 1) {
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
 	if (player.pSac !== undefined) {
-		resetInfDimensions()
+		resetInfDimensions(true)
 		player.pSac.dims.extraTime = 0
 	}
 	resetTDsOnNGM4()

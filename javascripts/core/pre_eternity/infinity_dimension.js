@@ -189,7 +189,7 @@ function infDimensionPower(tier) {
   	return mult
 }
 
-function resetInfDimensions(full) {
+function resetInfDimensions(full = (tmp.ngmX >= 5)) {
 	player.infinityPower = new Decimal(0)
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension" + t]
@@ -297,7 +297,7 @@ function getInfinityPowerEffect() {
 	let log = player.infinityPower.max(1).log10()
 	log *= tmp.infPowExp 
 	if (log > 10 && player.pSac !== undefined) log = Math.pow(log * 200 - 1e3, 1/3)
-	if (log >= 308.25 && player.pSac !== undefined) log = 308.25 //Will have to change this when we get around to break_infinity in NG-5.
+	if (log >= 308.25 && player.pSac !== undefined && !onPostBreak()) log = inflog - 0.000001 //Temporary fix, but eh. 
 	return Decimal.pow(10, log)
 }
 
@@ -411,7 +411,7 @@ function updateInfPower() {
 	else {
 		let r = infDimensionProduction(1)
 		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2))
-		if (player.pSac != undefined) r = r.div(tmp.ec12Mult)
+		if (player.pSac != undefined)  r = r.div(tmp.ec12Mult)
 
 		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per second."
 	}

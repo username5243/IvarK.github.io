@@ -4522,6 +4522,7 @@ function otherDimsUpdating(diff){
 	if (tmp.ngmX >= 5) infProd = infDimensionProduction(2).add(infProd)
 
 	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infProd.times(diff))
+	if (tmp.ngmX >= 5 && !onPostBreak() && player.infinityPower > Number.MAX_VALUE) player.infinitypower = new Decimal(Number.MAX_VALUE)
 	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
 
 	//Time Dimensions

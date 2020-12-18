@@ -47,7 +47,7 @@ function maxAllIDswithAM() {
 }
 
 function resetIDsOnNGM5() {
-	if (player.pSac !== undefined) resetInfDimensions()
+	if (player.pSac !== undefined) resetInfDimensions(true) 
 }
 
 //Global Dimension unlocks
@@ -140,6 +140,7 @@ let puMults = {
 	},
 	42: function() {
 		let x = player.tickspeedBoosts
+		if (x >= 10) x = Math.sqrt(5 * x + 50)
 		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
 	44: function() {
