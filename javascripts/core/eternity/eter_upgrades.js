@@ -164,7 +164,7 @@ function updateEternityUpgrades() {
 }
 
 function buyEternityUpgrade(name) {
-	let cost = ETER_UPGS[num].cost
+	let cost = ETER_UPGS[name].cost
 	if (player.eternityPoints.gte(cost) && !player.eternityUpgrades.includes(name)) {
 		player.eternityUpgrades.push(name)
 		player.eternityPoints = player.eternityPoints.minus(cost)
