@@ -1,6 +1,6 @@
 function dimShiftDisplay(){
 	var shiftRequirement = getShiftRequirement(0);
-	var isShift = player.resets < (inNC(4) || player.currentChallenge == "postc1" || player.pSac !== undefined ? 2 : 4)
+	var isShift = getMaxUnlockableDimensions() < (haveSixDimensions() ? 6 : 8)
 	getEl("resetLabel").textContent = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' ('+ getFullExpansion(Math.ceil(player.resets)) +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 	getEl("softReset").textContent = "Reset the game for a " + (isShift ? "new Dimension" : "Boost")
 }

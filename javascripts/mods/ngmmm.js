@@ -10,7 +10,7 @@ function getTickspeedBoostRequirement(bulk = 1) {
 
 function tickspeedBoost(bulk) {
 	player.tickspeedBoosts += bulk
-	if (!player.achievements.includes("r27") || player.tickspeedBoosts >= 5 * player.galaxies - 8) player.tdBoosts = resetTDBoosts()
+	if (!player.achievements.includes("r27") || player.tickspeedBoosts > (tmp.ngmX >= 5 ? 4 * player.galaxies : 5 * player.galaxies - 8)) player.tdBoosts = resetTDBoosts()
 	softReset(player.achievements.includes("r27") && 5 * player.galaxies - 8 > player.tickspeedBoosts ? 0 : -player.resets, true)
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 }

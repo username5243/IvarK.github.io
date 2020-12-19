@@ -49,7 +49,7 @@ function getGalaxyEff(bi) {
 		if (player.aarexModifications.ngmX >= 4) eff *= getNGM4GalaxyEff()
 	}
 	if (tmp.ngmR) eff *= 1.2
-	if (player.tickspeedBoosts !== undefined && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
+	if (tmp.ngmX >= 3 && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
 	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (hasTimeStudy(212)) eff *= tsMults[212]()
 	if (hasTimeStudy(232) && bi) eff *= tsMults[232]()
@@ -171,7 +171,7 @@ function getPostC3Mult() {
 function getPostC3Base() {
 	if (player.currentChallenge=="postcngmm_3") return 1
 	let perGalaxy = 0.005;
-	if (player.tickspeedBoosts != undefined) perGalaxy = 0.002
+	if (tmp.ngmX >= 4) perGalaxy = 0.002
 	if (inQC(2)) perGalaxy = 0
 	if (inBigRip()) {
 		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]

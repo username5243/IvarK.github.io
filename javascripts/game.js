@@ -4050,12 +4050,15 @@ function incrementTimesUpdating(diffStat){
 function requiredInfinityUpdating(diff){
 	if (tmp.ri) return
 	if (player.infinityUpgradesRespecced != undefined) infinityRespeccedDMUpdating(diff)
-		
-	for (let tier = (inQC(1) ? 1 : player.currentEternityChall == "eterc3" ? 3 : (inNC(4) || player.currentChallenge == "postc1") ? 5 : 7) - (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined ? 1 : 0); tier >= 1; --tier) {
+
+	let steps = getDimensionSteps()
+	let dims = getMaxGeneralDimensions()
+	for (let tier = dims - steps; tier >= 1; tier--) {
 		var name = TIER_NAMES[tier];
-		player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined ? 2 : 1)).times(diff / 10));
+		player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + steps).times(diff / 10))
 	}
-	if (player.masterystudies != undefined) if (player.firstAmount.gt(0)) player.dontWant = false
+	if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
+
 	var tempa = getDimensionProductionPerSecond(1).times(diff)
 	player.money = player.money.plus(tempa)	
 	player.totalmoney = player.totalmoney.plus(tempa)
@@ -4092,7 +4095,7 @@ function normalChallPowerUpdating(diff){
 }
 
 function incrementParadoxUpdating(diff) {
-	if (player.pSac !== undefined) {
+	if (tmp.ngmX >= 5) {
 		//Paradox Power
 		player.pSac.dims.power=player.pSac.dims.power.add(getPDProduction(1).times(diff))
 		for (var t=1;t<7;t++) {
@@ -4402,15 +4405,16 @@ function metaDimsUpdating(diff){
 }
 
 function infinityTimeMetaBlackHoleDimUpdating(diff){
-	var step = inQC(4) || player.pSac !== undefined ? 2 : 1
-	var stepT = inNC(7) && player.aarexModifications.ngmX >= 4 ? 2 : step
-	for (let tier = 1 ; tier <= 8; tier++) {
-		if (tier < 9 - step){
-			player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier+step).times(diff / 10))
-			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier+step).times(diff / 10))
+	var step = inQC(4) || tmp.ngmX >= 5 ? 2 : 1
+	var stepT = inNC(7) && tmp.ngmX >= 4 ? 2 : step
+	var max = tmp.ngmX >= 5 ? 6 : 8
+	for (let tier = 1 ; tier <= max; tier++) {
+		if (tier <= max - step){
+			player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
+			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier + step).times(diff / 10))
 			if (isBHDimUnlocked(tier + step)) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + step).times(diff / 10))
 		}
-		if ((tmp.eterUnl || player.aarexModifications.ngmX >= 4) && tier < 9 - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
+		if ((tmp.eterUnl || tmp.ngmX >= 4) && tier <= max - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
 	}
 }
 
@@ -4432,17 +4436,18 @@ function otherDimsUpdating(diff){
 	if (tmp.ngmX >= 5) infProd = infDimensionProduction(2).add(infProd)
 
 	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infProd.times(diff))
-	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
+	else if (!haveSixDimensions()) player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
+
+	if (tmp.ngmX >= 5 && !onPostBreak() && player.infinityPower.gt(Number.MAX_VALUE)) player.infinitypower = new Decimal(Number.MAX_VALUE)
 
 	//Time Dimensions
 	let timeProd = getTimeDimensionProduction(1)
 	if (tmp.ngmX >= 5) timeProd = getTimeDimensionProduction(2).add(timeProd)
+	player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
 
-   	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(timeProd.times(diff))
-   	else {
-		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(infDimensionProduction(9).times(diff))
-		player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
-	}
+	//Eternity Challenge 7
+	let id8Prod = getECReward(7)
+	if (id8Prod.gt(0)) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(id8Prod.times(diff))
 }
 
 function ERFreeTickUpdating(){

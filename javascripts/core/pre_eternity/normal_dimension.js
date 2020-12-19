@@ -73,9 +73,9 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 }
 
 function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
-	if (!player.galacticSacrifice) return mult
+	if (tmp.ngmX < 2) return mult
 	
-	if (player.galacticSacrifice.upgrades.includes(12) && (!player.galacticSacrifice.upgrades.includes(42) || player.aarexModifications.ngmX < 4)) mult = mult.times(galMults.u12())
+	if (player.galacticSacrifice.upgrades.includes(12) && (!player.galacticSacrifice.upgrades.includes(42) || tmp.ngmX < 4)) mult = mult.times(galMults.u12())
 	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
 	if (player.galacticSacrifice.upgrades.includes(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
 	if (player.galacticSacrifice.upgrades.includes(15)) mult = mult.times(galMults.u15())
@@ -230,32 +230,23 @@ function getDimensionFinalMultiplier(tier) {
 }
 
 function getDimensionDescription(tier) {
-	var name = TIER_NAMES[tier];
-	if (tier > Math.min(inQC(1) ? 1 : player.currentEternityChall == "eterc3" ? 3 : inNC(4) || player.currentChallenge == "postc1" || player.pSac != undefined ? 5 : 7, player.resets + 3) - (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined ? 1 : 0)) return getFullExpansion(inNC(11) ? getAmount(tier) : player[name + 'Bought']) + ' (' + dimBought(tier) + ')';
-	else if (player.money.l > 1e9) return shortenND(player[name + 'Amount'])
-	else if (player.money.l > 1e6) return shortenND(player[name + 'Amount']) + '  (+' + formatValue(player.options.notation, getDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
-	else return shortenND(player[name + 'Amount']) + ' (' + dimBought(tier) + ')  (+' + formatValue(player.options.notation, getDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
+	let name = TIER_NAMES[tier]
+	let amt = player[name + 'Amount']
+	let bgt = player[name + 'Bought']
+	let tierAdd = getDimensionSteps() + tier
+	let tierMax = getMaxGeneralDimensions()
+
+	let toGain = new Decimal(0)
+	if (tierAdd <= tierMax) toGain = getDimensionProductionPerSecond(tierAdd).div(10)
+	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = DimensionProduction(1).add(toGain)
+	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
+
+	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (player.money.e <= 1e6 ? " (" + getFullExpansion(bgt % 10) + ")" : "") + (toGain.gt(0) && player.money.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
 }
 
-function getDimensionRateOfChange(tier) {
-	if (tier == 8 || (player.currentEternityChall == "eterc3" && tier > 3)) return 0;
-
-	let toGain = getDimensionProductionPerSecond(tier + 1)
-	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = DimensionProduction(1).times(10)
-
-	var name = TIER_NAMES[tier];
-	if (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined) {
-		if (tier == 7) return 0
-		else toGain = getDimensionProductionPerSecond(tier + 2);
-	}
-	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
-	var current = player[name + 'Amount'].max(1);
-	if (player.aarexModifications.logRateChange) {
-		var change = current.add(toGain.div(10)).log10()-current.log10()
-		if (change < 0 || isNaN(change)) change = 0
-	} else var change = toGain.times(10).dividedBy(current);
-
-	return change;
+function getDimensionRateOfChangeDisplay(current, toAdd) {
+	if (player.aarexModifications.logRateChange)  return " (+" + shorten(current.add(toAdd).log10() - current.log10()) + " OoM/s)"
+	else return " (+" + shorten(toAdd.div(current).times(100)) + "%/s)"
 }
 
 let infToDimMultUpgs = [null, "18Mult", "27Mult", "36Mult", "45Mult", "45Mult", "36Mult", "27Mult", "18Mult"]
@@ -296,7 +287,7 @@ function multiplyPC5Costs(cost, tier) {
 	
 function canBuyDimension(tier) {
 	if (tmp.ri) return false
-	if (tier > Math.min(player.resets + 4, inNC(4) || player.currentChallenge == "postc1" || player.pSac != undefined ? 6 : 8)) return false
+	if (tier > getMaxUnlockableDimensions()) return false
 	if (tier > 1 && getAmount(tier - 1) == 0 && getEternitied() < 30) return false
 
 	return true
@@ -328,7 +319,7 @@ function getMPTBase(focusOn) {
 		if (player.masterystudies) if (masteryStudies.has("t321")) return new Decimal("1e430")
 		return 1
 	}
-	let ret =getMPTPreInfBase()
+	let ret = getMPTPreInfBase()
 	if (player.infinityUpgrades.includes("dimMult")) ret *= infUpg12Pow()
 	if (player.achievements.includes("r58")) {
 		if (player.galacticSacrifice !== undefined) {
@@ -379,7 +370,7 @@ function getNormalDimensionCostMults() {
 function onBuyDimension(tier) {
 	giveAchievement(allAchievements["r1"+tier])
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
-	if (inNC(8) || player.currentChallenge == "postc1") clearDimensions(tier-1)
+	if (inNC(8) || player.currentChallenge == "postc1") clearDimensions(tier - 1)
 	if (inMatterChallenge() && player.matter.eq(0)) player.matter = new Decimal(1)
 	player.postC4Tier = tier;
 	player.postC8Mult = new Decimal(1)
@@ -409,10 +400,37 @@ function costIncreaseActive(cost) {
 	return cost.gte(Number.MAX_VALUE) || player.currentChallenge === 'postcngmm_2';
 }
 
+function haveSixDimensions() {
+	return inNC(4) || player.currentChallenge == "postc1" || tmp.ngmX >= 5
+}
+
+function getMaxUnlockableDimensions() {
+	return Math.min(
+		haveSixDimensions() ? 6 : 8,
+		player.resets + 4
+	)
+}
+
+function getMaxGeneralDimensions() {
+	return Math.min(
+		inQC(1) ? 2
+		: player.currentEternityChall == "eterc3" ? 4	
+		: 8
+	, getMaxUnlockableDimensions())
+}
+
+function getDimensionSteps() {
+	return tmp.ngmX >= 5 || inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) ? 2 : 1
+}
+
+function getMaxDimensionsOutsideOfChallenges() {
+	return tmp.ngmX >= 5 ? 6 : 8
+}
+
 function getDimensionCostMultiplierIncrease() {
 	if (inQC(7)) return Number.MAX_VALUE
-	let ret = player.dimensionMultDecrease;
-	if (player.aarexModifications.ngmX > 3) ret = Math.pow(ret, 1.25)
+	let ret = player.dimensionMultDecrease
+	if (tmp.ngmX >= 4) ret = Math.pow(ret, 1.25)
 	if (player.currentChallenge === 'postcngmm_2') {
 		exp = player.aarexModifications.ngmX >= 4 ? .9 : .5
 		ret = Math.pow(ret, exp)

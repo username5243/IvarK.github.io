@@ -9,7 +9,7 @@ function getDimensionBoostPower(next, focusOn) {
 	}
 	if (player.boughtDims) ret += player.timestudy.ers_studies[4] + (next ? 1 : 0)
 	if (player.galacticSacrifice && player.galacticSacrifice.upgrades.includes(23) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u23()
-	if (player.pSac !== undefined && hasPU(41)) ret *= puMults[41]()
+	if (hasPU(41)) ret *= puMults[41]()
 	if (player.infinityUpgrades.includes("resetMult") && player.galacticSacrifice) ret *= 1.2 + 0.05 * player.infinityPoints.max(1).log(10)
 	if (!player.boughtDims && player.achievements.includes("r101")) ret = ret * 1.01
 	if (hasTimeStudy(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
@@ -44,8 +44,8 @@ function softReset(bulk, tier = 1) {
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
-	if (player.pSac !== undefined) {
-		resetInfDimensions()
+	if (tmp.ngmX >= 5) {
+		resetIDsOnNGM5()
 		player.pSac.dims.extraTime = 0
 	}
 	resetTDsOnNGM4()
@@ -76,10 +76,13 @@ function setInitialMoney() {
 	var x = 10
 	if (player.challenges.includes("challenge1")) x = 100
 	if (player.aarexModifications.ngmX > 3) x = 200
+	if (player.achievements.includes("ngm5p12")) x = 250
 	if (player.achievements.includes("r37")) x = 1000
 	if (player.achievements.includes("r54")) x = 2e5
 	if (player.achievements.includes("r55")) x = 1e10
 	if (player.achievements.includes("r78")) x = 2e25
+
+	if (player.achievements.includes("ngm5p12") && player.aarexModifications.quickReset) x = 199
 	player.money = new Decimal(x)
 }
 

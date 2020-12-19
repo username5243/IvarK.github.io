@@ -344,7 +344,7 @@ function startEternityChallenge(n) {
 }
 
 function isEC12Active() {
-	return player.currentEternityChall == "eterc12" || player.pSac !== undefined
+	return player.currentEternityChall == "eterc12" || tmp.ngmX >= 5
 }
 
 function getEC12Mult() {
@@ -385,6 +385,13 @@ function getECReward(x) {
 		let x = Math.log10(player.infinityPower.plus(1).log10() + 1)
 		if (x > 0) x=Math.pow(x, (m2 ? 0.05 : 0.03) * c)
 		return Math.max(x, 1)
+	}
+	if (x == 7) {
+		if (c == 0 && player.currentEternityChall !== "eterc7") return new Decimal(0)
+
+		let timeProd = getTimeDimensionProduction(1)
+		if (player.currentEternityChall === "eterc7") return timeProd
+		return timeProd.pow(c / 5).max(1).sub(1)
 	}
 	if (x == 9) {
 		let r=player.timeShards

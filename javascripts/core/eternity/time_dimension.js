@@ -27,7 +27,7 @@ function doNGMatLeast4TDChanges(tier, ret){
 	if (player.galacticSacrifice.upgrades.includes(12)) ret = ret.times(galMults.u12())
 	if (player.galacticSacrifice.upgrades.includes(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
 	if (player.galacticSacrifice.upgrades.includes(15)) ret = ret.times(galMults.u15())
-	if (player.pSac !== undefined) if (tier == 2) ret = ret.pow(puMults[13](hasPU(13, true, true))) //NG-5, not NG-4.
+	if (tmp.ngmX >= 5 && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true, true))) //NG-5, not NG-4.
 	if (player.galacticSacrifice.upgrades.includes(44) && tmp.ngmX >= 4) {
 		let e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))
@@ -117,7 +117,6 @@ function getTimeDimensionProduction(tier) {
   	let dim = player["timeDimension" + tier]
   	if (player.currentEternityChall == "eterc11") return dim.amount
   	let ret = dim.amount
-  	if (inQC(4) && tier == 1) ret = ret.plus(player.timeDimension2.amount.floor())
   	ret = ret.times(getTimeDimensionPower(tier))
   	if (player.aarexModifications.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
   	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
@@ -141,30 +140,25 @@ function getIC3EffFromFreeUpgs() {
 }
 
 function isTDUnlocked(t) {
-	if (t > 8) return
+	if (t > 8) return false
 	if (tmp.ngmX >= 4) {
-		if ((inNC(4) || player.currentChallenge == "postc1" || player.pSac != undefined) && t > 6) return
-		return player.tdBoosts > t - 2
+		if (haveSixDimensions() && t > 6) return false
+		return player.tdBoosts >= t - 1
 	}
-	return t < 5 || player.dilation.studies.includes(t - 3)
-}
-
-function getTimeDimensionRateOfChange(tier) {
-	let toGain = getTimeDimensionProduction(tier + (inQC(4) || player.pSac !== undefined ? 2 : 1))
-	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
-	let current = Decimal.max(player["timeDimension" + tier].amount, 1);
-	let change
-	if (player.aarexModifications.logRateChange) {
-		change = current.add(toGain.div(10)).log10()-current.log10()
-		if (change < 0 || isNaN(change)) change = 0
-	} else change = toGain.times(10).dividedBy(current);
-	return change;
+	return t <= 4 || player.dilation.studies.includes(t - 3)
 }
 
 function getTimeDimensionDescription(tier) {
-	if (!isTDUnlocked(((inNC(7) && tmp.ngmX >= 4) || inQC(4) || player.pSac!=undefined ? 2 : 1) + tier)) return getFullExpansion(player['timeDimension' + tier].bought)
-	else if (player.timeShards.l > 1e7) return shortenDimensions(player['timeDimension' + tier].amount)
-	else return shortenDimensions(player['timeDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, getTimeDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
+	let amt = player['timeDimension' + tier].amount
+	let bgt = player['timeDimension' + tier].bought
+	let tierAdd = ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5 ? 2 : 1) + tier
+	let tierMax = (haveSixDimensions() && tmp.ngmX == 4) || tmp.ngmX >= 5 ? 6 : 8
+
+	let toGain = new Decimal(0)
+	if (tierAdd <= tierMax) toGain = getTimeDimensionProduction(tierAdd).div(10)
+	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
+
+	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (toGain.gt(0) && player.timeShards.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
 }
 
 function updateTimeDimensions() {
@@ -186,7 +180,7 @@ function updateTimeDimensions() {
 		}
 
 		if (tmp.ngmX >= 4) {
-			var isShift = player.tdBoosts < (inNC(4) || tmp.ngmX >= 5 ? 5 : 7)
+			var isShift = player.tdBoosts + 1 < (tmp.ngmX >= 5 ? 6 : 8)
 			var req = getTDBoostReq()
 			document.getElementById("tdReset").style.display = ""
 			document.getElementById("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
@@ -200,7 +194,7 @@ function updateTimeDimensions() {
 
 function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
-	if (tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
+	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
