@@ -2583,7 +2583,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(id) {
-	if (modes.ngmm == 4 && !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")) return
+	if (modes.ngmm == 4 /*&& !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")*/) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)

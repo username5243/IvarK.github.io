@@ -195,7 +195,10 @@ function resetInfDimensions(full = (tmp.ngmX >= 5)) {
 			dim.baseAmount = 0
 		}
 		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
-		if (tmp.ngmX >= 5) dim.costAM = new Decimal(idBaseCosts[t])
+		if (tmp.ngmX >= 5) {
+			dim.bought = 0
+			dim.costAM = new Decimal(idBaseCosts[t])
+		}
 	}
 	if (full) resetInfDimUnlocked()
 }
