@@ -1910,7 +1910,7 @@ function setChallengeDisplay(){
         document.getElementById("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         document.getElementById("autoGSChallengeDesc").textContent=player.aarexModifications.ngmX>3?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(player.aarexModifications.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         document.getElementById("autoTBChallengeDesc").textContent=player.aarexModifications.ngmX>3?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        document.getElementById("infPowEffectPowerDiv").innerHTML = ((player.galacticSacrifice&&player.pSac==undefined)||player.aarexModifications.ngp3c)?"Raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, t":"T"
+        document.getElementById("infPowEffectPowerDiv").innerHTML = ((tmp.ngmX >= 2 || tmp.ngC) && tmp.ngmX < 5) ? "Raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, t" : "T"
         document.getElementById("ngmmchalls").style.display=player.galacticSacrifice?"":"none"
         document.getElementById("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         document.getElementById("ngm4chall").style.display=player.aarexModifications.ngmX>3?"":"none"
@@ -2097,7 +2097,6 @@ function setSomeQuantumAutomationDisplay(){
 
 function setReplAutoDisplay(){
         document.getElementById('replicantigalaxypowerdiv').style.display=player.achievements.includes("r106")&&player.boughtDims?"":"none"
-        document.getElementById("dilationeterupgrow").style.display="none"
         document.getElementById("blackHoleAnimBtn").style.display="none"
         if (player.exdilation != undefined) {
                 if (player.dilation.studies.includes(1)) document.getElementById("dilationeterupgrow").style.display="table-row"

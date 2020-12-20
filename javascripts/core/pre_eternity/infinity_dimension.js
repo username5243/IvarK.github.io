@@ -9,7 +9,7 @@ function getInfinityDimensionMultiplier(tier){
 }
 
 function maxAllID() {
-	if (player.pSac !== undefined) maxAllIDswithAM()
+	if (tmp.ngmX >= 5) maxAllIDswithAM()
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension"+t]
 		let cost = getIDCost(t)
@@ -48,21 +48,17 @@ function hideMaxIDButton(onLoad = false) {
 }
 
 function infDimensionDescription(tier) {
-	if (tier > (inQC(4) || player.pSac != undefined ? 6 : 7) && (ECTimesCompleted("eterc7") === 0 || player.timeDimension1.amount.eq(0) || tier == 7) && player.currentEternityChall != "eterc7") return getFullExpansion(Math.round(player["infinityDimension" + tier].amount.toNumber()));
-	else if (player.infinityPower.l > 1e7) return shortenDimensions(player['infinityDimension' + tier].amount)
-	else return shortenDimensions(player['infinityDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, infDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
-}
+	let amt = player['infinityDimension' + tier].amount
+	let bgt = player['infinityDimension' + tier].bought
+	let tierAdd = (inQC(4) || tmp.ngmX >= 5 ? 2 : 1) + tier
+	let tierMax = tmp.ngmX >= 5 ? 6 : 8
 
-function infDimensionRateOfChange(tier) {
-	let toGain = infDimensionProduction(tier + ((inQC(4) || player.pSac !== undefined) && tier < 8 ? 2 : 1))
-	if (tmp.inEC12) toGain = toGain.div(tmp.ec12Mult)
-	let current = Decimal.max(player["infinityDimension"+tier].amount, 1);
-	let change
-	if (player.aarexModifications.logRateChange) {
-		change = current.add(toGain.div(10)).log10()-current.log10()
-		if (change < 0 || isNaN(change)) change = 0
-	} else change = toGain.times(tier > 7 ? 1 : 10).dividedBy(current);
-	return change;
+	let toGain = new Decimal(0)
+	if (tierAdd <= tierMax) toGain = infDimensionProduction(tierAdd).div(10)
+	if (tier == 8) toGain = getECReward(7).add(toGain)
+	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
+
+	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (toGain.gt(0) && player.infinityPower.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")
 }
 
 function updateInfinityDimensions() {
@@ -102,9 +98,9 @@ function infDimensionProduction(tier) {
 
 function getTotalIDEUMult(){
 	let mult = new Decimal(1)
-	if (hasEternityUpg(1)) mult = mult.times(player.eternityPoints.plus(1))
-	if (hasEternityUpg(2)) mult = mult.times(getEU2Mult())
-	if (hasEternityUpg(3)) mult = mult.times(getEU3Mult())
+	if (hasEternityUpg(1)) mult = mult.times(ETER_UPGS[1].mult())
+	if (hasEternityUpg(2)) mult = mult.times(ETER_UPGS[2].mult())
+	if (hasEternityUpg(3)) mult = mult.times(ETER_UPGS[3].mult())
 	return mult
 }
 
@@ -296,8 +292,10 @@ function getInfinityPowerEffect() {
 	if (player.currentEternityChall == "eterc9") return Decimal.pow(Math.max(player.infinityPower.log2(), 1), player.galacticSacrifice == undefined ? 4 : 30).max(1)
 	let log = player.infinityPower.max(1).log10()
 	log *= tmp.infPowExp 
-	if (log > 10 && player.pSac !== undefined) log = Math.pow(log * 200 - 1e3, 1/3)
-	if (log >= 308.25 && player.pSac !== undefined && !onPostBreak()) log = inflog - 0.000001 //Temporary fix, but eh. 
+	if (tmp.ngmX >= 5) {
+		if (log > 10) log = Math.pow(log * 200 - 1e3, 1/3)
+		if (!onPostBreak() && log > Math.log10(Number.MAX_VALUE)) return new Decimal(Number.MAX_VALUE)
+	}
 	return Decimal.pow(10, log)
 }
 
@@ -307,7 +305,7 @@ function getInfinityPowerEffectExp() {
 	if (player.galacticSacrifice != undefined) {
 		x = Math.pow(galaxies, 0.7)
 		if (player.currentChallenge === "postcngm3_2" || (player.tickspeedBoosts != undefined && player.currentChallenge === "postc1")) {
-			if (player.aarexModifications.ngmX >= 4) {
+			if (tmp.ngmX >= 4) {
 				x = Math.pow(galaxies, 1.25)
 				if (x > 7) x += 1
 			} else x = galaxies
@@ -368,44 +366,9 @@ function getIDReplMult() {
 	return tmp.rm
 }
 
-function getEU2Eternities(){
-	let e = nMx(getEternitied(), 0)
-	if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(new Decimal(e).log10() / 4 * Math.log2(10), 128)
-	return e
-}
-
-function getEU2Mult() {
-	let e = getEU2Eternities() 
-	/*
-	the reason I softcapped eternities is because they caused balance issues 
-	when you got a lot of eternities (from tmp.e50kdt being true <==> that broken DT upgrade)
-	you get a TON of IPo so much so that you supa-inflate, and this should stop most of it 
-	note: it was giving me about 95% of the mult to ID which is.... a LOT
-	note2: that being said, you can softcap it later, but it it gets to e1000 then the multiplier is
-	about ee14 to IDs = BROKEN (e5k = e50DT ==> e3e17 to IDs = BROKEN BROKEN GOOD)
-	*/
-	if (typeof(e) == "number" && isNaN(e)) e = 0
-	if (player.boughtDims) return Decimal.pow(e, Decimal.times(e,2).add(1).log(4))
-	let cap = nMn(e, 1e5)
-	let soft = 0
-	if (e > 1e5) soft = nS(e, cap)
-	let achReward = 1
-	if (player.achievements.includes("ngpp15")) achReward = Decimal.pow(10, Math.pow(Decimal.log10(Decimal.add(e, 10)), 4.75))
-	let div1 = tmp.ngC ? 100 : 200
-	let div2 = tmp.ngC ? 2 : 4
-	let tim1 = tmp.ngC ? 4 : 2
-	return Decimal.pow(cap / div1 + 1, Math.log(cap * tim1 + 1) / Math.log(div2)).times(Decimal.div(soft, div1).add(1).times(Decimal.times(soft, div2).add(1).log(div2)).max(1)).max(achReward)
-}
-
-function getEU3Mult() {
-	if (player.boughtDims) return player.timeShards.div(1e12).plus(1)
-	if (tmp.ngC) return Decimal.pow(6250 / Math.max(Math.min(infchallengeTimes, 6250), 6.1), 500 / Math.max(infchallengeTimes, 6.1))
-	return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
-}
-
 function updateInfPower() {
 	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if ((player.galacticSacrifice && player.pSac == undefined) || tmp.ngC) document.getElementById("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
+	if (getEl("infPowEffectPower")) getEl("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
 	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
@@ -429,7 +392,6 @@ function getNewInfReq() {
 			reqs[2] = new Decimal("1e4000")
 		}
 		if (tmp.ngmX >= 4){ // NG minus 4
-			reqs[0] = new Decimal("1e1777")
 			reqs[1] = new Decimal("1e2385")
 			reqs[3] = new Decimal("1e9525")
 		}

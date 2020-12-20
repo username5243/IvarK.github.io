@@ -272,6 +272,7 @@ function resetIC1Reward() {
 
 var challNames = [null, null, "Second Dimension Autobuyer Challenge", "Third Dimension Autobuyer Challenge", "Fourth Dimension Autobuyer Challenge", "Fifth Dimension Autobuyer Challenge", "Sixth Dimension Autobuyer Challenge", "Seventh Dimension Autobuyer Challenge", "Eighth Dimension Autobuyer Challenge", "Tickspeed Autobuyer Challenge", "Automated Dimension Boosts Challenge", "Automated Galaxies Challenge", "Automated Big Crunches Challenge", "Automated Dimensional Sacrifice Challenge", "Automated Galactic Sacrifice Challenge", "Automated Tickspeed Boosts Challenge", "Automated Time Dimension Boosts Challenge"]
 var challOrder = [null, 1, 2, 3, 8, 6, 10, 9, 11, 5, 4, 12, 7, 13, 14, 15, 16]
+var infchallengeTimes = 999999999
 function updateChallengeTimes() {
 	for (c=2;c<17;c++) setAndMaybeShow("challengetime"+c,player.challengeTimes[challOrder[c]-2]<600*60*24*31,'"'+challNames[c]+' time record: "+timeDisplayShort(player.challengeTimes['+(challOrder[c]-2)+'], false, 3)')
 	var temp=0
@@ -298,40 +299,48 @@ function updateChallengeTimes() {
 }
 
 function loadICData(){
-        nextAt = {      postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),
-			postc2:new Decimal("1e5000"), postc2_ngC:new Decimal("1e5860"),
-			postc3:new Decimal("1e12000"), postc3_ngC:new Decimal("1e7175"),
-			postc4:new Decimal("1e14000"), postc4_ngC:new Decimal("1e8475"),
-			postc5:new Decimal("1e18000"), postc5_ngm3:new Decimal("1e21500"), postc5_ngC:new Decimal("1e21000"),
-		        postc6:new Decimal("1e20000"), postc6_ngm3:new Decimal("1e23000"), postc6_ngC:new Decimal("1e21000"),
-			postc7:new Decimal("1e23000"), postc7_ngm3:new Decimal("1e25500"), postc7_ngC:new Decimal("1e32000"),
-			postc8:new Decimal("1e28000"), postc8_ngm3:new Decimal("1e39000"), postc8_ngC:new Decimal("1e37500"),
-			postcngmm_1:new Decimal("1e750"), postcngmm_1_ngm3:new Decimal("1e1080"),
-			postcngmm_2:new Decimal("1e1350"),
-			postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
-			postcngm3_1:new Decimal("1e1560"),
-			postcngm3_2:new Decimal("1e2085"),
-			postcngm3_3:new Decimal("1e8421"),
-			postcngm3_4:new Decimal("1e17000"),
-			postcngc_1:new Decimal("1e38000"),
-			postcngc_2:new Decimal("1e42250"),
-		}
-	goals = {       postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"), postc1_ngm4:new Decimal("1e575"),
-			postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngm4:new Decimal("1e4675"), postc2_ngC:new Decimal("1e5850"),
-			postc3:new Decimal("1e5000"), postc3_ngC:new Decimal("1e2675"), 
-			postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"), postc4_ngC:new Decimal("1e5750"),
-			postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"), postc5_ngC:new Decimal("1e2400"),
-			postc6:new Decimal("2e22222"), postc6_ngC:new Decimal("2.1e21111"),
-			postc7:new Decimal("1e10000"), postc7_ngmm:new Decimal("1e15000"), postc7_ngm3:new Decimal("1e5100"), postc7_ngC:new Decimal("1e4300"),
-			postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
-			postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
-			postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
-			postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1425"),
-        		postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
-		        postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
-			postcngm3_3:new Decimal("8e888"), postcngm3_4:new Decimal("1e1500"),
-			postcngm3_4:new Decimal("1e12345"),
-			postcngc_1:new Decimal("1e10525"),					
-                        postcngc_2:new Decimal("1e27225"),
-		}
+	nextAt = {
+		postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),
+		postc2: new Decimal("1e5000"), postc2_ngC:new Decimal("1e5860"),
+		postc3: new Decimal("1e12000"), postc3_ngC:new Decimal("1e7175"),
+		postc4: new Decimal("1e14000"), postc4_ngC:new Decimal("1e8475"),
+		postc5: new Decimal("1e18000"), postc5_ngm3:new Decimal("1e21500"), postc5_ngC:new Decimal("1e21000"),
+		postc6:new Decimal("1e20000"), postc6_ngm3:new Decimal("1e23000"), postc6_ngC:new Decimal("1e21000"),
+		postc7:new Decimal("1e23000"), postc7_ngm3:new Decimal("1e25500"), postc7_ngC:new Decimal("1e32000"),
+		postc8:new Decimal("1e28000"), postc8_ngm3:new Decimal("1e39000"), postc8_ngC:new Decimal("1e37500"),
+
+		postcngmm_1:new Decimal("1e750"), postcngmm_1_ngm3:new Decimal("1e1080"),
+		postcngmm_2:new Decimal("1e1350"),
+		postcngmm_3:new Decimal("1e2000"), postcngmm_3_ngm3:new Decimal("1e2650"),
+
+		postcngm3_1:new Decimal("1e1560"), postcngm3_1_ngm4:new Decimal("1e1800"),
+		postcngm3_2:new Decimal("1e2085"),
+		postcngm3_3:new Decimal("1e8421"),
+		postcngm3_4:new Decimal("1e17000"),
+
+		postcngc_1:new Decimal("1e38000"),
+		postcngc_2:new Decimal("1e42250"),
+	}
+	goals = {      
+		postc1: new Decimal("1e850"), postc1_ngmm: new Decimal("1e650"), postc1_ngm3:new Decimal("1e375"), postc1_ngm4:new Decimal("1e575"),
+		postc2:new Decimal("1e10500"), postc2_ngm3:new Decimal("1e4250"), postc2_ngm4:new Decimal("1e4675"), postc2_ngC:new Decimal("1e5850"),
+		postc3:new Decimal("1e5000"), postc3_ngC:new Decimal("1e2675"), 
+		postc4:new Decimal("1e13000"), postc4_ngm3:new Decimal("1e4210"), postc4_ngC:new Decimal("1e5750"),
+		postc5:new Decimal("1e11111"), postc5_ngm3:new Decimal("7.77e7777"), postc5_ngC:new Decimal("1e2400"),
+		postc6:new Decimal("2e22222"), postc6_ngC:new Decimal("2.1e21111"),
+		postc7:new Decimal("1e10000"), postc7_ngmm:new Decimal("1e15000"), postc7_ngm3:new Decimal("1e5100"), postc7_ngC:new Decimal("1e4300"),
+		postc8:new Decimal("1e27000"), postc8_ngm3:new Decimal("1e35000"), 
+
+		postcngmm_1:new Decimal("1e550"), postcngmm_1_ngm3:new Decimal("1e650"), postcngmm_1_ngm4:new Decimal("1e950"),
+		postcngmm_2:new Decimal("1e950"), postcngmm_2_ngm3:new Decimal("1e1090"), postcngmm_2_ngm4:new Decimal("1e1200"),
+		postcngmm_3:new Decimal("1e1200"), postcngmm_3_ngm3:new Decimal("1e1230"), postcngmm_3_ngm4:new Decimal("1e1425"),
+
+		postcngm3_1:new Decimal("1e550"), postcngm3_1_ngm4:new Decimal("1e1210"),
+		postcngm3_2:new Decimal("1e610"), postcngm3_2_ngm4:new Decimal("1e750"),
+		postcngm3_3:new Decimal("8e888"), postcngm3_4:new Decimal("1e1500"),
+		postcngm3_4:new Decimal("1e12345"),
+
+		postcngc_1:new Decimal("1e10525"),					
+		postcngc_2:new Decimal("1e27225"),
+	}
 }

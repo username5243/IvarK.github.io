@@ -47,7 +47,7 @@ function maxAllIDswithAM() {
 }
 
 function resetIDsOnNGM5() {
-	if (player.pSac !== undefined) resetInfDimensions(true) 
+	if (tmp.ngmX >= 5) resetInfDimensions(true)
 }
 
 //Global Dimension unlocks
@@ -98,76 +98,73 @@ function pSacrificed() {
 //Paradox Upgrades
 let puSizes = {x: 4, y: 6}
 let puMults = {
-	11: function(l) {
+	11(l) {
 		//l - upgrade level
-		return Math.pow(2,l)
+		return Math.pow(2, l)
 	},
-	12: function(l) {
+	12(l) {
 		return l + 1
 	},
-	13: function(l) {
+	13(l) {
 		return 1 + l / 20
 	},
-	14: function(l) {
+	14(l) {
 		return Math.min(Math.pow(2, l), 1e3)
 	},
 
-	22: function() {
+	22() {
 		return player.money.add(1).pow(0.2)
 	},
-	23: function() {
+	23() {
 		return player.infinityPower.add(1).pow(0.15)
 	},
-	24: function() {
+	24() {
 		return player.timeShards.add(1).pow(0.1)
 	},
 
-	31: function() {
+	31() {
 		return Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
 	},
-	32: function() {
+	32() {
 		return getInfinityPowerEffect()
 	},
-	33: function() {
+	33() {
 		return player.pSac.px.add(1).times(3).log10() / 500
 	},
-	34: function() {
+	34() {
 		return player.postC3Reward.log10() / 3 + 1
 	},
 
-	41: function() {
-		return Math.max(1.1, player.pSac.px.log10() / 10) 
+	41() {
+		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
-	42: function() {
+	42() {
 		let x = player.tickspeedBoosts
 		if (x >= 10) x = Math.sqrt(5 * x + 50)
 		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
-	44: function() {
+	44() {
 		return player.timeShards.add(1).log10() / 10 + 1
 	},
 
-	51: function() {
-		return 1 //Todo
-	},
-	52: function() {
-		if (!ph.did("infinity")) return 1.5 
+	52() {
+		if (!ph.did("infinity")) return 1.5
 		return Math.max(1 + player.galaxies / 20, 1.5) //Quick note: I don't believe that you can get to 10 galaxies (the minimum required for this upgrade to increase) until after infinity is broken. Might change that in the future. 
 	},
-	54: function() {
+	54() {
 		return 1 //Todo
 	},
 
-	61: function() {
+	61() {
 		return 1 //Todo
 	},
-	62: function() {
+	62() {
 		return 1 //Todo
 	},
-	63: function() {
+	63() {
 		return 1 //Todo
 	},
-	64: function() {
+	64() {
 		return 1 //Todo
 	},
 }
@@ -183,7 +180,7 @@ let puDescs = {
 	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
 	
-	31: function() {
+	31() {
 		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
@@ -204,10 +201,10 @@ let puDescs = {
 	54: "Gain 1 galaxy for every 5 tickspeed boosts bought.", //Since this will give more galaxies than actually getting galaxies, I take this to be automatically unbalanced.
 	61: "Total gained Paradoxes boost Paradox gain.",
 	62: "Paradox Upgrade 34 is stronger based on your total antimatter.",
-	63: function() {
+	63() {
 		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Paradoxes boost Galaxy Point gain." : "???"
 	},
-	64: function() {
+	64() {
 		return player.galacticSacrifice.times > 0 || player.infinitied > 0 || player.eternities > 0 || quantumed ? "Time Dimension Boosts and Dimension Boosts boost each other." : "???"
 	}
 }
@@ -241,6 +238,19 @@ let puCosts = {
 	42: 1e9,
 	43: Math.pow(2, 32),
 	44: 1e11
+}
+let puScalings = {
+	11(l) {
+		if (l >= 8) return 1
+		return 0
+	},
+	13(l) {
+		if (l >= 10) return 1
+		return 0
+	}
+}
+let puSoftcaps = {
+	42: () => player.tickspeedBoosts >= 10
 }
 let puCaps = {
 	11: 100,
@@ -280,7 +290,6 @@ function updateParadoxUpgrades() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			document.getElementById("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
-			document.getElementById("puc" + id).style.display = hasPU(id, true) >= puCaps[id] ? "none" : ""
 			if (typeof(puDescs[id]) == "function") document.getElementById("pud" + id).textContent = puDescs[id]()
 		}
 	}
@@ -292,8 +301,8 @@ function updatePUMults() {
 			var id = r * 10 + c
 			if (puMults[id]) {
 				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true, true)).toFixed(2)
-				else if (id==33) document.getElementById("pue33").textContent = "+" + puMults[33]().toFixed(4)
-				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x"
+				else if (id == 33) document.getElementById("pue33").textContent = "+" + puMults[33]().toFixed(4)
+				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
 		}
 	}
@@ -303,7 +312,8 @@ function updatePUCosts() {
 	for (var r = 1; r <= puSizes.y; r++) {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
-			document.getElementById("puc" + id).textContent = "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px"
+			var lvl = hasPU(id, true)
+			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (puCaps[id] ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + " / " + puCaps[id] : "")
 		}
 	}
 }

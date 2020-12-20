@@ -421,7 +421,8 @@ amNewsArray = [
 ["Tired for waiting minutes / hours to progress? Try Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
 ['In ng+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
 ["Coming soon: NG+3.2. ETA: We don't have a release date. There is a possibility that it takes infinite time.", "tmp.ngp3", "am210"],
-/*NEXT ID: am211*/
+["Pfft, screw gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
+/*NEXT ID: am212*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);

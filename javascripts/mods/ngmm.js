@@ -528,7 +528,7 @@ let galMults = {
 			var l = 0
 			if (player.infinityUpgrades.includes("postinfi61")) l = Math.log10(getInfinitied() + 1)
 			if (l > 2) return Decimal.pow(10, l * Math.min(l, 6) * Math.min(l, 4))
-			var p = player.pSac !== undefined ? 1 : 2
+			var p = tmp.ngmX >= 5 ? 1 : 2
 			return Decimal.pow(10, p + Math.min(4, getInfinitied())).pow(exp)
 		}
 		if (tmp.ec > 53) return Decimal.pow(10, 2e4)

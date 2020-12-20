@@ -1729,94 +1729,6 @@ document.getElementById("infiMult").onclick = function() {
 	}
 }
 
-
-function updateEternityUpgrades() {
-	document.getElementById("eter1").className = (player.eternityUpgrades.includes(1)) ? "eternityupbtnbought" : (player.eternityPoints.gte(5)) ? "eternityupbtn" : "eternityupbtnlocked"
-	document.getElementById("eter2").className = (player.eternityUpgrades.includes(2)) ? "eternityupbtnbought" : (player.eternityPoints.gte(10)) ? "eternityupbtn" : "eternityupbtnlocked"
-	document.getElementById("eter3").className = (player.eternityUpgrades.includes(3)) ? "eternityupbtnbought" : (player.eternityPoints.gte(50e3)) ? "eternityupbtn" : "eternityupbtnlocked"
-	if (player.boughtDims) {
-		document.getElementById("eterrow2").style.display = "none"
-		return
-	} else document.getElementById("eterrow2").style.display = ""
-	document.getElementById("eter4").className = (player.eternityUpgrades.includes(4)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1e16)) ? "eternityupbtn" : "eternityupbtnlocked"
-	document.getElementById("eter5").className = (player.eternityUpgrades.includes(5)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1e40)) ? "eternityupbtn" : "eternityupbtnlocked"
-	document.getElementById("eter6").className = (player.eternityUpgrades.includes(6)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1e50)) ? "eternityupbtn" : "eternityupbtnlocked"
-	if (player.exdilation != undefined && player.dilation.studies.includes(1))  {
-		document.getElementById("dilationeterupgrow").style.display = ""
-		document.getElementById("eter7").className = (player.eternityUpgrades.includes(7)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e1500")) ? "eternityupbtn" : "eternityupbtnlocked"
-		document.getElementById("eter8").className = (player.eternityUpgrades.includes(8)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e2000")) ? "eternityupbtn" : "eternityupbtnlocked"
-		document.getElementById("eter9").className = (player.eternityUpgrades.includes(9)) ? "eternityupbtnbought" : (player.eternityPoints.gte("1e3000")) ? "eternityupbtn" : "eternityupbtnlocked"
-	} else document.getElementById("dilationeterupgrow").style.display = "none"
-	if (tmp.ngC) ngC.eterUpgs.display()
-	updateNGP3EterUpgs()
-}
-
-function buyEternityUpgrade(name, cost) {
-	if (player.eternityPoints.gte(cost) && !player.eternityUpgrades.includes(name)) {
-		player.eternityUpgrades.push(name)
-		player.eternityPoints = player.eternityPoints.minus(cost)
-		updateEternityUpgrades();
-		if (name == 4) {
-			achMultLabelUpdate(); // Eternity Upgrade 4 applies achievement multiplier to Time Dimensions
-		}
-	}
-}
-
-function hasEternityUpg(x) {
-	return tmp.eterUnl && player.eternityUpgrades.includes(x)
-}
-
-function getEPCost(bought) {
-	if (player.galacticSacrifice !== undefined) return Decimal.pow(50,bought).times(500)
-	return Decimal.pow(bought > 481 ? 1e3 : bought > 153 ? 500 : bought > 58 ? 100 : 50, bought + Math.pow(Math.max(bought - 1334, 0), 1.2)).times(500)	
-}
-
-function buyEPMult() {
-	if (player.eternityPoints.gte(player.epmultCost)) {
-		player.epmult = player.epmult.times(5)
-		if (player.autoEterMode === undefined || player.autoEterMode === 'amount') {
-			player.eternityBuyer.limit = Decimal.times(player.eternityBuyer.limit, 5);
-			document.getElementById("priority13").value = formatValue("Scientific", player.eternityBuyer.limit, 2, 0);
-		}
-		player.eternityPoints = player.eternityPoints.minus(player.epmultCost)
-		player.epmultCost = getEPCost(Math.round(player.epmult.ln()/Math.log(5)))
-		document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
-		updateEternityUpgrades()
-	}
-}
-
-function buyMaxEPMult() {
-	if (player.eternityPoints.lt(player.epmultCost)) return
-	var bought=Math.round(player.epmult.ln()/Math.log(5))
-	var increment=1
-	while (player.eternityPoints.gte(getEPCost(bought + increment * 2 - 1))) {
-		increment *= 2
-	}
-	var toBuy = increment
-	for (p = 0; p < 53; p++) {
-		increment /= 2
-		if (increment < 1) break
-		if (player.eternityPoints.gte(getEPCost(bought + toBuy + increment - 1))) toBuy += increment
-	}
-	var num = toBuy
-	var newEP = player.eternityPoints
-	while (num > 0) {
-		var temp = newEP
-		var cost = getEPCost(bought+num-1)
-		if (newEP.lt(cost)) {
-			newEP = player.eternityPoints.sub(cost)
-			toBuy--
-		} else newEP = newEP.sub(cost)
-		if (newEP.eq(temp) || num > 9007199254740992) break
-		num--
-	}
-	player.eternityPoints = newEP
-	if (isNaN(newEP.e)) player.eternityPoints = new Decimal(0)
-	player.epmult = player.epmult.times(Decimal.pow(5, toBuy))
-	player.epmultCost = getEPCost(bought+toBuy)
-	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
-}
-
 function playerInfinityUpgradesOnEternity() {
 	if (getEternitied() > 19 || player.achievements.includes("ng3p51")) return
 	else if (getEternitied() > 3) {
@@ -3259,8 +3171,6 @@ function addTime(array) {
 	player.lastTenRuns[0] = array
 }
 
-var infchallengeTimes = 999999999
-
 function getLimit() {
 	if (player.infinityUpgradesRespecced == undefined || player.currentChallenge != "") return Number.MAX_VALUE
 	return Decimal.pow(Number.MAX_VALUE, 1 + player.infinityUpgradesRespecced[3] / 2)
@@ -4140,12 +4050,15 @@ function incrementTimesUpdating(diffStat){
 function requiredInfinityUpdating(diff){
 	if (tmp.ri) return
 	if (player.infinityUpgradesRespecced != undefined) infinityRespeccedDMUpdating(diff)
-		
-	for (let tier = (inQC(1) ? 1 : player.currentEternityChall == "eterc3" ? 3 : (inNC(4) || player.currentChallenge == "postc1") ? 5 : 7) - (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined ? 1 : 0); tier >= 1; --tier) {
+
+	let steps = getDimensionSteps()
+	let dims = getMaxGeneralDimensions()
+	for (let tier = dims - steps; tier >= 1; tier--) {
 		var name = TIER_NAMES[tier];
-		player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined ? 2 : 1)).times(diff / 10));
+		player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + steps).times(diff / 10))
 	}
-	if (player.masterystudies != undefined) if (player.firstAmount.gt(0)) player.dontWant = false
+	if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
+
 	var tempa = getDimensionProductionPerSecond(1).times(diff)
 	player.money = player.money.plus(tempa)	
 	player.totalmoney = player.totalmoney.plus(tempa)
@@ -4182,7 +4095,7 @@ function normalChallPowerUpdating(diff){
 }
 
 function incrementParadoxUpdating(diff) {
-	if (player.pSac !== undefined) {
+	if (tmp.ngmX >= 5) {
 		//Paradox Power
 		player.pSac.dims.power=player.pSac.dims.power.add(getPDProduction(1).times(diff))
 		for (var t=1;t<7;t++) {
@@ -4492,15 +4405,16 @@ function metaDimsUpdating(diff){
 }
 
 function infinityTimeMetaBlackHoleDimUpdating(diff){
-	var step = inQC(4) || player.pSac !== undefined ? 2 : 1
-	var stepT = inNC(7) && player.aarexModifications.ngmX >= 4 ? 2 : step
-	for (let tier = 1 ; tier <= 8; tier++) {
-		if (tier < 9 - step){
-			player["infinityDimension"+tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier+step).times(diff / 10))
-			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier+step).times(diff / 10))
+	var step = inQC(4) || tmp.ngmX >= 5 ? 2 : 1
+	var stepT = inNC(7) && tmp.ngmX >= 4 ? 2 : step
+	var max = tmp.ngmX >= 5 ? 6 : 8
+	for (let tier = 1 ; tier <= max; tier++) {
+		if (tier <= max - step){
+			player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
+			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier + step).times(diff / 10))
 			if (isBHDimUnlocked(tier + step)) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + step).times(diff / 10))
 		}
-		if ((tmp.eterUnl || player.aarexModifications.ngmX >= 4) && tier < 9 - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
+		if ((tmp.eterUnl || tmp.ngmX >= 4) && tier <= max - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
 	}
 }
 
@@ -4522,18 +4436,18 @@ function otherDimsUpdating(diff){
 	if (tmp.ngmX >= 5) infProd = infDimensionProduction(2).add(infProd)
 
 	if (player.currentEternityChall !== "eterc7") player.infinityPower = player.infinityPower.plus(infProd.times(diff))
-	if (tmp.ngmX >= 5 && !onPostBreak() && player.infinityPower > Number.MAX_VALUE) player.infinitypower = new Decimal(Number.MAX_VALUE)
-	else if (!inNC(4) && player.currentChallenge !== "postc1") player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
+	else if (!haveSixDimensions()) player.seventhAmount = player.seventhAmount.plus(infProd.times(diff))
+
+	if (tmp.ngmX >= 5 && !onPostBreak() && player.infinityPower.gt(Number.MAX_VALUE)) player.infinitypower = new Decimal(Number.MAX_VALUE)
 
 	//Time Dimensions
 	let timeProd = getTimeDimensionProduction(1)
 	if (tmp.ngmX >= 5) timeProd = getTimeDimensionProduction(2).add(timeProd)
+	player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
 
-   	if (player.currentEternityChall == "eterc7") player.infinityDimension8.amount = player.infinityDimension8.amount.plus(timeProd.times(diff))
-   	else {
-		if (ECTimesCompleted("eterc7") > 0) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(infDimensionProduction(9).times(diff))
-		player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
-	}
+	//Eternity Challenge 7
+	let id8Prod = getECReward(7)
+	if (id8Prod.gt(0)) player.infinityDimension8.amount = player.infinityDimension8.amount.plus(id8Prod.times(diff))
 }
 
 function ERFreeTickUpdating(){
@@ -4629,7 +4543,7 @@ function passiveIPperMUpdating(diff){
 }
 
 function giveBlackHolePowerUpdating(diff){
-	if (player.exdilation != undefined) player.blackhole.power = player.blackhole.power.plus(getBlackholeinfDimensionProduction(1).times(diff))
+	if (player.exdilation != undefined) player.blackhole.power = player.blackhole.power.plus(getBlackholeDimensionProduction(1).times(diff))
 }
 
 function freeTickspeedUpdating(){
@@ -5040,7 +4954,6 @@ function d8SacDisplay() {
 function pSacBtnUpdating(){
 	if (canPSac()) {
 		let px = getPxGain()
-		document.getElementById("pSac").style.display = ""
 		document.getElementById("pSac").innerHTML = "Paradox Sacrifice for " + shortenDimensions(px) + " Paradox" + (px.eq(1) ? "." : "es.")
 	}
 }
@@ -5185,7 +5098,7 @@ function gameLoop(diff) {
 
 		if (tmp.ngp3) {
 			if (hasDilationStudy(1)) {
-				if (isBigRipUpgradeActive(20) || false /*hasBosonicUpg(65)*/) {
+				if (isBigRipUpgradeActive(20) || hasEternityUpg(15)) {
 					let gain = getDilGain()
 					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
 				} else if (player.dilation.active) ngp3DilationUpdating()
@@ -5559,12 +5472,12 @@ function autoBuyerTick() {
 					}
 				} else if (canBuyDimension(priority[i].tier)) {
 					if (priority[i].target > 10) {
-						if (tmp.ngC) ngC.condense.nds.max(priority[i].target - 10)
 						if (player.options.bulkOn) buyBulkDimension(priority[i].target - 10, priority[i].bulk, true)
 						else buyBulkDimension(priority[i].target - 10, 1, true)
+						if (tmp.ngC) ngC.condense.nds.max(priority[i].target - 10)
 					} else {
-						if (tmp.ngC) ngC.condense.nds.max(priority[i].target)
 						buyOneDimension(priority[i].target)
+						if (tmp.ngC) ngC.condense.nds.max(priority[i].target)
 					}
 				}
 				if (tmp.ngmX >= 4) buyMaxTimeDimension(priority[i].tier, priority[i].bulk)
