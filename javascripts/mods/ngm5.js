@@ -52,7 +52,7 @@ function resetIDsOnNGM5() {
 
 //Global Dimension unlocks
 function isDimUnlocked(d) {
-	if (d < 7) return true
+	if (d < 7) return true // bruh. seriously. 
 	return false
 }
 
@@ -269,6 +269,7 @@ function buyPU(x,r) {
 	else player.pSac.upgs.push(x)
 	updateParadoxUpgrades()
 	if (r) updatePUCosts()
+	checkPDunlock()
 }
 
 function getPUCost(x,r,l) {
@@ -334,6 +335,7 @@ var pdBaseCosts = [null, 1, 2, 4, 16, 256, 2048, 1e250, 1e280]
 var pdCostMults = [null, 3, 16, 64, 4096, 8192, 32768, 1e250, 1e280]
 
 function buyPD(d) {
+	if (!tmp.PDunl) return
 	var ps = player.pSac
 	var c = ps.dims[d].cost
 	if (!ps.px.gte(c)) return
@@ -349,6 +351,7 @@ function buyPD(d) {
 }
 
 function maxPDs() {
+	if (!tmp.PDunl) return
 	let ps = player.pSac
 	let upd = false
 	for (var d = 1; d < 9; d++) {
@@ -409,7 +412,10 @@ function resetPDs(full) {
 	if (full) player.pSac.dims={}
 	player.pSac.dims.power = new Decimal(0)
 	player.pSac.dims.extraTime = 0
-	if (full) for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
+	if (full) { 
+		for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
+		tmp.PDunl = false //Wait until the next update. 
+	}
 	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = new Decimal(player.pSac.dims[d].bought)
 }
 
@@ -447,4 +453,17 @@ function haveExtraTime() {
 function quickMReset() {
 	player.aarexModifications.quickReset = !player.aarexModifications.quickReset
 	document.getElementById("quickMReset").textContent = "Quick matter reset: O" + (player.aarexModifications.quickReset ? "N" : "FF")
+}
+
+//ngm5 remade
+
+function checkPDunlock(onload = false) { 
+	if (tmp.PDunl || tmp.ngmX !== 5) return
+	if (hasPU(31) && hasPU(32) && hasPU(33)) {
+		tmp.PDunl = true
+		if (onload) return
+		//these notifications show up in reverse order. the top one appears on the bottom. 
+		$.notify("Paradox Dimensions Unlocked!", "success")
+		$.notify("Your Paradoxes are coalescing into Dimensions.", "success")
+	} 
 }
