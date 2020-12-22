@@ -423,7 +423,8 @@ amNewsArray = [
 ["Coming soon: NG+3.2. ETA: We don't have a release date. There is a possibility that it takes infinite time.", "tmp.ngp3", "am210"],
 ["Pfft, screw gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
 ["NG-5 is being worked on!", "tmp.ngmX >= 4", "am212"],
-/*NEXT ID: am213*/
+["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
+/*NEXT ID: am214*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
