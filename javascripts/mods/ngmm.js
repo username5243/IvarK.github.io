@@ -522,6 +522,7 @@ let R135 = Math.pow(Math.E + Math.PI + 0.56714 + 4.81047 + 0.78343 + 1.75793 + 2
 //v2.31
 let galMults = {
 	u11: function() {
+		if (tmp.ngmX >= 5) return 1
 		if (player.tickspeedBoosts != undefined) {
 			var e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
 			var exp = (tmp.ngmX >= 4 && player.galacticSacrifice.upgrades.includes(41)) ? 2 * e : 1

@@ -472,7 +472,6 @@ function checkPDunlock(onload = false) {
 
 let puSizes = {x: 4, y: 4}
 function checkParadoxUnlock() {
-	console.log(player)
 	if (player.pSac === undefined) return 
 	if (player.galacticSacrifice.times > 0) puSizes.y = 4
 	console.log(player.galacticSacrifice.times)

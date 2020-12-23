@@ -5162,6 +5162,7 @@ function gameLoop(diff) {
 
 	normalSacDisplay()
 	sacLayersDisplay()
+	//todo: add in code that renders pSac. maybe next update.
 	d8SacDisplay()
 
 	document.getElementById("challengesbtn").style.display = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"
