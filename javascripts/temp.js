@@ -277,7 +277,7 @@ function updateMatterSpeed(){
 	if (tmp.ngmX >= 5) exp = 100 / puMults[12](hasPU(12, true, true)) //I added a 0. remove this code and potentially that 0 when we're done here.
 	if (GDs.boostUnl('mf')) exp *= GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
 
-	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
+	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100 + player.money.log10() / 1000
 	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
 }
 

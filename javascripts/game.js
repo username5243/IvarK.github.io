@@ -169,7 +169,6 @@ function setupInfUpgHTMLandData(){
 }
 
 function setupParadoxUpgrades(){
-	checkParadoxUnlock()
 	var pu = document.getElementById("pUpgs") 
 	for (let r = pu.rows.length; r !== 0; --r) pu.deleteRow(-1)
 	for (r = 1; r <= puSizes.y; r++) {
@@ -4698,7 +4697,10 @@ function normalSacDisplay(){
 
 function sacLayersDisplay(){
 	document.getElementById("automationbtn").style.display = player.aarexModifications.ngmX > 3 && (player.challenges.includes("challenge1") || player.infinitied > 0 || player.eternities != 0 || ph.did("quantum")) && !isEmptiness ? "inline-block" : "none"
-	if (document.getElementById("paradox").style.display=='block') updatePUMults()
+	if (document.getElementById("paradox").style.display=='block') {
+		ParadoxUpgradeButtonTypeDisplay()
+		updatePUMults()
+	}
 	if (document.getElementById("galaxy").style.display=='block') {
 		galacticUpgradeSpanDisplay()
 		galacticUpgradeButtonTypeDisplay()
@@ -5162,7 +5164,7 @@ function gameLoop(diff) {
 
 	normalSacDisplay()
 	sacLayersDisplay()
-	//todo: add in code that renders pSac. maybe next update.
+	//todo: add in code that renders pSac. maybe next update. 
 	d8SacDisplay()
 
 	document.getElementById("challengesbtn").style.display = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"

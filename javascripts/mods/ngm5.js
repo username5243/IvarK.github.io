@@ -96,6 +96,7 @@ function pSacrificed() {
 	return player.pSac != undefined && !isEmptiness && (player.pSac.times || player.galacticSacrifice.times || player.infinitied > 0 || getEternitied() > 0 || quantumed)
 }
 //Paradox Upgrades
+let puSizes = {x: 4, y: 6}
 let puMults = {
 	11(l) {
 		//l - upgrade level
@@ -256,6 +257,11 @@ let puCaps = {
 	12: 100,
 	13: 20,
 	14: 10
+}
+let puConditions = {
+	r4: () => player.galacticSacrifice.times >= 1 || player.infinitied >= 1 || onPostBreak(),
+	r5: () => player.infinitied >= 1 || onPostBreak(),
+	r6: () => onPostBreak() 
 }
 
 function buyPU(x,r) {
@@ -439,7 +445,6 @@ function resetPSac() {
 			rebuyables: keepPU ? player.pSac.rebuyables : {}
 		}
 		resetPDs(true)
-		setupParadoxUpgrades()
 		updateParadoxUpgrades()
 		updatePUCosts()
 	}
@@ -470,11 +475,35 @@ function checkPDunlock(onload = false) {
 	} 
 }
 
-let puSizes = {x: 4, y: 4}
-function checkParadoxUnlock() {
-	if (player.pSac === undefined) return 
-	if (player.galacticSacrifice.times > 0) puSizes.y = 4
-	console.log(player.galacticSacrifice.times)
-	if (player.infinitied >= 1) puSizes.y = 5
-	if (onPostBreak()) puSizes.y = 6
+function ParadoxUpgradeButtonTypeDisplay() {
+	let t = document.getElementById("pUpgs")
+	for (let i = 1; i <= 6; i++) { //6 rows
+		var r = t.rows[i-1]
+		if (!puConditions["r"+i] || puConditions["r"+i]()) {
+			r.style.display = ""
+			for (let j = 1; j <= 4; j++) { //4 columns
+				var c = r.cells[j-1]
+				if (!puConditions["c"+j] || puConditions["c"+j]()) {
+					c.style.display = ""
+					var e = document.getElementById('pu' + i + j);
+					if (hasPU(i+''+j)) {
+						e.className = 'pubought'
+					} else if (player.pSac.px.gte(puCosts[i+''+j])) {
+						e.className = 'pupg';
+					} else {
+						e.className = 'infinistorebtnlocked'
+					}
+					let upgId = i * 10 + j
+					let mult = puMults[upgId]
+					let elm = document.getElementById('pue' + upgId)
+
+					if (mult && elm) {
+						let display = puMults["u" + upgId]
+						mult = mult()
+						document.getElementById('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
+					}
+				} else c.style.display = "none"
+			}
+		} else r.style.display = "none"
+	}
 }
