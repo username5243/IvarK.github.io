@@ -81,7 +81,7 @@ function pSacReset(force, chall, pxGain) {
 		player.pSac[force ? "forcedTimes" : "normalTimes"]++
 		if (!force) {
 			player.infDimensionsUnlocked[1]=true
-			giveAchievement("Make Antimatter Great Again!")
+			giveAchievement("Make Antimatter Great Again!") 
 		}
 	}
 	player.pSac.time = 0
@@ -96,7 +96,6 @@ function pSacrificed() {
 	return player.pSac != undefined && !isEmptiness && (player.pSac.times || player.galacticSacrifice.times || player.infinitied > 0 || getEternitied() > 0 || quantumed)
 }
 //Paradox Upgrades
-let puSizes = {x: 4, y: 6}
 let puMults = {
 	11(l) {
 		//l - upgrade level
@@ -440,6 +439,7 @@ function resetPSac() {
 			rebuyables: keepPU ? player.pSac.rebuyables : {}
 		}
 		resetPDs(true)
+		setupParadoxUpgrades()
 		updateParadoxUpgrades()
 		updatePUCosts()
 	}
@@ -465,5 +465,17 @@ function checkPDunlock(onload = false) {
 		//these notifications show up in reverse order. the top one appears on the bottom. 
 		$.notify("Paradox Dimensions Unlocked!", "success")
 		$.notify("Your Paradoxes are coalescing into Dimensions.", "success")
+		//by the way, if someone could make them stay for longer than.... well, 1-2 seconds, that would help a lot. 
+		//or, you know, come up with some other way to display this notif. 
 	} 
+}
+
+let puSizes = {x: 4, y: 4}
+function checkParadoxUnlock() {
+	console.log(player)
+	if (player.pSac === undefined) return 
+	if (player.galacticSacrifice.times > 0) puSizes.y = 4
+	console.log(player.galacticSacrifice.times)
+	if (player.infinitied >= 1) puSizes.y = 5
+	if (onPostBreak()) puSizes.y = 6
 }

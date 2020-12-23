@@ -186,7 +186,7 @@ function infDimensionPower(tier) {
 }
 
 function resetInfDimensions(full = (tmp.ngmX >= 5)) {
-	player.infinityPower = new Decimal(0)
+	player.infinityPower = new Decimal(1)
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {

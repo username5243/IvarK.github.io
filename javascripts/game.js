@@ -169,8 +169,10 @@ function setupInfUpgHTMLandData(){
 }
 
 function setupParadoxUpgrades(){
-	var pu = document.getElementById("pUpgs")
-	for (let r = 1; r <= puSizes.y; r++) {
+	checkParadoxUnlock()
+	var pu = document.getElementById("pUpgs") 
+	for (let r = pu.rows.length; r !== 0; --r) pu.deleteRow(-1)
+	for (r = 1; r <= puSizes.y; r++) {
 		let row = pu.insertRow(r - 1)
 		for (let c = 1; c <= puSizes.x; c++) {
 			var col = row.insertCell(c - 1)
@@ -3953,8 +3955,8 @@ function checkMatter(diff){
 	var pxGain
 	if (haveET) {
 		//Matter
+		player.matter=player.matter.times(Decimal.pow(tmp.mv, diff))
 		if (player.matter.lt(player.money)) {
-			player.matter=player.matter.times(Decimal.pow(tmp.mv, diff))
 			if (player.matter.gte(player.money)) player.pSac.dims.extraTime+=player.matter.div(player.money).log(tmp.mv)/10
 			player.matter=player.matter.min(player.money)
 		} else player.pSac.dims.extraTime+=diff
