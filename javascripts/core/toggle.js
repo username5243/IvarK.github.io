@@ -31,7 +31,7 @@ function infMultAutoToggle() {
 		}
 	} else {
 		player.infMultBuyer = !player.infMultBuyer
-		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult O"+(player.infMultBuyer?"N":"FF")
+		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult: O" + (player.infMultBuyer ? "N" : "FF")
 	}
 }
 
