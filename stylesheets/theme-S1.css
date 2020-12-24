@@ -457,7 +457,12 @@ input {
     border-color: #507751 !important;
 }
 
-.milestonerewardlocked {
+.galStonereward {
+    background: #9a921d !important;
+    border-color: #9a921d !important;
+}
+
+.milestonerewardlocked, .galStonerewardlocked {
     background: #9E9E9E !important;
     box-shadow: 1px 1px 1px 0px #000;
     border: none !important;

@@ -509,3 +509,9 @@ function ParadoxUpgradeButtonTypeDisplay() {
 		} else r.style.display = "none"
 	}
 }
+
+function updateGalaxyTabs() {
+	document.getElementById("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
+	document.getElementById("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
+	if (player.pSac === undefined) showGalTab("galUpgs")
+}

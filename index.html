@@ -3744,13 +3744,23 @@
 			<div class="footer"></div>
 		</div>
 		<div id="automation_ngm4_placement"></div>
-		<div id="paradox" class="tab"><table class="table" id="pUpgs" style="margin: 0 auto"></table></div>
+		<div id="paradox" class="tab">
+			<table class="table" id="pUpgs" style="margin: 0 auto">
+				<!-- setupParadoxUpgs() -->
+			</table>
+			<div class="footer"></div>
+		</div>
 		<div id="galaxy" class="tab" align="center" style="display: none">
-			<div id="vanillaGalaxyPoints">
-				<br>
-				<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
-				<br>
-			</div>
+			<tr>
+				<td><button id="galupgsbtn" class="secondarytabbtn" onclick="showGalTab('galUpgs')">Upgrades</button><td>
+				<td><button id="galStonesbtn" class="secondarytabbtn" onclick="showGalTab('galStones')">Milestones</button><td>
+			</tr>
+			<div class="galaxytab" id="galUpgs">
+				<div id="vanillaGalaxyPoints">
+					<br>
+					<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
+					<br>
+				</div>
 			<table class="table" id="galTable" style="margin: 0 auto">
 				<tr>
 					<td>
@@ -3853,6 +3863,51 @@
 					</td>
 				</tr>
 			</table>
+			</div>
+			<div class="galaxytab" id="galStones">
+			<table class="table" align="center" style="margin: auto" id="galStones">
+				<tr>
+					<td class="galStonesText">1 Sacrifice:</td>
+					<td class="galStonesText">2 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward0">Unlock the Third Infinity Dimension</button></td>
+					<td><button class="galStonerewardlocked" id="Greward1">Start with 20 Paradoxes on Sacrifice</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">3 Sacrifices:</td>
+					<td class="galStonesText">5 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward2">Permanently unlock Paradox Dimensions.</button></td>
+					<td><button class="galStonerewardlocked" id="Greward3">You keep rebuyable Paradox upgrades on Sacrifice</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">10 Sacrifcies:</td>
+					<td class="galStonesText">15 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward4" style="font-size: 12px">Start with 25 Paradoxes per Sacrifice performed (Disabled in Challenges)</button></td>
+					<td><button class="galStonerewardlocked" id="Greward5" style="font-size: 10px">Unlock an autobuyer for the first Paradox dimension, and reduce the cost of the last Paradox rebuyable</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">20 Sacrifices:</td>
+					<td class="galStonesText">25 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward6">Unlock an autobuyer for the second Paradox Dimension</button></td>
+					<td><button class="galStonerewardlocked" id="Greward7">Unlock an autobuyer for the third Paradox Dimension</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">30 Sacrifices:</td>
+					<td class="galStonesText">35 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward8">Unlock an autobuyer for the fourth Paradox Dimension</button></td>
+					<td><button class="galStonerewardlocked" id="Greward9">Unlock an autobuyer for the fifth Paradox Dimension</button></td>
+				</tr>
+			</table>
+			</div>
 			<div class="footer"></div>
 		</div>
 		<div id="infinity" class="tab" align="center" style="display: none">
