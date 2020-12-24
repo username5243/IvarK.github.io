@@ -1852,6 +1852,18 @@ function updateMilestones() {
 	document.getElementById("mdmilestonesrow2b").style.display = moreUnlocked ? "" : "none"
 }
 
+function updateGalstones() {
+	var galStoneRequirements = [1, 2, 3, 5, 10, 15, 20, 25, 30, 35]
+	for (i=0; i<9; i++) {
+		var name = "Greward" + i;
+		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
+			document.getElementById(name).className = "galStonereward"
+		} else {
+			document.getElementById(name).className = "galStonerewardlocked"
+		}
+	}
+}
+
 document.getElementById("save").onclick = function () {
 	saved++
 	if (saved > 99) giveAchievement("Just in case")
@@ -2377,6 +2389,7 @@ function onNotationChange() {
 	updateDilationUpgradeCosts()
 	updateExdilation()
 	updateMilestones()
+	updateGalstones()
 	if (tmp.ngp3) {
 		updateQuarksTabOnUpdate()
 		updateGluonsTabOnUpdate("notation")
@@ -5597,6 +5610,21 @@ function isEterBuyerOn() {
 	if (!player.eternityBuyer.ifAD || player.dilation.active) return true
 	if (!player.eternityBuyer.dilationMode) return false
 	return (player.eternityBuyer.dilMode != "upgrades" && !player.eternityBuyer.slowStopped) || (player.eternityBuyer.dilMode == "upgrades" && player.eternityBuyer.tpUpgraded)
+}
+
+function showGalTab(tabName) {
+	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+	var tabs = document.getElementsByClassName('galaxytab');
+	var tab;
+	for (var i = 0; i < tabs.length; i++) {
+		tab = tabs.item(i);
+		if (tab.id === tabName) {
+			tab.style.display = 'block';
+		} else {
+			tab.style.display = 'none';
+		}
+	}
+	player.aarexModifications.tabsSave.tabGalaxy = tabName
 }
 
 function showInfTab(tabName) {

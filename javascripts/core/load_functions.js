@@ -2222,8 +2222,8 @@ function onLoad(noOffline) {
 	if (player.pSac !== undefined) {
 		updateParadoxUpgrades()
                 updatePUCosts()
-                updateGalaxySpeedruns()
-	}
+        }
+        updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
 	handleDisplaysOutOfQuantum()
 	hideDimensions()
@@ -2233,7 +2233,8 @@ function onLoad(noOffline) {
 	checkForEndMe()
 	updateAutobuyers()
 	updatePriorities()
-	updateMilestones()
+        updateMilestones()
+        updateGalstones()
 	loadInfAutoBuyers()
 	updateEternityUpgrades()
 	updateTheoremButtons()
@@ -2295,7 +2296,7 @@ function onLoad(noOffline) {
 	showStatsTab((tabsSave.on && tabsSave.tabStats) || 'stats')
 	showAchTab((tabsSave.on && (tabsSave.tabAchs == 'normalachievements' || tabsSave.tabAchs == 'secretachievements') && tabsSave.tabAchs) || 'normalachievements')
         showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
-        showGalaxyTab("galUpgrades")
+        showGalTab((tabsSave.on && tabsSave.tabGalaxy && player.pSac !== undefined) || 'galUpgs')
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
 	showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')
@@ -2586,7 +2587,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(id) {
-	if (modes.ngmm == 4 && !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")) return
+	//if (modes.ngmm == 4 && !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")) return
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
@@ -2613,7 +2614,8 @@ function new_game(id) {
 	showDimTab('antimatterdimensions')
 	showStatsTab('stats')
 	showAchTab('normalachievements')
-	showChallengesTab('normalchallenges')
+        showChallengesTab('normalchallenges')
+        showGalTab('galUpgs')
 	showInfTab('preinf')
 	showEternityTab('timestudies', true)
 	showQuantumTab('uquarks')
