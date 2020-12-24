@@ -426,7 +426,9 @@ function resetPDs(full) {
 
 function getExtraTime() {
 	if (!haveExtraTime()) return 0
-	return Math.log10(player.pSac.dims.power.add(1).log10() + 1) * 4
+	let ExtraTime = player.pSac.dims.power.add(1).log10() + 1
+	ExtraTime = Math.log(ExtraTime) / Math.log(5) * 4
+	return ExtraTime
 }
 
 //Paradox Layer Reset
