@@ -221,7 +221,7 @@ let puCosts = {
 		return Math.pow(4, l + 4)
 	},
 	14: function(l) {
-		return Decimal.pow(3,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
+		return Decimal.pow(2,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
 	21: 256,
@@ -486,9 +486,9 @@ function ParadoxUpgradeButtonTypeDisplay() {
 				if (!puConditions["c"+j] || puConditions["c"+j]()) {
 					c.style.display = ""
 					var e = document.getElementById('pu' + i + j);
-					if (hasPU(i+''+j)) {
+					if (hasPU(i*10+j)) {
 						e.className = 'pubought'
-					} else if (player.pSac.px.gte(puCosts[i+''+j])) {
+					} else if (i === 1 ? player.pSac.px.gte(puCosts[10+j](hasPU(10+j,true))) : player.pSac.px.gte(puCosts[i*10+j])) {
 						e.className = 'pupg';
 					} else {
 						e.className = 'infinistorebtnlocked'
