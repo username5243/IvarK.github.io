@@ -53,7 +53,6 @@ function getMetaDimensionGlobalMultiplier() {
 	if (player.achievements.includes("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//Mastery Study Boosts
-		if (masteryStudies.has(262)) ret = ret.times(getMTSMult(262))
 		if (masteryStudies.has(282)) ret = ret.times(getMTSMult(282))
 		if (masteryStudies.has(303)) ret = ret.times(getMTSMult(303))
 		if (masteryStudies.has(351)) ret = ret.times(getMTSMult(351))
@@ -346,6 +345,7 @@ function getMADimBoostPowerExp(ma) {
 		return power
 	}
 	if (player.dilation.upgrades.includes("ngpp5")) power++
+	if (masteryStudies.has(262)) power++
 	power += getECReward(13)
 	if (tmp.ngp3) {
 		if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp

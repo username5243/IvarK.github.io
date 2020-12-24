@@ -1662,7 +1662,7 @@ function doNGSPUpdatingVersion(){
 
 function doInitInfMultStuff(){
         ipMultPower=2
-        if (player.masterystudies) if (player.masterystudies.includes("t241")) ipMultPower=2.2
+        if (masteryStudies.has("t241")) ipMultPower=2.15
         if (GUBought("gb3")) ipMultPower=2.3
         if (player.aarexModifications.newGameExpVersion !== undefined) ipMultCostIncrease=4
         else ipMultCostIncrease=10
