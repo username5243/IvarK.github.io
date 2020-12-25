@@ -221,7 +221,7 @@ let puCosts = {
 		return Math.pow(4, l + 4)
 	},
 	14: function(l) {
-		return Decimal.pow(2,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
+		return Decimal.pow(3,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
 	21: 256,
