@@ -295,6 +295,10 @@ function bigCrunch(autoed) {
 		ph.updateDisplay()
 	}
 	if (player.currentChallenge != "" && !player.challenges.includes(player.currentChallenge)) player.challenges.push(player.currentChallenge);
+	if (tmp.ngmX >= 4 && player.galacticSacrifice.chall) {
+		if (!player.challenges.includes("challenge" + player.galacticSacrifice.chall)) player.challenges.push("challenge" + player.galacticSacrifice.chall)
+		delete player.galacticSacrifice.chall
+	}
 	if (player.currentChallenge == "postc8") giveAchievement("Anti-antichallenged");
 	var add = getIPMult()
 	if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) add = gainedInfinityPoints()

@@ -3336,7 +3336,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
-	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+	if (getInfinitied() >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
 		for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"

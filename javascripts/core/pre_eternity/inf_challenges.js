@@ -146,9 +146,12 @@ function updateChallenges() {
 
 	tmp.cp = 0
 	for (var i=0; i < player.challenges.length; i++) {
-		document.getElementById(player.challenges[i]).className = "completedchallengesbtn";
-		document.getElementById(player.challenges[i]).textContent = "Completed"
-		if (player.challenges[i].search("postc") == 0) tmp.cp++
+		let elm = document.getElementById(player.challenges[i])
+		if (elm) {
+			elm.className = "completedchallengesbtn";
+			elm.textContent = "Completed"
+			if (player.challenges[i].search("postc") == 0) tmp.cp++
+		}
 	}
 
 	let running = []
@@ -157,7 +160,7 @@ function updateChallenges() {
 	} else running.push(player.currentChallenge)
 	if (tmp.ngmX >= 4) {
 		var chall = player.galacticSacrifice.chall
-		if (chall) running.push(chall)
+		if (chall) running.push("challenge" + chall)
 	}
 	for (var i = 0; i < running.length; i++) {
 		var chall = running[i]

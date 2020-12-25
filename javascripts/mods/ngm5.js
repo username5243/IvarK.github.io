@@ -281,7 +281,7 @@ function getPUCost(x,r,l) {
 }
 
 function hasPU(x, r, nq) {
-	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
+	let e = tmp.ngmX >= 5 && player.pSac !== undefined && (!nq || !player.aarexModifications.quickReset)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
