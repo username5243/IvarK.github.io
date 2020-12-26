@@ -424,7 +424,8 @@ amNewsArray = [
 ["Pfft, screw gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
 ["NG-5 is being worked on!", "tmp.ngmX >= 4", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
-/*NEXT ID: am214*/
+["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
+/*NEXT ID: am215*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
