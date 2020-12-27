@@ -1,6 +1,7 @@
 presets={}
 
 // Time studies
+// Todo: Track how much TT you have bought
 
 function buyWithAntimatter() {
 	if (player.money.gte(player.timestudy.amcost)) {
@@ -246,7 +247,6 @@ function canBuyStudy(name) {
 		if (name == 151 && total < 195) return false
 		if (name == 171 && total < 200) return false
 	}
-
 	switch(row) {
 
 		case 1: return true
@@ -271,15 +271,21 @@ function canBuyStudy(name) {
 			if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
 			break;
 		case 12:
-			if (hasRow(row-1) && (!hasRow(row) || (player.eternityUpgrades.includes(10) && tmp.ngC) || (player.masterystudies ? player.masterystudies.includes("t272") : false))) return true; else return false
+			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length;
+			if (hasRow(row-1)) {
+				if (player.masterystudies.includes("t242")) {
+				return have < 2;
+				} else if ((!hasRow(row) || (player.eternityUpgrades.includes(10) && tmp.ngC))) return true;
+			}
+			return false;
 			break;
 		case 7:
 			if (!player.timestudy.studies.includes(61)) return false;
 			if (player.dilation.upgrades.includes(8)) return true;
 			if (player.eternityUpgrades.includes(10) && tmp.ngC) return true;
-			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
-			if (player.timestudy.studies.includes(201)) return have < 2;
-			return have < 1;
+			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
+			if (player.timestudy.studies.includes(201)) return have2 < 2;
+			return have2 < 1;
 			break;
 
 		case 19:
@@ -292,7 +298,7 @@ function canBuyStudy(name) {
 			break;
 
 		case 23:
-			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
+			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t243") : false))
 			break;
 	}
 }
@@ -301,7 +307,7 @@ let vanillaStudies = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81
 let ngcStudies = [12, 13, 23, 24, 25, 34, 35, 43, 44, 52, 63, 112, 113, 152, 172, 173, 194, 195, 196, 197, 202, 203]
 
 let all = vanillaStudies.concat(ngcStudies)
-let studyCosts = {
+let studyCosts = { // vanilla study costs
 	11: 1,
 	21: 3,		22: 2,
 	33: 2,		31: 3,		32: 2,
@@ -326,7 +332,7 @@ let studyCosts = {
 	221: 900,	222: 900,	223: 900,	224: 900,	225: 900,	226: 900,	227: 900,	228: 900,
 	231: 500,	232: 500,	233: 500,	234: 500,
 
-	//NG Condensed
+	// NG Condensed
 	12: 6,		13: 5,
 	23: 6,		24: 7,		25: 20,
 	34: 5,	 	35: 10,
@@ -362,7 +368,7 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	performedTS = true
 	if (player.boughtDims) {
 		var locked = getTotalTT(player) < 60
-		document.getElementById("nextstudy").textContent = locked ? "Next time study set unlock at 60 total Time Theorems." : ""
+		document.getElementById("nextstudy").textContent = locked ? "Next time study set unlocks at 60 total Time Theorems." : ""
 		document.getElementById("tsrow3").style.display = locked ? "none" : ""
 		for (var id = 1; id < (locked ? 5 : 7); id++) {
 			var b = player.timestudy.ers_studies[id]
@@ -491,8 +497,8 @@ function respecTimeStudies(force, presetLoad) {
 	if (!presetLoad) updateTimeStudyButtons(true)
 	if (gotAch) giveAchievement("You do know how these work, right?")
 	if (!GUBought("gb3")) ipMultPower = 2
-	if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy ON"
-	else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy OFF"
+	if (player.replicanti.galaxybuyer) document.getElementById("replicantiresettoggle").textContent = "Auto galaxy: ON"
+	else document.getElementById("replicantiresettoggle").textContent = "Auto galaxy: OFF"
 }
 
 function respecUnbuyableTimeStudies() {
@@ -736,7 +742,7 @@ function load_preset(id, reset) {
 }
 
 function delete_preset(presetId) {
-	if (!confirm("Do you really want to erase this preset? You will lose access if you do that!")) return
+	if (!confirm("Do you really want to erase this preset? You will lose access to this preset!")) return
 	var alreadyDeleted = false
 	var newPresetsOrder = []
 	for (var id = 0; id < poData.length; id++) {
@@ -758,7 +764,7 @@ function delete_preset(presetId) {
 }
 
 function rename_preset(id) {
-	presets[id].title = prompt("Input a new name of this preset. It is necessary to rename it into related names!")
+	presets[id].title = prompt("Input the new name for this preset. It is recommended you rename the preset based on what studies you have selected.")
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	placement = 1
 	while (poData[placement-1] != id) placement++

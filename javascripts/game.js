@@ -719,7 +719,11 @@ function updateNewPlayer(reseted) {
 	}
 	if (modesChosen.ngm === 1) player.aarexModifications.newGameMinusVersion = 2.2
 	if (modesChosen.ngm === 2) ngmR.setup()
-	if (modesChosen.ngp) doNGPlusOneNewPlayer()
+	if (modesChosen.ngp == 2) { 
+		doNGPlusFourPlayer()
+	} else if (modesChosen.ngp == 1) {
+		doNGPlusOneNewPlayer()
+	}
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) {
 		tmp.ngmX = modesChosen.ngmm + 1
@@ -731,7 +735,6 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.arrows) doNGEXPNewPlayer()
 	if (modesChosen.ngud) doNGUDNewPlayer()
 	if (modesChosen.rs == 2) doInfinityRespeccedNewPlayer()
-	if (modesChosen.ngp > 1) doNGPlusFourPlayer()
 	if (modesChosen.ngp > 2) convertToNGP5(true)
 	if (modesChosen.ngud == 2) player.aarexModifications.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
@@ -783,6 +786,20 @@ function doNGPlusOneNewPlayer(){
 	player.aarexModifications.newGamePlusVersion = 2
 }
 
+/* Currently does not work when initializing, please fix
+function doNGPlusClassicNewPlayer(){
+	player.infinitied = Math.max(player.infinited, 1);
+	player.dimensionMultDecrease = 2
+	player.tickSpeedMultDecrease = 1.65
+	player.challenges = challengesCompletedOnEternity()
+	for (ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec] = 5
+	player.achievements = []
+	player.achievements.push("r123") // 5 more eternities until the update
+	player.achievements.push("r22") // FAKE NEWS!
+	player.achievements.push("r76") // One for each dimension
+	player.aarexModifications.newGamePlusVersion = 2
+}
+ */
 function doNGPlusTwoNewPlayer(){
 	player.aarexModifications.newGamePlusPlusVersion = 2.90142
 	player.autoEterMode = "amount"
@@ -1962,22 +1979,22 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
-	ngp: ["OFF", "ON", "NG+4"/*, "NG+5"*/],
+	ngp: ["OFF", "ON (v3)", "NG+4"/*, "NG+5"*/],
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
 	rs: ["NONE", "Eternity", "Infinity"],
 	ngud: ["OFF", "ON", "Prime (')", "Semiprime (S')"/*, "Semiprime.1 (S'.1)"*/],
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/]/*,
-	ngmu: ["OFF", "ON", "NG**", "NG***"],
-	ngumu: ["OFF", "ON", "NGUd**'", "NGUd***'"],
+	ngmu: ["OFF", "ON", "NG**", "NG***"], // probably delete?
+	ngumu: ["OFF", "ON", "NGUd**'", "NGUd***'"], // probably delete?
 	ngex: ["OFF", "ON", "DEATH MODE 💀"]*/ // modes that aren't even made yet
 }
 function toggle_mod(id) {
 	hasSubMod = Object.keys(modSubNames).includes(id)
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
-	if (id == "ngp" && subMode == 2 && (!(modes.ngpp >= 2) || !metaSave.ngp4)) subMode = 0
+	if (id == "ngp" && subMode == 2 && (!(modes.ngpp >= 1) || !metaSave.ngp4)) subMode = 0
 	else if (id == "ngpp" && subMode == 1 && (modes.ngud || modes.ngex)) subMode = 2
 	else if (id == "ngpp" && subMode == 3 && modes.ngex) subMode = 0
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
@@ -1997,7 +2014,7 @@ function toggle_mod(id) {
 		document.getElementById("ngexBtn").textContent = "Expert Mode: OFF"
 	}
 	if ((id=="ngpp"||id=="ngud")&&subMode) {
-		if (!modes.ngp&&!modes.ngex) toggle_mod("ngp")
+		if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
 		modes.rs=0
 		document.getElementById("rsBtn").textContent = "Respecced: NONE"
 	}
@@ -2233,8 +2250,8 @@ function gainedEternityPoints() {
 	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(uEPM ? 1 : player.epmult)
 	if (player.aarexModifications.newGameExpVersion) ret = ret.times(10)
 	if (hasTimeStudy(61)) ret = ret.times(tsMults[61]())
-	if (hasTimeStudy(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
-	if (hasTimeStudy(122)) ret = ret.times(35)
+	if (hasTimeStudy(121)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : ((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
+	if (hasTimeStudy(122)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : 35)
 	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3) {
@@ -3083,22 +3100,22 @@ function updateCheckBoxes() {
 }
 
 function updateHotkeys() {
-	let html = "Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all,<br>S for sacrifice"
-	if (!player.achievements.includes("r136")) html += ", D for dimension boost"
+	let html = "Hotkeys: 1-8 to buy 10 Dimensions, shift+1-8 to buy 1 Dimension, T to buy max Tickspeed upgrades, shift+T to buy one Tickspeed upgrade, M to Max All,<br>S to Sacrifice"
+	if (!player.achievements.includes("r136")) html += ", D to Dimension Boost"
 	if (!player.achievements.includes("ng3p51")) {
-		if (player.tickspeedBoosts != undefined) html += ", B for tickspeed boost"
-		if (player.aarexModifications.ngmX >= 4) html += ", N for time dimension boost"
-		html += ", G for galaxy"
+		if (player.tickspeedBoosts != undefined) html += ", B to Tickspeed Boost"
+		if (player.aarexModifications.ngmX >= 4) html += ", N to Time Dimension Boost"
+		html += ", G to buy a Galaxy"
 	}
-	html += ", C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity"
-	if (player.achievements.includes("r136")) html += ", D to dilate time"
+	html += ", C to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
+	if (player.achievements.includes("r136")) html += ", D to Dilate Time"
 	if (player.achievements.includes("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
-	if (player.meta) html += ",<br>Q for quantum"
-	if (player.achievements.includes("ng3p45")) html += ", U for unstabilize all quarks"
-	if (player.achievements.includes("ng3p51")) html += ", B for Big Rip, G to become a ghost"
+	if (player.meta) html += ",<br>Q to Quantum"
+	if (player.achievements.includes("ng3p45")) html += ", U to unstabilize all Quarks"
+	if (player.achievements.includes("ng3p51")) html += ", B to Big Rip, G to become a ghost"
 	html += "."
-	if (player.boughtDims) html += "<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
-	html += "<br>Hotkeys do not work while holding control. Hold shift to see details on many formulas."
+	if (player.boughtDims) html += "<br>You can hold Shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
+	html += "<br>Hotkeys do not work while holding the Control key (Ctrl). Hold the Shift key to see details on many formulas."
 	document.getElementById("hotkeysDesc").innerHTML = html
 	//also uhh H for forcing achievement tooltip display update so yeah lol
 }
@@ -3117,7 +3134,7 @@ function updateEterChallengeTimes() {
 		}
 	}
 	document.getElementById("eterchallengesbtn").style.display = tempcounter > 0 ? "inline-block" : "none"
-	setAndMaybeShow("eterchallengetimesum",tempcounter>1,'"Sum of completed eternity challenge time records is "+timeDisplayShort('+temp+', false, 3)')
+	setAndMaybeShow("eterchallengetimesum",tempcounter>1,'"The sum of your completed Eternity Challenge time records is "+timeDisplayShort(' + temp + ', false, 3) + "."')
 }
 
 var averageEp = new Decimal(0)
@@ -3130,12 +3147,12 @@ function updateLastTenEternities() {
 		if (player.lastTenEternities[i][1].gt(0)) {
 			var eppm = player.lastTenEternities[i][1].dividedBy(player.lastTenEternities[i][0]/600)
 			var unit = player.lastTenEternities[i][2] ? player.lastTenEternities[i][2] == "b" ? "EM" : player.lastTenEternities[i][2] == "d2" ? "TP" : "EP" : "EP"
-			var tempstring = shorten(eppm) + " " + unit + "/min"
-			if (eppm<1) tempstring = shorten(eppm*60) + " " + unit + "/hour"
+			var tempstring = "(" + shorten(eppm) + " " + unit + "/min)"
+			if (eppm<1) tempstring = "(" + shorten(eppm * 60) + " " + unit + "/hour)"
 			msg = "The Eternity " + (i == 0 ? '1 eternity' : (i+1) + ' eternities') + " ago took " + timeDisplayShort(player.lastTenEternities[i][0], false, 3)
 			if (player.lastTenEternities[i][2]) {
 				if (player.lastTenEternities[i][2] == "b") msg += " while it was broken"
-				else if (player.lastTenEternities[i][2].toString().slice(0,1) == "d") msg += " while dilated"
+				else if (player.lastTenEternities[i][2].toString().slice(0,1) == "d") msg += " while Dilated"
 				else msg += " in Eternity Challenge " + player.lastTenEternities[i][2]
 			}
 			msg += " and gave " + shortenDimensions(player.lastTenEternities[i][1]) + " " + unit + ". " + tempstring

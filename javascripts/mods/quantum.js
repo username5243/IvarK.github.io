@@ -55,16 +55,16 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		if (inQCModifier("ms")) ph.updateDisplay()
 	}
 
-	var implode = !(auto||force)&&speedrunMilestonesReached<23
+	var implode = !(auto || force) && speedrunMilestonesReached < 23
 	if (implode) {
 		implosionCheck = 1
 		dev.implode()
 		setTimeout(function(){
 			quantumReset(force, auto, QCs, qc, bigRip, true)
-		},1000)
+		}, 1000)
 		setTimeout(function(){
 			implosionCheck = 0
-		},2000)
+		}, 2000)
 	} else quantumReset(force, auto, QCs, qc, bigRip)
 	updateTemp()
 }
@@ -176,8 +176,8 @@ function updateLastTenQuantums() {
 	for (var i = 0; i < 10; i++) {
 		if (tmp.qu.last10[i][1].gt(0)) {
 			var qkpm = tmp.qu.last10[i][1].dividedBy(tmp.qu.last10[i][0] / 600)
-			var tempstring = shorten(qkpm) + " QK/min"
-			if (qkpm<1) tempstring = shorten(qkpm*60) + " QK/hour"
+			var tempstring = "(" + shorten(qkpm) + " QK/min)"
+			if (qkpm<1) tempstring = "(" + shorten(qkpm * 60) + " QK/hour)"
 			var msg = "The quantum " + (i == 0 ? '1 quantum' : (i + 1) + ' quantums') + " ago took " + timeDisplayShort(tmp.qu.last10[i][0], false, 3)
 			if (tmp.qu.last10[i][2]) {
 				if (typeof(tmp.qu.last10[i][2]) == "number") " in Quantum Challenge " + tmp.qu.last10[i][2]
@@ -245,7 +245,7 @@ function doQuantumProgress() {
 		var percentage = Math.min(player.eternityPoints.max(1).log10() / 12.15, 100).toFixed(2) + "%"
 		document.getElementById("progressbar").style.width = percentage
 		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip','Eternity points percentage to Break Eternity')
+		document.getElementById("progresspercent").setAttribute('ach-tooltip','Eternity Points percentage to Break Eternity')
 	} else if (id == 5) {
 		var percentage = Math.min(tmp.qu.bigRip.bestThisRun.max(1).log10() / getQCGoalLog(undefined, true) * 100, 100).toFixed(2) + "%"
 		document.getElementById("progressbar").style.width = percentage
@@ -295,6 +295,9 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	document.getElementById("bigripbtn").style.display = "none"
 	document.getElementById("ghostifybtn").style.display = "none"
 	updateBankedEter()
+
+	// check if forced quantum
+	// otherwise, give rewards
 	if (force) {
 		if (bigRip && player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 		else bankedEterGain = 0
@@ -345,7 +348,11 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var oldTime = tmp.qu.time
 	tmp.qu.time = 0
 	updateQuarkDisplay()
+
+	// ng-2 display
 	document.getElementById("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
+
+	// ng+3
 	if (tmp.ngp3) {
 		var aea = {
 			dilMode: player.eternityBuyer.dilMode,
@@ -363,6 +370,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			}
 		}
 		updateQuantumWorth()
+
+		// big rip tracking
 		if (bigRip && !tmp.bruActive[12]) {
 			tmp.qu.bigRip.storedTS = {
 				tt: player.timestudy.theorem,
@@ -376,6 +385,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			for (var s = 0; s < player.masterystudies.length; s++) if (player.masterystudies[s].indexOf("t") == 0) tmp.qu.bigRip.storedTS.studies.push(parseInt(player.masterystudies[s].split("t")[1]))
 		}
 		if (bigRip != tmp.qu.bigRip.active) switchAB()
+
+		// supermastery
 		if (inQCModifier("sm")) {
 			var count = 0
 			var newMS = []
@@ -393,9 +404,12 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		}
 		if (!bigRip && tmp.qu.bigRip.active) if (player.galaxies == 9 && player.replicanti.galaxies == 9 && player.timeDimension4.amount.round().eq(9)) giveAchievement("We can really afford 9.")
 	} else tmp.qu.gluons = 0;
+
 	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
 	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
 	else player.infinityPoints = new Decimal(0);
+
+	// more big rip stuff
 	if (tmp.ngp3) {
 		if (!bigRip && tmp.qu.bigRip.active && force) {
 			tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.add(getSpaceShardsGain())
@@ -412,6 +426,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
 	
 	doQuantumResetStuff(bigRip, isQC)
+	// ghostify achievement reward - "Kee-hee-hee!"
 	if (ph.did("ghostify") && bigRip) {
 		player.timeDimension8 = {
 			cost: timeDimCost(8, 1),
@@ -447,7 +462,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			if (tmp.qu.autoOptions.assignQK) assignAll(true)
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			if (isAutoGhostActive(4) && player.ghostify.automatorGhosts[4].mode != "t") rotateAutoUnstable()
-		}//bounds if (!force)
+		} //bounds if (!force)
 		tmp.qu.pairedChallenges.current = 0
 		if (!isQC) {
 			tmp.qu.electrons.amount = 0
@@ -522,7 +537,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		delete tmp.qu.autoECN
 	} // bounds if tmp.ngp3
 	if (speedrunMilestonesReached < 1 && !bigRip) {
-		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult OFF"
+		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult: OFF"
 		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
 		document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
 		document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: " + shortenDimensions(player.epmult) + "x<p>Cost: " + shortenDimensions(player.epmultCost) + " EP"
@@ -531,6 +546,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
 		document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
 	}
+
+	// last few updates
 	setInitialResetPower()
 	resetUP()
 	if (oheHeadstart) player.replicanti.amount = new Decimal(1)

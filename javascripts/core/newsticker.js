@@ -35,7 +35,7 @@ newsArray = [//always true
 ["I hate myself. -Boo-chan", true, "a33"],
 ["Gee golly -Xandawesome", true, "a34"], 
 ["Above us, there is nothing above, But the stars, above.", true, "a35"], 
-["If black lives matter, do white lives antimatter?", true, "a36"], 
+["This news ticker was recently removed, have a cat instead", true, "a36"],
 ["Somebody wasn't nice, he got an antimatter-storm.", true, "a37"],
 ["You are living, you occupy space, you have a mass, you matter... unless you antimatter.", true, "a38"], 
 ["I clicked too fast... my PC is now dematerialised.", true, "a39"],
@@ -223,9 +223,9 @@ amNewsArray = [
 ["another aarex masterpiece ~ Spanosa", true, "am8"],
 ["In dan-simon's version, only this achievement was enough to break the game.", 'player.achievements.includes("ngpp7")', "am9"],
 ["Is there meta-infinity?", '(player.meta ? player.meta.bestAntimatter.gte(Number.MAX_VALUE) : false)', "am10"],
-["NG++-+- was confirmed.", 'player.masterystudies', "am11"],
-["You wanted a prestige layer so here you go.", 'player.galacticSacrifice && player.eternities > (player.aarexModifications.newGameMinusVersion?-20:0)', "am12"],
-["You are challenging in a challenge in a challenge. Challenge-ception.", "player.currentChallenge != '' && player.currentEternityChall != '' && !inQC(0)", "am13"],
+["NG+3-- was confirmed", 'player.masterystudies', "am11"],
+["You wanted a prestige layer, so here you go.", 'player.galacticSacrifice && player.eternities > (player.aarexModifications.newGameMinusVersion?-20:0)', "am12"],
+["You are being challenged in a challenge while in another challenge. Challenge-ception.", "player.currentChallenge != '' && player.currentEternityChall != '' && !inQC(0)", "am13"],
 ["New updates are coming in a day, not 5 hours. Sorry, jokers!", true, "am14"],
 ["Whale complained that matter and antimatter are balanced and the universe would not be existed.", true, "am15"],
 ["Congratulations for beating Quantum! Now you need to big rip the universe to progress! >:)", "player.totalmoney.gte(Decimal.pow(10, 32e14))", "am16"],
@@ -243,7 +243,7 @@ amNewsArray = [
 ["The news ticker is already dead despite taking up a two dimensional area", true, "am29"],
 ["All notations are good notations. Maybe except Psi.", true, "am30"],
 ["Why even bother using the news ticker? Sure, there are a few funny ones, but even they get old after a while and most of them are just long strings of nonsensical text that repeat over and over until you get sick of seeing them. You've probably seen this one at least nine times already, and you're going to keep seeing it and seeing it until you finally decide to turn off the news.", true, "am31"],
-["News ticker has declared dead! Provides no purpose.", true, "am32"],
+["A recent news ticker has been declared dead! It was said that it provides no purpose.", true, "am32"],
 ['"My save broke!" ~ New player who played a challenge in late-game.', true, "am33"],
 ["That's how NG+++ works!", true, "am34"],
 ["var add ad + gamebreakingcontent ngplusthree", true, "am35"],
@@ -418,11 +418,11 @@ amNewsArray = [
 ["When quarks have gone radioactive, the atom becomes a level that goes beyond radioactivity. Scientists call this level 'quarkfusey.'", "ph.did('ghostify')", "am205"],
 ["Scientific fact: The hotter the atom gets, the more radioactive it gets. Wait... Is this proven by the reactor?", "ph.did('ghostify')", "am206"],
 ["To do for the next update: Procrastinate, procrastinate, procrastinate, do a small development build, ...", "true", "am207"],
-["Tired for waiting minutes / hours to progress? Try Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
-['In ng+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
+["Tired of waiting many minutes, hours to progress? Try the Barrier-Easing mod! This makes your save easier and faster. You should try it. ~ Aarex", "!tmp.ez", "am208"],
+['In NG+3.1 everyone is a speed runner', "tmp.ngp3", "am209"],
 ["Coming soon: NG+3.2. ETA: We don't have a release date. There is a possibility that it takes infinite time.", "tmp.ngp3", "am210"],
-["Pfft, screw gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
-["NG-5 is being worked on!", "tmp.ngmX >= 4", "am212"],
+["Pfft, screw Gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
+["NG-5 is being worked on! Now with 100% less matter.", "tmp.ngmX >= 4", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
 ["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
 /*NEXT ID: am215*/
@@ -433,6 +433,7 @@ var scrollTimeouts = [];
 var nextMsgIndex;
 var nextMsgCond;
 var nextMsgId;
+
 function scrollNextMessage() {
         //don't run if hidden to save performance
         if (typeof (player) == "undefined") return
@@ -445,12 +446,11 @@ function scrollNextMessage() {
         try {
 			nextMsgCond = false
 			while (!nextMsgCond) {
-				var array = newsArray
-				if (player.achievements.includes("r22") && Math.random() > 0.5) array = amNewsArray
-
-				nextMsgIndex = Math.floor(Math.random() * array.length)
-				nextMsgCond = eval(array[nextMsgIndex][1])
-				nextMsgId = array[nextMsgIndex][2]
+				// randomly choose from either normal news or aarex news
+				var array = (player.achievements.includes("r22") && Math.random() > 0.5) ? amNewsArray : newsArray;
+				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length);
+				nextMsgCond = eval(array[nextMsgIndex][1]);
+				nextMsgId = Math.min(array[nextMsgIndex][2], array.length);
 			}
         } catch(e) {
                 console.log("Newsarray doesn't work at idx " + nextMsgIndex)
@@ -459,7 +459,7 @@ function scrollNextMessage() {
         scrollTimeouts = [];
         
         //set the text
-        var m = newsArray[nextMsgIndex][0];
+        var m = array[nextMsgIndex][0];
         if (nextMsgId == "am37") {
                 //coded by Naruyoko
                 var m = ""

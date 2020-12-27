@@ -245,7 +245,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button id="121" onclick="buyTimeStudy(121)">The worse your average EP/min is, the more EP you get<span id="121desc">Currently: 1x</span>Cost: 9 Time Theorems</button></td>
-						<td><button id="122" onclick="buyTimeStudy(122)">You gain 35x more EP<span>Cost: 9 Time Theorems</button></td>
+						<td><button id="122" onclick="buyTimeStudy(122)"><span id="122desc">You gain 35x more EP</span>Cost: 9 Time Theorems</button></td>
 						<td><button id="123" onclick="buyTimeStudy(123)">You gain more EP based on time spent in this Eternity<span id="123desc">Currently: 1x</span>Cost: 9 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -408,7 +408,7 @@
 							<button id="ts3" class="eternityttbtn" onclick="buyTimeStudy(3)">The replicanti multiplier to ID is 25% stronger<br>Bought: <span id="ts3bought">x</span><br>Cost: <span id="ts3cost">x</span> TT<br>Replicanti multiplier<br><span id='ts3desc'></span></button>
 						</td>
 						<td>
-							<button id="ts4" class="eternityttbtn" onclick="buyTimeStudy(4)">The dimension boost multiplier is incremented<br>Bought: <span id="ts4bought">x</span><br>Cost: <span id="ts4cost">x</span> TT<br>Multiplier per dimension boost<br><span id='ts4desc'></span></button>
+							<button id="ts4" class="eternityttbtn" onclick="buyTimeStudy(4)">The Dimension Boost multiplier is incremented<br>Bought: <span id="ts4bought">x</span><br>Cost: <span id="ts4cost">x</span> TT<br>Multiplier per dimension boost<br><span id='ts4desc'></span></button>
 						</td>
 					</tr>
 				</table>
@@ -437,9 +437,9 @@
 			</div>
 			<div class="eternitytab" id="masterystudies" style="font-size: 15px">
 				<canvas id="studyTreeCanvas2"></canvas>
-				Mastery study cost multiplier: <text id='costmult'></text>x<br>
-				Total normal mastery studies bought: <text id='totalmsbought'></text><br>
-				Total TT spent to mastery studies: <text id='totalttspent'></text><br>
+				Mastery Study cost multiplier: <text id='costmult'></text>x<br>
+				Total normal Mastery Studies bought: <text id='totalmsbought'></text><br>
+				Total TT spent on Mastery Studies: <text id='totalttspent'></text><br>
 				<tr>
 					<td><button class="storebtn" onclick="exportStudyTree()" style="width:150px; height: 40px; font-size: 10px; margin: auto">Export tree</button><td>
 					<td><button class="storebtn" onclick="respecToggle()" id="respec3" style="width:150px; height: 40px; font-size: 10px; margin: auto">Respec time studies on next Eternity</button><td>
@@ -454,9 +454,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy242" onclick='buyMasteryStudy("t", 241)'></button></td>
+						<td><button class="timestudylocked" id="timestudy242" onclick='buyMasteryStudy("t", 242)'></button></td>
 						<td><button class="timestudylocked" id="timestudy241" onclick='buyMasteryStudy("t", 241)'>The IP mult multiplies IP gain by 2.2x per upgrade.</button></td>
-						<td><button class="timestudylocked" id="timestudy243" onclick='buyMasteryStudy("t", 241)'></button></td>
+						<td><button class="timestudylocked" id="timestudy243" onclick='buyMasteryStudy("t", 243)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -543,7 +543,7 @@
 							<button id="eter6" class="eternityupbtn" onclick="buyEternityUpgrade(6)"></button>
 						</td>
 					</tr>
-					<tr>
+					<tr id="dilationeterupgrow" style>
 						<td>
 							<button id="eter7" class="eternityupbtn" onclick="buyEternityUpgrade(7)"></button>
 						</td>
@@ -1535,7 +1535,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				(Beta v0.1: Remastering the Studies - Alpha 3)
+				(Beta v0.1: Remastering the Studies - Alpha 3.01)
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2202,10 +2202,10 @@
 						</tr>
 						<tr id="achRowngpp1">
 							<td>
-								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions."><br></div>
+								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions. Reward: TS121 and TS122's multipliers are always 50x EP."><br></div>
 							</td>
 							<td>
-								<div id="And still no ninth dimension..." class="achievement achievementlocked" style="background-image: url(images/98.png)" ach-tooltip="Buy a Eighth Meta Dimension. Reward: All meta-dimensions are 10% stronger, and you start with 100 meta-antimatter on reset."><br></div>
+								<div id="And still no ninth dimension..." class="achievement achievementlocked" style="background-image: url(images/98.png)" ach-tooltip="Buy a Eighth Meta Dimension. Reward: All Meta Dimensions are 10% stronger, and you start with 100 meta-antimatter on reset."><br></div>
 							</td>
 							<td id="feDivNGpp">
 							</td>
@@ -5394,7 +5394,7 @@
 		<button class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import</button><br>
 		<button class="storebtn" style="font-size: 15px" onclick="load_saves()" style="display: inline">Load</button>
 		<button class="storebtn" style="font-size: 15px" onclick="reset_game()" style="display: inline">Reset</button><br>
-		You may want to check the console for errors (press F12 to view them). If there is any errors, the game won't load. Please hard reset (Ctrl+F5) when a new patch is applied to fix the errors.
+		You may want to check the console for errors (press F12 to view them). If there are any errors, the game won't load. Please hard reset (Ctrl+F5) when a new patch is applied to fix the errors.
 	</div>
 	<div class="popup optionmenu" id="welcome">
 		<div><text id="welcomeMessage"></text></div>

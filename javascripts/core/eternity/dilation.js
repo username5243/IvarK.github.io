@@ -16,8 +16,8 @@ function getDTMultPostBRU11(){
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 	if (tmp.quActive) gain = gain.times(colorBoosts.b)
-	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
-	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
+	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
+	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10() - 10000) / 8250 + 1, 1))
 	return gain
 }
 
