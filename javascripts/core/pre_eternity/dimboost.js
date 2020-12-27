@@ -57,16 +57,17 @@ function softReset(bulk, tier = 1) {
 	}
 	setInitialResetPower()
 
-	if (player.resets > 4) {
+	if (player.resets > 4 && tmp.ngmX < 5) {
 		document.getElementById("confirmation").style.display = "inline-block";
 		document.getElementById("sacrifice").style.display = "inline-block";
 		document.getElementById("confirmations").style.display = "inline-block";
 		document.getElementById("sacConfirmBtn").style.display = "inline-block";
-		if (player.galacticSacrifice && player.galaxies > 0) {
-			document.getElementById("gSacrifice").style.display = "inline-block"
-			document.getElementById("gConfirmation").style.display = "inline-block"
-		}
 	}
+	if (player.galacticSacrifice && player.galaxies > 0 && player.resets > (tmp.ngmX >= 5 ? 3 : 4)) {
+		document.getElementById("gSacrifice").style.display = "inline-block"
+		document.getElementById("gConfirmation").style.display = "inline-block"
+	}
+
 	hideDimensions()
 	tmp.tickUpdate = true;
 	if (!player.achievements.includes("r111")) setInitialMoney()

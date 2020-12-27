@@ -1506,10 +1506,8 @@ function updateMoney() {
 	var matterName = pl.on() ? "Matteria Foam" : "matter"
 	var element2 = document.getElementById("matter");
 	if (player.currentChallenge == "postc6" || inQC(6)) element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."; //TODO
-	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
+	else if (inNC(12) || player.currentChallenge == "postc1" || pl.on()) {
 		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."
-		var extra = getExtraTime()
-		if (tmp.ngmX >= 5 && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * getEC12Mult() * 10, 0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)" //I added a 10x multiplier to matter increase timer until we can sort out what is wrong with the matter timer. I doubt this will be permanent.
 		element2.innerHTML = txt
 	}
 	var element3 = document.getElementById("chall13Mult");
@@ -3962,38 +3960,6 @@ function updateEPminpeak(diff, type) {
 	return currentEPmin;
 }
 
-function checkMatter(diff){
-	var haveET = haveExtraTime()
-	var pxGain
-	if (haveET) {
-		//Matter
-		player.matter=player.matter.times(Decimal.pow(tmp.mv, diff))
-		if (player.matter.lt(player.money)) {
-			if (player.matter.gte(player.money)) player.pSac.dims.extraTime+=player.matter.div(player.money).log(tmp.mv)/10
-			player.matter=player.matter.min(player.money)
-		} else player.pSac.dims.extraTime+=diff
-		if (player.pSac.dims.extraTime>getExtraTime()) {
-			pxGain=getPxGain()
-			player.matter=new Decimal(1/0)
-			haveET=false
-		}
-	} else {
-		var newMatter = player.matter.times(Decimal.pow(tmp.mv, diff))
-		if (player.pSac != undefined && !haveET && newMatter.gt(player.money)) pxGain = getPxGain()
-		player.matter = newMatter
-	}
-	if (player.matter.pow(20).gt(player.money) && (player.currentChallenge == "postc7" || (inQC(6) && !player.achievements.includes("ng3p34")) )) {
-		if (tmp.ri || inBigRip()) {}
-		else if (inQC(6)) {
-			quantum(false, true, 0)
-			onChallengeFail()
-		} else quickReset()
-	} else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) && !haveET) {
-		if (player.pSac!=undefined) player.pSac.lostResets++
-		if (player.pSac!=undefined && !player.resets) pSacReset(true, undefined, pxGain)
-		else quickReset()
-	}
-}
 
 function passiveIPupdating(diff){
 	if (player.infinityUpgrades.includes("passiveGen")) player.partInfinityPoint += diff / player.bestInfinityTime * 10
@@ -5089,7 +5055,6 @@ function gameLoop(diff) {
 
 	if (!isGamePaused()) {
 		incrementParadoxUpdating(diff)
-		checkMatter(diff)
 		passiveIPupdating(diff)
 		passiveInfinitiesUpdating(diff)
 		requiredInfinityUpdating(diff)

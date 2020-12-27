@@ -15,7 +15,7 @@ function getBreakEternityTDMult(tier){
 
 function doNGMatLeast4TDChanges(tier, ret){
 	//Tickspeed multiplier boost
-	let x = (tmp.ngmX >= 5) ? player.galacticSacrifice.upgrades.includes(11) ? player.postC3Reward.sqrt() : new Decimal(1) : player.postC3Reward
+	let x = (tmp.ngmX >= 5) ? (player.galacticSacrifice.upgrades.includes(11) ? player.postC3Reward.sqrt() : new Decimal(1)) : player.postC3Reward
 	let exp = ([5, 3, 2, 1.5, 1, .5, 1/3, 0])[tier - 1]
 	if (x.gt(1e10)) x = Decimal.pow(10, Math.sqrt(x.log10() * 5 + 50))
 	if (player.galacticSacrifice.upgrades.includes(25)) exp *= galMults.u25()
@@ -80,7 +80,7 @@ function getTimeDimensionPower(tier) {
 	let dim = player["timeDimension" + tier]
 	let ret = dim.power.pow(player.boughtDims ? 1 : 2)
 
-	if (hasPU(32)) ret = ret.times(puMults[32]())
+	if (tmp.ngmX >= 5) ret = ret.times(getInfinityPowerEffect())
 	if (tmp.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier, ret)
 
 	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
@@ -327,7 +327,6 @@ function buyTimeDimension(tier) {
 	if (tmp.ngmX >= 4) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
-		reduceMatter(1)
 	} else {
 		dim.power = dim.power.times(player.boughtDims ? 3 : 2)
 		dim.cost = timeDimCost(tier, dim.bought)
@@ -366,7 +365,6 @@ function buyMaxTimeDimension(tier, bulk) {
 		getOrSubResourceTD(tier, Decimal.pow(mult, toBuy).sub(1).div(mult - 1).times(dim.cost))
 
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
-		reduceMatter(toBuy)
 	} else {
 		let increment = 1
 		while (player.eternityPoints.gte(timeDimCost(tier, dim.bought + increment - 1))) increment *= 2

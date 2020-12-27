@@ -19,7 +19,6 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	d.amount = d.amount.add(10)
 	d.power = d.power.times(3)
 	player.chall2Pow = 0
-	reduceMatter(1)
 }
 
 function maxIDwithAM(t, bulk) {
@@ -39,7 +38,6 @@ function maxIDwithAM(t, bulk) {
 	d.amount = d.amount.add(10 * tb)
 	d.power = d.power.times(Decimal.pow(3, tb))
 	player.chall2Pow = 0
-	reduceMatter(tb)
 }
 
 function maxAllIDswithAM() {
@@ -103,7 +101,7 @@ let puMults = {
 		return Math.pow(2, l)
 	},
 	12(l) {
-		return l + 1
+		return 1 //l + 1
 	},
 	13(l) {
 		return 1 + l / 20
@@ -123,10 +121,10 @@ let puMults = {
 	},
 
 	31() {
-		return Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
+		return 1 //Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
 	},
 	32() {
-		return getInfinityPowerEffect()
+		return 1
 	},
 	33() {
 		return player.pSac.px.add(1).times(3).log10() / 500
@@ -171,20 +169,20 @@ let puMults = {
 
 let puDescs = { 
 	11: "Normal Dimension multipliers increase 2x faster.",
-	12: "Matter increases slower.",
+	12: "???", //"Matter increases slower.",
 	13: "Increase the Second Normal Dimension multiplier",
 	14: "Time speed is 2x faster.",
 	
-	21: "Buying Dimensions or Tickspeed divides matter by 1.01.",
+	21: "???", //"Buying Dimensions or Tickspeed divides matter by 1.01.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
 	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
 	
 	31() {
-		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
+		return "???" //"Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
-	32: "Infinity Power boosts Time Dimensions.",
+	32: "???", //"Infinity Power boosts Time Dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
@@ -324,10 +322,7 @@ function updatePUCosts() {
 	}
 }
 
-//p21
-function reduceMatter(x) {
-	if (hasPU(21, false, true)) player.matter = player.matter.div(Decimal.pow(1.01, x))
-}
+
 
 //Paradox Challenges
 function inPxC(x) {
@@ -424,12 +419,6 @@ function resetPDs(full) {
 	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = new Decimal(player.pSac.dims[d].bought)
 }
 
-function getExtraTime() {
-	if (!haveExtraTime()) return 0
-	let ExtraTime = player.pSac.dims.power.add(1).log10() + 1
-	ExtraTime = Math.log(ExtraTime) / Math.log(5) * 4
-	return ExtraTime
-}
 
 //Paradox Layer Reset
 function resetPSac() {
@@ -453,9 +442,6 @@ function resetPSac() {
 }
 
 //v0.51
-function haveExtraTime() {
-	return tmp.ngmX >= 5 && !player.aarexModifications.quickReset
-}
 
 function quickMReset() {
 	player.aarexModifications.quickReset = !player.aarexModifications.quickReset

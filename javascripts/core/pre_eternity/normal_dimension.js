@@ -462,7 +462,6 @@ function buyOneDimension(tier) {
 	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
 	if (getAmount(8) == 99) giveAchievement("The 9th Dimension is a lie");
 	onBuyDimension(tier)
-	reduceMatter(1)
 	return true
 }
 
@@ -485,7 +484,6 @@ function buyManyDimension(tier, quick) {
 		floatText("D" + tier, "x" + shortenMoney(pow))
 		onBuyDimension(tier)
 	}
-	reduceMatter(toBuy)
 	return true
 }
 
@@ -513,7 +511,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		player[name + "Cost"] = player[name + "Cost"].times(Decimal.pow(mult, toBuy))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 		bought += toBuy
-		reduceMatter(toBuy * 10)
 	}
 	let stopped = !costIncreaseActive(player[name + "Cost"])
 	let failsafe = 0
@@ -547,7 +544,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		player[name + "Cost"] = newCost.times(newMult)
 		player.costMultipliers[tier - 1] = newMult.times(mi)
 		bought += toBuy
-		reduceMatter(toBuy * 10)
 	}
 
 	let pow = getDimensionPowerMultiplier()
