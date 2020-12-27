@@ -377,8 +377,8 @@ function clearOldAchieves(){
 }
 
 function checkAchievement(id) {
-	//Some achievements have different positions from some mods.
-	if (id == "ngpp13" || id == "ngpp18") return player.exdilation != undefined && player.meta != undefined
+    // Some achievements have different positions from some mods. This is for NG Update to prevent anything from NG++ showing up
+	if ((id == "ngpp13" || id == "ngpp18") && player.exdilation) return false
 
 	//Mod check
 	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
