@@ -58,6 +58,7 @@ function isDimUnlocked(d) {
 function getPxGain() {
 	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
 	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5)) //we are gonna fiddle with this value a LOT.
+	r = r.times(puMults[12](hasPU(12, true)))
 	if (hasPU(44)) r = r.times(puMults[44]())
 	return r.floor()
 }
@@ -101,7 +102,7 @@ let puMults = {
 		return Math.pow(2, l)
 	},
 	12(l) {
-		return 1 //l + 1
+		return Math.pow(2, l)
 	},
 	13(l) {
 		return 1 + l / 20
@@ -121,7 +122,7 @@ let puMults = {
 	},
 
 	31() {
-		return 1 //Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
+		return 2  * (player.galacticSacrifice.times + 1)
 	},
 	32() {
 		return 1
@@ -169,20 +170,20 @@ let puMults = {
 
 let puDescs = { 
 	11: "Normal Dimension multipliers increase 2x faster.",
-	12: "???", //"Matter increases slower.",
+	12: "Boost Paradox Gain.",
 	13: "Increase the Second Normal Dimension multiplier",
 	14: "Time speed is 2x faster.",
 	
-	21: "???", //"Buying Dimensions or Tickspeed divides matter by 1.01.",
+	21: "Buying Tickspeed no longer resets your Dimension Percentage.",
 	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
 	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
 	24: "Time Shards boost Paradox Dimensions 3 & 6.",
 	
 	31() {
-		return "???" //"Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
+		return "Boost Time Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
-	32: "???", //"Infinity Power boosts Time Dimensions.",
+	32: "Time Dimension boosts boost normal dimensions.",
 	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 

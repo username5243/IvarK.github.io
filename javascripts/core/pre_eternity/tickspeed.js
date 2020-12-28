@@ -234,7 +234,7 @@ function buyTickSpeed() {
 	if ((!inNC(5) && player.currentChallenge != "postc5") || player.tickspeedBoosts != undefined) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	else multiplySameCosts(player.tickSpeedCost)
 	if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !hasPU(21))) player.chall2Pow = 0
 	if (!tmp.be) {
 		player.tickspeed = player.tickspeed.times(tmp.tsReduce)
 		if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(getPostC3Mult())
@@ -300,7 +300,7 @@ function buyMaxPostInfTickSpeed(mult) {
 
 	let buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1
 	if (buying <= 0) return false
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !hasPU(21))) player.chall2Pow = 0
 	if (!tmp.be || player.currentEternityChall == "eterc10") {
 		player.tickspeed = player.tickspeed.times(Decimal.pow(mult, buying));
 		if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(Decimal.pow(getPostC3Mult(), buying))
@@ -340,7 +340,7 @@ function buyMaxTickSpeed() {
 		if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
 	}
 	let mult = tmp.tsReduce
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !hasPU(21))) player.chall2Pow = 0
 	if (cannotUsePostInfTickSpeed()) {
 		while (player.money.gt(player.tickSpeedCost) && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined))) {
 			player.money = player.money.minus(player.tickSpeedCost);

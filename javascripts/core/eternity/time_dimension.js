@@ -143,7 +143,7 @@ function isTDUnlocked(t) {
 	if (t > 8) return false
 	if (tmp.ngmX >= 4) {
 		if (haveSixDimensions() && t > 6) return false
-		return player.tdBoosts >= t - 1
+		return player.tdBoosts >= t - 1 
 	}
 	return t <= 4 || player.dilation.studies.includes(t - 3)
 }
@@ -326,7 +326,7 @@ function buyTimeDimension(tier) {
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	if (tmp.ngmX >= 4) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
-		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
+		if (inNC(2) || player.currentChallenge == "postc1" || (player.pSac != undefined && !hasPU(21))) player.chall2Pow = 0
 	} else {
 		dim.power = dim.power.times(player.boughtDims ? 3 : 2)
 		dim.cost = timeDimCost(tier, dim.bought)
