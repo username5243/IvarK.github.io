@@ -94,7 +94,7 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
-			return Math.floor(player.resets / 3e3)
+			return Math.floor(player.meta.resets) * 10
 		},
 		252() {
 			if (hasNU(6)) return 0
@@ -235,8 +235,8 @@ var masteryStudies = {
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.15x per upgrade.",
 		242: "You can pick 2 paths from the second split of Time Studies.",
-		243: "You can get all row-23 time studies.",
-		251: "Remote galaxy scaling starts 1 galaxy later per 3,000 dimension boosts.",
+		243: "You can get all row-23 time studies from time study tree.",
+		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
 		253: "Remote galaxy scaling starts 1 galaxy later per 4 total replicated galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
@@ -245,8 +245,8 @@ var masteryStudies = {
 		264: "You gain 5x more Tachyon Particles.",
 		265: "Replicate chance upgrades can go over 100%.",
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
-		271: "You can buy beyond 1ms interval upgrades, but the cost begins to increase faster.",
-		272: "You can buy all Time Studies in all 3-way splits.",
+		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
+		272: "You can get all studies from time study tree.",
 		273: "Replicate chance boosts itself.",
 		281: "Replicanti multiplier boosts DT production at a greatly reduced rate.",
 		282: "Replicanti multiplier boosts Meta Dimensions at a greatly reduced rate."

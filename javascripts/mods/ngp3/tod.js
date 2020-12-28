@@ -387,11 +387,10 @@ let TREE_UPGRADES = {
 			return 0
 		},
 		effLvl(lvl) {
-			if (lvl > 1e5) lvl = Math.pow(lvl * 10, 2/3) * 10
 			return lvl
 		},
 		eff(lvl) {
-			return Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4 * Math.sqrt(lvl)
+			return Math.sqrt(Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4) * Math.pow(lvl, 1/4)
 		}
 	}
 }
