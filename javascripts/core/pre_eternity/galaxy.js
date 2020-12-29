@@ -7,10 +7,7 @@ function galaxyReset(bulk) {
 	doGalaxyResetStuff(bulk)
 
 	NC10NDCostsOnReset()
-	if (player.pSac) {
-		resetInfDimensions()
-		player.pSac.dims.extraTime = 0
-	}
+	if (player.pSac) resetInfDimensions()
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()

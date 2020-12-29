@@ -98,7 +98,7 @@ function tickspeedDisplay(){
 function paradoxDimDisplay(){
 	getEl("pPow").textContent = shortenMoney(player.pSac.dims.power)
 	getEl("pPowProduction").textContent = "You are getting " + shortenDimensions(getPDProduction(1).div(getEC12Mult())) + " Paradox Power per second."
-	getEl("pPowEffect").textContent = getFullExpansion(Math.floor(1 * getEC12Mult()))
+	getEl("pPowEffect").textContent = shorten(getPDAcceleration())
 	var shown
 	for (let t = 8; t > 0; t--) {
 		shown = shown || isDimUnlocked(t)

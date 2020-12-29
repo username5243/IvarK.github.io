@@ -44,10 +44,7 @@ function softReset(bulk, tier = 1) {
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
-	if (tmp.ngmX >= 5) {
-		resetIDsOnNGM5()
-		player.pSac.dims.extraTime = 0
-	}
+	if (tmp.ngmX >= 5) resetIDsOnNGM5()
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()

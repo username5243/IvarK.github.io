@@ -85,7 +85,7 @@ function pSacReset(force, chall, pxGain) {
 	}
 	player.pSac.time = 0
 	PXminpeak = new Decimal(0)
-	resetPDs()
+	//resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
 	ph.onPrestige("paradox")
@@ -220,7 +220,7 @@ let puCosts = {
 		return Math.pow(4, l + 4)
 	},
 	14: function(l) {
-		return Decimal.pow(3,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
+		return Decimal.pow(4,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
 	21: 256,
@@ -255,7 +255,7 @@ let puCaps = {
 	11: 100,
 	12: 100,
 	13: 20,
-	14: 10
+	14: 5
 }
 let puConditions = {
 	r4: () => player.galacticSacrifice.times >= 1 || player.infinitied >= 1 || onPostBreak(),
@@ -389,7 +389,6 @@ function getPDProduction(d) {
 	let r = player.pSac.dims[d].amount
 	r = r.times(getPDPower(d))
 	if (d < 2) r = r.add(getPDProduction(2))
-	r = r.times(100)
 	return r
 }
 
@@ -411,8 +410,7 @@ function getPDRate(d) {
 
 function resetPDs(full) {
 	if (full) player.pSac.dims={}
-	player.pSac.dims.power = new Decimal(0)
-	player.pSac.dims.extraTime = 0
+	player.pSac.dims.power = new Decimal(1)
 	if (full) { 
 		for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
 		tmp.PDunl = false //Wait until the next update. 
@@ -420,6 +418,10 @@ function resetPDs(full) {
 	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = new Decimal(player.pSac.dims[d].bought)
 }
 
+function getPDAcceleration() {
+	if (tmp.ngmX < 5 || !tmp.PDunl || !player.pSac.dims.power.gt(1)) return 1
+	return 1 + Math.sqrt(player.pSac.dims.power.log10())
+}
 
 //Paradox Layer Reset
 function resetPSac() {

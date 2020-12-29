@@ -77,7 +77,7 @@ function updateTemp() {
 	tmp.inEC12 = isEC12Active()
 	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() : 1
 
-	let totalSpeed = gameSpeed * ls.mult("game")
+	let totalSpeed = gameSpeed * ls.mult("game") * getPDAcceleration()
 	if (tmp.gameSpeed != totalSpeed) {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true

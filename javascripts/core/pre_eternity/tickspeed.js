@@ -415,7 +415,6 @@ function updateTickspeed() {
 	let label = ""
 	if (showTickspeed) {
 		let tick = getTickspeed()
-		let name = 
 		label = (tick.e <= -1e12 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
 		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + (100 - 100 * tmp.ts.pre2.log10() / tmp.ts.pre1.log10()).toFixed(1) + "% subluminal)"
 	}
