@@ -145,7 +145,7 @@ function infDimensionPower(tier) {
   	if (tmp.ngmX >= 5) mult = mult.times(Math.pow(10,10)) //Todo: figure out what to do with this value
 	if (hasPU(42)) mult = mult.times(puMults[42]()) 
 
-  	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+  	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
 
 	let replUnl = !tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2)

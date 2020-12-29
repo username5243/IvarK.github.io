@@ -27,7 +27,7 @@ function doNGMatLeast4TDChanges(tier, ret){
 	if (player.galacticSacrifice.upgrades.includes(12)) ret = ret.times(galMults.u12())
 	if (player.galacticSacrifice.upgrades.includes(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
 	if (player.galacticSacrifice.upgrades.includes(15)) ret = ret.times(galMults.u15())
-	if (tmp.ngmX >= 5 && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true, true))) //NG-5, not NG-4.
+	if (tmp.ngmX >= 5 && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
 	if (player.galacticSacrifice.upgrades.includes(44) && tmp.ngmX >= 4) {
 		let e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))

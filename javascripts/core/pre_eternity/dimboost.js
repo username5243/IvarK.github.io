@@ -79,8 +79,6 @@ function setInitialMoney() {
 	if (player.achievements.includes("r54")) x = 2e5
 	if (player.achievements.includes("r55")) x = 1e10
 	if (player.achievements.includes("r78")) x = 2e25
-
-	if (player.achievements.includes("ngm5p12") && player.aarexModifications.quickReset) x = 199
 	player.money = new Decimal(x)
 }
 

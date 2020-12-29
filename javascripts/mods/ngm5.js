@@ -284,8 +284,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x, r, nq) { // x = upgrade id, r = level, nq = not quick matter reset
-	let e = tmp.ngmX >= 5 && !(nq && player.aarexModifications.quickReset)
+function hasPU(x, r) { // x = upgrade id, r = level, nq = not quick matter reset
+	let e = tmp.ngmX >= 5
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -305,7 +305,7 @@ function updatePUMults() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			if (puMults[id]) {
-				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true, true)).toFixed(2)
+				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
 				else if (id == 33) document.getElementById("pue33").textContent = "+" + puMults[33]().toFixed(4)
 				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
@@ -442,13 +442,6 @@ function resetPSac() {
 		updateParadoxUpgrades()
 		updatePUCosts()
 	}
-}
-
-//v0.51
-
-function quickMReset() {
-	player.aarexModifications.quickReset = !player.aarexModifications.quickReset
-	document.getElementById("quickMReset").textContent = "Quick matter reset: O" + (player.aarexModifications.quickReset ? "N" : "FF")
 }
 
 //ngm5 remade
