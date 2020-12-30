@@ -143,7 +143,7 @@ function infDimensionPower(tier) {
   	mult = mult.times(infDimPow)
 
   	if (tmp.ngmX >= 5) mult = mult.times(Math.pow(10,10)) //Todo: figure out what to do with this value
-	if (hasPU(42)) mult = mult.times(puMults[42]()) 
+	if (hasPU(32)) mult = mult.times(puMults[32]()) 
 
   	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
 
@@ -317,7 +317,7 @@ function getInfinityPowerEffectExp() {
 		x = Math.max(x , 7)
 	}
 	if (x > 100) x = 50 * Math.log10(x)
-	if (hasPU(34)) x *= puMults[34]()
+	if (hasPU(24)) x *= puMults[24]()
 	if (tmp.ngC) {
 		x *= 0.85
 		if (hasTS(191)) x += tsMults[191]()

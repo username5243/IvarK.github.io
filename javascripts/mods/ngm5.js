@@ -59,7 +59,7 @@ function getPxGain() {
 	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
 	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5)) //we are gonna fiddle with this value a LOT.
 	r = r.times(puMults[12](hasPU(12, true)))
-	if (hasPU(44)) r = r.times(puMults[44]())
+	if (hasPU(34)) r = r.times(puMults[34]())
 	return r.floor()
 }
 
@@ -111,36 +111,36 @@ let puMults = {
 		return Math.min(Math.pow(2, l), 1e3)
 	},
 
-	22() {
-		return player.money.add(1).pow(0.2)
-	},
-	23() {
-		return player.infinityPower.add(1).pow(0.15)
-	},
-	24() {
-		return player.timeShards.add(1).pow(0.1)
-	},
-
-	31() {
+	21() {
 		return 2  * (player.galacticSacrifice.times + 1)
 	},
-	33() {
+	23() {
 		return player.pSac.px.add(1).times(3).log10() / 500
 	},
-	34() {
+	24() {
 		return player.postC3Reward.log10() / 3 + 1
 	},
 
-	41() {
+	31() {
 		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
-	42() {
+	32() {
 		let x = player.tickspeedBoosts
 		if (x >= 10) x = Math.sqrt(5 * x + 50)
 		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
-	44() {
+	34() {
 		return player.timeShards.add(1).log10() / 10 + 1
+	},
+
+	42() {
+		return player.money.add(1).pow(0.2)
+	},
+	43() {
+		return player.infinityPower.add(1).pow(0.15)
+	},
+	44() {
+		return player.timeShards.add(1).pow(0.1)
 	},
 
 	52() {
@@ -171,23 +171,23 @@ let puDescs = {
 	13: "Increase the Second Normal Dimension multiplier",
 	14: "Time speed is 2x faster.",
 	
-	21: "Buying Tickspeed no longer resets your Dimension Percentage.",
-	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
-	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
-	24: "Time Shards boost Paradox Dimensions 3 & 6.",
-	
-	31() {
+	21() {
 		return "Boost Time Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
-	32: "Time Dimension boosts boost normal dimensions.",
-	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
-	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
+	22: "Time Dimension boosts boost normal dimensions.",
+	23: "Add Tickspeed Multiplier increase based on your Paradoxes.",
+	24: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
-	41: "Paradoxes boost Dimension Boosts.",
-	42: "Tickspeed Boosts boost Infinity Dimensions.",
-	43: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "You gain more Paradoxes based on your Time Shards.",
+	31: "Paradoxes boost Dimension Boosts.",
+	32: "Tickspeed Boosts boost Infinity Dimensions.",
+	33: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
+	34: "You gain more Paradoxes based on your Time Shards.",
+	
+	41: "Buying Tickspeed no longer resets your Dimension Percentage.",
+	42: "Antimatter boosts Paradox Dimensions 1 & 4.",
+	43: "Infinity Power boosts Paradox Dimensions 2 & 5.",
+	44: "Time Shards boost Paradox Dimensions 3 & 6.",
 
 	51: "Reduce Time Shard requirement multiplier to 1.3", 
 	52()  { 
@@ -220,20 +220,20 @@ let puCosts = {
 		return Decimal.pow(4,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
-	21: 256,
-	22: 8,
-	23: 32,
-	24: 64,
+	21: 1, //TODO
+	22: 2,
+	23: 8,
+	24: 512,
 
-	31: 1, //TODO
-	32: 2,
-	33: 8,
-	34: 512,
+	31: Math.pow(2, 26),
+	32: 1e9,
+	33: Math.pow(2, 32),
+	34: 1e11,
 
-	41: Math.pow(2, 26),
-	42: 1e9,
-	43: Math.pow(2, 32),
-	44: 1e11
+	41: 256, //We really need to rebalance this
+	42: 8,
+	43: 32,
+	44: 64,
 }
 let puScalings = {
 	11(l) {
@@ -255,9 +255,10 @@ let puCaps = {
 	14: 5
 }
 let puConditions = {
-	r4: () => player.galacticSacrifice.times >= 1 || player.infinitied >= 1 || onPostBreak(),
+	r3: () => player.galacticSacrifice.times >= 1 || player.infinitied >= 1 || onPostBreak(),
+	r4: () => tmp.PDunl,
 	r5: () => player.infinitied >= 1 || onPostBreak(),
-	r6: () => onPostBreak() 
+	r6: () => onPostBreak(),
 }
 
 function buyPU(x,r) {
@@ -375,7 +376,7 @@ function maxPDs() {
 function getPDPower(d) {
 	let r = player.pSac.dims[d].power
 	if (d < 8) {
-		var pu = ((d - 1) % 3) + 22
+		var pu = ((d - 1) % 3) + 42
 		if (hasPU(pu)) r = r.times(puMults[pu]())
 	}
 	if (d == 2) r = r.pow(puMults[13](hasPU(13, true)))
@@ -445,7 +446,7 @@ function resetPSac() {
 
 function checkPDunlock(onload = false) { 
 	if (tmp.PDunl || tmp.ngmX !== 5) return
-	if (hasPU(31) && hasPU(32) && hasPU(33)) {
+	if (hasPU(21) && hasPU(22) && hasPU(23)) {
 		tmp.PDunl = true
 		if (onload) return
 		//these notifications show up in reverse order. the top one appears on the bottom. 

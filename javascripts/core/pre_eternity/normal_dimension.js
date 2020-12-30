@@ -124,7 +124,7 @@ let dCurrentC7 = [null, 0, 0, 0, 0,
 
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()
-	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1 + (hasPU(32) ? player.tdBoosts - tier : 0))
+	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1 + (hasPU(22) ? player.tdBoosts - tier : 0))
 
 	let mptMult = new Decimal(1)
 	if (inNC(9) || player.currentChallenge === "postc1") {

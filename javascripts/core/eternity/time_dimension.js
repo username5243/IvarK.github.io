@@ -92,7 +92,7 @@ function getTimeDimensionPower(tier) {
 	if (player.galacticSacrifice === undefined) ret = ret.times(ret2)
 	ret = ret.times(calcVanillaTSTDMult(tier))
 
-	if (hasPU(31)) ret = ret.times(puMults[31]())
+	if (hasPU(21)) ret = ret.times(puMults[21]())
 	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(getECReward(10))
 	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galMults.u43())
@@ -328,7 +328,7 @@ function buyTimeDimension(tier) {
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	if (tmp.ngmX >= 4) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
-		if (inNC(2) || player.currentChallenge == "postc1" || (player.pSac != undefined && !hasPU(21))) player.chall2Pow = 0
+		if (inNC(2) || player.currentChallenge == "postc1") player.chall2Pow = 0
 	} else {
 		dim.power = dim.power.times(player.boughtDims ? 3 : 2)
 		dim.cost = timeDimCost(tier, dim.bought)
