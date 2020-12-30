@@ -1765,15 +1765,18 @@ function updateMilestones() {
 }
 
 function updateGalstones() {
-	var galStoneRequirements = [1, 2, 3, 5, 10, 15, 20, 25, 30, 35]
-	for (i=0; i<9; i++) {
+	var galStoneRequirements = [1, 2, 5, 10, 25, 50]
+	tmp.Greward = 0
+	for (i=0; i<6; i++) {
 		var name = "Greward" + i;
 		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
+			tmp.Greward++
 			document.getElementById(name).className = "galStonereward"
 		} else {
 			document.getElementById(name).className = "galStonerewardlocked"
 		}
 	}
+	if (tmp.Greward >= 5) tmp.PDunl = true
 }
 
 document.getElementById("save").onclick = function () {

@@ -70,7 +70,6 @@ function updateTemp() {
 	tmp.tsReduce = getTickspeedMultiplier()
 
 	updateMatterSpeed()
-	checkPDunlock(true)
 	updateInfinityPowerEffects()
 	if (player.replicanti.unl) updateReplicantiTemp()
 

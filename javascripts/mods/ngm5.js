@@ -220,20 +220,20 @@ let puCosts = {
 		return Decimal.pow(4,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
-	21: 1, //TODO
-	22: 2,
-	23: 8,
+	21: 32, //TODO
+	22: 100,
+	23: 256,
 	24: 512,
 
-	31: Math.pow(2, 26),
-	32: 1e9,
-	33: Math.pow(2, 32),
-	34: 1e11,
+	31: Math.pow(2, 12),
+	32: 1e4,
+	33: 3e4,
+	34: Math.pow(2, 17), //We really need to rebalance this
 
-	41: 256, //We really need to rebalance this
-	42: 8,
-	43: 32,
-	44: 64,
+	41: 1e5, 
+	42: Math.pow(2, 20),
+	43: 3e6,
+	44: Math.pow(2, 24),
 }
 let puScalings = {
 	11(l) {
@@ -271,7 +271,6 @@ function buyPU(x,r) {
 	else player.pSac.upgs.push(x)
 	updateParadoxUpgrades()
 	if (r) updatePUCosts()
-	checkPDunlock()
 }
 
 function getPUCost(x,r,l) {
@@ -426,15 +425,16 @@ function resetPSac() {
 	if (tmp.ngmX >= 5) {
 		PXminpeak = new Decimal(0)
 		let keepPU = false //Wait until the next update comes.
+		let keepPUR = tmp.Greward >= 3
 		player.pSac = {
 			time: 0,
 			times: 0,
 			normalTimes: 0,
 			forcedTimes: 0,
 			lostResets: (player.pSac && player.pSac.lostResets) || 0,
-			px: new Decimal(0),
+			px: tmp.Greward >= 4 ? new Decimal(25 * player.galacticSacrifice.times) : new Decimal(tmp.Greward >= 2 ? 20 : 0),
 			upgs: keepPU ? player.pSac.upgs : [],
-			rebuyables: keepPU ? player.pSac.rebuyables : {}
+			rebuyables: keepPUR ? player.pSac.rebuyables : {}
 		}
 		resetPDs(true)
 		updateParadoxUpgrades()
@@ -443,19 +443,6 @@ function resetPSac() {
 }
 
 //ngm5 remade
-
-function checkPDunlock(onload = false) { 
-	if (tmp.PDunl || tmp.ngmX !== 5) return
-	if (hasPU(21) && hasPU(22) && hasPU(23)) {
-		tmp.PDunl = true
-		if (onload) return
-		//these notifications show up in reverse order. the top one appears on the bottom. 
-		$.notify("Paradox Dimensions Unlocked!", "success")
-		$.notify("Your Paradoxes are coalescing into Dimensions.", "success")
-		//by the way, if someone could make them stay for longer than.... well, 1-2 seconds, that would help a lot. 
-		//or, you know, come up with some other way to display this notif. 
-	} 
-}
 
 function ParadoxUpgradeButtonTypeDisplay() {
 	let t = document.getElementById("pUpgs")
