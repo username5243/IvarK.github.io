@@ -376,10 +376,8 @@ function updateInfPower() {
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = infDimensionProduction(1)
-		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2))
-		if (player.pSac != undefined)  r = r.div(tmp.ec12Mult)
-
-		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per second."
+		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2)).div(tmp.ec12Mult).times(getPDAcceleration())
+		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
 	}
 }
 

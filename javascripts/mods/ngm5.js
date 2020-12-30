@@ -124,9 +124,6 @@ let puMults = {
 	31() {
 		return 2  * (player.galacticSacrifice.times + 1)
 	},
-	32() {
-		return 1
-	},
 	33() {
 		return player.pSac.px.add(1).times(3).log10() / 500
 	},
@@ -147,8 +144,8 @@ let puMults = {
 	},
 
 	52() {
-		if (!ph.did("infinity")) return 1.5
-		return Math.max(1 + player.galaxies / 20, 1.5) //Quick note: I don't believe that you can get to 10 galaxies (the minimum required for this upgrade to increase) until after infinity is broken. Might change that in the future. 
+		if (!onPostBreak()) return 1.5
+		return Math.max(1 + player.galaxies / 20, 1.5)
 	},
 	54() {
 		return 1 //Todo
@@ -228,7 +225,7 @@ let puCosts = {
 	23: 32,
 	24: 64,
 
-	31: 1,
+	31: 1, //TODO
 	32: 2,
 	33: 8,
 	34: 512,

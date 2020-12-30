@@ -1516,14 +1516,15 @@ function updateMoney() {
 		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
 	if (inNC(14) && player.aarexModifications.ngmX > 3) document.getElementById("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
-	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
+	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult / getPDAcceleration()) + "x" : ""
 }
 
 function updateCoinPerSec() {
 	var element = document.getElementById("coinsPerSec");
 	var ret = getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
-	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per second.'
+	if (tmp.PDunl) ret = ret.times(getPDAcceleration())
+	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per ' + (tmp.PDunl ? 'real-life ' : '') + 'second.'
 }
 
 var clickedAntimatter

@@ -92,6 +92,7 @@ function getTimeDimensionPower(tier) {
 	if (player.galacticSacrifice === undefined) ret = ret.times(ret2)
 	ret = ret.times(calcVanillaTSTDMult(tier))
 
+	if (hasPU(31)) ret = ret.times(puMults[31]())
 	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(getECReward(10))
 	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galMults.u43())
@@ -196,12 +197,13 @@ function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
 	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
+	if (tmp.ngmX >= 5) p = p.times(getPDAcceleration)
 
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 	if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
-	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Timeshards per second."
+	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Timeshards per " + (tmp.PDunl ? "real-life " : "") + "second."
 }
 
 var TIME_DIM_COSTS = {
