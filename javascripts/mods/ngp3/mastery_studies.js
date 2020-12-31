@@ -233,7 +233,7 @@ var masteryStudies = {
 		}
 	},
 	timeStudyDescs: {
-		241: "The IP mult multiplies IP gain by 2.15x per upgrade.",
+		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
 		242: "You can pick 2 paths from the second split of Time Studies.",
 		243: "You can get all row-23 time studies from time study tree.",
 		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
@@ -504,7 +504,7 @@ function buyMasteryStudy(type, id, quick=false) {
 			if (player.achievements.includes("r85")) otherMults *= 4
 			if (player.achievements.includes("r93")) otherMults *= 4
 			var old = getIPMultPower()
-			ipMultPower = 2.15
+			if (!GUBought("gb3")) ipMultPower = 2.1
 			player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
 		}
 		if (!hasNU(6) && (id == 251 || id == 252 || id == 253 || id == 301)) {
