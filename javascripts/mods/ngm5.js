@@ -56,7 +56,7 @@ function isDimUnlocked(d) {
 
 //Paradox Sacrifices
 function getPxGain() {
-	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
+	let r = new Decimal(player.money.max(1000).log10()-2)
 	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5)) //we are gonna fiddle with this value a LOT.
 	r = r.times(puMults[12](hasPU(12, true)))
 	if (hasPU(34)) r = r.times(puMults[34]())
@@ -112,7 +112,10 @@ let puMults = {
 	},
 
 	21() {
-		return 2  * (player.galacticSacrifice.times + 1)
+		return Math.floor(10  * Math.pow(1.5, player.galacticSacrifice.times))
+	},
+	22() {
+		return player.postC3Reward.sqrt()
 	},
 	23() {
 		return player.pSac.px.add(1).times(3).log10() / 500
@@ -175,7 +178,7 @@ let puDescs = {
 		return "Boost Time Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
-	22: "Time Dimension boosts boost normal dimensions.",
+	22: "Time Dimensions are affected by tickspeed at a reduced rate.",
 	23: "Add Tickspeed Multiplier increase based on your Paradoxes.",
 	24: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
@@ -220,8 +223,8 @@ let puCosts = {
 		return Decimal.pow(4,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
-	21: 32, //TODO
-	22: 100,
+	21: 1, //TODO
+	22: 20,
 	23: 256,
 	24: 512,
 
@@ -246,11 +249,11 @@ let puScalings = {
 	}
 }
 let puSoftcaps = {
-	42: () => player.tickspeedBoosts >= 10
+	32: () => player.tickspeedBoosts >= 10
 }
 let puCaps = {
-	11: 100,
-	12: 100,
+	11: 25,
+	//12: Infinity,
 	13: 20,
 	14: 5
 }
@@ -303,7 +306,7 @@ function updatePUMults() {
 			var id = r * 10 + c
 			if (puMults[id]) {
 				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
-				else if (id == 33) document.getElementById("pue33").textContent = "+" + puMults[33]().toFixed(4)
+				else if (id == 23) document.getElementById("pue23").textContent = "+" + puMults[23]().toFixed(4)
 				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
 		}
@@ -315,7 +318,7 @@ function updatePUCosts() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			var lvl = hasPU(id, true)
-			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (puCaps[id] ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + " / " + puCaps[id] : "")
+			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
 		}
 	}
 }

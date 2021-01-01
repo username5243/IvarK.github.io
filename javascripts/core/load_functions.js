@@ -1871,7 +1871,7 @@ function setDisplaysStuff1(){
 	document.getElementById("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
 
 	if (player.galacticSacrifice) {
-		document.getElementById("galaxy11").innerHTML = (tmp.ngmX >= 5 ? ("Tickspeed Multiplier Affects Time Dimensions at a reduced rate.") : ("Normal " + (tmp.ngmX = 4 ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper."))) + "<br>Cost: 1 GP"
+		document.getElementById("galaxy11").innerHTML = "Normal " + (tmp.ngmX = 4 ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
 		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (ph.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
@@ -2218,6 +2218,7 @@ function onLoad(noOffline) {
 	if (player.pSac !== undefined) {
 		updateParadoxUpgrades()
                 updatePUCosts()
+                updateGalstones()
         }
         updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
@@ -2230,7 +2231,6 @@ function onLoad(noOffline) {
 	updateAutobuyers()
 	updatePriorities()
         updateMilestones()
-        updateGalstones()
 	loadInfAutoBuyers()
 	updateEternityUpgrades()
 	updateTheoremButtons()

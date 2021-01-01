@@ -377,7 +377,7 @@ function updateInfPower() {
 	else {
 		let r = infDimensionProduction(1)
 		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2)).div(tmp.ec12Mult).times(getPDAcceleration())
-		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
+		document.getElementById("infPowPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
 	}
 }
 

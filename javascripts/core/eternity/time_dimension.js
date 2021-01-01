@@ -197,13 +197,13 @@ function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
 	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
-	if (tmp.ngmX >= 5) p = p.times(getPDAcceleration)
+	if (tmp.ngmX >= 5) p = p.times(getPDAcceleration())
 
 	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 	if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
-	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Timeshards per " + (tmp.PDunl ? "real-life " : "") + "second."
+	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && p < 100 ? shortenND(p) : shortenDimensions(p)) + " Time Shards per " + (tmp.PDunl ? "real-life " : "") + "second."
 }
 
 var TIME_DIM_COSTS = {
@@ -328,7 +328,7 @@ function buyTimeDimension(tier) {
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	if (tmp.ngmX >= 4) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
-		if (inNC(2) || player.currentChallenge == "postc1") player.chall2Pow = 0
+		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) player.chall2Pow = 0
 	} else {
 		dim.power = dim.power.times(player.boughtDims ? 3 : 2)
 		dim.cost = timeDimCost(tier, dim.bought)

@@ -2,7 +2,7 @@ let Prestiges = {
 	order: ["paradox", "accelerate", "galaxy", "infinity", "eternity", "interreality", "singularity", "quantum", "ghostify", "planck"],
 	reqs: {
 		paradox() {
-			return player.matter.max(player.money).gte(1e3) && player.totalTickGained && !tmp.ri
+			return player.money.max(1).log10() >= 3 && player.totalTickGained && !tmp.ri
 		},
 		accelerate() {
 			return false
