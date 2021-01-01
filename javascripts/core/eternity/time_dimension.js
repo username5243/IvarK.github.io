@@ -15,7 +15,7 @@ function getBreakEternityTDMult(tier){
 
 function doNGMatLeast4TDChanges(tier, ret){
 	//Tickspeed multiplier boost
-	let x = (tmp.ngmX >= 5) ? (player.galacticSacrifice.upgrades.includes(11) ? player.postC3Reward.sqrt() : new Decimal(1)) : player.postC3Reward
+	let x = (tmp.ngmX >= 5) ? (hasPU(11) ? puMults[22] : new Decimal(1)) : player.postC3Reward
 	let exp = ([5, 3, 2, 1.5, 1, .5, 1/3, 0])[tier - 1]
 	if (x.gt(1e10)) x = Decimal.pow(10, Math.sqrt(x.log10() * 5 + 50))
 	if (player.galacticSacrifice.upgrades.includes(25)) exp *= galMults.u25()
