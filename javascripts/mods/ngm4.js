@@ -29,7 +29,7 @@ function tdBoost(bulk) {
 	player.tdBoosts += bulk
 	if (!player.achievements.includes("r36")) softReset(player.achievements.includes("r26") && player.resets >= player.tdBoosts ? 0 : -player.resets)
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
-	giveAchievement("Accelerated")
+	if (tmp.ngmX >= 5) giveAchievement("Accelerated")
 }
 
 function resetTDBoosts() {

@@ -334,7 +334,7 @@ function buyTimeDimension(tier) {
 		dim.cost = timeDimCost(tier, dim.bought)
 		updateEternityUpgrades()
 	}
-	if (tier === 6) giveAchievement("Out of luck")
+	if (tier === 6 && tmp.ngmX >= 5) giveAchievement("Out of luck")
 	return true
 }
 
@@ -401,7 +401,7 @@ function buyMaxTimeDimension(tier, bulk) {
 		if (inQC(6)) player.postC8Mult = new Decimal(1)
 		updateEternityUpgrades()
 	}
-	if (tier === 6) giveAchievement("Out of luck")
+	if (tier === 6 && tmp.ngmX >= 5) giveAchievement("Out of luck")
 }
 
 function buyMaxTimeDimensions() {

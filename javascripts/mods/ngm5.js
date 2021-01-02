@@ -225,13 +225,13 @@ let puCosts = {
 
 	21: 1, //TODO
 	22: 20,
-	23: 256,
-	24: 512,
+	23: 512,
+	24: 4096,
 
-	31: Math.pow(2, 12),
-	32: 1e4,
-	33: 3e4,
-	34: Math.pow(2, 17), //We really need to rebalance this
+	31: Math.pow(2, 18),
+	32: 1e6,
+	33: 1e7,
+	34: Math.pow(2, 28), //We really need to rebalance this
 
 	41: 1e5, 
 	42: Math.pow(2, 20),
@@ -336,7 +336,7 @@ var pdBaseCosts = [null, 1, 2, 4, 16, 256, 2048, 1e250, 1e280]
 var pdCostMults = [null, 3, 16, 64, 4096, 8192, 32768, 1e250, 1e280]
 
 function buyPD(d) {
-	if (!tmp.PDunl) return
+	if (!tmp.PDunl || tmp.ngmX < 5) return
 	var ps = player.pSac
 	var c = ps.dims[d].cost
 	if (!ps.px.gte(c)) return
