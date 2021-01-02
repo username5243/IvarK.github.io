@@ -142,7 +142,7 @@ function infDimensionPower(tier) {
 	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
 
-  	if (tmp.ngmX >= 5) mult = mult.times(Math.pow(10,10)) //Todo: figure out what to do with this value
+  	if (tmp.ngmX >= 5) mult = mult.times(Math.pow(10,8)) //Todo: figure out what to do with this value
 	if (hasPU(32)) mult = mult.times(puMults[32]()) 
 
   	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))

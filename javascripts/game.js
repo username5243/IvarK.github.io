@@ -4057,7 +4057,7 @@ function requiredInfinityUpdating(diff){
 
 function chall2PowerUpdating(diff){
 	var div = 180
-	if (tmp.ngmX >= 5) div /= 4 * puMults[11](hasPU(11, true))
+	if (tmp.ngmX >= 5) div /= puMults[11](hasPU(11, true))
 	if (tmp.ngmR) div /= 100
 	player.chall2Pow = Math.min(player.chall2Pow + diff / div, 1);
 }
