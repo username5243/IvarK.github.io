@@ -1785,7 +1785,7 @@ function doNGp3Init2(){
 }
 
 function setConfirmationsDisplay(){
-		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || ph.did("infinity") || ph.did("galaxy") ? "inline-block" : "none"
+		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || ph.did("infinity") || (ph.did("galaxy") && tmp.ngmX < 5) ? "inline-block" : "none"
         document.getElementById("confirmations").style.display = sacDisplay
         document.getElementById("confirmation").style.display = sacDisplay
         document.getElementById("sacrifice").style.display = sacDisplay

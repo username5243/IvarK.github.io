@@ -20,7 +20,7 @@ function galaxyReset(bulk) {
 
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
-	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
+	if (player.infinitied < 1 && player.eternities == 0 && !quantumed && tmp.ngmX < 5) {
 		document.getElementById("sacrifice").style.display = "none"
 		document.getElementById("confirmation").style.display = "none"
 		if (player.galacticSacrifice && (player.galaxies > 0 || (player.galacticSacrifice ? player.galacticSacrifice.times > 0 : false))) {

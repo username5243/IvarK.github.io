@@ -4674,7 +4674,7 @@ function passiveGPGen(diff){
 
 
 function normalSacDisplay(){
-	if (player.eightBought > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
+	if (player.eightBought > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3" && tmp.ngmX < 5) document.getElementById("sacrifice").className = "storebtn"
    	else document.getElementById("sacrifice").className = "unavailablebtn"
 }
 
