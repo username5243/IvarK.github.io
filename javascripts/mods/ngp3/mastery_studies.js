@@ -44,7 +44,7 @@ var masteryStudies = {
 			return tmp.qu.pairedChallenges.completed == 4
 		},
 		11() {
-			return tmp.eds[1].perm == 10
+			return tmp.eds[1].perm >= 10
 		},
 		12() {
 			return tmp.eds[8].perm >= 10
