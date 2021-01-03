@@ -724,6 +724,7 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) {
 		tmp.ngmX = modesChosen.ngmm + 1
+		player.aarexModifications.ngmX = modesChosen.ngmm + 1
 		doNGMinusTwoNewPlayer()
 	}
 	if (modesChosen.ngpp > 1) doNGPlusThreeNewPlayer()
@@ -737,8 +738,8 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngud == 2) player.aarexModifications.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
 	if (modesChosen.nguep) player.aarexModifications.nguepV = 1.03
-	if (modesChosen.ngmm > 2) doNGMinusFourPlayer()
 	if (modesChosen.ngmm > 3) doNGMinusFivePlayer()
+	if (modesChosen.ngmm > 2) doNGMinusFourPlayer()
 	if (modesChosen.ngmu) doNGMultipliedPlayer()
 	if (modesChosen.ngumu) player.aarexModifications.ngumuV = 1.03
 	if (modesChosen.ngpp == 3) player.aarexModifications.ngp3lV = 1
@@ -1085,7 +1086,6 @@ function doEternityRespeccedNewPlayer(){
 
 function doNGMinusThreeNewPlayer(){
 	player.aarexModifications.newGame3MinusVersion = 3.202
-	player.aarexModifications.ngmX=3
 	player.tickspeedBoosts = 0
 	player.autobuyers[13] = 14
 	player.challengeTimes.push(600*60*24*31)
@@ -1173,7 +1173,6 @@ function doNGUDSemiprimePlayer(){
 
 function doNGMinusFourPlayer(){
 	player.aarexModifications.newGame4MinusVersion = 2.111
-	player.aarexModifications.ngmX = 4
 	player.tdBoosts = 0
 	player.challengeTimes.push(600 * 60 * 24 * 31)
 	player.autobuyers.push(15)
@@ -1183,7 +1182,7 @@ function doNGMinusFourPlayer(){
 
 function doNGMinusFivePlayer(){
 	player.aarexModifications.ngm5V = 0.52
-	player.aarexModifications.ngmX = 5
+	updateGalstones()
 	resetPSac()
 	resetIDsOnNGM5()
 }
@@ -1767,6 +1766,7 @@ function updateMilestones() {
 function updateGalstones() {
 	var galStoneRequirements = [1, 2, 5, 10, 25, 50]
 	tmp.Greward = 0
+	if (tmp.ngmX < 5) return 
 	for (i=0; i<6; i++) {
 		var name = "Greward" + i;
 		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
