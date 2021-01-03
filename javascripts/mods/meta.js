@@ -53,7 +53,6 @@ function getMetaDimensionGlobalMultiplier() {
 	if (player.achievements.includes("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//Mastery Study Boosts
-		if (masteryStudies.has(282)) ret = ret.times(getMTSMult(282))
 		if (masteryStudies.has(303)) ret = ret.times(getMTSMult(303))
 		if (masteryStudies.has(351)) ret = ret.times(getMTSMult(351))
 		if (masteryStudies.has(373)) ret = ret.times(getMTSMult(373))

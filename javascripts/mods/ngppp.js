@@ -183,7 +183,7 @@ function maxAllDilUpgs() {
 //v1.99874
 function maybeShowFillAll() {
 	var display = "none"
-	if (player.masterystudies) if (player.masterystudies.includes("t302")) display = "block"
+	if ((hasEternityUpg(10) && hasEternityUpg(11)) || hasEternityUpg(14)) display = "block"
 	document.getElementById("fillAll").style.display = display
 	document.getElementById("fillAll2").style.display = display
 }

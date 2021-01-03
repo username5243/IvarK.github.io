@@ -362,7 +362,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	if (masteryStudies.has(311)) return tmp.rm.pow(17.3)
+	if (masteryStudies.has(272)) return Decimal.pow(2, Math.pow(tmp.rm.log10(), 2)).min(Decimal.pow(10, 1e15))
 	return tmp.rm
 }
 

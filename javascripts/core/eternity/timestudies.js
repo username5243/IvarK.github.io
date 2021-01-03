@@ -164,17 +164,14 @@ function canBuyStudy(name) {
 	let total = getTotalTT(player)
 	let totalChalls = tmp.ec
 
-	if (name == 33) return player.timestudy.studies.includes(21) 
-	
-	if (name == 62) {
-		return player.eternityChalls.eterc5 !== undefined && hasTS(42)
-	}
-	if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) return false;
+	if (name == 33) return hasTS(21) 
+	if (name == 62) return player.eternityChalls.eterc5 !== undefined && hasTS(42)
 
-	if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) return false;
+	if ((name == 71 || name == 72) && player.eternityChallUnlocked == 12) return false
+	if ((name == 72 || name == 73) && player.eternityChallUnlocked == 11) return false
 
 	if (name == 181) {
-		return player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)
+		return player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && hasTS(171)
 	}
 	if (name == 201) return hasTS(192) && !player.dilation.upgrades.includes(8)
 	if (name == 211 || name == 212) return hasTS(191)
@@ -197,7 +194,7 @@ function canBuyStudy(name) {
 				return hasTS(13)
 				break; 
 			case 35: 
-				return hasTS(34) && (player.infinityPoints.plus(1).log10() >= 9000 || player.eternityUpgrades.includes(11))
+				return hasTS(34) && (player.infinityPoints.plus(1).log10() >= 9000 || hasEternityUpg(11))
 				break;
 			case 43: 
 				return hasTS(33)
@@ -250,7 +247,6 @@ function canBuyStudy(name) {
 	switch(row) {
 
 		case 1: return true
-			break;
 
 		case 2:
 		case 5:
@@ -259,8 +255,8 @@ function canBuyStudy(name) {
 		case 15:
 		case 16:
 		case 17:
-			if (hasRow(row-1)) return true; else return false
-			break;
+			return hasRow(row-1)
+
 		case 3:
 		case 4:
 		case 8:
@@ -268,38 +264,33 @@ function canBuyStudy(name) {
 		case 10:
 		case 13:
 		case 14:
-			if (player.timestudy.studies.includes((row-1)*10 + col)) return true; else return false
-			break;
+			return hasTS((row - 1) * 10 + col)
+
 		case 12:
-			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length;
-			if (hasRow(row-1)) {
-				if (player.masterystudies.includes("t242")) {
-				return have < 2;
-				} else if ((!hasRow(row) || (player.eternityUpgrades.includes(10) && tmp.ngC))) return true;
+			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length
+			if (hasRow(row - 1)) {
+				if (hasEternityUpg(10) || hasEternityUpg(14)) return true
+				return have < 1
 			}
-			return false;
-			break;
+			return false
+
 		case 7:
-			if (!player.timestudy.studies.includes(61)) return false;
+			if (!hasTS(61)) return false;
 			if (player.dilation.upgrades.includes(8)) return true;
-			if (player.eternityUpgrades.includes(10) && tmp.ngC) return true;
+			if (hasEternityUpg(10) && tmp.ngC) return true;
 			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
-			if (player.timestudy.studies.includes(201)) return have2 < 2;
-			return have2 < 1;
-			break;
+			if (hasTS(201)) return have2 < 2;
+			return have2 < 1
 
 		case 19:
-			return player.eternityChalls.eterc10 !== undefined && player.timestudy.studies.includes(181)
-			break;
+			return player.eternityChalls.eterc10 !== undefined && hasTS(181)
 
 		case 22:
 			if (tmp.ngC && total < 4500) return false;
-			return player.timestudy.studies.includes(210 + Math.round(col/2)) && (((name % 2 == 0) ? !player.timestudy.studies.includes(name-1) : !player.timestudy.studies.includes(name+1)) || (player.eternityUpgrades.includes(11) && tmp.ngC) || (player.masterystudies ? player.masterystudies.includes("t302") : false))
-			break;
+			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (hasEternityUpg(11) && tmp.ngC) || hasEternityUpg(14))
 
 		case 23:
-			return (player.timestudy.studies.includes(220 + Math.floor(col*2)) || player.timestudy.studies.includes(220 + Math.floor(col*2-1))) && (!player.timestudy.studies.includes((name%2 == 0) ? name-1 : name+1) || (player.eternityUpgrades.includes(11) && player.aarexModifications.ngp3c) || (player.masterystudies ? player.masterystudies.includes("t243") : false))
-			break;
+			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || hasEternityUpg(11) || hasEternityUpg(13) || hasEternityUpg(14))
 	}
 }
 
@@ -503,19 +494,15 @@ function respecTimeStudies(force, presetLoad) {
 
 function respecUnbuyableTimeStudies() {
 	var respecedTS = []
-	var secondSplitPick
-	var earlyDLStudies = []
+
 	for (var t = 0; t < all.length; t++) {
 		var id = all[t]
-		if (player.timestudy.studies.includes(id)) {
-			if (!inQCModifier("sm") && (id < 120 || id > 150 || !secondSplitPick || secondSplitPick == id % 10 || player.masterystudies.includes("t272")) && (id < 220 || !earlyDLStudies.includes(id % 2 > 0 ? id + 1 : id - 1) || player.masterystudies.includes("t302"))) {
-				respecedTS.push(id)
-				if (id > 120 && id < 130) secondSplitPick = id % 10
-				if (id > 220) earlyDLStudies.push(id)
-			} else player.timestudy.theorem += studyCosts[id]
+		if (hasTS(id)) {
+			if (inQCModifier("sm")) player.timestudy.theorem += studyCosts[id]
+			else respecedTS.push(id)
 		}
 	}
-	player.timestudy.studies=respecedTS
+	player.timestudy.studies = respecedTS
 }
 
 function getTotalTT(tree) {

@@ -230,12 +230,14 @@ function getReplSpeed() {
 	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
+
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
-		inc /= Math.min(x, 200)
-		if (x > 200) exp += x / 10 - 20
+
+		inc /= Math.min(x, 20)
+		if (x > 20) exp += (x - 20) / 20
 	}
-	if (player.dilation.upgrades.includes("ngmm10")) exp += player.dilation.upgrades.length
 	inc = inc + 1
+
 	if (GUActive("gb2")) exp *= 2
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]

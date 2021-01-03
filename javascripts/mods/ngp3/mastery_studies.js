@@ -1,6 +1,6 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 1e68, 242: 1e69, 243: 1e69, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
+		time: {241: 1e68, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
@@ -104,17 +104,8 @@ var masteryStudies = {
 			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG() / 4)
 		},
-		273(uses){
-			var intensity = 5
-			if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) intensity += tmp.nb[2]
-			if (uses.includes("intensity")) return intensity
-			return Decimal.max(Math.log10(player.replicanti.chance + 1), 1).pow(intensity)
-		},
-		281() {
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
-		},
-		282() {
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
+		273(uses) {
+			return Decimal.pow(10, Math.sqrt(player.replicanti.chance + 1) / 1e3)
 		},
 		301() {
 			if (hasNU(6)) return 0
@@ -234,8 +225,6 @@ var masteryStudies = {
 	},
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
-		242: "You can pick 2 paths from the second split of Time Studies.",
-		243: "You can get all row-23 time studies from time study tree.",
 		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
 		253: "Remote galaxy scaling starts 1 galaxy later per 4 total replicated galaxies.",
@@ -246,12 +235,12 @@ var masteryStudies = {
 		265: "Replicate chance upgrades can go over 100%.",
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
 		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
-		272: "You can get all studies from time study tree.",
+		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance boosts itself.",
-		281: "Replicanti multiplier boosts DT production at a greatly reduced rate.",
-		282: "Replicanti multiplier boosts Meta Dimensions at a greatly reduced rate."
+		281: "???",
+		282: "???"
 	},
-	hasStudyEffect: [251, 252, 253, 273, 281, 282, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 273, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -268,10 +257,10 @@ var masteryStudies = {
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
-	allConnections: {241: [242, 243, 251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
+	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {
-			return ph.did("quantum")
+			return true //ph.did("quantum")
 		}
 	},
 	unlocked: [],
@@ -494,7 +483,6 @@ function buyMasteryStudy(type, id, quick=false) {
 	} else player.masterystudies.push(type + id)
 	if (type == "t") {
 		addSpentableMasteryStudies(id)
-		if (id == 302) maybeShowFillAll()
 		if (quick) {
 			masteryStudies.costMult *= getMasteryStudyCostMult(id)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow, Math.floor(id / 10))
@@ -536,10 +524,8 @@ function buyMasteryStudy(type, id, quick=false) {
 	}
 	if (type=="d") buyingDilationStudy(id)
 	if (!quick) {
-		if (type == "t") {
-			if (id == 302) fillAll()
-			masteryStudies.bought++
-		} else if (type == "ec") {
+		if (type == "t") masteryStudies.bought++
+		else if (type == "ec") {
 			showTab("challenges")
 			showChallengesTab("eternitychallenges")
 		} else if (type == "d") {

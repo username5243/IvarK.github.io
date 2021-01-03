@@ -127,12 +127,12 @@ let ETER_UPGS = {
 
 			return Decimal.pow(10, Math.sqrt(epLog) / 1e4 + maLog / 10)
 		},
-		desc: () => "Eternity Points and Meta-Antimatter boost dilated time gain."
+		desc: () => "Eternity Points and Meta-Antimatter boost dilated time gain and you can buy all row-23 time studies."
 	},
 	14: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
 		cost: 1/0,
-		desc: () => "The cost scaling of EP multiplier upgrades is reduced."
+		desc: () => "The cost scaling of EP multiplier upgrades is reduced and you can buy all time studies from time study tree."
 	},
 	15: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
