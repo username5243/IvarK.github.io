@@ -358,6 +358,7 @@ function getEC12TimeLimit() {
 	//In the multiple of 0.1 seconds
 	let r = 10 - 2 * ECTimesCompleted("eterc12")
 	if (tmp.ngex) r *= 3.75
+	if (tmp.ngmX && ECTimesCompleted("eterc12") > 3) r += 1 // add 0.1 seconds to make 12x5 in NG-- possible?
 	return Math.max(r, 1)
 }
 
