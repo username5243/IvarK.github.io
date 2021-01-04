@@ -245,7 +245,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button id="121" onclick="buyTimeStudy(121)">The worse your average EP/min is, the more EP you get<span id="121desc">Currently: 1x</span>Cost: 9 Time Theorems</button></td>
-						<td><button id="122" onclick="buyTimeStudy(122)">You gain 35x more EP<span>Cost: 9 Time Theorems</button></td>
+						<td><button id="122" onclick="buyTimeStudy(122)"><span id="122desc">You gain 35x more EP</span>Cost: 9 Time Theorems</button></td>
 						<td><button id="123" onclick="buyTimeStudy(123)">You gain more EP based on time spent in this Eternity<span id="123desc">Currently: 1x</span>Cost: 9 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -408,7 +408,7 @@
 							<button id="ts3" class="eternityttbtn" onclick="buyTimeStudy(3)">The replicanti multiplier to ID is 25% stronger<br>Bought: <span id="ts3bought">x</span><br>Cost: <span id="ts3cost">x</span> TT<br>Replicanti multiplier<br><span id='ts3desc'></span></button>
 						</td>
 						<td>
-							<button id="ts4" class="eternityttbtn" onclick="buyTimeStudy(4)">The dimension boost multiplier is incremented<br>Bought: <span id="ts4bought">x</span><br>Cost: <span id="ts4cost">x</span> TT<br>Multiplier per dimension boost<br><span id='ts4desc'></span></button>
+							<button id="ts4" class="eternityttbtn" onclick="buyTimeStudy(4)">The Dimension Boost multiplier is incremented<br>Bought: <span id="ts4bought">x</span><br>Cost: <span id="ts4cost">x</span> TT<br>Multiplier per dimension boost<br><span id='ts4desc'></span></button>
 						</td>
 					</tr>
 				</table>
@@ -437,9 +437,9 @@
 			</div>
 			<div class="eternitytab" id="masterystudies" style="font-size: 15px">
 				<canvas id="studyTreeCanvas2"></canvas>
-				Mastery study cost multiplier: <text id='costmult'></text>x<br>
-				Total normal mastery studies bought: <text id='totalmsbought'></text><br>
-				Total TT spent to mastery studies: <text id='totalttspent'></text><br>
+				Mastery Study cost multiplier: <text id='costmult'></text>x<br>
+				Total normal Mastery Studies bought: <text id='totalmsbought'></text><br>
+				Total TT spent on Mastery Studies: <text id='totalttspent'></text><br>
 				<tr>
 					<td><button class="storebtn" onclick="exportStudyTree()" style="width:150px; height: 40px; font-size: 10px; margin: auto">Export tree</button><td>
 					<td><button class="storebtn" onclick="respecToggle()" id="respec3" style="width:150px; height: 40px; font-size: 10px; margin: auto">Respec time studies on next Eternity</button><td>
@@ -454,9 +454,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy242" onclick='buyMasteryStudy("t", 241)'></button></td>
 						<td><button class="timestudylocked" id="timestudy241" onclick='buyMasteryStudy("t", 241)'>The IP mult multiplies IP gain by 2.2x per upgrade.</button></td>
-						<td><button class="timestudylocked" id="timestudy243" onclick='buyMasteryStudy("t", 241)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -504,108 +502,14 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="dilstudy9" onclick='buyMasteryStudy("d", 9)'>Unlock Paired Challenges<br><span id="ds9Cost"></span><span id="ds9Req"></span></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy291" onclick='buyMasteryStudy("t", 291)'></button></td>
-						<td><button class="timestudylocked" id="timestudy292" onclick='buyMasteryStudy("t", 292)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy301" style='font-size:10px' onclick='buyMasteryStudy("t", 301)'></button></td>
-						<td><button class="timestudylocked" id="timestudy302" onclick='buyMasteryStudy("t", 302)'></button></td>
-						<td><button class="timestudylocked" id="timestudy303" style='font-size:10px' onclick='buyMasteryStudy("t", 303)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy311" onclick='buyMasteryStudy("t", 311)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy10" onclick='buyMasteryStudy("d", 10)'>Unlock Replicants<br><span id="ds10Cost"></span><span id="ds10Req"></span></button></td>
-						<td><button class="timestudylocked" id="timestudy312" onclick='buyMasteryStudy("t", 312)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy321" onclick='buyMasteryStudy("t", 321)'></button></td>
-						<td style='width:368px; text-align: center'><button class="timestudylocked" id="timestudy322" style='font-size:10px' onclick='buyMasteryStudy("t", 322)'></button></td>
-						<td><button class="timestudylocked" id="timestudy323" style='font-size:10px' onclick='buyMasteryStudy("t", 323)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy331" style='font-size:9px' onclick='buyMasteryStudy("t", 331)'></button></td>
-						<td><button class="timestudylocked" id="timestudy332" style='font-size:10px' onclick='buyMasteryStudy("t", 332)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy341" style='font-size:10px' onclick='buyMasteryStudy("t", 341)'></button></td>
-						<td><button class="timestudylocked" id="timestudy342" onclick='buyMasteryStudy("t", 342)'></button></td>
-						<td><button class="timestudylocked" id="timestudy343" onclick='buyMasteryStudy("t", 343)'></button></td>
-						<td><button class="timestudylocked" id="timestudy344" style='font-size:10px' onclick='buyMasteryStudy("t", 344)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy351" onclick='buyMasteryStudy("t", 351)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy361" style='font-size:10px' onclick='buyMasteryStudy("t", 361)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy11" onclick='buyMasteryStudy("d", 11)'>Unlock Emperor Dimensions<br><span id="ds11Cost"></span><span id="ds11Req"></span></button></td>
-						<td><button class="timestudylocked" id="timestudy362" onclick='buyMasteryStudy("t", 362)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy371" style='font-size:10px' onclick='buyMasteryStudy("t", 371)'></button></td>
-						<td><button class="timestudylocked" id="timestudy372" style='font-size:10px' onclick='buyMasteryStudy("t", 372)'></button></td>
-						<td><button class="timestudylocked" id="timestudy373" style='font-size:10px' onclick='buyMasteryStudy("t", 373)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy381" style='font-size:10px' onclick='buyMasteryStudy("t", 381)'></button></td>
-						<td><button class="timestudylocked" id="timestudy382" onclick='buyMasteryStudy("t", 382)'></button></td>
-						<td><button class="timestudylocked" id="timestudy383" onclick='buyMasteryStudy("t", 383)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy391" style='font-size:10px' onclick='buyMasteryStudy("t", 391)'></button></td>
-						<td><button class="timestudylocked" id="timestudy392" onclick='buyMasteryStudy("t", 392)'></button></td>
-						<td><button class="timestudylocked" id="timestudy393" onclick='buyMasteryStudy("t", 393)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="dilstudy12" onclick='buyMasteryStudy("d", 12)'>Unlock Nanofield<br><span id="ds12Cost"></span><span id="ds12Req"></span></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy401" style='font-size:10px' onclick='buyMasteryStudy("t", 401)'></button></td>
-						<td><button class="timestudylocked" id="timestudy402" onclick='buyMasteryStudy("t", 402)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy411" style='font-size:10px' onclick='buyMasteryStudy("t", 411)'></button></td>
-						<td><button class="timestudylocked" id="timestudy412" onclick='buyMasteryStudy("t", 412)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy421" style='font-size:10px' onclick='buyMasteryStudy("t", 421)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy13" onclick='buyMasteryStudy("d", 13)'>Unlock Tree of Decay<br><span id="ds13Cost"></span><span id="ds13Req"></span></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy431" style='font-size:10px' onclick='buyMasteryStudy("t", 431)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy14" onclick='buyMasteryStudy("d", 14)'>Unlock Big Rip<br><span id="ds14Cost"></span><span id="ds14Req"></span></button></td>
 					</tr>
 				</table>
@@ -637,7 +541,7 @@
 							<button id="eter6" class="eternityupbtn" onclick="buyEternityUpgrade(6)"></button>
 						</td>
 					</tr>
-					<tr>
+					<tr id="dilationeterupgrow" style>
 						<td>
 							<button id="eter7" class="eternityupbtn" onclick="buyEternityUpgrade(7)"></button>
 						</td>
@@ -1226,7 +1130,7 @@
 			</div>
 			<div id="infinitydimensions" class="dimtab">
 				<div>
-					<p>You have <span id="infPowAmount" style="font-size:35px; color: black">0</span> Infinity Power. <span id="infPowEffectPowerDiv"></span>ranslated to <span id="infDimMultAmount" style="font-size:35px; color: black">0</span>x multiplier on all Normal Dimensions</p>
+					<p>You have <span id="infPowAmount" style="font-size:35px; color: black">0</span> Infinity Power, <span id="infPowEffectPowerDiv"></span>ranslated to <span id="infDimMultAmount" style="font-size:35px; color: black">0</span>x multiplier on all Normal Dimensions</p>
 				</div>
 				<div id="infPowPerSec">You are getting 0 Infinity Power per second.</div>
 				<button id="maxAllID" class="storebtn" style="font-size: 12px" onclick="maxAllID()">Max all</Button>
@@ -1238,7 +1142,7 @@
 					<div>
 						<p id="itmult"></p>
 						<p id="totaltickgained">You've gained 0 tickspeed upgrades.</p>
-							<p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> Time Shards. The next tickspeed upgrade is at <span id="tickThreshold" style="font-size:35px; color: black">0</span></p>
+							<p>You have <span id="timeShardAmount" style="font-size:35px; color: black">0</span> Time Shards. The next tickspeed upgrade is at <span id="tickThreshold" style="font-size:35px; color: black">0</span> Time Shards.</p>
 						</div>
 						<div id="timeShardsPerSec">You are getting 0 Time Shards per second.</div>
 						<button id="maxTimeDimensions" class="storebtn" style="font-size: 12px" onclick="buyMaxTimeDimensions()">Max all</button>
@@ -1252,7 +1156,7 @@
 						<button id="togglealltimedims"style="width:140px; height: 30px; font-size: 12px; visibility: hidden" onclick="toggleAllTimeDims()" class="storebtn">Toggle all ON/OFF</button>
 			</div>
 			<div id="pdims" class="dimtab">
-				<div>You have <span id="pPow" style="font-size:35px; color: #ff00ff">0</span> Paradox Power, which Accelerates the flow of time by <span id="pPowEffect" style="font-size:35px; color: #ff00ff">0</span>x</div>
+				<div>You have <span id="pPow" style="font-size:35px; color: #ff00ff">0</span> Paradox Power, translated to <span id="pPowEffect" style="font-size:35px; color: #ff00ff">0</span> extra seconds (used when matter exceeds your antimatter).</div>
 				<div id="pPowProduction">You are getting 0 Paradox Power per second.</div>
 				<button class="storebtn" style="font-size: 12px" onclick="maxPDs()">Max all</Button>
 				<table id="pdTable" class="table"></table>
@@ -1260,7 +1164,7 @@
 			<div id="metadimensions" class="dimtab">
 				  <div>
 					  <p>You have <span id="metaAntimatterAmount" style="font-size:35px; color: black">0</span> meta-antimatter.<p>
-					  <p><span id="bestAntimatterType"></span> was <span id="metaAntimatterBest" style="font-size:35px; color: black">0</span>. <span id="bestAntimatterTranslation"></span>ranslated to <span id="metaAntimatterEffect" style="font-size:35px; color: black">0</span>x <span id="metaAntimatterEffectType"></span>.</p>
+					  <p><span id="bestAntimatterType"></span> was <span id="metaAntimatterBest" style="font-size:35px; color: black">0</span>, <span id="bestAntimatterTranslation"></span>ranslated to <span id="metaAntimatterEffect" style="font-size:35px; color: black">0</span>x <span id="metaAntimatterEffectType"></span>.</p>
 					  <p id="bestAntimatterQuantum"></p>
 					  <p id="bestMAOverGhostifies"></p>
 				  </div>
@@ -1520,7 +1424,7 @@
 				<canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
 				<b>Exponents of antimatter per second</b>
 			</div>
-			<div class="footer bottom" style="margin: 20px"></div>
+			<div class="footer bottom" style="margin: 20px;"></div>
 		</div>
 		<div id="options" class="tab" align="center">
 			<table class="table" align="center" style="margin: auto">
@@ -1618,17 +1522,17 @@
 			<p id='hotkeysDesc'></p>
 			<br>
 			<p id='versionDesc'>
-				<b style="font-size: 18px">You are playing New Game Plus 3.</b>
+				<b id='modVersionDesc' style="font-size: 18px">You are playing New Game Plus 3.</b>
 				<br>
-				(Update v3.0: Reworked)
-				<br>
-				<br>
-				Created by Aarex with a help from pg132 and usavictor.
+				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
 				<br>
 				<br>
-				<b class="warning">WARNING! THIS UPDATE IS ON BETA!</b>
+				<p id='versionDescCreator'>Created by Aarex with help from pg132 and usavictor.</p>
 				<br>
-				(Beta v0.1: Remastering the Studies - Alpha 2.01)
+				<br>
+				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
+				<br>
+				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 5)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1934,16 +1838,16 @@
 							<div id="Accelerated" class="achievement achievementlocked" style="background-image: url(images/ngm5/r11.png)" ach-tooltip="Time Dimension Shift for the first time."><br></div>
 						</td>
 						<td>
-							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter, and 199 Antimatter if Quick Matter Reset is enabled."><br></div>
+							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/ngm5/r12.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter."><br></div>
 						</td>
 						<td>
-							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
+							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/ngm5/r13.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
 						</td>
 						<td>
 							<div id="TICK OVERDRIVE" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy a tickspeed boost."><br></div>
 						</td>
 						<td>
-							<div id="The hardest of sacrifices" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Perform a Galacitc Sacrifice for the first time."><br></div>
+							<div id="The hardest of sacrifices" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Perform a Galactic Sacrifice for the first time."><br></div>
 						</td>
 						<td>
 							<div id="Impossible Equations" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the third Paradox Dimension."><br></div>
@@ -2295,10 +2199,10 @@
 						</tr>
 						<tr id="achRowngpp1">
 							<td>
-								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions."><br></div>
+								<div id="I'm so meta" class="achievement achievementlocked" style="background-image: url(images/97.png)" ach-tooltip="Unlock Meta Dimensions. Reward: TS121 and TS122's multipliers are always 50x EP."><br></div>
 							</td>
 							<td>
-								<div id="And still no ninth dimension..." class="achievement achievementlocked" style="background-image: url(images/98.png)" ach-tooltip="Buy a Eighth Meta Dimension. Reward: All meta-dimensions are 10% stronger, and you start with 100 meta-antimatter on reset."><br></div>
+								<div id="And still no ninth dimension..." class="achievement achievementlocked" style="background-image: url(images/98.png)" ach-tooltip="Buy a Eighth Meta Dimension. Reward: All Meta Dimensions are 10% stronger, and you start with 100 meta-antimatter on reset."><br></div>
 							</td>
 							<td id="feDivNGpp">
 							</td>
@@ -3145,7 +3049,7 @@
 						</td>
 						<td id='icngm3_div1' style='display:none'>
 							<div class="infchallengediv" id="postcngmm_3div" style="height: 140px; display: none">
-								<span>The Tickspeed Autobuyer Challenge, Automated Big Crunches Challenge, Automated Galacitc Sacrifice Challenge, and Automated Tickspeed Boosts Challenge are all applied at once.</span>
+								<span>The Tickspeed Autobuyer Challenge, Automated Big Crunches Challenge, Automated Galactic Sacrifice Challenge, and Automated Tickspeed Boosts Challenge are all applied at once.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -5527,7 +5431,7 @@
 		<button class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import</button><br>
 		<button class="storebtn" style="font-size: 15px" onclick="load_saves()" style="display: inline">Load</button>
 		<button class="storebtn" style="font-size: 15px" onclick="reset_game()" style="display: inline">Reset</button><br>
-		You may want to check the console for errors (press F12 to view them). If there is any errors, the game won't load. Please hard reset (Ctrl+F5) when a new patch is applied to fix the errors.
+		You may want to check the console for errors (press F12 to view them). If there are any errors, the game won't load. Please hard reset (Ctrl+F5) when a new patch is applied to fix the errors.
 	</div>
 	<div class="popup optionmenu" id="welcome">
 		<div><text id="welcomeMessage"></text></div>

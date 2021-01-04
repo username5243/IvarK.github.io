@@ -574,7 +574,7 @@ function timeMult() {
 	var mult = new Decimal(1)
 	if (player.infinityUpgrades.includes("timeMult")) mult = mult.times(infUpg11Pow());
 	if (player.infinityUpgrades.includes("timeMult2")) mult = mult.times(infUpg13Pow());
-	if (player.achievements.includes("r76")) mult = mult.times(Math.pow(player.totalTimePlayed / (600 * 60 * 48), player.galacticSacrifice ? 0.1 : 0.05));
+	if (player.achievements.includes("r76")) mult = mult.times(Math.max(Math.pow(player.totalTimePlayed / (600 * 60 * 48), player.galacticSacrifice ? 0.1 : 0.05)), 1);
 	return mult;
 }
 

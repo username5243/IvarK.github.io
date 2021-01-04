@@ -146,9 +146,12 @@ function updateChallenges() {
 
 	tmp.cp = 0
 	for (var i=0; i < player.challenges.length; i++) {
-		document.getElementById(player.challenges[i]).className = "completedchallengesbtn";
-		document.getElementById(player.challenges[i]).textContent = "Completed"
-		if (player.challenges[i].search("postc") == 0) tmp.cp++
+		let elm = document.getElementById(player.challenges[i])
+		if (elm) {
+			elm.className = "completedchallengesbtn";
+			elm.textContent = "Completed"
+			if (player.challenges[i].search("postc") == 0) tmp.cp++
+		}
 	}
 
 	let running = []
@@ -157,7 +160,7 @@ function updateChallenges() {
 	} else running.push(player.currentChallenge)
 	if (tmp.ngmX >= 4) {
 		var chall = player.galacticSacrifice.chall
-		if (chall) running.push(chall)
+		if (chall) running.push("challenge" + chall)
 	}
 	for (var i = 0; i < running.length; i++) {
 		var chall = running[i]
@@ -270,6 +273,7 @@ function resetIC1Reward() {
 	infDimPow = Math.pow(tmp.ngmX >= 2 ? 2 : 1.3, ics)
 }
 
+// todo: Fix Normal Challenge IDs!
 var challNames = [null, null, "Second Dimension Autobuyer Challenge", "Third Dimension Autobuyer Challenge", "Fourth Dimension Autobuyer Challenge", "Fifth Dimension Autobuyer Challenge", "Sixth Dimension Autobuyer Challenge", "Seventh Dimension Autobuyer Challenge", "Eighth Dimension Autobuyer Challenge", "Tickspeed Autobuyer Challenge", "Automated Dimension Boosts Challenge", "Automated Galaxies Challenge", "Automated Big Crunches Challenge", "Automated Dimensional Sacrifice Challenge", "Automated Galactic Sacrifice Challenge", "Automated Tickspeed Boosts Challenge", "Automated Time Dimension Boosts Challenge"]
 var challOrder = [null, 1, 2, 3, 8, 6, 10, 9, 11, 5, 4, 12, 7, 13, 14, 15, 16]
 var infchallengeTimes = 999999999
@@ -281,7 +285,7 @@ function updateChallengeTimes() {
 		temp+=player.challengeTimes[i]
 		tempcounter++
 	}
-	setAndMaybeShow("challengetimesum",tempcounter>1,'"Sum of completed challenge time records is "+timeDisplayShort('+temp+', false, 3)')
+	setAndMaybeShow("challengetimesum",tempcounter>1,'"The sum of your completed Normal Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
 	document.getElementById("challengetimesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
 
 	var temp=0
@@ -293,7 +297,7 @@ function updateChallengeTimes() {
 			tempcounter++
 		}
 	}
-	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"Sum of completed infinity challenge time records is "+timeDisplayShort('+temp+', false, 3)')
+	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"The sum of your completed Infinity Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
 	document.getElementById("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
 	updateWorstChallengeBonus();
 }

@@ -132,7 +132,7 @@ const allAchievements = {
         ngud16 : "We couldn't afford 5",
         ngud18 : "I already got rid of you.",
 
-        ngpp11 : "I'm so meta", // NO REWARD
+        ngpp11 : "I'm so meta",
         ngpp12 : "And still no ninth dimension...",
         ngpp13 : "In the grim darkness of the far endgame",
         ngpp14 : "Meta-boosting to the max",
@@ -377,8 +377,8 @@ function clearOldAchieves(){
 }
 
 function checkAchievement(id) {
-	//Some achievements have different positions from some mods.
-	if (id == "ngpp13" || id == "ngpp18") return player.exdilation != undefined && player.meta != undefined
+    // Some achievements have different positions from some mods. This is for NG Update to prevent anything from NG++ showing up
+	if ((id == "ngpp13" || id == "ngpp18") && player.exdilation) return false
 
 	//Mod check
 	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
@@ -524,7 +524,7 @@ function updateAchievements() {
 		}
 	}
     player.achPow = Decimal.pow(tmp.ngmX >= 5 ? 20 : tmp.ngmX >= 2 ? 5 : 1.5, amount)
-    document.getElementById("achmultlabel").textContent = "Current achievement multiplier on " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
+    document.getElementById("achmultlabel").textContent = "Current achievement multiplier to " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
 	document.getElementById("nothingness").style.display = rowsShown ? "none" : ""
 
 	rowsShown = 0

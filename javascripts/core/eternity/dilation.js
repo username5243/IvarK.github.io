@@ -10,15 +10,13 @@ function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
 	if (player.achievements.includes("ng3p11")) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
 	if (player.achievements.includes("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
-	if (masteryStudies.has(261)) gain = gain.times(getMTSMult(263))
-	if (masteryStudies.has(281)) gain = gain.times(getMTSMult(281))
 	if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
 	if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 	if (tmp.quActive) gain = gain.times(colorBoosts.b)
-	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10()/1e6, 0.25)))
-	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10()-2e4)/8e3+1,1))
+	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
+	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10() - 10000) / 8250 + 1, 1))
 	return gain
 }
 
@@ -83,7 +81,7 @@ function getDilPower() {
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
-		if (masteryStudies.has(264)) ret = ret.times(getMTSMult(264))
+		if (masteryStudies.has(264)) ret = ret.times(5)
 		if (GUActive("br1")) ret = ret.times(getBR1Effect())
 		if (masteryStudies.has(341)) ret = ret.times(getMTSMult(341))
 	}
@@ -563,6 +561,7 @@ function resetDilationGalaxies() {
 
 function getBaseDilGalaxyEff() {
 	let x = 1
+	if (masteryStudies.has(263)) x *= 1.25
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x

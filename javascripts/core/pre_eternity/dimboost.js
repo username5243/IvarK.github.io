@@ -172,6 +172,7 @@ function getDimboostCostIncrease () {
 }
 
 function getSupersonicStart() {
+	return 1/0
 	if (inQC(5)) return 0
 	if (player.galacticSacrifice) return 1/0
 	let r = 56e4

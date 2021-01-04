@@ -1,12 +1,12 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 2e71, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76, 291: 2.143347050754458e77, 292: 2.143347050754458e77, 301: 8.573388203017832e77, 302: 2.6791838134430725e78, 303: 8.573388203017832e77, 311: 8.573388203017832e77, 312: 8.573388203017832e77, 321: 2.6791838134430727e76, 322: 9.324815538194444e77, 323: 2.6791838134430727e76, 331: 1.0172526041666666e79, 332: 1.0172526041666666e79, 341: 9.5367431640625e78, 342: 1.0172526041666666e79, 343: 1.0172526041666666e79, 344: 9.5367431640625e78, 351: 2.1192762586805557e79, 361: 1.5894571940104167e79, 362: 1.5894571940104167e79, 371: 2.1192762586805557e79, 372: 6.622738308376736e79, 373: 2.1192762586805557e79, 381: 6.622738308376736e79, 382: 6.622738308376736e79, 383: 6.622738308376736e79, 391: 8.27842288547092e79, 392: 8.27842288547092e79, 393: 8.27842288547092e79, 401: 4.967053731282552e80, 402: 8.278422885470921e80, 411: 1.3245476616753473e71, 412: 1.655684577094184e71, 421: 1.9868214925130208e72, 431: 1.1037897180627893e75},
+		time: {241: 1e68, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
-		time_mults: {241: 1, 252: 5, 253: 1.5, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4, 291: 1, 292: 1, 301: 2, 302: 131072, 303: 2, 311: 64, 312: 64, 321: 2, 322: 2, 323: 2, 331: 2, 332: 2, 341: 1, 342: 1, 343: 1, 344: 1, 351: 4, 361: 1, 362: 1, 371: 2, 372: 2, 373: 2, 381: 1, 382: 1, 383: 2, 391: 1, 392: 1, 393: 1, 401: 1e10, 402: 1e10, 411: 1, 412: 1, 421: 1, 431: 1},
+		time_mults: {241: 1, 242: 5, 243: 1.5, 252: 5, 253: 1.5, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
 		ec: {},
 		dil: {}
 	},
@@ -44,7 +44,7 @@ var masteryStudies = {
 			return tmp.qu.pairedChallenges.completed == 4
 		},
 		11() {
-			return tmp.eds[1].perm == 10
+			return tmp.eds[1].perm >= 10
 		},
 		12() {
 			return tmp.eds[8].perm >= 10
@@ -94,7 +94,7 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
-			return Math.floor(player.resets / 3e3)
+			return Math.floor(player.meta.resets) * 10
 		},
 		252() {
 			if (hasNU(6)) return 0
@@ -104,34 +104,8 @@ var masteryStudies = {
 			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG() / 4)
 		},
-		262() {
-			let r = Math.max(player.resets / 5e4 - 10, 1)
-			let exp = Math.sqrt(Math.max(player.resets / 1e5 - 5.5, 1))
-			if (r > 1e4) r = Math.pow(6 + Math.log10(r), 4)
-			if (player.aarexModifications.newGameExpVersion) exp *= 2
-			return Decimal.pow(r, exp)
-		},
-		263() {
-			let x = player.meta.resets
-			x = x * (x + 10) / 60
-			return x + 1
-		},
-		264() {
-			let r = player.galaxies / 100 + 1
-			if (player.aarexModifications.newGameExpVersion) return Math.pow(r, 2)
-			return r
-		},
-		273(uses){
-			var intensity = 5
-			if (ghostified && player.ghostify.neutrinos.boosts > 1 && !uses.includes("pn")) intensity += tmp.nb[2]
-			if (uses.includes("intensity")) return intensity
-			return Decimal.max(Math.log10(player.replicanti.chance + 1), 1).pow(intensity)
-		},
-		281() {
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 10 * (tmp.newNGP3E ? 2 : 1))
-		},
-		282() {
-			return Decimal.pow(10, Math.pow(tmp.rm.max(1).log10(), 0.25) / 15 * (tmp.newNGP3E ? 2 : 1))
+		273(uses) {
+			return Decimal.pow(10, Math.sqrt(player.replicanti.chance + 1) / 1e3)
 		},
 		301() {
 			if (hasNU(6)) return 0
@@ -250,59 +224,23 @@ var masteryStudies = {
 		}
 	},
 	timeStudyDescs: {
-		241: "The IP mult multiplies IP gain by 2.2x per upgrade.",
-		242: "You can pick 2 paths from the second split of Time Studies.",
-		243: "You can get all row-23 time studies.",
-		251: "Remote galaxy scaling starts 1 galaxy later per 3,000 dimension boosts.",
+		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
+		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
 		253: "Remote galaxy scaling starts 1 galaxy later per 4 total replicated galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
-		262: "Dimension Boosts boost Meta Dimensions at a reduced rate.",
-		263: "Meta-dimension boosts boost dilated time production.",
-		264: "Gain more tachyon particles based on your normal galaxies.",
+		262: "The power of meta-antimatter effect is raised by 1.",
+		263: "Free galaxies are 25% stronger.",
+		264: "You gain 5x more Tachyon Particles.",
 		265: "Replicate chance upgrades can go over 100%.",
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
-		271: "You can buy beyond 1ms interval upgrades, but the cost begins to increase faster.",
-		272: "You can buy all Time Studies in all 3-way splits.",
+		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
+		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance boosts itself.",
-		281: "Replicanti multiplier boosts DT production at a greatly reduced rate.",
-		282: "Replicanti multiplier boosts Meta Dimensions at a greatly reduced rate.",
-		291: "You gain 1% of your EP gained on Eternity per second.",
-		292: "You can gain tachyon particles without disabling dilation.",
-		301: "Remote galaxy scaling starts 1 galaxy later per 4.15 extra replicated galaxies.",
-		302: "You can buy all Time Studies before the mastery portal.",
-		303: "Meta Dimensions are stronger based on your galaxies.",
-		311: "Replicanti boost to all Infinity Dimensions is 17.3x stronger.",
-		312: "Meta-dimension boosts are 4.5% stronger and cost scale by 1 less.",
-		321: "Buff multiplier per 10 normal Dimensions to <span id='321effect'></span>x if it is 1x.",
-		322: "Tickspeed boosts DT production at greatly reduced rate.",
-		323: "Cancel dilation penalty for the Normal Dimension boost from replicanti.",
-		331: "Dimension Supersonic scaling starts 240,000 later, and the cost increase is reduced by 3.",
-		332: "You gain replicanti faster based on your normal galaxies.",
-		341: "Preons boost dilated time production at reduced rate.",
-		342: "All replicated galaxies are stronger and use the same formula.",
-		343: "Free galaxies are as strong as a normal replicated galaxy.",
-		344: "Replicated galaxies are more effective based on your preons.",
-		351: "Time Shards boost all Meta Dimensions.",
-		361: "Hatch speed is faster based on your tachyon particles.",
-		362: "Reduce the softcap for the preon boost.",
-		371: "Hatch speed is faster based on your extra replicated galaxies.",
-		372: "Hatch speed is faster based on your time shards.",
-		373: "You get more preons based on your galaxies.",
-		381: "Hatch speed is faster based on your tickspeed reduction multiplier.",
-		382: "Eighth Dimensions boost Meta Dimensions.",
-		383: "Blue power and meta-antimatter boost Meta Dimensions.",
-		391: "Hatch speed is faster based on your meta-antimatter.",
-		392: "Preons boost all Emperor Dimensions.",
-		393: "Workers boost Meta Dimensions.",
-		401: "The production of preon anti-energy is slower based on your preons.",
-		402: "Emperor Dimensions and hatch speed are 30x faster.",
-		411: "The production of preon energy is faster based on your replicants.",
-		412: "Further reduce the softcap of preon boost.",
-		421: "Tickspeed boosts preon energy production.",
-		431: "Branches are faster based on your free galaxies."
+		281: "???",
+		282: "???"
 	},
-	hasStudyEffect: [251, 252, 253, 262, 263, 264, 273, 281, 282, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 273, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -315,41 +253,14 @@ var masteryStudies = {
 		},
 		273(x) {
 			return "^" + shorten(x)
-		},
-		301(x) {
-			return "+" + getFullExpansion(Math.floor(x))
-		},
-		332(x) {
-			return shortenDimensions(x) + "x"
-		},
-		344(x) {
-			return (x * 100 - 100).toFixed(2) + "%"
-		},
-		431(x) {
-			let msg = shorten(x) + "x"
-			if (shiftDown && tmp.eg431) msg += ", Galaxy amount: " + getFullExpansion(Math.floor(player.dilation.freeGalaxies)) + "+" + getFullExpansion(Math.floor(tmp.eg431))
-			return msg
 		}
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
-	allConnections: {241: [242, 243, 251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: [291, 292, 302], 291: [301], 292: [303], 301: [311], 302: ["d10"], 303: [312], 311: [321], 312: [323], d10: [322], 322: [331, 332], 331: [342], 332: [343], 342: [341], 343: [344], 344: [351], 351: ["d11"], d11: [361, 362], 361: [371], 362: [373], 371: [372], 372: [381], 373: [382], 381: [391], 382: [383], 383: [393], 391: [392], 393: [392], 392: ["d12"], d12: [401, 402], 401: [411], 402: [412], 411: [421], 412: ["d13"], 421: ["d13"], d13: [431], 431: ["d14"]},
-	allConnections_legacy: {252: [263, 264, "d7"], ec13: [], ec14: []},
+	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {
-			return ph.did("quantum")
-		},
-		322() {
-			return player.masterystudies.includes("d10") || ghostified
-		},
-		361() {
-			return player.masterystudies.includes("d11") || ghostified
-		},
-		r40() {
-			return player.masterystudies.includes("d12") || ghostified
-		},
-		r43() {
-			return player.masterystudies.includes("d13") || ghostified
+			return true //ph.did("quantum")
 		}
 	},
 	unlocked: [],
@@ -572,7 +483,6 @@ function buyMasteryStudy(type, id, quick=false) {
 	} else player.masterystudies.push(type + id)
 	if (type == "t") {
 		addSpentableMasteryStudies(id)
-		if (id == 302) maybeShowFillAll()
 		if (quick) {
 			masteryStudies.costMult *= getMasteryStudyCostMult(id)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow, Math.floor(id / 10))
@@ -582,7 +492,7 @@ function buyMasteryStudy(type, id, quick=false) {
 			if (player.achievements.includes("r85")) otherMults *= 4
 			if (player.achievements.includes("r93")) otherMults *= 4
 			var old = getIPMultPower()
-			ipMultPower = 2.2
+			if (!GUBought("gb3")) ipMultPower = 2.1
 			player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
 		}
 		if (!hasNU(6) && (id == 251 || id == 252 || id == 253 || id == 301)) {
@@ -614,10 +524,8 @@ function buyMasteryStudy(type, id, quick=false) {
 	}
 	if (type=="d") buyingDilationStudy(id)
 	if (!quick) {
-		if (type == "t") {
-			if (id == 302) fillAll()
-			masteryStudies.bought++
-		} else if (type == "ec") {
+		if (type == "t") masteryStudies.bought++
+		else if (type == "ec") {
 			showTab("challenges")
 			showChallengesTab("eternitychallenges")
 		} else if (type == "d") {
@@ -705,7 +613,6 @@ function updateMasteryStudyTextDisplay() {
 		document.getElementById("ds" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.dil[id]) + " Time Theorems"
 		if (req) document.getElementById("ds" + id + "Req").innerHTML = ghostified || !req ? "" : "<br>Requirement: " + req
 	}
-	if (ph.did("quantum")) document.getElementById("321effect").textContent=shortenCosts(new Decimal("1e430"))
 }
 
 var occupied

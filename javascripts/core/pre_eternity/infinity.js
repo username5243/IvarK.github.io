@@ -122,9 +122,9 @@ function updateLastTenRuns() {
 		if (player.lastTenRuns[i][1].gt(0)) {
 			var ippm = player.lastTenRuns[i][1].dividedBy(player.lastTenRuns[i][0]/600)
 			if (ippm.gt(tempBest)) tempBest = ippm
-			var tempstring = shorten(ippm) + " IP/min"
-			if (ippm<1) tempstring = shorten(ippm*60) + " IP/hour"
-			var msg = "The infinity " + (i == 0 ? '1 infinity' : (i+1) + ' infinities') + " ago took " + timeDisplayShort(player.lastTenRuns[i][0], false, 3)
+			var tempstring = "(" + shorten(ippm) + " IP/min)"
+			if (ippm<1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
+			var msg = "The infinity " + (i == 0 ? '1 infinity' : (i + 1) + ' infinities') + " ago took " + timeDisplayShort(player.lastTenRuns[i][0], false, 3)
 			if (player.lastTenRuns[i][2]) {
 				var split=player.lastTenRuns[i][2].split("challenge")
 				if (split[1]==undefined) msg += " in Infinity Challenge " + checkICID(player.lastTenRuns[i][2])
@@ -141,9 +141,9 @@ function updateLastTenRuns() {
 		tempTime = tempTime.dividedBy(listed)
 		tempIP = tempIP.dividedBy(listed)
 		var ippm = tempIP.dividedBy(tempTime/600)
-		var tempstring = "(" + shorten(ippm) + " IP/min"
+		var tempstring = "(" + shorten(ippm) + " IP/min)"
 		averageIP = tempIP
-		if (ippm < 1) tempstring = "(" + shorten(ippm * 60) + " IP/hour"
+		if (ippm < 1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
 		document.getElementById("averagerun").textContent = "Average time of the last " + listed + " Infinities: " + timeDisplayShort(tempTime, false, 3) + " | Average IP gain: " + shortenDimensions(tempIP) + " IP. " + tempstring
 		
 		if (tempBest.gte(1e8)) giveAchievement("Oh hey, you're still here");
@@ -295,6 +295,10 @@ function bigCrunch(autoed) {
 		ph.updateDisplay()
 	}
 	if (player.currentChallenge != "" && !player.challenges.includes(player.currentChallenge)) player.challenges.push(player.currentChallenge);
+	if (tmp.ngmX >= 4 && player.galacticSacrifice.chall) {
+		if (!player.challenges.includes("challenge" + player.galacticSacrifice.chall)) player.challenges.push("challenge" + player.galacticSacrifice.chall)
+		delete player.galacticSacrifice.chall
+	}
 	if (player.currentChallenge == "postc8") giveAchievement("Anti-antichallenged");
 	var add = getIPMult()
 	if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) add = gainedInfinityPoints()

@@ -33,9 +33,9 @@ function setupFooterHTML() {
 			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " + 
 			(betaId != "" ?
-				"<a>Test server</a> (You are in it!) | " +
+				"<a>Test server</a> (You are here) | " +
 				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
-			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are in it!) | ") + 
+			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are here) | ") + 
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
 		"</div></tr></td></table>"
@@ -169,9 +169,8 @@ function setupInfUpgHTMLandData(){
 }
 
 function setupParadoxUpgrades(){
-	var pu = document.getElementById("pUpgs") 
-	for (let r = pu.rows.length; r !== 0; --r) pu.deleteRow(-1)
-	for (r = 1; r <= puSizes.y; r++) {
+	var pu = document.getElementById("pUpgs")
+	for (let r = 1; r <= puSizes.y; r++) {
 		let row = pu.insertRow(r - 1)
 		for (let c = 1; c <= puSizes.x; c++) {
 			var col = row.insertCell(c - 1)
@@ -720,7 +719,11 @@ function updateNewPlayer(reseted) {
 	}
 	if (modesChosen.ngm === 1) player.aarexModifications.newGameMinusVersion = 2.2
 	if (modesChosen.ngm === 2) ngmR.setup()
-	if (modesChosen.ngp) doNGPlusOneNewPlayer()
+	if (modesChosen.ngp == 2) { 
+		doNGPlusFourPlayer()
+	} else if (modesChosen.ngp == 1) {
+		doNGPlusOneNewPlayer()
+	}
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) {
 		tmp.ngmX = modesChosen.ngmm + 1
@@ -733,7 +736,6 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.arrows) doNGEXPNewPlayer()
 	if (modesChosen.ngud) doNGUDNewPlayer()
 	if (modesChosen.rs == 2) doInfinityRespeccedNewPlayer()
-	if (modesChosen.ngp > 1) doNGPlusFourPlayer()
 	if (modesChosen.ngp > 2) convertToNGP5(true)
 	if (modesChosen.ngud == 2) player.aarexModifications.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
@@ -785,6 +787,20 @@ function doNGPlusOneNewPlayer(){
 	player.aarexModifications.newGamePlusVersion = 2
 }
 
+/* Currently does not work when initializing, please fix
+function doNGPlusClassicNewPlayer(){
+	player.infinitied = Math.max(player.infinited, 1);
+	player.dimensionMultDecrease = 2
+	player.tickSpeedMultDecrease = 1.65
+	player.challenges = challengesCompletedOnEternity()
+	for (ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec] = 5
+	player.achievements = []
+	player.achievements.push("r123") // 5 more eternities until the update
+	player.achievements.push("r22") // FAKE NEWS!
+	player.achievements.push("r76") // One for each dimension
+	player.aarexModifications.newGamePlusVersion = 2
+}
+ */
 function doNGPlusTwoNewPlayer(){
 	player.aarexModifications.newGamePlusPlusVersion = 2.90142
 	player.autoEterMode = "amount"
@@ -1512,7 +1528,7 @@ function updateMoney() {
 	var element3 = document.getElementById("chall13Mult");
 	if (isADSCRunning()) {
 		var mult = getProductBoughtMult()
-		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
+		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all Dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
 	if (inNC(14) && player.aarexModifications.ngmX > 3) document.getElementById("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult / getPDAcceleration()) + "x" : ""
@@ -1522,8 +1538,7 @@ function updateCoinPerSec() {
 	var element = document.getElementById("coinsPerSec");
 	var ret = getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
-	if (tmp.PDunl) ret = ret.times(getPDAcceleration())
-	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per ' + (tmp.PDunl ? 'real-life ' : '') + 'second.'
+	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per second.'
 }
 
 var clickedAntimatter
@@ -1977,22 +1992,22 @@ var modFullNames = {
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
-	ngp: ["OFF", "ON", "NG+4"/*, "NG+5"*/],
+	ngp: ["OFF", "ON (v3)", "NG+4"/*, "NG+5"*/],
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
 	rs: ["NONE", "Eternity", "Infinity"],
 	ngud: ["OFF", "ON", "Prime (')", "Semiprime (S')"/*, "Semiprime.1 (S'.1)"*/],
 	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/]/*,
-	ngmu: ["OFF", "ON", "NG**", "NG***"],
-	ngumu: ["OFF", "ON", "NGUd**'", "NGUd***'"],
+	ngmu: ["OFF", "ON", "NG**", "NG***"], // probably delete?
+	ngumu: ["OFF", "ON", "NGUd**'", "NGUd***'"], // probably delete?
 	ngex: ["OFF", "ON", "DEATH MODE 💀"]*/ // modes that aren't even made yet
 }
 function toggle_mod(id) {
 	hasSubMod = Object.keys(modSubNames).includes(id)
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
-	if (id == "ngp" && subMode == 2 && (!(modes.ngpp >= 2) || !metaSave.ngp4)) subMode = 0
+	if (id == "ngp" && subMode == 2 && (!(modes.ngpp >= 1) || !metaSave.ngp4)) subMode = 0
 	else if (id == "ngpp" && subMode == 1 && (modes.ngud || modes.ngex)) subMode = 2
 	else if (id == "ngpp" && subMode == 3 && modes.ngex) subMode = 0
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
@@ -2012,7 +2027,7 @@ function toggle_mod(id) {
 		document.getElementById("ngexBtn").textContent = "Expert Mode: OFF"
 	}
 	if ((id=="ngpp"||id=="ngud")&&subMode) {
-		if (!modes.ngp&&!modes.ngex) toggle_mod("ngp")
+		if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
 		modes.rs=0
 		document.getElementById("rsBtn").textContent = "Respecced: NONE"
 	}
@@ -2248,8 +2263,8 @@ function gainedEternityPoints() {
 	var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e / getEPGainBase() - 0.7).times(uEPM ? 1 : player.epmult)
 	if (player.aarexModifications.newGameExpVersion) ret = ret.times(10)
 	if (hasTimeStudy(61)) ret = ret.times(tsMults[61]())
-	if (hasTimeStudy(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
-	if (hasTimeStudy(122)) ret = ret.times(35)
+	if (hasTimeStudy(121)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : ((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
+	if (hasTimeStudy(122)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : 35)
 	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
 	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3) {
@@ -2304,7 +2319,6 @@ function onNotationChange() {
 	updateDilationUpgradeCosts()
 	updateExdilation()
 	updateMilestones()
-	updateGalstones()
 	if (tmp.ngp3) {
 		updateQuarksTabOnUpdate()
 		updateGluonsTabOnUpdate("notation")
@@ -3099,22 +3113,22 @@ function updateCheckBoxes() {
 }
 
 function updateHotkeys() {
-	let html = "Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all,<br>S for sacrifice"
-	if (!player.achievements.includes("r136")) html += ", D for dimension boost"
+	let html = "Hotkeys: 1-8 to buy 10 Dimensions, shift+1-8 to buy 1 Dimension, T to buy max Tickspeed upgrades, shift+T to buy one Tickspeed upgrade, M to Max All,<br>S to Sacrifice"
+	if (!player.achievements.includes("r136")) html += ", D to Dimension Boost"
 	if (!player.achievements.includes("ng3p51")) {
-		if (player.tickspeedBoosts != undefined) html += ", B for tickspeed boost"
-		if (player.aarexModifications.ngmX >= 4) html += ", N for time dimension boost"
-		html += ", G for galaxy"
+		if (player.tickspeedBoosts != undefined) html += ", B to Tickspeed Boost"
+		if (player.aarexModifications.ngmX >= 4) html += ", N to Time Dimension Boost"
+		html += ", G to buy a Galaxy"
 	}
-	html += ", C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity"
-	if (player.achievements.includes("r136")) html += ", D to dilate time"
+	html += ", C to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
+	if (player.achievements.includes("r136")) html += ", D to Dilate Time"
 	if (player.achievements.includes("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
-	if (player.meta) html += ",<br>Q for quantum"
-	if (player.achievements.includes("ng3p45")) html += ", U for unstabilize all quarks"
-	if (player.achievements.includes("ng3p51")) html += ", B for Big Rip, G to become a ghost"
+	if (player.meta) html += ",<br>Q to Quantum"
+	if (player.achievements.includes("ng3p45")) html += ", U to unstabilize all Quarks"
+	if (player.achievements.includes("ng3p51")) html += ", B to Big Rip, G to become a ghost"
 	html += "."
-	if (player.boughtDims) html += "<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
-	html += "<br>Hotkeys do not work while holding control. Hold shift to see details on many formulas."
+	if (player.boughtDims) html += "<br>You can hold Shift while buying time studies to buy all up until that point, see each study's number, and save study trees."
+	html += "<br>Hotkeys do not work while holding the Control key (Ctrl). Hold the Shift key to see details on many formulas."
 	document.getElementById("hotkeysDesc").innerHTML = html
 	//also uhh H for forcing achievement tooltip display update so yeah lol
 }
@@ -3133,7 +3147,7 @@ function updateEterChallengeTimes() {
 		}
 	}
 	document.getElementById("eterchallengesbtn").style.display = tempcounter > 0 ? "inline-block" : "none"
-	setAndMaybeShow("eterchallengetimesum",tempcounter>1,'"Sum of completed eternity challenge time records is "+timeDisplayShort('+temp+', false, 3)')
+	setAndMaybeShow("eterchallengetimesum",tempcounter>1,'"The sum of your completed Eternity Challenge time records is "+timeDisplayShort(' + temp + ', false, 3) + "."')
 }
 
 var averageEp = new Decimal(0)
@@ -3146,12 +3160,12 @@ function updateLastTenEternities() {
 		if (player.lastTenEternities[i][1].gt(0)) {
 			var eppm = player.lastTenEternities[i][1].dividedBy(player.lastTenEternities[i][0]/600)
 			var unit = player.lastTenEternities[i][2] ? player.lastTenEternities[i][2] == "b" ? "EM" : player.lastTenEternities[i][2] == "d2" ? "TP" : "EP" : "EP"
-			var tempstring = shorten(eppm) + " " + unit + "/min"
-			if (eppm<1) tempstring = shorten(eppm*60) + " " + unit + "/hour"
+			var tempstring = "(" + shorten(eppm) + " " + unit + "/min)"
+			if (eppm<1) tempstring = "(" + shorten(eppm * 60) + " " + unit + "/hour)"
 			msg = "The Eternity " + (i == 0 ? '1 eternity' : (i+1) + ' eternities') + " ago took " + timeDisplayShort(player.lastTenEternities[i][0], false, 3)
 			if (player.lastTenEternities[i][2]) {
 				if (player.lastTenEternities[i][2] == "b") msg += " while it was broken"
-				else if (player.lastTenEternities[i][2].toString().slice(0,1) == "d") msg += " while dilated"
+				else if (player.lastTenEternities[i][2].toString().slice(0,1) == "d") msg += " while Dilated"
 				else msg += " in Eternity Challenge " + player.lastTenEternities[i][2]
 			}
 			msg += " and gave " + shortenDimensions(player.lastTenEternities[i][1]) + " " + unit + ". " + tempstring
@@ -3352,7 +3366,7 @@ function eternity(force, auto, presetLoad, dilated) {
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
-	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
+	if (getInfinitied() >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
 		for (var i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
@@ -3964,6 +3978,19 @@ function updateEPminpeak(diff, type) {
 	return currentEPmin;
 }
 
+function checkMatter(diff){
+	if (player.matter.pow(20).gt(player.money) && (player.currentChallenge == "postc7" || (inQC(6) && !player.achievements.includes("ng3p34")) )) {
+		if (tmp.ri || inBigRip()) {}
+		else if (inQC(6)) {
+			quantum(false, true, 0)
+			onChallengeFail()
+		} else quickReset()
+	} else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) && !haveET) {
+		if (player.pSac!=undefined) player.pSac.lostResets++
+		if (player.pSac!=undefined && !player.resets) pSacReset(true, undefined, pxGain)
+		else quickReset()
+	}
+}
 
 function passiveIPupdating(diff){
 	if (player.infinityUpgrades.includes("passiveGen")) player.partInfinityPoint += diff / player.bestInfinityTime * 10
@@ -4057,7 +4084,7 @@ function requiredInfinityUpdating(diff){
 
 function chall2PowerUpdating(diff){
 	var div = 180
-	if (tmp.ngmX >= 5) div /= puMults[11](hasPU(11, true))
+	if (tmp.ngmX >= 5) div /= puMults[11](hasPU(11, true, true))
 	if (tmp.ngmR) div /= 100
 	player.chall2Pow = Math.min(player.chall2Pow + diff / div, 1);
 }
@@ -4086,12 +4113,12 @@ function incrementParadoxUpdating(diff) {
 			if (!isDimUnlocked(t+2)) break
 			player.pSac.dims[t].amount=player.pSac.dims[t].amount.add(getPDProduction(t+2).times(diff))
 		}
-		if (player.pSac.dims.power.gte(1e20)) giveAchievement("Time Paradox")
+		if (player.pSac.dims.power.gte(1e10)) giveAchievement("Time Paradox")
 	}
 }
 
 function dimensionButtonDisplayUpdating() {
-	document.getElementById("pdtabbtn").style.display = ph.shown("paradox") && tmp.PDunl ? "" : "none"
+	document.getElementById("pdtabbtn").style.display = (ph.shown("paradox") && tmp.PDunl) ? "" : "none"
    	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && (tmp.ngmX >= 5 || ph.shown("infinity"))) ? "" : "none"
 	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || tmp.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
 	document.getElementById("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
@@ -4674,16 +4701,13 @@ function passiveGPGen(diff){
 
 
 function normalSacDisplay(){
-	if (player.eightBought > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3" && tmp.ngmX < 5) document.getElementById("sacrifice").className = "storebtn"
+	if (player.eightBought > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
    	else document.getElementById("sacrifice").className = "unavailablebtn"
 }
 
 function sacLayersDisplay(){
 	document.getElementById("automationbtn").style.display = player.aarexModifications.ngmX > 3 && (player.challenges.includes("challenge1") || player.infinitied > 0 || player.eternities != 0 || ph.did("quantum")) && !isEmptiness ? "inline-block" : "none"
-	if (document.getElementById("paradox").style.display=='block') {
-		ParadoxUpgradeButtonTypeDisplay()
-		updatePUMults()
-	}
+	if (document.getElementById("paradox").style.display=='block') updatePUMults()
 	if (document.getElementById("galaxy").style.display=='block') {
 		galacticUpgradeSpanDisplay()
 		galacticUpgradeButtonTypeDisplay()
@@ -5059,6 +5083,7 @@ function gameLoop(diff) {
 
 	if (!isGamePaused()) {
 		incrementParadoxUpdating(diff)
+		checkMatter(diff)
 		passiveIPupdating(diff)
 		passiveInfinitiesUpdating(diff)
 		requiredInfinityUpdating(diff)
@@ -5146,7 +5171,6 @@ function gameLoop(diff) {
 
 	normalSacDisplay()
 	sacLayersDisplay()
-	//todo: add in code that renders pSac. maybe next update. 
 	d8SacDisplay()
 
 	document.getElementById("challengesbtn").style.display = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity") && !isEmptiness ? "inline-block" : "none"
@@ -5514,6 +5538,7 @@ function showGalTab(tabName) {
 	player.aarexModifications.tabsSave.tabGalaxy = tabName
 }
 
+
 function showInfTab(tabName) {
 	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
 	var tabs = document.getElementsByClassName('inftab');
@@ -5677,8 +5702,6 @@ function initGame() {
 	//Update temp twice to make sure all values are correct
 	updateTemp()
 	updateTemp()
-	//NG-5: I dunno a better way to get the NGm5 achs. to load. 
-	updateAchievements()
 }
 
 window.addEventListener('keydown', function(event) {

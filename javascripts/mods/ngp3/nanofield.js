@@ -144,7 +144,7 @@ var nanoRewards = {
 			return Decimal.pow(25 + 5 * x, x)
 		},
 		ma_effect_exp: function(x) {
-			return x * 6.8
+			return Math.sqrt(x * 6.8)
 		},
 		dil_gal_gain: function(x) {
 			x = Math.pow(x, 0.83) * 0.039

@@ -4,7 +4,7 @@ let ETER_UPGS = {
 		unl: () => true,
 		cost: 5,
 		mult: () => player.eternityPoints.plus(1),
-		desc: () => "Infinity Dimension multiplier based on unspent EP. (x + 1)"
+		desc: () => "Infinity Dimension multiplier based on unspent EP. (x+1)"
 	},
 	2: {
 		unl: () => true,
@@ -40,10 +40,10 @@ let ETER_UPGS = {
 			return Decimal.pow(cap / div1 + 1, Math.log(cap * tim1 + 1) / Math.log(div2)).times(Decimal.div(soft, div1).add(1).times(Decimal.times(soft, div2).add(1).log(div2)).max(1)).max(achReward)
 		},
 		desc() {
-			let eu2formula = "(x/200) ^ log4(2x)"
-			if (tmp.ngC) eu2formula = "(x/100) ^ log2(4x)"
-			if (player.boughtDims !== undefined) eu2formula = "x ^ log4(2x)"
-			else if (player.achievements.includes("ngpp15")) eu2formula = tmp.ngC ? "x ^ log10(x) ^ 2" : "x ^ log10(x) ^ 3.75"
+			let eu2formula = "(x/200)^log4(2x)"
+			if (tmp.ngC) eu2formula = "(x/100)^log2(4x)"
+			if (player.boughtDims !== undefined) eu2formula = "x^log4(2x)"
+			else if (player.achievements.includes("ngpp15")) eu2formula = tmp.ngC ? "x^log10(x)^2" : "x^log10(x)^3.75"
 
 			return "Infinity Dimension multiplier based on Eternities. (" + eu2formula + ")"
 		}
@@ -56,7 +56,7 @@ let ETER_UPGS = {
 			if (tmp.ngC) return Decimal.pow(6250 / Math.max(Math.min(infchallengeTimes, 6250), 6.1), 500 / Math.max(infchallengeTimes, 6.1))
 			return Decimal.pow(2, 300 / Math.max(infchallengeTimes, 6.1))
 		},
-		desc: () => "Infinity Dimension multiplier based on " + (player.boughtDims ? "Time Shards. (x / "+shortenCosts(1e12) + " + 1)" : "sum of Infinity Challenge times.")
+		desc: () => "Infinity Dimension multiplier based on " + (player.boughtDims ? "Time Shards. (x/"+shortenCosts(1e12) + " + 1)" : "sum of Infinity Challenge times.")
 	},
 	4: {
 		unl: () => true,
@@ -80,7 +80,7 @@ let ETER_UPGS = {
 		desc: () => "Time Dimensions gain a multiplier based on days played" + (tmp.ngC ? " and you can buy max RGs." : ".")
 	},
 
-	//NG Update
+	// NG Update
 	7: {
 		unl: () => player.exdilation !== undefined && hasDilationStudy(1),
 		cost: "1e1500",
@@ -100,7 +100,7 @@ let ETER_UPGS = {
 		desc: () => "Dilated time gain is boosted by Eternity Points."
 	},
 
-	//NG Condensed
+	// NG Condensed
 	10: {
 		unl: () => tmp.ngC,
 		cost: "1e625",
@@ -117,7 +117,7 @@ let ETER_UPGS = {
 		desc: () => "The Normal, Infinity, Replicated, & Time Condenser cost formulas are weaker."
 	},
 
-	//NG+3: Post-Mastery Studies
+	// NG+3: Post-Mastery Studies
 	13: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
 		cost: 1/0,
@@ -127,18 +127,19 @@ let ETER_UPGS = {
 
 			return Decimal.pow(10, Math.sqrt(epLog) / 1e4 + maLog / 10)
 		},
-		desc: () => "Eternity Points and Meta-Antimatter boost dilated time gain."
+		desc: () => "Eternity Points and Meta-Antimatter boost dilated time gain and you can buy all row-23 time studies."
 	},
 	14: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
 		cost: 1/0,
-		desc: () => "The cost scaling of EP multiplier upgrades is reduced."
+		desc: () => "The cost scaling of EP multiplier upgrades is reduced and you can buy all time studies from time study tree."
 	},
 	15: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
 		cost: 1/0,
 		desc: () => "You can passively generate Tachyon Particles."
 	},
+
 	updateDisplayOnTick() {
 		for (let i = 1; i <= this.total; i++) {
 			if (this[i].unl()) {

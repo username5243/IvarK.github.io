@@ -868,7 +868,7 @@ function doInitNGp2NOT3Stuff(){
                                 player.aarexModifications.quantumConf = true
                         }
                         player.aarexModifications.newGamePlusVersion = 1
-                        if (confirm("Do you want to migrate your NG++ save into new NG+++ mode?")) {
+                        if (confirm("Do you want to migrate your NG++ save into NG+++?")) {
                                 doNGP3NewPlayerStuff()
                         }
                         player.dilation.upgrades=migratedUpgrades
@@ -1662,7 +1662,7 @@ function doNGSPUpdatingVersion(){
 
 function doInitInfMultStuff(){
         ipMultPower=2
-        if (player.masterystudies) if (player.masterystudies.includes("t241")) ipMultPower=2.2
+        if (masteryStudies.has("t241")) ipMultPower=2.1
         if (GUBought("gb3")) ipMultPower=2.3
         if (player.aarexModifications.newGameExpVersion !== undefined) ipMultCostIncrease=4
         else ipMultCostIncrease=10
@@ -1907,7 +1907,7 @@ function setChallengeDisplay(){
         document.getElementById("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         document.getElementById("autoGSChallengeDesc").textContent=player.aarexModifications.ngmX>3?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(player.aarexModifications.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         document.getElementById("autoTBChallengeDesc").textContent=player.aarexModifications.ngmX>3?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        document.getElementById("infPowEffectPowerDiv").innerHTML = ((tmp.ngmX >= 2 || tmp.ngC) && tmp.ngmX < 5) ? "Raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, t" : "T"
+        document.getElementById("infPowEffectPowerDiv").innerHTML = ((tmp.ngmX >= 2 || tmp.ngC) && tmp.ngmX < 5) ? "which is raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
         document.getElementById("ngmmchalls").style.display=player.galacticSacrifice?"":"none"
         document.getElementById("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         document.getElementById("ngm4chall").style.display=player.aarexModifications.ngmX>3?"":"none"
@@ -2073,7 +2073,7 @@ function setSomeQuantumAutomationDisplay(){
         var suffix = "NG" + (player.meta != undefined ? "pp" : "ud")
         document.getElementById("uhDiv" + suffix).appendChild(document.getElementById("Universal harmony"))
         document.getElementById("feDiv" + suffix).appendChild(document.getElementById("In the grim darkness of the far endgame"))
-        document.getElementById("dil14desc").textContent = player.aarexModifications.nguspV ? "The TP multiplier upgrade is more powerful." : "Increase the exponent of the TP formula."
+        document.getElementById("dil14desc").textContent = player.aarexModifications.nguspV ? "Make the TP multiplier upgrade more powerful." : "Increase the exponent of the TP formula."
         document.getElementById("dil52").style["font-size"] = player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "10px" : "9px"
         document.getElementById("dil52formula").style.display = player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "none" : ""
         document.getElementById("exDilationDesc").innerHTML = player.aarexModifications.nguspV ? 'making galaxies <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% stronger in dilation.' : 'making dilation <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% less severe.'
@@ -2120,12 +2120,12 @@ function updateNGModeMessage(){
 	if (player.aarexModifications.newGameMult) ngModeMessages.push("Welcome to NG Multiplied, made by Despacit and Soul147! This mode adds many buffs which may break the game, similar to NG^.")
 	if (player.aarexModifications.newGameExpVersion) ngModeMessages.push("Welcome to NG^, made by Naruyoko! This mode adds many buffs to features that can end up unbalancing the game significantly.")
 	if (condensed) {
-		ngModeMessages.push("WARNING! NG Condensed is in Beta! Some content aren't balanced yet. Currently, everything is balanced until Meta Dimensions (only ported until ECs).")
-		ngModeMessages.push("Welcome to NG Condensed, made by Jacorb! This mode significantly changes the game, including NG+++, to speed it up while also adding new features along the way. Have fun! :)")
+                ngModeMessages.push("Welcome to NG Condensed, made by Jacorb! This mode significantly changes the game, including NG+++, to speed it up while also adding new features along the way. Have fun! :)")
+                ngModeMessages.push("WARNING! NG Condensed is in Beta! Some content is not completely balanced yet. Currently, everything is balanced until Meta Dimensions (only ported until ECs).")
 	}
 	if (player.meta!==undefined||player.exdilation!==undefined) {
 		if (!player.aarexModifications.newGamePlusVersion && !condensed) ngModeMessages.push("You have disabled NG+ features on NG++. This means you start off from the beginning of Antimatter Dimensions without any buffs, and with NG+3 enabled, it can be considered as The Grand Run. If you want to go for it, good luck.")
-		if (player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+4 by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
+		if (player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+4, by Aarex and Soul147! This is a NG+ version of NG+3, starting you off with all features up to Big Rip unlocked. It isn't recommended to play this mode as you have some more content accessible early on compared to NG+.")
 
 		if (player.exdilation!==undefined) {
 			if (player.aarexModifications.nguspV) ngModeMessages.push("Welcome to NG Update Semiprime, made by Aarex! This is like NGUd', but with balancing changes implemented. Good luck! :)")
@@ -2138,7 +2138,7 @@ function updateNGModeMessage(){
 			else ngModeMessages.push("Welcome to NG Update, made by dan-simon! In this mod, Black Hole and Ex-Dilation are available after the endgame of the vanilla Antimatter Dimensions.")
 		} else if (player.masterystudies && !player.aarexModifications.ngp3mpV && !player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG+++ mode, the extension of dan-simon's NG++, made by Aarex! There is a lot of content in this mod, so good luck!")
 		else if (!player.aarexModifications.ngp4V) ngModeMessages.push("Welcome to NG++, made by dan-simon! In this mode, more Dilation upgrades and Meta Dimensions are added to push the endgame further. Disclaimer: This is not NG+3, there is no Quantum content available.")
-	} else if (player.aarexModifications.newGamePlusVersion) ngModeMessages.push("Welcome to NG+ v2, made by usavictor and Aarex! You start with many things unlocked and given to you immediately to get through the early game faster.")
+	} else if (player.aarexModifications.newGamePlusVersion) ngModeMessages.push("Welcome to NG+, made by usavictor and Aarex! You start with many things unlocked and given to you immediately to get through the early game faster.")
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
 	if (player.galacticSacrifice) {
@@ -2148,11 +2148,10 @@ function updateNGModeMessage(){
 		else ngModeMessages.push('Welcome to NG--, created by Nyan cat! You are always in Dilation and IC3, but there is a new layer called Galactic Sacrifice.')
 	}
 	if (player.aarexModifications.newGameMinusVersion) ngModeMessages.push("Welcome to NG-, created by slabdrill! Originally made as a save file modification, NG- is now ported as a 'mod'. Everything in the original Antimatter Dimensions is nerfed, making the endgame harder to reach.")
-	if (player.aarexModifications.aau) ngModeMessages.push("You have applied the AAU 'mod', made by Apeirogon. This will unbalance many areas of the game, as you get all achievements available in your save. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
-	if (player.aarexModifications.ls) ngModeMessages.push("You have applied the Light Speed 'mod', made by Aarex Tiaokhiao. This will unbalance many areas of the game, as you can speed up some mechanics and also, the game. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
+	if (player.aarexModifications.aau) ngModeMessages.push("You have applied the AAU 'mod', made by Apeirogon. This will unbalance many areas of the game, as you get all achievements available in your save along with their rewards. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
+	if (player.aarexModifications.ls) ngModeMessages.push("You have applied the Light Speed 'mod', made by Aarex Tiaokhiao. This will unbalance many areas of the game, as you can speed up some mechanics, including the entire game. It is not recommended to choose this 'mod' for this reason, unless you want fast gameplay.")
 
 	if (inflationCheck) ngModeMessages = ["I'm terribly sorry, but it seems there has been an inflation problem in your save, which is why this save file has been reset."]
-	if (infiniteCheck) ngModeMessages = ["I'm terribly sorry, but there has been an Infinite bug detected within your save file, which is why said save file will get reset. Luckily, you can export your save before this reset. Thanks! :)"]
 	if (forceToQuantumAndRemove) {
 		quantum(false, true, 0)
 		ngModeMessages = ["Due to balancing changes, you are forced to quantum and reset your TT and your best TP, but you are given  " + shorten(setTTAfterQuantum) + " TT as compensation."]
@@ -2320,7 +2319,8 @@ function onLoad(noOffline) {
 	document.getElementById("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
 	updateTemp()
 	updateTemp()
-        
+        updateAchievements()
+        ParadoxUpgradeButtonTypeDisplay() // ng-5 updating
 }
 
 
@@ -2346,7 +2346,7 @@ END OF ONLOAD
 
 function setupNGP31Versions() {
 	if (player.aarexModifications.ngp3lV) {
-		alert("The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
+		alert("NG+3L is no longer supported. This save will now go through a mandatory migration to NG+3R.")
 		delete player.aarexModifications.ngp3lV
 	}
 	if (player.aarexModifications.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
@@ -2583,8 +2583,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(id) {
-	//if (modes.ngmm == 4 && !confirm("Warning! NG-5 is really unbalanced for now! It is recommended to not play this mode until the reworked version has been released! Are you sure?")) return
-
+	//if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in balance testing! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
 	updateNewPlayer()
@@ -3020,7 +3019,7 @@ function get_save(id) {
 
 function pauseGame(load) {
 	if (!load) player.aarexModifications.pause = !player.aarexModifications.pause
-	if (isGamePaused()) alert("YOUR GAME IS PAUSED! The time has stopped, which means production and automation don't work. However, you can manually do something without automation.")
+	if (isGamePaused()) alert("YOUR GAME IS PAUSED! Please note that you must unpause for automation and production to continue normally. However, you may navigate through the game manually, but it will not display any immediate effects until you unpause the game.")
 	document.getElementById("pauseStatus").textContent = player.aarexModifications.pause ? "Unpause" : "Pause"
 }
 

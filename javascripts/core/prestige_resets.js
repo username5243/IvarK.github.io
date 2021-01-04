@@ -744,7 +744,7 @@ function doInfinityGhostifyResetStuff(implode, bm){
 }
 
 function doTOUSOnGhostify(bm){
-	if (player.achievements.includes("ng3p77")) { //thry of ultimate studies
+	if (player.achievements.includes("ng3p77")) { // theory of ultimate studies
 		player.timestudy.studies=[]
 		player.masterystudies=[]
 		for (var t = 0; t < all.length; t++) player.timestudy.studies.push(all[t])
@@ -762,7 +762,7 @@ function doTOUSOnGhostify(bm){
 function doEternityGhostifyResetStuff(implode, bm){
 	EPminpeakType = 'normal'
 	EPminpeak = new Decimal(0)
-	doTOUSOnGhostify(bm) //thry of ultimate studies
+	doTOUSOnGhostify(bm) // theory of ultimate studies
 	if (!bm) {
 		resetEternityChallenges()
 		resetMasteryStudies()
