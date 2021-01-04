@@ -448,6 +448,7 @@ function resetPSac() {
 //ngm5 remade
 
 function ParadoxUpgradeButtonTypeDisplay() {
+	if (tmp.ngmX < 5) return
 	let t = document.getElementById("pUpgs")
 	for (let i = 1; i <= 6; i++) { //6 rows
 		var r = t.rows[i-1]
