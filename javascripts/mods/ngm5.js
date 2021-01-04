@@ -19,7 +19,6 @@ function buyIDwithAM(t, auto) { // t is the dimension number, auto is either tru
 	d.amount = d.amount.add(10)
 	d.power = d.power.times(3)
 	player.chall2Pow = 0
-	reduceMatter(1)
 }
 
 function maxIDwithAM(t, bulk) {
@@ -39,7 +38,6 @@ function maxIDwithAM(t, bulk) {
 	d.amount = d.amount.add(10 * tb)
 	d.power = d.power.times(Decimal.pow(3, tb))
 	player.chall2Pow = 0
-	reduceMatter(tb)
 }
 
 function maxAllIDswithAM() {
@@ -52,15 +50,16 @@ function resetIDsOnNGM5() {
 
 //Global Dimension unlocks
 function isDimUnlocked(d) {
-	if (d < 7) return true
+	if (d < 7) return true // bruh. seriously. 
 	return false
 }
 
 //Paradox Sacrifices
 function getPxGain() {
-	let r = new Decimal(player.matter.max(player.money).max(1).log10()+1)
-	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5))
-	if (hasPU(44)) r = r.times(puMults[44]())
+	let r = new Decimal(player.money.max(1000).log10()-2)
+	for (var d = 1; d < 9; d++) r = r.times(Math.pow(player[TIER_NAMES[d]+"Amount"].max(10).log10(), 2/5)) //we are gonna fiddle with this value a LOT.
+	r = r.times(puMults[12](hasPU(12, true)))
+	if (hasPU(34)) r = r.times(puMults[34]())
 	return r.floor()
 }
 
@@ -81,12 +80,12 @@ function pSacReset(force, chall, pxGain) {
 		player.pSac[force ? "forcedTimes" : "normalTimes"]++
 		if (!force) {
 			player.infDimensionsUnlocked[1]=true
-			giveAchievement("Make Antimatter Great Again!")
+			giveAchievement("Make Antimatter Great Again!") 
 		}
 	}
 	player.pSac.time = 0
 	PXminpeak = new Decimal(0)
-	resetPDs()
+	//resetPDs()
 	updateParadoxUpgrades()
 	galaxyReset(-player.galaxies)
 	ph.onPrestige("paradox")
@@ -95,7 +94,6 @@ function pSacReset(force, chall, pxGain) {
 function pSacrificed() {
 	return player.pSac != undefined && !isEmptiness && (player.pSac.times || player.galacticSacrifice.times || player.infinitied > 0 || getEternitied() > 0 || quantumed)
 }
-// yeah llolo;
 //Paradox Upgrades
 let puSizes = {x: 4, y: 6}
 let puMults = {
@@ -104,7 +102,7 @@ let puMults = {
 		return Math.pow(2, l)
 	},
 	12(l) {
-		return l + 1
+		return Math.pow(2, l)
 	},
 	13(l) {
 		return 1 + l / 20
@@ -113,44 +111,44 @@ let puMults = {
 		return Math.min(Math.pow(2, l), 1e3)
 	},
 
+	21() {
+		return Math.floor(10  * Math.pow(1.5, player.galacticSacrifice.times))
+	},
 	22() {
-		return player.money.add(1).pow(0.2)
+		return player.postC3Reward.sqrt()
 	},
 	23() {
-		return player.infinityPower.add(1).pow(0.15)
-	},
-	24() {
-		return player.timeShards.add(1).pow(0.1)
-	},
-
-	31() {
-		return Decimal.pow(10, player.galacticSacrifice.times + 10).min(1e15)
-	},
-	32() {
-		return getInfinityPowerEffect()
-	},
-	33() {
 		return player.pSac.px.add(1).times(3).log10() / 500
 	},
-	34() {
+	24() {
 		return player.postC3Reward.log10() / 3 + 1
 	},
 
-	41() {
+	31() {
 		return Math.max(Math.cbrt(player.pSac.px.log10()), 1) //Todo
 	},
-	42() {
+	32() {
 		let x = player.tickspeedBoosts
 		if (x >= 10) x = Math.sqrt(5 * x + 50)
 		return Decimal.pow(2.5, Math.log2(x + 1) * Math.sqrt(x)) //Aarex's suggestion
 	},
-	44() {
+	34() {
 		return player.timeShards.add(1).log10() / 10 + 1
 	},
 
+	42() {
+		return player.money.add(1).pow(0.2)
+	},
+	43() {
+		return player.infinityPower.add(1).pow(0.15)
+	},
+	44() {
+		return player.timeShards.add(1).pow(0.1)
+	},
+
 	52() {
-		if (!ph.did("infinity")) return 1.5
-		return Math.max(1 + player.galaxies / 20, 1.5) //Todo
+		if (!onPostBreak()) return 1.5
+		return Math.max(1 + player.galaxies / 20, 1.5)
 	},
 	54() {
 		return 1 //Todo
@@ -172,27 +170,27 @@ let puMults = {
 
 let puDescs = { 
 	11: "Normal Dimension multipliers increase 2x faster.",
-	12: "Matter increases slower.",
+	12: "Boost Paradox Gain.",
 	13: "Increase the Second Normal Dimension multiplier",
 	14: "Time speed is 2x faster.",
 	
-	21: "Buying Dimensions or Tickspeed divides matter by 1.01.",
-	22: "Antimatter boosts Paradox Dimensions 1 & 4.",
-	23: "Infinity Power boosts Paradox Dimensions 2 & 5.",
-	24: "Time Shards boost Paradox Dimensions 3 & 6.",
-	
-	31() {
-		return "Gain a multiplier to Infinity Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
+	21() {
+		return "Boost Time Dimensions" + (ph.did("galaxy") ? " based on your Galactic Sacrificed stat." : ".")
 	},
 	
-	32: "Infinity Power boosts Time Dimensions.",
-	33: "Add Tickspeed Multiplier increase based on your Paradoxes.",
-	34: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
+	22: "Time Dimensions are affected by tickspeed at a reduced rate.",
+	23: "Add Tickspeed Multiplier increase based on your Paradoxes.",
+	24: "Infinity Power effect is stronger based on your Tickspeed Multiplier.",
 
-	41: "Paradoxes add the power to Dimension Boosts.",
-	42: "Tickspeed Boosts boost Infinity Dimensions.",
-	43: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
-	44: "You gain more Paradoxes based on your Time Shards.",
+	31: "Paradoxes boost Dimension Boosts.",
+	32: "Tickspeed Boosts boost Infinity Dimensions.",
+	33: "Reduce the cost multiplier of Time Dimension Boosts to 1.5x.", //Apeirogon wants this to be set to 2. should we let it? the roadmap says 1.5, so I'm keeping it here.
+	34: "You gain more Paradoxes based on your Time Shards.",
+	
+	41: "Buying Tickspeed no longer resets your Dimension Percentage.",
+	42: "Antimatter boosts Paradox Dimensions 1 & 4.",
+	43: "Infinity Power boosts Paradox Dimensions 2 & 5.",
+	44: "Time Shards boost Paradox Dimensions 3 & 6.",
 
 	51: "Reduce Time Shard requirement multiplier to 1.3", 
 	52()  { 
@@ -210,35 +208,35 @@ let puDescs = {
 	}
 }
 let puCosts = {
-	11(l) {
+	11: function(l) { //l is still costs
 		if (l >= 8) l *= Math.ceil(Math.sqrt(l - 6))
 		return Math.pow(4, l + 1)
 	},
-	12(l) {
-		return Math.pow(2, Math.pow(2, l))
+	12: function(l) {
+		return Math.pow(2, Math.pow(2, l)) //between the diminishing returns and terrible scaling, this one outta be good. 
 	},
-	13(l) {
-		if (l >= 10) l *= l - 9
+	13: function(l) {
+		if (l >= 10) l *= l - 9 //very harsh softcap as a compromise between Apeirogon and Aarex.
 		return Math.pow(4, l + 4)
 	},
-	14(l) {
-		return Decimal.pow(3,Math.pow(2, l) - 1)
+	14: function(l) {
+		return Decimal.pow(4,Math.pow(2, l) - 1) //tbh I don't think that this upgrade needs a softcap, since the scaling is already pretty terrible. 
 	},
 
-	21: 256,
-	22: 8,
-	23: 32,
-	24: 64,
+	21: 1, //TODO
+	22: 20,
+	23: 512,
+	24: 4096,
 
-	31: 1,
-	32: 2,
-	33: 8,
-	34: 512,
+	31: Math.pow(2, 18),
+	32: 1e6,
+	33: 1e7,
+	34: Math.pow(2, 28), //We really need to rebalance this
 
-	41: Math.pow(2, 26),
-	42: 1e9,
-	43: Math.pow(2, 32),
-	44: 1e11
+	41: 1e5, 
+	42: Math.pow(2, 20),
+	43: 3e6,
+	44: Math.pow(2, 24),
 }
 let puScalings = {
 	11(l) {
@@ -251,13 +249,19 @@ let puScalings = {
 	}
 }
 let puSoftcaps = {
-	42: () => player.tickspeedBoosts >= 10
+	32: () => player.tickspeedBoosts >= 10
 }
 let puCaps = {
-	11: 100,
-	12: 100,
+	11: 25,
+	//12: Infinity,
 	13: 20,
-	14: 10
+	14: 5
+}
+let puConditions = {
+	r3: () => player.galacticSacrifice.times >= 1 || player.infinitied >= 1 || onPostBreak(),
+	r4: () => tmp.PDunl,
+	r5: () => player.infinitied >= 1 || onPostBreak(),
+	r6: () => onPostBreak(),
 }
 
 function buyPU(x,r) {
@@ -280,8 +284,8 @@ function getPUCost(x,r,l) {
 	return puCosts[x]
 }
 
-function hasPU(x, r, nq) {
-	let e = tmp.ngmX >= 5 && player.pSac !== undefined && (!nq || !player.aarexModifications.quickReset)
+function hasPU(x, r) { // x = upgrade id, r = level, nq = not quick matter reset
+	let e = tmp.ngmX >= 5
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -301,8 +305,8 @@ function updatePUMults() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			if (puMults[id]) {
-				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true, true)).toFixed(2)
-				else if (id == 33) document.getElementById("pue33").textContent = "+" + puMults[33]().toFixed(4)
+				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
+				else if (id == 23) document.getElementById("pue23").textContent = "+" + puMults[23]().toFixed(4)
 				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
 		}
@@ -314,15 +318,12 @@ function updatePUCosts() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			var lvl = hasPU(id, true)
-			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (puCaps[id] ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + " / " + puCaps[id] : "")
+			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
 		}
 	}
 }
 
-//p21
-function reduceMatter(x) {
-	if (hasPU(21, false, true)) player.matter = player.matter.div(Decimal.pow(1.01, x))
-}
+
 
 //Paradox Challenges
 function inPxC(x) {
@@ -335,6 +336,7 @@ var pdBaseCosts = [null, 1, 2, 4, 16, 256, 2048, 1e250, 1e280]
 var pdCostMults = [null, 3, 16, 64, 4096, 8192, 32768, 1e250, 1e280]
 
 function buyPD(d) {
+	if (!tmp.PDunl || tmp.ngmX < 5) return
 	var ps = player.pSac
 	var c = ps.dims[d].cost
 	if (!ps.px.gte(c)) return
@@ -350,6 +352,7 @@ function buyPD(d) {
 }
 
 function maxPDs() {
+	if (!tmp.PDunl) return
 	let ps = player.pSac
 	let upd = false
 	for (var d = 1; d < 9; d++) {
@@ -375,7 +378,7 @@ function maxPDs() {
 function getPDPower(d) {
 	let r = player.pSac.dims[d].power
 	if (d < 8) {
-		var pu = ((d - 1) % 3) + 22
+		var pu = ((d - 1) % 3) + 42
 		if (hasPU(pu)) r = r.times(puMults[pu]())
 	}
 	if (d == 2) r = r.pow(puMults[13](hasPU(13, true)))
@@ -386,7 +389,6 @@ function getPDProduction(d) {
 	let r = player.pSac.dims[d].amount
 	r = r.times(getPDPower(d))
 	if (d < 2) r = r.add(getPDProduction(2))
-	r = r.times(100)
 	return r
 }
 
@@ -408,15 +410,17 @@ function getPDRate(d) {
 
 function resetPDs(full) {
 	if (full) player.pSac.dims={}
-	player.pSac.dims.power = new Decimal(0)
-	player.pSac.dims.extraTime = 0
-	if (full) for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
+	player.pSac.dims.power = new Decimal(1)
+	if (full) { 
+		for (var d = 1; d < 9; d++) player.pSac.dims[d] = {cost: new Decimal(pdBaseCosts[d]), bought: 0, power: new Decimal(1)}
+		tmp.PDunl = false //Wait until the next update. 
+	}
 	for (var d = 1; d < 9; d++) player.pSac.dims[d].amount = new Decimal(player.pSac.dims[d].bought)
 }
 
-function getExtraTime() {
-	if (!haveExtraTime()) return 0
-	return Math.log10(player.pSac.dims.power.add(1).log10() + 1) * 4
+function getPDAcceleration() {
+	if (tmp.ngmX < 5 || !tmp.PDunl || !player.pSac.dims.power.gt(1)) return 1
+	return 1 + Math.sqrt(player.pSac.dims.power.log10())
 }
 
 //Paradox Layer Reset
@@ -424,15 +428,16 @@ function resetPSac() {
 	if (tmp.ngmX >= 5) {
 		PXminpeak = new Decimal(0)
 		let keepPU = false //Wait until the next update comes.
+		let keepPUR = tmp.Greward >= 3
 		player.pSac = {
 			time: 0,
 			times: 0,
 			normalTimes: 0,
 			forcedTimes: 0,
 			lostResets: (player.pSac && player.pSac.lostResets) || 0,
-			px: new Decimal(0),
+			px: tmp.Greward >= 4 ? new Decimal(25 * player.galacticSacrifice.times) : new Decimal(tmp.Greward >= 2 ? 20 : 0),
 			upgs: keepPU ? player.pSac.upgs : [],
-			rebuyables: keepPU ? player.pSac.rebuyables : {}
+			rebuyables: keepPUR ? player.pSac.rebuyables : {}
 		}
 		resetPDs(true)
 		updateParadoxUpgrades()
@@ -440,12 +445,43 @@ function resetPSac() {
 	}
 }
 
-//v0.51
-function haveExtraTime() {
-	return tmp.ngmX >= 5 && !player.aarexModifications.quickReset
+//ngm5 remade
+
+function ParadoxUpgradeButtonTypeDisplay() {
+	let t = document.getElementById("pUpgs")
+	for (let i = 1; i <= 6; i++) { //6 rows
+		var r = t.rows[i-1]
+		if (!puConditions["r"+i] || puConditions["r"+i]()) {
+			r.style.display = ""
+			for (let j = 1; j <= 4; j++) { //4 columns
+				var c = r.cells[j-1]
+				if (!puConditions["c"+j] || puConditions["c"+j]()) {
+					c.style.display = ""
+					var e = document.getElementById('pu' + i + j);
+					if (hasPU(i*10+j)) {
+						e.className = 'pubought'
+					} else if (i === 1 ? player.pSac.px.gte(puCosts[10+j](hasPU(10+j,true))) : player.pSac.px.gte(puCosts[i*10+j])) {
+						e.className = 'pupg';
+					} else {
+						e.className = 'infinistorebtnlocked'
+					}
+					let upgId = i * 10 + j
+					let mult = puMults[upgId]
+					let elm = document.getElementById('pue' + upgId)
+
+					if (mult && elm) {
+						let display = puMults["u" + upgId]
+						mult = mult()
+						document.getElementById('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
+					}
+				} else c.style.display = "none"
+			}
+		} else r.style.display = "none"
+	}
 }
 
-function quickMReset() {
-	player.aarexModifications.quickReset = !player.aarexModifications.quickReset
-	document.getElementById("quickMReset").textContent = "Quick matter reset: O" + (player.aarexModifications.quickReset ? "N" : "FF")
+function updateGalaxyTabs() {
+	document.getElementById("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
+	document.getElementById("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
+	if (player.pSac === undefined) showGalTab("galUpgs")
 }

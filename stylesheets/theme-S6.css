@@ -47,7 +47,7 @@ button:hover {
 	color: #ff7f00 !important
 }
 
-.unavailablebtn, .infinistorebtnlocked, .newdimlocked, .timetheorembtnlocked, .timestudylocked, .eternityupbtnlocked, .milestonerewardlocked, .eternityttbtnlocked, .lockedchallengesbtn, .dilationupglocked, .dilationupgrebuyablelocked {
+.unavailablebtn, .infinistorebtnlocked, .newdimlocked, .timetheorembtnlocked, .timestudylocked, .eternityupbtnlocked, .milestonerewardlocked, .galStonerewardlocked, .eternityttbtnlocked, .lockedchallengesbtn, .dilationupglocked, .dilationupgrebuyablelocked {
 	background-color: #7f7f7f !important;
 	color: #000000 !important
 }
@@ -244,6 +244,16 @@ button:hover {
 
 .milestonereward:hover {
 	background-color: #ff0000 !important
+}
+
+.galStonereward {
+	background-color: #ff8f3f !important;
+	border: 0px !important;
+	color: #000000 !important;
+}
+
+.galStonereward:hover {
+	background-color: #ff7f00 !important
 }
 
 .eternitychallengestudylocked {

@@ -33,9 +33,9 @@ function setupFooterHTML() {
 			"<a href='about.html' target='_newtab'>About</a> | " + 
 			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " + 
 			(betaId != "" ?
-				"<a>Test server</a> (You are in it!) | " +
+				"<a>Test server</a> (You are here) | " +
 				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
-			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are in it!) | ") + 
+			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are here) | ") + 
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
 		"</div></tr></td></table>"
@@ -727,6 +727,7 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) {
 		tmp.ngmX = modesChosen.ngmm + 1
+		player.aarexModifications.ngmX = modesChosen.ngmm + 1
 		doNGMinusTwoNewPlayer()
 	}
 	if (modesChosen.ngpp > 1) doNGPlusThreeNewPlayer()
@@ -739,8 +740,8 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngud == 2) player.aarexModifications.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
 	if (modesChosen.nguep) player.aarexModifications.nguepV = 1.03
-	if (modesChosen.ngmm > 2) doNGMinusFourPlayer()
 	if (modesChosen.ngmm > 3) doNGMinusFivePlayer()
+	if (modesChosen.ngmm > 2) doNGMinusFourPlayer()
 	if (modesChosen.ngmu) doNGMultipliedPlayer()
 	if (modesChosen.ngumu) player.aarexModifications.ngumuV = 1.03
 	if (modesChosen.ngpp == 3) player.aarexModifications.ngp3lV = 1
@@ -1101,7 +1102,6 @@ function doEternityRespeccedNewPlayer(){
 
 function doNGMinusThreeNewPlayer(){
 	player.aarexModifications.newGame3MinusVersion = 3.202
-	player.aarexModifications.ngmX=3
 	player.tickspeedBoosts = 0
 	player.autobuyers[13] = 14
 	player.challengeTimes.push(600*60*24*31)
@@ -1189,7 +1189,6 @@ function doNGUDSemiprimePlayer(){
 
 function doNGMinusFourPlayer(){
 	player.aarexModifications.newGame4MinusVersion = 2.111
-	player.aarexModifications.ngmX = 4
 	player.tdBoosts = 0
 	player.challengeTimes.push(600 * 60 * 24 * 31)
 	player.autobuyers.push(15)
@@ -1199,7 +1198,7 @@ function doNGMinusFourPlayer(){
 
 function doNGMinusFivePlayer(){
 	player.aarexModifications.ngm5V = 0.52
-	player.aarexModifications.ngmX = 5
+	updateGalstones()
 	resetPSac()
 	resetIDsOnNGM5()
 }
@@ -1522,19 +1521,17 @@ function updateMoney() {
 	var matterName = pl.on() ? "Matteria Foam" : "matter"
 	var element2 = document.getElementById("matter");
 	if (player.currentChallenge == "postc6" || inQC(6)) element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."; //TODO
-	else if (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined || pl.on()) {
+	else if (inNC(12) || player.currentChallenge == "postc1" || pl.on()) {
 		var txt = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " " + matterName + "."
-		var extra = getExtraTime()
-		if (tmp.ngmX >= 5 && player.matter.gt(0)) txt += " (" + timeDisplayShort(Math.max(player.money.div(player.matter).log(tmp.mv) * getEC12Mult() * 10, 0)) + (extra ? " + " + timeDisplayShort((extra - player.pSac.dims.extraTime) * 10 * getEC12Mult()) : "") + " left until matter reset)" //I added a 10x multiplier to matter increase timer until we can sort out what is wrong with the matter timer. I doubt this will be permanent.
 		element2.innerHTML = txt
 	}
 	var element3 = document.getElementById("chall13Mult");
 	if (isADSCRunning()) {
 		var mult = getProductBoughtMult()
-		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
+		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all Dimensions (product of '+(player.tickspeedBoosts != undefined&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
 	if (inNC(14) && player.aarexModifications.ngmX > 3) document.getElementById("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
-	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
+	document.getElementById("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult / getPDAcceleration()) + "x" : ""
 }
 
 function updateCoinPerSec() {
@@ -1779,6 +1776,22 @@ function updateMilestones() {
 	document.getElementById("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow2a").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow2b").style.display = moreUnlocked ? "" : "none"
+}
+
+function updateGalstones() {
+	var galStoneRequirements = [1, 2, 5, 10, 25, 50]
+	tmp.Greward = 0
+	if (tmp.ngmX < 5) return 
+	for (i=0; i<6; i++) {
+		var name = "Greward" + i;
+		if (player.galacticSacrifice.times >= galStoneRequirements[i]) {
+			tmp.Greward++
+			document.getElementById(name).className = "galStonereward"
+		} else {
+			document.getElementById(name).className = "galStonerewardlocked"
+		}
+	}
+	if (tmp.Greward >= 5) tmp.PDunl = true
 }
 
 document.getElementById("save").onclick = function () {
@@ -3966,25 +3979,6 @@ function updateEPminpeak(diff, type) {
 }
 
 function checkMatter(diff){
-	var haveET = haveExtraTime()
-	var pxGain
-	if (haveET) {
-		//Matter
-		if (player.matter.lt(player.money)) {
-			player.matter=player.matter.times(Decimal.pow(tmp.mv, diff))
-			if (player.matter.gte(player.money)) player.pSac.dims.extraTime+=player.matter.div(player.money).log(tmp.mv)/10
-			player.matter=player.matter.min(player.money)
-		} else player.pSac.dims.extraTime+=diff
-		if (player.pSac.dims.extraTime>getExtraTime()) {
-			pxGain=getPxGain()
-			player.matter=new Decimal(1/0)
-			haveET=false
-		}
-	} else {
-		var newMatter = player.matter.times(Decimal.pow(tmp.mv, diff))
-		if (player.pSac != undefined && !haveET && newMatter.gt(player.money)) pxGain = getPxGain()
-		player.matter = newMatter
-	}
 	if (player.matter.pow(20).gt(player.money) && (player.currentChallenge == "postc7" || (inQC(6) && !player.achievements.includes("ng3p34")) )) {
 		if (tmp.ri || inBigRip()) {}
 		else if (inQC(6)) {
@@ -4124,7 +4118,7 @@ function incrementParadoxUpdating(diff) {
 }
 
 function dimensionButtonDisplayUpdating() {
-	document.getElementById("pdtabbtn").style.display = ph.shown("paradox") ? "" : "none"
+	document.getElementById("pdtabbtn").style.display = (ph.shown("paradox") && tmp.PDunl) ? "" : "none"
    	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && (tmp.ngmX >= 5 || ph.shown("infinity"))) ? "" : "none"
 	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || tmp.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
 	document.getElementById("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
@@ -5528,6 +5522,22 @@ function isEterBuyerOn() {
 	if (!player.eternityBuyer.dilationMode) return false
 	return (player.eternityBuyer.dilMode != "upgrades" && !player.eternityBuyer.slowStopped) || (player.eternityBuyer.dilMode == "upgrades" && player.eternityBuyer.tpUpgraded)
 }
+
+function showGalTab(tabName) {
+	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+	var tabs = document.getElementsByClassName('galaxytab');
+	var tab;
+	for (var i = 0; i < tabs.length; i++) {
+		tab = tabs.item(i);
+		if (tab.id === tabName) {
+			tab.style.display = 'block';
+		} else {
+			tab.style.display = 'none';
+		}
+	}
+	player.aarexModifications.tabsSave.tabGalaxy = tabName
+}
+
 
 function showInfTab(tabName) {
 	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName

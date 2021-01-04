@@ -117,7 +117,7 @@ function updateNCVisuals() {
 }
 
 function inMatterChallenge() {
-	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || inQC(6) || player.pSac !== undefined || pl.on()
+	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || inQC(6) || pl.on()
 }
 
 var worstChallengeTime = 1

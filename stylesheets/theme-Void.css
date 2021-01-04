@@ -523,6 +523,13 @@ input {
     animation: studyGlowIn 7s infinite;
 }
 
+.galStonerewardlocked {
+    color: #0072ff !important;
+    background: black !important;
+    border: 1px solid #0072ff !important;
+    animation: galaxyStudyGlowIn 7s infinite;
+}
+
 .greedbtn {
     background-color: #f2d729 !important;
     color: black !important;

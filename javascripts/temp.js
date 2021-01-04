@@ -76,7 +76,7 @@ function updateTemp() {
 	tmp.inEC12 = isEC12Active()
 	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() : 1
 
-	let totalSpeed = gameSpeed * ls.mult("game")
+	let totalSpeed = gameSpeed * ls.mult("game") * getPDAcceleration()
 	if (tmp.gameSpeed != totalSpeed) {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
@@ -273,10 +273,9 @@ function updateTS431ExtraGalTemp() {
 function updateMatterSpeed(){
 	//mv: Matter speed
 	let exp = 1
-	if (tmp.ngmX >= 5) exp = 100 / puMults[12](hasPU(12, true, true)) //I added a 0. remove this code and potentially that 0 when we're done here.
 	if (GDs.boostUnl('mf')) exp *= GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
 
-	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
+	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100 + player.money.log10() / 1000
 	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
 }
 

@@ -76,7 +76,7 @@ function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
 	if (tmp.ngmX < 2) return mult
 	
 	if (player.galacticSacrifice.upgrades.includes(12) && (!player.galacticSacrifice.upgrades.includes(42) || tmp.ngmX < 4)) mult = mult.times(galMults.u12())
-	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
 	if (player.galacticSacrifice.upgrades.includes(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
 	if (player.galacticSacrifice.upgrades.includes(15)) mult = mult.times(galMults.u15())
 	if (player.galacticSacrifice.upgrades.includes(35)) mult = mult.times(galMults.u35())
@@ -124,7 +124,7 @@ let dCurrentC7 = [null, 0, 0, 0, 0,
 
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()
-	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1)
+	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1 + (hasPU(22) ? player.tdBoosts - tier : 0))
 
 	let mptMult = new Decimal(1)
 	if (inNC(9) || player.currentChallenge === "postc1") {
@@ -462,7 +462,6 @@ function buyOneDimension(tier) {
 	if (tier == 1 && getAmount(1) >= 1e150) giveAchievement("There's no point in doing that")
 	if (getAmount(8) == 99) giveAchievement("The 9th Dimension is a lie");
 	onBuyDimension(tier)
-	reduceMatter(1)
 	return true
 }
 
@@ -485,7 +484,6 @@ function buyManyDimension(tier, quick) {
 		floatText("D" + tier, "x" + shortenMoney(pow))
 		onBuyDimension(tier)
 	}
-	reduceMatter(toBuy)
 	return true
 }
 
@@ -513,7 +511,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		player[name + "Cost"] = player[name + "Cost"].times(Decimal.pow(mult, toBuy))
 		if (costIncreaseActive(player[name + "Cost"])) player.costMultipliers[tier - 1] = player.costMultipliers[tier - 1].times(getDimensionCostMultiplierIncrease())
 		bought += toBuy
-		reduceMatter(toBuy * 10)
 	}
 	let stopped = !costIncreaseActive(player[name + "Cost"])
 	let failsafe = 0
@@ -547,7 +544,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		player[name + "Cost"] = newCost.times(newMult)
 		player.costMultipliers[tier - 1] = newMult.times(mi)
 		bought += toBuy
-		reduceMatter(toBuy * 10)
 	}
 
 	let pow = getDimensionPowerMultiplier()

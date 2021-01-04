@@ -142,10 +142,10 @@ function infDimensionPower(tier) {
 	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
 
-  	if (hasPU(31)) mult = mult.times(puMults[31]())
-	if (hasPU(42)) mult = mult.times(puMults[42]()) 
+  	if (tmp.ngmX >= 5) mult = mult.times(Math.pow(10,8)) //Todo: figure out what to do with this value
+	if (hasPU(32)) mult = mult.times(puMults[32]()) 
 
-  	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true, true)))
+  	if (tmp.ngmX >= 5 && tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
 
 	let replUnl = !tmp.ngC && player.replicanti.unl && player.replicanti.amount.gt(1)
   	if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2)
@@ -185,8 +185,8 @@ function infDimensionPower(tier) {
   	return mult
 }
 
-function resetInfDimensions(full) {
-	player.infinityPower = new Decimal(0)
+function resetInfDimensions(full = (tmp.ngmX >= 5)) {
+	player.infinityPower = new Decimal(1)
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {
@@ -195,7 +195,10 @@ function resetInfDimensions(full) {
 			dim.baseAmount = 0
 		}
 		if (player.infDimensionsUnlocked[t - 1]) dim.amount = new Decimal(dim.baseAmount)
-		if (tmp.ngmX >= 5) dim.costAM = new Decimal(idBaseCosts[t])
+		if (tmp.ngmX >= 5) {
+			dim.bought = 0
+			dim.costAM = new Decimal(idBaseCosts[t])
+		}
 	}
 	if (full) resetInfDimUnlocked()
 }
@@ -314,7 +317,7 @@ function getInfinityPowerEffectExp() {
 		x = Math.max(x , 7)
 	}
 	if (x > 100) x = 50 * Math.log10(x)
-	if (hasPU(34)) x *= puMults[34]()
+	if (hasPU(24)) x *= puMults[24]()
 	if (tmp.ngC) {
 		x *= 0.85
 		if (hasTS(191)) x += tsMults[191]()
@@ -373,10 +376,8 @@ function updateInfPower() {
 	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = infDimensionProduction(1)
-		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2))
-		if (player.pSac != undefined) r = r.div(tmp.ec12Mult)
-
-		document.getElementById("infPowPerSec").textContent = "You are getting " + shortenDimensions(r) + " Infinity Power per second."
+		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2)).div(tmp.ec12Mult).times(getPDAcceleration())
+		document.getElementById("infPowPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
 	}
 }
 

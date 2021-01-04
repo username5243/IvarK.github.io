@@ -221,7 +221,7 @@ function doNormalChallengeResetStuff(){
 }
 
 function resetInfDimensions(full) {
-	player.infinityPower = new Decimal(0)
+	player.infinityPower = new Decimal(1)
 	for (var t = 1; t < 9; t++) {
 		let dim = player["infinityDimension" + t]
 		if (full) {

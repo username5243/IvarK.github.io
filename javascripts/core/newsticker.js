@@ -425,7 +425,8 @@ amNewsArray = [
 ["NG-5 is being worked on! Now with 100% less matter.", "tmp.ngmX >= 4", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
 ["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
-/*NEXT ID: am215*/
+["You gotta make that PP grow ;)", tmp.ngmX >= 5 && player.achievements.includes("ngm5p18"), "am215"]
+/*NEXT ID: am216*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);

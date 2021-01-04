@@ -124,6 +124,7 @@ input {
 .infinistorebtnlocked,
 .newdimlocked,
 .milestonerewardlocked,
+.galStonerewardlocked,
 .eternityupbtnlocked,
 .eternityttbtnlocked,
 .lockedchallengesbtn,
@@ -146,6 +147,8 @@ input {
 .completedchallengesbtn:hover,
 .milestonerewardlocked:hover,
 .milestonereward:hover,
+.galStonerewardlocked:hover,
+.galStonereward:hover,
 .timestudylocked:hover,
 .eternityupbtnlocked:hover,
 .eternityttbtnlocked:hover,
@@ -413,6 +416,11 @@ strong { color: #0072e5 }
 .timestudy{
     border-color: #990099 !important;
     background-color: #7100e2 !important;
+}
+
+.galStonereward {
+    border: 1px solid #00e5ff !important;
+    background-color: #0072ff !important;
 }
 
 .eternityupbtn {
