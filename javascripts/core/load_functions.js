@@ -1829,9 +1829,6 @@ function setOptionsDisplaysStuff1(){
         document.getElementById("maxHighestTD").parentElement.parentElement.style.display = player.aarexModifications.ngmX > 3 ? "" : "none"
         document.getElementById("maxHighestTD").textContent = "Max only highest Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
 
-        document.getElementById("quickMReset").style.display = pSacrificed() ? "" : "none"
-        document.getElementById("quickMReset").textContent = "Quick matter reset: O"+(player.aarexModifications.quickReset?"N":"FF")
-
         document.getElementById("chartDurationInput").value = player.options.chart.duration;
         document.getElementById("chartUpdateRateInput").value = player.options.chart.updateRate;
         if (player.options.chart.on) document.getElementById("chartOnOff").checked = true
