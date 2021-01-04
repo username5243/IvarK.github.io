@@ -13,6 +13,20 @@ function setR1Tooltip() {
 	alot.setAttribute('ach-tooltip', "Buy a single Second Dimension." + (player.aarexModifications.ngmX > 3 ? " Reward: You gain 100x more Time Shards." : ""))
 }
 
+function setNGm5Tooltip() {
+	// Row 1.5 (NG-5 only) (1/8)
+	//ngm5p11/
+	//ngm5p12/
+	//ngm5p13/
+	//ngm5p14/
+	//ngm5p15/
+	//ngm5p16/
+	//ngm5p17/
+	let TimePx = document.getElementById("Time Paradox")
+
+	//ACHIEVEMENT ROW 1.5
+	TimePx.setAttribute('ach-tooltip', "Get at least " + formatValue(player.options.notation, 1e20, 0, 0) +" Paradox Power.")
+}
 function setR2Tooltip() {
 	// Row 2 (6/8)
 	let infinity = document.getElementById("To infinity!")
@@ -567,4 +581,9 @@ function setNGP3AchievementTooltip() {
 function setAchieveTooltip() { 
 	setPreNGP3AchievementTooltip()
 	if (tmp.ngp3) setNGP3AchievementTooltip()
+	if (tmp.ngmX >= 5) setNGm5AchievementTootip()
+}
+
+function setNGm5AchievementTootip() {
+	setNGm5Tooltip()
 }

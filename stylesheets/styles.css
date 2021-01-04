@@ -1607,7 +1607,8 @@ button {
     background: #737373;
 }
 
-.milestonereward {
+.milestonereward,
+.galStonereward {
     width: 250px;
     height: 60px;
     color: black;
@@ -1621,7 +1622,8 @@ button {
     font-size: 12px;
 }
 
-.milestonerewardlocked {
+.milestonerewardlocked,
+.galStonerewardlocked {
     width: 250px;
     height: 60px;
     color: black;
@@ -1635,7 +1637,12 @@ button {
     font-size: 12px;
 }
 
-.milestoneText {
+.galStonereward {
+    border: 1px solid #1E90FF !important;
+    background-color: #4169E1 !important;
+}
+
+.milestoneText, .galStonesText {
     font-size: 20px;
 }
 
@@ -3079,6 +3086,12 @@ screen and (max-width: 480px) {
     0%  {box-shadow: inset 0px 0px 3px 0px #b341e0;}
     50% {box-shadow: inset 0px 0px 15px 0px #b341e0;}
     100%  {box-shadow: inset 0px 0px 3px 0px #b341e0;}
+}
+
+@keyframes galaxyStudyGlowIn {
+    0%  {box-shadow: inset 0px 0px 3px 0px #0072ff;}
+    50% {box-shadow: inset 0px 0px 15px 0px #0072ff;}
+    100%  {box-shadow: inset 0px 0px 3px 0px #0072ff;}
 }
 
 @keyframes normalDimStudyGlowIn {

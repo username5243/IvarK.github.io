@@ -868,7 +868,7 @@ function doInitNGp2NOT3Stuff(){
                                 player.aarexModifications.quantumConf = true
                         }
                         player.aarexModifications.newGamePlusVersion = 1
-                        if (confirm("Do you want to migrate your NG++ save into new NG+++ mode?")) {
+                        if (confirm("Do you want to migrate your NG++ save into NG+++?")) {
                                 doNGP3NewPlayerStuff()
                         }
                         player.dilation.upgrades=migratedUpgrades
@@ -1785,7 +1785,7 @@ function doNGp3Init2(){
 }
 
 function setConfirmationsDisplay(){
-		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || ph.did("infinity") || ph.did("galaxy") ? "inline-block" : "none"
+		var sacDisplay = player.resets >= 5 || player.galaxies >= 2 || ph.did("infinity") || (ph.did("galaxy") && tmp.ngmX < 5) ? "inline-block" : "none"
         document.getElementById("confirmations").style.display = sacDisplay
         document.getElementById("confirmation").style.display = sacDisplay
         document.getElementById("sacrifice").style.display = sacDisplay
@@ -1829,9 +1829,6 @@ function setOptionsDisplaysStuff1(){
         document.getElementById("maxHighestTD").parentElement.parentElement.style.display = player.aarexModifications.ngmX > 3 ? "" : "none"
         document.getElementById("maxHighestTD").textContent = "Max only highest Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
 
-        document.getElementById("quickMReset").style.display = pSacrificed() ? "" : "none"
-        document.getElementById("quickMReset").textContent = "Quick matter reset: O"+(player.aarexModifications.quickReset?"N":"FF")
-
         document.getElementById("chartDurationInput").value = player.options.chart.duration;
         document.getElementById("chartUpdateRateInput").value = player.options.chart.updateRate;
         if (player.options.chart.on) document.getElementById("chartOnOff").checked = true
@@ -1874,7 +1871,7 @@ function setDisplaysStuff1(){
 	document.getElementById("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
 
 	if (player.galacticSacrifice) {
-		document.getElementById("galaxy11").innerHTML = "Normal " + (tmp.ngmX >= 4 ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : (tmp.ngmX >= 5 ? 90 : 99) + "% cheaper.") + "<br>Cost: 1 GP"
+		document.getElementById("galaxy11").innerHTML = "Normal " + (tmp.ngmX >= 4 ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
 		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (ph.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
@@ -2145,7 +2142,7 @@ function updateNGModeMessage(){
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
 	if (player.galacticSacrifice) {
-		if (player.aarexModifications.ngmX>4) ngModeMessages.push('Welcome to NG-5, the nerfed version of NG-4! This is very hardcore because you are stuck in more challenges. You are also stuck in Automated Big Crunches Challenge which is a big impact on this mod. Good luck! This mod is made by Aarex.')
+		if (player.aarexModifications.ngmX>4) ngModeMessages.push('Welcome to NG-5, the nerfed version of NG-4! This is very hardcore because you are stuck in more challenges. You are also stuck in Automated Big Crunches Challenge which is a big impact on this mod. Good luck! This mod is made by Aarex, with help from Anthios, Apeirogon, and TheMkeyHolder.')
 		else if (player.aarexModifications.ngmX>3) ngModeMessages.push('Welcome to NG-4, the nerfed version of NG-3! This mode features even more changes from NG---, and is very hardcore. WIP by Nyan Cat and edited by Aarex.')
 		else if (player.aarexModifications.newGame3MinusVersion) ngModeMessages.push('Welcome to NG-3, the nerfed version of NG--! This mode reduces tickspeed multiplier multiplier and nerfs galaxies, but has a new feature called \"Tickspeed Boosts\" and many more changes to NG--.')
 		else ngModeMessages.push('Welcome to NG--, created by Nyan cat! You are always in Dilation and IC3, but there is a new layer called Galactic Sacrifice.')
@@ -2219,8 +2216,10 @@ function onLoad(noOffline) {
 	setSomeQuantumAutomationDisplay()
 	if (player.pSac !== undefined) {
 		updateParadoxUpgrades()
-		updatePUCosts()
-	}
+                updatePUCosts()
+                updateGalstones()
+        }
+        updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
 	handleDisplaysOutOfQuantum()
 	hideDimensions()
@@ -2230,7 +2229,7 @@ function onLoad(noOffline) {
 	checkForEndMe()
 	updateAutobuyers()
 	updatePriorities()
-	updateMilestones()
+        updateMilestones()
 	loadInfAutoBuyers()
 	updateEternityUpgrades()
 	updateTheoremButtons()
@@ -2291,7 +2290,8 @@ function onLoad(noOffline) {
 	showDimTab((tabsSave.on && tabsSave.tabDims) || 'antimatterdimensions')
 	showStatsTab((tabsSave.on && tabsSave.tabStats) || 'stats')
 	showAchTab((tabsSave.on && (tabsSave.tabAchs == 'normalachievements' || tabsSave.tabAchs == 'secretachievements') && tabsSave.tabAchs) || 'normalachievements')
-	showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
+        showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
+        showGalTab((tabsSave.on && tabsSave.tabGalaxy && player.pSac !== undefined) || 'galUpgs')
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
 	showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')
@@ -2319,7 +2319,8 @@ function onLoad(noOffline) {
 	document.getElementById("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
 	updateTemp()
 	updateTemp()
-        
+        updateAchievements()
+        ParadoxUpgradeButtonTypeDisplay() // ng-5 updating
 }
 
 
@@ -2582,8 +2583,7 @@ function delete_save(saveId) {
 
 var ngModeMessages=[]
 function new_game(id) {
-	if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in balance testing! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
-
+	//if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in balance testing! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
 	updateNewPlayer()
@@ -2609,7 +2609,8 @@ function new_game(id) {
 	showDimTab('antimatterdimensions')
 	showStatsTab('stats')
 	showAchTab('normalachievements')
-	showChallengesTab('normalchallenges')
+        showChallengesTab('normalchallenges')
+        showGalTab('galUpgs')
 	showInfTab('preinf')
 	showEternityTab('timestudies', true)
 	showQuantumTab('uquarks')

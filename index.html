@@ -1126,7 +1126,6 @@
 						<td id="intergalacticLabel" colspan=2></td>
 					</tr>
 				</table>
-				<button id="quickMReset" style="color:black; width: 200px; height: 50px; font-size: 12px; display: inline-block" class="storebtn" onclick="quickMReset()">Quick matter reset: OFF</button>
 				<button id="quickReset" style="color:black; width: 200px; height: 50px; font-size: 12px; display: none" class="storebtn" onclick="quickReset()">Lose a reset, returning to the start of the reset</button>
 			</div>
 			<div id="infinitydimensions" class="dimtab">
@@ -1425,7 +1424,7 @@
 				<canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
 				<b>Exponents of antimatter per second</b>
 			</div>
-			<div class="footer bottom"></div>
+			<div class="footer bottom" style="margin: 20px;"></div>
 		</div>
 		<div id="options" class="tab" align="center">
 			<table class="table" align="center" style="margin: auto">
@@ -1839,16 +1838,16 @@
 							<div id="Accelerated" class="achievement achievementlocked" style="background-image: url(images/ngm5/r11.png)" ach-tooltip="Time Dimension Shift for the first time."><br></div>
 						</td>
 						<td>
-							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter, and 199 Antimatter if Quick Matter Reset is enabled."><br></div>
+							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/ngm5/r12.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter."><br></div>
 						</td>
 						<td>
-							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
+							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/ngm5/r13.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
 						</td>
 						<td>
 							<div id="TICK OVERDRIVE" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy a tickspeed boost."><br></div>
 						</td>
 						<td>
-							<div id="The hardest of sacrifices" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Perform a Galacitc Sacrifice for the first time."><br></div>
+							<div id="The hardest of sacrifices" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Perform a Galactic Sacrifice for the first time."><br></div>
 						</td>
 						<td>
 							<div id="Impossible Equations" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the third Paradox Dimension."><br></div>
@@ -1857,7 +1856,7 @@
 							<div id="Logic is an illusion" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the sixth Paradox Dimension."><br></div>
 						</td>
 						<td>
-							<div id="Time Paradox" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Get at least 2,000 extra seconds from Paradox Dimensions."><br></div>
+							<div id="Time Paradox" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Get at least 10 Qt (10e20) Paradox Power."><br></div>
 						</td>
 					</tr>
 					<tr id="achRow2">
@@ -3050,7 +3049,7 @@
 						</td>
 						<td id='icngm3_div1' style='display:none'>
 							<div class="infchallengediv" id="postcngmm_3div" style="height: 140px; display: none">
-								<span>The Tickspeed Autobuyer Challenge, Automated Big Crunches Challenge, Automated Galacitc Sacrifice Challenge, and Automated Tickspeed Boosts Challenge are all applied at once.</span>
+								<span>The Tickspeed Autobuyer Challenge, Automated Big Crunches Challenge, Automated Galactic Sacrifice Challenge, and Automated Tickspeed Boosts Challenge are all applied at once.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3648,13 +3647,23 @@
 			<div class="footer"></div>
 		</div>
 		<div id="automation_ngm4_placement"></div>
-		<div id="paradox" class="tab"><table class="table" id="pUpgs" style="margin: 0 auto"></table></div>
+		<div id="paradox" class="tab">
+			<table class="table" id="pUpgs" style="margin: 0 auto">
+				<!-- setupParadoxUpgs() -->
+			</table>
+			<div class="footer"></div>
+		</div>
 		<div id="galaxy" class="tab" align="center" style="display: none">
-			<div id="vanillaGalaxyPoints">
-				<br>
-				<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
-				<br>
-			</div>
+			<tr>
+				<td><button id="galupgsbtn" class="secondarytabbtn" onclick="showGalTab('galUpgs')">Upgrades</button><td>
+				<td><button id="galStonesbtn" class="secondarytabbtn" onclick="showGalTab('galStones')">Milestones</button><td>
+			</tr>
+			<div class="galaxytab" id="galUpgs">
+				<div id="vanillaGalaxyPoints">
+					<br>
+					<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
+					<br>
+				</div>
 			<table class="table" id="galTable" style="margin: 0 auto">
 				<tr>
 					<td>
@@ -3757,6 +3766,36 @@
 					</td>
 				</tr>
 			</table>
+			</div>
+			<div class="galaxytab" id="galStones">
+			<table class="table" align="center" style="margin: auto" id="galStones">
+				<tr>
+					<td class="galStonesText">1 Sacrifice:</td>
+					<td class="galStonesText">2 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward0">Unlock the Third Infinity Dimension</button></td>
+					<td><button class="galStonerewardlocked" id="Greward1">Start with 20 Paradoxes on Sacrifice</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">5 Sacrifices:</td>
+					<td class="galStonesText">10 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward2">You keep rebuyable Paradox upgrades on Sacrifice</button></td>
+					<td><button class="galStonerewardlocked" id="Greward3">Start with 25 Paradoxes per Sacrifice performed (Disabled in Challenges)</button></td>
+				</tr>
+				<tr>
+					<td class="galStonesText">25 Sacrifcies:</td>
+					<td class="galStonesText">50 Sacrifices:</td>
+				</tr>
+				<tr>
+					<td><button class="galStonerewardlocked" id="Greward4">Unlock Paradox Dimensions</button></td>
+					<td><button class="galStonerewardlocked" id="Greward5">Unlock Paradox Dimension Autobuyers (COMING SOON)</button></td>
+				</tr>
+				<!--TODO-->
+			</table>
+			</div>
 			<div class="footer"></div>
 		</div>
 		<div id="infinity" class="tab" align="center" style="display: none">
