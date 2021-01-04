@@ -104,8 +104,11 @@ var masteryStudies = {
 			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG() / 4)
 		},
-		273(uses) {
-			return Decimal.pow(10, Math.sqrt(player.replicanti.chance + 1) / 1e3)
+		273() {
+			return player.replicanti.chance + 1
+		},
+		281() {
+			return player.dilation.dilatedTime.add(1).log10()
 		},
 		301() {
 			if (hasNU(6)) return 0
@@ -226,21 +229,21 @@ var masteryStudies = {
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
 		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
-		252: "Remote galaxy scaling starts 1 galaxy later per 7 free galaxies.",
-		253: "Remote galaxy scaling starts 1 galaxy later per 4 total replicated galaxies.",
+		252: "Remote galaxy scaling starts 1 galaxy later per 7 Tachyonic Galaxies.",
+		253: "Remote galaxy scaling starts 1 galaxy later per 4 total Replicated Galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
 		262: "The power of meta-antimatter effect is raised by 1.",
-		263: "Free galaxies are 25% stronger.",
+		263: "Tachyonic Galaxies are 25% stronger.",
 		264: "You gain 5x more Tachyon Particles.",
 		265: "Replicate chance upgrades can go over 100%.",
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
 		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
 		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance boosts itself.",
-		281: "???",
+		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
 		282: "???"
 	},
-	hasStudyEffect: [251, 252, 253, 273, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 273, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -253,7 +256,10 @@ var masteryStudies = {
 		},
 		273(x) {
 			return "^" + shorten(x)
-		}
+		},
+		281(x) {
+			return "+" + shorten(x) + " OoMs"
+		},
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,

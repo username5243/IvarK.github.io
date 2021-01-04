@@ -123,11 +123,10 @@ let ETER_UPGS = {
 		cost: 1/0,
 		mult() {
 			let epLog = player.eternityPoints.add(1).log10()
-			let maLog = player.meta.bestAntimatter.add(1).log10()
 
-			return Decimal.pow(10, Math.sqrt(epLog) / 1e4 + maLog / 10)
+			return Decimal.pow(10, Math.pow(epLog, 0.4) / 100)
 		},
-		desc: () => "Eternity Points and Meta-Antimatter boost dilated time gain and you can buy all row-23 time studies."
+		desc: () => "Eternity Points boost dilated time gain and you can buy all row-23 time studies."
 	},
 	14: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
@@ -137,7 +136,7 @@ let ETER_UPGS = {
 	15: {
 		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
 		cost: 1/0,
-		desc: () => "You can passively generate Tachyon Particles."
+		desc: () => "You can passively generate Eternity Points and Tachyon Particles."
 	},
 
 	updateDisplayOnTick() {

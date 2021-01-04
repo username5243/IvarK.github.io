@@ -425,6 +425,11 @@ function getRG3Effect() {
 	return Decimal.pow(player.resets, exp)
 }
 
+function getBR4Effect() {
+	if (!tmp.eterUnl) return 1
+	return Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1)
+}
+
 function getBR5Effect() {
 	if (!tmp.eterUnl) return 1
 	return 1 + Math.min(Math.sqrt(player.dilation.tachyonParticles.max(1).log10()) * 0.013, 0.14)
@@ -450,7 +455,7 @@ function updateQuarksTab(tab) {
 	document.getElementById("redDimTranslation").textContent=shortenMoney(colorBoosts.dim.r)
 	document.getElementById("greenDimTranslation").textContent=shortenMoney(colorBoosts.dim.g)
 	document.getElementById("blueDimTranslation").textContent=shortenMoney(colorBoosts.dim.b)
-	if (player.masterystudies.includes("t383")) document.getElementById("blueTranslationMD").textContent=shorten(getMTSMult(383))
+
 	if (player.ghostify.milestones >= 8) {
 		var assortAmount=getAssortAmount()
 		var colors=['r','g','b']
@@ -462,12 +467,12 @@ function updateQuarksTab(tab) {
 }
 
 function updateGluonsTab() {
-	document.getElementById("gbupg1current").textContent = "Currently: " + shortenMoney(getGB1Effect()) + "x"
-	document.getElementById("brupg1current").textContent = "Currently: " + shortenMoney(getBR1Effect()) + "x"
+	document.getElementById("gbupg1current").textContent = "Currently: " + shorten(getGB1Effect()) + "x"
+	document.getElementById("brupg1current").textContent = "Currently: " + shorten(getBR1Effect()) + "x"
 	document.getElementById("rgupg2current").textContent = "Currently: " + (Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25) * 100 - 100).toFixed(1) + "%"
-	document.getElementById("brupg2current").textContent = "Currently: " + shortenMoney(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10() / 1e6, 0.25))) + "x"
+	document.getElementById("brupg2current").textContent = "Currently: " + shorten(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10() / 1e6, 0.25))) + "x"
 	document.getElementById("rgupg3current").textContent = "Currently: " + shorten(getRG3Effect()) + "x"
-	document.getElementById("brupg4current").textContent = "Currently: " + shortenMoney(Decimal.pow(getDimensionPowerMultiplier(hasNU(13) && "no-rg4"), 0.0003).max(1)) + "x"
+	document.getElementById("brupg4current").textContent = "Currently: " + shorten(getBR4Effect()) + "x"
 	if (player.masterystudies.includes("d9")) {
 		document.getElementById("gbupg5current").textContent = "Currently: " + (Math.sqrt(player.replicanti.galaxies) / 5.5).toFixed(1) + "%"
 		document.getElementById("brupg5current").textContent = "Currently: " + (100 - 100 / getBR5Effect()).toFixed(1) + "%"
@@ -537,7 +542,6 @@ function updateQuarksTabOnUpdate(mode) {
 		document.getElementById(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
 	document.getElementById("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
-	document.getElementById("bluePowerMDEffect").style.display = player.masterystudies.includes("t383") ? "" : "none"
 	if (player.masterystudies.includes("d13")) {
 		document.getElementById("redQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
 		document.getElementById("greenQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.g)

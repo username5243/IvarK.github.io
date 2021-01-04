@@ -7,7 +7,7 @@ function galaxyReset(bulk) {
 	doGalaxyResetStuff(bulk)
 
 	NC10NDCostsOnReset()
-	if (player.pSac) resetInfDimensions()
+	if (tmp.ngmX >= 5) resetInfDimensions()
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()
@@ -20,7 +20,7 @@ function galaxyReset(bulk) {
 
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
-	if (player.infinitied < 1 && player.eternities == 0 && !quantumed && tmp.ngmX < 5) {
+	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
 		document.getElementById("sacrifice").style.display = "none"
 		document.getElementById("confirmation").style.display = "none"
 		if (player.galacticSacrifice && (player.galaxies > 0 || (player.galacticSacrifice ? player.galacticSacrifice.times > 0 : false))) {
@@ -47,7 +47,7 @@ document.getElementById("secondSoftReset").onclick = function() {
 	let bool4 = player.currentChallenge != "postc7"
 	let bool5 = (player.currentEternityChall == "eterc6" || inQC(6)) && !tmp.be
 	var bool = bool1 && bool2  && bool3 && bool4 && !bool5 && !tmp.ri && !cantReset()
-	if (getAmount(inNC(4) || player.pSac != undefined ? 6 : 8) >= getGalaxyRequirement() && bool) {
+	if (getAmount(inNC(4) || tmp.ngmX >= 5 ? 6 : 8) >= getGalaxyRequirement() && bool) {
 		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(player.aarexModifications.ngmX > 3))) maxBuyGalaxies(true);
 		else galaxyReset(1)
 	}
@@ -76,7 +76,7 @@ function getGalaxyRequirement(offset = 0, display) {
 	else if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
 	if (player.aarexModifications.ngmX > 3) amount -= 10
 	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
-	if (inNC(4) || player.pSac !== undefined) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (tmp.ngmX >= 4 ? 20 : -30)
+	if (inNC(4) || tmp.ngmX >= 5) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (tmp.ngmX >= 4 ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
 		if (tmp.qu.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
@@ -87,7 +87,7 @@ function getGalaxyRequirement(offset = 0, display) {
 		if (tmp.ngp3) {
 			let ghostlySpeed = tmp.be ? 55 : 1
 			let div = 1e4
-			let over = tmp.grd.gals / (302500 / ghostlySpeed)
+			let over = tmp.grd.gals / 302500 * ghostlySpeed
 			if (over >= 1) {
 				if (over >= 3) {
 					div /= Math.pow(over, 6) / 729
@@ -106,7 +106,7 @@ function getGalaxyRequirement(offset = 0, display) {
 			amount += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
 			if (tmp.grd.gals >= distantStart * 2.5 && player.galacticSacrifice != undefined) {
 				// 5 times worse scaling
-				amount += 4 * speed * getDistantAdd(tmp.grd.gals-distantStart * 2.5 + 1)
+				amount += 4 * speed * getDistantAdd(tmp.grd.gals - distantStart * 2.5 + 1)
 				scaling = Math.max(scaling, 2)
 			} else scaling = Math.max(scaling, 1)
 		}
@@ -156,7 +156,7 @@ function getDistantScalingStart() {
 	let n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
-	if (hasTimeStudy(224)) n += Math.floor(player.resets/2000)
+	if (hasTimeStudy(224)) n += Math.floor(player.resets / 2000)
 	if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
 	if (player.dilation.upgrades.includes("ngmm11")) n += 25
 	if (pl.on()) n -= fNu.tmp.nerfMu
@@ -206,7 +206,7 @@ function maxBuyGalaxies(manual) {
 	let max = (manual || (!player.autobuyers[10].priority && tmp.ngp3)) ? 1/0 : player.autobuyers[10].priority
 	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && tmp.ngmX >= 3) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
 	if (max > player.galaxies) {
-		let amount = getAmount(inNC(4) || player.pSac != undefined ? 6 : 8)
+		let amount = getAmount(inNC(4) || tmp.ngmX >= 5 ? 6 : 8)
 		let increment = 1
 		let toSkip = 0
 		let check = 0

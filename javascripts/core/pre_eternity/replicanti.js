@@ -101,10 +101,7 @@ function getRGCost(offset = 0, costChange) {
 			if (player.meta != undefined) {
 				var isReduced = tmp.ngp3 && masteryStudies.has(266)
 				if (isReduced) {
-					increase += (offset - Math.max(scaleStart - 1 - player.replicanti.gal, 0)) * (1500 * (offset - Math.max(scaleStart - 1 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, scaleStart - 1) * 2) - 1183500)
-					if (player.replicanti.gal + offset > 2998) increase += (offset - Math.max(2998 - player.replicanti.gal, 0)) * (5e3 * (offset - Math.max(2998 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 2998) * 2) - 29935e3)
-					if (player.replicanti.gal + offset > 58198) increase += (offset - Math.max(58199 - player.replicanti.gal, 0)) * (1e6 * (offset - Math.max(58199 - player.replicanti.gal, 0) + Math.max(player.replicanti.gal, 58199) * 2) - 58199e6)
-					if (player.replicanti.gal + offset > 12e4) increase += Math.pow((player.replicanti.gal + offset - 12e4), 3) - Math.pow(Math.max(player.replicanti.gal - 12e4, 0), 3)
+					increase += Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)
 				} else for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
 			}
 		}
@@ -227,16 +224,16 @@ function replicantiGalaxyAutoToggle() {
 function getReplSpeed() {
 	let inc = .2
 	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
-	if (player.dilation.upgrades.includes('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
+	if (hasDilationUpg('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
-
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
 
 		inc /= Math.min(x, 20)
-		if (x > 20) exp += (x - 20) / 20
 	}
 	inc = inc + 1
+
+	if (masteryStudies.has(281)) exp += tmp.mts[281]
 
 	if (GUActive("gb2")) exp *= 2
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep

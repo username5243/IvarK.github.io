@@ -178,7 +178,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td style="opacity: 0;"><button class="timestudylocked"></button></td>
-						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your Replicanti Galaxies on Infinity</span><span>Cost: 2 Time Theorems</button></td>
+						<td><button id="33" onclick="buyTimeStudy(33)"><span id="ts33desc">You keep half of your Replicated Galaxies on Infinity</span><span>Cost: 2 Time Theorems</button></td>
 						<td><button id="31" onclick="buyTimeStudy(31)">Power up bonuses that are based on your Infinities (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
 						<td><button id="32" onclick="buyTimeStudy(32)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
 						<td><button id="34" onclick="buyTimeStudy(34)">Gain x10 eternitied stat<span>Cost: 5 Time Theorems</button></td>
@@ -227,7 +227,7 @@
 					</tr>
 					<tr>
 						<td><button id="101" onclick="buyTimeStudy(101)">Replicanti gives a multiplier to NDs equal to their amount.<span>Cost: 4 Time Theorems</button></td>
-						<td><button id="102" onclick="buyTimeStudy(102)">Replicanti Galaxies power up Replicanti multiplier<span>Cost: 6 Time Theorems</button></td>
+						<td><button id="102" onclick="buyTimeStudy(102)">Replicated Galaxies power up Replicanti multiplier<span>Cost: 6 Time Theorems</button></td>
 						<td><button id="103" onclick="buyTimeStudy(103)">Time Dimensions gain a multiplier equal to replicanti galaxy amount<span>Cost: 6 Time Theorems</p></button></td>
 					</tr>
 				</table>
@@ -251,9 +251,9 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="eternitychallengestudy" id="ec6unl">Eternity Challenge 6<span>Requirement: 40 replicanti galaxies<span>Cost: 100 Time Theorems</button></td>
-						<td><button id="131" onclick="buyTimeStudy(131)"><span id="131desc">Automatic replicanti galaxies are disabled, but you can get 50% more</span>Cost: 5 Time Theorems</button></td>
-						<td><button id="132" onclick="buyTimeStudy(132)">Replicanti galaxies are 40% more effective<span>Cost: 5 Time Theorems</button></td>
+						<td><button class="eternitychallengestudy" id="ec6unl">Eternity Challenge 6<span>Requirement: 40 Replicated Galaxies<span>Cost: 100 Time Theorems</button></td>
+						<td><button id="131" onclick="buyTimeStudy(131)"><span id="131desc">Automatic Replicated Galaxies are disabled, but you can get 50% more</span>Cost: 5 Time Theorems</button></td>
+						<td><button id="132" onclick="buyTimeStudy(132)">Replicated Galaxies are 40% more effective<span>Cost: 5 Time Theorems</button></td>
 						<td><button id="133" onclick="buyTimeStudy(133)">Replicanti are 10x slower until infinity, but their galaxies are 50% stronger<span>Cost: 5 Time Theorems</button></td>
 						<td><button class="eternitychallengestudy" id="ec8unl">Eternity Challenge 8<span>Cost: 100 Time Theorems</button></td>
 					</tr>
@@ -726,7 +726,7 @@
 					</tr>
 				</table>
 				<p>You have <span id="dilatedTimeAmount" style="font-size:35px; color: black">0</span> dilated time <span id="dilatedTimePerSecond" style="font-size:25px; color: black">0</span></p>
-				<p>Next <span id="freeGalaxyMult">free galaxy</span> at <span id="galaxyThreshold" style="font-size:25px; color: black">1000</span> dilated time, gained total of <span id="dilatedGalaxies" style="font-size:25px; color: black">0</span></p>
+				<p>Next <span id="freeGalaxyMult"></span> at <span id="galaxyThreshold" style="font-size:25px; color: black">1000</span> dilated time, gained total of <span id="dilatedGalaxies" style="font-size:25px; color: black">0</span></p>
 				<button id="rebuyupgmax" style="width:210px; height: 30px; font-size: 12px" onclick="maxAllDilUpgs()" class="storebtn">Max all dilation upgrades</button>
 				<button id="rebuyupgauto" style="width:210px; height: 30px; font-size: 12px" onclick="toggleAutoEter('rebuyupg')" class="storebtn"></button>
 				<button id="dilUpgsauto" style="width:240px; height: 30px; font-size: 12px" onclick="toggleAutoEter('dilUpgs')" class="storebtn"></button>
@@ -737,7 +737,7 @@
 							<button id="dil11" onclick="buyDilationUpgrade(11)">Double dilated time production.<br><span id="dil11cost"></span></button>
 						</td>
 						<td>
-							<button id="dil12" onclick="buyDilationUpgrade(12)">Decrease the galaxy threshold multiplier, but reset free galaxies and dilated time.<br><span id="dil12cost"></span></button>
+							<button id="dil12" onclick="buyDilationUpgrade(12)">Decrease the galaxy threshold multiplier, but reset Tachyonic Galaxies and dilated time.<br><span id="dil12cost"></span></button>
 						</td>
 						<td>
 							<button id="dil13" onclick="buyDilationUpgrade(13)"><span id="dil13desc"></span><br><span id="dil13cost"></span></button>
@@ -772,7 +772,7 @@
 				<table>
 					<tr>
 						<td>
-							<button id="dil21" onclick="buyDilationUpgrade(21)">Gain twice as many free galaxies.<br><span id="dil21cost"></span></button>
+							<button id="dil21" onclick="buyDilationUpgrade(21)">Gain twice as many Tachyonic Galaxies.<br><span id="dil21cost"></span></button>
 						</td>
 						<td>
 							<button id="dil22" onclick="buyDilationUpgrade(22)"><span id="dil22desc">lul bug</span><br><span id="dil22cost"></span></button>
@@ -1156,7 +1156,7 @@
 						<button id="togglealltimedims"style="width:140px; height: 30px; font-size: 12px; visibility: hidden" onclick="toggleAllTimeDims()" class="storebtn">Toggle all ON/OFF</button>
 			</div>
 			<div id="pdims" class="dimtab">
-				<div>You have <span id="pPow" style="font-size:35px; color: #ff00ff">0</span> Paradox Power, translated to <span id="pPowEffect" style="font-size:35px; color: #ff00ff">0</span> extra seconds (used when matter exceeds your antimatter).</div>
+				<div>You have <span id="pPow" style="font-size:35px; color: #ff00ff">0</span> Paradox Power, translated to <span id="pPowEffect" style="font-size:35px; color: #ff00ff">0</span>x faster time flow.</div>
 				<div id="pPowProduction">You are getting 0 Paradox Power per second.</div>
 				<button class="storebtn" style="font-size: 12px" onclick="maxPDs()">Max all</Button>
 				<table id="pdTable" class="table"></table>
@@ -1424,7 +1424,7 @@
 				<canvas id="normalDimChart" width="1500" height="500" style="user-select: none;"></canvas>
 				<b>Exponents of antimatter per second</b>
 			</div>
-			<div class="footer bottom" style="margin: 20px;"></div>
+			<div class="footer bottom"></div>
 		</div>
 		<div id="options" class="tab" align="center">
 			<table class="table" align="center" style="margin: auto">
@@ -1532,7 +1532,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 5)</p>
+				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 6)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1838,7 +1838,7 @@
 							<div id="Accelerated" class="achievement achievementlocked" style="background-image: url(images/ngm5/r11.png)" ach-tooltip="Time Dimension Shift for the first time."><br></div>
 						</td>
 						<td>
-							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/ngm5/r12.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter."><br></div>
+							<div id="Make Antimatter Great Again!" class="achievement achievementlocked" style="background-image: url(images/ngm5/r12.png)" ach-tooltip="Manually Paradox Sacrifice. Reward: Start with 250 Antimatter, and 199 Antimatter if Quick Matter Reset is enabled."><br></div>
 						</td>
 						<td>
 							<div id="Out of luck" class="achievement achievementlocked" style="background-image: url(images/ngm5/r13.png)" ach-tooltip="Buy the 6th Time Dimension."><br></div>
@@ -1856,7 +1856,7 @@
 							<div id="Logic is an illusion" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Buy the sixth Paradox Dimension."><br></div>
 						</td>
 						<td>
-							<div id="Time Paradox" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Get at least 10 Qt (10e20) Paradox Power."><br></div>
+							<div id="Time Paradox" class="achievement achievementlocked" style="background-image: url(images/achhidden.png)" ach-tooltip="Get at least 2,000 extra seconds from Paradox Dimensions."><br></div>
 						</td>
 					</tr>
 					<tr id="achRow2">
@@ -2084,7 +2084,7 @@
 								<div id="Infinite time" class="achievement achievementlocked" style="background-image: url(images/69.png)" ach-tooltip="Get 308 tickspeed upgrades (in one eternity) from Time Dimensions. Reward: Tickspeed effects on Time Dimension multipliers are slightly increased."><br></div>
 							</td>
 							<td>
-								<div id="The swarm" class="achievement achievementlocked" style="background-image: url(images/70.png)" ach-tooltip="Get 10 replicanti galaxies in 15 seconds."><br></div>
+								<div id="The swarm" class="achievement achievementlocked" style="background-image: url(images/70.png)" ach-tooltip="Get 10 Replicated Galaxies in 15 seconds."><br></div>
 							</td>
 							<td>
 								<div id="Do you really need a guide for this?" class="achievement achievementlocked" style="background-image: url(images/71.png)" ach-tooltip="Eternity with less than 10 infinities."><br></div>
@@ -2136,7 +2136,7 @@
 								<div id="Like feasting on a behind" class="achievement achievementlocked" style="background-image: url(images/85.png)" ach-tooltip="Get 1e100 IP without any Infinities, Dimensions, or resets (not including upgrades). Reward: Gain a multiplier to IP based on time spent in this Infinity."><br></div>
 							</td>
 							<td>
-								<div id="Popular music" class="achievement achievementlocked" style="background-image: url(images/86.png)" ach-tooltip="Have 180 times more non-bonus replicanti galaxies than normal galaxies. Reward: Replicanti galaxies divide your replicanti by 1.79e308 instead of resetting them to 1."><br></div>
+								<div id="Popular music" class="achievement achievementlocked" style="background-image: url(images/86.png)" ach-tooltip="Have 180 times more non-bonus Replicated Galaxies than normal galaxies. Reward: Replicated Galaxies divide your replicanti by 1.79e308 instead of resetting them to 1."><br></div>
 							</td>
 							<td>
 								<div id="But I wanted another prestige layer..." class="achievement achievementlocked" style="background-image: url(images/87.png)" ach-tooltip="Reach 1e308 EP."><br></div>
@@ -2150,7 +2150,7 @@
 								<div id="No ethical consumption" class="achievement achievementlocked" style="background-image: url(images/89.png)" ach-tooltip="Get 5 billion banked infinities. Reward: You permanently bank 5% of your Infinities when you Eternity."><br></div>
 							</td>
 							<td>
-								<div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)" ach-tooltip="Have 540 galaxies without having any Replicated galaxies."><br></div>
+								<div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)" ach-tooltip="Have 540 galaxies without having any Replicated Galaxies."><br></div>
 							</td>
 							<td>
 								<div id="I never liked this infinity stuff anyway" class="achievement achievementlocked" style="background-image: url(images/91.png)" ach-tooltip="Reach 1e140,000 IP without buying IDs or IP multipliers."><br></div>
@@ -2213,7 +2213,7 @@
 								<div id="The cap is a million, not a trillion" class="achievement achievementlocked" style="background-image: url(images/101.png)" ach-tooltip="Get 1e12 eternities. Reward: Eternity Upgrade 2 uses a better formula."><br></div>
 							</td>
 							<td>
-								<div id="It will never be enough" class="achievement achievementlocked" style="background-image: url(images/102.png)" ach-tooltip="Reach 1e100,000 replicanti. Reward: You can buy maximum replicanti galaxies."><br></div>
+								<div id="It will never be enough" class="achievement achievementlocked" style="background-image: url(images/102.png)" ach-tooltip="Reach 1e100,000 replicanti. Reward: You can buy maximum Replicated Galaxies."><br></div>
 							</td>
 							<td>
 								<div id="GAS GAS GAS" class="achievement achievementlocked" style="background-image: url(images/103.png)" ach-tooltip="Get 1,000,000 tickspeed upgrades from Time Dimensions. Reward: Unlock autobuyers for Time Dimensions and 5x EP upgrades."><br></div>
@@ -2267,7 +2267,7 @@
 								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
 							</td>
 							<td>
-								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)" ach-tooltip="Reach 4,000,000 Eighth Dimensions without any replicated or free galaxies. Reward: Eighth Dimensions are stronger based on your normal galaxies."><br></div>
+								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)" ach-tooltip="Reach 4,000,000 Eighth Dimensions without any replicated or Tachyonic Galaxies. Reward: Eighth Dimensions are stronger based on your normal galaxies."><br></div>
 							</td>
 							<td>
 								<div id="Seriously, I already got rid of you." class="achievement achievementlocked" style="background-image: url(images/120.png)"><br></div>
@@ -2336,7 +2336,7 @@
 								<div id="Gonna go fast" class="achievement achievementlocked" style="background-image: url(images/145.png)"></div>
 							</td>
 							<td>
-								<div id="We can really afford 9." class="achievement achievementlocked" style="background-image: url(images/146.png)" ach-tooltip="Undo the big rip with exactly 9 galaxies, 9 replicated galaxies, and 9 Fourth Time Dimensions. Reward: Gain a multiplier to replicants based on spins."></div>
+								<div id="We can really afford 9." class="achievement achievementlocked" style="background-image: url(images/146.png)" ach-tooltip="Undo the big rip with exactly 9 galaxies, 9 Replicated Galaxies, and 9 Fourth Time Dimensions. Reward: Gain a multiplier to replicants based on spins."></div>
 							</td>
 							<td>
 								<div id="Time Breaker" class="achievement achievementlocked" style="background-image: url(images/147.png)" ach-tooltip="Break Eternity. Reward: Galaxies don't reset your Dimension Boosts, and Quantum Challenges now cost 0 electrons."></div>
@@ -3244,7 +3244,7 @@
 						</td>
 						<td>
 							<div class="eterchallengediv" id="eterc6div" style="height: 140px; display: none">
-								<span>You can't gain galaxies normally, but the cost of upgrading your max replicanti galaxies is massively reduced.
+								<span>You can't gain galaxies normally, but the cost of upgrading your max Replicated Galaxies is massively reduced.
 								</span>
 								<br>
 								<br>
@@ -3413,7 +3413,7 @@
 									<br>
 									<span id="qc2cost"></span><br>
 									<span id="qc2goal"></span><br>
-									Reward: Gain more free galaxies for each threshold. Currently: <span id="qc2reward"></span>%
+									Reward: Gain more Tachyonic Galaxies for each threshold. Currently: <span id="qc2reward"></span>%
 								</div>
 							</div>
 						</td>
@@ -3449,7 +3449,7 @@
 						</td>
 						<td>
 							<div class="quantumchallengediv" id="qc5div">
-								<span>Dimension Supersonic scaling starts instantly, and grows much faster. Replicanti Galaxy cost and free galaxy threshold also grow much faster. Multiplier per ten dimensions is 1x.</span>
+								<span>Dimension Supersonic scaling starts instantly, and grows much faster. Replicanti Galaxy cost and Tachyonic Galaxy threshold also grow much faster. Multiplier per ten dimensions is 1x.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3501,7 +3501,7 @@
 									<br>
 									<span id="qc8cost"></span><br>
 									<span id="qc8goal"></span><br>
-									Reward: You gain extra replicated galaxies faster after 100. Currently: <span id="qc8reward"></span>x faster
+									Reward: You gain extra Replicated Galaxies faster after 100. Currently: <span id="qc8reward"></span>x faster
 								</div>
 							</div>
 						</td>
@@ -3654,147 +3654,149 @@
 			<div class="footer"></div>
 		</div>
 		<div id="galaxy" class="tab" align="center" style="display: none">
-			<tr>
-				<td><button id="galupgsbtn" class="secondarytabbtn" onclick="showGalTab('galUpgs')">Upgrades</button><td>
-				<td><button id="galStonesbtn" class="secondarytabbtn" onclick="showGalTab('galStones')">Milestones</button><td>
-			</tr>
-			<div class="galaxytab" id="galUpgs">
-				<div id="vanillaGalaxyPoints">
-					<br>
-					<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
-					<br>
-				</div>
-			<table class="table" id="galTable" style="margin: 0 auto">
+			<table>
 				<tr>
-					<td>
-						<button id="galaxy11" class="infinistorebtn1" onclick="buyGalaxyUpgrade(11)"></button>
-					</td>
-					<td>
-						<button id="galaxy12" class="infinistorebtn2" onclick="buyGalaxyUpgrade(12)"></button>
-					</td>
-					<td>
-						<button id="galaxy13" class="infinistorebtn3" onclick="buyGalaxyUpgrade(13)"></button>
-					</td>
-					<td>
-						<button id="galaxy14" class="infinistorebtn4" onclick="buyGalaxyUpgrade(14)">Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: 300 GP</button>
-					</td>
-					<td>
-						<button id="galaxy15" class="infinistorebtn4" onclick="buyGalaxyUpgrade(15)"></button>
-					</td>
-					<td>
-						<button id="galaxy16" class="infinistorebtn4" onclick="buyGalaxyUpgrade(16)">Square the effect of the upgrade to the left, and Time Dimension Shifts multiply GP gain.<br>Cost: <span id='galcost16'></span> GP</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button id="galaxy21" class="infinistorebtn1" onclick="buyGalaxyUpgrade(21)"></button>
-					</td>
-					<td>
-						<button id="galaxy22" class="infinistorebtn2" onclick="buyGalaxyUpgrade(22)">Galaxies are <span id='galBuff22'></span>x stronger, reduce the cost by 20 less except for the first, and decrease the cost multiplier to 30.<br>Cost: 5 GP</button>
-					</td>
-					<td>
-						<button id="galaxy23" class="infinistorebtn3" onclick="buyGalaxyUpgrade(23)"><span id='galDesc23'></span><br>Currently: <span id='galspan23'>x</span>x more power<br>Cost: 100 GP</button>
-					</td>
-					<td>
-						<button id="galaxy24" class="infinistorebtn4" onclick="buyGalaxyUpgrade(24)">Increase the multiplier of the product of bought based on your galaxy points.<br>Currently: <span id='galspan24'>x</span>x<br>Cost: <span id='galcost24'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy25" class="infinistorebtn4" onclick="buyGalaxyUpgrade(25)">Tickspeed multiplier boosts Time Dimensions more based on your Galaxy points.<br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy26" class="infinistorebtn4" onclick="buyGalaxyUpgrade(26)">Square the effect of the upgrade to the left.<br>Cost: <span id='galcost26'></span> GP</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button id="galaxy31" class="infinistorebtn1" onclick="buyGalaxyUpgrade(31)">Increase all dimension multipliers.<br>Currently: x^<span id='galspan31'></span><br>Cost: <span id='galcost31'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy32" class="infinistorebtn2" onclick="buyGalaxyUpgrade(32)">Gain more galaxy points based on your total antimatter.<br>Currently: <span id='galspan32'>x</span>x<br>Cost: <span id='galcost32'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy33" class="infinistorebtn3" onclick="buyGalaxyUpgrade(33)">The multiplier per ten dimensions is stronger based on your galaxy points.<br>Currently: <span id='galspan33'>x</span>x more power<br>Cost: <span id='galcost33'></span> GP</button></td>
-					</td>
-					<td>
-						<button id="galaxy34" class="infinistorebtn4" onclick="buyGalaxyUpgrade(34)">Decrease tickspeed boost cost multiplier to 4.<br>Cost: <span id='galcost34'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy35" class="infinistorebtn4" onclick="buyGalaxyUpgrade(35)" style="font-size:9px">Each bought Time Dimension boosts Normal Dimensions by the product of x/6 and your multiplier of the product of bought.<br>Currently: <span id='galspan35'></span>x<br>Cost: <span id='galcost35'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy36" class="infinistorebtn4" onclick="buyGalaxyUpgrade(36)">Square the effect of the upgrade to the left.<br>Cost: <span id='galcost36'></span> GP</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button id="galaxy41" class="infinistorebtn1" onclick="buyGalaxyUpgrade(41)"></button>
-					</td>
-					<td>
-						<button id="galaxy42" class="infinistorebtn2" onclick="buyGalaxyUpgrade(42)"></button>
-					</td>
-					<td>
-						<button id="galaxy43" class="infinistorebtn3" onclick="buyGalaxyUpgrade(43)"></button>
-					</td>
-					<td>
-						<button id="galaxy44" class="infinistorebtn4" onclick="buyGalaxyUpgrade(44)">Normal Dimensions boost Time Dimensions.<br>Cost: <span id='galcost44'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy45" class="infinistorebtn4" onclick="buyGalaxyUpgrade(45)">Time Dimensions boost Normal Dimensions, and Eighth Dimensions multiply GP gain.<br>Cost: <span id='galcost45'></span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy46" class="infinistorebtn4" onclick="buyGalaxyUpgrade(46)">Boost all upgrades in this row based on your GP.<br>Currently: <span id='galspan46'>0</span>%<br>Cost: <span id='galcost46'></span> GP</button>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<button id="galaxy51" class="infinistorebtn1" onclick="buyGalaxyUpgrade(51)">Galaxy points boost Eternity points.<br>Currently: <span id='galspan51'>?</span>x<br>Cost: <span id='galcost51'>1e4500</span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy52" class="infinistorebtn2" onclick="buyGalaxyUpgrade(52)">Reduce the galaxy softcap of Galaxy points gain formula.<br>Cost: <span id='galcost52'>1e5500</span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy53" class="infinistorebtn3" onclick="buyGalaxyUpgrade(53)">Galaxy points boost 2x Infinity Points multiplier upgrades<br>Cost: <span id='galcost53'>1e15000</span> GP</button>
-					</td>
-					<td>
-						<button id="galaxy54" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
-					</td>
-					<td>
-						<button id="galaxy55" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
-					</td>
-					<td>
-						<button id="galaxy56" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
-					</td>
+					<td><button id="galupgsbtn" class="secondarytabbtn" onclick="showGalTab('galUpgs')">Upgrades</button><td>
+					<td><button id="galStonesbtn" class="secondarytabbtn" onclick="showGalTab('galStones')">Milestones</button><td>
 				</tr>
 			</table>
+			<div id="vanillaGalaxyPoints">
+				<br>
+				<div id="galaxyPoints" style="color: #4169E1; font-size: 15px; width: 40%; margin: 0 auto">You have x galaxy points.</div>
+				<br>
+			</div>
+			<div class="galaxytab" id="galUpgs">
+				<table class="table" id="galTable" style="margin: 0 auto">
+								<tr>
+									<td>
+										<button id="galaxy11" class="infinistorebtn1" onclick="buyGalaxyUpgrade(11)"></button>
+									</td>
+									<td>
+										<button id="galaxy12" class="infinistorebtn2" onclick="buyGalaxyUpgrade(12)"></button>
+									</td>
+									<td>
+										<button id="galaxy13" class="infinistorebtn3" onclick="buyGalaxyUpgrade(13)"></button>
+									</td>
+									<td>
+										<button id="galaxy14" class="infinistorebtn4" onclick="buyGalaxyUpgrade(14)">Tickspeed Boosts give 32 free tickspeed purchases each.<br>Cost: 300 GP</button>
+									</td>
+									<td>
+										<button id="galaxy15" class="infinistorebtn4" onclick="buyGalaxyUpgrade(15)"></button>
+									</td>
+									<td>
+										<button id="galaxy16" class="infinistorebtn4" onclick="buyGalaxyUpgrade(16)">Square the effect of the upgrade to the left, and Time Dimension Shifts multiply GP gain.<br>Cost: <span id='galcost16'></span> GP</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button id="galaxy21" class="infinistorebtn1" onclick="buyGalaxyUpgrade(21)"></button>
+									</td>
+									<td>
+										<button id="galaxy22" class="infinistorebtn2" onclick="buyGalaxyUpgrade(22)">Galaxies are <span id='galBuff22'></span>x stronger, reduce the cost by 20 less except for the first, and decrease the cost multiplier to 30.<br>Cost: 5 GP</button>
+									</td>
+									<td>
+										<button id="galaxy23" class="infinistorebtn3" onclick="buyGalaxyUpgrade(23)"><span id='galDesc23'></span><br>Currently: <span id='galspan23'>x</span>x more power<br>Cost: 100 GP</button>
+									</td>
+									<td>
+										<button id="galaxy24" class="infinistorebtn4" onclick="buyGalaxyUpgrade(24)">Increase the multiplier of the product of bought based on your galaxy points.<br>Currently: <span id='galspan24'>x</span>x<br>Cost: <span id='galcost24'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy25" class="infinistorebtn4" onclick="buyGalaxyUpgrade(25)">Tickspeed multiplier boosts Time Dimensions more based on your Galaxy points.<br>Currently: ^<span id='galspan25'>x</span><br>Cost: <span id='galcost25'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy26" class="infinistorebtn4" onclick="buyGalaxyUpgrade(26)">Square the effect of the upgrade to the left.<br>Cost: <span id='galcost26'></span> GP</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button id="galaxy31" class="infinistorebtn1" onclick="buyGalaxyUpgrade(31)">Increase all dimension multipliers.<br>Currently: x^<span id='galspan31'></span><br>Cost: <span id='galcost31'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy32" class="infinistorebtn2" onclick="buyGalaxyUpgrade(32)">Gain more galaxy points based on your total antimatter.<br>Currently: <span id='galspan32'>x</span>x<br>Cost: <span id='galcost32'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy33" class="infinistorebtn3" onclick="buyGalaxyUpgrade(33)">The multiplier per ten dimensions is stronger based on your galaxy points.<br>Currently: <span id='galspan33'>x</span>x more power<br>Cost: <span id='galcost33'></span> GP</button></td>
+									</td>
+									<td>
+										<button id="galaxy34" class="infinistorebtn4" onclick="buyGalaxyUpgrade(34)">Decrease tickspeed boost cost multiplier to 4.<br>Cost: <span id='galcost34'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy35" class="infinistorebtn4" onclick="buyGalaxyUpgrade(35)" style="font-size:9px">Each bought Time Dimension boosts Normal Dimensions by the product of x/6 and your multiplier of the product of bought.<br>Currently: <span id='galspan35'></span>x<br>Cost: <span id='galcost35'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy36" class="infinistorebtn4" onclick="buyGalaxyUpgrade(36)">Square the effect of the upgrade to the left.<br>Cost: <span id='galcost36'></span> GP</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button id="galaxy41" class="infinistorebtn1" onclick="buyGalaxyUpgrade(41)"></button>
+									</td>
+									<td>
+										<button id="galaxy42" class="infinistorebtn2" onclick="buyGalaxyUpgrade(42)"></button>
+									</td>
+									<td>
+										<button id="galaxy43" class="infinistorebtn3" onclick="buyGalaxyUpgrade(43)"></button>
+									</td>
+									<td>
+										<button id="galaxy44" class="infinistorebtn4" onclick="buyGalaxyUpgrade(44)">Normal Dimensions boost Time Dimensions.<br>Cost: <span id='galcost44'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy45" class="infinistorebtn4" onclick="buyGalaxyUpgrade(45)">Time Dimensions boost Normal Dimensions, and Eighth Dimensions multiply GP gain.<br>Cost: <span id='galcost45'></span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy46" class="infinistorebtn4" onclick="buyGalaxyUpgrade(46)">Boost all upgrades in this row based on your GP.<br>Currently: <span id='galspan46'>0</span>%<br>Cost: <span id='galcost46'></span> GP</button>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<button id="galaxy51" class="infinistorebtn1" onclick="buyGalaxyUpgrade(51)">Galaxy points boost Eternity points.<br>Currently: <span id='galspan51'>?</span>x<br>Cost: <span id='galcost51'>1e4500</span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy52" class="infinistorebtn2" onclick="buyGalaxyUpgrade(52)">Reduce the galaxy softcap of Galaxy points gain formula.<br>Cost: <span id='galcost52'>1e5500</span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy53" class="infinistorebtn3" onclick="buyGalaxyUpgrade(53)">Galaxy points boost 2x Infinity Points multiplier upgrades<br>Cost: <span id='galcost53'>1e15000</span> GP</button>
+									</td>
+									<td>
+										<button id="galaxy54" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
+									</td>
+									<td>
+										<button id="galaxy55" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
+									</td>
+									<td>
+										<button id="galaxy56" class="infinistorebtnlocked">???<br>Cost: ??? GP</button>
+									</td>
+								</tr>
+							</table>
 			</div>
 			<div class="galaxytab" id="galStones">
-			<table class="table" align="center" style="margin: auto" id="galStones">
-				<tr>
-					<td class="galStonesText">1 Sacrifice:</td>
-					<td class="galStonesText">2 Sacrifices:</td>
-				</tr>
-				<tr>
-					<td><button class="galStonerewardlocked" id="Greward0">Unlock the Third Infinity Dimension</button></td>
-					<td><button class="galStonerewardlocked" id="Greward1">Start with 20 Paradoxes on Sacrifice</button></td>
-				</tr>
-				<tr>
-					<td class="galStonesText">5 Sacrifices:</td>
-					<td class="galStonesText">10 Sacrifices:</td>
-				</tr>
-				<tr>
-					<td><button class="galStonerewardlocked" id="Greward2">You keep rebuyable Paradox upgrades on Sacrifice</button></td>
-					<td><button class="galStonerewardlocked" id="Greward3">Start with 25 Paradoxes per Sacrifice performed (Disabled in Challenges)</button></td>
-				</tr>
-				<tr>
-					<td class="galStonesText">25 Sacrifcies:</td>
-					<td class="galStonesText">50 Sacrifices:</td>
-				</tr>
-				<tr>
-					<td><button class="galStonerewardlocked" id="Greward4">Unlock Paradox Dimensions</button></td>
-					<td><button class="galStonerewardlocked" id="Greward5">Unlock Paradox Dimension Autobuyers (COMING SOON)</button></td>
-				</tr>
-				<!--TODO-->
-			</table>
+				<table class="table" align="center" style="margin: auto" id="galStones">
+					<tr>
+						<td class="galStonesText">1 Sacrifice:</td>
+						<td class="galStonesText">2 Sacrifices:</td>
+					</tr>
+					<tr>
+						<td><button class="galStonerewardlocked" id="Greward0">Unlock the Third Infinity Dimension</button></td>
+						<td><button class="galStonerewardlocked" id="Greward1">Start with 20 Paradoxes on Sacrifice</button></td>
+					</tr>
+					<tr>
+						<td class="galStonesText">5 Sacrifices:</td>
+						<td class="galStonesText">10 Sacrifices:</td>
+					</tr>
+					<tr>
+						<td><button class="galStonerewardlocked" id="Greward2">You keep rebuyable Paradox upgrades on Sacrifice</button></td>
+						<td><button class="galStonerewardlocked" id="Greward3">Start with 25 Paradoxes per Sacrifice performed (Disabled in Challenges)</button></td>
+					</tr>
+					<tr>
+						<td class="galStonesText">25 Sacrifcies:</td>
+						<td class="galStonesText">50 Sacrifices:</td>
+					</tr>
+					<tr>
+						<td><button class="galStonerewardlocked" id="Greward4">Unlock Paradox Dimensions</button></td>
+						<td><button class="galStonerewardlocked" id="Greward5">Unlock Paradox Dimension Autobuyers (COMING SOON)</button></td>
+					</tr>
+					<!--TODO-->
+				</table>
 			</div>
 			<div class="footer"></div>
 		</div>
@@ -4360,7 +4362,7 @@
 				<br>
 				<button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
 				<button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>
-				<button class="storebtn" id="replicantimax" onclick="upgradeReplicantiGalaxy()" style="width:180px; height: 50px; font-size: 10px">Max Replicanti galaxies: 0<br>+1 Costs: 1e6969 IP</button>
+				<button class="storebtn" id="replicantimax" onclick="upgradeReplicantiGalaxy()" style="width:180px; height: 50px; font-size: 10px">Max Replicated Galaxies: 0<br>+1 Costs: 1e6969 IP</button>
 				<br>
 				<button class="storebtn" id="replauto1" onclick="toggleReplAuto('chance')" style="width:180px; font-size: 10px; visibility: hidden">Auto: ON</button>
 				<button class="storebtn" id="replauto2" onclick="toggleReplAuto('interval')" style="width:180px; font-size: 10px; visibility: hidden">Auto: ON</button>
@@ -4368,7 +4370,7 @@
 				<br><br><br>
 				<p id="replicantiapprox"></p>
 				<br>
-				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 70px; font-size: 12px">Reset replicanti amount, but get a free galaxy</button>
+				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 70px; font-size: 12px"></button>
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>
@@ -4383,7 +4385,7 @@
 				  Replicanti needed to get a galaxy: <input type="text" onchange="setReplicantiNewLimit()" id="replLimit"></input>
 				</div>
 			</div>
-			<div class="footer bottom"></div>
+			<div class="footer bottom" style="margin: 20px;"></div>
 		</div>
 		<div id="singularity" class="inftab">
 			<br>
@@ -4543,10 +4545,10 @@
 						Translated to <span id="boost">boosted </span><span class="red" id="redTranslation" style="font-size:35px">0.0</span>% increase in galaxy efficiency.</p>
 					</td>
 					<td>
-						Translated to <span class="green" id="greenTranslation" style="font-size:35px">0</span>% increase in extra replicated galaxies.</p>
+						Translated to <span class="green" id="greenTranslation" style="font-size:35px">0</span>% increase in extra Replicated Galaxies.</p>
 					</td>
 					<td class="bqC">
-						Translated to <span class="blue" id="blueTranslation" style="font-size:35px">1.0</span>x faster dilated time production<span id="bluePowerMDEffect"> and <span class="blue" id="blueTranslationMD" style="font-size:35px">1.0</span>x production from all Meta Dimensions</span>.</span>
+						Translated to <span class="blue" id="blueTranslation" style="font-size:35px">1.0</span>x faster dilated time production.</span>
 					</td>
 				</tr></table>
 				<table class='qtable' id="colorDimTranslations">
@@ -4583,7 +4585,7 @@
 					<td colspan=2><button class="gluonupgrade br" id="generateBRGluons" onclick="generateGluons('br')">Generate <span id="generateBRGluonsAmount">0</span> blue-red gluons from blue quarks</button></td>
 				</tr><tr>
 					<td><button id='rgupg1' onclick='buyGluonUpg("rg",1)'>Remote Antimatter Galaxy cost scaling is approximately 2x slower.<br>Cost: 1 RG gluons</button></td>
-					<td><button id='rgupg2' onclick='buyGluonUpg("rg",2)'>Galaxies are more effective based on your free galaxies.<br><span id='rgupg2current'></span><br>Cost: 2 RG gluons</button></td>
+					<td><button id='rgupg2' onclick='buyGluonUpg("rg",2)'>Galaxies are more effective based on your Tachyonic Galaxies.<br><span id='rgupg2current'></span><br>Cost: 2 RG gluons</button></td>
 					<td><button id='gbupg1' onclick='buyGluonUpg("gb",1)' style='font-size:8.5px'>You gain replicanti faster based on your tickspeed reduction multiplier.<br><span id='gbupg1current'></span><br>Cost: 1 GB gluons</button></td>
 					<td><button id='gbupg2' onclick='buyGluonUpg("gb",2)'>Replicate interval scaling is 2x slower.<br>Cost: 2 GB gluons</button></td>
 					<td><button id='brupg1' onclick='buyGluonUpg("br",1)'>You gain more tachyon particles based on your dilated time.<br><span id='brupg1current'></span><br>Cost: 1 BR gluons</button></td>
@@ -4601,7 +4603,7 @@
 				</tr><tr id='gupgrow3'>
 					<td><button id='rgupg5' onclick='buyGluonUpg("rg",5)'>Slow down the Dark Matter Galaxy cost scaling by 13%.<br>Cost: <span id='rgupg5cost'></span> RG gluons</button></td>
 					<td><button id='rgupg6' onclick='buyGluonUpg("rg",6)'>Slow down the Distant Antimatter Galaxy cost scaling by 13.2%.<br>Cost: <span id='rgupg6cost'></span> RG gluons</button></td>
-					<td><button id='gbupg5' onclick='buyGluonUpg("gb",5)'>Normal replicated galaxies slow down the Dark Matter Galaxy cost scaling.<br><span id='gbupg5current'></span><br>Cost: <span id='gbupg5cost'></span> GB gluons</button></td>
+					<td><button id='gbupg5' onclick='buyGluonUpg("gb",5)'>Normal Replicated Galaxies slow down the Dark Matter Galaxy cost scaling.<br><span id='gbupg5current'></span><br>Cost: <span id='gbupg5cost'></span> GB gluons</button></td>
 					<td><button id='gbupg6' onclick='buyGluonUpg("gb",6)'>Infinity power slows down the Distant Antimatter Galaxy cost scaling.<br><span id='gbupg6current'></span><br>Cost: <span id='gbupg6cost'></span> GB gluons</button></td>
 					<td><button id='brupg5' onclick='buyGluonUpg("br",5)'>Tachyon particles slow down the Dark Matter Galaxy cost scaling.<br><span id='brupg5current'></span><br>Cost: <span id='brupg5cost'></span> BR gluons</button></td>
 					<td><button id='brupg6' onclick='buyGluonUpg("br",6)' style='font-size:8.5px'>Meta-Dimension Boosts slow down the Distant Antimatter Galaxy cost scaling.<br><span id='brupg6current'></span><br>Cost: <span id='brupg6cost'></span> BR gluons</button></td>
@@ -4655,7 +4657,7 @@
 						<td><div id="speedrunMilestone17" style="background-image: url(images/quantum_speedruns/17.png)" ach-tooltip="Reward: All Meta Dimensions are available for purchase on Quantum."></div></td>
 						<td><div id="speedrunMilestone18" style="background-image: url(images/quantum_speedruns/18.png)"></div></td>
 						<td><div id="speedrunMilestone19" style="background-image: url(images/quantum_speedruns/19.png)"></div></td>
-						<td><div id="speedrunMilestone20" style="background-image: url(images/quantum_speedruns/20.png)" ach-tooltip="Reward: You can turn on automatic replicated galaxies regardless of the second Time Study split path."></div></td>
+						<td><div id="speedrunMilestone20" style="background-image: url(images/quantum_speedruns/20.png)" ach-tooltip="Reward: You can turn on automatic Replicated Galaxies regardless of the second Time Study split path."></div></td>
 						<td><div id="speedrunMilestone21" style="background-image: url(images/quantum_speedruns/21.png)" ach-tooltip="Reward: The rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster."></div></td>
 						<td><div id="speedrunMilestone22" style="background-image: url(images/quantum_speedruns/22.png)"></div></td>
 						<td><div id="speedrunMilestone23" style="background-image: url(images/quantum_speedruns/23.png)" ach-tooltip="Reward: Unlock the Quantum autobuyer."></div></td>
@@ -4666,7 +4668,7 @@
 						<td><div id="speedrunMilestone25" style="background-image: url(images/quantum_speedruns/25.png)" ach-tooltip="Reward: Unlock the manual mode for the Eternity autobuyer and get the sacrifice galaxy autobuyer."></div></td>
 						<td><div id="speedrunMilestone26" style="background-image: url(images/quantum_speedruns/26.png)" ach-tooltip="Reward: The rebuyable dilation upgrade autobuyer can buy the maximum upgrades possible."></div></td>
 						<td><div id="speedrunMilestone27" style="background-image: url(images/quantum_speedruns/27.png)" ach-tooltip="Reward: You can buy max Meta-Dimension Boosts, and start with 4 Meta-Dimension Boosts."></div></td>
-						<td><div id="speedrunMilestone28" style="background-image: url(images/quantum_speedruns/28.png)" ach-tooltip="Reward: You gain banked infinities based on your post-crunch infinitied stat, and replicated galaxies don't reset on Big Crunch."></div></td>
+						<td><div id="speedrunMilestone28" style="background-image: url(images/quantum_speedruns/28.png)" ach-tooltip="Reward: You gain banked infinities based on your post-crunch infinitied stat, and Replicated Galaxies don't reset on Big Crunch."></div></td>
 						<td colspan=2></td>
 					</tr>
 				</table>
@@ -4810,7 +4812,7 @@
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>Replicantis boost dilated time production.<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>Your best-in-this-quantum meta-antimatter makes the meta-antimatter effect stronger.<br><span id='treeupg8lvl'>?</span><br>Currently: +<span id='treeupg8current'>?</span> to exponent<br><span id="treeupg8cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
 					</tr></table>
 					<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
 				</div>
@@ -4841,7 +4843,7 @@
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow1">
 						<td>They increase TP gain formula exponent from <span id="preNeutrinoBoost1"></span> to <span class="neutrinos" id="neutrinoBoost1">1.0</span>.</td>
-						<td id="neutrinoBoostCell2">They strengthen the effect of "replicate chance boosts itself" stronger from <span id="preNeutrinoBoost2"></span> to <span class="neutrinos" id="neutrinoBoost2">1.0</span>.<br>(The effect exponent is increased from <span id="preNeutrinoBoost2Exp"></span> to <span class="neutrinos" id="neutrinoBoost2Exp" style="font-size:25px"></span>)</td>
+						<td id="neutrinoBoostCell2">They boost something by <span class="neutrinos" id="neutrinoBoost2">1.0</span>x.</td>
 						<td id="neutrinoBoostCell3">They remove the limit of 14th dilation upgrade and then boost that upgrade by <span class="neutrinos" id="neutrinoBoost3">3.00</span>x.</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow2">
@@ -5164,7 +5166,7 @@
 							They boost Time Theorem production by <span class="yellow" id="leBoost6" style="font-size:35px"></span>x.
 						</td>
 						<td id="le1">
-							Every 100% of green power effect, they add <span class="green" id="leBoost1" style="font-size:35px"></span> to free galaxies amount in Mastery Study 201.<br>(<span class="green" id="leBoost1Total" style="font-size:25px"></span> added to free galaxies amount)
+							Every 100% of green power effect, they add <span class="green" id="leBoost1" style="font-size:35px"></span> to Tachyonic Galaxies amount in Mastery Study 201.<br>(<span class="green" id="leBoost1Total" style="font-size:25px"></span> added to Tachyonic Galaxies amount)
 						</td>
 					</tr><tr>
 						<td class="blue">

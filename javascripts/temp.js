@@ -291,7 +291,7 @@ function updateReplicantiTemp() {
 	if (masteryStudies.has(273)) {
 		data.chance = Decimal.pow(data.chance, tmp.mts[273])
 		data.freq = 0
-		if (data.chance.gte("1e9999998")) data.freq = tmp.mts[273].times(Math.log10(player.replicanti.chance + 1) / Math.log10(2))
+		if (data.chance.gte("1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1) / Math.log10(2), tmp.mts[273])
 	}
 
 	data.est = Decimal.div((data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3), data.interval)

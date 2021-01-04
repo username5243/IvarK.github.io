@@ -23,10 +23,10 @@ function setNGm5Tooltip() {
 	//ngm5p16/
 	//ngm5p17/
 	let TimePx = document.getElementById("Time Paradox")
-
 	//ACHIEVEMENT ROW 1.5
 	TimePx.setAttribute('ach-tooltip', "Get at least " + formatValue(player.options.notation, 1e20, 0, 0) +" Paradox Power.")
 }
+
 function setR2Tooltip() {
 	// Row 2 (6/8)
 	let infinity = document.getElementById("To infinity!")
@@ -201,7 +201,7 @@ function setR10Tooltip() {
 	//ACHIEVEMENT ROW 10
 	costco.setAttribute('ach-tooltip', "Bulk buy 750 Dimension Boosts at once. Reward: Dimension Boosts are " + (player.boughtDims?"cheaper based on EP":"1% more powerful (to Normal Dimensions)") + (player.tickspeedBoosts != undefined ? " and g13 is boosted by the cube root of Galaxies" : "") + ".")
 	mile.setAttribute('ach-tooltip', "Get "+(tmp.ngp3 ? "the 100 Eternities milestone." : "all Eternity milestones."))
-	swarm.setAttribute('ach-tooltip', "Get 10 replicanti galaxies within the first 15 seconds of this Infinity." + (player.boughtDims ? " Reward: Unlock replicanti galaxy power control, and uncap replicanti chance and interval." : ""))
+	swarm.setAttribute('ach-tooltip', "Get 10 Replicated Galaxies within the first 15 seconds of this Infinity." + (player.boughtDims ? " Reward: Unlock replicanti galaxy power control, and uncap replicanti chance and interval." : ""))
 	inftime.setAttribute('ach-tooltip', player.boughtDims ? "Eternity without buying dimensions 1-7. Reward: Time Dimensions gain a multiplier based on the eighth root of eighth dimensions." : "Get 308 tickspeed upgrades (in one eternity) from Time Dimensions. Reward: Time Dimensions are affected slightly more by tickspeed.")
 	guide.setAttribute('ach-tooltip', player.boughtDims ? "Reach " + shortenCosts(new Decimal("1e1000000")) + " replicanti. Reward: Replicanti increases faster the more you have." : "Eternity with less than 10 infinities.")
 	nine.setAttribute('ach-tooltip', "Eternity with exactly 9 replicanti." + (player.boughtDims ? " Reward: The replicanti multiplier to ID is 9% stronger (after time studies)." : ""))
@@ -242,7 +242,7 @@ function setR12Tooltip() {
 	eatass.setAttribute('ach-tooltip', "Reach "+shortenCosts(1e100)+" IP without any Infinities or First Normal Dimensions. Reward: Gain an IP multiplier based on time spent in this Infinity.")
 	layer.setAttribute('ach-tooltip', "Reach "+shortenMoney(Number.MAX_VALUE)+" EP." + (player.galacticSacrifice !== undefined ? " Reward: The Galaxy boost to Galaxy points gain is buffed." : "")) 
 	fkoff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Gain a multiplier to Time Dimensions based on the amount of bought Time Studies.")
-	minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus Replicanti galaxies than normal galaxies. Reward: Getting a Replicanti Galaxy divides your replicanti by " + shortenMoney(Number.MAX_VALUE) + " instead of resetting them to 1.")
+	minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus Replicated Galaxies than normal galaxies. Reward: Getting a Replicanti Galaxy divides your replicanti by " + shortenMoney(Number.MAX_VALUE) + " instead of resetting them to 1.")
 }
 
 function setR13Tooltip() {
@@ -304,8 +304,8 @@ function setR14Tooltip() {
 	//ACHIEVEMENT ROW 14 (NG++)
 	onlywar.setAttribute('ach-tooltip', "Reach "+shortenMoney(new Decimal('1e40000'))+" EP."+(onlywarReward!=""?" Reward: " + onlywarReward + ".":""))
 	thecap.setAttribute('ach-tooltip', "Get "+shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 uses a better formula.")
-	neverenough.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000"))+" replicanti. " + (tmp.ngC ? "Reward: You can always buy max RGs." : "Reward: You unlock the option to buy the maximum Replicanti Galaxies available."))
-	harmony.setAttribute('ach-tooltip', player.meta?"Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger.":"Get the same amount (at least 300) of normal, replicanti, and free galaxies.")
+	neverenough.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000"))+" replicanti. " + (tmp.ngC ? "Reward: You can always buy max RGs." : "Reward: You unlock the option to buy the maximum Replicated Galaxies available."))
+	harmony.setAttribute('ach-tooltip', player.meta?"Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger.":"Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.")
 }
 
 function setR15Tooltip() {
@@ -320,7 +320,7 @@ function setR15Tooltip() {
 	let winner = document.getElementById("And the winner is...")
 
 	//ACHIEVEMENT ROW 15
-	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce more dilated time based on your normal galaxies, and gain more Tachyon particles based on your replicated galaxies.")
+	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce more dilated time based on your normal galaxies, and gain more Tachyon particles based on your Replicated Galaxies.")
 	hadron.setAttribute('ach-tooltip', "Have colored quarks, but have no color charge. Reward: Quantum worth boosts all Meta Dimensions.")
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to the 1st Meta Dimension based on total antimatter.") 
 	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies and electrons. Reward: Generate Time Theorems based on your best-ever Tachyon particles.")
@@ -430,8 +430,8 @@ function setR20Tooltip() {
 	let pls = document.getElementById("Please answer me why you are dying.")
 
 	let willenoughReward = [] // for the achievement "Will it be enough?"
-	willenoughReward.push("replicated galaxies doesn't divide replicantis")
-	willenoughReward.push("you keep all your replicated galaxies on Infinity")
+	willenoughReward.push("Replicated Galaxies doesn't divide replicantis")
+	willenoughReward.push("you keep all your Replicated Galaxies on Infinity")
 	willenoughReward.push("keep all your replicanti upgrades on Eternity only when you start a normal Eternity run")
 	if (player.aarexModifications.ngudpV&&!player.aarexModifications.ngumuV) willenoughReward.push("keep Black Hole Dimensions on Quantum")
 	willenoughReward = wordizeList(willenoughReward, true)

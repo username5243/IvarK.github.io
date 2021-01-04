@@ -3,12 +3,7 @@ function updateNeutrinoBoostDisplay(){
 		document.getElementById("preNeutrinoBoost1").textContent = getDilExp("neutrinos").toFixed(2)
 		document.getElementById("neutrinoBoost1").textContent = getDilExp().toFixed(2)
 	}
-	if (player.ghostify.neutrinos.boosts >= 2) {
-		document.getElementById("preNeutrinoBoost2").textContent = "^" + shorten(getMTSMult(273, "pn"))
-		document.getElementById("neutrinoBoost2").textContent = "^" + shorten(getMTSMult(273))
-		document.getElementById("preNeutrinoBoost2Exp").textContent = getMTSMult(273, ["pn", "intensity"]).toFixed(2)
-		document.getElementById("neutrinoBoost2Exp").textContent = getMTSMult(273, "intensity").toFixed(2)
-	}
+	if (player.ghostify.neutrinos.boosts >= 2) document.getElementById("neutrinoBoost2").textContent = shorten(tmp.nb[2])
 	if (player.ghostify.neutrinos.boosts >= 3) document.getElementById("neutrinoBoost3").textContent = tmp.nb[3].toFixed(2)
 	if (player.ghostify.neutrinos.boosts >= 4) document.getElementById("neutrinoBoost4").textContent = formatPercentage(tmp.nb[4] - 1)
 	if (player.ghostify.neutrinos.boosts >= 5) document.getElementById("neutrinoBoost5").textContent = formatPercentage(tmp.nb[5])

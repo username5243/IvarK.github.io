@@ -575,7 +575,7 @@ function mainDilationDisplay(){
 		exdilationDisplay()
 	} else getEl("reversedilationdiv").style.display = "none"
 	var fgm=getFreeGalaxyGainMult()
-	getEl('freeGalaxyMult').textContent = fgm == 1 ? "free galaxy" : Math.round(fgm * 10) / 10 + " free galaxies"
+	getEl('freeGalaxyMult').textContent = fgm == 1 ? "Tachyonic Galaxy" : Math.round(fgm * 10) / 10 + " Tachyonic Galaxies"
 }
 
 function breakEternityDisplay(){
@@ -641,7 +641,8 @@ function replicantiDisplay() {
 		getEl("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber()))+"%") + chanceDisplayEnding
 		getEl("replicantiinterval").innerHTML = "Interval: "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100), true, 3) + (isIntervalAffordable() ? "<br>-> "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100 / 0.9), true, 3)+" Cost: "+shortenCosts(player.replicanti.intervalCost)+" IP" : "")
 		let replGal = player.replicanti.gal
-		let replGalName = player.replicanti.gal < 100 ? "Max Replicanti galaxies" : getGalaxyScaleName((replGal > 399 ? 2 : replGal > 99 ? 1 : 0) + (tmp.ngp3 && player.masterystudies.includes("t266") ? (replGal > 12e4 ? 3 : replGal > 58198 ? 2 : replGal > 2998 ? 1 : 0) : 0)) + "Replicated Galaxies"
+		let replGalScale = replGal >= (tmp.ngC ? 250 : 400) ? 2 : replGal >= 100 ? 1 : 0
+		let replGalName = (replGalScale ? getGalaxyScaleName(replGalScale) : "Max ") + "Replicated Galaxies"
 		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
@@ -704,9 +705,7 @@ function initialTimeStudyDisplay(){
 	let ts225 = tsMults[225]()
 	getEl("225desc").textContent = "Currently: +" + getFullExpansion(ts225) + " extra RGs" + (ts225 > 100 ? " (softcapped)" : "")
 
-	let ts226 = tsMults[226]()
-	getEl("226desc").textContent = "Currently: +" + getFullExpansion(ts226) + " extra RGs" + (ts226 > 100 ? " (softcapped)" : "")
-
+	getEl("226desc").textContent = "Currently: +" + getFullExpansion(tsMults[226]()) + " extra RGs"
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"
 	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]()) + "x power"
 	getEl("232desc").textContent = "Currently: " + formatPercentage(tsMults[232]() - 1) + "%"

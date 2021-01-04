@@ -3311,7 +3311,7 @@ function eternity(force, auto, presetLoad, dilated) {
 				document.getElementById("apDilSelected").textContent = ">>"
 				forceRespec = true
 				presetLoad = pData.dil.preset
-			} else if (masteryStudies.has(291) && player.eternityPoints.log10() >= oldEP.log10() * 1.01 && !dilated2 && grindActive) {
+			} else if (hasEternityUpg(15) && player.eternityPoints.log10() >= oldEP.log10() * 1.01 && !dilated2 && grindActive) {
 				if (pData.selected > -1) {
 					pData.reselect=pData.selected
 					if (apLoaded && loadedAPs > pData.selected) document.getElementById("apselected" + pData.selected).textContent = ""
@@ -4118,7 +4118,7 @@ function incrementParadoxUpdating(diff) {
 }
 
 function dimensionButtonDisplayUpdating() {
-	document.getElementById("pdtabbtn").style.display = (ph.shown("paradox") && tmp.PDunl) ? "" : "none"
+	document.getElementById("pdtabbtn").style.display = ph.shown("paradox") && player.galacticSacrifice.times >= 25 ? "" : "none"
    	document.getElementById("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && (tmp.ngmX >= 5 || ph.shown("infinity"))) ? "" : "none"
 	document.getElementById("tdtabbtn").style.display = ((ph.shown("eternity") || tmp.ngmX >= 4) && (!inQC(8) || tmp.be)) ? "" : "none"
 	document.getElementById("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
@@ -4992,7 +4992,7 @@ function IPonCrunchPassiveGain(diff){
 }
 
 function EPonEternityPassiveGain(diff){
-	if (masteryStudies.has(291) || player.achievements.includes("ng3p93")) {
+	if (hasEternityUpg(15) || player.achievements.includes("ng3p93")) {
 		player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints().times(diff / 100))
 		document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
 	}
@@ -5115,7 +5115,7 @@ function gameLoop(diff) {
 				} else if (player.dilation.active) ngp3DilationUpdating()
 			}
 			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
-			if (masteryStudies.has(291)) updateEternityUpgrades() // to fix the 5ep upg display
+			if (hasEternityUpg(15)) updateEternityUpgrades() // to fix the 5ep upg display
 			if (ph.did("ghostify")) {
 				if (GDs.unlocked()) {
 					// Gravity Dimensions

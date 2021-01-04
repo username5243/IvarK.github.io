@@ -416,7 +416,6 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
     } else if (value !== undefined && Decimal.lt(value, 1000)) {
         return (value).toFixed(placesUnder1000);
     } else {
-        //if (tmp.ngmX >= 5) return formatValue(player.options.notation, Math.pow(10, (inflog - 0.0000001)), 2, 1)
         return "Infinite";
     }
 }

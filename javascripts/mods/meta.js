@@ -36,38 +36,33 @@ function getMetaDimensionMultiplier(tier) {
 
 	//QC Rewards:
 	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
-	
+
 	//Achievements:
 	if (tier == 8 && player.achievements.includes("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
 	if (tier == 1 && player.achievements.includes("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
 	if (tier == 1 && player.achievements.includes("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
-	
+
 	ret = dilates(dilates(ret.max(1), 2), "meta")
-	if (player.dilation.upgrades.includes("ngmm8")) ret = ret.pow(getDil71Mult())
+	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 	return ret
 }
 
 function getMetaDimensionGlobalMultiplier() {
 	let ret = getDilationMetaDimensionMultiplier()
-	if (player.dilation.upgrades.includes("ngpp3")) ret = ret.times(getDil14Bonus())
+	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
 	if (player.achievements.includes("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
-		//Mastery Study Boosts
-		if (masteryStudies.has(303)) ret = ret.times(getMTSMult(303))
-		if (masteryStudies.has(351)) ret = ret.times(getMTSMult(351))
-		if (masteryStudies.has(373)) ret = ret.times(getMTSMult(373))
-		if (masteryStudies.has(382)) ret = ret.times(getMTSMult(382))
-		if (masteryStudies.has(383)) ret = ret.times(getMTSMult(383))
-		if (masteryStudies.has(393)) ret = ret.times(getMTSMult(393))
 		//Qunatum Upgrades
-		if (GUActive("br4")) ret = ret.times(Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1))
+		if (GUActive("br4")) ret = ret.times(getBR4Effect())
+
 		//QC Rewards
 		if (isQCRewardActive(3)) ret = ret.times(tmp.qcRewards[3])
 		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
+
 		//Achievement Rewards
-		var ng3p13exp = Math.pow(Decimal.plus(quantumWorth, 1).log10(), 0.75)
-		if (ng3p13exp > 1000) ng3p13exp = Math.pow(7 + Math.log10(ng3p13exp), 3)
+		var ng3p13exp = Math.sqrt(Decimal.plus(quantumWorth, 1).log10())
 		if (player.achievements.includes("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
+
 		if (player.achievements.includes("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
 	return ret
@@ -76,8 +71,7 @@ function getMetaDimensionGlobalMultiplier() {
 function getPerTenMetaPower() {
 	let r = 2
 	let exp = 1
-	if (player.dilation.upgrades.includes("ngpp4")) r = getDil15Bonus()
-	if (hasBosonicUpg(25)) exp = tmp.blu[25]
+	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
 	return Math.pow(r, exp)
 }
 
@@ -85,11 +79,10 @@ function getMetaBoostPower() {
 	if (inQC(8)) return 1
 	let r = 2
 	let exp = 1
-	if (player.dilation.upgrades.includes("ngpp4")) r = getDil15Bonus()
+	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
 	if (tmp.ngp3) {
-		if (isNanoEffectUsed("meta_boost_power")) r = tmp.nf.effects.meta_boost_power
 		if (masteryStudies.has(312)) exp = 1.045
-		if (player.achievements.includes("ng3p26")) exp *= Math.log10(9 + Math.max(player.meta.resets / 75 + 0.25, 1))
+		if (player.achievements.includes("ng3p26")) exp *= 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	}
 	if (player.achievements.includes("ngpp14")) r *= 1.01
 	return Math.pow(r, exp)
@@ -137,16 +130,10 @@ function getMetaShiftRequirement() {
 	var inQC4 = inQC(4)
 	data.mult = inQC4 ? 5.5 : 15
 	if (masteryStudies.has(312)) data.mult -= 1
+
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
-	if (ph.did("ghostify")) if (hasNU(1)) data.amount -= tmp.nu[1]
-
-	data.scalingStart = inQC4 ? 55 : 15
-	if (player.meta.resets >= data.scalingStart) {
-		var multAdded = inQC4 ? 14.5 : 5
-		data.amount += multAdded * (mdb - data.scalingStart)
-		data.mult += multAdded
-	}
+	if (hasNU(1)) data.amount -= tmp.nu[1]
 	
 	return data
 }
@@ -160,23 +147,12 @@ function metaBoost() {
 	let isNU1ReductionActive = hasNU(1) ? !tmp.qu.bigRip.active : false
 	if (!(player.meta[req.tier].bought>=req.amount)) return
 	if (isRewardEnabled(27) && req.tier > 7) {
-		if (isNU1ReductionActive) {
-			if (player.meta.resets < req.scalingStart) {
-				player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, req.scalingStart)
-				if (player.meta.resets == req.scalingStart) req = getMetaShiftRequirement()
-			}
-			if (player.meta.resets >= req.scalingStart && player.meta.resets < 110) {
-				player.meta.resets=Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1,110)
-				if (player.meta.resets>109) req=getMetaShiftRequirement()
-			}
-			if (player.meta.resets > 109) player.meta.resets += Math.floor((player.meta[8].bought - req.amount) / req.mult) + 1
-		} else {
-			if (player.meta.resets < req.scalingStart) {
-				player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / req.mult) + 1, req.scalingStart)
-				if (player.meta.resets == req.scalingStart) req = getMetaShiftRequirement()
-			}
-			if (player.meta.resets >= req.scalingStart) player.meta.resets += Math.floor((player.meta[8].bought - req.amount) / req.mult) + 1
+		if (isNU1ReductionActive && player.meta.resets < 110) {
+			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
+			req = getMetaShiftRequirement()
 		}
+		player.meta.resets += Math.floor((player.meta[8].bought - req.amount) / req.mult) + 1
+
 		if (inQC(4)) if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
 	} else player.meta.resets++
 	if (player.achievements.includes("ng3p72")) return
@@ -216,7 +192,7 @@ function getMetaCost(tier, boughtTen) {
 }
 
 function getMetaCostScalingStart() {
-	return "1e900"
+	return 1/0
 }
 
 function getMetaMaxCost(tier) {
@@ -316,13 +292,13 @@ function getMetaDimensionProduction(tier) {
 }
 
 function getExtraDimensionBoostPower() {
-	if (player.currentEternityChall=="eterc14" || inQC(7) || inQC(9)) return new Decimal(1)
+	if (player.currentEternityChall == "eterc14" || inQC(7) || inQC(9)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (!inQC(3)) r = r.add(1)
 	if (player.aarexModifications.nguspV) {
 		let l = r.log(2)
-		if (l > 1024) r = Decimal.pow(2,Math.pow(l * 32, 2/3))
+		if (l > 1024) r = Decimal.pow(2, Math.pow(l * 32, 2/3))
 	}
 	return r
 }
@@ -343,13 +319,10 @@ function getMADimBoostPowerExp(ma) {
 		if (power > 1e8) power = Math.pow(power * 1e6, 4/7)
 		return power
 	}
-	if (player.dilation.upgrades.includes("ngpp5")) power++
+	if (hasDilationUpg("ngpp5")) power++
 	if (masteryStudies.has(262)) power++
 	power += getECReward(13)
-	if (tmp.ngp3) {
-		if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
-		if (isTreeUpgActive(8)) power += getTreeUpgradeEffect(8)
-	}
+	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
 }
 
@@ -416,10 +389,10 @@ function updateMetaDimensions () {
 function getDil15Bonus() {
 	let x = 1
 	let max = 3
-	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 3) {
+	/*if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 3) {
 		x = tmp.nb[3]
 		max = 1/0
-	}
+	}*/
 	if (player.aarexModifications.nguspV !== undefined) x *= Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
 	else x *= Math.min(Math.log10(player.dilation.dilatedTime.max(1e10).log(10)) + 1, max)
 	return x

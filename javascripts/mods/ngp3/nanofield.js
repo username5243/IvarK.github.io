@@ -152,17 +152,11 @@ var nanoRewards = {
 			return x + 1
 		},
 		dt_to_ma_exp: function(x) {
-			return Math.sqrt(x) * 0.021 + 1
+			return Math.sqrt(x) * 0.01 + 0.1
 		},
 		dil_effect_exp: function(x) {
 			if (x > 15) tier = Math.log10(x - 5) * 15
 			return x * 0.36 + 1
-		},
-		meta_boost_power: function(x) {
-			let y = 2
-			if (player.dilation.upgrades.includes("ngpp4")) y = getDil15Bonus()
-
-			return x * 1.34 + y
 		},
 		remote_start: function(x) {
 			return x * 2150
@@ -184,6 +178,9 @@ var nanoRewards = {
 		},
 		light_threshold_speed: function(x) {
 			return Math.max(Math.sqrt(x + 1) / 4, 1)
+		},
+		unknown: function(x) {
+			return
 		}
 	},
 	effectDisplays: {
@@ -201,9 +198,6 @@ var nanoRewards = {
 		},
 		dil_effect_exp: function(x) {
 			return "in dilation, Normal Dimension multipliers and Tickspeed are raised by ^" + x.toFixed(2)
-		},
-		meta_boost_power: function(x) {
-			return "each meta-Dimension Boost gives " + x.toFixed(2) + "x boost"
 		},
 		remote_start: function(x) {
 			return "Remote Antimatter Galaxies scaling starts " + getFullExpansion(Math.floor(x)) + " later"
@@ -225,6 +219,9 @@ var nanoRewards = {
 		},
 		light_threshold_speed: function(x) {
 			return "Light threshold increases " + x.toFixed(2) + "x slower"
+		},
+		unknown: function(x) {
+			return "???"
 		}
 	},
 	effectsUsed: {
@@ -233,7 +230,7 @@ var nanoRewards = {
 		3: ["dil_gal_gain"],
 		4: ["dt_to_ma_exp"],
 		5: ["dil_effect_exp"],
-		6: ["meta_boost_power"],
+		6: ["unknown"],
 		7: ["remote_start", "preon_charge"],
 		8: ["per_10_power", "preon_energy"],
 	},

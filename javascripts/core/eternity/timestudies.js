@@ -879,7 +879,7 @@ let tsMults = {
 		return r
 	},
 	211() {
-		return player.galacticSacrifice === undefined ? 5 :  1
+		return tmp.ngmX >= 2 ? 1 : 5
 	},
 	212() {
 		let r = player.timeShards.max(2).log2()
@@ -890,7 +890,37 @@ let tsMults = {
 		return tmp.ngC ? 2 : (tmp.ngex ? 10 : 20)
 	},
 	222() {
-		return player.galacticSacrifice === undefined ? 2 : .5
+		return tmp.ngmX >= 2 ? 0.5 : 2
+	},
+	221() {
+		return Decimal.pow(1.0025, player.resets)
+	},
+	225() {
+		let x = Math.floor(player.replicanti.amount.e / 1e3)
+		let softcapEff = 2
+		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
+
+		if (x > 100) x = Math.sqrt(x * 100)
+		return Math.floor(x)
+	},
+	226() {
+		let x = Math.floor(player.replicanti.gal / 15)
+		return x
+	},
+	227() {
+		return Math.pow(tmp.sacPow.max(10).log10(), 10)
+	},
+	231() {
+		return Decimal.pow(Math.max(player.resets, 1), 0.3)
+	},
+	232() {
+		var exp = 0.2
+		if (tmp.ngp3) {
+			if (player.ghostify.ghostlyPhotons.unl) exp = tmp.be ? 0.2 : 0
+			else if (player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3, 0)
+		}
+		if (exp == 0) return 1
+		return Math.pow(1 + initialGalaxies() / 1000, exp)
 	},
 
 	//NG Condensed
@@ -954,39 +984,5 @@ let tsMults = {
 		let cond = player.condensed.time.reduce((a,c) => (a||0)+(c||0))
 		let x = Decimal.pow(10, 50 * Math.sqrt(cond))
 		return x
-	},
-	221() {
-		return Decimal.pow(1.0025, player.resets)
-	},
-	225() {
-		let x = Math.floor(player.replicanti.amount.e / 1e3)
-		let softcapEff = 2
-		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
-
-		if (x >= 100) x = Math.floor(Math.sqrt(0.25 + (x - 99) * softcapEff) + 98.5)
-		return x
-	},
-	226() {
-		let x = Math.floor(player.replicanti.gal / 15)
-		let softcapEff = 2
-		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
-
-		if (x >= 100) x = Math.floor(Math.sqrt(0.25 + (x - 99) * softcapEff) + 98.5)
-		return x
-	},
-	227() {
-		return Math.pow(tmp.sacPow.max(10).log10(), 10)
-	},
-	231() {
-		return Decimal.pow(Math.max(player.resets, 1), 0.3)
-	},
-	232() {
-		var exp = 0.2
-		if (tmp.ngp3) {
-			if (player.ghostify.ghostlyPhotons.unl) exp = tmp.be ? 0.2 : 0
-			else if (player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3, 0)
-		}
-		if (exp == 0) return 1
-		return Math.pow(1 + initialGalaxies() / 1000, exp)
 	}
 }

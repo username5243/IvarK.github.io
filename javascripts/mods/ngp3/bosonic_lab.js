@@ -872,7 +872,7 @@ var bu = {
 		22: "Replace seventh Nanofield reward with a boost to neutrino gain and preon charge.",
 		23: "Assigning gives more colored quarks based on your meta-antimatter.",
 		24: "You produce 1% of Space Shards on Big Rip per second, but Break Eternity upgrades that boost space shard gain are nerfed.",
-		25: "Electrons boost the per-ten Meta Dimensions multiplier.",
+		25: "???",
 		31: "Bosonic Antimatter boosts all Nanorewards.",
 		32: "You unlock more boosts from Light Empowerments.",
 		33: "Higgs Bosons reduce the costs of all electron upgrades.",
@@ -946,17 +946,6 @@ var bu = {
 		23() {
 			if (!tmp.eterUnl) return new Decimal(1)
 			return player.meta.antimatter.add(1).pow(0.06)
-		},
-		25() {
-			var div = 8e3
-			var add = 1
-			var exp = 0.6
-			if (tmp.newNGP3E){
-				div = 2e3
-				add = 1.5
-			}
-			if (!tmp.quActive) return add
-			return Math.pow(tmp.qu.electrons.amount + 1, exp) / div + add
 		},
 		31() {
 			var ret = Math.pow(Math.log10(player.ghostify.bl.am.add(1).log10() / 5 + 1) / 2 + 1, 2)
@@ -1056,9 +1045,6 @@ var bu = {
 		},
 		15(x) {
 			return shorten(x.gh) + "x more Ghostifies & " + shorten(x.dt) + "x more DT"
-		},
-		25(x) {
-			return "^" + x.toFixed(2)
 		},
 		31(x) {
 			return formatPercentage(x - 1) + "% stronger"
