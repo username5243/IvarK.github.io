@@ -78,13 +78,11 @@ function getPerTenMetaPower() {
 function getMetaBoostPower() {
 	if (inQC(8)) return 1
 	let r = 2
-	let exp = 1
 	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
-	if (tmp.ngp3) {
-		if (masteryStudies.has(312)) exp = 1.045
-		if (player.achievements.includes("ng3p26")) exp *= 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
-	}
 	if (player.achievements.includes("ngpp14")) r *= 1.01
+
+	let exp = 1
+	if (player.achievements.includes("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }
 
@@ -389,12 +387,10 @@ function updateMetaDimensions () {
 function getDil15Bonus() {
 	let x = 1
 	let max = 3
-	/*if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 3) {
-		x = tmp.nb[3]
-		max = 1/0
-	}*/
-	if (player.aarexModifications.nguspV !== undefined) x *= Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
-	else x *= Math.min(Math.log10(player.dilation.dilatedTime.max(1e10).log(10)) + 1, max)
+
+	if (player.aarexModifications.nguspV !== undefined) x = Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
+	else x = Math.min(Math.log10(player.dilation.dilatedTime.max(1e10).log(10)) + 1, max)
+
 	return x
 }
 

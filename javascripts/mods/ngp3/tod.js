@@ -45,10 +45,10 @@ function updateTreeOfDecayTab(){
 		var rate = getDecayRate(shorthand)
 		var linear = Decimal.pow(2, getRDPower(shorthand))
 		document.getElementById(color + "UnstableGain").className = canUnstable(shorthand) ? "storebtn" : "unavailablebtn"
-		document.getElementById(color + "UnstableGain").textContent = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
+		document.getElementById(color + "UnstableGain").innerHTML = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
 		document.getElementById(color + "QuarkSpin").textContent = shortenMoney(branch.spin)
 		document.getElementById(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
-		document.getElementById(color + "QuarksDecayRate").textContent = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
+		document.getElementById(color + "QuarksDecayRate").innerHTML = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
 
 		let pow = Decimal.pow(2, getRDPower(shorthand))
 		let decayed = getDecayLifetime(branch.quarks.div(pow)).div(getDecayRate(shorthand))
@@ -107,18 +107,18 @@ function updateTODStuff() {
 		var shorthand = shorthands[c]
 		var branch = tmp.qu.tod[shorthand]
 		var name = getUQNameFromBranch(shorthand)
-		document.getElementById(shorthand+"UQName").textContent = name
+		document.getElementById(shorthand + "UQName").innerHTML = name
 		extra = Decimal.log10(branch.spin) > 200
 		start = extra ? "" : "Cost: "
 		end = extra ? color : color + " quark spin"
-		for (var b = 1; b < 4; b++) {
+		for (var b = 1; b <= 3; b++) {
 			document.getElementById(color + "upg" + b + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(shorthand, b))
 			document.getElementById(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
-			if (b > 1) document.getElementById(color + "UpgName" + b).textContent=name
+			if (b > 1) document.getElementById(color + "UpgName" + b).innerHTML = name
 		}
 		if (ph.did("ghostify")) {
 			document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
-			document.getElementById(shorthand+"RDReq").textContent = "(requires "+shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + getUQNameFromBranch(shorthand) + " quarks)"
+			document.getElementById(shorthand+"RDReq").innerHTML = "(requires " + shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + name + " quarks)"
 			document.getElementById(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
 		} else document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = "none"
 	}
@@ -512,7 +512,7 @@ var uq_names = {
 			if (b >= roots_2.length) return this.exponents(rds)
 
 			let c = Math.floor((rds - 5) / 5) % 10 + 1
-			x = roots_2[b] + (c > 1 ? "^" + getFullExpansion(c) : "") + " " + x
+			x = roots_2[b] + (c > 1 ? "<sup>" + c + "</sup>" : "") + " " + x
 		}
 
 		return x
@@ -530,7 +530,7 @@ var uq_names = {
 			if (b >= roots_2.length) return this.exponents(rds)
 
 			let c = Math.floor((rds - 5) / 5) % 10 + 1
-			x = roots_2[b] + (c > 1 ? getFullExpansion(c) : "") + "." + x
+			x = roots_2[b] + (c > 1 ? c : "") + "." + x
 		}
 
 		if (x !== "") x = x + " unstable" 
@@ -538,9 +538,30 @@ var uq_names = {
 
 		return x
 	},
+	scientific(rds) {
+		let x = "Rd"
+		let roots_1 = ["", "r", "i", "e", "q"]
+		let roots_2 = ["", "g", "d", "ra", "er"]
+
+		let a = rds % 5
+		let b = Math.floor((rds - 5) / 50 + 1)
+
+		if (b >= 1) {
+			if (b >= roots_2.length) return this.exponents(rds)
+
+			let c = Math.floor((rds - 5) / 5) % 10 + 1
+			x += "<sup>" + roots_2[b] + (c > 1 ? c : "") + "</sup>"
+		}
+		if (a >= (b > 0 ? 2 : 1)) x += "<sub>" + roots_1[a] + "</sub>"
+
+		if (rds > 0) x = x + " unstable" 
+		else x = "unstable"
+
+		return x
+	},
 	exponents(rds) {
 		if (rds == 0) return "unstable"
-		return "unstable^" + getFullExpansion(rds + 1)
+		return "unstable<sup>" + getFullExpansion(rds + 1) + "</sup>"
 	},
 	mixed(rds) {
 		if (rds > 5) return this.exponents(rds)

@@ -4,7 +4,7 @@ function updateNeutrinoBoostDisplay(){
 		document.getElementById("neutrinoBoost1").textContent = getDilExp().toFixed(2)
 	}
 	if (player.ghostify.neutrinos.boosts >= 2) document.getElementById("neutrinoBoost2").textContent = shorten(tmp.nb[2])
-	if (player.ghostify.neutrinos.boosts >= 3) document.getElementById("neutrinoBoost3").textContent = tmp.nb[3].toFixed(2)
+	if (player.ghostify.neutrinos.boosts >= 3) document.getElementById("neutrinoBoost3").textContent = shorten(tmp.nb[3])
 	if (player.ghostify.neutrinos.boosts >= 4) document.getElementById("neutrinoBoost4").textContent = formatPercentage(tmp.nb[4] - 1)
 	if (player.ghostify.neutrinos.boosts >= 5) document.getElementById("neutrinoBoost5").textContent = formatPercentage(tmp.nb[5])
 	if (player.ghostify.neutrinos.boosts >= 6) document.getElementById("neutrinoBoost6").textContent = formatPercentage(1 - 1 / tmp.nb[6])
@@ -168,21 +168,13 @@ let neutrinoBoosts = {
 	},
 	2: {
 		eff(nt) {
-			let nb2neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
-			let nb2 = Math.pow(nb2neutrinos, .25) * 1.5
-			return nb2 
+			return 1
 		},
 		cost: 2
 	},
 	3: {
 		eff(nt) {
-			let nb3neutrinos = Math.sqrt(
-				Math.pow(nt[0].max(1).log10(), 2) +
-				Math.pow(nt[1].max(1).log10(), 2) +
-				Math.pow(nt[2].max(1).log10(), 2)
-			)
-			let nb3 = Math.sqrt(nb3neutrinos + 625) / 25
-			return nb3
+			return 1
 		},
 		cost: 4
 	},
