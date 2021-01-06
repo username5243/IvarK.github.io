@@ -234,12 +234,14 @@ function getReplSpeed() {
 	inc = inc + 1
 
 	if (masteryStudies.has(281)) exp += tmp.mts[281]
-
 	if (GUActive("gb2")) exp *= 2
+	if (masteryStudies.has(282)) exp += 100
+
 	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	if (hasBosonicUpg(44)) exp += tmp.blu[44]
 	if (isQCRewardActive(9)) exp += tmp.qcRewards[9].ri
 	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+
 	return {inc: inc, exp: exp}
 }
 

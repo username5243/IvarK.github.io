@@ -241,7 +241,7 @@ var masteryStudies = {
 		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance boosts itself.",
 		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		282: "???"
+		282: "Increase the OoMs of replicate interval scaling by +100."
 	},
 	hasStudyEffect: [251, 252, 253, 273, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
