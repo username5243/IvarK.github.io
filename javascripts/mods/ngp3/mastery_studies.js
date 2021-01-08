@@ -94,7 +94,7 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
-			return Math.floor(player.meta.resets) * 10
+			return Math.floor(Math.pow(player.meta.resets, 2) / 2)
 		},
 		252() {
 			if (hasNU(6)) return 0
@@ -228,7 +228,7 @@ var masteryStudies = {
 	},
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
-		251: "Remote galaxy scaling starts 10 galaxies later per 1 Meta-Dimension Boost.",
+		251: "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 7 Tachyonic Galaxies.",
 		253: "Remote galaxy scaling starts 1 galaxy later per 4 total Replicated Galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
