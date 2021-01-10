@@ -79,7 +79,7 @@ function pSacReset(force, chall, pxGain) {
 		player.pSac.times++
 		player.pSac[force ? "forcedTimes" : "normalTimes"]++
 		if (!force) {
-			player.infDimensionsUnlocked[1]=true
+			unlockInfinNGm5(2)
 			giveAchievement("Make Antimatter Great Again!") 
 		}
 	}
@@ -485,4 +485,11 @@ function updateGalaxyTabs() {
 	document.getElementById("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
 	document.getElementById("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
 	if (player.pSac === undefined) showGalTab("galUpgs")
+}
+
+function unlockInfinNGm5(dim) {
+	dim--
+	if (player.infDimensionsUnlocked[dim]) return 
+	player.infDimensionsUnlocked[dim] = true
+	$.notify("Infinity Dimension " + (dim + 1) + " unlocked!", "info")
 }

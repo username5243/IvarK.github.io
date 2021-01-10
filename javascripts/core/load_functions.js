@@ -2218,6 +2218,7 @@ function onLoad(noOffline) {
 		updateParadoxUpgrades()
                 updatePUCosts()
                 updateGalstones()
+        ParadoxUpgradeButtonTypeDisplay() // ng-5 updating
         }
         updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
@@ -2320,7 +2321,6 @@ function onLoad(noOffline) {
 	updateTemp()
 	updateTemp()
         updateAchievements()
-        ParadoxUpgradeButtonTypeDisplay() // ng-5 updating
 }
 
 

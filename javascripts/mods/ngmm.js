@@ -161,7 +161,7 @@ function galacticSacrifice(auto, force, chall) {
 		updateAutobuyers()
 	}
 	if (tmp.ngmX >= 5) {
-		player.infDimensionsUnlocked[2] = true
+		unlockInfinNGm5(3)
 		giveAchievement("The hardest of sacrifices")
 		updateGalstones()
 	}
