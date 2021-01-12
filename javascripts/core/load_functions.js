@@ -2978,12 +2978,12 @@ function loadAutoBuyerSettings() {
                 if (player.achievements.includes("ng3p52")) document.getElementById("autoDilValue").value=player.eternityBuyer.dilationPerAmount
         }
         if (player.autobuyers[12] !== undefined) document.getElementById("priority14").value = formatValue("Scientific", new Decimal(player.autobuyers[12].priority), 2, 0)
-        if (player.autobuyers[13] !== undefined) {
+        if (tmp.ngmX >= 3 && player.autobuyers[13] % 1 !== 0) {
                 document.getElementById("priority15").value = player.autobuyers[13].priority
                 document.getElementById("overGalaxiesTickspeedBoost").value = player.overXGalaxiesTickspeedBoost
                 document.getElementById("bulkTickBoost").value = player.autobuyers[13].bulk
         }
-        if (player.autobuyers[14] !== undefined) {
+        if (tmp.ngmX >= 4 && player.autobuyers[14] % 1 !== 0) {
                 document.getElementById("priority16").value = player.autobuyers[14].priority
                 document.getElementById("overGalaxiesTDBoost").value = player.autobuyers[14].overXGals
                 document.getElementById("bulkTickBoost").value = player.autobuyers[14].bulk

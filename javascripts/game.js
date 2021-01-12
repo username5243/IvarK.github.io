@@ -4735,7 +4735,7 @@ function isEmptinessDisplayChanges(){
 function DimBoostBulkDisplay(){
 	var bulkDisplay = player.infinityUpgrades.includes("bulkBoost") || player.autobuyers[9].bulkBought === true ? "inline" : "none"
 	document.getElementById("bulkdimboost").style.display = bulkDisplay
-	if (player.tickspeedBoosts != undefined) document.getElementById("bulkTickBoostDiv").style.display = bulkDisplay
+	if (tmp.ngmX >= 3) document.getElementById("bulkTickBoostDiv").style.display = bulkDisplay
 }
 
 function currentChallengeProgress(){
