@@ -369,7 +369,7 @@ function getNormalDimensionCostMults() {
 
 function onBuyDimension(tier) {
 	giveAchievement(allAchievements["r1"+tier])
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && tier != 1)) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
 	if (inNC(8) || player.currentChallenge == "postc1") clearDimensions(tier - 1)
 	if (inMatterChallenge() && player.matter.eq(0)) player.matter = new Decimal(1)
 	player.postC4Tier = tier;
@@ -645,7 +645,7 @@ function getDimensionProductionPerSecond(tier) {
 
 	if ((tmp.ngC || tmp.ez) && tier == 1) ret = ret.times(3)
 	if (tmp.ez && tier != 1) ret = ret.times(10)
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) ret = ret.times(player.chall2Pow)
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && tier != 1)) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
 	if (player.aarexModifications.ngmX > 3) ret = ret.div(10)
