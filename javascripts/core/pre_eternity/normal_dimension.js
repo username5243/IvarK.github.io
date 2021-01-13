@@ -369,7 +369,7 @@ function getNormalDimensionCostMults() {
 
 function onBuyDimension(tier) {
 	giveAchievement(allAchievements["r1"+tier])
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && tier != 1)) player.chall2Pow = 0
 	if (inNC(8) || player.currentChallenge == "postc1") clearDimensions(tier - 1)
 	if (inMatterChallenge() && player.matter.eq(0)) player.matter = new Decimal(1)
 	player.postC4Tier = tier;
