@@ -1988,7 +1988,8 @@ var modFullNames = {
 	ngprw: "NG+ Reworked",
 	ls: "Light Speed",
 	ngc: "NG Condensed",
-	ez: "Barrier-Easing"
+	ez: "Barrier-Easing",
+	ngm5r: "NG- Regulated"
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
@@ -2004,6 +2005,11 @@ var modSubNames = {
 	ngex: ["OFF", "ON", "DEATH MODE 💀"]*/ // modes that aren't even made yet
 }
 function toggle_mod(id) {
+	if (id == "ngm5r") {
+		alert("Coming soon...")
+		return
+	}
+
 	hasSubMod = Object.keys(modSubNames).includes(id)
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
