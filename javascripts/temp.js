@@ -611,7 +611,7 @@ function updateBosonicAMDimReturnsTemp() {
 }
 
 function updateBosonicEnchantsTemp(){
-	tmp.bEn.lvl = {}
+	tmp.bEn = {lvl: {}}
 	for (var g2 = 2; g2 <= br.limit; g2++) for (var g1 = 1; g1 < g2; g1++) {
 		var id = g1 * 10 + g2
 		tmp.bEn.lvl[id] = player.ghostify.bl.enchants[id] || new Decimal(0)
@@ -620,6 +620,7 @@ function updateBosonicEnchantsTemp(){
 }
 
 function updateBosonicUpgradesTemp(){
+	tmp.blu = {}
 	for (var r = bu.rows; r >= 1; r--) for (var c = 5; c >= 1; c--) {
 		var id = r * 10 + c
 		if (bu.effects[id] !== undefined) tmp.blu[id] = bu.effects[id]()

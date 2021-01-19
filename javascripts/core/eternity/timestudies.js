@@ -911,7 +911,9 @@ let tsMults = {
 		return Math.pow(tmp.sacPow.max(10).log10(), 10)
 	},
 	231() {
-		return Decimal.pow(Math.max(player.resets, 1), 0.3)
+		let x = Decimal.pow(Math.max(player.resets, 1), 0.3)
+		if (tmp.ngp3 && player.achievements.includes("ngpp14")) x = x.max(Decimal.pow(1.01, Math.sqrt(player.resets)))
+		return x
 	},
 	232() {
 		var exp = 0.2

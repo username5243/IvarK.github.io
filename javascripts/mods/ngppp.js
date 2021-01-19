@@ -160,9 +160,9 @@ function maxAllDilUpgs() {
 			} else if (id == "r2") {
 				if (canBuyGalaxyThresholdUpg()) {
 					if (speedrunMilestonesReached > 21) {
-						var cost = Decimal.pow(10,player.dilation.rebuyables[2] * 2 + 6)
+						var cost = Decimal.pow(10, player.dilation.rebuyables[2] * 2 + 6)
 						if (player.dilation.dilatedTime.gte(cost)) {
-							var toBuy = Math.min(Math.floor(player.dilation.dilatedTime.div(cost).times(99).add(1).log(100)), 60 - player.dilation.rebuyables[2])
+							var toBuy = Math.floor(player.dilation.dilatedTime.div(cost).times(99).add(1).log(100))
 							var toSpend = Decimal.pow(100,toBuy).sub(1).div(99).times(cost)
 							player.dilation.dilatedTime = player.dilation.dilatedTime.sub(player.dilation.dilatedTime.min(cost))
 							player.dilation.rebuyables[2] += toBuy

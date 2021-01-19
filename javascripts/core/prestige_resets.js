@@ -157,7 +157,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.dilation = {
 		studies: bigRip ? (tmp.bruActive[12] ? [1,2,3,4,5,6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
 		active: false,
-		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.bruActive[11])) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones > 15 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
+		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.bruActive[11])) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones >= 16 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -168,8 +168,8 @@ function doQuantumResetStuff(bigRip, isQC){
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: 0,
-			4: 0,
+			3: speedrunMilestonesReached >= 8 ? player.dilation.rebuyables[3] : 0,
+			4: speedrunMilestonesReached >= 8 ? player.dilation.rebuyables[4] : 0,
 		}
 	}
 	resetNGUdData(true)
@@ -673,9 +673,9 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		studies: bm ? player.dilation.studies : [],
 		active: false,
 		times: 0,
-		tachyonParticles: player.ghostify.milestones > 15 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
+		tachyonParticles: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
 		dilatedTime: new Decimal(bm ? 1e100 : 0),
-		bestTP: player.ghostify.milestones > 15 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
+		bestTP: player.ghostify.milestones >= 16 ? player.dilation.bestTPOverGhostifies : new Decimal(0),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
@@ -684,8 +684,8 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: 0,
-			4: 0,
+			3: bm ? player.dilation.rebuyables[3] : 0,
+			4: bm ? player.dilation.rebuyables[4] : 0,
 		}
 	}
 	resetNGUdData()

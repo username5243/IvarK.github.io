@@ -264,7 +264,7 @@ function setR13Tooltip() {
 	//ACHIEVEMENT ROW 13
 	potato3.setAttribute('ach-tooltip', "Get more than "+shortenCosts(new Decimal("1e8296262"))+" ticks per second." + (player.galacticSacrifice !== undefined ? " Reward: The Galaxy boost to Galaxy points gain is buffed based on a specific value (~663 galaxies)." : ""))
 	infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed" + (player.meta ? ", and your Infinity gain is multiplied by dilated time^(1/4)." : "."))
-	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal(tmp.ngex?"1e15000":"1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti.")
+	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal(tmp.ngex?"1e15000":"1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti" + (tmp.ngp3 || player.aarexModifications.newGamePlusVersion? " and you can always buy max RGs." : "."))
 	thinking.setAttribute('ach-tooltip', "Eternity for " + shortenCosts( new Decimal("1e600")) + " EP in 1 minute or less while Dilated. Reward: Multiply Dilated Time gain based on replicanti.")
 	thisis.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal('1e20000')) + " IP without any time studies while Dilated." + (thisisReward != "" ? " Reward: " + thisisReward + "." : ""))
 }
@@ -290,7 +290,7 @@ function setR14Tooltip() {
 	//ngpp11/////
 	//ngpp12/////
 	let onlywar = document.getElementById("In the grim darkness of the far endgame")
-	//ngpp14/////
+	let metamax = document.getElementById("Meta-boosting to the max")
 	let thecap = document.getElementById("The cap is a million, not a trillion")
 	let neverenough = document.getElementById("It will never be enough")
 	//ngpp17/////
@@ -302,17 +302,18 @@ function setR14Tooltip() {
 	onlywarReward = wordizeList(onlywarReward, true)
 
 	//ACHIEVEMENT ROW 14 (NG++)
-	onlywar.setAttribute('ach-tooltip', "Reach "+shortenMoney(new Decimal('1e40000'))+" EP."+(onlywarReward!=""?" Reward: " + onlywarReward + ".":""))
-	thecap.setAttribute('ach-tooltip', "Get "+shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 uses a better formula.")
-	neverenough.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000"))+" replicanti. " + (tmp.ngC ? "Reward: You can always buy max RGs." : "Reward: You unlock the option to buy the maximum Replicated Galaxies available."))
-	harmony.setAttribute('ach-tooltip', player.meta?"Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger.":"Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.")
+	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
+	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
+	metamax.setAttribute('ach-tooltip', "Get 10 Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
+	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || player.aarexModifications.newGamePlusVersion ? "TS131 doesn't disable RG autobuyer anymore." : "You can always buy max RGs."))
+	harmony.setAttribute('ach-tooltip', player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.")
 }
 
 function setR15Tooltip() {
 	// Row 15 (ng3p1) (5/8)
 	let notenough = document.getElementById("I don't have enough fuel!")
 	//ng3p12/////
-	let hadron = document.getElementById("Hadronization")
+	//ng3p13/////
 	//ng3p14/////
 	//ng3p15/////
 	let old = document.getElementById("Old age")
@@ -321,7 +322,6 @@ function setR15Tooltip() {
 
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce more dilated time based on your normal galaxies, and gain more Tachyon particles based on your Replicated Galaxies.")
-	hadron.setAttribute('ach-tooltip', "Have colored quarks, but have no color charge. Reward: Quantum worth boosts all Meta Dimensions.")
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to the 1st Meta Dimension based on total antimatter.") 
 	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies and electrons. Reward: Generate Time Theorems based on your best-ever Tachyon particles.")
 	winner.setAttribute('ach-tooltip', "Quantum in under 30 seconds. Reward: Your EP multiplies Quark gain.")

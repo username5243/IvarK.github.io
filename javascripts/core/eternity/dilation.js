@@ -401,7 +401,11 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (speedrunMilestonesReached < 22) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] >= 3) player.eternityBuyer.tpUpgraded = true
+		if (id[1] == 3) {
+			player.eternityBuyer.tpUpgraded = true
+			if (player.achievements.includes("ng3p13")) setTachyonParticles(player.dilated.tachyonParticles.times(getDil3Power()))
+		}
+		if (id[1] == 4) player.eternityBuyer.tpUpgraded = true
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return
@@ -432,7 +436,8 @@ function buyDilationUpgrade(pos, max, isId) {
 }
 
 function getPassiveTTGen() {
-	if (player.dilation.tachyonParticles.plus(player.dilation.bestTP).gt(Decimal.pow(10, 3333))) return 1e202
+	if (player.dilation.tachyonParticles.plus(player.dilation.bestTP).gt("1e3333")) return 1e202
+
 	let r = getTTGenPart(player.dilation.tachyonParticles)
 	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
 	if (tmp.ngex) r *= .8
@@ -444,9 +449,9 @@ function getPassiveTTGen() {
 function getTTGenPart(x) {
 	if (!x) return new Decimal(0)
 	x = x.max(1).log10()
-	let y = player.aarexModifications.ngudpV && !player.aarexModifications.nguepV ? 73 : 80
+	let y = 70
 	if (x > y) x = Math.sqrt((x - y + 5) * 5) + y - 5
-	return Math.pow(10,x)
+	return Math.pow(10, x)
 }
 
 function updateDilationUpgradeButtons() {
@@ -465,6 +470,7 @@ function updateDilationUpgradeButtons() {
 	}
 	var genSpeed = getPassiveTTGen()
 	var power = getDil3Power()
+	document.getElementById("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
 	document.getElementById("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
 	document.getElementById("dil22desc").textContent = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Time Dimensions are affected by replicanti multiplier ^ 0.1."
 	document.getElementById("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
@@ -511,16 +517,16 @@ function updateDilationUpgradeCosts() {
 }
 
 function canBuyGalaxyThresholdUpg() {
-	return !tmp.ngp3 || player.dilation.rebuyables[2] < 60
+	return true
 }
 
-function getFreeGalaxyThresholdIncrease(){
-	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : !canBuyGalaxyThresholdUpg() ? 1.35 : 1.35 + 3.65 * Math.pow(0.8, getDilUpgPower(2))
-	if (hasBosonicUpg(12)) {
-		thresholdMult -= tmp.blu[12]
-		if (thresholdMult < 1.2) thresholdMult = 1.1 + 0.1 / Math.sqrt(2.2 - thresholdMult)
-		else if (thresholdMult < 1.15) thresholdMult = 1.05 + 0.1 / (2.15 - thresholdMult)
-	}
+function getFreeGalaxyThresholdIncrease() {
+	let dil2 = getDilUpgPower(2)
+	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : 1.35
+	if (dil2 != 0) thresholdMult += 3.65 * Math.pow(0.8, dil2)
+
+	if (tmp.ngp3 && dil2 > 30) thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(Math.log10(dil2 / 3)))
+
 	if (player.exdilation != undefined) thresholdMult -= Math.min(.1 * exDilationUpgradeStrength(2), 0.2)
 	if (thresholdMult < 1.15 && player.aarexModifications.nguspV !== undefined) thresholdMult = 1.05 + 0.1 / (2.15 - thresholdMult)
 	return thresholdMult

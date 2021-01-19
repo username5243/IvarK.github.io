@@ -129,9 +129,9 @@ var extraReplGalaxies = 0
 function replicantiGalaxy() {
 	var maxGal = getMaxRG()
 	if (!canGetReplicatedGalaxy()) return
-	if (player.galaxyMaxBulk) player.replicanti.galaxies=maxGal
+	if (player.galaxyMaxBulk) player.replicanti.galaxies = maxGal
 	else player.replicanti.galaxies++
-	if (!player.achievements.includes("ng3p67")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126")?player.replicanti.amount:1,Number.MAX_VALUE).max(1)
+	if (!player.achievements.includes("ng3p67")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
 	galaxyReset(0)
 }
 
@@ -140,7 +140,7 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return speedrunMilestonesReached >= 20 || !hasTimeStudy(131) || tmp.ngC
+	return (player.achievements.includes("ngpp16") && tmp.ngp3) || !hasTimeStudy(131) || tmp.ngC
 }
 
 function getMaxRG() {

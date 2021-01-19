@@ -3648,7 +3648,7 @@ function updateNGpp17Reward(){
 }
 
 function updateNGpp16Reward(){
-	document.getElementById('replicantibulkmodetoggle').style.display = (player.achievements.includes("ngpp16") || (tmp.ngC && player.eternityUpgrades.includes(6))) ? "inline-block" : "none"
+	document.getElementById('replicantibulkmodetoggle').style.display = (player.achievements.includes(tmp.ngp3 || player.aarexModifications.newGamePlusVersion ? "r134" : "ngpp16") || (tmp.ngC && player.eternityUpgrades.includes(6))) ? "inline-block" : "none"
 }
 
 function notifyQuantumMilestones(){

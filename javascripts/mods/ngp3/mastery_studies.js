@@ -32,7 +32,7 @@ var masteryStudies = {
 	},
 	unlockReqConditions: {
 		7() {
-			return quantumWorth.gte(50)
+			return false //quantumWorth.gte(50)
 		},
 		8() {
 			return tmp.qu.electrons.amount >= 16750
@@ -58,7 +58,7 @@ var masteryStudies = {
 	},
 	unlockReqDisplays: {
 		7() {
-			return "50 quantum worth"
+			return "LOCKED UNTIL BETA V0.3" //"50 quantum worth"
 		},
 		8() {
 			return getFullExpansion(16750) + " electrons"

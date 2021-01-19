@@ -737,7 +737,7 @@
 							<button id="dil11" onclick="buyDilationUpgrade(11)">Double dilated time production.<br><span id="dil11cost"></span></button>
 						</td>
 						<td>
-							<button id="dil12" onclick="buyDilationUpgrade(12)">Decrease the galaxy threshold multiplier, but reset Tachyonic Galaxies and dilated time.<br><span id="dil12cost"></span></button>
+							<button id="dil12" onclick="buyDilationUpgrade(12)" style="font-size: 9px">Tachyonic Galaxies scale faster, but reset dilated time and those galaxies.<br><span id="dil12desc">Scaling: 4x</span><br><span id="dil12cost"></span></button>
 						</td>
 						<td>
 							<button id="dil13" onclick="buyDilationUpgrade(13)"><span id="dil13desc"></span><br><span id="dil13cost"></span></button>
@@ -810,7 +810,7 @@
 				<table>
 					<tr>
 						<td>
-							<button id="dil71" onclick="buyDilationUpgrade(71)">The Replicanti limit is multiplied by your Dilated Time ^2,500<br><span id="dil71cost"></span></button>
+							<button id="dil71" onclick="buyDilationUpgrade(71)">The limit of replicantis is higher by DT^2,500.<br><span id="dil71cost"></span></button>
 						</td>
 						<td>
 							<button id="dil72" onclick="buyDilationUpgrade(72)">The IP gain multiplier upgrade is not affected by Obscurements.<br><span id="dil72cost"></span></button>
@@ -1533,7 +1533,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 7)</p>
+				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 8)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2230,7 +2230,7 @@
 								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 20x more Eternities up to 100,000 Eternities, start with Eternities based on your fastest Quantum (up to 20,000), and unlock the 'Don't respec studies and auto-reunlock ECs' option in the Eternity Challenges menu."><br></div>
 							</td>
 							<td>
-								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge."><br></div>
+								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions and each time you buy '3x TP' upgrade, your TP amount is increased by 3x."><br></div>
 							</td>
 							<td>
 								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades."><br></div>
@@ -4639,10 +4639,10 @@
 						<td><div id="speedrunMilestone2" style="background-image: url(images/quantum_speedruns/2.png)" ach-tooltip="Reward: Unlock the Time Theorem autobuyer."></div></td>
 						<td><div id="speedrunMilestone3" style="background-image: url(images/quantum_speedruns/3.png)" ach-tooltip="Reward: Start with all Eternity Challenges completed and Eternity Upgrades bought."></div></td>
 						<td><div id="speedrunMilestone4" style="background-image: url(images/quantum_speedruns/4.png)" ach-tooltip="Reward: Start with Time Dilation unlocked."></div></td>
-						<td><div id="speedrunMilestone5" style="background-image: url(images/quantum_speedruns/5.png)" ach-tooltip="Reward: Unlock the Dilation option for the Eternity autobuyer."></div></td>
+						<td><div id="speedrunMilestone5" style="background-image: url(images/quantum_speedruns/5.png)" ach-tooltip="Reward: You can automatically dilate time each time you buy a 'better TP formula' upgrade."></div></td>
 						<td><div id="speedrunMilestone6" style="background-image: url(images/quantum_speedruns/6.png)" ach-tooltip="Reward: Start with all Dilation studies & non-rebuyable dilation upgrades before Meta Dimensions unlocked, except for the passive TT gen upgrade."></div></td>
 						<td><div id="speedrunMilestone7" style="background-image: url(images/quantum_speedruns/7.png)" ach-tooltip="Reward: Unlock the First Meta Dimension autobuyer and rebuyable dilation upgrades autobuyer."></div></td>
-						<td><div id="speedrunMilestone8" style="background-image: url(images/quantum_speedruns/8.png)" ach-tooltip="Reward: Unlock the Second Meta Dimension autobuyer."></div></td>
+						<td><div id="speedrunMilestone8" style="background-image: url(images/quantum_speedruns/8.png)" ach-tooltip="Reward: Unlock the Second Meta Dimension autobuyer and you keep repeatable upgrades that boost TP gain."></div></td>
 					</tr>
 					<tr id="speedrunRow2">
 						<td><div id="speedrunMilestone9" style="background-image: url(images/quantum_speedruns/9.png)" ach-tooltip="Reward: Unlock the third Meta Dimension autobuyer."></div></td>
@@ -4658,7 +4658,7 @@
 						<td><div id="speedrunMilestone17" style="background-image: url(images/quantum_speedruns/17.png)" ach-tooltip="Reward: All Meta Dimensions are available for purchase on Quantum."></div></td>
 						<td><div id="speedrunMilestone18" style="background-image: url(images/quantum_speedruns/18.png)"></div></td>
 						<td><div id="speedrunMilestone19" style="background-image: url(images/quantum_speedruns/19.png)"></div></td>
-						<td><div id="speedrunMilestone20" style="background-image: url(images/quantum_speedruns/20.png)" ach-tooltip="Reward: You can turn on automatic Replicated Galaxies regardless of the second Time Study split path."></div></td>
+						<td><div id="speedrunMilestone20" style="background-image: url(images/quantum_speedruns/20.png)" ach-tooltip="Reward: ???"></div></td>
 						<td><div id="speedrunMilestone21" style="background-image: url(images/quantum_speedruns/21.png)" ach-tooltip="Reward: The rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster."></div></td>
 						<td><div id="speedrunMilestone22" style="background-image: url(images/quantum_speedruns/22.png)"></div></td>
 						<td><div id="speedrunMilestone23" style="background-image: url(images/quantum_speedruns/23.png)" ach-tooltip="Reward: Unlock the Quantum autobuyer."></div></td>

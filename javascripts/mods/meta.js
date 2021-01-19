@@ -79,9 +79,10 @@ function getMetaBoostPower() {
 	if (inQC(8)) return 1
 	let r = 2
 	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
-	if (player.achievements.includes("ngpp14")) r *= 1.01
+	if (player.achievements.includes("ngpp14") && !tmp.ngp3) r *= 1.01
 
 	let exp = 1
+	if (tmp.ngp3) exp = 1.05
 	if (player.achievements.includes("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }

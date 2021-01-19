@@ -61,7 +61,7 @@ let Prestiges = {
 			return tmp.ngp3
 		},
 		planck() {
-			return tmp.ngp3
+			return false //tmp.ngp3
 		}
 	},
 	can(id) {

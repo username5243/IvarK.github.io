@@ -320,8 +320,8 @@ function getBosonicFinalCost(x) {
 }
 
 function updateBosonicLabTemp() {
-	tmp.bEn = {}
-	tmp.blu = {}
+	delete tmp.bEn
+	delete tmp.blu
 	tmp.wzb = {}
 
 	if (!ph.did("ghostify")) return 
@@ -864,7 +864,7 @@ var bu = {
 	reqData: {},
 	descs: {
 		11: "Bosonic Antimatter increases blue Light effect.",
-		12: "For every 100% of green power effect, decrease the free galaxy threshold increase by 0.0007.",
+		12: "???",
 		13: "Radioactive Decays boost the effect of Light Empowerments.",
 		14: "Sacrificed galaxies cancel less galaxies based on your free galaxies.",
 		15: "Ghostifies and dilated time power up each other.",
@@ -906,9 +906,6 @@ var bu = {
 			ret = Math.pow(x, exp) / 4
 
 			return ret
-		},
-		12() {
-			return tmp.quActive ? (colorBoosts.g + tmp.pe - 1) * 7e-4 : 0
 		},
 		13() {
 			if (!tmp.quActive) return 1
