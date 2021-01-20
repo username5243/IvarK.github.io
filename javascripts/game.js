@@ -1761,7 +1761,7 @@ function updateInfCosts() {
 }
 
 function updateMilestones() {
-	var moreUnlocked = tmp.ngp3 && (player.dilation.upgrades.includes("ngpp3") || ph.did("quantum"))
+	var moreUnlocked = tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
 	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 2e10, 4e11, 1e13]
 	for (i=0; i<(moreUnlocked ? 28 : 24); i++) {
 		var name = "reward" + i;
