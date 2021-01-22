@@ -44,7 +44,7 @@ function hideMaxIDButton(onLoad = false) {
 		}
 	}
 	if (player.pSac !== undefined) hide = false
-	document.getElementById("maxAllID").style.display = hide ? "none" : ""
+	getEl("maxAllID").style.display = hide ? "none" : ""
 }
 
 function infDimensionDescription(tier) {
@@ -62,18 +62,18 @@ function infDimensionDescription(tier) {
 }
 
 function updateInfinityDimensions() {
-	if (document.getElementById("dimensions").style.display == "block" && document.getElementById("infinitydimensions").style.display == "block") {
+	if (getEl("dimensions").style.display == "block" && getEl("infinitydimensions").style.display == "block") {
 		updateInfPower()
 		for (let tier = 1; tier <= 8; ++tier) {
 			let unl = player.infDimensionsUnlocked[tier-1]
-			document.getElementById("infRow" + tier).style.display = unl ? "" : "none"
+			getEl("infRow" + tier).style.display = unl ? "" : "none"
 			if (unl) {
-				document.getElementById("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
-				document.getElementById("infAmount" + tier).textContent = infDimensionDescription(tier);
-				document.getElementById("infMax" + tier).textContent = (ph.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
-				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) document.getElementById("infMax"+tier).className = "storebtn"
-				else document.getElementById("infMax" + tier).className = "unavailablebtn"
-				document.getElementById("infRow" + tier).style.visibility = "visible";
+				getEl("infD" + tier).textContent = DISPLAY_NAMES[tier] + " Infinity Dimension x" + shortenMoney(infDimensionPower(tier));
+				getEl("infAmount" + tier).textContent = infDimensionDescription(tier);
+				getEl("infMax" + tier).textContent = (ph.did("quantum") ? '' : "Cost: ") + (player.pSac !== undefined ? shortenDimensions(player["infinityDimension" + tier].costAM) : shortenInfDimCosts(getIDCost(tier)) + " IP")
+				if (player.pSac !== undefined ? player.money.gte(player["infinityDimension"+tier].costAM) : player.infinityPoints.gte(getIDCost(tier))) getEl("infMax"+tier).className = "storebtn"
+				else getEl("infMax" + tier).className = "unavailablebtn"
+				getEl("infRow" + tier).style.visibility = "visible";
 				if (tmp.ngC) ngC.condense.ids.update(tier)
 			}
 		}
@@ -262,7 +262,7 @@ function buyManyInfinityDimension(tier, auto) {
 
 	if (player.pSac != undefined) player.chall2Pow = 0
 	if (player.currentEternityChall == "eterc8") player.eterc8ids -= 1
-	document.getElementById("eterc8ids").textContent = "You have " + player.eterc8ids + " purchases left."
+	getEl("eterc8ids").textContent = "You have " + player.eterc8ids + " purchases left."
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	return true
 }
@@ -329,10 +329,10 @@ function getInfinityPowerEffectExp() {
 function switchAutoInf(tier) {
 	if (player.infDimBuyers[tier - 1]) {
 		player.infDimBuyers[tier - 1] = false
-		document.getElementById("infauto"+tier).textContent = "Auto: OFF"
+		getEl("infauto"+tier).textContent = "Auto: OFF"
 	} else {
 		player.infDimBuyers[tier - 1] = true
-		document.getElementById("infauto"+tier).textContent = "Auto: ON"
+		getEl("infauto"+tier).textContent = "Auto: ON"
 	}
 	hideMaxIDButton()
 }
@@ -341,13 +341,13 @@ function toggleAllInfDims() {
 	if (player.infDimBuyers[0]) {
 		for (let i = 1; i <= 8; i++) {
 			player.infDimBuyers[i - 1] = false
-			document.getElementById("infauto" + i).textContent = "Auto: OFF"
+			getEl("infauto" + i).textContent = "Auto: OFF"
 		}
 	} else {
 		for (let i=1; i <= 8; i++) {
 			if (getEternitied() - 10 >= i) {
 				player.infDimBuyers[i - 1] = true
-				document.getElementById("infauto" + i).textContent = "Auto: ON"
+				getEl("infauto" + i).textContent = "Auto: ON"
 			}
 		}
 	}
@@ -356,8 +356,8 @@ function toggleAllInfDims() {
 
 function loadInfAutoBuyers() {
 	for (let i = 1; i <= 8; i++) {
-		if (player.infDimBuyers[i - 1]) document.getElementById("infauto" + i).textContent = "Auto: ON"
-		else document.getElementById("infauto" + i).textContent = "Auto: OFF"
+		if (player.infDimBuyers[i - 1]) getEl("infauto" + i).textContent = "Auto: ON"
+		else getEl("infauto" + i).textContent = "Auto: OFF"
 	}
 	hideMaxIDButton(true)
 }
@@ -370,14 +370,17 @@ function getIDReplMult() {
 }
 
 function updateInfPower() {
-	document.getElementById("infPowAmount").textContent = shortenMoney(player.infinityPower)
-	if (getEl("infPowEffectPower")) getEl("infPowEffectPower").textContent = tmp.infPowExp.toFixed(2)
-	document.getElementById("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
-	if (player.currentEternityChall == "eterc7") document.getElementById("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
+	getEl("infPowAmount").textContent = shortenMoney(player.infinityPower)
+	if (getEl("infPowEffectPower")) {
+		if (tmp.ngmX < 5 || tmp.infPow.log10() < 10) getEl("infPowEffectPower").textContent = tmp.infPowExp.toFixed(tmp.ngmX !== 5 ? 2 : 1)
+		else getEl("infPowEffectPower").textContent = Math.min(tmp.infPow.log10() / player.infinityPower.log10()).toFixed(1)
+	}
+	getEl("infDimMultAmount").textContent = shortenMoney(tmp.infPow)
+	if (player.currentEternityChall == "eterc7") getEl("infPowPerSec").textContent = "You are getting " +shortenDimensions(infDimensionProduction(1))+" Seventh Dimensions per second."
 	else {
 		let r = infDimensionProduction(1)
 		if (tmp.ngmX >= 5) r = r.plus(infDimensionProduction(2)).div(tmp.ec12Mult).times(getPDAcceleration())
-		document.getElementById("infPowPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
+		getEl("infPowPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && r < 100 ? shortenND(r) : shortenDimensions(r)) + " Infinity Power per "  + (tmp.ngmX >= 5 && tmp.PDunl ? "real-life " : "") + "second."
 	}
 }
 

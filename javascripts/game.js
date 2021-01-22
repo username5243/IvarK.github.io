@@ -1989,7 +1989,7 @@ var modFullNames = {
 	ls: "Light Speed",
 	ngc: "NG Condensed",
 	ez: "Barrier-Easing",
-	ngm5r: "NG- Regulated"
+	ngm5rg: "NG- Regulated"
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
@@ -2005,7 +2005,7 @@ var modSubNames = {
 	ngex: ["OFF", "ON", "DEATH MODE 💀"]*/ // modes that aren't even made yet
 }
 function toggle_mod(id) {
-	if (id == "ngm5r") {
+	if (id == "ngm5rg") {
 		alert("Coming soon...")
 		return
 	}
@@ -4485,6 +4485,7 @@ function nonERFreeTickUpdating(){
 		thresholdMult = 1.25
 		if (player.aarexModifications.newGameMult) thresholdMult -= 0.08
 	}
+	if (tmp.ngmX >= 5) thresholdMult = 1.5
 	if (isQCRewardActive(7)) thresholdMult *= tmp.qcRewards[7]
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 9) thresholdMult -= tmp.nb[10]
 	if (thresholdMult < 1.1 && player.galacticSacrifice == undefined) thresholdMult = 1.05 + 0.05 / (2.1 - thresholdMult)
