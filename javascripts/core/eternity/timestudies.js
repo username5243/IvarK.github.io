@@ -878,6 +878,10 @@ let tsMults = {
 		if (tmp.ngC) r/=2
 		return r
 	},
+	141() {
+		if (player.achievements.includes("r137") && (player.aarexModifications.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
+		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime+1) * Math.pow(player.thisInfinityTime+1, 0.125))).max(1)
+	},
 	211() {
 		return tmp.ngmX >= 2 ? 1 : 5
 	},
@@ -912,7 +916,7 @@ let tsMults = {
 	},
 	231() {
 		let x = Decimal.pow(Math.max(player.resets, 1), 0.3)
-		if (tmp.ngp3 && player.achievements.includes("ngpp14")) x = x.max(Decimal.pow(1.01, Math.sqrt(player.resets)))
+		if (tmp.ngp3 && player.achievements.includes("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(player.resets / 1e5 + 1, 1.25)))
 		return x
 	},
 	232() {

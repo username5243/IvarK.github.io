@@ -32,14 +32,13 @@ function getBaseDTProduction(){
 
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
-	if (tmp.ngp3 && (!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11))) {
-		gain = gain.times(getDTMultPostBRU11())
-	}
 	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 
 	if (tmp.ngp3) {
 		if (player.achievements.includes("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
 		if (player.achievements.includes("ngpp13")) gain = gain.times(2)
+
+		if (isBigRipUpgradeActive(11)) gain = gain.times(getDTMultPostBRU11())
 	}
 	return gain
 }

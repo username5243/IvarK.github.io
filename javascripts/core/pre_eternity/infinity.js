@@ -7,10 +7,10 @@ function breakInfinity() {
 	if (!canBreakInfinity()) return false
 	if (player.break && !player.currentChallenge.includes("post")) {
 		player.break = false
-		document.getElementById("break").textContent = "BREAK INFINITY"
+		getEl("break").textContent = "BREAK INFINITY"
 	} else {
 		player.break = true
-		document.getElementById("break").textContent = "FIX INFINITY"
+		getEl("break").textContent = "FIX INFINITY"
 	}
 }
 
@@ -44,11 +44,11 @@ function gainedInfinityPoints(next) {
 
 	if (player.infinityUpgradesRespecced == undefined) var ret = Decimal.pow(10, player.money.e / div - 0.75).times(uIPM ? 1 : getIPMult())
 	else var ret = player.money.div(Number.MAX_VALUE).pow(2 * (1 - Math.log10(2)) / Decimal.log10(Number.MAX_VALUE)).times(uIPM ? 1 : getIPMult())
-	if (hasTimeStudy(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
-	if (hasTimeStudy(51)) ret = ret.times(tsMults[51]())
-	if (hasTimeStudy(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
-	if (hasTimeStudy(142)) ret = ret.times(1e25)
-	if (hasTimeStudy(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
+	if (hasTS(41)) ret = ret.times(Decimal.pow(tsMults[41](), player.galaxies + player.replicanti.galaxies))
+	if (hasTS(51)) ret = ret.times(tsMults[51]())
+	if (hasTS(141)) ret = ret.times(tsMults[141]())
+	if (hasTS(142)) ret = ret.times(1e25)
+	if (hasTS(143)) ret = ret.times(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125)))
 	if (player.achievements.includes("r116")) ret = ret.times(Decimal.add(getInfinitied(), 1).pow(Math.log10(2)))
 	if (player.achievements.includes("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
 	if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.max(1).pow(1000))
@@ -88,25 +88,25 @@ function getIPMult() {
 function toggleCrunchMode(freeze) {
 	if (player.autoCrunchMode == "amount") {
 		player.autoCrunchMode = "time"
-		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: time"
-		document.getElementById("limittext").textContent = "Seconds between crunches:"
+		getEl("togglecrunchmode").textContent = "Auto crunch mode: time"
+		getEl("limittext").textContent = "Seconds between crunches:"
 	} else if (player.autoCrunchMode == "time"){
 		player.autoCrunchMode = "relative"
-		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
-		document.getElementById("limittext").textContent = "X times last crunch:"
+		getEl("togglecrunchmode").textContent = "Auto crunch mode: X times last crunch"
+		getEl("limittext").textContent = "X times last crunch:"
 	} else if (player.autoCrunchMode == "relative" && player.boughtDims){
 		player.autoCrunchMode = "replicanti"
-		document.getElementById("togglecrunchmode").innerHTML = "Auto crunch mode: replicated galaxies"
-		document.getElementById("limittext").innerHTML = "Replicanti galaxies needed for crunch:"
-		document.getElementById("maxReplicantiCrunchSwitchDiv").style.display = 'inline'
+		getEl("togglecrunchmode").innerHTML = "Auto crunch mode: replicated galaxies"
+		getEl("limittext").innerHTML = "Replicanti galaxies needed for crunch:"
+		getEl("maxReplicantiCrunchSwitchDiv").style.display = 'inline'
 	} else {
 		player.autoCrunchMode = "amount"
-		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
-		document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
-		document.getElementById("maxReplicantiCrunchSwitchDiv").style.display = 'none'
+		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
+		getEl("limittext").textContent = "Amount of IP to wait until reset:"
+		getEl("maxReplicantiCrunchSwitchDiv").style.display = 'none'
 		if (!freeze&&player.autobuyers[11].priority.toString().toLowerCase()=="max") {
 			player.autobuyers[11].priority = new Decimal(1)
-			document.getElementById("priority12").value=1
+			getEl("priority12").value=1
 		}
 	}
 }
@@ -131,11 +131,11 @@ function updateLastTenRuns() {
 				else msg += " in " + challNames[parseInt(split[1])]
 			}
 			msg += " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
-			document.getElementById("run"+(i+1)).textContent = msg
+			getEl("run"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(player.lastTenRuns[i][0])
 			tempIP = tempIP.plus(player.lastTenRuns[i][1])
 			listed++
-		} else document.getElementById("run"+(i+1)).textContent = ""
+		} else getEl("run"+(i+1)).textContent = ""
 	}
 	if (listed > 1) {
 		tempTime = tempTime.dividedBy(listed)
@@ -144,12 +144,12 @@ function updateLastTenRuns() {
 		var tempstring = "(" + shorten(ippm) + " IP/min)"
 		averageIP = tempIP
 		if (ippm < 1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
-		document.getElementById("averagerun").textContent = "Average time of the last " + listed + " Infinities: " + timeDisplayShort(tempTime, false, 3) + " | Average IP gain: " + shortenDimensions(tempIP) + " IP. " + tempstring
+		getEl("averagerun").textContent = "Average time of the last " + listed + " Infinities: " + timeDisplayShort(tempTime, false, 3) + " | Average IP gain: " + shortenDimensions(tempIP) + " IP. " + tempstring
 		
 		if (tempBest.gte(1e8)) giveAchievement("Oh hey, you're still here");
 		if (tempBest.gte(1e300)) giveAchievement("MAXIMUM OVERDRIVE");
 		bestRunIppm = tempBest
-	} else document.getElementById("averagerun").innerHTML = ""
+	} else getEl("averagerun").innerHTML = ""
 }
 
 function getInfinitiedStat(){
@@ -163,7 +163,7 @@ function getInfinitied() {
 function getInfinitiedGain() {
 	let infGain=1
 	if (player.thisInfinityTime > 50 && player.achievements.includes("r87")) infGain = 250
-	if (hasTimeStudy(32)) infGain *= tsMults[32]()
+	if (hasTS(32)) infGain *= tsMults[32]()
 	if (player.achievements.includes("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	return nA(infGain, player.achievements.includes("r87") && player.galacticSacrifice ? 249 : 0)
 }
@@ -197,8 +197,8 @@ function doIRCrunchResetStuff(){
 function doGPUpgCrunchUpdating(g11MultShown){
 	var showg11Mult = player.infinitied > 0 || player.eternities !== 0 || ph.did("quantum")
 	if (player.galacticSacrifice && (showg11Mult != g11MultShown)) {
-		document.getElementById("galaxy11").innerHTML = "Normal" + (player.aarexModifications.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
-		document.getElementById("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (showg11Mult ? "faster based on your infinitied stat.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
+		getEl("galaxy11").innerHTML = "Normal" + (player.aarexModifications.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
+		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (showg11Mult ? "faster based on your infinitied stat.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
 	}
 }
 
@@ -210,14 +210,14 @@ function doDefaultTickspeedReduction(){
 }
 
 function doAfterResetCrunchStuff(g11MultShown){
-	document.getElementById("challengeconfirmation").style.display = "inline-block"
+	getEl("challengeconfirmation").style.display = "inline-block"
 	if (!player.options.retryChallenge) player.currentChallenge = ""
 	skipResets()
 	doIRCrunchResetStuff()
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !player.achievements.includes("r95")) player.replicanti.amount = new Decimal(1)
-	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (hasTimeStudy(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (!tmp.ngC && speedrunMilestonesReached < 28 && !player.achievements.includes("ng3p67")) player.replicanti.galaxies = (hasTS(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDsOnNGM4()
@@ -274,8 +274,8 @@ function bigCrunch(autoed) {
 	
 	if ((!player.achievements.includes("r55") || (player.options.animations.bigCrunch === "always" && !autoed)) && isEmptiness && implosionCheck === 0 && player.options.animations.bigCrunch) {
 		implosionCheck = 1;
-		document.getElementById("body").style.animation = "implode 2s 1";
-		setTimeout(function(){ document.getElementById("body").style.animation = ""; }, 2000)
+		getEl("body").style.animation = "implode 2s 1";
+		setTimeout(function(){ getEl("body").style.animation = ""; }, 2000)
 		setTimeout(bigCrunch, 1000)
 		return
 	}
@@ -302,7 +302,7 @@ function bigCrunch(autoed) {
 	if (player.currentChallenge == "postc8") giveAchievement("Anti-antichallenged");
 	var add = getIPMult()
 	if ((player.break && player.currentChallenge == "") || player.infinityUpgradesRespecced != undefined) add = gainedInfinityPoints()
-	else if (hasTimeStudy(51)) add = add.times(1e15)
+	else if (hasTS(51)) add = add.times(1e15)
 	player.infinityPoints = player.infinityPoints.plus(add)
 	var array = [player.thisInfinityTime, add]
 	if (player.currentChallenge != "") array.push(player.currentChallenge)
