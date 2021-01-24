@@ -124,7 +124,7 @@ let ETER_UPGS = {
 
 	// NG+3: Post-Mastery Studies
 	13: {
-		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
+		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
 		mult() {
 			let epLog = player.eternityPoints.add(1).log10()
@@ -134,12 +134,12 @@ let ETER_UPGS = {
 		desc: () => "Eternity Points boost dilated time gain and you can buy all row-23 time studies."
 	},
 	14: {
-		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
+		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
 		desc: () => "The cost scaling of EP multiplier upgrades is reduced and you can buy all time studies from time study tree."
 	},
 	15: {
-		unl: () => tmp.ngp3 && (hasDilationUpg("ngpp6") || ph.did("quantum")),
+		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
 		desc: () => "You can passively generate Eternity Points and Tachyon Particles."
 	},

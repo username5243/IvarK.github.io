@@ -244,7 +244,6 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
             if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
             places = Math.min(places, 12 - Math.floor(Math.log10(power)))
             if (places >= 0) {
-				matissa = Math.floor(matissa * Math.pow(10, places)) / Math.pow(10, places)
 				matissa = matissa.toFixed(places)
                 if (matissa >= 10) {
                     matissa = (1).toFixed(places);

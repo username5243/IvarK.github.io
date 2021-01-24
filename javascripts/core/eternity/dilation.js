@@ -16,15 +16,15 @@ function getDTMultPostBRU11(){
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 	if (tmp.quActive) gain = gain.times(colorBoosts.b)
 	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
-	if (player.achievements.includes("r137")) gain = gain.times(Math.max((player.replicanti.amount.log10() - 10000) / 8250 + 1, 1))
+	if (player.achievements.includes("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / 1e4, 1) - 1)))
 	return gain
 }
 
-function getBaseDTProduction(){
+function getBaseDTProduction() {
 	let tp = player.dilation.tachyonParticles
 	let exp = getDTGainExp()
 	let gain = tp.pow(exp)
-	
+
 	if (player.exdilation != undefined) gain = gain.times(getNGUDTGain())
 	gain = gain.times(getEternityBoostToDT())
 
@@ -38,18 +38,18 @@ function getBaseDTProduction(){
 		if (player.achievements.includes("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
 		if (player.achievements.includes("ngpp13")) gain = gain.times(2)
 
-		if (isBigRipUpgradeActive(11)) gain = gain.times(getDTMultPostBRU11())
+		if (!isBigRipUpgradeActive(11)) gain = gain.times(getDTMultPostBRU11())
 	}
 	return gain
 }
 
 function getDilTimeGainPerSecond() {
 	let gain = getBaseDTProduction()
-	if (tmp.ngp3) {
+	/*if (tmp.ngp3) {
 		let lgain = gain.log10()
 		lgain = softcap(lgain, "dt_log")
 		gain = Decimal.pow(10, lgain)
-	}
+	}*/
 
 	gain = gain.times(Decimal.pow(2, getDilUpgPower(1)))	
 
@@ -402,7 +402,7 @@ function buyDilationUpgrade(pos, max, isId) {
 		}
 		if (id[1] == 3) {
 			player.eternityBuyer.tpUpgraded = true
-			if (player.achievements.includes("ng3p13")) setTachyonParticles(player.dilated.tachyonParticles.times(getDil3Power()))
+			if (player.achievements.includes("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
 		}
 		if (id[1] == 4) player.eternityBuyer.tpUpgraded = true
 	} else {
@@ -479,7 +479,7 @@ function updateDilationUpgradeButtons() {
 	if (player.dilation.studies.includes(6)) {
 		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		document.getElementById("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
-		document.getElementById("dil54formula").textContent = "(log(x)^0.5" + (tmp.ngp3 ? ")" : "/2)")
+		document.getElementById("dil54formula").textContent = tmp.ngp3 ? "(1.01^log(x))" : "(log(x)^0.5)"
 		document.getElementById("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
 	if (player.exdilation != undefined) document.getElementById("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"

@@ -330,7 +330,10 @@ function getDil14Bonus() {
 }
 
 function getDil17Bonus() {
-	return Math.sqrt(player.meta.bestAntimatter.max(1).log10()) / (player.masterystudies ? 1 : 2);
+	let r = player.meta.bestAntimatter.max(1).log10()
+	if (tmp.ngp3) r = Decimal.pow(1.01, r)
+	else r = Math.sqrt(r)
+	return r
 }
 
 function updateOverallMetaDimensionsStuff(){
