@@ -29,7 +29,7 @@ function softReset(bulk, tier = 1) {
 	player.resets += bulk;
 	if (player.masterystudies) if (player.resets > 4) player.old = false
 	if (inNC(14) && player.tickspeedBoosts == undefined) player.tickBoughtThisInf.pastResets.push({resets: player.resets, bought: player.tickBoughtThisInf.current})
-	if (tmp.ngp3 && getEternitied() >= 1e9 && player.dilation.upgrades.includes("ngpp6") && tier < 2) {
+	if (moreEMsUnlocked() && getEternitied() >= 1e9 && tier == 1) {
 		skipResets()
 		if (!pl.on()) player.matter = new Decimal(0)
 		player.postC8Mult = new Decimal(1)

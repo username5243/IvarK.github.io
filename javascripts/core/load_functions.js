@@ -2074,8 +2074,8 @@ function setSomeQuantumAutomationDisplay(){
         getEl("uhDiv" + suffix).appendChild(getEl("Universal harmony"))
         getEl("feDiv" + suffix).appendChild(getEl("In the grim darkness of the far endgame"))
         getEl("dil14desc").textContent = player.aarexModifications.nguspV ? "Make the TP multiplier upgrade more powerful." : "Increase the exponent of the TP formula."
-        getEl("dil52").style["font-size"] = player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "10px" : "9px"
-        getEl("dil52formula").style.display = player.masterystudies == undefined || player.aarexModifications.nguspV !== undefined ? "none" : ""
+        getEl("dil52").style["font-size"] = !tmp.ngp3 || player.aarexModifications.nguspV !== undefined ? "10px" : "9px"
+        getEl("dil52formula").style.display = !tmp.ngp3 || player.aarexModifications.nguspV !== undefined ? "none" : ""
         getEl("exDilationDesc").innerHTML = player.aarexModifications.nguspV ? 'making galaxies <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% stronger in dilation.' : 'making dilation <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% less severe.'
         getEl("metaAntimatterEffectType").textContent=inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
         if (player.meta) {

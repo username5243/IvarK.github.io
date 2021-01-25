@@ -1761,9 +1761,9 @@ function updateInfCosts() {
 }
 
 function updateMilestones() {
-	var moreUnlocked = tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 2e10, 4e11, 1e13]
-	for (i=0; i<(moreUnlocked ? 28 : 24); i++) {
+	var moreUnlocked = moreEMsUnlocked()
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12]
+	for (i=0; i < (moreUnlocked ? 28 : 24); i++) {
 		var name = "reward" + i;
 		if (i > 23) document.getElementById("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
 		if (getEternitied() >= milestoneRequirements[i]) {
@@ -1776,6 +1776,10 @@ function updateMilestones() {
 	document.getElementById("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow2a").style.display = moreUnlocked ? "" : "none"
 	document.getElementById("mdmilestonesrow2b").style.display = moreUnlocked ? "" : "none"
+}
+
+function moreEMsUnlocked() {
+	return tmp.ngp3 && (hasDilationStudy(1) || ph.did("quantum"))
 }
 
 function updateGalstones() {
@@ -3443,7 +3447,7 @@ function eternity(force, auto, presetLoad, dilated) {
 }
 
 function resetReplicantiUpgrades() {
-	let keepPartial = tmp.ngp3 && player.dilation.upgrades.includes("ngpp3") && getEternitied() >= 2e10
+	let keepPartial = moreEMsUnlocked() && getEternitied() >= 1e10
 	player.replicanti.chance = keepPartial ? Math.min(player.replicanti.chance, 1) : 0.01
 	player.replicanti.interval = keepPartial ? Math.max(player.replicanti.interval, hasTimeStudy(22) ? 1 : 50) : 1000
 	player.replicanti.gal = 0

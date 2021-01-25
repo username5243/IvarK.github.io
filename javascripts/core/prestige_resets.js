@@ -116,12 +116,12 @@ function doQuantumResetStuff(bigRip, isQC){
 		amount: new Decimal(oheHeadstart ? 1 : 0),
 		unl: oheHeadstart,
 		chance: 0.01,
-		chanceCost: new Decimal(player.galacticSacrifice !== undefined ? 1e90 : 1e150),
+		chanceCost: new Decimal(tmp.ngmX >= 2 ? 1e90 : 1e150),
 		interval: 1000,
-		intervalCost: new Decimal(player.galacticSacrifice !== undefined ? 1e80 : 1e140),
+		intervalCost: new Decimal(tmp.ngmX >= 2 ? 1e80 : 1e140),
 		gal: 0,
 		galaxies: 0,
-		galCost: new Decimal(player.galacticSacrifice!=undefined?1e110:1e170),
+		galCost: new Decimal(tmp.ngmX >= 2 ? 1e110 : 1e170),
 		galaxybuyer: bigRipChanged ? turnSomeOn : oheHeadstart ? player.replicanti.galaxybuyer : undefined,
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
@@ -379,8 +379,8 @@ function doEternityResetStuff() {
 	player.offlineProdCost = getEternitied() > 19 ? player.offlineProdCost : 1e7
 	player.challengeTarget = 0
 	player.autoSacrifice = getEternitied() > 6 ? player.autoSacrifice : 1
-	player.replicanti.amount = speedrunMilestonesReached > 23 ? player.replicanti.amount : new Decimal(getEternitied() > 49 ? 1 : 0)
-	player.replicanti.unl = getEternitied() > 49
+	player.replicanti.amount = speedrunMilestonesReached >= 24 ? player.replicanti.amount : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
 	player.autoIP = new Decimal(0)
@@ -628,9 +628,9 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		amount: new Decimal(bm ? 1 : 0),
 		unl: bm > 0,
 		chance: 0.01,
-		chanceCost: new Decimal(player.galacticSacrifice !== undefined ? 1e90 : 1e150),
+		chanceCost: new Decimal(tmp.ngmX >= 2 ? 1e90 : 1e150),
 		interval: 1000,
-		intervalCost: new Decimal(player.galacticSacrifice !== undefined ? 1e80 : 1e140),
+		intervalCost: new Decimal(tmp.ngmX >= 2 ? 1e80 : 1e140),
 		gal: 0,
 		galaxies: 0,
 		galCost: new Decimal(player.galacticSacrifice != undefined ? 1e110 : 1e170),
