@@ -26,23 +26,23 @@ let LIGHT_SPEED = {
 	},
 	reset() {
 		let shown = player.aarexModifications.ls !== undefined
-		document.getElementById("lstabbtn").style.display = shown ? "" : "none"
+		getEl("lstabbtn").style.display = shown ? "" : "none"
 		if (!shown) return
 
 		for (var i = 0; i < ls.options.length; i++) ls.updateOption(ls.options[i])
 	},
 	updateOption(id) {
 		let unl = ls.reqs[id]()
-		document.getElementById("ls_" + id).parentElement.style.display = unl ? "" : "none"
+		getEl("ls_" + id).parentElement.style.display = unl ? "" : "none"
 		if (!unl) return
 
 		let speed = ls.mult(id)
-		document.getElementById("ls_" + id).value = Math.round(Math.log10(speed) * 10)
-		document.getElementById("ls_" + id + "_text").textContent = speed.toFixed(2)
+		getEl("ls_" + id).value = Math.round(Math.log10(speed) * 10)
+		getEl("ls_" + id + "_text").textContent = speed.toFixed(2)
 	},
 	changeOption(id) {
-		let speed = Math.pow(10, document.getElementById("ls_" + id).value / 10)
-		document.getElementById("ls_" + id + "_text").textContent = speed.toFixed(2)
+		let speed = Math.pow(10, getEl("ls_" + id).value / 10)
+		getEl("ls_" + id + "_text").textContent = speed.toFixed(2)
 		if (speed == 1) delete player.aarexModifications.ls[id]
 		else player.aarexModifications.ls[id] = speed
 	}

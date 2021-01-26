@@ -136,8 +136,8 @@ let Prestiges = {
 				ph.tmp[p] = {}
 				if (!did && ph.didData[p]()) did = true
 				if (did) ph.onPrestige(p)
-				else document.getElementById("hide" + p).style.display = "none"
-			} else document.getElementById("hide" + p).style.display = "none"
+				else getEl("hide" + p).style.display = "none"
+			} else getEl("hide" + p).style.display = "none"
 		}
 	},
 	updateDisplay() {
@@ -159,12 +159,12 @@ let Prestiges = {
 				ph.tmp[p].order = ph.tmp.shown
 			}
 
-			document.getElementById(d[0]).style.display = prestigeShown ? "" : "none"
-			document.getElementById(d[1]).style.display = tabShown ? "" : "none"
-			document.getElementById(d[2]).style.display = tabShown && !isEmptiness && (p != "quantum" || !inQCModifier("ms")) ? "" : "none"
+			getEl(d[0]).style.display = prestigeShown ? "" : "none"
+			getEl(d[1]).style.display = tabShown ? "" : "none"
+			getEl(d[2]).style.display = tabShown && !isEmptiness && (p != "quantum" || !inQCModifier("ms")) ? "" : "none"
 
-			document.getElementById(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
-			document.getElementById(d[1]).className = "presCurrency" + ph.tmp.shown
+			getEl(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
+			getEl(d[1]).className = "presCurrency" + ph.tmp.shown
 		}
 
 		//Infinity Dimension unlocks
@@ -175,20 +175,20 @@ let Prestiges = {
 
 		//Quantum (after Neutrino Upgrade 16)
 		let bigRipAndQuantum = !hasNU(16) && !pl.on()
-		if (!bigRipAndQuantum && inQC(0)) document.getElementById("quantumbtn").style.display = "none"
+		if (!bigRipAndQuantum && inQC(0)) getEl("quantumbtn").style.display = "none"
 
 		//Big Rip
 		var canBigRip = canQuickBigRip() && (ph.shown("quantum") || bigRipAndQuantum)
-		document.getElementById("bigripbtn").style.display = canBigRip ? "" : "none"
+		getEl("bigripbtn").style.display = canBigRip ? "" : "none"
 		if (canBigRip) {
 			let pos = bigRipAndQuantum ? "ghostify" : "quantum"
-			document.getElementById("bigripbtn").className = "presBtn presPos" + (ph.tmp[pos].shown ? ph.tmp[pos].order : ph.tmp.shown + 1) + " quickBigRip"
+			getEl("bigripbtn").className = "presBtn presPos" + (ph.tmp[pos].shown ? ph.tmp[pos].order : ph.tmp.shown + 1) + " quickBigRip"
 			if (!ph.tmp[pos].shown) ph.tmp.shown++
 		}
 
 		if (tmp.ngp3 && tmp.qu.bigRip.active) {
-			document.getElementById("quantumbtn").className = "presBtn presPos" + (ph.tmp.quantum.shown ? ph.tmp.quantum.order : ph.tmp.shown + 1) + " quickBigRip"
-			document.getElementById("quantumbtn").style.display = ""
+			getEl("quantumbtn").className = "presBtn presPos" + (ph.tmp.quantum.shown ? ph.tmp.quantum.order : ph.tmp.shown + 1) + " quickBigRip"
+			getEl("quantumbtn").style.display = ""
 			if (!ph.tmp.quantum.shown) ph.tmp.shown++
 		}
 	},
@@ -196,8 +196,8 @@ let Prestiges = {
 		if (ph.tmp[layer].did) return
 		ph.tmp[layer].did = true
 		ph.tmp.layers++
-		document.getElementById("hide" + layer).style.display = ""
-		document.getElementById("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide" + layer).style.display = ""
+		getEl("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	},
 	setupHTML(layer) {
 		var html = ""
@@ -205,19 +205,19 @@ let Prestiges = {
 			var p = ph.order[x]
 			html += '<button id="hide' + p + '" onclick="ph.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
 		}
-		document.getElementById("hideLayers").innerHTML = html
+		getEl("hideLayers").innerHTML = html
 	},
 	hideOption(layer) {
 		if (player.aarexModifications.layerHidden[layer]) delete player.aarexModifications.layerHidden[layer]
 		else player.aarexModifications.layerHidden[layer] = true
 
 		if (layer == "eternity" && !player.aarexModifications.layerHidden.eternity) {
-			if (document.getElementById("timedimensions").style.display == "block" || document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
-			if (document.getElementById("eternitychallenges").style.display == "block") showChallengeTab("normalchallenges")
+			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (getEl("eternitychallenges").style.display == "block") showChallengeTab("normalchallenges")
 		}
 		if (layer == "quantum") handleDisplaysOutOfQuantum()
 
-		document.getElementById("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	}
 }
 

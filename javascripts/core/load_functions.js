@@ -1734,8 +1734,6 @@ function doNGp3Init2(){
         
 	if (tmp.ngp3) {
 		if (player.eternityBuyer.presets === undefined) player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
-		getEl('prioritydil').value=player.eternityBuyer.dilationPerAmount
-		if (player.achievements.includes("ng3p52")) getEl("autoDilValue").value=player.eternityBuyer.dilationPerAmount
 		if (player.meta.bestOverQuantums === undefined) player.meta.bestOverQuantums = player.meta.bestAntimatter
 		updateColorPowers()
 		tmp.be=tmp.qu.bigRip.active&&tmp.qu.breakEternity.break
@@ -2089,7 +2087,6 @@ function setSomeQuantumAutomationDisplay(){
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
         getEl('autoReset').style.display=player.achievements.includes("ng3p47")?"":"none"
-        getEl('aftereternity').style.display=player.achievements.includes("ng3p52")?"":"none"
 }
 
 function setReplAutoDisplay(){
@@ -2963,19 +2960,6 @@ function loadAutoBuyerSettings() {
         getEl("bulkgalaxy").value = player.autobuyers[10].bulk
         getEl("priority13").value = formatValue("Scientific", new Decimal(player.eternityBuyer.limit), 2, player.autoEterMode == "exponent" ? 2 : 0)
         if (player.achievements.includes("ng3p52") && player.eternityBuyer.presets !== undefined) {
-                getEl("autoEterIfAD").textContent = "Auto-eternity only if able to auto-dilate: O" + (player.eternityBuyer.ifAD ? "N" : "FF")
-                getEl("autoEterValue").value = formatValue("Scientific", new Decimal(player.eternityBuyer.limit), 2, player.autoEterMode == "exponent" ? 2 : 0)
-                getEl("autodilatemode").textContent = "Mode: " + (player.eternityBuyer.dilMode == "upgrades" ? "Upgrades" : "Amount of eternities")
-                getEl("slowstop").textContent = "Stop auto-dilate if a little bit of TP is gained: O" + (player.eternityBuyer.slowStop ? "N" : "FF")
-                getEl("toggleAP").textContent = player.eternityBuyer.presets.on ? "Disable" : "Enable"
-                getEl("eternitiesLeft").textContent = getFullExpansion(player.eternityBuyer.presets.left)
-                apLoaded = false
-                clearInterval(apInterval)
-                if (getEl("eternitystore").style.display === "block" && getEl("autoEternity").style.display === "block") loadAP()
-        }
-        if (player.eternityBuyer.dilationPerAmount !== undefined) {
-                getEl('prioritydil').value=player.eternityBuyer.dilationPerAmount
-                if (player.achievements.includes("ng3p52")) getEl("autoDilValue").value=player.eternityBuyer.dilationPerAmount
         }
         if (player.autobuyers[12] !== undefined) getEl("priority14").value = formatValue("Scientific", new Decimal(player.autobuyers[12].priority), 2, 0)
         if (tmp.ngmX >= 3 && player.autobuyers[13] % 1 !== 0) {

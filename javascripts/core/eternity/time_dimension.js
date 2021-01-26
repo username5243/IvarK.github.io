@@ -163,33 +163,33 @@ function getTimeDimensionDescription(tier) {
 }
 
 function updateTimeDimensions() {
-	if (document.getElementById("timedimensions").style.display == "block" && document.getElementById("dimensions").style.display == "block") {
+	if (getEl("timedimensions").style.display == "block" && getEl("dimensions").style.display == "block") {
 		updateTimeShards()
 
 		let maxCost = getMaxTDCost()
 		for (let tier = 1; tier <= 8; ++tier) {
 			if (isTDUnlocked(tier)) {
 				let cost = player["timeDimension" + tier].cost
-				document.getElementById("timeRow" + tier).style.display = "table-row"
-				document.getElementById("timeD" + tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
-				document.getElementById("timeAmount" + tier).textContent = getTimeDimensionDescription(tier);
-				document.getElementById("timeMax" + tier).textContent = tmp.ngmX >= 4 && cost.gte(maxCost) ? "Maxed out!" : (ph.did("quantum") ? '' : "Cost: ") + (tmp.ngmX >= 4 ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
-				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) document.getElementById("timeMax"+tier).className = "storebtn"
-			else document.getElementById("timeMax" + tier).className = "unavailablebtn"
-			} else document.getElementById("timeRow" + tier).style.display = "none"
+				getEl("timeRow" + tier).style.display = "table-row"
+				getEl("timeD" + tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
+				getEl("timeAmount" + tier).textContent = getTimeDimensionDescription(tier);
+				getEl("timeMax" + tier).textContent = tmp.ngmX >= 4 && cost.gte(maxCost) ? "Maxed out!" : (ph.did("quantum") ? '' : "Cost: ") + (tmp.ngmX >= 4 ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
+				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) getEl("timeMax"+tier).className = "storebtn"
+			else getEl("timeMax" + tier).className = "unavailablebtn"
+			} else getEl("timeRow" + tier).style.display = "none"
 			if (tmp.ngC) ngC.condense.tds.update(tier)
 		}
 
 		if (tmp.ngmX >= 4) {
 			var isShift = player.tdBoosts + 1 < (tmp.ngmX >= 5 ? 6 : 8)
 			var req = getTDBoostReq()
-			document.getElementById("tdReset").style.display = ""
-			document.getElementById("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
-			document.getElementById("tdResetBtn").textContent = "Reset the game for a " + (isShift ? "new dimension" : "boost")
-			document.getElementById("tdResetBtn").className = (player["timeDimension" + req.tier].bought < req.amount) ? "unavailablebtn" : "storebtn"
-		} else document.getElementById("tdReset").style.display = "none"
+			getEl("tdReset").style.display = ""
+			getEl("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
+			getEl("tdResetBtn").textContent = "Reset the game for a " + (isShift ? "new dimension" : "boost")
+			getEl("tdResetBtn").className = (player["timeDimension" + req.tier].bought < req.amount) ? "unavailablebtn" : "storebtn"
+		} else getEl("tdReset").style.display = "none"
 
-		document.getElementById("tdCostLimit").textContent = tmp.ngmX >= 4 ? "You can spend up to " + shortenDimensions(maxCost) + " antimatter to Time Dimensions." : ""
+		getEl("tdCostLimit").textContent = tmp.ngmX >= 4 ? "You can spend up to " + shortenDimensions(maxCost) + " antimatter to Time Dimensions." : ""
 	}
 }
 
@@ -199,11 +199,11 @@ function updateTimeShards() {
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 	if (tmp.ngmX >= 5) p = p.times(getPDAcceleration())
 
-	document.getElementById("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
-	document.getElementById("timeShardAmount").textContent = shortenMoney(player.timeShards)
-	document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
-	if (player.currentEternityChall == "eterc7") document.getElementById("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
-	else document.getElementById("timeShardsPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && p < 100 ? shortenND(p) : shortenDimensions(p)) + " Time Shards per " + (tmp.PDunl ? "real-life " : "") + "second."
+	getEl("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
+	getEl("timeShardAmount").textContent = shortenMoney(player.timeShards)
+	getEl("tickThreshold").textContent = shortenMoney(player.tickThreshold)
+	if (player.currentEternityChall == "eterc7") getEl("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
+	else getEl("timeShardsPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && p < 100 ? shortenND(p) : shortenDimensions(p)) + " Time Shards per " + (tmp.PDunl ? "real-life " : "") + "second."
 }
 
 var TIME_DIM_COSTS = {
@@ -421,7 +421,7 @@ function toggleAllTimeDims() {
 	}
 	for (id = 1; id <= 8; id++) {
 		player.autoEterOptions["td" + id] = turnOn
-		document.getElementById("td" + id + 'auto').textContent = "Auto: " + (turnOn ? "ON" : "OFF")
+		getEl("td" + id + 'auto').textContent = "Auto: " + (turnOn ? "ON" : "OFF")
 	}
-	document.getElementById("maxTimeDimensions").style.display = turnOn ? "none" : ""
+	getEl("maxTimeDimensions").style.display = turnOn ? "none" : ""
 }

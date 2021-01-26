@@ -18,7 +18,7 @@ function updateToDSpeedDisplay(){
 		}
 		t = "Branch speed: " + factorizeDescs(speeds, speedDescs) + shorten(getBranchFinalSpeed()) + "x" + " (hold shift for details)"
 	}
-	document.getElementById("todspeed").textContent = t
+	getEl("todspeed").textContent = t
 }
 
 function getTreeUpgradeEfficiencyDisplayText() {
@@ -34,9 +34,9 @@ function updateTreeOfDecayTab(){
 	var branchNum
 	var colors = ["red", "green", "blue"]
 	var shorthands = ["r", "g", "b"]
-	if (document.getElementById("redBranch").style.display == "block") branchNum = 1
-	if (document.getElementById("greenBranch").style.display == "block") branchNum = 2
-	if (document.getElementById("blueBranch").style.display == "block") branchNum = 3
+	if (getEl("redBranch").style.display == "block") branchNum = 1
+	if (getEl("greenBranch").style.display == "block") branchNum = 2
+	if (getEl("blueBranch").style.display == "block") branchNum = 3
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
 		var shorthand = shorthands[c]
@@ -44,11 +44,11 @@ function updateTreeOfDecayTab(){
 		var name = color + " " + getUQNameFromBranch(shorthand) + " quarks"
 		var rate = getDecayRate(shorthand)
 		var linear = Decimal.pow(2, getRDPower(shorthand))
-		document.getElementById(color + "UnstableGain").className = canUnstable(shorthand) ? "storebtn" : "unavailablebtn"
-		document.getElementById(color + "UnstableGain").innerHTML = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
-		document.getElementById(color + "QuarkSpin").textContent = shortenMoney(branch.spin)
-		document.getElementById(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
-		document.getElementById(color + "QuarksDecayRate").innerHTML = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
+		getEl(color + "UnstableGain").className = canUnstable(shorthand) ? "storebtn" : "unavailablebtn"
+		getEl(color + "UnstableGain").innerHTML = "Gain " + shortenMoney(getUnstableGain(shorthand)) + " " + name + (player.ghostify.milestones > 3 ? "." : ", but lose all your " + color + " quarks.")
+		getEl(color + "QuarkSpin").textContent = shortenMoney(branch.spin)
+		getEl(color + "UnstableQuarks").textContent = shortenMoney(branch.quarks)
+		getEl(color + "QuarksDecayRate").innerHTML = branch.quarks.lt(linear) && rate.lt(1) ? "You are losing " + shorten(linear.times(rate)) + " " + name + " per second" : "Their half-life is " + timeDisplayShort(Decimal.div(10, rate), true, 2) + (linear.eq(1) ? "" : " until their amount reaches " + shorten(linear))
 
 		let pow = Decimal.pow(2, getRDPower(shorthand))
 		let decayed = getDecayLifetime(branch.quarks.div(pow)).div(getDecayRate(shorthand))
@@ -56,13 +56,13 @@ function updateTreeOfDecayTab(){
 
 		let gain = getQuarkSpinProduction(shorthand).times(decayed.min(1))
 
-		document.getElementById(color + "QuarksDecayTime").textContent = todTimeDisplay(Decimal.times(10, decayed))
-		document.getElementById(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(gain) + "/s"
+		getEl(color + "QuarksDecayTime").textContent = todTimeDisplay(Decimal.times(10, decayed))
+		getEl(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(gain) + "/s"
 		if (branchNum == c + 1) {
 			var decays = getRadioactiveDecays(shorthand)
 			var power = Math.floor(getBU1Power(shorthand) / 120 + 1)			
-			document.getElementById(color + "UpgPow1").textContent = decays || power > 1 ? shorten(Decimal.pow(2, (1 + decays * .1) / power)) : 2
-			document.getElementById(color + "UpgSpeed1").textContent = decays > 2 || power > 1 ? shorten(Decimal.pow(2, Math.max(.8 + decays * .1, 1) / power)) : 2
+			getEl(color + "UpgPow1").textContent = decays || power > 1 ? shorten(Decimal.pow(2, (1 + decays * .1) / power)) : 2
+			getEl(color + "UpgSpeed1").textContent = decays > 2 || power > 1 ? shorten(Decimal.pow(2, Math.max(.8 + decays * .1, 1) / power)) : 2
 			lvl = getBranchUpgLevel(shorthand, 3)
 			let s = getBranchUpg3SoftcapStart()
 			if (lvl >= s) {
@@ -72,9 +72,9 @@ function updateTreeOfDecayTab(){
 				else eff = eff.toFixed(2)
 			}
 			else eff = "4"
-			document.getElementById(color + "UpgEffDesc").textContent =  " " + eff + "x"
-			for (var u = 1; u < 4; u++) document.getElementById(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
-			if (ph.did("ghostify")) document.getElementById(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
+			getEl(color + "UpgEffDesc").textContent =  " " + eff + "x"
+			for (var u = 1; u < 4; u++) getEl(color + "upg" + u).className = "gluonupgrade " + (branch.spin.lt(getBranchUpgCost(shorthand, u)) ? "unavailablebtn" : shorthand)
+			if (ph.did("ghostify")) getEl(shorthand + "RadioactiveDecay").className = "gluonupgrade "  +(branch.quarks.lt(Decimal.pow(10, Math.pow(2, 50))) ? "unavailablebtn" : shorthand)
 		}
 	} //for loop
 	if (!branchNum) {
@@ -84,11 +84,11 @@ function updateTreeOfDecayTab(){
 			let cost = getTreeUpgradeCost(u)
 			let lvl = getTreeUpgradeLevel(u)
 			let effLvl = getEffectiveTreeUpgLevel(u)
-			document.getElementById("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
-			document.getElementById("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
+			getEl("treeupg" + u).className = "gluonupgrade " + (canBuyTreeUpg(u) ? shorthands[getTreeUpgradeLevel(u) % 3] : "unavailablebtn")
+			getEl("treeupg" + u + "current").textContent = getTreeUpgradeEffectDesc(u)
 			let scalingsActive = (lvl >= 1e4 ? 1 : 0) + TREE_UPGRADES[u].scaleAdd(lvl)
-			document.getElementById("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
-			document.getElementById("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
+			getEl("treeupg" + u + "lvl").textContent = getGalaxyScaleName(scalingsActive) + "Level: " + getFullExpansion(lvl) + (lvl != effLvl ? " -> " + getFullExpansion(Math.floor(effLvl)) + (effLvl != lvl * tmp.tue ? " (softcapped)" : "") : "")
+			getEl("treeupg" + u + "cost").textContent = start + shortenMoney(cost) + " " + colors[lvl % 3] + end
 		}
 		setAndMaybeShow("treeUpgradeEff", ph.did("ghostify"), 'getTreeUpgradeEfficiencyDisplayText()')
 	}
@@ -97,9 +97,9 @@ function updateTreeOfDecayTab(){
 
 function updateTODStuff() {
 	if (!tmp.ngp3 || !player.masterystudies.includes("d13")) {
-		document.getElementById("todtabbtn").style.display = "none"
+		getEl("todtabbtn").style.display = "none"
 		return
-	} else document.getElementById("todtabbtn").style.display = ""
+	} else getEl("todtabbtn").style.display = ""
 	var colors = ["red", "green", "blue"]
 	var shorthands = ["r", "g", "b"]
 	for (var c = 0; c < 3; c++) {
@@ -107,20 +107,20 @@ function updateTODStuff() {
 		var shorthand = shorthands[c]
 		var branch = tmp.qu.tod[shorthand]
 		var name = getUQNameFromBranch(shorthand)
-		document.getElementById(shorthand + "UQName").innerHTML = name
+		getEl(shorthand + "UQName").innerHTML = name
 		extra = Decimal.log10(branch.spin) > 200
 		start = extra ? "" : "Cost: "
 		end = extra ? color : color + " quark spin"
 		for (var b = 1; b <= 3; b++) {
-			document.getElementById(color + "upg" + b + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(shorthand, b))
-			document.getElementById(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
-			if (b > 1) document.getElementById(color + "UpgName" + b).innerHTML = name
+			getEl(color + "upg" + b + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(shorthand, b))
+			getEl(color + "upg" + b + "cost").textContent = start + shortenMoney(getBranchUpgCost(shorthand, b)) + " " + end
+			if (b > 1) getEl(color + "UpgName" + b).innerHTML = name
 		}
 		if (ph.did("ghostify")) {
-			document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
-			document.getElementById(shorthand+"RDReq").innerHTML = "(requires " + shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + name + " quarks)"
-			document.getElementById(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
-		} else document.getElementById(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = "none"
+			getEl(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = ""
+			getEl(shorthand+"RDReq").innerHTML = "(requires " + shorten(Decimal.pow(10, Math.pow(2, 50))) + " of " + color + " " + name + " quarks)"
+			getEl(shorthand+"RDLvl").textContent = getFullExpansion(getRadioactiveDecays(shorthand))
+		} else getEl(shorthand+"RadioactiveDecay").parentElement.parentElement.style.display = "none"
 	}
 }
 
@@ -467,8 +467,8 @@ function buyBranchUpg(branch, upg) {
 	extra = bData.spin.log10() > 200
 	start = extra ? "" : "Cost: "
 	end = extra ? colors[branch] : colors[branch] + " quark spin"
-	document.getElementById(colors[branch] + "upg" + upg + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, upg))
-	document.getElementById(colors[branch] + "upg" + upg + "cost").textContent = start + shortenMoney(getBranchUpgCost(branch, upg)) + " " + end
+	getEl(colors[branch] + "upg" + upg + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, upg))
+	getEl(colors[branch] + "upg" + upg + "cost").textContent = start + shortenMoney(getBranchUpgCost(branch, upg)) + " " + end
 }
 
 function getBranchUpgLevel(branch,upg) {
@@ -481,7 +481,7 @@ var todspeed = 1
 
 function rotateAutoAssign() {
 	tmp.qu.autoOptions.assignQKRotate = tmp.qu.autoOptions.assignQKRotate ? (tmp.qu.autoOptions.assignQKRotate + 1) % 3 : 1
-	document.getElementById('autoAssignRotate').textContent = "Rotation: " + (tmp.qu.autoOptions.assignQKRotate > 1 ? "Left" : tmp.qu.autoOptions.assignQKRotate ? "Right" : "None")
+	getEl('autoAssignRotate').textContent = "Rotation: " + (tmp.qu.autoOptions.assignQKRotate > 1 ? "Left" : tmp.qu.autoOptions.assignQKRotate ? "Right" : "None")
 }
 
 function unstableAll() {
@@ -641,11 +641,11 @@ function maxBranchUpg(branch, weak) {
 			bData.upgrades[u] += toAdd
 		}
 		if (bData.upgrades[u] > oldLvl) {
-			document.getElementById(colors[branch] + "upg" + u + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, u))
+			getEl(colors[branch] + "upg" + u + "current").textContent = shortenDimensions(getEffectiveBranchUpgMult(branch, u))
 			extra = bData.spin.log10() > 200
 			start = extra ? "" : "Cost: "
 			end = extra ? colors[branch] : colors[branch] + " quark spin"
-			document.getElementById(colors[branch] + "upg" + u + "cost").textContent = start + shortenMoney(getBranchUpgCost(branch, u)) + " " + end
+			getEl(colors[branch] + "upg" + u + "cost").textContent = start + shortenMoney(getBranchUpgCost(branch, u)) + " " + end
 		}
 	}
 }

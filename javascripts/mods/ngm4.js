@@ -41,7 +41,7 @@ function resetTDsOnNGM4() {
 }
 
 //v2.1
-document.getElementById("challenge16").onclick = function () {
+getEl("challenge16").onclick = function () {
 	startNormalChallenge(16)
 }
 
@@ -62,13 +62,13 @@ function cantReset() {
 	return tmp.ngmX >= 4 && inNC(14) && getTotalResets() >= 10
 }
 
-document.getElementById("buyerBtnTDBoost").onclick = function () {
+getEl("buyerBtnTDBoost").onclick = function () {
 	buyAutobuyer(14)
 }
 
 function maxHighestTD() {
 	player.aarexModifications.maxHighestTD=!player.aarexModifications.maxHighestTD
-	document.getElementById("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
+	getEl("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
 }
 
 function getMaxTDCost() {

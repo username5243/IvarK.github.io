@@ -6,8 +6,8 @@ function updateConvertSave(convertMod) {
 		conversionText = "Convert to NG+3";
 	} else
 		convert = false;
-	document.getElementById("convertSave").style.display = convert ? "" : "none";
-	document.getElementById("convertSave").textContent = conversionText;
+	getEl("convertSave").style.display = convert ? "" : "none";
+	getEl("convertSave").textContent = conversionText;
 }
 
 function eligibleConvert() {

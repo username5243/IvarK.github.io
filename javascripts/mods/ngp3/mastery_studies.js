@@ -363,7 +363,7 @@ function setupMasteryStudiesHTML() {
 		var html = "<span id='ts" + name + "Desc'></span>"
 		if (masteryStudies.hasStudyEffect.includes(name)) html += "<br>Currently: <span id='ts" + name + "Current'></span>"
 		html += "<br>Cost: <span id='ts" + name + "Cost'></span> Time Theorems"
-		document.getElementById("timestudy" + name).innerHTML = html
+		getEl("timestudy" + name).innerHTML = html
 	}
 }
 
@@ -381,11 +381,11 @@ function updateUnlockedMasteryStudies() {
 		if (Math.floor(id / 10) > rowNum) {
 			rowNum = Math.floor(id / 10)
 			if (masteryStudies.allUnlocks["r"+rowNum] && !masteryStudies.allUnlocks["r"+rowNum]()) unl = false
-			document.getElementById(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
+			getEl(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
 			if (unl) masteryStudies.unlocked.push("r"+rowNum)
-		} else if (divid[0] == "d") document.getElementById(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
+		} else if (divid[0] == "d") getEl(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
 		if (masteryStudies.allUnlocks[id]&&!masteryStudies.allUnlocks[id]()) unl = false
-		document.getElementById(divid).style.visibility = unl ? "" : "hidden"
+		getEl(divid).style.visibility = unl ? "" : "hidden"
 		if (unl) masteryStudies.unlocked.push(id)
 	}
 }
@@ -440,23 +440,23 @@ function buyingDilStudyForQC() {
 function buyingDilStudyReplicant() {
 	showTab("quantumtab")
 	showQuantumTab("replicants")
-	document.getElementById("timestudy322").style.display=""
+	getEl("timestudy322").style.display=""
 	updateReplicants()
 }
 
 function buyingDilStudyED() {
 	showTab("dimensions")
 	showDimTab("emperordimensions")
-	document.getElementById("timestudy361").style.display = ""
-	document.getElementById("timestudy362").style.display = ""
-	document.getElementById("edtabbtn").style.display = ""
+	getEl("timestudy361").style.display = ""
+	getEl("timestudy362").style.display = ""
+	getEl("edtabbtn").style.display = ""
 	updateReplicants()
 }
 
 function buyingDilStudyNanofield() {
 	showTab("quantumtab")
 	showQuantumTab("nanofield")
-	document.getElementById("nanofieldtabbtn").style.display = ""
+	getEl("nanofieldtabbtn").style.display = ""
 	updateNanoRewardTemp()
 }
 
@@ -570,26 +570,26 @@ function updateMasteryStudyButtons() {
 		var name = masteryStudies.unlocked[id]
 		if (name + 0 == name) {
 			var className
-			var div = document.getElementById("timestudy" + name)
+			var div = getEl("timestudy" + name)
 			if (player.masterystudies.includes("t" + name)) className = "timestudybought"
 			else if (canBuyMasteryStudy('t', name)) className = "timestudy"
 			else className = "timestudylocked"
 			if (div.className !== className) div.className = className
 			if (masteryStudies.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				document.getElementById("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				getEl("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
-		var div = document.getElementById("ec" + id + "unl")
+		var div = getEl("ec" + id + "unl")
 		if (!masteryStudies.unlocked.includes("ec" + id)) break
 		if (player.eternityChallUnlocked == id) div.className = "eternitychallengestudybought"
 		else if (canBuyMasteryStudy('ec', id)) div.className = "eternitychallengestudy"
 		else div.className = "timestudylocked"
 	}
 	for (id = 7; id <= masteryStudies.unlocksUpTo; id++) {
-		var div = document.getElementById("dilstudy" + id)
+		var div = getEl("dilstudy" + id)
 		if (!masteryStudies.unlocked.includes("d" + id)) break
 		if (player.masterystudies.includes("d" + id)) div.className = "dilationupgbought"
 		else if (canBuyMasteryStudy('d', id)) div.className = "dilationupg"
@@ -599,25 +599,25 @@ function updateMasteryStudyButtons() {
 
 function updateMasteryStudyTextDisplay() {
 	if (!player.masterystudies) return
-	document.getElementById("costmult").textContent = shorten(masteryStudies.costMult)
-	document.getElementById("totalmsbought").textContent = masteryStudies.bought
-	document.getElementById("totalttspent").textContent = shortenDimensions(masteryStudies.ttSpent)
+	getEl("costmult").textContent = shorten(masteryStudies.costMult)
+	getEl("totalmsbought").textContent = masteryStudies.bought
+	getEl("totalttspent").textContent = shortenDimensions(masteryStudies.ttSpent)
 	for (id = 0; id < masteryStudies.timeStudies.length; id++) {
 		var name = masteryStudies.timeStudies[id]
 		if (!masteryStudies.unlocked.includes(name)) break
-		document.getElementById("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
+		getEl("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("ec"+id)) break
-		document.getElementById("ec" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.ec[id]) + " Time Theorems"
-		document.getElementById("ec" + id + "Req").style.display = player.etercreq == id ? "none" : "block"
-		document.getElementById("ec" + id + "Req").textContent = "Requirement: " + masteryStudies.ecReqDisplays[id]()
+		getEl("ec" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.ec[id]) + " Time Theorems"
+		getEl("ec" + id + "Req").style.display = player.etercreq == id ? "none" : "block"
+		getEl("ec" + id + "Req").textContent = "Requirement: " + masteryStudies.ecReqDisplays[id]()
 	}
 	for (id = 7; id <= masteryStudies.unlocksUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("d" + id)) break
 		var req = masteryStudies.unlockReqDisplays[id]&&masteryStudies.unlockReqDisplays[id]()
-		document.getElementById("ds" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.dil[id]) + " Time Theorems"
-		if (req) document.getElementById("ds" + id + "Req").innerHTML = ghostified || !req ? "" : "<br>Requirement: " + req
+		getEl("ds" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.dil[id]) + " Time Theorems"
+		if (req) getEl("ds" + id + "Req").innerHTML = ghostified || !req ? "" : "<br>Requirement: " + req
 	}
 }
 
@@ -625,8 +625,8 @@ var occupied
 function drawMasteryBranch(id1, id2) {
 	var type1 = id1.split("ec")[1] ? "c" : id1.split("dil")[1] ? "d" : id1.split("time")[1] ? "t" : undefined
 	var type2 = id2.split("ec")[1] ? "c" : id2.split("dil")[1] ? "d" : id2.split("time")[1] ? "t" : undefined
-	var start = document.getElementById(id1).getBoundingClientRect();
-	var end = document.getElementById(id2).getBoundingClientRect();
+	var start = getEl(id1).getBoundingClientRect();
+	var end = getEl(id2).getBoundingClientRect();
 	var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 	var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 	var x2 = end.left + (end.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
@@ -654,7 +654,7 @@ function drawMasteryBranch(id1, id2) {
 	if (!occupied.includes(id2) && type2 == "t") {
 		occupied.push(id2)
 		if (shiftDown) {
-			var start = document.getElementById(id2).getBoundingClientRect();
+			var start = getEl(id2).getBoundingClientRect();
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 			var mult = getMasteryStudyCostMult(id2.split("study")[1])
@@ -672,7 +672,7 @@ function drawMasteryBranch(id1, id2) {
 function drawMasteryTree() {
 	msctx.clearRect(0, 0, msc.width, msc.height);
 	if (player === undefined) return
-	if (document.getElementById("eternitystore").style.display === "none" || document.getElementById("masterystudies").style.display === "none" || player.masterystudies === undefined) return
+	if (getEl("eternitystore").style.display === "none" || getEl("masterystudies").style.display === "none" || player.masterystudies === undefined) return
 	occupied=[]
 	drawMasteryBranch("back", "timestudy241")
 	for (var x = 0; x < masteryStudies.studies.length; x++) {

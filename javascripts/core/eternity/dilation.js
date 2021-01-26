@@ -419,13 +419,13 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (getEternitied() >= 1e9) player.dbPower = new Decimal(getDimensionBoostPower())
 		}
 		if (id == "ngpp6" && tmp.ngp3) {
-			document.getElementById("masterystudyunlock").style.display=""
-			document.getElementById("respecMastery").style.display = "block"
-			document.getElementById("respecMastery2").style.display = "block"
+			getEl("masterystudyunlock").style.display=""
+			getEl("respecMastery").style.display = "block"
+			getEl("respecMastery2").style.display = "block"
 			if (!quantumed) {
 				$.notify("Congratulations for unlocking Mastery Studies! You can either click the 'mastery studies' button\nor 'continue to mastery studies' button in the Time Studies menu.")
-				document.getElementById("welcomeMessage").innerHTML = "Congratulations for reaching the end-game of NG++. In NG+3, the game keeps going with a lot of new content starting at Mastery Studies. You can either click the 'Mastery studies' tab button or 'Continue to mastery studies' button in the Time Studies menu to access the new Mastery Studies available."
-				document.getElementById("welcome").style.display = "flex"
+				getEl("welcomeMessage").innerHTML = "Congratulations for reaching the end-game of NG++. In NG+3, the game keeps going with a lot of new content starting at Mastery Studies. You can either click the 'Mastery studies' tab button or 'Continue to mastery studies' button in the Time Studies menu to access the new Mastery Studies available."
+				getEl("welcome").style.display = "flex"
 			}
 		}
 	}
@@ -463,48 +463,48 @@ function updateDilationUpgradeButtons() {
 				DIL_UPG_UNLOCKED[id] = 1
 				updateDilationUpgradeCost(pos, id)
 			} else delete DIL_UPG_UNLOCKED[id]
-			document.getElementById("dil" + pos).parentElement.style.display = unl ? "" : "none"
+			getEl("dil" + pos).parentElement.style.display = unl ? "" : "none"
 		}
-		if (unl) document.getElementById("dil" + pos).className = hasDilationUpg(id) || (id == "r2" && !canBuyGalaxyThresholdUpg()) ? "dilationupgbought" : player.dilation.dilatedTime.gte(getDilUpgCost(id)) ? "dilationupg" : "dilationupglocked"
+		if (unl) getEl("dil" + pos).className = hasDilationUpg(id) || (id == "r2" && !canBuyGalaxyThresholdUpg()) ? "dilationupgbought" : player.dilation.dilatedTime.gte(getDilUpgCost(id)) ? "dilationupg" : "dilationupglocked"
 	}
 	var genSpeed = getPassiveTTGen()
 	var power = getDil3Power()
-	document.getElementById("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
-	document.getElementById("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
-	document.getElementById("dil22desc").textContent = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Time Dimensions are affected by replicanti multiplier ^ 0.1."
-	document.getElementById("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
-	document.getElementById("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
-	document.getElementById("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
-	document.getElementById("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
+	getEl("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
+	getEl("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
+	getEl("dil22desc").textContent = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Time Dimensions are affected by replicanti multiplier ^ 0.1."
+	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
+	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
+	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
+	getEl("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
 	if (player.dilation.studies.includes(6)) {
-		document.getElementById("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
-		document.getElementById("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
-		document.getElementById("dil54formula").textContent = tmp.ngp3 ? "(1.01^log(x))" : "(log(x)^0.5)"
-		document.getElementById("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
+		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
+		getEl("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
+		getEl("dil54formula").textContent = tmp.ngp3 ? "(1.01^log(x))" : "(log(x)^0.5)"
+		getEl("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
-	if (player.exdilation != undefined) document.getElementById("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
+	if (player.exdilation != undefined) getEl("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"
 	if (isDilUpgUnlocked("ngusp2")) {
-		document.getElementById("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
-		document.getElementById("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
+		getEl("dil45desc").textContent = "Currently: +" + shortenMoney(getD21Bonus()) + " to exponent before softcap"
+		getEl("dil61desc").textContent = "Currently: " + shortenMoney(getD22Bonus()) + "x"
 	}
 	if (tmp.ngC) {
-		document.getElementById("dil25desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
-		document.getElementById("dil35desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
-		document.getElementById("dil45desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
-		document.getElementById("dil73desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
-		document.getElementById("dil75desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
+		getEl("dil25desc").textContent = "Currently: "+shortenMoney((getDil26Mult()-1)*100)+"% stronger"
+		getEl("dil35desc").textContent = "Currently: +"+shortenMoney(getDil36Mult())
+		getEl("dil45desc").textContent = "Currently: "+shortenMoney((getDil46Mult()-1)*100)+"% stronger"
+		getEl("dil73desc").textContent = "Currently: "+shortenMoney(getDil83Mult())+"x"
+		getEl("dil75desc").textContent = "Currently: "+shortenMoney((getDil85Mult()-1)*100)+"% stronger"
 	}
 }
 
 function updateDilationUpgradeCost(pos, id) {
-	if (id == "r2" && !canBuyGalaxyThresholdUpg()) document.getElementById("dil" + pos + "cost").textContent = "Maxed out"
+	if (id == "r2" && !canBuyGalaxyThresholdUpg()) getEl("dil" + pos + "cost").textContent = "Maxed out"
 	else {
 		let r = getDilUpgCost(id)
 		if (id == "r3") r = formatValue(player.options.notation, getRebuyableDilUpgCost(3), 1, 1)
 		else r = shortenCosts(r)
-		document.getElementById("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
+		getEl("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
 	}
-	if (id == "ngud1") document.getElementById("dil42oom").textContent = shortenCosts(new Decimal("1e1000"))
+	if (id == "ngud1") getEl("dil42oom").textContent = shortenCosts(new Decimal("1e1000"))
 }
 
 function updateDilationUpgradeCosts() {
@@ -595,12 +595,12 @@ function startDilatedEternity(auto, shortcut) {
 }
 
 function updateDilationDisplay() {
-	if (document.getElementById("dilation").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
-		document.getElementById("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
-		document.getElementById("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
-		document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
-		document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
-		document.getElementById("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
+	if (getEl("dilation").style.display == "block" && getEl("eternitystore").style.display == "block") {
+		getEl("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
+		getEl("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
+		getEl("dilatedTimePerSecond").textContent = "+" + shortenMoney(getDilTimeGainPerSecond()) + "/s"
+		getEl("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
+		getEl("dilatedGalaxies").textContent = getFullExpansion(Math.floor(player.dilation.freeGalaxies))
 	}
 }
 

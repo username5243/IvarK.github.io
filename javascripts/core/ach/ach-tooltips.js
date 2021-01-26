@@ -1,7 +1,7 @@
 function setR1Tooltip() {
 	// Row 1 (1/8)
 	//r11/////
-	let alot = document.getElementById("100 antimatter is a lot")
+	let alot = getEl("100 antimatter is a lot")
 	//r13/////
 	//r14/////
 	//r15/////
@@ -22,21 +22,21 @@ function setNGm5Tooltip() {
 	//ngm5p15/
 	//ngm5p16/
 	//ngm5p17/
-	let TimePx = document.getElementById("Time Paradox")
+	let TimePx = getEl("Time Paradox")
 	//ACHIEVEMENT ROW 1.5
 	TimePx.setAttribute('ach-tooltip', "Get at least " + formatValue(player.options.notation, 1e20, 0, 0) + " Paradox Power.")
 }
 
 function setR2Tooltip() {
 	// Row 2 (6/8)
-	let infinity = document.getElementById("To infinity!")
+	let infinity = getEl("To infinity!")
 	//r22/////
-	let ndial = document.getElementById("The 9th Dimension is a lie");
-	let apocAchieve = document.getElementById("Antimatter Apocalypse");
+	let ndial = getEl("The 9th Dimension is a lie");
+	let apocAchieve = getEl("Antimatter Apocalypse");
 	//r25/////
-	let gal = document.getElementById("You got past The Big Wall")
-	let doubleGal = document.getElementById("Double Galaxy");
-	let noPointAchieve = document.getElementById("There's no point in doing that");
+	let gal = getEl("You got past The Big Wall")
+	let doubleGal = getEl("Double Galaxy");
+	let noPointAchieve = getEl("There's no point in doing that");
 
 	//ACHIEVEMENT ROW 2
 	ndial.setAttribute('ach-tooltip', "Have exactly 99 Eighth Dimensions. Reward: Eighth Dimensions are 10% stronger" + (player.tickspeedBoosts == undefined ? "." : " and you gain more GP based on your Eighth Dimensions and your Tickspeed Boosts."));
@@ -49,13 +49,13 @@ function setR2Tooltip() {
 
 function setR3Tooltip() {
 	// Row 3 (5/8)
-	let nerf = document.getElementById("I forgot to nerf that")
+	let nerf = getEl("I forgot to nerf that")
 	//r32/////
-	let lot = document.getElementById("That's a lot of infinites");
-	let didnt = document.getElementById("You didn't need it anyway")
+	let lot = getEl("That's a lot of infinites");
+	let didnt = getEl("You didn't need it anyway")
 	//r35/////
-	let claustrophobic = document.getElementById("Claustrophobic");
-	let fast = document.getElementById("That's fast!");
+	let claustrophobic = getEl("Claustrophobic");
+	let fast = getEl("That's fast!");
 	//r38/////
 
 	//ACHIEVEMENT ROW 3
@@ -68,14 +68,14 @@ function setR3Tooltip() {
 
 function setR4Tooltip() {
 	// Row 4 (6/8)
-	let cancer = document.getElementById("Spreading Cancer");
-	let sanic = document.getElementById("Supersanic")
-	let zero = document.getElementById("Zero Deaths");
+	let cancer = getEl("Spreading Cancer");
+	let sanic = getEl("Supersanic")
+	let zero = getEl("Zero Deaths");
 	//r44/////
-	let potato = document.getElementById("Faster than a potato")
-	let dimensional = document.getElementById("Multidimensional")
+	let potato = getEl("Faster than a potato")
+	let dimensional = getEl("Multidimensional")
 	//r47/////
-	let anti = document.getElementById("AntiChallenged")
+	let anti = getEl("AntiChallenged")
 
 	//ACHIEVEMENT ROW 4
 	sanic.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e63, 0, 0) + " antimatter" + (player.aarexModifications.ngmX >= 4 ? " and unlock new galaxy upgrades at " + formatValue(player.options.notation, 1e666, 0, 0) + " antimatter" : "") + ".")
@@ -88,14 +88,14 @@ function setR4Tooltip() {
 
 function setR5Tooltip() {
 	// Row 5 (4/8)
-	let limitBreak = document.getElementById("Limit Break")
+	let limitBreak = getEl("Limit Break")
 	//r52/////
 	//r53/////
 	//r54/////
-	let forever = document.getElementById("Forever isn't that long")
-	let many = document.getElementById("Many Deaths")
+	let forever = getEl("Forever isn't that long")
+	let many = getEl("Many Deaths")
 	//r57/////
-	let is = document.getElementById("Is this hell?")
+	let is = getEl("Is this hell?")
 
 	//ACHIEVEMENT ROW 5
 	forever.setAttribute('ach-tooltip', "Big Crunch in 1 minute or less. Reward: Start with "+shortenCosts(1e10)+" antimatter" + (player.galacticSacrifice && player.tickspeedBoosts == undefined ? ", and gain a multiplier to IP based on your best Infinity time." : "."))
@@ -107,13 +107,13 @@ function setR5Tooltip() {
 function setR6Tooltip() {
 	// Row 6 (6/8)
 	//r61/////
-	let oh = document.getElementById("Oh hey, you're still here")
-	let begin = document.getElementById("A new beginning.")
-	let mil = document.getElementById("1 million is a lot")
+	let oh = getEl("Oh hey, you're still here")
+	let begin = getEl("A new beginning.")
+	let mil = getEl("1 million is a lot")
 	//r65/////
-	let potato2 = document.getElementById("Faster than a squared potato")
-	let infchall = document.getElementById("Infinitely Challenging")
-	let right = document.getElementById("You did this again just for the achievement right?")
+	let potato2 = getEl("Faster than a squared potato")
+	let infchall = getEl("Infinitely Challenging")
+	let right = getEl("You did this again just for the achievement right?")
 
 	let e58 = formatValue(player.options.notation, 1e58, 0, 0)
 
@@ -128,14 +128,14 @@ function setR6Tooltip() {
 
 function setR7Tooltip() {
 	// Row 7 (5/8)
-	let not = document.getElementById("ERROR 909: Dimension not found")
-	let cant = document.getElementById("Can't hold all these infinities")
-	let dne1 = document.getElementById("This achievement doesn't exist")
-	let endme = document.getElementById("End me")
-	let newDim = document.getElementById("NEW DIMENSIONS???")
+	let not = getEl("ERROR 909: Dimension not found")
+	let cant = getEl("Can't hold all these infinities")
+	let dne1 = getEl("This achievement doesn't exist")
+	let endme = getEl("End me")
+	let newDim = getEl("NEW DIMENSIONS???")
 	//r76/////
-	let tables = document.getElementById("How the antitables have turned")
-	let blink = document.getElementById("Blink of an eye")
+	let tables = getEl("How the antitables have turned")
+	let blink = getEl("Blink of an eye")
 
 	//ACHIEVEMENT ROW 7
 	not.setAttribute('ach-tooltip',"Big Crunch with only a single First Dimension without Dimension Boosts, Shifts or Galaxies while in the Automatic Galaxies Challenge. Reward: First Dimensions are " + (player.galacticSacrifice ? 909 : 3) + " times stronger" + (player.aarexModifications.ngmX >= 4 ? ", and buff the more expensive Break Infinity upgrade based on Infinities to be more effective" : "") + ".")
@@ -149,14 +149,14 @@ function setR7Tooltip() {
 
 function setR8Tooltip() {
 	// Row 8 (5/8)
-	let hevipelledidnothing = document.getElementById("Hevipelle did nothing wrong")
+	let hevipelledidnothing = getEl("Hevipelle did nothing wrong")
 	//r82/////
 	//r83/////
-	let spare = document.getElementById("I got a few to spare")
-	let IPBelongs = document.getElementById("All your IP are belong to us")
+	let spare = getEl("I got a few to spare")
+	let IPBelongs = getEl("All your IP are belong to us")
 	//r86/////
-	let twomillion = document.getElementById("2 Million Infinities")
-	let reference = document.getElementById("Yet another infinity reference")
+	let twomillion = getEl("2 Million Infinities")
+	let reference = getEl("Yet another infinity reference")
 
 	//ACHIEVEMENT ROW 8
 	IPBelongs.setAttribute('ach-tooltip', "Big Crunch for " + shortenCosts(1e150) + " IP. " + (!player.aarexModifications.newGameMinusVersion ? "Reward: Gain an additional 4x multiplier to IP." : ""))
@@ -168,14 +168,14 @@ function setR8Tooltip() {
 
 function setR9Tooltip() {
 	// Row 9 (7/8)
-	let speed = document.getElementById("Ludicrous Speed")
-	let speed2 = document.getElementById("I brake for nobody")
-	let overdrive = document.getElementById("MAXIMUM OVERDRIVE")
-	let minute = document.getElementById("Minute of infinity")
-	let isthissafe = document.getElementById("Is this safe?")
+	let speed = getEl("Ludicrous Speed")
+	let speed2 = getEl("I brake for nobody")
+	let overdrive = getEl("MAXIMUM OVERDRIVE")
+	let minute = getEl("Minute of infinity")
+	let isthissafe = getEl("Is this safe?")
 	//r96/////
-	let hell = document.getElementById("Yes. This is hell.")
-	let zerodeg = document.getElementById("0 degrees from infinity")
+	let hell = getEl("Yes. This is hell.")
+	let zerodeg = getEl("0 degrees from infinity")
 
 	//ACHIEVEMENT ROW 9
 	speed.setAttribute('ach-tooltip', "Big Crunch for "+shortenCosts(1e200)+" IP in 2 seconds or less. Reward: All Normal Dimensions are significantly stronger in the first 5 seconds of an Infinity.")
@@ -189,14 +189,14 @@ function setR9Tooltip() {
 
 function setR10Tooltip() {
 	// Row 10 (6/8)
-	let costco = document.getElementById("Costco sells dimboosts now")
-	let mile = document.getElementById("This mile took an Eternity")
+	let costco = getEl("Costco sells dimboosts now")
+	let mile = getEl("This mile took an Eternity")
 	//r103/////
 	//r104/////
-	let inftime = document.getElementById("Infinite time")
-	let swarm = document.getElementById("The swarm")
-	let guide = document.getElementById("Do you really need a guide for this?")
-	let nine = document.getElementById("We could afford 9")
+	let inftime = getEl("Infinite time")
+	let swarm = getEl("The swarm")
+	let guide = getEl("Do you really need a guide for this?")
+	let nine = getEl("We could afford 9")
 
 	//ACHIEVEMENT ROW 10
 	costco.setAttribute('ach-tooltip', "Bulk buy 750 Dimension Boosts at once. Reward: Dimension Boosts are " + (player.boughtDims?"cheaper based on EP":"1% more powerful (to Normal Dimensions)") + (player.tickspeedBoosts == undefined ? "" : " and g13 is boosted by the cube root of Galaxies") + ".")
@@ -209,14 +209,14 @@ function setR10Tooltip() {
 
 function setR11Tooltip() {
 	// Row 11 (3/8)
-	let dawg = document.getElementById("Yo dawg, I heard you liked infinities...")
+	let dawg = getEl("Yo dawg, I heard you liked infinities...")
 	//r112/////
 	//r113/////
 	//r114/////
 	//r115/////
 	//r116/////
-	let nobodygottime = document.getElementById("8 nobody got time for that")
-	let over9000 = document.getElementById("IT'S OVER 9000")
+	let nobodygottime = getEl("8 nobody got time for that")
+	let over9000 = getEl("IT'S OVER 9000")
 
 	//ACHIEVEMENT ROW 11
 	over9000.setAttribute('ach-tooltip', "Get a total Sacrifice multiplier of "+shortenCosts(new Decimal("1e9000"))+". Reward: Sacrifice doesn't reset your dimensions.")
@@ -226,14 +226,14 @@ function setR11Tooltip() {
 
 function setR12Tooltip() {
 	// Row 12 (7/8)
-	let infiniteIP = document.getElementById("Can you get infinite IP?")
+	let infiniteIP = getEl("Can you get infinite IP?")
 	//r122/////
-	let fiveMore = document.getElementById("5 more eternities until the update")
-	let newI = document.getElementById("Eternities are the new infinity")
-	let eatass = document.getElementById("Like feasting on a behind")
-	let minaj = document.getElementById("Popular music")
-	let layer = document.getElementById("But I wanted another prestige layer...")
-	let fkoff = document.getElementById("What do I have to do to get rid of you")
+	let fiveMore = getEl("5 more eternities until the update")
+	let newI = getEl("Eternities are the new infinity")
+	let eatass = getEl("Like feasting on a behind")
+	let minaj = getEl("Popular music")
+	let layer = getEl("But I wanted another prestige layer...")
+	let fkoff = getEl("What do I have to do to get rid of you")
 
 	//ACHIEVEMENT ROW 12
 	infiniteIP.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e30008"))+" IP." + (player.galacticSacrifice == undefined || player.tickspeedBoosts != undefined ? "" : " Reward: Your total galaxies boost Galaxy points gain."))
@@ -249,12 +249,12 @@ function setR13Tooltip() {
 	// Row 13 (5/8)
 	//r131/////
 	//r132/////
-	let infstuff = document.getElementById("I never liked this infinity stuff anyway")
-	let when = document.getElementById("When will it be enough?")
-	let potato3 = document.getElementById("Faster than a potato^286078")
+	let infstuff = getEl("I never liked this infinity stuff anyway")
+	let when = getEl("When will it be enough?")
+	let potato3 = getEl("Faster than a potato^286078")
 	//r136/////
-	let thinking = document.getElementById("Now you're thinking with dilation!")
-	let thisis = document.getElementById("This is what I have to do to get rid of you.")
+	let thinking = getEl("Now you're thinking with dilation!")
+	let thisis = getEl("This is what I have to do to get rid of you.")
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (player.galacticSacrifice !== undefined) thisisReward.push("g23 is more effective based on your best IP in dilation")
@@ -272,11 +272,11 @@ function setR13Tooltip() {
 function setR13p5Tooltip() {
 	// Row 13.5 (NGUD) (3/6)
 	//ngud11/////
-	let stillamil = document.getElementById("1 million is still a lot")
+	let stillamil = getEl("1 million is still a lot")
 	//ngud13/////
-	let out = document.getElementById("Finally I'm out of that channel")
+	let out = getEl("Finally I'm out of that channel")
 	//ngud16/////
-	let ridNGud = document.getElementById("I already got rid of you.")
+	let ridNGud = getEl("I already got rid of you.")
 
 	//NGUD ACHIEVEMENT ROW (13.5)
 	stillamil.setAttribute('ach-tooltip', "Reach " + shortenCosts(1e6) + " black hole power.")
@@ -289,12 +289,12 @@ function setR14Tooltip() {
 	// Row 14 (4/8)
 	//ngpp11/////
 	//ngpp12/////
-	let onlywar = document.getElementById("In the grim darkness of the far endgame")
-	let metamax = document.getElementById("Meta-boosting to the max")
-	let thecap = document.getElementById("The cap is a million, not a trillion")
-	let neverenough = document.getElementById("It will never be enough")
+	let onlywar = getEl("In the grim darkness of the far endgame")
+	let metamax = getEl("Meta-boosting to the max")
+	let thecap = getEl("The cap is a million, not a trillion")
+	let neverenough = getEl("It will never be enough")
 	//ngpp17/////
-	let harmony = document.getElementById("Universal harmony")
+	let harmony = getEl("Universal harmony")
 
 	let onlywarReward = [] // for the achievement "In the grim darkness of the far endgame"
 	if (tmp.ngp3) onlywarReward.push("you produce 2x more Dilated Time")
@@ -311,14 +311,14 @@ function setR14Tooltip() {
 
 function setR15Tooltip() {
 	// Row 15 (ng3p1) (5/8)
-	let notenough = document.getElementById("I don't have enough fuel!")
+	let notenough = getEl("I don't have enough fuel!")
 	//ng3p12/////
 	//ng3p13/////
 	//ng3p14/////
 	//ng3p15/////
-	let old = document.getElementById("Old age")
-	let rid = document.getElementById("I already got rid of you...")
-	let winner = document.getElementById("And the winner is...")
+	let old = getEl("Old age")
+	let rid = getEl("I already got rid of you...")
+	let winner = getEl("And the winner is...")
 
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce more dilated time based on your normal galaxies, and gain more Tachyon particles based on your Replicated Galaxies.")
@@ -329,14 +329,14 @@ function setR15Tooltip() {
 
 function setR16Tooltip() {
 	// Row 16 (ng3p2) (5/8)
-	let special = document.getElementById("Special Relativity")
-	let squared = document.getElementById("We are not going squared.")
+	let special = getEl("Special Relativity")
+	let squared = getEl("We are not going squared.")
 	//ng3p23/////
-	let memories = document.getElementById("Old memories come true")
+	let memories = getEl("Old memories come true")
 	//ng3p25/////
-	let morals = document.getElementById("Infinity Morals")
+	let morals = getEl("Infinity Morals")
 	//ng3p27/////
-	let seriously = document.getElementById("Seriously, I already got rid of you.")
+	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
 	special.setAttribute('ach-tooltip', "Quantum in under 5 seconds. Reward: Start with all Infinity Dimensions unlocked if you have at least 25 eternities.")
@@ -348,9 +348,9 @@ function setR16Tooltip() {
 
 function setQSRTooltip() {
 	// Quantum Speedruns (3/28)
-	let tfms = document.getElementById("speedrunMilestone18")
-	let tms = document.getElementById("speedrunMilestone19")
-	let tfms2 = document.getElementById("speedrunMilestone22")
+	let tfms = getEl("speedrunMilestone18")
+	let tms = getEl("speedrunMilestone19")
+	let tfms2 = getEl("speedrunMilestone22")
 
 	//QUANTUM SPEEDRUNS
 	tfms.setAttribute('ach-tooltip', "Reward: Start with " + shortenCosts(1e13) + " Eternities.")
@@ -360,14 +360,14 @@ function setQSRTooltip() {
 
 function setR17Tooltip() {
 	// Row 17 (ng3p3) (6/8)
-	let internal = document.getElementById("ERROR 500: INTERNAL DIMENSION ERROR")
-	let truth = document.getElementById("The truth of anti-challenged")
-	let noparadox = document.getElementById("Never make paradoxes!")
+	let internal = getEl("ERROR 500: INTERNAL DIMENSION ERROR")
+	let truth = getEl("The truth of anti-challenged")
+	let noparadox = getEl("Never make paradoxes!")
 	//ng3p34/////
 	//ng3p35/////
-	let cantGet = document.getElementById("I can’t get my multipliers higher!")
-	let noDil = document.getElementById("No dilation means no production.")
-	let dontWant = document.getElementById("I don't want you to live anymore.")
+	let cantGet = getEl("I can’t get my multipliers higher!")
+	let noDil = getEl("No dilation means no production.")
+	let dontWant = getEl("I don't want you to live anymore.")
 
 	//ACHIEVEMENT ROW 17
 	internal.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e333")) + " MA without having 2nd Meta Dimensions and Meta-Dimension Boosts. Reward: 1st Meta Dimensions are stronger based on meta antimatter.")
@@ -380,14 +380,14 @@ function setR17Tooltip() {
 
 function setR18Tooltip() {
 	// Row 18 (ng3p4) (7/8)
-	let notrelative = document.getElementById("Time is not relative")
-	let error404 = document.getElementById("ERROR 404: DIMENSIONS NOT FOUND")
-	let ie = document.getElementById("Impossible expectations")
-	let wasted = document.getElementById("Studies are wasted")
-	let protonsDecay = document.getElementById("Do protons decay?")
+	let notrelative = getEl("Time is not relative")
+	let error404 = getEl("ERROR 404: DIMENSIONS NOT FOUND")
+	let ie = getEl("Impossible expectations")
+	let wasted = getEl("Studies are wasted")
+	let protonsDecay = getEl("Do protons decay?")
 	//ng3p46/////
-	let stop = document.getElementById("Stop blocking me!")
-	let dying = document.getElementById("Are you currently dying?")
+	let stop = getEl("Stop blocking me!")
+	let dying = getEl("Are you currently dying?")
 
 	//ACHIEVEMENT ROW 18
 	notrelative.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 411))+" dilated time without gaining tachyon particles. Reward: You gain more DT based on the amount of Nanorewards.")
@@ -403,12 +403,12 @@ function setR19Tooltip() {
 	// Row 19 (ng3p5) (5/8)
 	//ng3p51/////
 	//ng3p52/////
-	let gofast = document.getElementById("Gonna go fast")
+	let gofast = getEl("Gonna go fast")
 	//ng3p54/////
-	let timeBreak = document.getElementById("Time Breaker")
-	let immunity = document.getElementById("Time Immunity")
-	let notSmart = document.getElementById("You're not really smart.")
-	let soLife = document.getElementById("And so your life?")
+	let timeBreak = getEl("Time Breaker")
+	let immunity = getEl("Time Immunity")
+	let notSmart = getEl("You're not really smart.")
+	let soLife = getEl("And so your life?")
 
 	//ACHIEVEMENT ROW 19
 	gofast.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 1185)) + " EP first, and then square your EP by disabling dilation while Big Ripped. Reward: Space shards multiply quark gain.")
@@ -421,13 +421,13 @@ function setR19Tooltip() {
 function setR20Tooltip() {
 	// Row 20 (ng3p6) (6/8)
 	//ng3p61/////
-	let finite = document.getElementById("Finite Time")
+	let finite = getEl("Finite Time")
 	//ng3p63/////
-	let really = document.getElementById("Really?")
-	let grind = document.getElementById("But I don't want to grind!")
+	let really = getEl("Really?")
+	let grind = getEl("But I don't want to grind!")
 	//ng3p65/////
-	let willenough = document.getElementById("Will it be enough?")
-	let pls = document.getElementById("Please answer me why you are dying.")
+	let willenough = getEl("Will it be enough?")
+	let pls = getEl("Please answer me why you are dying.")
 
 	let willenoughReward = [] // for the achievement "Will it be enough?"
 	willenoughReward.push("Replicated Galaxies doesn't divide replicantis")
@@ -446,9 +446,9 @@ function setR20Tooltip() {
 
 function setBMTooltip() {
 	// Brave Milestones (3/16)
-	let bm1 = document.getElementById("braveMilestone1")
-	let bm10 = document.getElementById("braveMilestone10")
-	let bm14 = document.getElementById("braveMilestone14")
+	let bm1 = getEl("braveMilestone1")
+	let bm10 = getEl("braveMilestone10")
+	let bm14 = getEl("braveMilestone14")
 
 	//BRAVE MILESTONES
 	bm1.setAttribute('ach-tooltip', "Reward: Start Ghostifies with all Speedrun Milestones and all "+shorten(Number.MAX_VALUE)+" QK assignation features unlocked, all Paired Challenges completed, all Big Rip upgrades bought, Nanofield is 2x faster until you reach 16 rewards, and you get quarks based on your best MA this quantum.")
@@ -459,13 +459,13 @@ function setBMTooltip() {
 function setR21Tooltip() {
 	// Row 21 (ng3p7) (5/8)
 	//ng3p71/////
-	let uc = document.getElementById("Underchallenged")
-	let mi = document.getElementById("Meta-Infinity confirmed?")
-	let wd = document.getElementById("Weak Decay")
-	let radioDecay = document.getElementById("Radioactive Decaying to the max!")
+	let uc = getEl("Underchallenged")
+	let mi = getEl("Meta-Infinity confirmed?")
+	let wd = getEl("Weak Decay")
+	let radioDecay = getEl("Radioactive Decaying to the max!")
 	//ng3p76/////
 	//ng3p77/////
-	let arent = document.getElementById("Aren't you already dead?")
+	let arent = getEl("Aren't you already dead?")
 
 	//ACHIEVEMENT ROW 21
 	uc.setAttribute('ach-tooltip', "Become a ghost with at least "+shortenCosts(Decimal.pow(10, 2.2e5))+" EP without starting Eternity Challenge 10 while Big Ripped. Reward: Meta-Dimension Boosts no longer reset Meta Dimensions.")
@@ -478,13 +478,13 @@ function setR21Tooltip() {
 function setR22Tooltip() {
 	// Row 22 (ng3p8) (7/8)
 	//ng3p81/////
-	let oc = document.getElementById("Overchallenged")
+	let oc = getEl("Overchallenged")
 	//ng3p83/////
-	let isnotenough = document.getElementById("Big Rip isn't enough") 
-	let ee = document.getElementById("Everlasting Eternities")
-	let btco = document.getElementById("Back to Challenge One")
-	let tdc = document.getElementById("The Deep Challenge")
-	let igu = document.getElementById("I give up.")
+	let isnotenough = getEl("Big Rip isn't enough") 
+	let ee = getEl("Everlasting Eternities")
+	let btco = getEl("Back to Challenge One")
+	let tdc = getEl("The Deep Challenge")
+	let igu = getEl("I give up.")
 
 	//ACHIEVEMENT ROW 22
 	ee.setAttribute('ach-tooltip', "Get " + shorten(Number.MAX_VALUE) + " eternities. Reward: Boost quark gain by 10 per Light Empowerment squared.")
@@ -499,12 +499,12 @@ function setR23Tooltip() {
 	// Row 23 (ng3p9) (3/8)
 	//ng3p91/////
 	//ng3p92/////
-	let aretheseanother = document.getElementById("Are these another...")
+	let aretheseanother = getEl("Are these another...")
 	//ng3p94/////
 	//ng3p95/////
 	//ng3p96/////
-	let ghostliest = document.getElementById("The Ghostliest Side")
-	let metae18 = document.getElementById("Meta-Quintillion")
+	let ghostliest = getEl("The Ghostliest Side")
+	let metae18 = getEl("Meta-Quintillion")
 
 	//ACHIEVEMENT ROW 23
 	aretheseanother.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 4e4)) + " Quarks. Reward: Gain 500x more Quarks and Ghost Particles and always gain 1% of your Eternity Points upon Eternity per second.")
@@ -516,10 +516,10 @@ function setR24Tooltip() {
 	// Row 24 (ng3p10) (0/8)
 	//ng3p101/////
 	//ng3p102/////
-	let einstein = document.getElementById("Einstein's Ghost")
+	let einstein = getEl("Einstein's Ghost")
 	//ng3p104/////
-	let x = document.getElementById("X-Ranked")
-	let how = document.getElementById("Do you even how to?")
+	let x = getEl("X-Ranked")
+	let how = getEl("Do you even how to?")
 	//ng3p107/////
 	//ng3p108/////
 

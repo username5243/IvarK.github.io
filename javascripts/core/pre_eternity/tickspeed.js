@@ -246,7 +246,7 @@ function buyTickSpeed() {
 	return true
 }
 
-document.getElementById("tickSpeed").onclick = function () {
+getEl("tickSpeed").onclick = function () {
 	buyTickSpeed()
 };
 
@@ -434,6 +434,6 @@ function updateTickspeed() {
 
 	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && inNC(14)) {
 		label += "<br>You have " + (308 - player.tickBoughtThisInf.current) + " tickspeed purchases left."
-		document.getElementById("tickSpeedAmount").innerHTML = label
-	} else document.getElementById("tickSpeedAmount").textContent = label
+		getEl("tickSpeedAmount").innerHTML = label
+	} else getEl("tickSpeedAmount").textContent = label
 }

@@ -55,14 +55,14 @@ function softReset(bulk, tier = 1) {
 	setInitialResetPower()
 
 	if (player.resets > 4 && tmp.ngmX < 5) {
-		document.getElementById("confirmation").style.display = "inline-block";
-		document.getElementById("sacrifice").style.display = "inline-block";
-		document.getElementById("confirmations").style.display = "inline-block";
-		document.getElementById("sacConfirmBtn").style.display = "inline-block";
+		getEl("confirmation").style.display = "inline-block";
+		getEl("sacrifice").style.display = "inline-block";
+		getEl("confirmations").style.display = "inline-block";
+		getEl("sacConfirmBtn").style.display = "inline-block";
 	}
 	if (player.galacticSacrifice && player.galaxies > 0 && player.resets > (tmp.ngmX >= 5 ? 3 : 4)) {
-		document.getElementById("gSacrifice").style.display = "inline-block"
-		document.getElementById("gConfirmation").style.display = "inline-block"
+		getEl("gSacrifice").style.display = "inline-block"
+		getEl("gConfirmation").style.display = "inline-block"
 	}
 
 	hideDimensions()
@@ -193,7 +193,7 @@ function getSupersonicMultIncrease() {
 	return r
 }
 
-document.getElementById("softReset").onclick = function () {
+getEl("softReset").onclick = function () {
 	if (inQC(6)) return
 	if (cantReset()) return
 	var req = getShiftRequirement(0)

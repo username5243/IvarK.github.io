@@ -439,7 +439,7 @@ function scrollNextMessage() {
         //don't run if hidden to save performance
         if (typeof (player) == "undefined") return
         if (player.options.newsHidden) return false
-        var s = document.getElementById('news');
+        var s = getEl('news');
         updateNewsArray();
         tmp.blankedOut = false
         
@@ -592,7 +592,7 @@ function nextGhostlyNewsTickerMsg() {
 	} catch(e) {
 		console.log("Newsarray doesn't work at idx " + ghostlyNewsIndex)
 	}
-	var newsText = document.getElementById("ghostlyNewsTickerText")
+	var newsText = getEl("ghostlyNewsTickerText")
 	newsText.textContent = ghostlyNewsArray[ghostlyNewsIndex][0]
 	newsText.innerHTML = "<b>NEWS!</b> " + newsText.innerHTML
 	newsText.style.left = "100%"
@@ -620,11 +620,11 @@ function nextGhostlyNewsTickerMsg() {
 
 function toggleGhostlyNews(force) {
 	player.options.secrets.ghostlyNews = !player.options.secrets.ghostlyNews
-	document.getElementById("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
-	document.getElementById("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
-	document.getElementById("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
+	getEl("ghostlyNewsTicker").style.height = (player.options.secrets.ghostlyNews ? 24 : 0)+"px"
+	getEl("ghostlyNewsTickerBlock").style.height = (player.options.secrets.ghostlyNews ? 16 : 0)+"px"
+	getEl("ghostlynewsbtn").textContent = (player.options.secrets.ghostlyNews ? "Hide" : "Show") + " ghostly news ticker"
 }
 
-document.getElementById("ghostlyNewsTicker").onclick = function () {
+getEl("ghostlyNewsTicker").onclick = function () {
 	if (tmp.blankedOut2) giveAchievement("Blanked out")
 };

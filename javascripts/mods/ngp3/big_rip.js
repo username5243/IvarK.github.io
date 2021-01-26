@@ -32,7 +32,7 @@ function setPCsForBigRip() {
 
 function toggleBigRipConf() {
 	tmp.qu.bigRip.conf = !tmp.qu.bigRip.conf
-	document.getElementById("bigRipConfirmBtn").textContent = "Big Rip confirmation: O" + (tmp.qu.bigRip.conf ? "N" : "FF")
+	getEl("bigRipConfirmBtn").textContent = "Big Rip confirmation: O" + (tmp.qu.bigRip.conf ? "N" : "FF")
 }
 
 function unstoreTT() {
@@ -99,14 +99,14 @@ function buyBigRipUpg(id) {
 	tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.sub(bigRipUpgCosts[id])
 	if (player.ghostify.milestones < 8) tmp.qu.bigRip.spaceShards=tmp.qu.bigRip.spaceShards.round()
 	tmp.qu.bigRip.upgrades.push(id)
-	document.getElementById("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
+	getEl("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
 	if (tmp.qu.bigRip.active) tweakBigRip(id, true)
 	if (id == 10 && !tmp.qu.bigRip.upgrades.includes(9)) {
 		tmp.qu.bigRip.upgrades.push(9)
 		if (tmp.qu.bigRip.active) tweakBigRip(9, true)
 	}
 	for (var u = 1; u <= getMaxBigRipUpgrades(); u++) {
-		document.getElementById("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
+		getEl("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
 	}
 }
 
@@ -183,33 +183,33 @@ function isBigRipUpgradeActive(id, bigRipped) {
 }
 
 function updateBreakEternity() {
-	if (document.getElementById("breakEternityTabbtn").style == "none") return
+	if (getEl("breakEternityTabbtn").style == "none") return
 
 	if (tmp.qu.breakEternity.unlocked) {
-		document.getElementById("breakEternityReq").style.display = "none"
-		document.getElementById("breakEternityShop").style.display = ""
-		document.getElementById("breakEternityNoBigRip").style.display = tmp.qu.bigRip.active ? "none" : ""
-		document.getElementById("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
-		for (var u = 1; u <= 13; u++) document.getElementById("breakUpg" + u + "Cost").textContent = shortenDimensions(getBreakUpgCost(u))
-		document.getElementById("breakUpg7MultIncrease").textContent = shortenDimensions(1e9)
-		document.getElementById("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
-		document.getElementById("breakUpgRS").style.display = tmp.qu.bigRip.active ? "" : "none"
+		getEl("breakEternityReq").style.display = "none"
+		getEl("breakEternityShop").style.display = ""
+		getEl("breakEternityNoBigRip").style.display = tmp.qu.bigRip.active ? "none" : ""
+		getEl("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
+		for (var u = 1; u <= 13; u++) getEl("breakUpg" + u + "Cost").textContent = shortenDimensions(getBreakUpgCost(u))
+		getEl("breakUpg7MultIncrease").textContent = shortenDimensions(1e9)
+		getEl("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
+		getEl("breakUpgRS").style.display = tmp.qu.bigRip.active ? "" : "none"
 	} else {
-		document.getElementById("breakEternityReq").style.display = ""
-		document.getElementById("breakEternityReq").textContent = "You need to get " + shorten(new Decimal("1e1200")) + " EP before you can Break Eternity."
-		document.getElementById("breakEternityNoBigRip").style.display = "none"
-		document.getElementById("breakEternityShop").style.display = "none"
+		getEl("breakEternityReq").style.display = ""
+		getEl("breakEternityReq").textContent = "You need to get " + shorten(new Decimal("1e1200")) + " EP before you can Break Eternity."
+		getEl("breakEternityNoBigRip").style.display = "none"
+		getEl("breakEternityShop").style.display = "none"
 	}
 }
 
 function breakEternity() {
 	tmp.qu.breakEternity.break = !tmp.qu.breakEternity.break
 	tmp.qu.breakEternity.did = true
-	document.getElementById("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
+	getEl("breakEternityBtn").textContent = (tmp.qu.breakEternity.break ? "FIX" : "BREAK") + " ETERNITY"
 	if (tmp.qu.bigRip.active) {
 		tmp.be = tmp.quActive && tmp.qu.breakEternity.break
 		updateTemp()
-		if (!tmp.be && document.getElementById("timedimensions").style.display == "block") showDimTab("antimatterdimensions")
+		if (!tmp.be && getEl("timedimensions").style.display == "block") showDimTab("antimatterdimensions")
 	}
 	if (!player.dilation.active && isSmartPeakActivated) {
 		EPminpeakType = 'normal'
@@ -249,10 +249,10 @@ function buyBreakUpg(id) {
 	if (player.ghostify.milestones < 15) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.round()
 	if (id == 7) {
 		tmp.qu.breakEternity.epMultPower++
-		document.getElementById("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
-		document.getElementById("breakUpg7Cost").textContent = shortenDimensions(getBreakUpgCost(7))
+		getEl("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
+		getEl("breakUpg7Cost").textContent = shortenDimensions(getBreakUpgCost(7))
 	} else tmp.qu.breakEternity.upgrades.push(id)
-	document.getElementById("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
+	getEl("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
 }
 
 function getBreakUpgMult(id) {
@@ -267,9 +267,9 @@ function maxBuyBEEPMult() {
 	tmp.qu.breakEternity.epMultPower += toBuy
 	tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.sub(toSpend)
 	if (player.ghostify.milestones < 15) tmp.qu.breakEternity.eternalMatter = tmp.qu.breakEternity.eternalMatter.round()
-	document.getElementById("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
-	document.getElementById("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
-	document.getElementById("breakUpg7Cost").textContent = shortenDimensions(getBreakUpgCost(7))
+	getEl("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
+	getEl("breakUpg7Mult").textContent = shortenDimensions(getBreakUpgMult(7))
+	getEl("breakUpg7Cost").textContent = shortenDimensions(getBreakUpgCost(7))
 }
 
 function getMaxBigRipUpgrades() {

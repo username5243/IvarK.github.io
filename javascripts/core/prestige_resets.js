@@ -260,7 +260,7 @@ function resetTimeDimensions(full) {
 		}
 		dim.amount = new Decimal(dim.bought)
 	}
-	document.getElementById("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
+	getEl("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
 }
 
 function resetEternityChallenges(bigRip, ngpp) {
@@ -701,10 +701,10 @@ function doPreInfinityGhostifyResetStuff(implode){
 	setInitialResetPower()
 	GPminpeak = new Decimal(0)
 	if (implode) showTab("dimensions")
-	document.getElementById("tickSpeed").style.visibility = "hidden"
-	document.getElementById("tickSpeedMax").style.visibility = "hidden"
-	document.getElementById("tickLabel").style.visibility = "hidden"
-	document.getElementById("tickSpeedAmount").style.visibility = "hidden"
+	getEl("tickSpeed").style.visibility = "hidden"
+	getEl("tickSpeedMax").style.visibility = "hidden"
+	getEl("tickLabel").style.visibility = "hidden"
+	getEl("tickSpeedAmount").style.visibility = "hidden"
 	hideDimensions()
 	tmp.tickUpdate = true
 }
@@ -718,12 +718,12 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	if (isEmptiness) {
 		showTab("dimensions")
 		isEmptiness = false
-		document.getElementById("quantumtabbtn").style.display = "inline-block"
-		document.getElementById("ghostifytabbtn").style.display = "inline-block"
+		getEl("quantumtabbtn").style.display = "inline-block"
+		getEl("ghostifytabbtn").style.display = "inline-block"
 	}
-	document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
-	document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
-	document.getElementById("infmultbuyer").textContent = "Max buy IP mult"
+	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
+	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenDimensions(player.infinityPoints) + "</span> Infinity points."
+	getEl("infmultbuyer").textContent = "Max buy IP mult"
 	if (implode) showChallengesTab("normalchallenges")
 	updateChallenges()
 	updateNCVisuals()
@@ -732,14 +732,14 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
 	if (!bm) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
-		document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
-		document.getElementById("replicantidiv").style.display = "none"
-		document.getElementById("replicantiunlock").style.display = "inline-block"
-		document.getElementById("replicantiresettoggle").style.display = "none"
+		getEl("bulkDimboost").value = player.autobuyers[9].bulk
+		getEl("replicantidiv").style.display = "none"
+		getEl("replicantiunlock").style.display = "inline-block"
+		getEl("replicantiresettoggle").style.display = "none"
 		delete player.replicanti.galaxybuyer
 	}
 	updateLastTenRuns()
-	if ((document.getElementById("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
+	if ((getEl("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
 	resetInfDimensions(true)
 }
 
@@ -771,10 +771,10 @@ function doEternityGhostifyResetStuff(implode, bm){
 	player.dilation.totalTachyonParticles = player.dilation.bestTP
 	player.meta.bestOverQuantums = getMetaAntimatterStart()
 	doMetaDimensionsReset()
-	document.getElementById("eternitybtn").style.display = "none"
-	document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
-	if (implode) showEternityTab("timestudies", document.getElementById("eternitystore").style.display == "none")
+	getEl("eternitybtn").style.display = "none"
+	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
+	if (implode) showEternityTab("timestudies", getEl("eternitystore").style.display == "none")
 	updateLastTenEternities()
 	resetTimeDimensions(true)
 	updateRespecButtons()
@@ -819,15 +819,15 @@ function doQuantumGhostifyResetStuff(implode, bm){
 		for (var c = 0; c < 3; c++) tmp.qu.tod[colors[c]].upgrades[1] = 5
 	}
 	if (!bm) {
-		document.getElementById('rebuyupgauto').style.display = "none"
-		document.getElementById('toggleallmetadims').style.display = "none"
-		document.getElementById('metaboostauto').style.display = "none"
-		document.getElementById("autoBuyerQuantum").style.display = "none"
-		document.getElementById('toggleautoquantummode').style.display = "none"
+		getEl('rebuyupgauto').style.display = "none"
+		getEl('toggleallmetadims').style.display = "none"
+		getEl('metaboostauto').style.display = "none"
+		getEl("autoBuyerQuantum").style.display = "none"
+		getEl('toggleautoquantummode').style.display = "none"
 	}
 
-	document.getElementById('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
-	document.getElementById("quantumbtn").style.display = "none"
+	getEl('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
+	getEl("quantumbtn").style.display = "none"
 	updateColorCharge()
 	updateColorDimPowers()
 	updateGluonsTabOnUpdate("prestige")
@@ -841,19 +841,19 @@ function doQuantumGhostifyResetStuff(implode, bm){
 function doGhostifyGhostifyResetStuff(bm, force){
 	GHPminpeak = new Decimal(0)
 	GHPminpeakValue = new Decimal(0)
-	document.getElementById("ghostifybtn").style.display = "none"
+	getEl("ghostifybtn").style.display = "none"
 	if (!ghostified) {
 		ghostified = true
-		document.getElementById("ghostifytabbtn").style.display = "inline-block"
-		document.getElementById("ghostparticles").style.display = ""
-		document.getElementById("ghostifyAnimBtn").style.display = "inline-block"
-		document.getElementById("ghostifyConfirmBtn").style.display = "inline-block"
+		getEl("ghostifytabbtn").style.display = "inline-block"
+		getEl("ghostparticles").style.display = ""
+		getEl("ghostifyAnimBtn").style.display = "inline-block"
+		getEl("ghostifyConfirmBtn").style.display = "inline-block"
 		giveAchievement("Kee-hee-hee!")
 	} else if (player.ghostify.times > 2 && player.ghostify.times < 11) {
 		$.notify("You unlocked " + (player.ghostify.times + 2) + "th Neutrino upgrade!", "success")
 		updateNeutrinoUpgradeUnlock(player.ghostify.times + 2)
 	}
-	document.getElementById("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
+	getEl("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
 	if (bm < 7) {
 		player.ghostify.neutrinos.electron = new Decimal(0)
 		player.ghostify.neutrinos.mu = new Decimal(0)

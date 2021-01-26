@@ -15,9 +15,9 @@ function isInfiniteDetected() { // todo: make better infinite detection system
 		exportInfiniteSave()
 		reload()
 		infiniteDetected = false
-		if (document.getElementById("welcome").style.display != "flex") document.getElementById("welcome").style.display = "flex"
+		if (getEl("welcome").style.display != "flex") getEl("welcome").style.display = "flex"
 		else {
-			document.getElementById("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
+			getEl("welcomeMessage").innerHTML = "I'm sorry, but you got an Infinite bug. Because of this, your save is reverted to your last saved progress. It is recommended to post how did you got this bug. Thanks! :)"
 		}
 		return true
 	}
@@ -25,12 +25,12 @@ function isInfiniteDetected() { // todo: make better infinite detection system
 
 function exportInfiniteSave() {
 	infiniteSave = btoa(JSON.stringify(player))
-	document.getElementById("bugExport").style.display = ""
+	getEl("bugExport").style.display = ""
 	bugExport()
 }
 
 function bugExport() {
-	let output = document.getElementById('output');
+	let output = getEl('output');
 	let parent = output.parentElement;
 
 	parent.style.display = "";

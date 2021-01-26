@@ -83,7 +83,7 @@ let ECCosts = [null,
 		550, 1,   1]
 
 for (let ecnum = 1; ecnum <= 12; ecnum ++){
-	document.getElementById("ec" + ecnum + "unl").onclick = function(){
+	getEl("ec" + ecnum + "unl").onclick = function(){
 		if (canUnlockECFromNum(ecnum)) {
 			unlockEChall(ecnum)
 			player.timestudy.theorem -= ECCosts[ecnum]
@@ -95,7 +95,7 @@ for (let ecnum = 1; ecnum <= 12; ecnum ++){
 function unlockEChall(idx) {
 	if (player.eternityChallUnlocked == 0) {
 		player.eternityChallUnlocked = idx
-		document.getElementById("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
+		getEl("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
 		if (!justImported) showTab("challenges")
 		if (!justImported) showChallengesTab("eternitychallenges")
 		if (idx !== 13 && idx !== 14) {
@@ -110,10 +110,10 @@ function unlockEChall(idx) {
 function updateECUnlockButtons() {
 	for (let ecnum = 1; ecnum <= 12; ecnum ++){
 		let s = "ec" + ecnum + "unl"
-		if (canUnlockECFromNum(ecnum)) document.getElementById(s).className = "eternitychallengestudy"
-		else document.getElementById(s).className = "eternitychallengestudylocked"
+		if (canUnlockECFromNum(ecnum)) getEl(s).className = "eternitychallengestudy"
+		else getEl(s).className = "eternitychallengestudylocked"
 	}
-	if (player.eternityChallUnlocked !== 0) document.getElementById("ec" + player.eternityChallUnlocked + "unl").className = "eternitychallengestudybought"
+	if (player.eternityChallUnlocked !== 0) getEl("ec" + player.eternityChallUnlocked + "unl").className = "eternitychallengestudybought"
 }
 
 function resetEternityChallUnlocks() {
@@ -235,21 +235,21 @@ function updateEternityChallenges() {
 			tmp.ec+=ecdata
 			locked=false
 		}
-		document.getElementById(property+"div").style.display=ecdata?"inline-block":"none"
-		document.getElementById(property).textContent=ecdata>4?"Completed":"Locked"
-		document.getElementById(property).className=ecdata>4?"completedchallengesbtn":"lockedchallengesbtn"
+		getEl(property+"div").style.display=ecdata?"inline-block":"none"
+		getEl(property).textContent=ecdata>4?"Completed":"Locked"
+		getEl(property).className=ecdata>4?"completedchallengesbtn":"lockedchallengesbtn"
 	}
 	if (player.eternityChallUnlocked>0) {
 		var property="eterc"+player.eternityChallUnlocked
 		var onchallenge=player.currentEternityChall==property
 		locked=false
-		document.getElementById(property+"div").style.display="inline-block"
-		document.getElementById(property).textContent=onchallenge?"Running":"Start"
-		document.getElementById(property).className=onchallenge?"onchallengebtn":"challengesbtn"
+		getEl(property+"div").style.display="inline-block"
+		getEl(property).textContent=onchallenge?"Running":"Start"
+		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
-	document.getElementById("eterctabbtn").parentElement.style.display = ph.shown("eternity") && !locked ? "" : "none"
-	document.getElementById("autoEC").style.display = tmp.ngp3 && !ph.did("quantum") ? "inline-block" : "none"
-	if (ph.did("quantum")&&tmp.ngp3) document.getElementById("autoEC").className=tmp.qu.autoEC?"timestudybought":"storebtn"
+	getEl("eterctabbtn").parentElement.style.display = ph.shown("eternity") && !locked ? "" : "none"
+	getEl("autoEC").style.display = tmp.ngp3 && !ph.did("quantum") ? "inline-block" : "none"
+	if (ph.did("quantum")&&tmp.ngp3) getEl("autoEC").className=tmp.qu.autoEC?"timestudybought":"storebtn"
 }
 
 function startEternityChallenge(n) {
@@ -289,11 +289,11 @@ function startEternityChallenge(n) {
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
 		for (let i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
-		document.getElementById("buyerBtnDimBoost").style.display = "inline-block"
-		document.getElementById("buyerBtnGalaxies").style.display = "inline-block"
-		document.getElementById("buyerBtnInf").style.display = "inline-block"
-		document.getElementById("buyerBtnTickSpeed").style.display = "inline-block"
-		document.getElementById("buyerBtnSac").style.display = "inline-block"
+		getEl("buyerBtnDimBoost").style.display = "inline-block"
+		getEl("buyerBtnGalaxies").style.display = "inline-block"
+		getEl("buyerBtnInf").style.display = "inline-block"
+		getEl("buyerBtnTickSpeed").style.display = "inline-block"
+		getEl("buyerBtnSac").style.display = "inline-block"
 	}
 	updateAutobuyers()
 	setInitialMoney()
@@ -316,22 +316,22 @@ function startEternityChallenge(n) {
 	updateMilestones()
 	resetTimeDimensions()
 	if (getEternitied() < 20) player.autobuyers[9].bulk = 1
-	if (getEternitied() < 20) document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
+	if (getEternitied() < 20) getEl("bulkDimboost").value = player.autobuyers[9].bulk
 	if (getEternitied() < 50) {
-		document.getElementById("replicantidiv").style.display="none"
-		document.getElementById("replicantiunlock").style.display="inline-block"
+		getEl("replicantidiv").style.display="none"
+		getEl("replicantiunlock").style.display="inline-block"
 	}
 	if (getEternitied() > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false
-	document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
-	document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
+	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
+	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
 	if (getEternitied() > 0 && oldStat < 1) {
-		document.getElementById("infmultbuyer").style.display = "inline-block"
-		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult O" + (player.infMultBuyer?"N":"FF")
+		getEl("infmultbuyer").style.display = "inline-block"
+		getEl("infmultbuyer").textContent = "Autobuy IP mult O" + (player.infMultBuyer?"N":"FF")
 	}
 	hideMaxIDButton()
-	document.getElementById("eternitybtn").style.display = "none"
+	getEl("eternitybtn").style.display = "none"
 	updateEternityUpgrades()
-	document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
+	getEl("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true;
 	playerInfinityUpgradesOnEternity()

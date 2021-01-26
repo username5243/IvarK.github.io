@@ -1,7 +1,7 @@
 var player = {};
 
 function changestate(n) {
-    var classes = document.getElementById('div'+n).classList
+    var classes = getEl('div'+n).classList
     if(classes.contains('hidden')){
 		classes.remove('hidden');
 	    classes.add('shown');
@@ -15,8 +15,8 @@ function changestate(n) {
 if (localStorage.getItem("howToSpoilers") !== null) var spoilers = parseInt(localStorage.getItem("howToSpoilers"))
 else var spoilers = 0
 
-if (spoilers === 0) document.getElementById("showspoilersbtn").innerHTML = "View: <br> Avoid spoilers"
-else document.getElementById("showspoilersbtn").innerHTML= "View: <br> Show spoilers"
+if (spoilers === 0) getEl("showspoilersbtn").innerHTML = "View: <br> Avoid spoilers"
+else getEl("showspoilersbtn").innerHTML= "View: <br> Show spoilers"
 
 function save() {
 	localStorage.setItem("howToSpoilers", spoilers)
@@ -44,10 +44,10 @@ function load_game() {
 function showspoilers() {
 	if (spoilers === 0) {
 		spoilers = 1;
-		document.getElementById("showspoilersbtn").innerHTML= "View: <br> Show spoilers"
+		getEl("showspoilersbtn").innerHTML= "View: <br> Show spoilers"
 	} else {
 		spoilers = 0;
-		document.getElementById("showspoilersbtn").innerHTML = "View: <br> Avoid spoilers"
+		getEl("showspoilersbtn").innerHTML = "View: <br> Avoid spoilers"
 	}
 	save()
 	updateSpoilers();
@@ -55,7 +55,7 @@ function showspoilers() {
 
 function updateSpoilers() {
 	var displayed = spoilers;
-	document.getElementById("ng3pguide").style.display=player.masterystudies||spoilers?"":"none"
+	getEl("ng3pguide").style.display=player.masterystudies||spoilers?"":"none"
 	for (i=42; i>0; i--) {
 		if (i != 7) {
 			if (!displayed) {
@@ -99,16 +99,16 @@ function updateSpoilers() {
 					else msg += "infinity meta-antimatter"
 					msg += ", you will able to go quantum. Quantum will reset everything eternity resets, and also time studies, eternity challenges, dilation, "+(player.masterystudies?"meta dimensions, and mastery studies":"and meta dimensions (except your best meta-antimatter)")+". You will gain a quark and unlock various upgrades."
 					if (player.masterystudies) msg += "<br><br>You will also unlock speedrun milestones where you must do fast quantums to get your QoL content rewards on eternity, and even quantum autobuyer."
-					document.getElementById("div22").innerHTML = msg
+					getEl("div22").innerHTML = msg
 				}
-			} else document.getElementById("div"+i).className = "hidden";
-			document.getElementById("div"+i+"btn").style.display = displayed ? "block" : "none";
-			document.getElementById("div"+i+"hr").style.display = displayed ? "block" : "none";
+			} else getEl("div"+i).className = "hidden";
+			getEl("div"+i+"btn").style.display = displayed ? "block" : "none";
+			getEl("div"+i+"hr").style.display = displayed ? "block" : "none";
 		}
 	}
 }
 
-document.getElementById("importbtn").onclick = function () {
+getEl("importbtn").onclick = function () {
     var save_data = prompt("Input your save.");
 	save_data = JSON.parse(atob(save_data), function(k, v) { return (v === Infinity) ? "Infinity" : v; });
 	if (!save_data) {

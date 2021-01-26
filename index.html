@@ -7,6 +7,7 @@
 	<link rel="icon" type="image/png" href="icon.png">
 	<meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." charset="utf-8"/>
 	<script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="javascripts/core/getel.js"></script>
 	<script type="text/javascript" src="javascripts/notify.js"></script>
 	<link rel="stylesheet" type="text/css" href="stylesheets/styles.css?12">
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
@@ -143,7 +144,6 @@
 					<td id="dilationTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('dilation')">Time Dilation</button></td>
 					<td id="blackHoleTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('blackhole')">Black hole</button></td>
 					<td id="breakEternityTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('breakEternity')">Break Eternity</button></td>
-					<td id="autoEternityTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('autoEternity')">Auto-Eternity</button></td>
 				</tr>
 			</table>
 			<div class="eternitytab" id="timestudies" style="font-size: 15px">
@@ -1025,53 +1025,6 @@
 				</div>
 				<div class="footer bottom"></div>
 			</div>
-			<div class="eternitytab" id="autoEternity">
-				<table id="autoEternityTable">
-					<tr>
-						<td>
-							<b>Main options</b><br>
-							<button class="storebtn" id="autoEterToggle" onclick="toggleABEter()">Enable</button><br>
-							<button class="storebtn" id="autoEterMode" style="width:400px" onclick="toggleAutoEterMode()"></button>
-							<button class="storebtn" id="autoEterIfAD" style="width:400px" onclick="toggleAutoEterIfAD()"></button>
-							<span id='autoEterCond'></span><br>
-							<input type="text" onchange="updateAutoEterValue()" id="autoEterValue"></input>
-						</td>
-						<td>
-							<div style="height:75px"><b>Preset automation</b><br><button id="toggleAP" class="storebtn" onclick="toggleAPs()">Enable</button> <button class="storebtn" onclick="createAP()">Add preset</button> <button class="storebtn" onclick="createAP(true)">Import preset</button><br>Eternities left to select the next preset: <span id="eternitiesLeft">2</span></div>
-							<div style="height:225px; overflow-y:auto">
-								<table id='automatedPresets'>
-								</table>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<b>Dilation options</b><br>
-							<button class="storebtn" id="autoDilToggle" onclick="toggleAutoDil()">Enable</button><br>
-							<button class="storebtn" id="autodilatemode" style="width:400px" onclick="changeAutoDilateMode()">Mode: Amount of eternities</button>
-							<button class="storebtn" id="slowstop" style="width:400px; font-size: 11px" onclick="toggleSlowStop()">Stop auto-dilate if a little bit of TP is gained: OFF</button>
-							Amount of eternities to wait until dilate time:<br>
-							<input type="text" onchange="updateAutoDilValue()" id="autoDilValue"></input>
-						</td>
-						<td>
-							<div style="height:50px"><b>Special preset automation</b></div>
-							<div>
-								<table>
-									<tr>
-										<td id='apDilSelected'></td>
-										<td id='apDil'></td>
-									</tr>
-									<tr>
-										<td id='apGrindSelected'></td>
-										<td id='apGrind'></td>
-									</tr>
-								</table>
-							</div>
-						</td>
-					</tr>
-				</table>
-				<div class="footer bottom"></div>
-			</div>
 		</div>
 		<div id="dimensions" class="tab">
 			<table class="table" align="center" style="margin: auto" id="dimTabButtons">
@@ -1533,7 +1486,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies - Alpha 12)</p>
+				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2331,7 +2284,7 @@
 								<div id="To the new dimension!" class="achievement achievementlocked" style="background-image: url(images/143.png)" ach-tooltip='Big Rip the universe. Reward: Keep your Infinity Upgrades and autobuyers, Time Theorem production is multiplied by 100, unlock the "X times eternitied" mode of the Eternity autobuyer, and every completion of EC12 gives a free completion of EC11.'></div>
 							</td>
 							<td>
-								<div id="Quantum doesn't take so long" class="achievement achievementlocked" style="background-image: url(images/144.png)" ach-tooltip="Quantum in under 1 second. Reward: Expand Automatic Eternity to contain new after-eternity features."></div>
+								<div id="Quantum doesn't take so long" class="achievement achievementlocked" style="background-image: url(images/144.png)" ach-tooltip="Quantum in under 1 second."></div>
 							</td>
 							<td>
 								<div id="Gonna go fast" class="achievement achievementlocked" style="background-image: url(images/145.png)"></div>
@@ -3854,7 +3807,6 @@
 			<button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy</button>
 			<button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
 			<button class="storebtn" id="toggleautoetermode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleAutoEterMode()">Auto eternity mode: amount</button>
-			<button class="storebtn" id="aftereternity" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="openAfterEternity()">After-eternity automation</button>
 			<button class="storebtn" id="toggleautoquantummode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleAutoQuantumMode()"></button>
 			<br>
 			<table class="table" style="margin: 0 auto">

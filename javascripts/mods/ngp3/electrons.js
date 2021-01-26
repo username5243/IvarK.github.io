@@ -1,23 +1,23 @@
 function updateElectronsTab() {
-	document.getElementById("normal_galaxies").textContent = getFullExpansion(player.galaxies)
-	document.getElementById("sacrificed_gals").textContent = getFullExpansion(Math.round(tmp.qu.electrons.sacGals))
-	document.getElementById("elc_amount").textContent = getFullExpansion(Math.round(tmp.qu.electrons.amount))
-	document.getElementById("elc_translation").textContent = getFullExpansion(Math.round(tmp.mpte))
-	document.getElementById("elc_effect").textContent = shorten(getDimensionPowerMultiplier("non-random"))
-	document.getElementById("linear_per_ten_mult").textContent = shorten(getDimensionPowerMultiplier("linear"))
+	getEl("normal_galaxies").textContent = getFullExpansion(player.galaxies)
+	getEl("sacrificed_gals").textContent = getFullExpansion(Math.round(tmp.qu.electrons.sacGals))
+	getEl("elc_amount").textContent = getFullExpansion(Math.round(tmp.qu.electrons.amount))
+	getEl("elc_translation").textContent = getFullExpansion(Math.round(tmp.mpte))
+	getEl("elc_effect").textContent = shorten(getDimensionPowerMultiplier("non-random"))
+	getEl("linear_per_ten_mult").textContent = shorten(getDimensionPowerMultiplier("linear"))
 	for (var u = 1; u <= 4; u++) {
-		document.getElementById("elc_upg_" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
+		getEl("elc_upg_" + u).className = "gluonupgrade " + (canBuyElectronUpg(u) ? "stor" : "unavailabl") + "ebtn"
 	}
 }
 
 function updateElectrons() {
 	var mult = getElectronGainFinalMult()
-	document.getElementById("elc_percentage").textContent = getGalaxySacrificeMult() * 100
-	document.getElementById("elc_mult").textContent = mult.toFixed(2)
+	getEl("elc_percentage").textContent = getGalaxySacrificeMult() * 100
+	getEl("elc_mult").textContent = mult.toFixed(2)
 	tmp.qu.electrons.amount = getElectronGainFinalMult() * tmp.qu.electrons.sacGals
 	for (var u = 1; u < 5; u++) {
 		var cost = getElectronUpgCost(u)
-		document.getElementById("elc_upg_" + u).innerHTML = "Increase the multiplier by " + (getElectronGainMult() * getElectronUpgIncrease(u)).toFixed(2) + "x.<br>" +
+		getEl("elc_upg_" + u).innerHTML = "Increase the multiplier by " + (getElectronGainMult() * getElectronUpgIncrease(u)).toFixed(2) + "x.<br>" +
 			"Level: " + getFullExpansion(tmp.qu.electrons.rebuyables[u-1]) + "<br>" +
 			"Cost: " + ((u == 4 ? getFullExpansion : shortenCosts)(cost)) + " " + [null, "Time Theorems", "dilated time", "meta-antimatter", "Meta-Dimension Boosts"][u]
 	}
@@ -98,7 +98,7 @@ function buyElectronUpg(u, quick) {
 		player.meta.resets -= cost
 		player.meta.antimatter = getMetaAntimatterStart()
 		clearMetaDimensions()
-		for (let i = 2; i <= 8; i++) if (!canBuyMetaDimension(i)) document.getElementById(i + "MetaRow").style.display = "none"
+		for (let i = 2; i <= 8; i++) if (!canBuyMetaDimension(i)) getEl(i + "MetaRow").style.display = "none"
 	}
 	tmp.qu.electrons.rebuyables[u - 1]++
 	tmp.qu.electrons.mult += getElectronUpgIncrease(u)

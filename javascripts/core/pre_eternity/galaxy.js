@@ -21,11 +21,11 @@ function galaxyReset(bulk) {
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
-		document.getElementById("sacrifice").style.display = "none"
-		document.getElementById("confirmation").style.display = "none"
+		getEl("sacrifice").style.display = "none"
+		getEl("confirmation").style.display = "none"
 		if (player.galacticSacrifice && (player.galaxies > 0 || (player.galacticSacrifice ? player.galacticSacrifice.times > 0 : false))) {
-			document.getElementById("gSacrifice").style.display = "inline-block"
-			document.getElementById("gConfirmation").style.display = "inline-block"
+			getEl("gSacrifice").style.display = "inline-block"
+			getEl("gConfirmation").style.display = "inline-block"
 		}
 	}
 	if (!player.achievements.includes("r111")) setInitialMoney()
@@ -39,7 +39,7 @@ function galaxyReset(bulk) {
 	tmp.tickUpdate = true;
 }
 
-document.getElementById("secondSoftReset").onclick = function() {
+getEl("secondSoftReset").onclick = function() {
 	let ngm4 = player.aarexModifications.ngmX ? player.aarexModifications.ngmX >= 4 : false
 	let bool1 = !inNC(11) || ngm4
 	let bool2 = player.currentChallenge != "postc1"

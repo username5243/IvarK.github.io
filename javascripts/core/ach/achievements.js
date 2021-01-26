@@ -421,22 +421,22 @@ function giveAchievement(name, noUpdate) {
 		player.autoIP = player.autoIP.times(4);
 		if (player.autoCrunchMode == "amount" && player.autobuyers[11].priority != undefined) player.autobuyers[11].priority = Decimal.times(player.autobuyers[11].priority, 4);
 	}
-	if (name == "The swarm" && player.boughtDims) document.getElementById('replicantigalaxypowerdiv').style.display=""
+	if (name == "The swarm" && player.boughtDims) getEl('replicantigalaxypowerdiv').style.display=""
 	if (name == "I told you already, time is relative" || name == "I'm so meta" || name == "To the new dimension!") updateHotkeys()
 	if (name == "GAS GAS GAS") {
-		for (i = 1; i <= 8; i++) document.getElementById("td" + i + 'auto').style.visibility = "visible"
-		document.getElementById('togglealltimedims').style.display = ""
-		document.getElementById('epmultauto').style.display = ""
-		if (player.aarexModifications.ngudpV) document.getElementById("blackholeAuto").style.display = ""
+		for (i = 1; i <= 8; i++) getEl("td" + i + 'auto').style.visibility = "visible"
+		getEl('togglealltimedims').style.display = ""
+		getEl('epmultauto').style.display = ""
+		if (player.aarexModifications.ngudpV) getEl("blackholeAuto").style.display = ""
 	}
-	if (name == "It will never be enough") document.getElementById('replicantibulkmodetoggle').style.display="inline-block"
+	if (name == "It will never be enough") getEl('replicantibulkmodetoggle').style.display="inline-block"
 	if (name == "I already got rid of you..." || name == "No dilation means no production.") {
 		player.dilation.bestTP = Decimal.max(player.dilation.tachyonParticles, player.dilation.bestTP)
-		document.getElementById('bestTP').style.display = ""
-		document.getElementById('bestTP').textContent = "Your best ever Tachyon particles was "+shorten(player.dilation.bestTP)+"."
+		getEl('bestTP').style.display = ""
+		getEl('bestTP').textContent = "Your best ever Tachyon particles was "+shorten(player.dilation.bestTP)+"."
 	}
-	if (name == "Twice in the row") document.getElementById('toggleautoquantummode').style.display = ""
-	if (name == "Stop blocking me!") document.getElementById('autoReset').style.display = ""
+	if (name == "Twice in the row") getEl('toggleautoquantummode').style.display = ""
+	if (name == "Stop blocking me!") getEl('autoReset').style.display = ""
 	if (name == "To the new dimension!") tmp.qu.bigRip.bestGals = 1
 	if (name == "Quantum doesn't take so long") {
 		updateAutobuyers()
@@ -452,7 +452,7 @@ function giveAchievement(name, noUpdate) {
 			if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
 		}
 	}
-	if (name == "I rather to oppose the theory of everything") document.getElementById('autoDisableQuantum').style.display = ""
+	if (name == "I rather to oppose the theory of everything") getEl('autoDisableQuantum').style.display = ""
 	if (name == "Even Ghostlier than before") {
 		for (let i = 1; i <= 8; i++){
 			if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
@@ -499,37 +499,37 @@ function updateAchievements() {
 				var name = allAchievements[id]
 				if (player.achievements.includes(id)) {
 					n++
-					document.getElementById(name).className = "achievementunlocked"
+					getEl(name).className = "achievementunlocked"
 				} else {
-					document.getElementById(name).className = "achievementlocked"
+					getEl(name).className = "achievementlocked"
 				}
 			}
 			if (n == 8) {
-				document.getElementById(rowHTML).className = "completedrow"
+				getEl(rowHTML).className = "completedrow"
 				if (player.aarexModifications.hideCompletedAchs) shown = false
 				amount++
-			} else document.getElementById(rowHTML).className = ""
+			} else getEl(rowHTML).className = ""
 		}
-		document.getElementById(rowHTML).style.display = shown ? "" : "none"
+		getEl(rowHTML).style.display = shown ? "" : "none"
 
 		if (shown) {
 			rowsShown++
-			var numberelement = document.getElementById(rowId + "number")
+			var numberelement = getEl(rowId + "number")
 			if (numberelement === null) {
-				document.getElementById(rowHTML).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
-				numberelement = document.getElementById(rowId + "number")
+				getEl(rowHTML).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
+				numberelement = getEl(rowId + "number")
 			}
 			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
 			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
 		}
 	}
     player.achPow = Decimal.pow(tmp.ngmX >= 5 ? 20 : tmp.ngmX >= 2 ? 5 : 1.5, amount)
-    document.getElementById("achmultlabel").textContent = "Current achievement multiplier to " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
-	document.getElementById("nothingness").style.display = rowsShown ? "none" : ""
+    getEl("achmultlabel").textContent = "Current achievement multiplier to " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
+	getEl("nothingness").style.display = rowsShown ? "none" : ""
 
 	rowsShown = 0
 	rowsNum = 0
-	for (var i = 1; i <= document.getElementById("secretachievementtable").children[0].children.length; i++) {
+	for (var i = 1; i <= getEl("secretachievementtable").children[0].children.length; i++) {
 		var shown = true
 		var rowId = "secretAchRow" + i
 		if (i > 3) {
@@ -548,32 +548,32 @@ function updateAchievements() {
 				var name = allAchievements[achId]
 				if (player.achievements.includes(achId)) {
 					n++
-					document.getElementById(name).setAttribute('ach-tooltip', secretAchievementTooltips[achId])
-					document.getElementById(name).className = "achievementunlocked"
+					getEl(name).setAttribute('ach-tooltip', secretAchievementTooltips[achId])
+					getEl(name).className = "achievementunlocked"
 				} else {
-					document.getElementById(name).className = "achievementhidden"
-					document.getElementById(name).setAttribute('ach-tooltip', (name[name.length-1] !== "?" && name[name.length-1] !== "!" && name[name.length-1] !== ".") ? name+"." : name)
+					getEl(name).className = "achievementhidden"
+					getEl(name).setAttribute('ach-tooltip', (name[name.length-1] !== "?" && name[name.length-1] !== "!" && name[name.length-1] !== ".") ? name+"." : name)
 				}
 			}
 			if (n == 8) {
-				document.getElementById(rowId).className = "completedrow"
+				getEl(rowId).className = "completedrow"
 				if (player.aarexModifications.hideCompletedAchs) shown = false
 				amount++
-			} else document.getElementById(rowId).className = ""
+			} else getEl(rowId).className = ""
 		}
-		document.getElementById(rowId).style.display = shown ? "" : "none"
+		getEl(rowId).style.display = shown ? "" : "none"
 		if (shown) {
 			rowsShown++
-			var numberelement = document.getElementById(rowId + "number")
+			var numberelement = getEl(rowId + "number")
 			if (numberelement === null) {
-				document.getElementById(rowId).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
-				numberelement = document.getElementById(rowId + "number")
+				getEl(rowId).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
+				numberelement = getEl(rowId + "number")
 			}
 			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
 			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
 		}
 	}
-	document.getElementById("nothingnessSecret").style.display = rowsShown ? "none" : ""
+	getEl("nothingnessSecret").style.display = rowsShown ? "none" : ""
 }
 
 function getNormalAchAmount(){
@@ -582,7 +582,7 @@ function getNormalAchAmount(){
 
 function getSecretAchAmount() {
     var n = 0
-    for (var i = 1; i <= document.getElementById("secretachievementtable").children[0].children.length; i++) {
+    for (var i = 1; i <= getEl("secretachievementtable").children[0].children.length; i++) {
         var achNum = i * 10
         if (i <= 3) for (var l = 0; l < 8; l++) {
             achNum = i * 10 + l + 1
@@ -603,21 +603,21 @@ function toggleAchRowNums() {
 	// 0 == not visible, 1 == visible
 	player.aarexModifications.showAchRowNums = !player.aarexModifications.showAchRowNums;
 	updateAchievements();
-	document.getElementById("showAchRowNums").textContent = (player.aarexModifications.showAchRowNums ? "Hide" : "Show") + " achievement row info";
+	getEl("showAchRowNums").textContent = (player.aarexModifications.showAchRowNums ? "Hide" : "Show") + " achievement row info";
 }
 
 function toggleCompletedAchs() {
 	// 0 == visible, 1 == not visible
 	player.aarexModifications.hideCompletedAchs = !player.aarexModifications.hideCompletedAchs;
 	updateAchievements();
-	document.getElementById("hideCompletedAchs").textContent = (player.aarexModifications.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
+	getEl("hideCompletedAchs").textContent = (player.aarexModifications.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
 }
 
 function toggleSecretAchs() {
 	// 0 == visible, 1 == not visible
 	player.aarexModifications.hideSecretAchs = !player.aarexModifications.hideSecretAchs;
-	if (document.getElementById("secretachievements").style.display == "block") showAchTab("normalachievements");
-	document.getElementById("hideSecretAchs").textContent = (player.aarexModifications.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
+	if (getEl("secretachievements").style.display == "block") showAchTab("normalachievements");
+	getEl("hideSecretAchs").textContent = (player.aarexModifications.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
 }
 
 function achMultLabelUpdate() {
@@ -631,18 +631,18 @@ function achMultLabelUpdate() {
 
 function metaAchMultLabelUpdate() {
 	if (!isQCRewardActive(6)) {
-		document.getElementById("metaAchMultLabel").style.display = "none"
+		getEl("metaAchMultLabel").style.display = "none"
 		return
 	}
-	document.getElementById("metaAchMultLabel").style.display = ""
-	document.getElementById("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(tmp.qcRewards[6]) + "x"
+	getEl("metaAchMultLabel").style.display = ""
+	getEl("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(tmp.qcRewards[6]) + "x"
 }
 
 function bWtAchMultLabelUpdate() {
 	if (!player.achievements.includes("ng3p91")) {
-		document.getElementById("bWtAchMultLabel").style.display = "none"
+		getEl("bWtAchMultLabel").style.display = "none"
 		return
 	}
-	document.getElementById("bWtAchMultLabel").style.display = ""
-	document.getElementById("bWtAchMultLabel").textContent = "Achievement multiplier to Bosonic Watts: " + shorten(getAchBWtMult()) + "x"
+	getEl("bWtAchMultLabel").style.display = ""
+	getEl("bWtAchMultLabel").textContent = "Achievement multiplier to Bosonic Watts: " + shorten(getAchBWtMult()) + "x"
 }

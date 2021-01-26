@@ -751,12 +751,8 @@ function ABTypeDisplay(){
 	else getEl("togglecrunchmode").style.display = "none"
 	if (getEternitied() > 8 || player.autobuyers[10].bulkBought) getEl("galaxybulk").style.display = "inline-block"
 	else getEl("galaxybulk").style.display = "none"
-	if (getEternitied() > 99 && player.meta) getEl("toggleautoetermode").style.display = "inline-block"
+	if (getEternitied() >= 100 && player.meta) getEl("toggleautoetermode").style.display = "inline-block"
 	else getEl("toggleautoetermode").style.display = "none"
-	if (getEternitied() > 99 && player.achievements.includes("ng3p52")) getEl('aftereternity').style.display = "inline-block"
-	else getEl('aftereternity').style.display = "none"
-	if (getEternitied() > 99 && player.achievements.includes("ng3p52")) getEl('autoEternityTabbtn').style.display = ""
-	else getEl('autoEternityTabbtn').style.display = "none"
 }
 
 function infPoints2Display(){

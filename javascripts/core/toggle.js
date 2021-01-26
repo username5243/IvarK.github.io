@@ -1,6 +1,6 @@
 function toggleChallengeRetry() {
 	player.options.retryChallenge = !player.options.retryChallenge
-	document.getElementById("retry").textContent = "Automatically retry challenges: O" + (player.options.retryChallenge ? "N" : "FF")
+	getEl("retry").textContent = "Automatically retry challenges: O" + (player.options.retryChallenge ? "N" : "FF")
 }
 
 function togglePerformanceTicks() {
@@ -10,13 +10,13 @@ function togglePerformanceTicks() {
 
 function toggleLogRateChange() {
 	player.aarexModifications.logRateChange=!player.aarexModifications.logRateChange
-	document.getElementById("toggleLogRateChange").textContent = "Logarithm rate: O" + (player.aarexModifications.logRateChange ? "N" : "FF")
+	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (player.aarexModifications.logRateChange ? "N" : "FF")
 	dimDescEnd = (player.aarexModifications.logRateChange?" OoM":"%")+"/s)"
 }
 
 function toggleTabsSave() {
 	player.aarexModifications.tabsSave.on =! player.aarexModifications.tabsSave.on
-	document.getElementById("tabsSave").textContent = "Saved tabs: O" + (player.aarexModifications.tabsSave.on ? "N" : "FF")
+	getEl("tabsSave").textContent = "Saved tabs: O" + (player.aarexModifications.tabsSave.on ? "N" : "FF")
 }
 
 function infMultAutoToggle() {
@@ -31,23 +31,23 @@ function infMultAutoToggle() {
 		}
 	} else {
 		player.infMultBuyer = !player.infMultBuyer
-		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult: O" + (player.infMultBuyer ? "N" : "FF")
+		getEl("infmultbuyer").textContent = "Autobuy IP mult: O" + (player.infMultBuyer ? "N" : "FF")
 	}
 }
 
 function toggleEternityConf() {
 	player.options.eternityconfirm = !player.options.eternityconfirm
-	document.getElementById("eternityconf").textContent = "Eternity confirmation: O" + (player.options.eternityconfirm ? "N" : "FF")
+	getEl("eternityconf").textContent = "Eternity confirmation: O" + (player.options.eternityconfirm ? "N" : "FF")
 }
 
 function toggleDilaConf() {
 	player.aarexModifications.dilationConf = !player.aarexModifications.dilationConf
-	document.getElementById("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (player.aarexModifications.dilationConf ? "N" : "FF")
+	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (player.aarexModifications.dilationConf ? "N" : "FF")
 }
 
 function toggleOfflineProgress() {
 	player.aarexModifications.offlineProgress = !player.aarexModifications.offlineProgress
-	document.getElementById("offlineProgress").textContent = "Offline progress: O"+(player.aarexModifications.offlineProgress?"N":"FF")
+	getEl("offlineProgress").textContent = "Offline progress: O"+(player.aarexModifications.offlineProgress?"N":"FF")
 }
 
 function toggleAutoBuyers() {
@@ -67,20 +67,20 @@ function toggleAutoBuyers() {
 function toggleBulk() {
 	if (player.options.bulkOn) {
 		player.options.bulkOn = false
-		document.getElementById("togglebulk").textContent = "Enable bulk buy"
+		getEl("togglebulk").textContent = "Enable bulk buy"
 	} else {
 		player.options.bulkOn = true
-		document.getElementById("togglebulk").textContent = "Disable bulk buy"
+		getEl("togglebulk").textContent = "Disable bulk buy"
 	}
 }
 
 function toggleHotkeys() {
 	if (player.options.hotkeys) {
 		player.options.hotkeys = false
-		document.getElementById("hotkeys").textContent = "Enable hotkeys"
+		getEl("hotkeys").textContent = "Enable hotkeys"
 	} else {
 		player.options.hotkeys = true
-		document.getElementById("hotkeys").textContent = "Disable hotkeys"
+		getEl("hotkeys").textContent = "Disable hotkeys"
 	}
 }
 
@@ -92,45 +92,45 @@ function respecToggle() {
 function toggleProductionTab() {
 	// 0 == visible, 1 == not visible
 	player.aarexModifications.hideProductionTab=!player.aarexModifications.hideProductionTab
-	document.getElementById("hideProductionTab").textContent = (player.aarexModifications.hideProductionTab?"Show":"Hide")+" production tab"
-	if (document.getElementById("production").style.display == "block") showDimTab("antimatterdimensions")
+	getEl("hideProductionTab").textContent = (player.aarexModifications.hideProductionTab?"Show":"Hide")+" production tab"
+	if (getEl("production").style.display == "block") showDimTab("antimatterdimensions")
 }
 
 function toggleRepresentation() {
 	// 0 == visible, 1 == not visible
 	player.aarexModifications.hideRepresentation=!player.aarexModifications.hideRepresentation
-	document.getElementById("hideRepresentation").textContent=(player.aarexModifications.hideRepresentation?"Show":"Hide")+" antimatter representation"
+	getEl("hideRepresentation").textContent=(player.aarexModifications.hideRepresentation?"Show":"Hide")+" antimatter representation"
 }
 
 function toggleProgressBar() {
 	player.aarexModifications.progressBar=!player.aarexModifications.progressBar
-	document.getElementById("progressBarBtn").textContent = (player.aarexModifications.progressBar?"Hide":"Show")+" progress bar"	
+	getEl("progressBarBtn").textContent = (player.aarexModifications.progressBar?"Hide":"Show")+" progress bar"	
 }
 
 function toggleReplAuto(i) {
 	if (i == "chance") {
 		if (player.replicanti.auto[0]) {
 			player.replicanti.auto[0] = false
-			document.getElementById("replauto1").textContent = "Auto: OFF"
+			getEl("replauto1").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[0] = true
-			document.getElementById("replauto1").textContent = "Auto: ON"
+			getEl("replauto1").textContent = "Auto: ON"
 		}
 	} else if (i == "interval") {
 		if (player.replicanti.auto[1]) {
 			player.replicanti.auto[1] = false
-			document.getElementById("replauto2").textContent = "Auto: OFF"
+			getEl("replauto2").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[1] = true
-			document.getElementById("replauto2").textContent = "Auto: ON"
+			getEl("replauto2").textContent = "Auto: ON"
 		}
 	} else if (i == "galaxy") {
 		if (player.replicanti.auto[2]) {
 			player.replicanti.auto[2] = false
-			document.getElementById("replauto3").textContent = "Auto: OFF"
+			getEl("replauto3").textContent = "Auto: OFF"
 		} else {
 			player.replicanti.auto[2] = true
-			document.getElementById("replauto3").textContent = "Auto: ON"
+			getEl("replauto3").textContent = "Auto: ON"
 		}
 	}
 }

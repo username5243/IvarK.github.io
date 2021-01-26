@@ -154,7 +154,7 @@ function galacticSacrifice(auto, force, chall) {
 			if (player.firstAmount == 1 && player.resets == 0 && player.galaxies == 0 && inNC(12)) giveAchievement("ERROR 909: Dimension not found")
 		}
 		if (!chall && (force || !player.options.retryChallenge)) delete player.galacticSacrifice.chall
-		document.getElementById("challengeconfirmation").style.display = "inline-block"
+		getEl("challengeconfirmation").style.display = "inline-block"
 		updateChallenges()
 		updateNCVisuals()
 		updateChallengeTimes()
@@ -224,7 +224,7 @@ let galCosts = {
 	"46ngm4": 1e40 
 }
 
-function getGalaxyUpgradeCost(i){
+function getGalaxyUpgradeCost(i) {
 	if (tmp.ngmX >= 4 && galCosts[i + "ngm4"]) return new Decimal(galCosts[i + "ngm4"])
 	return galCosts[i]
 }
@@ -283,39 +283,40 @@ function reduceDimCosts(upg) {
 	}
 }
 
-function galacticUpgradeSpanDisplay () {
-	document.getElementById("galaxyPoints").innerHTML = "You have <span class='GPAmount'>"+shortenDimensions(player.galacticSacrifice.galaxyPoints)+"</span> Galaxy point"+(player.galacticSacrifice.galaxyPoints.eq(1)?".":"s.")
-	document.getElementById('galcost33').innerHTML = shortenCosts(getGalaxyUpgradeCost(33))
-	if (player.tickspeedBoosts != undefined) {
-		document.getElementById('galcost24').textContent = shortenCosts(1e3)
-		document.getElementById('galcost34').textContent = shortenCosts(1e17)
+function galacticUpgradeSpanDisplay() {
+	getEl('galcost33').innerHTML = shortenCosts(getGalaxyUpgradeCost(33))
+	if (tmp.ngmX >= 3) {
+		getEl('galcost24').textContent = shortenCosts(1e3)
+		getEl('galcost34').textContent = shortenCosts(1e17)
 	}
 	if (tmp.ngmX >= 4) {
-		document.getElementById('galcost25').textContent = shortenCosts(1e3)
-		document.getElementById('galcost35').textContent = shortenCosts(2e3)
-		document.getElementById('galcost16').textContent = shortenCosts(1e16)
-		document.getElementById('galcost26').textContent = shortenCosts(1e18)
-		document.getElementById('galcost36').textContent = shortenCosts(1e22)
-		document.getElementById('galcost41').textContent = shortenCosts(1e23)
-		document.getElementById('galcost42').textContent = shortenCosts(1e25)
-		document.getElementById('galcost43').textContent = shortenCosts(1e28)
-		document.getElementById('galcost44').textContent = shortenCosts(1e31)
-		document.getElementById('galcost45').textContent = shortenCosts(1e34)
-		document.getElementById('galcost46').textContent = shortenCosts(1e40) 
+		getEl('galcost25').textContent = shortenCosts(1e3)
+		getEl('galcost35').textContent = shortenCosts(2e3)
+		getEl('galcost16').textContent = shortenCosts(1e16)
+		getEl('galcost26').textContent = shortenCosts(1e18)
+		getEl('galcost36').textContent = shortenCosts(1e22)
+		getEl('galcost41').textContent = shortenCosts(1e23)
+		getEl('galcost42').textContent = shortenCosts(1e25)
+		getEl('galcost43').textContent = shortenCosts(1e28)
+		getEl('galcost44').textContent = shortenCosts(1e31)
+		getEl('galcost45').textContent = shortenCosts(1e34)
+		getEl('galcost46').textContent = shortenCosts(1e40) 
 	} else if (player.infinityUpgrades.includes("postinfi63")) {
-		document.getElementById("galcost41").textContent = shortenCosts(new Decimal("1e3800"))
-		document.getElementById("galcost42").textContent = shortenCosts(new Decimal("1e4000"))
-		document.getElementById("galcost43").textContent = shortenCosts(new Decimal("1e4200"))
+		getEl("galcost41").textContent = shortenCosts(new Decimal("1e3800"))
+		getEl("galcost42").textContent = shortenCosts(new Decimal("1e4000"))
+		getEl("galcost43").textContent = shortenCosts(new Decimal("1e4200"))
 	}
 	if (player.infinityUpgrades.includes("postinfi63")) {
-		document.getElementById("galcost51").textContent = shortenCosts(new Decimal("1e5500"))
-		document.getElementById("galcost52").textContent = shortenCosts(new Decimal("1e8000"))
-		document.getElementById("galcost53").textContent = shortenCosts(new Decimal("1e25000"))
+		getEl("galcost51").textContent = shortenCosts(new Decimal("1e5500"))
+		getEl("galcost52").textContent = shortenCosts(new Decimal("1e8000"))
+		getEl("galcost53").textContent = shortenCosts(new Decimal("1e25000"))
 	}
 }
 
 function galacticUpgradeButtonTypeDisplay () {
-	let t = document.getElementById("galTable")
+	getEl("galaxyPoints").innerHTML = "You have <span class='GPAmount'>" + shortenDimensions(player.galacticSacrifice.galaxyPoints) + "</span> Galaxy point" + (player.galacticSacrifice.galaxyPoints.eq(1)? "." : "s.")
+
+	let t = getEl("galTable")
 	for (let i = 1; i <= 5; i++) { //5 rows
 		var r = t.rows[i-1]
 		if (!galConditions["r"+i] || galConditions["r"+i]()) {
@@ -324,7 +325,7 @@ function galacticUpgradeButtonTypeDisplay () {
 				var c = r.cells[j-1]
 				if (!galConditions["c"+j] || galConditions["c"+j]()) {
 					c.style.display = ""
-					var e = document.getElementById('galaxy' + i + j);
+					var e = getEl('galaxy' + i + j);
 					if (player.galacticSacrifice.upgrades.includes(+(i + '' + j))) {
 						e.className = 'infinistorebtnbought'
 					} else if (player.galacticSacrifice.galaxyPoints.gte(getGalaxyUpgradeCost(i + '' + j)) && (i === 1 || player.galacticSacrifice.upgrades.includes(+((i - 1) + '' + j)))) {
@@ -334,12 +335,12 @@ function galacticUpgradeButtonTypeDisplay () {
 					}
 					let upgId = i * 10 + j
 					let mult = galMults["u" + upgId]
-					let elm = document.getElementById('galspan' + upgId)
+					let elm = getEl('galspan' + upgId)
 
 					if (mult && elm) {
 						let display = galMultDisplays["u" + upgId]
 						mult = mult()
-						document.getElementById('galspan' + upgId).textContent = display ? display(mult) : shorten(mult)
+						getEl('galspan' + upgId).textContent = display ? display(mult) : shorten(mult)
 					}
 				} else c.style.display = "none"
 			}
@@ -374,18 +375,18 @@ function productAllDims1(){
 	return ret.max(1)
 }
 
-document.getElementById("challenge13").onclick = function () {
+getEl("challenge13").onclick = function () {
 	startNormalChallenge(13)
 }
 
 //v1.3
 function gSacrificeConf() {
-	document.getElementById("gConfirmation").checked = player.options.gSacrificeConfirmation
+	getEl("gConfirmation").checked = player.options.gSacrificeConfirmation
 	player.options.gSacrificeConfirmation = !player.options.gSacrificeConfirmation
-	document.getElementById("gSacConfirmBtn").textContent = "Galactic Sacrifice confirmation: " + (player.options.gSacrificeConfirmation ? "ON" : "OFF")
+	getEl("gSacConfirmBtn").textContent = "Galactic Sacrifice confirmation: " + (player.options.gSacrificeConfirmation ? "ON" : "OFF")
 }
 
-document.getElementById("challenge14").onclick = function () {
+getEl("challenge14").onclick = function () {
 	startNormalChallenge(14)
 }
 
@@ -409,7 +410,7 @@ function upgradeSacAutobuyer() {
 	updateAutobuyers();
 }
 
-document.getElementById("buyerBtnGalSac").onclick = function () {
+getEl("buyerBtnGalSac").onclick = function () {
 	buyAutobuyer(12);
 }
 
@@ -418,25 +419,25 @@ function getPost01Mult() {
 	return Math.min(Math.pow(player.infinitied + 1, .3), Math.pow(Math.log(player.infinitied + 3), 3))
 }
 
-document.getElementById("postinfi01").onclick = function() {
+getEl("postinfi01").onclick = function() {
 	buyInfinityUpgrade("galPointMult",player.tickspeedBoosts==undefined?1e3:1e4);
 }
 
-document.getElementById("postinfi02").onclick = function() {
+getEl("postinfi02").onclick = function() {
 	buyInfinityUpgrade("dimboostCost",player.tickspeedBoosts==undefined?2e4:1e5);
 }
 
-document.getElementById("postinfi03").onclick = function() {
+getEl("postinfi03").onclick = function() {
 	buyInfinityUpgrade("galCost",5e5);
 }
 
-document.getElementById("postinfi04").onclick = function() {
+getEl("postinfi04").onclick = function() {
 	if (player.infinityPoints.gte(player.dimPowerIncreaseCost) && player.extraDimPowerIncrease < 40) {
 		player.infinityPoints = player.infinityPoints.minus(player.dimPowerIncreaseCost)
 		player.dimPowerIncreaseCost = new Decimal(player.tickspeedBoosts == undefined ? 1e3 : 3e5).times(Decimal.pow(4, Math.min(player.extraDimPowerIncrease, 15) + 1));
 		player.extraDimPowerIncrease += 1;
 		if (player.extraDimPowerIncrease > 15) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4, 5), player.extraDimPowerIncrease - 15))
-		document.getElementById("postinfi04").innerHTML = "Further increase all Dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
+		getEl("postinfi04").innerHTML = "Further increase all Dimension multipliers<br>x^" + galMults.u31().toFixed(2) + (player.extraDimPowerIncrease < 40 ? " -> x^" + ((galMults.u31() + 0.02).toFixed(2)) + "<br>Cost: " + shorten(player.dimPowerIncreaseCost) + " IP" : "")
 	}
 }
 
@@ -465,36 +466,36 @@ function isADSCRunning() {
 }
 
 //v1.6
-document.getElementById("postinfi50").onclick = function() {
+getEl("postinfi50").onclick = function() {
     buyInfinityUpgrade("postinfi50", player.tickspeedBoosts==undefined?1e25:2e18);
 }
 
-document.getElementById("postinfi51").onclick = function() {
+getEl("postinfi51").onclick = function() {
     buyInfinityUpgrade("postinfi51", player.tickspeedBoosts==undefined?1e29:1e20);
 }
 
-document.getElementById("postinfi52").onclick = function() {
+getEl("postinfi52").onclick = function() {
     buyInfinityUpgrade("postinfi52", player.tickspeedBoosts==undefined?1e33:1e25);
 }
 
-document.getElementById("postinfi53").onclick = function() {
+getEl("postinfi53").onclick = function() {
     buyInfinityUpgrade("postinfi53", player.tickspeedBoosts==undefined?1e37:1e29);
 }
 
 //v1.9
-document.getElementById("postinfi60").onclick = function() {
+getEl("postinfi60").onclick = function() {
     buyInfinityUpgrade("postinfi60", 1e50);
 }
 
-document.getElementById("postinfi61").onclick = function() {
+getEl("postinfi61").onclick = function() {
     buyInfinityUpgrade("postinfi61", new Decimal("1e450"));
 }
 
-document.getElementById("postinfi62").onclick = function() {
+getEl("postinfi62").onclick = function() {
     buyInfinityUpgrade("postinfi62", new Decimal("1e700"));
 }
 
-document.getElementById("postinfi63").onclick = function() {
+getEl("postinfi63").onclick = function() {
     buyInfinityUpgrade("postinfi63", new Decimal("1e2000"));
 }
 
@@ -781,6 +782,6 @@ function exitNGMM() {
 
 	tmp.ngmX = calcNGMX()
 	player.aarexModifications.ngmX = tmp.ngmX
-	document.getElementById("gSacrifice").style.display = "none"
+	getEl("gSacrifice").style.display = "none"
 	ph.reset()
 }

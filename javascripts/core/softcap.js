@@ -1048,14 +1048,14 @@ function updateSoftcapStatsTab(){
 	for (let i = 0; i < n.length; i++){
 		let elname = names[n[i]]
 		if (hasAnySoftcapStarted(n[i])) {  
-			document.getElementById(elname).style = "display:block"
-			document.getElementById(elname).innerHTML = getInnerHTMLSoftcap(n[i])
+			getEl(elname).style = "display:block"
+			getEl(elname).innerHTML = getInnerHTMLSoftcap(n[i])
 
 			anyActive = true
 		} else {
-			document.getElementById(elname).style = "display:none"
+			getEl(elname).style = "display:none"
 		}
 	}
 
-	document.getElementById("softcapsbtn").style.display = anyActive ? "" : "none"
+	getEl("softcapsbtn").style.display = anyActive ? "" : "none"
 }

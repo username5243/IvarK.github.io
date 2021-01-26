@@ -1,23 +1,23 @@
 function babyRateUpdating(){
 	var eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed())
 	if (eggonRate.lt(3)){
-		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
-		document.getElementById("eggonRateTimeframe").textContent = "hour"
+		getEl("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
+		getEl("eggonRateTimeframe").textContent = "hour"
 	} else if (eggonRate.lt(30)) {
-		document.getElementById("eggonRate").textContent = shortenDimensions(eggonRate)
-		document.getElementById("eggonRateTimeframe").textContent = "minute"
+		getEl("eggonRate").textContent = shortenDimensions(eggonRate)
+		getEl("eggonRateTimeframe").textContent = "minute"
 	} else {
-		document.getElementById("eggonRate").textContent = shortenMoney(eggonRate.div(60))
-		document.getElementById("eggonRateTimeframe").textContent = "second"
+		getEl("eggonRate").textContent = shortenMoney(eggonRate.div(60))
+		getEl("eggonRateTimeframe").textContent = "second"
 	}
 }
 
 function preonGatherRateUpdating(){
 	var gatherRateData = getGatherRate()
-	document.getElementById("normalReplGatherRate").textContent = shortenDimensions(gatherRateData.normal)
-	document.getElementById("workerReplGatherRate").textContent = shortenDimensions(gatherRateData.workersTotal)
-	document.getElementById("babyReplGatherRate").textContent = shortenDimensions(gatherRateData.babies)
-	document.getElementById("gatherRate").textContent = tmp.qu.nanofield.producingCharge ? '-' + shortenDimensions(getQuarkLossProduction()) + '/s' : '+' + shortenDimensions(gatherRateData.total) + '/s'
+	getEl("normalReplGatherRate").textContent = shortenDimensions(gatherRateData.normal)
+	getEl("workerReplGatherRate").textContent = shortenDimensions(gatherRateData.workersTotal)
+	getEl("babyReplGatherRate").textContent = shortenDimensions(gatherRateData.babies)
+	getEl("gatherRate").textContent = tmp.qu.nanofield.producingCharge ? '-' + shortenDimensions(getQuarkLossProduction()) + '/s' : '+' + shortenDimensions(gatherRateData.total) + '/s'
 }
 
 function getGrowupRatePerMinute(){
@@ -26,74 +26,74 @@ function getGrowupRatePerMinute(){
 
 function growupRateUpdating(){
 	if (!hasNU(2)) {
-		document.getElementById("eggonAmount").textContent = shortenDimensions(tmp.qu.replicants.eggons)
-		document.getElementById("hatchProgress").textContent = Math.round(tmp.qu.replicants.babyProgress.toNumber() * 100)+"%"
+		getEl("eggonAmount").textContent = shortenDimensions(tmp.qu.replicants.eggons)
+		getEl("hatchProgress").textContent = Math.round(tmp.qu.replicants.babyProgress.toNumber() * 100)+"%"
 	}
 	var growupRate = getGrowupRatePerMinute()
 	if (tmp.qu.replicants.babies.eq(0)) growupRate = growupRate.min(eggonRate)
 	if (growupRate.lt(30)) {
-		document.getElementById("growupRate").textContent = shortenDimensions(growupRate)
-		document.getElementById("growupRateUnit").textContent = "minute"
+		getEl("growupRate").textContent = shortenDimensions(growupRate)
+		getEl("growupRateUnit").textContent = "minute"
 	} else {
-		document.getElementById("growupRate").textContent = shortenMoney(growupRate.div(60))
-		document.getElementById("growupRateUnit").textContent = "second"
+		getEl("growupRate").textContent = shortenMoney(growupRate.div(60))
+		getEl("growupRateUnit").textContent = "second"
 	}
-	document.getElementById("growupProgress").textContent = Math.round(tmp.qu.replicants.ageProgress.toNumber() * 100) + "%"
+	getEl("growupProgress").textContent = Math.round(tmp.qu.replicants.ageProgress.toNumber() * 100) + "%"
 }
 
 function updateReplicantsTab(){
-	document.getElementById("replicantiAmount2").textContent = shortenDimensions(player.replicanti.amount)
-	document.getElementById("replicantReset").className = player.replicanti.amount.lt(tmp.qu.replicants.requirement) ? "unavailablebtn" : "storebtn"
-	document.getElementById("replicantReset").innerHTML = "Reset replicanti amount for a replicant.<br>(requires " + shortenCosts(tmp.qu.replicants.requirement) + " replicanti)"
-	document.getElementById("replicantAmount").textContent = shortenDimensions(tmp.qu.replicants.amount)
-	document.getElementById("workerReplAmount").textContent = shortenDimensions(tmp.twr)
-	document.getElementById("babyReplAmount").textContent = shortenDimensions(tmp.qu.replicants.babies)
+	getEl("replicantiAmount2").textContent = shortenDimensions(player.replicanti.amount)
+	getEl("replicantReset").className = player.replicanti.amount.lt(tmp.qu.replicants.requirement) ? "unavailablebtn" : "storebtn"
+	getEl("replicantReset").innerHTML = "Reset replicanti amount for a replicant.<br>(requires " + shortenCosts(tmp.qu.replicants.requirement) + " replicanti)"
+	getEl("replicantAmount").textContent = shortenDimensions(tmp.qu.replicants.amount)
+	getEl("workerReplAmount").textContent = shortenDimensions(tmp.twr)
+	getEl("babyReplAmount").textContent = shortenDimensions(tmp.qu.replicants.babies)
 
 	preonGatherRateUpdating()
 
-	document.getElementById("gatheredQuarks").textContent = shortenDimensions(tmp.qu.replicants.quarks.floor())
-	document.getElementById("quarkTranslation").textContent = getFullExpansion(Math.round(tmp.pe * 100))
+	getEl("gatheredQuarks").textContent = shortenDimensions(tmp.qu.replicants.quarks.floor())
+	getEl("quarkTranslation").textContent = getFullExpansion(Math.round(tmp.pe * 100))
 
 	babyRateUpdating()
-	document.getElementById("feedNormal").className = (canFeedReplicant(1) ? "stor" : "unavailabl") + "ebtn"
-	document.getElementById("workerProgress").textContent = Math.round(tmp.eds[1].progress.toNumber() * 100) + "%"
+	getEl("feedNormal").className = (canFeedReplicant(1) ? "stor" : "unavailabl") + "ebtn"
+	getEl("workerProgress").textContent = Math.round(tmp.eds[1].progress.toNumber() * 100) + "%"
 
 	growupRateUpdating()
 	
-	document.getElementById("reduceHatchSpeed").innerHTML = "Hatch speed: " + hatchSpeedDisplay() + " -> " + hatchSpeedDisplay(true) + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.hatchSpeedCost) + " for all 3 gluons"
+	getEl("reduceHatchSpeed").innerHTML = "Hatch speed: " + hatchSpeedDisplay() + " -> " + hatchSpeedDisplay(true) + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.hatchSpeedCost) + " for all 3 gluons"
 	if (player.ghostify.milestones > 7) updateReplicants("display")
 }
 
 function updateReplicants(mode) {
-	if (document.getElementById("replicantstabbtn").style == "none") return
+	if (getEl("replicantstabbtn").style == "none") return
 
 	if (player.masterystudies == undefined ? true : player.ghostify.milestones < 8) mode = undefined
 	if (mode === undefined || mode === "display") {
-		document.getElementById("quantumFoodAmount").textContent = getFullExpansion(tmp.qu.replicants.quantumFood)
-		if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) document.getElementById("buyQuantumFood").innerHTML = "Buy 1 quantum food<br>Cost: " + shortenDimensions(tmp.qu.replicants.quantumFoodCost) + " of all 3 gluons"
-		document.getElementById("buyQuantumFood").className = "gluonupgrade " + (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.quantumFoodCost) ? "unavailabl" : "stor") + "ebtn"
-		if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) document.getElementById("breakLimit").innerHTML = "Limit of workers: " + getLimitMsg() + (isLimitUpgAffordable() ? " -> " + getNextLimitMsg() + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.limitCost) + " for all 3 gluons" : "")
-		document.getElementById("breakLimit").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.limitCost) || !isLimitUpgAffordable() ? "unavailabl" : "stor") + "ebtn"
-		document.getElementById("reduceHatchSpeed").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.hatchSpeedCost) ? "unavailabl" : "stor") + "ebtn"
+		getEl("quantumFoodAmount").textContent = getFullExpansion(tmp.qu.replicants.quantumFood)
+		if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) getEl("buyQuantumFood").innerHTML = "Buy 1 quantum food<br>Cost: " + shortenDimensions(tmp.qu.replicants.quantumFoodCost) + " of all 3 gluons"
+		getEl("buyQuantumFood").className = "gluonupgrade " + (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.quantumFoodCost) ? "unavailabl" : "stor") + "ebtn"
+		if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) getEl("breakLimit").innerHTML = "Limit of workers: " + getLimitMsg() + (isLimitUpgAffordable() ? " -> " + getNextLimitMsg() + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.limitCost) + " for all 3 gluons" : "")
+		getEl("breakLimit").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.limitCost) || !isLimitUpgAffordable() ? "unavailabl" : "stor") + "ebtn"
+		getEl("reduceHatchSpeed").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.hatchSpeedCost) ? "unavailabl" : "stor") + "ebtn"
 		if (player.masterystudies.includes('d11')) {
-			document.getElementById("quantumFoodAmountED").textContent = getFullExpansion(tmp.qu.replicants.quantumFood)
-			if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) document.getElementById("buyQuantumFoodED").innerHTML = "Buy 1 quantum food<br>Cost: "+shortenDimensions(tmp.qu.replicants.quantumFoodCost)+" for all 3 gluons"
-			document.getElementById("buyQuantumFoodED").className = "gluonupgrade " + (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.quantumFoodCost) ? "unavailabl" : "stor") + "ebtn"
-			if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) document.getElementById("breakLimitED").innerHTML = "Limit of workers: " + getLimitMsg() + (isLimitUpgAffordable() ? " -> " + getNextLimitMsg() + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.limitCost) + " of all 3 gluons":"")
-			document.getElementById("breakLimitED").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.limitCost) || !isLimitUpgAffordable() ? "unavailabl" : "stor") + "ebtn"
+			getEl("quantumFoodAmountED").textContent = getFullExpansion(tmp.qu.replicants.quantumFood)
+			if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) getEl("buyQuantumFoodED").innerHTML = "Buy 1 quantum food<br>Cost: "+shortenDimensions(tmp.qu.replicants.quantumFoodCost)+" for all 3 gluons"
+			getEl("buyQuantumFoodED").className = "gluonupgrade " + (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.quantumFoodCost) ? "unavailabl" : "stor") + "ebtn"
+			if (tmp.qu.quarks.lt(Decimal.pow(10, 1e5))) getEl("breakLimitED").innerHTML = "Limit of workers: " + getLimitMsg() + (isLimitUpgAffordable() ? " -> " + getNextLimitMsg() + "<br>Cost: " + shortenDimensions(tmp.qu.replicants.limitCost) + " of all 3 gluons":"")
+			getEl("breakLimitED").className = (tmp.qu.gluons.rg.min(tmp.qu.gluons.gb).min(tmp.qu.gluons.br).lt(tmp.qu.replicants.limitCost) || !isLimitUpgAffordable() ? "unavailabl" : "stor") + "ebtn"
 		}
 		if (tmp.qu.quarks.gte(Decimal.pow(10, 1e5))){
-			document.getElementById("buyQuantumFoodED").innerHTML = "Buy 1 quantum food"
-			document.getElementById("buyQuantumFood").innerHTML = "Buy 1 quantum food"
-			document.getElementById("breakLimit").innerHTML = "Limit of workers: " + getLimitMsg()
-			document.getElementById("breakLimitED").innerHTML = "Limit of workers: " + getLimitMsg()
-			document.getElementById("rgRepl").textContent = "lots of"
-			document.getElementById("gbRepl").textContent = "many"
-			document.getElementById("brRepl").textContent = "tons of"
+			getEl("buyQuantumFoodED").innerHTML = "Buy 1 quantum food"
+			getEl("buyQuantumFood").innerHTML = "Buy 1 quantum food"
+			getEl("breakLimit").innerHTML = "Limit of workers: " + getLimitMsg()
+			getEl("breakLimitED").innerHTML = "Limit of workers: " + getLimitMsg()
+			getEl("rgRepl").textContent = "lots of"
+			getEl("gbRepl").textContent = "many"
+			getEl("brRepl").textContent = "tons of"
 		} else {
-			document.getElementById("rgRepl").textContent = shortenDimensions(tmp.qu.gluons.rg)
-			document.getElementById("gbRepl").textContent = shortenDimensions(tmp.qu.gluons.gb)
-			document.getElementById("brRepl").textContent = shortenDimensions(tmp.qu.gluons.br)
+			getEl("rgRepl").textContent = shortenDimensions(tmp.qu.gluons.rg)
+			getEl("gbRepl").textContent = shortenDimensions(tmp.qu.gluons.gb)
+			getEl("brRepl").textContent = shortenDimensions(tmp.qu.gluons.br)
 		}
 	}
 }
@@ -284,25 +284,25 @@ function updateEmperorDimensions() {
 	let production = getGatherRate()
 	let mults = {}
 	let limitDim = tmp.qu.replicants.limitDim
-	document.getElementById("rgEDs").textContent = shortenDimensions(tmp.qu.gluons.rg)
-	document.getElementById("gbEDs").textContent = shortenDimensions(tmp.qu.gluons.gb)
-	document.getElementById("brEDs").textContent = shortenDimensions(tmp.qu.gluons.br)
-	document.getElementById("replicantAmountED").textContent=shortenDimensions(tmp.qu.replicants.amount)
+	getEl("rgEDs").textContent = shortenDimensions(tmp.qu.gluons.rg)
+	getEl("gbEDs").textContent = shortenDimensions(tmp.qu.gluons.gb)
+	getEl("brEDs").textContent = shortenDimensions(tmp.qu.gluons.br)
+	getEl("replicantAmountED").textContent=shortenDimensions(tmp.qu.replicants.amount)
 	for (var d = 1; d <= 8; d++) mults[d] = getEmperorDimensionMultiplier(d)
 	for (var d = 1; d <= 8; d++) {
-		if (d > limitDim) document.getElementById("empRow" + d).style.display = "none"
+		if (d > limitDim) getEl("empRow" + d).style.display = "none"
 		else {
-			document.getElementById("empRow" + d).style.display = ""
-			document.getElementById("empD" + d).textContent = DISPLAY_NAMES[d] + " Emperor Dimension x" + formatValue(player.options.notation, mults[d], 2, 1)
-			document.getElementById("empAmount" + d).textContent = d < limitDim ? shortenDimensions(tmp.eds[d].workers) + " (+" + shorten(getEmperorDimensionRateOfChange(d)) + dimDescEnd : getFullExpansion(tmp.eds[limitDim].perm)
-			document.getElementById("empQuarks" + d).textContent = shorten(production.workers[d])
-			document.getElementById("empFeed" + d).className = (canFeedReplicant(d) ? "stor" : "unavailabl") + "ebtn"
-			document.getElementById("empFeed" + d).textContent = "Feed (" + (d == limitDim || mults[d + 1].times(tmp.eds[d + 1].workers).div(20).lt(1e3) ? Math.round(tmp.eds[d].progress.toNumber() * 100) + "%, " : "") + getFullExpansion(tmp.eds[d].perm) + " kept)"
-			document.getElementById("empFeedMax" + d).className = (canFeedReplicant(d) ? "stor" : "unavailabl") + "ebtn"
+			getEl("empRow" + d).style.display = ""
+			getEl("empD" + d).textContent = DISPLAY_NAMES[d] + " Emperor Dimension x" + formatValue(player.options.notation, mults[d], 2, 1)
+			getEl("empAmount" + d).textContent = d < limitDim ? shortenDimensions(tmp.eds[d].workers) + " (+" + shorten(getEmperorDimensionRateOfChange(d)) + dimDescEnd : getFullExpansion(tmp.eds[limitDim].perm)
+			getEl("empQuarks" + d).textContent = shorten(production.workers[d])
+			getEl("empFeed" + d).className = (canFeedReplicant(d) ? "stor" : "unavailabl") + "ebtn"
+			getEl("empFeed" + d).textContent = "Feed (" + (d == limitDim || mults[d + 1].times(tmp.eds[d + 1].workers).div(20).lt(1e3) ? Math.round(tmp.eds[d].progress.toNumber() * 100) + "%, " : "") + getFullExpansion(tmp.eds[d].perm) + " kept)"
+			getEl("empFeedMax" + d).className = (canFeedReplicant(d) ? "stor" : "unavailabl") + "ebtn"
 		}
 	}
-	document.getElementById("totalWorkers").textContent = shortenDimensions(tmp.twr)
-	document.getElementById("totalQuarkProduction").textContent = shorten(production.workersTotal)
+	getEl("totalWorkers").textContent = shortenDimensions(tmp.twr)
+	getEl("totalQuarkProduction").textContent = shorten(production.workersTotal)
 	if (player.ghostify.milestones > 7) updateReplicants("display")
 }
 

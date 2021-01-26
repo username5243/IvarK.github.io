@@ -163,7 +163,7 @@ function getQuarkMult() {
 
 function toggleQuantumConf() {
 	player.aarexModifications.quantumConf = !player.aarexModifications.quantumConf
-	document.getElementById("quantumConfirmBtn").textContent = "Quantum confirmation: " + (player.aarexModifications.quantumConf ? "ON" : "OFF")
+	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (player.aarexModifications.quantumConf ? "ON" : "OFF")
 }
 
 var averageQk = new Decimal(0)
@@ -184,12 +184,12 @@ function updateLastTenQuantums() {
 				else msg += " in Paired Challenge " + tmp.qu.last10[i][2][0] + " (QC" + tmp.qu.last10[i][2][1][0] + "+" + tmp.qu.last10[i][2][1][1] + ")"
 			}
 			msg += " and gave " + shortenDimensions(tmp.qu.last10[i][1]) +" QK. "+ tempstring
-			document.getElementById("quantumrun"+(i+1)).textContent = msg
+			getEl("quantumrun"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(tmp.qu.last10[i][0])
 			tempQK = tempQK.plus(tmp.qu.last10[i][1])
 			bestQk = tmp.qu.last10[i][1].max(bestQk)
 			listed++
-		} else document.getElementById("quantumrun" + (i + 1)).textContent = ""
+		} else getEl("quantumrun" + (i + 1)).textContent = ""
 	}
 	if (listed > 1) {
 		tempTime = tempTime.dividedBy(listed)
@@ -198,8 +198,8 @@ function updateLastTenQuantums() {
 		var tempstring = "(" + shorten(qkpm) + " QK/min)"
 		averageQk = tempQK
 		if (qkpm < 1) tempstring = "(" + shorten(qkpm * 60) + " QK/hour"
-		document.getElementById("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " QK. " + tempstring
-	} else document.getElementById("averageQuantumRun").textContent = ""
+		getEl("averageQuantumRun").textContent = "Average time of the last " + listed + " Quantums: "+ timeDisplayShort(tempTime, false, 3) + " | Average QK gain: " + shortenDimensions(tempQK) + " QK. " + tempstring
+	} else getEl("averageQuantumRun").textContent = ""
 }
 
 //v2.9014
@@ -220,49 +220,49 @@ function doQuantumProgress() {
 		} else if (player.money.lt(Decimal.pow(10, getQCGoalLog())) || player.meta.antimatter.gte(quantumReq)) id = 2
 	}
 	var className = id > 4 ? "ghostifyProgress" : "quantumProgress"
-	if (document.getElementById("progressbar").className != className) document.getElementById("progressbar").className = className
+	if (getEl("progressbar").className != className) getEl("progressbar").className = className
 	if (id == 1) {
 		var percentage = Math.min(player.meta.antimatter.max(1).log10() / quantumReq.log10() * 100, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip', (player.masterystudies ? "Meta-antimatter p" : "P") + 'ercentage to quantum')
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip', (player.masterystudies ? "Meta-antimatter p" : "P") + 'ercentage to quantum')
 	} else if (id == 2) {
 		var percentage = Math.min(player.money.max(1).log10() / getQCGoalLog() * 100, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip','Percentage to Quantum Challenge goal')
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip','Percentage to Quantum Challenge goal')
 	} else if (id == 3) {
 		var gqkLog = gqk.log2()
 		var goal = Math.pow(2, Math.ceil(Math.log10(gqkLog) / Math.log10(2)))
 		if (!tmp.qu.reachedInfQK) goal = Math.min(goal, 1024)
 		var percentage = Math.min(gqkLog / goal * 100, 100).toFixed(2) + "%"
 		if (goal > 512 && !tmp.qu.reachedInfQK) percentage = Math.min(tmp.qu.quarks.add(gqk).log2() / goal * 100, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		if (goal > 512 && !tmp.qu.reachedInfQK) document.getElementById("progresspercent").setAttribute('ach-tooltip', "Percentage to new QoL features (" + shorten(Number.MAX_VALUE) + " QK)")
-		else document.getElementById("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " QK gain")
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		if (goal > 512 && !tmp.qu.reachedInfQK) getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to new QoL features (" + shorten(Number.MAX_VALUE) + " QK)")
+		else getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " QK gain")
 	} else if (id == 4) {
 		var percentage = Math.min(player.eternityPoints.max(1).log10() / 12.15, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip','Eternity Points percentage to Break Eternity')
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip','Eternity Points percentage to Break Eternity')
 	} else if (id == 5) {
 		var percentage = Math.min(tmp.qu.bigRip.bestThisRun.max(1).log10() / getQCGoalLog(undefined, true) * 100, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip','Percentage to Ghostify')
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip','Percentage to Ghostify')
 	} else if (id == 6) {
 		var ggLog = gg.log2()
 		var goal = Math.pow(2, Math.ceil(Math.log10(ggLog) / Math.log10(2)))
 		var percentage = Math.min(ggLog / goal * 100, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " GHP gain")
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to " + shortenDimensions(Decimal.pow(2, goal)) + " GHP gain")
 	} else if (id == 7) {
 		var percentage = Math.min(tmp.qu.bigRip.bestThisRun.max(1).log10() / 6000e4, 100).toFixed(2) + "%"
-		document.getElementById("progressbar").style.width = percentage
-		document.getElementById("progresspercent").textContent = percentage
-		document.getElementById("progresspercent").setAttribute('ach-tooltip', "Percentage to Ghostly Photons")
+		getEl("progressbar").style.width = percentage
+		getEl("progresspercent").textContent = percentage
+		getEl("progresspercent").setAttribute('ach-tooltip', "Percentage to Ghostly Photons")
 	}
 }
 
@@ -282,8 +282,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		ph.onPrestige("quantum")
 		ph.updateDisplay()
 		if (tmp.ngp3) {
-			document.getElementById("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
-			document.getElementById("quarksAnimBtn").style.display="inline-block"
+			getEl("bestAntimatterType").textContent = "Your best meta-antimatter for this quantum"
+			getEl("quarksAnimBtn").style.display="inline-block"
 		}
 	}
 	if (isEmptiness) {
@@ -291,9 +291,9 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		isEmptiness = false
 		ph.updateDisplay()
 	}
-	document.getElementById("quantumbtn").style.display = "none"
-	document.getElementById("bigripbtn").style.display = "none"
-	document.getElementById("ghostifybtn").style.display = "none"
+	getEl("quantumbtn").style.display = "none"
+	getEl("bigripbtn").style.display = "none"
+	getEl("ghostifybtn").style.display = "none"
 	updateBankedEter()
 
 	// check if forced quantum
@@ -327,14 +327,14 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			if (tmp.ngp3 && tmp.qu.quarks.gte(Number.MAX_VALUE) && !tmp.qu.reachedInfQK) {
 				tmp.qu.reachedInfQK = true
 				if (!ph.did("ghostify")) {
-					document.getElementById("welcome").style.display = "flex"
-					document.getElementById("welcomeMessage").innerHTML = "Congratulations for getting " + shorten(Number.MAX_VALUE) + " quarks! You have unlocked new QoL features, like quantum autobuyer modes, assign all, and auto-assignation!"
-					document.getElementById('assignAll').style.display = ""
-					document.getElementById('autoAssign').style.display = ""
-					document.getElementById('autoAssignRotate').style.display = ""
-					document.getElementById('ratioSettings').style.display = ""
+					getEl("welcome").style.display = "flex"
+					getEl("welcomeMessage").innerHTML = "Congratulations for getting " + shorten(Number.MAX_VALUE) + " quarks! You have unlocked new QoL features, like quantum autobuyer modes, assign all, and auto-assignation!"
+					getEl('assignAll').style.display = ""
+					getEl('autoAssign').style.display = ""
+					getEl('autoAssignRotate').style.display = ""
+					getEl('ratioSettings').style.display = ""
 				}
-				document.getElementById('toggleautoquantummode').style.display=""
+				getEl('toggleautoquantummode').style.display=""
 			}
 		}
 		if (!inQC(4)) if (player.meta.resets < 1) giveAchievement("Infinity Morals")
@@ -350,7 +350,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	updateQuarkDisplay()
 
 	// ng-2 display
-	document.getElementById("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
+	getEl("galaxyPoints2").innerHTML = "You have <span class='GPAmount'>0</span> Galaxy points."
 
 	// ng+3
 	if (tmp.ngp3) {
@@ -417,7 +417,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			if (player.matter.gt("1e5000")) giveAchievement("Really?")
 		} else if (inQC(6) && inQC(8) && player.money.gt(tmp.qu.pairedChallenges.pc68best)) {
 			tmp.qu.pairedChallenges.pc68best = player.money
-			document.getElementById("bpc68").textContent = shortenMoney(player.money)
+			getEl("bpc68").textContent = shortenMoney(player.money)
 		}
 	}
 	var oldMoney = player.money
@@ -483,7 +483,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (tmp.qu.bigRip.active != bigRip) {
 			if (bigRip) {
 				for (var u = 0; u < tmp.qu.bigRip.upgrades.length; u++) tweakBigRip(tmp.qu.bigRip.upgrades[u])
-				if (tmp.qu.bigRip.times < 1) document.getElementById("bigRipConfirmBtn").style.display = "inline-block"
+				if (tmp.qu.bigRip.times < 1) getEl("bigRipConfirmBtn").style.display = "inline-block"
 				tmp.qu.bigRip.times++
 				tmp.qu.bigRip.bestThisRun = player.money
 				giveAchievement("To the new dimension!")
@@ -498,7 +498,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
 		}
-		document.getElementById("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
+		getEl("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
 		updateColorDimPowers()
 		if (!oheHeadstart) {
 			player.eternityBuyer.dilationMode = false
@@ -516,11 +516,11 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			player.autoEterMode="amount"
 			updateAutoEterMode()
 		}
-		document.getElementById('dilationmode').style.display = speedrunMilestonesReached > 4 ? "" : "none"
-		document.getElementById('rebuyupgauto').style.display = speedrunMilestonesReached > 6 ? "" : "none"
-		document.getElementById('toggleallmetadims').style.display = speedrunMilestonesReached > 7 ? "" : "none"
-		document.getElementById('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
-		document.getElementById("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
+		getEl('dilationmode').style.display = speedrunMilestonesReached > 4 ? "" : "none"
+		getEl('rebuyupgauto').style.display = speedrunMilestonesReached > 6 ? "" : "none"
+		getEl('toggleallmetadims').style.display = speedrunMilestonesReached > 7 ? "" : "none"
+		getEl('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
 		if (bigRip ? tmp.bruActive[12] : isRewardEnabled(11) && isRewardEnabled(4)) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
 		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
@@ -537,14 +537,14 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		delete tmp.qu.autoECN
 	} // bounds if tmp.ngp3
 	if (speedrunMilestonesReached < 1 && !bigRip) {
-		document.getElementById("infmultbuyer").textContent = "Autobuy IP mult: OFF"
-		document.getElementById("togglecrunchmode").textContent = "Auto crunch mode: amount"
-		document.getElementById("limittext").textContent = "Amount of IP to wait until reset:"
-		document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: " + shortenDimensions(player.epmult) + "x<p>Cost: " + shortenDimensions(player.epmultCost) + " EP"
+		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
+		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
+		getEl("limittext").textContent = "Amount of IP to wait until reset:"
+		getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: " + shortenDimensions(player.epmult) + "x<p>Cost: " + shortenDimensions(player.epmultCost) + " EP"
 	}
 	if (!oheHeadstart) {
 		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
-		document.getElementById("bulkDimboost").value = player.autobuyers[9].bulk
+		getEl("bulkDimboost").value = player.autobuyers[9].bulk
 	}
 
 	// last few updates
@@ -581,28 +581,28 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	updateMilestones()
 	resetTimeDimensions()
 	if (oheHeadstart) {
-		document.getElementById("replicantiresettoggle").style.display = "inline-block"
+		getEl("replicantiresettoggle").style.display = "inline-block"
 		skipResets()
 	} else {
 		hideDimensions()
-		if (tmp.ngp3) document.getElementById("infmultbuyer").textContent="Max buy IP mult"
-		else document.getElementById("infmultbuyer").style.display = "none"
+		if (tmp.ngp3) getEl("infmultbuyer").textContent="Max buy IP mult"
+		else getEl("infmultbuyer").style.display = "none"
 		hideMaxIDButton()
-		document.getElementById("replicantidiv").style.display="none"
-		document.getElementById("replicantiunlock").style.display="inline-block"
-		document.getElementById("replicantiresettoggle").style.display = "none"
+		getEl("replicantidiv").style.display="none"
+		getEl("replicantiunlock").style.display="inline-block"
+		getEl("replicantiresettoggle").style.display = "none"
 		delete player.replicanti.galaxybuyer
 	}
 	var shortenedIP = shortenDimensions(player.infinityPoints)
-	document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenedIP + "</span> Infinity points."
-	document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenedIP + "</span> Infinity points."
+	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + shortenedIP + "</span> Infinity points."
+	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + shortenedIP + "</span> Infinity points."
 	updateEternityUpgrades()
-	document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
+	getEl("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true
 	playerInfinityUpgradesOnEternity()
-	document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	document.getElementById("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
+	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: 1x<p>Cost: 500 EP"
 	updateTheoremButtons()
 	updateTimeStudyButtons()
 	updateDilationUpgradeCosts()
@@ -611,32 +611,32 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 
 	Marathon2 = 0;
 	setInitialMoney()
-	document.getElementById("quantumConfirmBtn").style.display = "inline-block"
+	getEl("quantumConfirmBtn").style.display = "inline-block"
 }
 
 function handleDisplaysOnQuantum(bigRip, prestige) {
 	if (!tmp.ngp3) return
 	if (!bigRip) bigRip = inBigRip()
 	
-	if (inQC(8) && (document.getElementById("infinitydimensions").style.display == "block" || (document.getElementById("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
+	if (inQC(8) && (getEl("infinitydimensions").style.display == "block" || (getEl("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
 
 	let keepECs = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 2
-	if (!keepECs && document.getElementById("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
 
 	let keepDil = bigRip ? tmp.bruActive[10] : player.dilation.studies.includes(1)
-	if (!keepDil && document.getElementById("dilation").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display=="block")
+	if (!keepDil && getEl("dilation").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display=="block")
 
 	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && speedrunMilestonesReached >= 6
-	if (!keepMDs && document.getElementById("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
 	let keepMSs = bigRip || (tmp.ngp3 && player.dilation.upgrades.includes("ngpp6"))
-	document.getElementById("masterystudyunlock").style.display = keepMSs ? "" : "none"
-	document.getElementById("respecMastery").style.display = keepMSs ? "block" : "none"
-	document.getElementById("respecMastery2").style.display = keepMSs ? "block" : "none"
+	getEl("masterystudyunlock").style.display = keepMSs ? "" : "none"
+	getEl("respecMastery").style.display = keepMSs ? "block" : "none"
+	getEl("respecMastery2").style.display = keepMSs ? "block" : "none"
 	if (keepMSs) drawMasteryTree()
 	else {
 		performedTS = false
-		if (document.getElementById("masterystudies").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display != "block")
+		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 	}
 
 	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
@@ -646,15 +646,15 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 		let keepNf = keepQuantum && player.masterystudies.includes("d11")
 		let keepToD = keepQuantum && player.masterystudies.includes("d12")
 
-		document.getElementById("electronstabbtn").style.display = keepElc ? "" : "none"
-		document.getElementById("replicantstabbtn").style.display = keepAnts ? "" : "none"
-		document.getElementById("nanofieldtabbtn").style.display = keepNf ? "" : "none"
-		document.getElementById("todtabbtn").style.display = keepToD ? "" : "none"
+		getEl("electronstabbtn").style.display = keepElc ? "" : "none"
+		getEl("replicantstabbtn").style.display = keepAnts ? "" : "none"
+		getEl("nanofieldtabbtn").style.display = keepNf ? "" : "none"
+		getEl("todtabbtn").style.display = keepToD ? "" : "none"
 	
-		if (!keepElc && document.getElementById("electrons").style.display == "block") showQuantumTab("uquarks")
-		if (!keepAnts && document.getElementById("replicants").style.display == "block") showQuantumTab("uquarks")
-		if (!keepNf && document.getElementById("nanofield").style.display == "block") showQuantumTab("uquarks")
-		if (!keepToD && document.getElementById("tod").style.display == "block") showQuantumTab("uquarks")
+		if (!keepElc && getEl("electrons").style.display == "block") showQuantumTab("uquarks")
+		if (!keepAnts && getEl("replicants").style.display == "block") showQuantumTab("uquarks")
+		if (!keepNf && getEl("nanofield").style.display == "block") showQuantumTab("uquarks")
+		if (!keepToD && getEl("tod").style.display == "block") showQuantumTab("uquarks")
 	}
 
 	handleDisplaysOutOfQuantum(bigRip)
@@ -669,13 +669,13 @@ function handleDisplaysOutOfQuantum(bigRip) {
 	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
 	let keepBE = tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
 
-	if (!keepQCs && document.getElementById("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
-	if (!keepEDs && document.getElementById("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
-	if (!keepBE && document.getElementById("breakEternity").style.display == "block") showEternityTab("timestudies", document.getElementById("eternitystore").style.display != "block")
+	if (!keepQCs && getEl("quantumchallenges").style.display == "block") showChallengesTab("normalchallenges")
+	if (!keepEDs && getEl("emperordimensions").style.display == "block") showDimTab("antimatterdimensions")
+	if (!keepBE && getEl("breakEternity").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 
-	document.getElementById("qctabbtn").style.display = keepQCs ? "" : "none"
-	document.getElementById("edtabbtn").style.display = keepEDs ? "" : "none"
-	document.getElementById("breakEternityTabbtn").style.display = keepBE? "" : "none"
+	getEl("qctabbtn").style.display = keepQCs ? "" : "none"
+	getEl("edtabbtn").style.display = keepEDs ? "" : "none"
+	getEl("breakEternityTabbtn").style.display = keepBE? "" : "none"
 
 	updatePCCompletions()
 }
@@ -694,7 +694,7 @@ function handleQuantumDisplays(prestige) {
 	updateElectrons()
 
 	let dontshowrg4 = inQC(1) || QCIntensity(1) >= 1 || ph.did("ghostify")
-	document.getElementById('rg4toggle').style.display = dontshowrg4 ? "none" : ""
+	getEl('rg4toggle').style.display = dontshowrg4 ? "none" : ""
 
 	updateQuantumChallenges()
 	updateQCTimes()
@@ -714,7 +714,7 @@ function updateQuarkDisplay() {
 		else msg += "quark" + (tmp.qu.quarks.round().eq(1) ? "" : "s")
 		msg += "."
 	}
-	document.getElementById("quarks").innerHTML=msg
+	getEl("quarks").innerHTML=msg
 }
 
 function metaReset2() {

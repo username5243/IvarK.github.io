@@ -46,7 +46,7 @@ function startChallenge(name) {
 	IPminpeak = new Decimal(0)
 	if (player.currentChallenge.includes("post")) {
 		player.break = true
-		document.getElementById("break").innerHTML = "FIX INFINITY"
+		getEl("break").innerHTML = "FIX INFINITY"
 	}
 	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
@@ -97,23 +97,23 @@ function getTotalNormalChallenges() {
 function updateNCVisuals() {
 	var chall = player.currentChallenge
 
-	if (inNC(2) || chall == "postc1" || tmp.ngmR || tmp.ngmX >= 5) document.getElementById("chall2Pow").style.display = "inline-block"
-	else document.getElementById("chall2Pow").style.display = "none"
+	if (inNC(2) || chall == "postc1" || tmp.ngmR || tmp.ngmX >= 5) getEl("chall2Pow").style.display = "inline-block"
+	else getEl("chall2Pow").style.display = "none"
 
-	if (inNC(3) || chall == "postc1") document.getElementById("chall3Pow").style.display = "inline-block"
-	else document.getElementById("chall3Pow").style.display = "none"
+	if (inNC(3) || chall == "postc1") getEl("chall3Pow").style.display = "inline-block"
+	else getEl("chall3Pow").style.display = "none"
 
-	if (inMatterChallenge()) document.getElementById("matter").style.display = "block"
-	else document.getElementById("matter").style.display = "none"
+	if (inMatterChallenge()) getEl("matter").style.display = "block"
+	else getEl("matter").style.display = "none"
 
-	if (isADSCRunning()) document.getElementById("chall13Mult").style.display = "block"
-	else document.getElementById("chall13Mult").style.display = "none"
+	if (isADSCRunning()) getEl("chall13Mult").style.display = "block"
+	else getEl("chall13Mult").style.display = "none"
 
-	if (inNC(14) && player.aarexModifications.ngmX > 3) document.getElementById("c14Resets").style.display = "block"
-	else document.getElementById("c14Resets").style.display = "none"
+	if (inNC(14) && player.aarexModifications.ngmX > 3) getEl("c14Resets").style.display = "block"
+	else getEl("c14Resets").style.display = "none"
 
-	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") document.getElementById("quickReset").style.display = "inline-block"
-	else document.getElementById("quickReset").style.display = "none"
+	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
+	else getEl("quickReset").style.display = "none"
 }
 
 function inMatterChallenge() {
@@ -138,7 +138,7 @@ function updateWorstChallengeBonus() {
 }
 
 function updateChallenges() {
-	var buttons = Array.from(document.getElementById("normalchallenges").getElementsByTagName("button")).concat(Array.from(document.getElementById("breakchallenges").getElementsByTagName("button")))
+	var buttons = Array.from(getEl("normalchallenges").getElementsByTagName("button")).concat(Array.from(getEl("breakchallenges").getElementsByTagName("button")))
 	for (var i=0; i < buttons.length; i++) {
 		buttons[i].className = "challengesbtn";
 		buttons[i].textContent = "Start"
@@ -146,7 +146,7 @@ function updateChallenges() {
 
 	tmp.cp = 0
 	for (var i=0; i < player.challenges.length; i++) {
-		let elm = document.getElementById(player.challenges[i])
+		let elm = getEl(player.challenges[i])
 		if (elm) {
 			elm.className = "completedchallengesbtn";
 			elm.textContent = "Completed"
@@ -164,28 +164,28 @@ function updateChallenges() {
 	}
 	for (var i = 0; i < running.length; i++) {
 		var chall = running[i]
-		document.getElementById(chall).className = "onchallengebtn";
-		document.getElementById(chall).textContent = "Running"
+		getEl(chall).className = "onchallengebtn";
+		getEl(chall).textContent = "Running"
 	}
 
-	document.getElementById("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !ph.did("quantum") ? "none" : ""
+	getEl("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !ph.did("quantum") ? "none" : ""
 	if (inQC(4)) {
-		document.getElementById("challenge7").className = "onchallengebtn";
-		document.getElementById("challenge7").textContent = "Trapped in"
+		getEl("challenge7").className = "onchallengebtn";
+		getEl("challenge7").textContent = "Trapped in"
 	}
 
 	if (inQC(6)) for (i=2;i<9;i++) if (i<3||i>5) {
-		document.getElementById("postc"+i).className = "onchallengebtn";
-		document.getElementById("postc"+i).textContent = "Trapped in"
+		getEl("postc"+i).className = "onchallengebtn";
+		getEl("postc"+i).textContent = "Trapped in"
 	}
 
 	if (isIC3Trapped()) {
-		document.getElementById("postc3").className = "onchallengebtn";
-		document.getElementById("postc3").textContent = "Trapped in"
+		getEl("postc3").className = "onchallengebtn";
+		getEl("postc3").textContent = "Trapped in"
 	}
 
-	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
-	for (c = 0; c < order.length; c++) document.getElementById(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
+	if (player.postChallUnlocked > 0 || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) getEl("challTabButtons").style.display = "table"
+	for (c = 0; c < order.length; c++) getEl(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
 
 	resetIC1Reward()
 }
@@ -286,7 +286,7 @@ function updateChallengeTimes() {
 		tempcounter++
 	}
 	setAndMaybeShow("challengetimesum",tempcounter>1,'"The sum of your completed Normal Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
-	document.getElementById("challengetimesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
+	getEl("challengetimesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
 
 	var temp=0
 	var tempcounter=0
@@ -298,7 +298,7 @@ function updateChallengeTimes() {
 		}
 	}
 	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"The sum of your completed Infinity Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
-	document.getElementById("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
+	getEl("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
 	updateWorstChallengeBonus();
 }
 

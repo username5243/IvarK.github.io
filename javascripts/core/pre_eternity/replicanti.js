@@ -7,8 +7,8 @@ function getReplUnlCost() {
 function unlockReplicantis() {
 	let cost = getReplUnlCost()
 	if (player.infinityPoints.gte(cost)) {
-		document.getElementById("replicantidiv").style.display = "inline-block"
-		document.getElementById("replicantiunlock").style.display = "none"
+		getEl("replicantidiv").style.display = "inline-block"
+		getEl("replicantiunlock").style.display = "none"
 		player.replicanti.unl = true
 		player.replicanti.amount = new Decimal(1)
 		player.infinityPoints = player.infinityPoints.minus(cost)
@@ -17,7 +17,7 @@ function unlockReplicantis() {
 
 function replicantiGalaxyBulkModeToggle() {
 	player.galaxyMaxBulk = !player.galaxyMaxBulk
-	document.getElementById('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
+	getEl('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
 }
 
 function getReplMult(next) {
@@ -40,7 +40,7 @@ function upgradeReplicantiChance() {
 		else player.infinityPoints = player.infinityPoints.minus(player.replicanti.chanceCost)
 		player.replicanti.chance = Math.round(player.replicanti.chance * 100 + 1) / 100
 		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-		document.getElementById("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+		getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(1e15)
 	}
 }
@@ -61,7 +61,7 @@ function upgradeReplicantiInterval() {
 	else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
 	if (!isIntervalAffordable()) player.replicanti.interval = (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-	document.getElementById("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
+	getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 }
 
 function getReplicantiLimit(cap = false) {
@@ -119,7 +119,7 @@ function upgradeReplicantiGalaxy() {
 		player.replicanti.galCost = getRGCost(1)
 		player.replicanti.gal += 1
 		if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
-		document.getElementById("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
+		getEl("eterc8repl").textContent = "You have "+player.eterc8repl+" purchases left."
 		return true
 	}
 	return false
@@ -218,7 +218,7 @@ function getReplGalaxyEff() {
 
 function replicantiGalaxyAutoToggle() {
 	player.replicanti.galaxybuyer=!player.replicanti.galaxybuyer
-	document.getElementById("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
+	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
 function getReplSpeed() {

@@ -6,14 +6,14 @@ var quantumChallenges = {
 var assigned
 var pcFocus = 0
 function updateQuantumChallenges() {
-	if (document.getElementById("qctabbtn").style == "none") return
+	if (getEl("qctabbtn").style == "none") return
 
 	assigned = []
 	var assignedNums = {}
-	document.getElementById("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
-	document.getElementById("autoCS").style.display = player.ghostify.automatorGhosts.ghosts >= 22 ? "" : "none"
-	document.getElementById("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
-	document.getElementById("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
+	getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
+	getEl("autoCS").style.display = player.ghostify.automatorGhosts.ghosts >= 22 ? "" : "none"
+	getEl("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
+	getEl("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
 	for (var pc = 1; pc <= 4; pc++) {
 		var subChalls = tmp.qu.pairedChallenges.order[pc]
 		if (subChalls) for (var sc = 0; sc < 2; sc++) {
@@ -27,50 +27,50 @@ function updateQuantumChallenges() {
 			var property = "pc" + pc
 			var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
 			var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
-			document.getElementById(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
-			document.getElementById(property+"cost").textContent = "Cost: " + (!sc2 && !player.achievements.includes("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
-			document.getElementById(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
-			document.getElementById(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
-			document.getElementById(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
+			getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
+			getEl(property+"cost").textContent = "Cost: " + (!sc2 && !player.achievements.includes("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
+			getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
+			getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
+			getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
 
 			var sc1t = Math.min(sc1, sc2)
 			var sc2t = Math.max(sc1, sc2)
 			if (player.masterystudies.includes("d14")) {
-				document.getElementById(property + "br").style.display = ""
-				document.getElementById(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : tmp.qu.bigRip.active ? "Big Ripped" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
-				document.getElementById(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : tmp.qu.bigRip.active ? "onchallengebtn" : tmp.qu.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
-			} else document.getElementById(property + "br").style.display = "none"
+				getEl(property + "br").style.display = ""
+				getEl(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : tmp.qu.bigRip.active ? "Big Ripped" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
+				getEl(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : tmp.qu.bigRip.active ? "onchallengebtn" : tmp.qu.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
+			} else getEl(property + "br").style.display = "none"
 		}
 	}
 	if (player.masterystudies.includes("d14")) {
 		var max = getMaxBigRipUpgrades()
-		document.getElementById("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
-		for (var u = 18; u <= 20; u++) document.getElementById("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
+		getEl("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
+		for (var u = 18; u <= 20; u++) getEl("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
 		for (var u = 1; u <= max; u++) {
-			document.getElementById("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
-			document.getElementById("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
+			getEl("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
+			getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
 		}
 	}
 	for (var qc = 1; qc <= 9; qc++) {
 		var property = "qc" + qc
 		var unl = isQCUnlocked(qc)
 		var done = QCIntensity(qc) >= 1
-		document.getElementById(property + "div").style.display = unl ? "inline-block" : "none"
+		getEl(property + "div").style.display = unl ? "inline-block" : "none"
 		if (!unl) continue
 
-		document.getElementById(property).textContent = ((!assigned.includes(qc) && pcFocus) ? (done ? "Choose" : "Not completed") : inQC(qc) ? "Running" : done ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
-		document.getElementById(property).className = (!assigned.includes(qc) && pcFocus) ? (done ? "challengesbtn" : "lockedchallengesbtn") : inQC(qc) ? "onchallengebtn" : done ? "completedchallengesbtn" : "challengesbtn"
-		document.getElementById(property + "cost").textContent = "Cost: " + getFullExpansion(getQCCost([qc])) + " electrons"
-		document.getElementById(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog([qc]))) + " antimatter"
+		getEl(property).textContent = ((!assigned.includes(qc) && pcFocus) ? (done ? "Choose" : "Not completed") : inQC(qc) ? "Running" : done ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
+		getEl(property).className = (!assigned.includes(qc) && pcFocus) ? (done ? "challengesbtn" : "lockedchallengesbtn") : inQC(qc) ? "onchallengebtn" : done ? "completedchallengesbtn" : "challengesbtn"
+		getEl(property + "cost").textContent = "Cost: " + getFullExpansion(getQCCost([qc])) + " electrons"
+		getEl(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog([qc]))) + " antimatter"
 	}
 	updateQCDisplaysSpecifics()
 }
 
 function updateQCDisplaysSpecifics() {
-	document.getElementById("qc2reward").textContent = Math.round(tmp.qcRewards[2] * 100 - 100)
-	document.getElementById("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
-	document.getElementById("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
-	document.getElementById("qc8reward").textContent = tmp.qcRewards[8]
+	getEl("qc2reward").textContent = Math.round(tmp.qcRewards[2] * 100 - 100)
+	getEl("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
+	getEl("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
+	getEl("qc8reward").textContent = tmp.qcRewards[8]
 }
 
 function teleportToQCs() {
@@ -195,7 +195,7 @@ function QCIntensity(num) {
 }
 
 function updateQCTimes() {
-	document.getElementById("qcsbtn").style.display = "none"
+	getEl("qcsbtn").style.display = "none"
 	if (!player.masterystudies) return
 	var temp = 0
 	var tempcounter = 0
@@ -206,7 +206,7 @@ function updateQCTimes() {
 			tempcounter++
 		}
 	}
-	if (tempcounter > 0) document.getElementById("qcsbtn").style.display = "inline-block"
+	if (tempcounter > 0) getEl("qcsbtn").style.display = "inline-block"
 	setAndMaybeShow("qctimesum", tempcounter > 1, '"The sum of your completed Quantum Challenge time records is "+timeDisplayShort(' + temp + ', false, 3)')
 }
 
@@ -219,13 +219,13 @@ function respecPCs() {
 	data.respec = false
 	for (qc = 1; qc <= 9; qc++) if (QCIntensity(qc)) tmp.qu.challenges[qc] = 1
 
-	document.getElementById("respecPC").className = "storebtn"
+	getEl("respecPC").className = "storebtn"
 }
 
 var ranking = 0
 function updatePCCompletions() {
 	var shownormal = false
-	document.getElementById("pccompletionsbtn").style.display = "none"
+	getEl("pccompletionsbtn").style.display = "none"
 	if (!tmp.ngp3) return
 
 	var r = 0
@@ -263,29 +263,29 @@ function updatePCCompletions() {
 		if (tmp.pcc[mod] && qcm.rewards[mod]) tmp.pce[mod] = qcm.rewards[mod].eff(tmp.pcc[mod])
 	}
 
-	if (r) document.getElementById("pccompletionsbtn").style.display = "inline-block"
-	document.getElementById("pccranking").textContent = r.toFixed(1)
-	document.getElementById("pccrankingMax").textContent = (Math.sqrt(4 * (2 + qcm.modifiers.length)) * 36 * 100 / 56).toFixed(1)
+	if (r) getEl("pccompletionsbtn").style.display = "inline-block"
+	getEl("pccranking").textContent = r.toFixed(1)
+	getEl("pccrankingMax").textContent = (Math.sqrt(4 * (2 + qcm.modifiers.length)) * 36 * 100 / 56).toFixed(1)
 	updatePCTable()
 	for (var m = 0; m < qcm.modifiers.length; m++) {
 		var id = qcm.modifiers[m]
 		var shownormal = tmp.qu.qcsMods[id] !== undefined || shownormal
-		document.getElementById("qcms_" + id).style.display = tmp.qu.qcsMods[id] !== undefined ? "" : "none"
+		getEl("qcms_" + id).style.display = tmp.qu.qcsMods[id] !== undefined ? "" : "none"
 	}
-	document.getElementById("qcms_normal").style.display = shownormal ? "" : "none"
+	getEl("qcms_normal").style.display = shownormal ? "" : "none"
 	if (r >= 75) {
-		document.getElementById("modifiersdiv").style.display = ""
+		getEl("modifiersdiv").style.display = ""
 		for (var m = 0; m < qcm.modifiers.length; m++) {
 			var id = qcm.modifiers[m]
 			if (r >= qcm.reqs[id] || !qcm.reqs[id]) {
-				document.getElementById("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
-				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', (qcm.descs[id] || "???") + (tmp.pce[id] ? " (PC Reward: " + qcm.rewards[id].desc(tmp.pce[id]) + ")" : ""))
+				getEl("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
+				getEl("qcm_" + id).setAttribute('ach-tooltip', (qcm.descs[id] || "???") + (tmp.pce[id] ? " (PC Reward: " + qcm.rewards[id].desc(tmp.pce[id]) + ")" : ""))
 			} else {
-				document.getElementById("qcm_" + id).className = "unavailablebtn"
-				document.getElementById("qcm_" + id).setAttribute('ach-tooltip', 'Get ' + qcm.reqs[id] + ' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
+				getEl("qcm_" + id).className = "unavailablebtn"
+				getEl("qcm_" + id).setAttribute('ach-tooltip', 'Get ' + qcm.reqs[id] + ' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
 			}
 		}
-	} else document.getElementById("modifiersdiv").style.display = "none"
+	} else getEl("modifiersdiv").style.display = "none"
 	
 	ranking = r // its global
 }
@@ -386,59 +386,59 @@ function updatePCTable() {
 			if (tmp.pct == "") {
 				var comp = tmp.qu.pairedChallenges.completions[pcid]
 				if (comp !== undefined) {
-					document.getElementById(divid).textContent = "PC" + comp
-					document.getElementById(divid).className = (tmp.qu.qcsNoDil["pc" + pcid] ? "nd" : "pc" + comp) + "completed"
+					getEl(divid).textContent = "PC" + comp
+					getEl(divid).className = (tmp.qu.qcsNoDil["pc" + pcid] ? "nd" : "pc" + comp) + "completed"
 					var achTooltip = 'Fastest time: ' + (tmp.qu.pairedChallenges.fastest[pcid] ? timeDisplayShort(tmp.qu.pairedChallenges.fastest[pcid]) : "N/A")
 					if (tmp.qu.qcsNoDil["pc" + pcid]) achTooltip += ", No dilation: PC" + tmp.qu.qcsNoDil["pc" + pcid]
-					document.getElementById(divid).setAttribute('ach-tooltip', achTooltip)
+					getEl(divid).setAttribute('ach-tooltip', achTooltip)
 					if (divid=="pc38") giveAchievement("Hardly marked")
 					if (divid=="pc68") giveAchievement("Big Rip isn't enough")
 				} else if (pcid == 68 && ph.did("ghostify")) {
-					document.getElementById(divid).textContent = "BR"
-					document.getElementById(divid).className = "brCompleted"
-					document.getElementById(divid).removeAttribute('ach-tooltip')
-					document.getElementById(divid).setAttribute('ach-tooltip', 'Fastest time from start of Ghostify: ' + timeDisplayShort(player.ghostify.best))
+					getEl(divid).textContent = "BR"
+					getEl(divid).className = "brCompleted"
+					getEl(divid).removeAttribute('ach-tooltip')
+					getEl(divid).setAttribute('ach-tooltip', 'Fastest time from start of Ghostify: ' + timeDisplayShort(player.ghostify.best))
 				} else {
-					document.getElementById(divid).textContent = ""
-					document.getElementById(divid).className = ""
-					document.getElementById(divid).removeAttribute('ach-tooltip')
+					getEl(divid).textContent = ""
+					getEl(divid).className = ""
+					getEl(divid).removeAttribute('ach-tooltip')
 				}
 			} else if (data&&data["pc" + pcid]) {
 				var comp = data["pc" + pcid]
-				document.getElementById(divid).textContent = "PC" + comp
-				document.getElementById(divid).className = "pc" + comp + "completed"
-				document.getElementById(divid).removeAttribute('ach-tooltip')
+				getEl(divid).textContent = "PC" + comp
+				getEl(divid).className = "pc" + comp + "completed"
+				getEl(divid).removeAttribute('ach-tooltip')
 			} else {
-				document.getElementById(divid).textContent = ""
-				document.getElementById(divid).className = ""
-				document.getElementById(divid).removeAttribute('ach-tooltip')
+				getEl(divid).textContent = ""
+				getEl(divid).className = ""
+				getEl(divid).removeAttribute('ach-tooltip')
 			}
 		} else { // r == c
 			var divid = "qcC" + r
 			if ((tmp.pct == "" && QCIntensity(r)) || (data && data["qc" + r])) {
-				document.getElementById(divid).textContent = "QC"+r
+				getEl(divid).textContent = "QC"+r
 				if (tmp.qu.qcsNoDil["qc" + r] && tmp.pct == "") {
-					document.getElementById(divid).className = "ndcompleted"
-					document.getElementById(divid).setAttribute('ach-tooltip', "No dilation achieved!")
+					getEl(divid).className = "ndcompleted"
+					getEl(divid).setAttribute('ach-tooltip', "No dilation achieved!")
 				} else {
-					document.getElementById(divid).className = "pc1completed"
-					document.getElementById(divid).removeAttribute('ach-tooltip')
+					getEl(divid).className = "pc1completed"
+					getEl(divid).removeAttribute('ach-tooltip')
 				}
 			} else {
-				document.getElementById(divid).textContent = ""
-				document.getElementById(divid).className = ""
-				document.getElementById(divid).removeAttribute('ach-tooltip')
+				getEl(divid).textContent = ""
+				getEl(divid).className = ""
+				getEl(divid).removeAttribute('ach-tooltip')
 			}
 		}
 	}
 	updateBestPC68Display()
-	document.getElementById("upcc").textContent = (qcm.names[tmp.pct] || "Unique PC completions") + ": " + (tmp.pcc[tmp.pct || "normal"] || 0) + " / 36"
-	document.getElementById("udcc").textContent = tmp.pct == "" ?  "No dilation: " + (tmp.pcc.noDil || 0) + " / 36" : ""
-	document.getElementById("pcEff").textContent = tmp.pce[tmp.pct] ? "Effect: " + qcm.rewards[tmp.pct].desc(tmp.pce[tmp.pct]) : ""
+	getEl("upcc").textContent = (qcm.names[tmp.pct] || "Unique PC completions") + ": " + (tmp.pcc[tmp.pct || "normal"] || 0) + " / 36"
+	getEl("udcc").textContent = tmp.pct == "" ?  "No dilation: " + (tmp.pcc.noDil || 0) + " / 36" : ""
+	getEl("pcEff").textContent = tmp.pce[tmp.pct] ? "Effect: " + qcm.rewards[tmp.pct].desc(tmp.pce[tmp.pct]) : ""
 }
 
 function updateBestPC68Display() {
-	document.getElementById("bpc68").textContent = tmp.pct == "" ? "Best PC w/ QC6 & 8: " + shortenMoney(tmp.qu.pairedChallenges.pc68best) : ""
+	getEl("bpc68").textContent = tmp.pct == "" ? "Best PC w/ QC6 & 8: " + shortenMoney(tmp.qu.pairedChallenges.pc68best) : ""
 }
 
 var qcm = {
@@ -495,7 +495,7 @@ function toggleQCModifier(id) {
 		for (var m = 0; m < qcm.on.length; m++) if (qcm.on[m] != id) data.push(qcm.on[m])
 		qcm.on = data
 	} else qcm.on.push(id)
-	document.getElementById("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
+	getEl("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
 	updateQuantumChallenges()
 }
 

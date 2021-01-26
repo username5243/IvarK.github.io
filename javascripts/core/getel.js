@@ -1,0 +1,1 @@
+getEl = x => document.getElementById(x)

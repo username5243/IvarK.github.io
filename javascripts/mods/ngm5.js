@@ -294,8 +294,8 @@ function updateParadoxUpgrades() {
 	for (var r = 1; r <= puSizes.y; r++) {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
-			document.getElementById("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
-			if (typeof(puDescs[id]) == "function") document.getElementById("pud" + id).textContent = puDescs[id]()
+			getEl("pu" + id).className = hasPU(id, r < 2) == (r > 1 || puCaps[id] || 1/0) ? "pubought" : player.pSac.px.gte(getPUCost(id, r < 2, hasPU(id, true))) ? "pupg" : "infinistorebtnlocked"
+			if (typeof(puDescs[id]) == "function") getEl("pud" + id).textContent = puDescs[id]()
 		}
 	}
 }
@@ -305,9 +305,9 @@ function updatePUMults() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			if (puMults[id]) {
-				if (id == 13) document.getElementById("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
-				else if (id == 23) document.getElementById("pue23").textContent = "+" + puMults[23]().toFixed(4)
-				else document.getElementById("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
+				if (id == 13) getEl("pue13").textContent = "^" + puMults[13](hasPU(13, true)).toFixed(2)
+				else if (id == 23) getEl("pue23").textContent = "+" + puMults[23]().toFixed(4)
+				else getEl("pue" + id).textContent = shorten(puMults[id](hasPU(id, true, r < 2))) + "x" + (puSoftcaps[id] && puSoftcaps[id]() ? " (softcapped)" : "")
 			}
 		}
 	}
@@ -318,7 +318,7 @@ function updatePUCosts() {
 		for (var c = 1; c <= puSizes.x; c++) {
 			var id = r * 10 + c
 			var lvl = hasPU(id, true)
-			document.getElementById("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
+			getEl("puc" + id).innerHTML = lvl >= puCaps[id] ? "" : "Cost: " + shortenDimensions(getPUCost(id, r < 2, hasPU(id, true))) + " Px" + (r == 1 ? "<br>" + getGalaxyScaleName(puScalings[id] ? puScalings[id](lvl) : 0) + "Level: " + getFullExpansion(lvl) + (puCaps[id] ? " / " + puCaps[id] : "") : "")
 		}
 	}
 }
@@ -449,7 +449,7 @@ function resetPSac() {
 
 function ParadoxUpgradeButtonTypeDisplay() {
 	if (tmp.ngmX < 5) return
-	let t = document.getElementById("pUpgs")
+	let t = getEl("pUpgs")
 	for (let i = 1; i <= 6; i++) { //6 rows
 		var r = t.rows[i-1]
 		if (!puConditions["r"+i] || puConditions["r"+i]()) {
@@ -458,7 +458,7 @@ function ParadoxUpgradeButtonTypeDisplay() {
 				var c = r.cells[j-1]
 				if (!puConditions["c"+j] || puConditions["c"+j]()) {
 					c.style.display = ""
-					var e = document.getElementById('pu' + i + j);
+					var e = getEl('pu' + i + j);
 					if (hasPU(i*10+j)) {
 						e.className = 'pubought'
 					} else if (i === 1 ? player.pSac.px.gte(puCosts[10+j](hasPU(10+j,true))) : player.pSac.px.gte(puCosts[i*10+j])) {
@@ -468,12 +468,12 @@ function ParadoxUpgradeButtonTypeDisplay() {
 					}
 					let upgId = i * 10 + j
 					let mult = puMults[upgId]
-					let elm = document.getElementById('pue' + upgId)
+					let elm = getEl('pue' + upgId)
 
 					if (mult && elm) {
 						let display = puMults["u" + upgId]
 						mult = mult()
-						document.getElementById('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
+						getEl('pue' + upgId).textContent = display ? display(mult) : shorten(mult)
 					}
 				} else c.style.display = "none"
 			}
@@ -482,8 +482,8 @@ function ParadoxUpgradeButtonTypeDisplay() {
 }
 
 function updateGalaxyTabs() {
-	document.getElementById("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
-	document.getElementById("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
+	getEl("galupgsbtn").style.display = player.pSac !== undefined ? "" : "none"
+	getEl("galStonesbtn").style.display = player.pSac !== undefined ? "" : "none"
 	if (player.pSac === undefined) showGalTab("galUpgs")
 }
 
