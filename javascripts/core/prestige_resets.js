@@ -379,7 +379,7 @@ function doEternityResetStuff() {
 	player.offlineProdCost = getEternitied() > 19 ? player.offlineProdCost : 1e7
 	player.challengeTarget = 0
 	player.autoSacrifice = getEternitied() > 6 ? player.autoSacrifice : 1
-	player.replicanti.amount = speedrunMilestonesReached >= 24 ? player.replicanti.amount : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.pow(0.9).floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined

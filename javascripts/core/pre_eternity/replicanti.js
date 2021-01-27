@@ -131,7 +131,7 @@ function replicantiGalaxy() {
 	if (!canGetReplicatedGalaxy()) return
 	if (player.galaxyMaxBulk) player.replicanti.galaxies = maxGal
 	else player.replicanti.galaxies++
-	if (!player.achievements.includes("ng3p67")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
+	if (!tmp.ngp3 || !player.achievements.includes("ngpp16")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
 	galaxyReset(0)
 }
 
@@ -207,7 +207,7 @@ function getTotalRG() {
 function getReplGalaxyEff() {
 	let x = 1
 	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2)/10
-	else if (ECTimesCompleted("eterc8") > 0) x = getECReward(8)
+	else if (ECComps("eterc8") > 0) x = getECReward(8)
 	if (tmp.ngp3) {
 		if (masteryStudies.has(344)) x *= getMTSMult(344)
 		if (hasBosonicUpg(34)) x *= tmp.blu[34]
@@ -219,35 +219,6 @@ function getReplGalaxyEff() {
 function replicantiGalaxyAutoToggle() {
 	player.replicanti.galaxybuyer=!player.replicanti.galaxybuyer
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
-}
-
-function getReplSpeed() {
-	let inc = .2
-	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
-	if (hasDilationUpg('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
-		let expDiv = 10
-		if (tmp.ngp3) expDiv = 9
-		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
-
-		inc /= Math.min(x, 20)
-	}
-	inc = inc + 1
-
-	if (masteryStudies.has(281)) exp += tmp.mts[281]
-	if (GUActive("gb2")) exp *= 2
-	if (masteryStudies.has(282)) exp += 100
-
-	if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
-	if (hasBosonicUpg(44)) exp += tmp.blu[44]
-	if (isQCRewardActive(9)) exp += tmp.qcRewards[9].ri
-	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
-
-	return {inc: inc, exp: exp}
-}
-
-
-function getReplScaleStart() {
-	return Number.MAX_VALUE
 }
 
 function getReplicantiInterval() {
@@ -271,15 +242,79 @@ function getReplicantiInterval() {
 }
 
 function getReplicantiFinalInterval() {
-	let x = getReplicantiInterval()
+	let x = tmp.rep.baseInt
 	if (player.replicanti.amount.gt(getReplScaleStart())) {
 		if (player.boughtDims) {
 			let base = player.achievements.includes("r107") ? Math.max(player.replicanti.amount.log(2) / 1024, 1) : 1
 			x = Math.pow(base, -.25) * x.toNumber()
-		} else x = Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0)/tmp.rep.speeds.exp).times(x)
+		} else x = Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0) / tmp.rep.speeds.exp).times(x)
 	}
 	if (tmp.ngC) x = Decimal.div(x, 20)
 	return x
+}
+
+function getReplScaleStart() {
+	return Number.MAX_VALUE
+}
+
+function getReplSpeed() {
+	let inc = .2
+	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
+	if (hasDilationUpg('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
+		let expDiv = 10
+		if (tmp.ngp3) expDiv = 9
+		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv
+
+		inc /= Math.min(x, 20)
+	}
+	inc = inc + 1
+
+	if (masteryStudies.has(281)) exp += tmp.mts[281]
+	if (GUActive("gb2")) exp *= 2
+	if (masteryStudies.has(282)) exp += 100
+
+	//if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
+	//if (hasBosonicUpg(44)) exp += tmp.blu[44]
+	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+
+	return {inc: inc, exp: exp}
+}
+
+function updateReplicantiTemp() {
+	var data = {}
+	tmp.rep = data
+
+	data.ln = player.replicanti.amount.ln()
+
+	data.chance = player.replicanti.chance
+	if (masteryStudies.has(273)) {
+		data.chance = Decimal.pow(data.chance, tmp.mts[273])
+		data.freq = 0
+		if (data.chance.gte("1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1) / Math.log10(2), tmp.mts[273])
+	}
+	let estChance = data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3
+
+	data.baseInt = getReplicantiInterval()
+	data.baseEst = Decimal.div(estChance, data.baseInt)
+
+	data.speeds = getReplSpeed()
+	if (ECComps("eterc14") > 0 && data.baseEst) {
+		//Sub-1ms reduction -> Lower replicanti scaling
+		let div = data.baseEst.pow(getECReward(14))
+		data.ec14 = {
+			interval: div,
+			ooms: div.log10() / 3 + 1
+		}
+
+		data.speeds.exp *= data.ec14.ooms
+		data.baseInt = data.baseInt.div(data.ec14.interval)
+		data.baseEst = data.baseEst.div(data.ec14.interval)
+	}
+
+	data.interval = getReplicantiFinalInterval()
+
+	data.est = Decimal.div(estChance, data.interval)
+	data.estLog = data.est.times(Math.log10(Math.E))
 }
 
 function runRandomReplicanti(chance){

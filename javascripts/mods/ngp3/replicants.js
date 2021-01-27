@@ -171,7 +171,7 @@ function getEmperorDimensionGlobalMultiplier() {
 	if (masteryStudies.has(402)) ret = ret.times(30)
 	if (isTreeUpgActive(6)) ret = ret.times(getTreeUpgradeEffect(6))
 	if (tmp.pce && tmp.pce.ms) ret = ret.times(Decimal.pow(tmp.pce.ms.eds, tmp.eds[8].perm))
-	if (hasBosonicUpg(35)) ret = ret.times(tmp.blu[35].eds)
+	if (hasBosonicUpg(35)) ret = ret.times(tmp.blu[35])
 	return ret
 }
 

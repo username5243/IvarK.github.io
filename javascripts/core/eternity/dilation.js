@@ -471,7 +471,7 @@ function updateDilationUpgradeButtons() {
 	var power = getDil3Power()
 	getEl("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
 	getEl("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
-	getEl("dil22desc").textContent = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Time Dimensions are affected by replicanti multiplier ^ 0.1."
+	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(0.1)) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."

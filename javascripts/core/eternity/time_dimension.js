@@ -18,21 +18,21 @@ function doNGMatLeast4TDChanges(tier, ret){
 	let x = (tmp.ngmX >= 5) ? (hasPU(11) ? puMults[22] : new Decimal(1)) : player.postC3Reward
 	let exp = ([5, 3, 2, 1.5, 1, .5, 1/3, 0])[tier - 1]
 	if (x.gt(1e10)) x = Decimal.pow(10, Math.sqrt(x.log10() * 5 + 50))
-	if (player.galacticSacrifice.upgrades.includes(25)) exp *= galMults.u25()
+	if (hasGalUpg(25)) exp *= galMults.u25()
 	if (player.pSac!=undefined) exp /= 2
 	if (inNC(16)) exp /= 2
 	ret = ret.times(x.pow(exp))
 
 	//NG-4 upgrades
-	if (player.galacticSacrifice.upgrades.includes(12)) ret = ret.times(galMults.u12())
-	if (player.galacticSacrifice.upgrades.includes(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
-	if (player.galacticSacrifice.upgrades.includes(15)) ret = ret.times(galMults.u15())
+	if (hasGalUpg(12)) ret = ret.times(galMults.u12())
+	if (hasGalUpg(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
+	if (hasGalUpg(15)) ret = ret.times(galMults.u15())
 	if (tmp.ngmX >= 5 && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
-	if (player.galacticSacrifice.upgrades.includes(44) && tmp.ngmX >= 4) {
-		let e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
+	if (hasGalUpg(44) && tmp.ngmX >= 4) {
+		let e = hasGalUpg(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))
 	}
-	if (player.galacticSacrifice.upgrades.includes(31)) ret = ret.pow(galMults.u31())
+	if (hasGalUpg(31)) ret = ret.pow(galMults.u31())
 	return ret
 }
 
@@ -49,7 +49,7 @@ function getERTDAchMults(){
 function calcNGM2atleastTDPreVPostDilMultiplier(tier){
 	let ret2 = new Decimal(1)
 	if (player.currentEternityChall == "eterc9") ret2 = ret2.times(tmp.infPow)
-	if (ECTimesCompleted("eterc1") !== 0) ret2 = ret2.times(getECReward(1))
+	if (ECComps("eterc1") !== 0) ret2 = ret2.times(getECReward(1))
 	if (hasEternityUpg(4)) ret2 = ret2.times(ETER_UPGS[4].mult())
 	if (hasEternityUpg(5)) ret2 = ret2.times(ETER_UPGS[5].mult())
 	if (hasEternityUpg(6)) ret2 = ret2.times(ETER_UPGS[6].mult())
@@ -93,9 +93,9 @@ function getTimeDimensionPower(tier) {
 	ret = ret.times(calcVanillaTSTDMult(tier))
 
 	if (hasPU(21)) ret = ret.times(puMults[21]())
-	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(getECReward(10))
+	if (ECComps("eterc10") !== 0) ret = ret.times(getECReward(10))
 	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
-	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galMults.u43())
+	if (player.galacticSacrifice !== undefined && hasGalUpg(43)) ret = ret.times(galMults.u43())
 	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && !tmp.ngC && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 	if (inQC(6)) ret = ret.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
@@ -128,16 +128,7 @@ function getTimeDimensionProduction(tier) {
 }
 
 function getIC3EffFromFreeUpgs() {
-	let x = 0
-	if (tmp.ngp3) {
-		if (player.currentEternityChall=='eterc14') x = 5
-		else {
-			x = ECTimesCompleted("eterc14") * 4
-			if (hasNU(12)) if (tmp.qu.bigRip.active) x *= tmp.nu[12].replicated
-		}
-	}
-	if (player.galacticSacrifice !== undefined) x++
-	return x
+	return tmp.ngmX >= 2 ? 1 : 0
 }
 
 function isTDUnlocked(t) {

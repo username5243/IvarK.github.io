@@ -246,7 +246,7 @@ function doCrunchInfinitiesGain(){
 	let infGain
 	if (player.currentEternityChall == "eterc4") {
 		infGain = 1
-		if (player.infinitied >= 16 - (ECTimesCompleted("eterc4")*4)) {
+		if (player.infinitied >= 16 - (ECComps("eterc4")*4)) {
 			setTimeout(exitChallenge, 500)
 			onChallengeFail()
 		}
@@ -407,7 +407,7 @@ var ipMultPower = 2
 var ipMultCostIncrease = 10
 function getIPMultPower() {
 	let ret = ipMultPower
-	if (player.galacticSacrifice && player.galacticSacrifice.upgrades.includes(53)) ret += Math.pow(1.25, -15e4 / player.galacticSacrifice.galaxyPoints.log10())
+	if (player.galacticSacrifice && hasGalUpg(53)) ret += Math.pow(1.25, -15e4 / player.galacticSacrifice.galaxyPoints.log10())
 	return ret
 }
 

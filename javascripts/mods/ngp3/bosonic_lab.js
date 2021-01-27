@@ -877,11 +877,11 @@ var bu = {
 		32: "You unlock more boosts from Light Empowerments.",
 		33: "Higgs Bosons reduce the costs of all electron upgrades.",
 		34: "All types of galaxies boost each other.",
-		35: "Replicantis and Emperor Dimensions boost each other.",
+		35: "Replicantis boost Emperor Dimensions.",
 		41: "Intergalactic and Infinite Time rewards boost each other.",
 		42: "Red power boosts the first Bosonic Upgrade.",
 		43: "Green power effect boosts Tree Upgrades.",
-		44: "Blue power makes replicate interval increase slower.",
+		44: "???",
 		45: "Dilated time weakens the Distant Antimatter Galaxies scaling.",
 		51: "You never produce preon anti-energy and always produce Eternal Matter (but at a reduced rate outside of Big Rips).",
 		52: "Replicantis raise all powers to Infinite Time and Intergalactic amount to an exponent.",
@@ -967,10 +967,7 @@ var bu = {
 			return ret / 5 + 1
 		},
 		35() {
-			return {
-				rep: Math.pow(tmp.quActive ? tmp.qu.replicants.quarks.add(1).log10() : 0, 1/3) * 2,
-				eds: Decimal.pow(tmp.newNGP3E ? 10 : 20, Math.pow(player.replicanti.amount.log10(), 2/3) / 15e3)
-			}
+			return Decimal.pow(tmp.newNGP3E ? 10 : 20, Math.pow(player.replicanti.amount.log10(), 2/3) / 15e3)
 		},
 		41() {
 			return {
@@ -986,12 +983,6 @@ var bu = {
 		43() {
 			if (!tmp.quActive) return 1
 			return Math.sqrt(colorBoosts.g + tmp.pe) / (inBigRip() ? 100 : 40) + 1
-		},
-		44() {
-			if (!tmp.quActive) return 0
-			let exp = tmp.newNGP3E ? .65 : .5
-			let mul = tmp.newNGP3E ? .2 : .15
-			return Math.pow(tmp.qu.colorPowers.b.add(1).log10(), exp) * mul
 		},
 		45() {
 			if (!tmp.eterUnl) return 1
@@ -1051,9 +1042,6 @@ var bu = {
 		},
 		34(x) {
 			return formatPercentage(x - 1, 2) + "% stronger"
-		},
-		35(x) {
-			return "+" + shorten(x.rep) + " OoMs to replicate interval increase, " + shorten(x.eds) + "x to all EDs"
 		},
 		41(x) {
 			return shorten(x.ig) + "x to Intergalactic, " + shorten(x.it) + "x to Infinite Time"

@@ -119,7 +119,7 @@ function clearMetaDimensions () { //Resets costs and amounts
 	for (var i = 1; i <= 8; i++) {
 		player.meta[i].amount = new Decimal(0);
 		player.meta[i].bought = 0;
-		player.meta[i].cost = new Decimal(initCost[i]);
+		player.meta[i].cost = new Decimal(initCost[i - 1]);
 	}
 }
 
@@ -161,8 +161,8 @@ function metaBoost() {
 }
 
 
-function getMetaDimensionCostMultiplier(tier) {
-	return costMults[tier];
+function dimMetaCostMult(tier) {
+	return new Decimal(costMults[tier]);
 }
 
 function dimMetaBought(tier) {
@@ -177,16 +177,16 @@ function metaBuyOneDimension(tier) {
 	player.meta[tier].amount = player.meta[tier].amount.plus(1);
 	player.meta[tier].bought++;
 	if (player.meta[tier].bought % 10 < 1) {
-		player.meta[tier].cost = getMetaCost(tier, player.meta[tier].bought/10)
+		player.meta[tier].cost = getMetaCost(tier, player.meta[tier].bought / 10)
 	}
 	if (tier > 7) giveAchievement("And still no ninth dimension...")
 	return true;
 }
 
 function getMetaCost(tier, boughtTen) {
-	let cost = Decimal.times(initCost[tier], costMults[tier].pow(boughtTen))
-	let scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(costMults[tier]))
-	if (boughtTen >= scalingStart) cost = cost.times(Decimal.pow(10, (boughtTen-scalingStart + 1) * (boughtTen-scalingStart + 2) / 2))
+	let cost = Decimal.times(initCost[tier], dimMetaCostMult(tier).pow(boughtTen))
+	let scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(dimMetaCostMult(tier)))
+	if (boughtTen >= scalingStart) cost = cost.times(Decimal.pow(10, (boughtTen - scalingStart + 1) * (boughtTen - scalingStart + 2) / 2))
 	return cost
 }
 
@@ -218,11 +218,11 @@ function buyMaxMetaDimension(tier) {
 	if (!canBuyMetaDimension(tier)) return
 	if (getMetaMaxCost(tier).gt(player.meta.antimatter)) return
 	var currentBought = Math.floor(player.meta[tier].bought / 10)
-	var bought = player.meta.antimatter.div(10).div(initCost[tier]).log(costMults[tier]) + 1
-	var scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(costMults[tier]))
+	var bought = player.meta.antimatter.div(10).div(initCost[tier]).log(dimMetaCostMult(tier)) + 1
+	var scalingStart = Math.ceil(Decimal.div(getMetaCostScalingStart(), initCost[tier]).log(dimMetaCostMult(tier)))
 	if (bought >= scalingStart) {
-		let b = costMults[tier].log10() + 0.5
-		bought=Math.sqrt(b * b + 2 * (bought - scalingStart) * costMults[tier].log10()) - b + scalingStart
+		let b = dimMetaCostMult(tier).log10() + 0.5
+		bought = Math.sqrt(b * b + 2 * (bought - scalingStart) * dimMetaCostMult(tier).log10()) - b + scalingStart
 	}
 	bought = Math.floor(bought) - currentBought
 	var num = bought
@@ -230,7 +230,7 @@ function buyMaxMetaDimension(tier) {
 	if (num > 1) {
 		while (num > 0) {
 			var temp = tempMA
-			var cost = getMetaCost(tier,currentBought + num - 1).times(num > 1 ? 10 : 10 - dimMetaBought(tier))
+			var cost = getMetaCost(tier, currentBought + num - 1).times(num > 1 ? 10 : 10 - dimMetaBought(tier))
 			if (cost.gt(tempMA)) {
 				tempMA = player.meta.antimatter.sub(cost)
 				bought--
@@ -291,7 +291,7 @@ function getMetaDimensionProduction(tier) {
 }
 
 function getExtraDimensionBoostPower() {
-	if (player.currentEternityChall == "eterc14" || inQC(7) || inQC(9)) return new Decimal(1)
+	if (inQC(7) || inQC(9)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (!inQC(3)) r = r.add(1)
@@ -319,8 +319,6 @@ function getMADimBoostPowerExp(ma) {
 		return power
 	}
 	if (hasDilationUpg("ngpp5")) power++
-	if (masteryStudies.has(262)) power++
-	power += getECReward(13)
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
 }
@@ -340,7 +338,7 @@ function updateOverallMetaDimensionsStuff(){
 	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
 	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && player.currentEternityChall != "eterc14" && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
+	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'

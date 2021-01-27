@@ -193,12 +193,12 @@ function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (player.achievements.includes("ng3p56")) x *= 1.03
-		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
+		/*if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
 		if (!player.dilation.active && tmp.quActive && tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
 		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
-		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)
-		x = softcap(x, "inf_time_log")
+		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)*/
+		x = softcap(x, "inf_time_log", 1)
 		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")
 	}
 	tmp.it = Decimal.pow(10, x)
@@ -277,25 +277,6 @@ function updateMatterSpeed(){
 
 	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100 + player.money.log10() / 1000
 	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
-}
-
-function updateReplicantiTemp() {
-	var data = {}
-	tmp.rep = data
-
-	data.ln = player.replicanti.amount.ln()
-	data.chance = player.replicanti.chance
-	data.speeds = getReplSpeed()
-	data.interval = getReplicantiFinalInterval()
-
-	if (masteryStudies.has(273)) {
-		data.chance = Decimal.pow(data.chance, tmp.mts[273])
-		data.freq = 0
-		if (data.chance.gte("1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1) / Math.log10(2), tmp.mts[273])
-	}
-
-	data.est = Decimal.div((data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3), data.interval)
-	data.estLog = data.est.times(Math.log10(Math.E))
 }
 
 function updatePostInfiTemp() {

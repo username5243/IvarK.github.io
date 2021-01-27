@@ -1,5 +1,7 @@
+var testHarderNGp3 = false
+
 function updateNGP3EterUpgs() {
-	if (masteryStudies.unl())  {
+	if (ph.did("quantum"))  {
 		getEl("eterrowMS").style.display = ""
 		getEl("eter13").className = (player.eternityUpgrades.includes(13)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"
 		getEl("eter14").className = (player.eternityUpgrades.includes(14)) ? "eternityupbtnbought" : (player.eternityPoints.gte(1/0)) ? "eternityupbtn" : "eternityupbtnlocked"

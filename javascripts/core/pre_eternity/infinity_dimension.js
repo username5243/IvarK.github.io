@@ -82,7 +82,7 @@ function updateInfinityDimensions() {
 
 function infDimensionProduction(tier) {
 	if (inQC(8)) return new Decimal(0)
-	if (tier == 9) return getTimeDimensionProduction(1).pow(ECTimesCompleted("eterc7") * 0.2).max(1).minus(1)
+	if (tier == 9) return getTimeDimensionProduction(1).pow(ECComps("eterc7") * 0.2).max(1).minus(1)
 	let dim = player["infinityDimension" + tier]
 	let ret = dim.amount
 	if (inQC(4) && tier == 1) ret = ret.plus(player.infinityDimension2.amount.floor())
@@ -134,9 +134,8 @@ function getStartingIDPower(tier){
 
 function infDimensionPower(tier) {
   	let dim = player["infinityDimension" + tier]
-  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10" || player.currentEternityChall == "eterc13") return new Decimal(0)
+  	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
-  	if (player.currentEternityChall == 'eterc14') return tmp.ngC ? new Decimal(1) : getIDReplMult()
   	if (inQC(3)) return getExtraDimensionBoostPower()
   
 	let mult = getStartingIDPower(tier)
@@ -163,11 +162,11 @@ function infDimensionPower(tier) {
 	}
 
 	if (player.aarexModifications.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))
-	if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
-  	if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(getECReward(4))
+	if (ECComps("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
+  	if (ECComps("eterc4") !== 0) mult = mult.times(getECReward(4))
 
   	let ec9 = new Decimal(1)
-  	if (ECTimesCompleted("eterc9") !== 0) ec9 = getECReward(9)
+  	if (ECComps("eterc9") !== 0) ec9 = getECReward(9)
   	if (player.galacticSacrifice === undefined) mult = mult.times(ec9)
 
   	if (inQC(6)) mult = mult.times(player.postC8Mult).dividedBy(player.matter.max(1))
@@ -226,10 +225,10 @@ function getIDCost(tier) {
 
 function getIDCostMult(tier) {
 	let ret = infCostMults[tier]
-	if (ECTimesCompleted("eterc12")) ret = Math.pow(ret,getECReward(12))
+	if (ECComps("eterc12")) ret = Math.pow(ret,getECReward(12))
 	if (player.galacticSacrifice == undefined) return ret
 	if (player.infinityUpgrades.includes("postinfi53")) ret /= 50
-	if (player.galacticSacrifice.upgrades.includes(42)) ret /= 1 + 5 * Math.log10(player.eternityPoints.plus(1).log10() + 1)
+	if (hasGalUpg(42)) ret /= 1 + 5 * Math.log10(player.eternityPoints.plus(1).log10() + 1)
 	let cap = .1
 	if (player.achPow.gte(Decimal.pow(5,11.9)) && tier > 1) {
 		cap = .02
@@ -240,7 +239,7 @@ function getIDCostMult(tier) {
 
 function getInfBuy10Mult(tier) {
 	let ret = infPowerMults[player.galacticSacrifice!==undefined&&player.tickspeedBoosts===undefined ? 1 : 0][tier]
-	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
+	if (player.galacticSacrifice !== undefined && hasGalUpg(41)) ret *= player.galacticSacrifice.galaxyPoints.max(10).log10()
 	if (player.dilation.upgrades.includes("ngmm6")) ret *= getDil45Mult()
 	if (tmp.ngC && tier < 8) ret *= 0.25
 	return ret
@@ -365,7 +364,7 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	if (masteryStudies.has(272)) return Decimal.pow(2, Math.pow(tmp.rm.log10(), 2)).min(Decimal.pow(10, 1e15))
+	if (masteryStudies.has(272)) return Decimal.pow(2, Math.pow(tmp.rm.log10(), 2))
 	return tmp.rm
 }
 

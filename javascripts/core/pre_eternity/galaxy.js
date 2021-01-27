@@ -72,7 +72,7 @@ function getGalaxyRequirement(offset = 0, display) {
 	let base = tmp.grd.gals * mult
 	let amount = 80 + base
 	let scaling = 0
-	if (player.galacticSacrifice != undefined) amount -= (player.galacticSacrifice.upgrades.includes(22) && tmp.grd.gals >= 1) ? 80 : 60
+	if (player.galacticSacrifice != undefined) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
 	else if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
 	if (player.aarexModifications.ngmX > 3) amount -= 10
 	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
@@ -140,7 +140,7 @@ function getGalaxyReqMultiplier() {
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
 	if (player.galacticSacrifice !== undefined) {
-		if (player.galacticSacrifice.upgrades.includes(22)) ret -= 30
+		if (hasGalUpg(22)) ret -= 30
 	} else if (hasTimeStudy(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
 	if (tmp.ngC) ret -= 35

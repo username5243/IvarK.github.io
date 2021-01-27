@@ -1,12 +1,17 @@
+let TIER_NAMES = [null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight"]
+let DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"]
+let initCost = [null, 10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
+let costMults = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
+
 function resetDimensions() {
-	let costs = [10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
-	if (inNC(10) || player.currentChallenge == "postc1") costs = [10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
+	let costs = initCost
+	if (inNC(10) || player.currentChallenge == "postc1") costs = [null, 10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
 
 	for (var d = 1; d <= 8; d++) {
 		var name = TIER_NAMES[d]
 		player[name + "Amount"] = new Decimal(0)
 		player[name + "Bought"] = 0
-		player[name + "Cost"] = new Decimal(costs[d - 1])
+		player[name + "Cost"] = new Decimal(costs[d])
 	}
 	resetNormalDimensionCostMults()
 
@@ -14,8 +19,8 @@ function resetDimensions() {
 }
 
 function resetNormalDimensionCostMults() {
-	let costMults = getNormalDimensionCostMults()
-	for (var d = 1; d <= 8; d++) player.costMultipliers[d - 1] = new Decimal(costMults[d])
+	let mults = getNormalDimensionCostMults()
+	for (var d = 1; d <= 8; d++) player.costMultipliers[d - 1] = new Decimal(mults[d])
 }
 
 function getR84or73Mult(){
@@ -75,13 +80,13 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
 	if (tmp.ngmX < 2) return mult
 	
-	if (player.galacticSacrifice.upgrades.includes(12) && (!player.galacticSacrifice.upgrades.includes(42) || tmp.ngmX < 4)) mult = mult.times(galMults.u12())
+	if (hasGalUpg(12) && (!hasGalUpg(42) || tmp.ngmX < 4)) mult = mult.times(galMults.u12())
 	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
-	if (player.galacticSacrifice.upgrades.includes(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
-	if (player.galacticSacrifice.upgrades.includes(15)) mult = mult.times(galMults.u15())
-	if (player.galacticSacrifice.upgrades.includes(35)) mult = mult.times(galMults.u35())
+	if (hasGalUpg(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
+	if (hasGalUpg(15)) mult = mult.times(galMults.u15())
+	if (hasGalUpg(35)) mult = mult.times(galMults.u35())
 	if (player.challenges.includes("postc4")) mult = mult.pow(1.05);
-	if (player.galacticSacrifice.upgrades.includes(31)) mult = mult.pow(galMults.u31());
+	if (hasGalUpg(31)) mult = mult.pow(galMults.u31());
 	return mult
 }
 
@@ -98,9 +103,9 @@ function getAfterDefaultDilationLayerAchBonus(tier){
 	if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
 	if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
 	if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
-	if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42) && player.aarexModifications.ngmX >= 4) mult = mult.times(galMults.u12())
-	if (player.galacticSacrifice.upgrades.includes(45) && player.aarexModifications.ngmX >= 4) {
-		var e = player.galacticSacrifice.upgrades.includes(46) ? galMults["u46"]() : 1
+	if (hasGalUpg(12) && hasGalUpg(42) && player.aarexModifications.ngmX >= 4) mult = mult.times(galMults.u12())
+	if (hasGalUpg(45) && player.aarexModifications.ngmX >= 4) {
+		var e = hasGalUpg(46) ? galMults["u46"]() : 1
 		mult = mult.times(Math.pow(player["timeDimension" + tier].amount.plus(10).log10(), e))
 	}
 	return mult
@@ -329,7 +334,7 @@ function getMPTBase(focusOn) {
 		} else ret *= 1.01
 	}
 	ret += getECReward(3)
-	if (player.galacticSacrifice !== undefined) if (player.galacticSacrifice.upgrades.includes(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
+	if (player.galacticSacrifice !== undefined) if (hasGalUpg(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
 	if (focusOn == "no-QC5") return ret
 	if (tmp.ngp3) {
 		if (isQCRewardActive(5)) ret += tmp.qcRewards[5]
@@ -358,9 +363,8 @@ function getDimensionCostMultiplier(tier) {
 }
 
 function getNormalDimensionCostMults() {
-	let x = []
+	let x = costMults
 	if (inNC(10)) x = [null, 1e3, 5e3, 1e4, 12e3, 18e3, 26e3, 32e3, 42e3]
-	else x = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
 
 	if (tmp.ngmR) for (let d = 1; d <= 8; d++) x[d] = ngmR.adjustCostScale(x[d])
 
@@ -487,8 +491,6 @@ function buyManyDimension(tier, quick) {
 	return true
 }
 
-var initCost
-var costMults
 function buyBulkDimension(tier, bulk, auto) {
 	if (!canBuyDimension(tier)) return
 	let bought = 0

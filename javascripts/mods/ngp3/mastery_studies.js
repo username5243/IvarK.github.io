@@ -13,11 +13,11 @@ var masteryStudies = {
 	costMult: 1,
 	ecReqs: {
 		13() {
-			let comps = ECTimesCompleted("eterc13")
+			let comps = ECComps("eterc13")
 			return 728e3 + (1500 + 3000 * comps) * comps
 		},
 		14() {
-			let comps = ECTimesCompleted("eterc14")
+			let comps = ECComps("eterc14")
 			return 255e5 + (4e6 + 2e6 * comps) * comps
 		}
 	},
@@ -105,10 +105,11 @@ var masteryStudies = {
 			return Math.floor(getTotalRG() / 4)
 		},
 		273() {
-			return player.replicanti.chance + 1
+			return Math.sqrt(player.replicanti.chance + 1)
 		},
 		281() {
-			return player.dilation.dilatedTime.add(1).log10()
+			let x = player.dilation.dilatedTime.add(1).log10()
+			return x / Math.pow(Math.log10(x + 1) + 1, 2)
 		},
 		301() {
 			if (hasNU(6)) return 0
@@ -405,7 +406,7 @@ function addSpentableMasteryStudies(x) {
 		var isNum=typeof(id) == "number"
 		var ecId = !isNum&&id.split("ec")[1]
 		var canAdd = false
-		if (ecId) canAdd = ECTimesCompleted("eterc"+ecId)
+		if (ecId) canAdd = ECComps("eterc"+ecId)
 		else canAdd = player.masterystudies.includes(isNum?"t"+id:id)
 		if (masteryStudies.unlocked.includes(id) && !masteryStudies.spentable.includes(id)) masteryStudies.spentable.push(id)
 		if (canAdd) {

@@ -2,7 +2,7 @@ function getTickspeedBoostRequirement(bulk = 1) {
 	let resets = player.tickspeedBoosts + bulk - 1
 	let mult = 5
 	if (player.currentChallenge != "postcngmm_1" && player.currentChallenge != "postc1") {
-		if (player.galacticSacrifice.upgrades.includes(34)) mult = 4
+		if (hasGalUpg(34)) mult = 4
 		if (player.infinityUpgrades.includes("postinfi52")) mult = 3
 	}
 	return {tier: inNC(4) || player.pSac != undefined ? 6 : 8, amount: resets * mult + (inNC(15) && player.aarexModifications.ngmX > 3 ? 10 : 30), mult: mult}
@@ -23,7 +23,7 @@ function resetTickspeedBoosts() {
 function getProductBoughtMult() {
 	let mult = 1
 	if (player.tickspeedBoosts != undefined) {
-		mult = player.galacticSacrifice.upgrades.includes(24) && player.currentChallenge != "postcngm3_4" ? galMults.u24() : 0.2
+		mult = hasGalUpg(24) && player.currentChallenge != "postcngm3_4" ? galMults.u24() : 0.2
 		if (inNC(13) || player.currentChallenge == "postc1") mult = Decimal.div(mult, 2)
 	}
 	return mult
@@ -81,7 +81,7 @@ function getInitPostC3Power(){
 	if (player.tickspeedBoosts != undefined && player.currentChallenge != "postc5") {
 		let mult = 30
 		if ((inNC(14) && player.aarexModifications.ngmX == 3) || player.currentChallenge == "postcngm3_3") mult = 20
-		else if (player.galacticSacrifice.upgrades.includes(14)) mult = 32
+		else if (hasGalUpg(14)) mult = 32
 		if (inNC(6, 1)) mult *= Math.min(player.galaxies / 30, 1)
 		let ic3PowerTB = player.tickspeedBoosts * mult
 		let softCapStart = 1024

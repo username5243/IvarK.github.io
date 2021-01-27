@@ -1379,19 +1379,19 @@ function doNGm2v11tov3(){
                 delete player.galaxyPoints
         }
         if (player.aarexModifications.newGameMinusMinusVersion < 1.21) {
-                if (player.galacticSacrifice.upgrades.includes(11)) for (d=1;d<8;d++) {
+                if (hasGalUpg(11)) for (d=1;d<8;d++) {
                         var name = TIER_NAMES[d]
                         player[name+"Cost"] = Decimal.div(player[name+"Cost"], 10)
                 }
         }
         if (player.aarexModifications.newGameMinusMinusVersion < 1.22) {
-                if (player.galacticSacrifice.upgrades.includes(11)) for (d=1;d<8;d++) {
+                if (hasGalUpg(11)) for (d=1;d<8;d++) {
                         var name = TIER_NAMES[d]
                         player[name+"Cost"] = Decimal.div(player[name+"Cost"], 10)
                 }
         }
         if (player.aarexModifications.newGameMinusMinusVersion < 1.24) {
-                if (ECTimesCompleted("eterc6")>0) {
+                if (ECComps("eterc6")>0) {
                         forceHardReset=true
                         inflationCheck=true
                         reset_game()
@@ -1400,7 +1400,7 @@ function doNGm2v11tov3(){
                 }
         }
         if (player.aarexModifications.newGameMinusMinusVersion < 1.26) {
-                if (player.galacticSacrifice.upgrades.includes(11)) for (d=1;d<8;d++) {
+                if (hasGalUpg(11)) for (d=1;d<8;d++) {
                         var name = TIER_NAMES[d]
                         player[name+"Cost"] = Decimal.times(player[name+"Cost"], 100)
                 }
@@ -1694,7 +1694,7 @@ function dov12tov122(){
 function updateVersionsONLOAD(){
 	dov7tov10()
 	doNGM1Versions()
-	if (player.aarexModifications.newGamePlusVersion === undefined) if (player.eternities < 20 && ECTimesCompleted("eterc1") > 0) player.aarexModifications.newGamePlusVersion = 1
+	if (player.aarexModifications.newGamePlusVersion === undefined) if (player.eternities < 20 && ECComps("eterc1") > 0) player.aarexModifications.newGamePlusVersion = 1
 	doInitNGp2NOT3Stuff()
 	doNGP2v2tov2302()
 	doQuantumRestore()

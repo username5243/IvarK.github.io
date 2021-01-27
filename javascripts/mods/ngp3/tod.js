@@ -56,7 +56,7 @@ function updateTreeOfDecayTab(){
 
 		let gain = getQuarkSpinProduction(shorthand).times(decayed.min(1))
 
-		getEl(color + "QuarksDecayTime").textContent = todTimeDisplay(Decimal.times(10, decayed))
+		getEl(color + "QuarksDecayTime").innerHTML = todTimeDisplay(Decimal.times(10, decayed))
 		getEl(color + "QuarkSpinProduction").textContent = "+" + shortenMoney(gain) + "/s"
 		if (branchNum == c + 1) {
 			var decays = getRadioactiveDecays(shorthand)

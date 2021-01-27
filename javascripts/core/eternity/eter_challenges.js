@@ -10,43 +10,43 @@ function canUnlockEC(idx, cost, study, study2) {
 	let ecMults = getECMults()
 	switch(idx) {
 		case 1:
-			if (getEternitied() >= ecStarts[1] + (ECTimesCompleted("eterc1") ? ECTimesCompleted("eterc1") : 0) * ecMults[1]) return true
+			if (getEternitied() >= ecStarts[1] + (ECComps("eterc1") ? ECComps("eterc1") : 0) * ecMults[1]) return true
 			break;
 
 		case 2:
-			if (player.totalTickGained >= ecStarts[2] + (ECTimesCompleted("eterc2") * ecMults[2])) return true
+			if (player.totalTickGained >= ecStarts[2] + (ECComps("eterc2") * ecMults[2])) return true
 			break;
 
 		case 3:
-			if (player.eightAmount.gte(ecStarts[3] + (ECTimesCompleted("eterc3") * ecMults[3]))) return true
+			if (player.eightAmount.gte(ecStarts[3] + (ECComps("eterc3") * ecMults[3]))) return true
 			break;
 
 		case 4:
-			if (ecStarts[4] + (ECTimesCompleted("eterc4") * ecMults[4]) <= getInfinitied()) return true
+			if (ecStarts[4] + (ECComps("eterc4") * ecMults[4]) <= getInfinitied()) return true
 			break;
 
 		case 5:
-			if (ecStarts[5] + (ECTimesCompleted("eterc5") * ecMults[5]) <= player.galaxies) return true
+			if (ecStarts[5] + (ECComps("eterc5") * ecMults[5]) <= player.galaxies) return true
 			break;
 
 		case 6:
-			if (ecStarts[6] + (ECTimesCompleted("eterc6") * ecMults[6]) <= player.replicanti.galaxies) return true
+			if (ecStarts[6] + (ECComps("eterc6") * ecMults[6]) <= player.replicanti.galaxies) return true
 			break;
 
 		case 7:
-			if (player.money.gte(new Decimal(ecStarts[7]).times(new Decimal(ecMults[7]).pow(ECTimesCompleted("eterc7"))))) return true
+			if (player.money.gte(new Decimal(ecStarts[7]).times(new Decimal(ecMults[7]).pow(ECComps("eterc7"))))) return true
 			break;
 
 		case 8:
-			if (player.infinityPoints.gte(new Decimal(ecStarts[8]).times(new Decimal(ecMults[8]).pow(ECTimesCompleted("eterc8"))))) return true
+			if (player.infinityPoints.gte(new Decimal(ecStarts[8]).times(new Decimal(ecMults[8]).pow(ECComps("eterc8"))))) return true
 			break;
 
 		case 9:
-			if (player.infinityPower.gte(new Decimal(ecStarts[9]).times(new Decimal(ecMults[9]).pow(ECTimesCompleted("eterc9"))))) return true
+			if (player.infinityPower.gte(new Decimal(ecStarts[9]).times(new Decimal(ecMults[9]).pow(ECComps("eterc9"))))) return true
 			break;
 
 		case 10:
-			if (player.eternityPoints.gte(new Decimal(ecStarts[10]).times(new Decimal(ecMults[10]).pow(ECTimesCompleted("eterc10"))))) return true
+			if (player.eternityPoints.gte(new Decimal(ecStarts[10]).times(new Decimal(ecMults[10]).pow(ECComps("eterc10"))))) return true
 			break;
 
 		case 11:
@@ -140,8 +140,8 @@ let ecExpData = {
 		eterc10: 3000,
 		eterc11: 500,
 		eterc12: 110000,
-		eterc13: 38500000,
-		eterc14: 1595000,
+		eterc13: 1/0,
+		eterc14: 1/0,
 		eterc1_ngmm: 1800,
 		eterc2_ngmm: 1125,
 		eterc3_ngmm: 1025,
@@ -211,7 +211,7 @@ let ecExpData = {
 function getECGoal(x) {
 	let expInit = ecExpData.inits[x]
 	let expIncrease = ecExpData.increases[x]
-	let completions = ECTimesCompleted(x)
+	let completions = ECComps(x)
 	if (player.galacticSacrifice != undefined) {
 		expInit = ecExpData.inits[x + "_ngmm"] || expInit
 		expIncrease = ecExpData.increases[x + "_ngmm"] || expIncrease
@@ -355,13 +355,13 @@ function getEC12Mult() {
 
 function getEC12TimeLimit() {
 	//In the multiple of 0.1 seconds
-	let r = 10 - 2 * ECTimesCompleted("eterc12")
+	let r = 10 - 2 * ECComps("eterc12")
 	if (tmp.ngex) r *= 3.75
-	if (tmp.ngmX && ECTimesCompleted("eterc12") > 3) r += 1.5 // add 0.15 seconds to try to make 12x5 in NG-- possible
+	if (tmp.ngmX && ECComps("eterc12") > 3) r += 1.5 // add 0.15 seconds to try to make 12x5 in NG-- possible
 	return Math.max(r, 1)
 }
 
-function ECTimesCompleted(name) {
+function ECComps(name) {
 	return (tmp.eterUnl && player.eternityChalls[name]) || 0
 }
 
@@ -369,7 +369,7 @@ function getECReward(x) {
 	let m2 = player.galacticSacrifice !== undefined
 	let pc = !(!tmp.ngC)
 	let ei = m2 || pc //either
-	let c = ECTimesCompleted("eterc" + x)
+	let c = ECComps("eterc" + x)
 	if (x == 1) return Math.pow(Math.max(player.thisEternity * 10, 1), (0.3 + c * 0.05) * (ei ? 5 : 1))
 	if (x == 2) {
 		let r = player.infinityPower.pow((m2 ? 4.5 : 1.5) / (700 - c * 100)).add(1)
@@ -405,10 +405,8 @@ function getECReward(x) {
 	if (x == 10) return Decimal.pow(getInfinitied(), m2 ? 2 : .9).times(Math.pow(c, pc ? 10 : 1) * (m2 ? 0.02 : 0.000002)).add(1).pow(player.timestudy.studies.includes(31) ? 4 : 1)
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
-	if (x == 13) {
-		return [0, 0.25, 0.5, 0.7, 0.85, 1][c]
-	}
-	if (x == 14) return getIC3EffFromFreeUpgs()
+	if (x == 13) return Math.sqrt(1 + c / 7.5)
+	if (x == 14) return [0, 0.1, 0.2, 0.4, 0.6, 1][c]
 }
 
 function doCheckECCompletionStuff(){

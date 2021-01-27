@@ -302,6 +302,10 @@ function updateChallengeTimes() {
 	updateWorstChallengeBonus();
 }
 
+
+var nextAt = {}
+var goals = {}
+
 function loadICData(){
 	nextAt = {
 		postc1: new Decimal("1e2000"), postc1_ngmm: new Decimal("1e3000"), postc1_ngm3:new Decimal("1e3760"), postc1_ngm4:new Decimal("1e4350"), postc1_ngC: new Decimal("1e5555"),

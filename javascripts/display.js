@@ -440,7 +440,7 @@ function breakInfinityUpgradeDisplay(){
 	getEl("postinfi23").innerHTML = "Unlock the option to bulk buy Dimension" + (player.tickspeedBoosts == undefined ? "" : " and Tickspeed") + " Boosts <br>Cost: " + shortenCosts(player.tickspeedBoosts != undefined ? 2e4 : player.galacticSacrifice ? 5e6 : 5e9) + " IP"
 	getEl("postinfi33").innerHTML = "Autobuyers work twice as fast <br>Cost: " + shortenCosts(1e15) + " IP"
 	if (player.dimensionMultDecrease > 3) getEl("postinfi42").innerHTML = "Decrease the Dimension cost multiplier increase post-e308<br>" + player.dimensionMultDecrease + "x -> " + (player.dimensionMultDecrease - 1) + "x<br>Cost: " + shorten(player.dimensionMultDecreaseCost) +" IP"
-	else getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECTimesCompleted("eterc6") % 5 > 0 ? 1 : 0) + "x"
+	else getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECComps("eterc6") % 5 > 0 ? 1 : 0) + "x"
 	getEl("offlineProd").innerHTML = "Generate " + player.offlineProd + "% > " + Math.max(Math.max(5, player.offlineProd + 5), Math.min(50, player.offlineProd + 5)) + "% of your best IP/min from the last 10 Infinities, works offline<br>Currently: " + shortenMoney(bestRunIppm.times(player.offlineProd / 100)) + "IP/min<br> Cost: " + shortenCosts(player.offlineProdCost) + " IP"
 	if (player.offlineProd == 50) getEl("offlineProd").innerHTML = "Generate " + player.offlineProd + "% of your best IP/min from the last 10 Infinities, works offline<br>Currently: " + shortenMoney(bestRunIppm.times(player.offlineProd / 100)) + " IP/min"
 }
@@ -656,10 +656,13 @@ function replicantiDisplay() {
 				: getFullExpansion(extraReplGalaxies)
 			) + (extraReplBase > 325 ? " (softcapped)" : "") : "") +
 			" replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
-		getEl("replicantiapprox").innerHTML = tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
-			"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
-			"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
-			"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)" :
+
+		getEl("replicantiapprox").innerHTML = 
+			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV) ? 
+				"Replicanti increases by " + (tmp.rep.est < Math.log10(2) ? "x2.00 per " + timeDisplayShort(Math.log10(2) / tmp.rep.est * 10) : (tmp.rep.est.gte(1e4) ? shorten(tmp.rep.est) + " OoMs" : "x" + shorten(Decimal.pow(10, tmp.rep.est.toNumber()))) + " per second") + ".<br>" +
+				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
+				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)<br>" +
+				"(The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + ")" :
 			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * getEC12Mult()) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
 
 		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
@@ -677,6 +680,8 @@ function replicantiDisplay() {
 }
 
 function initialTimeStudyDisplay(){
+	let dbExp = ECComps("eterc13") ? getECReward(13) : 1
+
 	getEl("11desc").textContent = "Currently: " + shortenMoney(tsMults[11]()) + "x"
 	getEl("32desc").textContent = "You gain " + getFullExpansion(tsMults[32]()) + "x more Infinities (based on Dimension Boosts)"
 	getEl("51desc").textContent = "You gain " + shortenCosts(player.aarexModifications.newGameExpVersion ? 1e30 : 1e15) + "x more IP"
@@ -684,6 +689,7 @@ function initialTimeStudyDisplay(){
 	getEl("72desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.04).max(1).min("1e30000")) + "x"
 	getEl("73desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.005).max(1).min("1e1300")) + "x"
 	getEl("82desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.0000109, Decimal.pow(player.resets, 2)).min(player.meta==undefined?1/0:'1e80000')) + "x"
+	getEl("83desc").textContent = "Currently: " + shorten(tsMults[83]().pow(dbExp)) + "x"
 	getEl("91desc").textContent = "Currently: " + shortenMoney(Decimal.pow(10, Math.min(player.thisEternity, 18000)/60)) + "x"
 	getEl("92desc").textContent = "Currently: " + shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity, 20))) + "x"
 	getEl("93desc").textContent = "Currently: " +  shortenMoney(Decimal.pow(player.totalTickGained, 0.25).max(1)) + "x"
@@ -707,7 +713,7 @@ function initialTimeStudyDisplay(){
 
 	getEl("226desc").textContent = "Currently: +" + getFullExpansion(tsMults[226]()) + " extra RGs"
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"
-	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]()) + "x power"
+	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]().pow(dbExp)) + "x power"
 	getEl("232desc").textContent = "Currently: " + formatPercentage(tsMults[232]() - 1) + "%"
 
 	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost());
@@ -715,25 +721,25 @@ function initialTimeStudyDisplay(){
 
 function eternityChallengeUnlockDisplay(){
 	var ec1Mult=player.aarexModifications.newGameExpVersion?1e3:2e4
-	if (player.etercreq !== 1) getEl("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ECTimesCompleted("eterc1")+1)*ec1Mult+" Eternities<span>Cost: 30 Time Theorems"
+	if (player.etercreq !== 1) getEl("ec1unl").innerHTML = "Eternity Challenge 1<span>Requirement: "+(ECComps("eterc1")+1)*ec1Mult+" Eternities<span>Cost: 30 Time Theorems"
 	else getEl("ec1unl").innerHTML = "Eternity Challenge 1<span>Cost: 30 Time Theorems"
-	if (player.etercreq !== 2) getEl("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(1300+(ECTimesCompleted("eterc2")*150))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
+	if (player.etercreq !== 2) getEl("ec2unl").innerHTML = "Eternity Challenge 2<span>Requirement: "+(1300+(ECComps("eterc2")*150))+" Tickspeed upgrades gained from time dimensions<span>Cost: 35 Time Theorems"
 	else getEl("ec2unl").innerHTML = "Eternity Challenge 2<span>Cost: 35 Time Theorems"
-	if (player.etercreq !== 3) getEl("ec3unl").innerHTML = "Eternity Challenge 3<span>Requirement: "+(17300+(ECTimesCompleted("eterc3")*1250))+" 8th dimensions<span>Cost: 40 Time Theorems"
+	if (player.etercreq !== 3) getEl("ec3unl").innerHTML = "Eternity Challenge 3<span>Requirement: "+(17300+(ECComps("eterc3")*1250))+" 8th dimensions<span>Cost: 40 Time Theorems"
 	else getEl("ec3unl").innerHTML = "Eternity Challenge 3<span>Cost: 40 Time Theorems"
-	if (player.etercreq !== 4) getEl("ec4unl").innerHTML = "Eternity Challenge 4<span>Requirement: "+(1e8 + (ECTimesCompleted("eterc4")*5e7)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" infinities<span>Cost: 70 Time Theorems"
+	if (player.etercreq !== 4) getEl("ec4unl").innerHTML = "Eternity Challenge 4<span>Requirement: "+(1e8 + (ECComps("eterc4")*5e7)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" infinities<span>Cost: 70 Time Theorems"
 	else getEl("ec4unl").innerHTML = "Eternity Challenge 4<span>Cost: 70 Time Theorems"
-	if (player.etercreq !== 5) getEl("ec5unl").innerHTML = "Eternity Challenge 5<span>Requirement: "+(160+(ECTimesCompleted("eterc5")*14))+" galaxies<span>Cost: 130 Time Theorems"
+	if (player.etercreq !== 5) getEl("ec5unl").innerHTML = "Eternity Challenge 5<span>Requirement: "+(160+(ECComps("eterc5")*14))+" galaxies<span>Cost: 130 Time Theorems"
 	else getEl("ec5unl").innerHTML = "Eternity Challenge 5<span>Cost: 130 Time Theorems"
-	if (player.etercreq !== 6) getEl("ec6unl").innerHTML = "Eternity Challenge 6<span>Requirement: "+(40+(ECTimesCompleted("eterc6")*5))+" replicanti galaxies<span>Cost: 85 Time Theorems"
+	if (player.etercreq !== 6) getEl("ec6unl").innerHTML = "Eternity Challenge 6<span>Requirement: "+(40+(ECComps("eterc6")*5))+" replicanti galaxies<span>Cost: 85 Time Theorems"
 	else getEl("ec6unl").innerHTML = "Eternity Challenge 6<span>Cost: 85 Time Theorems"
-	if (player.etercreq !== 7) getEl("ec7unl").innerHTML = "Eternity Challenge 7<span>Requirement: "+shortenCosts(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECTimesCompleted("eterc7"))))+" antimatter <span>Cost: 115 Time Theorems"
+	if (player.etercreq !== 7) getEl("ec7unl").innerHTML = "Eternity Challenge 7<span>Requirement: "+shortenCosts(new Decimal("1e500000").times(new Decimal("1e300000").pow(ECComps("eterc7"))))+" antimatter <span>Cost: 115 Time Theorems"
 	else getEl("ec7unl").innerHTML = "Eternity Challenge 7<span>Cost: 115 Time Theorems"
-	if (player.etercreq !== 8) getEl("ec8unl").innerHTML = "Eternity Challenge 8<span>Requirement: "+shortenCosts(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECTimesCompleted("eterc8"))))+" IP <span>Cost: 115 Time Theorems"
+	if (player.etercreq !== 8) getEl("ec8unl").innerHTML = "Eternity Challenge 8<span>Requirement: "+shortenCosts(new Decimal("1e4000").times(new Decimal("1e1000").pow(ECComps("eterc8"))))+" IP <span>Cost: 115 Time Theorems"
 	else getEl("ec8unl").innerHTML = "Eternity Challenge 8<span>Cost: 115 Time Theorems"
-	if (player.etercreq !== 9) getEl("ec9unl").innerHTML = "Eternity Challenge 9<span>Requirement: "+shortenCosts(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECTimesCompleted("eterc9"))))+" infinity power<span>Cost: 415 Time Theorems"
+	if (player.etercreq !== 9) getEl("ec9unl").innerHTML = "Eternity Challenge 9<span>Requirement: "+shortenCosts(new Decimal("1e17500").times(new Decimal("1e2000").pow(ECComps("eterc9"))))+" infinity power<span>Cost: 415 Time Theorems"
 	else getEl("ec9unl").innerHTML = "Eternity Challenge 9<span>Cost: 415 Time Theorems"
-	if (player.etercreq !== 10) getEl("ec10unl").innerHTML = "Eternity Challenge 10<span>Requirement: "+shortenCosts(new Decimal("1e100").times(new Decimal("1e20").pow(ECTimesCompleted("eterc10"))))+" EP<span>Cost: 550 Time Theorems"
+	if (player.etercreq !== 10) getEl("ec10unl").innerHTML = "Eternity Challenge 10<span>Requirement: "+shortenCosts(new Decimal("1e100").times(new Decimal("1e20").pow(ECComps("eterc10"))))+" EP<span>Cost: 550 Time Theorems"
 	else getEl("ec10unl").innerHTML = "Eternity Challenge 10<span>Cost: 550 Time Theorems"
 
 	getEl("ec11unl").innerHTML = "Eternity Challenge 11<span>Requirement: Use only the Normal Dimension path<span>Cost: 1 Time Theorem"
@@ -824,25 +830,12 @@ function primaryStatsDisplayResetLayers(){
 }
 
 function ECCompletionsDisplay(){
-	getEl("eterc1completed").textContent = "Completed "+ECTimesCompleted("eterc1")+" times."
-	getEl("eterc2completed").textContent = "Completed "+ECTimesCompleted("eterc2")+" times."
-	getEl("eterc3completed").textContent = "Completed "+ECTimesCompleted("eterc3")+" times."
-	getEl("eterc4completed").textContent = "Completed "+ECTimesCompleted("eterc4")+" times."
-	getEl("eterc5completed").textContent = "Completed "+ECTimesCompleted("eterc5")+" times."
-	getEl("eterc6completed").textContent = "Completed "+ECTimesCompleted("eterc6")+" times."
-	getEl("eterc7completed").textContent = "Completed "+ECTimesCompleted("eterc7")+" times."
-	getEl("eterc8completed").textContent = "Completed "+ECTimesCompleted("eterc8")+" times."
-	getEl("eterc9completed").textContent = "Completed "+ECTimesCompleted("eterc9")+" times."
-	getEl("eterc10completed").textContent = "Completed "+ECTimesCompleted("eterc10")+" times."
-	getEl("eterc11completed").textContent = "Completed "+ECTimesCompleted("eterc11")+" times."
-	getEl("eterc12completed").textContent = "Completed "+ECTimesCompleted("eterc12")+" times."
-	getEl("eterc13completed").textContent = "Completed "+ECTimesCompleted("eterc13")+" times."
-	getEl("eterc14completed").textContent = "Completed "+ECTimesCompleted("eterc14")+" times."
+	for (let x = 1; x <= 14; x++) getEl("eterc" + x + "completed").textContent = "Completed " + ECComps("eterc" + x) + " times."
 }
 
 function ECchallengePortionDisplay(){
 	let ec12TimeLimit = Math.round(getEC12TimeLimit() * 10) / 100
-	for (var c=1;c<15;c++) getEl("eterc"+c+"goal").textContent = "Goal: "+shortenCosts(getECGoal("eterc"+c))+" IP"+(c==12?" in "+ec12TimeLimit+" second"+(ec12TimeLimit==1?"":"s")+" or less.":c==4?" in "+Math.max((16-(ECTimesCompleted("eterc4")*4)),0)+" infinities or less.":"")
+	for (var c=1;c<15;c++) getEl("eterc"+c+"goal").textContent = "Goal: "+shortenCosts(getECGoal("eterc"+c))+" IP"+(c==12?" in "+ec12TimeLimit+" second"+(ec12TimeLimit==1?"":"s")+" or less.":c==4?" in "+Math.max((16-(ECComps("eterc4")*4)),0)+" infinities or less.":"")
 }
 
 function EC8PurchasesDisplay(){

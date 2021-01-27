@@ -305,7 +305,7 @@ function setR14Tooltip() {
 	onlywar.setAttribute('ach-tooltip', "Reach " + shortenMoney(new Decimal('1e40000')) + " EP." + (onlywarReward != "" ? " Reward: " + onlywarReward + "." : ""))
 	thecap.setAttribute('ach-tooltip', "Get " + shortenDimensions(1e12)+" Eternities. Reward: Eternity Upgrade 2 " + (tmp.ngp3 ? "and TS231 use" : "uses") + " a better formula.")
 	metamax.setAttribute('ach-tooltip', "Get 10 Meta-Dimension Boosts. Reward: Meta-dimension boosts are " + (tmp.ngp3 ? 5 : 1) + "% stronger.")
-	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || player.aarexModifications.newGamePlusVersion ? "TS131 doesn't disable RG autobuyer anymore." : "You can always buy max RGs."))
+	neverenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal(tmp.ngp3 ? "1e75000" : "1e100000")) + " replicanti. Reward: " + (tmp.ngp3 || player.aarexModifications.newGamePlusVersion ? "TS131 doesn't disable RG autobuyer anymore and replicated galaxies no longer reset the replicanti amount." : "You can always buy max RGs."))
 	harmony.setAttribute('ach-tooltip', player.meta ? "Have at least 700 normal, replicanti, and free dilated galaxies. Reward: Galaxies are 0.1% stronger." : "Get the same amount (at least 300) of normal, replicanti, and Tachyonic Galaxies.")
 }
 

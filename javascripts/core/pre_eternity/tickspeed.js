@@ -31,7 +31,7 @@ function getGalaxyPower(ng, bi, noDil) {
 function getGalaxyEff(bi) {
 	let eff = 1
 	if (inNC(6, 2)) eff *= 1.5
-	if (player.galacticSacrifice) if (player.galacticSacrifice.upgrades.includes(22)) eff *= player.aarexModifications.ngmX>3?2:5;
+	if (player.galacticSacrifice) if (hasGalUpg(22)) eff *= player.aarexModifications.ngmX>3?2:5;
 	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= tmp.ngC ? 4 : 2;
 	if (player.infinityUpgrades.includes("postGalaxy")) eff *= getPostGalaxyEff();
 	if (player.challenges.includes("postc5")) eff *= player.galacticSacrifice ? 1.15 : 1.1;
@@ -279,7 +279,7 @@ function resetTickspeed() {
 function getTickSpeedCostMultiplierIncrease() {
 	if (inQC(7)) return Number.MAX_VALUE
 	let ret = player.tickSpeedMultDecrease;
-	let exp = .9 - .02 * ECTimesCompleted("eterc11")
+	let exp = .9 - .02 * ECComps("eterc11")
 	if (!tmp.quActive && GUBought("gb4")) ret = 1.65
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)
 	else if (player.challenges.includes('postcngmm_2')) {

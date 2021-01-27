@@ -344,10 +344,7 @@ let qcRewards = {
 				comps
 			)
 			let x = player.replicanti.amount.log10()
-			return {
-				ri: Math.sqrt(x / 1e7) * compEff,
-				ge: Math.sqrt(x / 1e10) * compEff
-			}
+			return Math.sqrt(x / 1e10) * compEff
 		}
 	}
 }

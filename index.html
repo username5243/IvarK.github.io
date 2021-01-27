@@ -218,7 +218,7 @@
 					<tr>
 						<td><button id="81" onclick="buyTimeStudy(81)">Dimension Boost power <span id="81desc" style="display:inline"></span><span>Cost: 4 Time Theorems</button></td>
 						<td><button id="82" onclick="buyTimeStudy(82)">Dimension Boosts affect Infinity Dimensions<span id="82desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
-						<td><button id="83" onclick="buyTimeStudy(83)">Dimension Boosts are 0.04% more effective for each tick upgrade gained from Time Dimensions<span>Cost: 5 Time Theorems</button></td>
+						<td><button id="83" onclick="buyTimeStudy(83)">Dimension Boosts are 0.04% more effective for each free tickspeed upgrade<span id="83desc">Currently: 1x</span><span>Cost: 5 Time Theorems</button></td>
 					</tr>
 					<tr>
 						<td><button id="91" onclick="buyTimeStudy(91)">Normal Dimensions gain a multiplier based on time spent this Eternity<span id="91desc">Currently: 1x</span>Cost: 4 Time Theorems</button></td>
@@ -701,7 +701,7 @@
 						<td class="milestoneText" id='milestone27'></td>
 					</tr>
 					<tr id='mdmilestonesrow2b'>
-						<td><button class="milestonerewardlocked" id="reward26">Unlock the "Replicanti amount" mode for the Eternity autobuyer</button></td>
+						<td><button class="milestonerewardlocked" id="reward26">Eternity reduces the Replicanti amount to ^0.9 instead.</button></td>
 						<td><button class="milestonerewardlocked" id="reward27">Unlock the "time since peak changed" mode for the Eternity autobuyer</button></td>
 					</tr>
 				</table>
@@ -1486,7 +1486,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.1: Remastering the Studies)</p>
+				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies - Alpha 1)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -3308,7 +3308,7 @@
 					<tr>
 						<td>
 							<div class="eterchallengediv" id="eterc13div" style="height: 140px; display: none">
-								<span>Infinity Dimensions are disabled, and the Dimension Boost multiplier to Normal Dimensions is nullified.</span>
+								<span>Dimension Boosts and total Galaxies boost each other, but square root their powers. (Not started)</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3322,7 +3322,7 @@
 						</td>
 						<td>
 							<div class="eterchallengediv" id="eterc14div" style="height: 140px; display: none">
-								<span>You are stuck in IC3, and all replicanti boosts except to ID are nullified. Free tickspeed upgrades count five times as much towards the IC3 boost, and meta-antimatter is disabled.</span>
+								<span>Replicanti upgrade autobuyers are always on, but replicantis reduce all Normal Dimensions. (Not started)</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3469,8 +3469,8 @@
 									<br>
 									<span id="qc9cost"></span><br>
 									<span id="qc9goal"></span><br>
-									Reward: Replicantis boost its interval scaling and Gravity Energy. (Boosted by # of unique PC completions)<br>
-									Currently: <span id="qc9reward"></span>
+									Reward: Replicantis increases the Gravity Energy gain. (Boosted by # of unique PC completions)<br>
+									Currently: +<span id="qc9reward"></span>x
 								</div>
 							</div>
 						</td>

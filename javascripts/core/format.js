@@ -683,7 +683,7 @@ shortenPreInfCosts = function (money) {
 };
 
 shortenInfDimCosts = function (money) {
-	return formatValue(player.options.notation, money, ECTimesCompleted("eterc12")?2:0, 0);
+	return formatValue(player.options.notation, money, ECComps("eterc12")?2:0, 0);
 };
 
 shortenDimensions = function (money) {
@@ -739,8 +739,8 @@ function timeDisplayShort(time, rep, places) {
 			timeNum = time.toNumber()
 		} else log = Math.log10(time)
 
-		if (log < Math.log10(plTime)) return "1 / " + formatValue(player.options.notation, Decimal.div(1, time), places, 0) + " s"
-		if (log < -30) return formatValue(player.options.notation, Decimal.div(time, plTime), places, 0) + "tP" //1 tP = 1 Planck Time
+		if (log < Math.log10(plTime)) return "1 / " + formatValue(player.options.notation, Decimal.div(1, time), places, 2) + " s"
+		if (log < -30) return formatValue(player.options.notation, Decimal.div(time, plTime), places, 2) + " t<sub>P</sub>" //1 tP = 1 Planck Time
 		if (log < -2) {
 			log = Math.ceil(-log)
 			return (timeNum * Math.pow(1e3, Math.ceil(log / 3))).toFixed(Math.max(places + (log - 1) % 3 - 2, 0)) + " " + small[Math.ceil(log / 3)] + "s"

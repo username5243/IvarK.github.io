@@ -262,7 +262,7 @@ let GDs = {
 	energyMult() {
 		let x = 1
 		if (isEnchantUsed(15)) x = tmp.bEn[15]
-		if (isQCRewardActive(9)) x += tmp.qcRewards[9].ge
+		if (isQCRewardActive(9)) x += tmp.qcRewards[9]
 		if (isEnchantUsed(45)) x *= tmp.bEn[45]
 		return x
 	},

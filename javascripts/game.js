@@ -13,15 +13,12 @@ var keySequence = 0;
 var keySequence2 = 0;
 var failureCount = 0;
 var implosionCheck = 0;
-var TIER_NAMES = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ];
-var DISPLAY_NAMES = [ null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth" ];
-var break_infinity_js
-var forceHardReset = false;
+var break_infinity_js = false
+var forceHardReset = false
 var player
 var metaSave = null
 var modes = {}
 var gameSpeed = 1
-var testHarderNGp3 = false
 
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
@@ -637,7 +634,7 @@ function updateNewPlayer(reseted) {
 			epcost: new Decimal(1),
 			studies: [],
 		},
-		eternityChalls: modesChosen.ngm === 1 ? {eterc1:-6} : {},
+		eternityChalls: modesChosen.ngm === 1 ? {eterc1: -6} : {},
 		eternityChallGoal: new Decimal(Number.MAX_VALUE),
 		currentEternityChall: "",
 		eternityChallUnlocked: 0,
@@ -802,9 +799,9 @@ function doNGPlusTwoNewPlayer(){
 	player.autoEterMode = "amount"
 	player.dilation.rebuyables[4] = 0
 	player.meta = {resets: 0, antimatter: 10, bestAntimatter: 10}
-	for (dim = 1; dim < 9; dim++) player.meta[dim] = {amount: 0, bought: 0, cost: initCost[dim]}
+	for (dim = 1; dim <= 8; dim++) player.meta[dim] = {amount: 0, bought: 0, cost: initCost[dim]}
 	player.autoEterOptions = {epmult:false}
-	for (dim = 1; dim < 9; dim++) player.autoEterOptions["td" + dim] = false
+	for (dim = 1; dim <= 8; dim++) player.autoEterOptions["td" + dim] = false
 	player.galaxyMaxBulk = false
 	player.quantum = {
 		times: 0,
@@ -1140,7 +1137,7 @@ function doInfinityRespeccedNewPlayer(){
 		tickUpgrades: 0,
 		respec: false
 	}
-	for (dim = 1; dim < 9; dim++) player.dimtechs["dim" + dim + "Upgrades"] = 0
+	for (dim = 1; dim <= 8; dim++) player.dimtechs["dim" + dim + "Upgrades"] = 0
 	player.setsUnlocked = 0
 	player.infMultCost = 1
 }
@@ -1659,7 +1656,7 @@ function setupBreakInfUpgHTMLandData() {
 			player.tickSpeedMultDecrease--;
 			if (player.tickSpeedMultDecrease > 2) getEl("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+player.tickSpeedMultDecrease+"x -> "+(player.tickSpeedMultDecrease-1)+"x<br>Cost: "+shortenDimensions(player.tickSpeedMultDecreaseCost) +" IP"
 			else {
-				for (c=0;c<ECTimesCompleted("eterc11");c++) player.tickSpeedMultDecrease-=0.07
+				for (c=0;c<ECComps("eterc11");c++) player.tickSpeedMultDecrease-=0.07
 				getEl("postinfi31").innerHTML = "Tickspeed cost multiplier increase<br>"+player.tickSpeedMultDecrease.toFixed(player.tickSpeedMultDecrease<2?2:0)+"x"
 			}
 		}
@@ -1688,8 +1685,8 @@ function setupBreakInfUpgHTMLandData() {
 			player.dimensionMultDecrease--;
 			if (player.dimensionMultDecrease > 3) getEl("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+player.dimensionMultDecrease+"x -> "+(player.dimensionMultDecrease-1)+"x<br>Cost: "+shortenCosts(player.dimensionMultDecreaseCost) +" IP"
 			else {
-				for (c=0;c<ECTimesCompleted("eterc6");c++) player.dimensionMultDecrease-=0.2
-				getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECTimesCompleted("eterc6")%5>0?1:0)+"x"
+				for (c=0;c<ECComps("eterc6");c++) player.dimensionMultDecrease-=0.2
+				getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECComps("eterc6")%5>0?1:0)+"x"
 			}
 		}
 	}
@@ -2271,7 +2268,7 @@ function gainedEternityPoints() {
 	if (hasTimeStudy(121)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : ((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) 
 	if (hasTimeStudy(122)) ret = ret.times(player.achievements.includes("ngpp11") ? 50 : 35)
 	if (hasTimeStudy(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
-	if (player.galacticSacrifice !== undefined && player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galMults.u51())
+	if (player.galacticSacrifice !== undefined && hasGalUpg(51)) ret = ret.times(galMults.u51())
 	if (tmp.ngp3) {
 		if (player.quantum.bigRip.active) {
 			if (isBigRipUpgradeActive(5)) ret = ret.times(tmp.qu.bigRip.spaceShards.max(1))
@@ -3221,8 +3218,8 @@ function eternity(force, auto, presetLoad, dilated) {
 	if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
 	if (player.thisEternity < player.bestEternity && !force) player.bestEternity = player.thisEternity
 	if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
-	if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5 && player.dimensionMultDecrease < 4) player.dimensionMultDecrease = Math.max(parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1)),2)
-	if (!GUActive("gb4")) if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
+	if (player.currentEternityChall == "eterc6" && ECComps("eterc6") < 5 && player.dimensionMultDecrease < 4) player.dimensionMultDecrease = Math.max(parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1)),2)
+	if (!GUActive("gb4")) if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
 	if (player.infinitied < 10 && !force && !player.boughtDims) giveAchievement("Do you really need a guide for this?");
 	if (Decimal.round(player.replicanti.amount) == 9) giveAchievement("We could afford 9");
 	if (player.dimlife && !force) giveAchievement("8 nobody got time for that")
@@ -3353,7 +3350,6 @@ function eternity(force, auto, presetLoad, dilated) {
 	if (player.respec) respecToggle()
 	if (player.respecMastery) respecMasteryToggle()
 	giveAchievement("Time is relative")
-	if (player.replicanti.unl && speedrunMilestonesReached < 22) player.replicanti.amount = new Decimal(1)
 	player.replicanti.galaxies = 0
 	extraReplGalaxies = 0
 	if (dilated || !player.achievements.includes("ng3p67")) resetReplicantiUpgrades()
@@ -4863,8 +4859,8 @@ function ECRewardDisplayUpdating(){
 	getEl("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
 	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
 	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
-	getEl("ec13reward").textContent = "Reward: Increase the exponent of meta-antimatter's effect. (" + (getECReward(13)+9) + "x)"
-	getEl("ec14reward").textContent = "Reward: Free tickspeed upgrades boost the IC3 reward to be " + getIC3EffFromFreeUpgs().toFixed(0) + "x stronger."
+	getEl("ec13reward").textContent = "Reward: Everything except meta-antimatter gives a stronger boost to Dimension Boosts. (x^" + getECReward(13).toFixed(2) + ")"
+	getEl("ec14reward").textContent = "Reward: Slow down the base replicate interval by " + shorten(tmp.rep.ec14.interval) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14.ooms) + "x OoMs."
 
 	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 	getEl("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
@@ -4898,9 +4894,8 @@ function challengeOverallDisplayUpdating(){
 			if (tmp.qu.autoOptions.sacrifice) getEl("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<=9;c++) {
 				let x = tmp.qcRewards[c]
-				if (c==9) getEl("qc9reward").textContent = "+" + x.ri.toFixed(2) + " base OoMs to interval scaling, +" + x.ge.toFixed(2) + "x to Gravity Energy gain"
-				else if (c==5) getEl("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
-				else if (c!=2&&c!=8) getEl("qc"+c+"reward").textContent = shorten(x)
+				if (c == 5) getEl("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
+				else if (c != 2 && c != 8) getEl("qc" + c + "reward").textContent = shorten(x)
 			}
 			if (player.masterystudies.includes("d14")) bigRipUpgradeUpdating() //big rip
 		}

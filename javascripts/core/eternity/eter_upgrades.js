@@ -20,7 +20,7 @@ let ETER_UPGS = {
 			*/
 
 			let e = nMx(getEternitied(), 0)
-			if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(Decimal.log10(e) / 4 * Math.log2(10), 128)
+			//if (Decimal.gt(e, Decimal.pow(2, 1024))) e = Decimal.pow(Decimal.log10(e) / 4 * Math.log2(10), 128)
 			if (typeof(e) == "number" && isNaN(e)) e = 0
 			return e
 		},
@@ -35,7 +35,7 @@ let ETER_UPGS = {
 
 			let achReward = 1
 			if (player.achievements.includes("ngpp15")) {
-				if (tmp.ngC || tmp.ngp3) achReward = Decimal.pow(tmp.ngC ? 10 : 20, Math.pow(Decimal.log10(Decimal.add(e, 10)), tmp.ngC ? 3 : 2))
+				if (tmp.ngC || tmp.ngp3) achReward = Decimal.pow(tmp.ngC ? 10 : 20, Math.pow(Decimal.log10(Decimal.add(e, 10)), tmp.ngC ? 3 : 4))
 				else return Decimal.pow(e, Math.min(1e4, Math.pow(e, .3)))
 			}
 

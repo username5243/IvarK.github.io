@@ -19,7 +19,7 @@ let Prestiges = {
 			return player.infinityPoints.gte(player.currentEternityChall != "" ? player.eternityChallGoal : Number.MAX_VALUE) && id7unlocked
 		},
 		interreality() {
-			return ECTimesCompleted("eterc10") >= 1
+			return ECComps("eterc10") >= 1
 		},
 		singularity() {
 			return ngSg.can()
@@ -29,7 +29,7 @@ let Prestiges = {
 				Decimal.gte(
 					player.achievements.includes("ng3p76") ? player.meta.bestOverQuantums : player.meta.antimatter, 
 					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
-				) && (!player.masterystudies || ECTimesCompleted("eterc14")) && quarkGain().gt(0)
+				) && (!tmp.ngp3 || ECComps("eterc14")) && quarkGain().gt(0)
 		},
 		ghostify() {
 			return tmp.qu.bigRip.active ? this.quantum() : hasNU(16) || pl.on()
