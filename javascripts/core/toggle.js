@@ -4,19 +4,19 @@ function toggleChallengeRetry() {
 }
 
 function togglePerformanceTicks() {
-	player.aarexModifications.performanceTicks = ((player.aarexModifications.performanceTicks || 0) + 1) % 4
+	tmp.mod.performanceTicks = ((tmp.mod.performanceTicks || 0) + 1) % 4
 	updatePerformanceTicks()
 }
 
 function toggleLogRateChange() {
-	player.aarexModifications.logRateChange=!player.aarexModifications.logRateChange
-	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (player.aarexModifications.logRateChange ? "N" : "FF")
-	dimDescEnd = (player.aarexModifications.logRateChange?" OoM":"%")+"/s)"
+	tmp.mod.logRateChange=!tmp.mod.logRateChange
+	getEl("toggleLogRateChange").textContent = "Logarithm rate: O" + (tmp.mod.logRateChange ? "N" : "FF")
+	dimDescEnd = (tmp.mod.logRateChange?" OoM":"%")+"/s)"
 }
 
 function toggleTabsSave() {
-	player.aarexModifications.tabsSave.on =! player.aarexModifications.tabsSave.on
-	getEl("tabsSave").textContent = "Saved tabs: O" + (player.aarexModifications.tabsSave.on ? "N" : "FF")
+	tmp.mod.tabsSave.on =! tmp.mod.tabsSave.on
+	getEl("tabsSave").textContent = "Saved tabs: O" + (tmp.mod.tabsSave.on ? "N" : "FF")
 }
 
 function infMultAutoToggle() {
@@ -41,13 +41,13 @@ function toggleEternityConf() {
 }
 
 function toggleDilaConf() {
-	player.aarexModifications.dilationConf = !player.aarexModifications.dilationConf
-	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (player.aarexModifications.dilationConf ? "N" : "FF")
+	tmp.mod.dilationConf = !tmp.mod.dilationConf
+	getEl("dilationConfirmBtn").textContent = "Dilation confirmation: O" + (tmp.mod.dilationConf ? "N" : "FF")
 }
 
 function toggleOfflineProgress() {
-	player.aarexModifications.offlineProgress = !player.aarexModifications.offlineProgress
-	getEl("offlineProgress").textContent = "Offline progress: O"+(player.aarexModifications.offlineProgress?"N":"FF")
+	tmp.mod.offlineProgress = !tmp.mod.offlineProgress
+	getEl("offlineProgress").textContent = "Offline progress: O"+(tmp.mod.offlineProgress?"N":"FF")
 }
 
 function toggleAutoBuyers() {
@@ -91,20 +91,20 @@ function respecToggle() {
 
 function toggleProductionTab() {
 	// 0 == visible, 1 == not visible
-	player.aarexModifications.hideProductionTab=!player.aarexModifications.hideProductionTab
-	getEl("hideProductionTab").textContent = (player.aarexModifications.hideProductionTab?"Show":"Hide")+" production tab"
+	tmp.mod.hideProductionTab=!tmp.mod.hideProductionTab
+	getEl("hideProductionTab").textContent = (tmp.mod.hideProductionTab?"Show":"Hide")+" production tab"
 	if (getEl("production").style.display == "block") showDimTab("antimatterdimensions")
 }
 
 function toggleRepresentation() {
 	// 0 == visible, 1 == not visible
-	player.aarexModifications.hideRepresentation=!player.aarexModifications.hideRepresentation
-	getEl("hideRepresentation").textContent=(player.aarexModifications.hideRepresentation?"Show":"Hide")+" antimatter representation"
+	tmp.mod.hideRepresentation=!tmp.mod.hideRepresentation
+	getEl("hideRepresentation").textContent=(tmp.mod.hideRepresentation?"Show":"Hide")+" antimatter representation"
 }
 
 function toggleProgressBar() {
-	player.aarexModifications.progressBar=!player.aarexModifications.progressBar
-	getEl("progressBarBtn").textContent = (player.aarexModifications.progressBar?"Hide":"Show")+" progress bar"	
+	tmp.mod.progressBar=!tmp.mod.progressBar
+	getEl("progressBarBtn").textContent = (tmp.mod.progressBar?"Hide":"Show")+" progress bar"	
 }
 
 function toggleReplAuto(i) {

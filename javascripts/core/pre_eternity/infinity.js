@@ -1,5 +1,5 @@
 function canBreakInfinity() {
-	if (player.aarexModifications.ngexV) return player.challenges.length == getTotalNormalChallenges() + 1
+	if (tmp.mod.ngexV) return player.challenges.length == getTotalNormalChallenges() + 1
 	return player.autobuyers[11] % 1 != 0 && player.autobuyers[11].interval <= 100
 }
 
@@ -197,7 +197,7 @@ function doIRCrunchResetStuff(){
 function doGPUpgCrunchUpdating(g11MultShown){
 	var showg11Mult = player.infinitied > 0 || player.eternities !== 0 || ph.did("quantum")
 	if (player.galacticSacrifice && (showg11Mult != g11MultShown)) {
-		getEl("galaxy11").innerHTML = "Normal" + (player.aarexModifications.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
+		getEl("galaxy11").innerHTML = "Normal" + (tmp.mod.ngmX > 3 ? " and Time D" : " d")+"imensions are " + (showg11Mult ? "cheaper based on your infinitied stat.<br>Currently: <span id='galspan11'></span>x":"99% cheaper.")+"<br>Cost: 1 GP"
 		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (showg11Mult ? "faster based on your infinitied stat.<br>Currently: <span id='galspan15'></span>x":"100x faster")+".<br>Cost: 1 GP"
 	}
 }
@@ -282,7 +282,7 @@ function bigCrunch(autoed) {
 	implosionCheck = 0;
 	checkOnCrunchAchievements()
 	if (player.currentChallenge != "" && player.challengeTimes[challNumber-2] > player.thisInfinityTime) player.challengeTimes[challNumber-2] = player.thisInfinityTime
-	if (player.aarexModifications.ngmX >= 4) if (player.galacticSacrifice.chall) {
+	if (tmp.mod.ngmX >= 4) if (player.galacticSacrifice.chall) {
 		challNumber = player.galacticSacrifice.chall
 		if (player.challengeTimes[challNumber-2] > player.thisInfinityTime) player.challengeTimes[challNumber-2] = player.thisInfinityTime
 	}

@@ -1,7 +1,7 @@
 let SINGULARITY = {
 	main: {
 		setup() {
-			player.aarexModifications.ngSg = 1
+			tmp.mod.ngSg = 1
 			player.sing = {
 				conf: true,
 				times: 0,
@@ -59,7 +59,7 @@ let SINGULARITY = {
 			alert("Coming soon...")
 		},
 		exit() {
-			delete player.aarexModifications.ngSg
+			delete tmp.mod.ngSg
 			delete player.sing
 
 			this.compile()

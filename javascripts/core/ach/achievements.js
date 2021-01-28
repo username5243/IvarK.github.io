@@ -427,7 +427,7 @@ function giveAchievement(name, noUpdate) {
 		for (i = 1; i <= 8; i++) getEl("td" + i + 'auto').style.visibility = "visible"
 		getEl('togglealltimedims').style.display = ""
 		getEl('epmultauto').style.display = ""
-		if (player.aarexModifications.ngudpV) getEl("blackholeAuto").style.display = ""
+		if (tmp.mod.ngudpV) getEl("blackholeAuto").style.display = ""
 	}
 	if (name == "It will never be enough") getEl('replicantibulkmodetoggle').style.display="inline-block"
 	if (name == "I already got rid of you..." || name == "No dilation means no production.") {
@@ -506,7 +506,7 @@ function updateAchievements() {
 			}
 			if (n == 8) {
 				getEl(rowHTML).className = "completedrow"
-				if (player.aarexModifications.hideCompletedAchs) shown = false
+				if (tmp.mod.hideCompletedAchs) shown = false
 				amount++
 			} else getEl(rowHTML).className = ""
 		}
@@ -519,8 +519,8 @@ function updateAchievements() {
 				getEl(rowHTML).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
 				numberelement = getEl(rowId + "number")
 			}
-			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
-			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
+			numberelement.parentElement.style.display = tmp.mod.showAchRowNums ? "" : "none"
+			if (tmp.mod.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
 		}
 	}
     player.achPow = Decimal.pow(tmp.ngmX >= 5 ? 20 : tmp.ngmX >= 2 ? 5 : 1.5, amount)
@@ -557,7 +557,7 @@ function updateAchievements() {
 			}
 			if (n == 8) {
 				getEl(rowId).className = "completedrow"
-				if (player.aarexModifications.hideCompletedAchs) shown = false
+				if (tmp.mod.hideCompletedAchs) shown = false
 				amount++
 			} else getEl(rowId).className = ""
 		}
@@ -569,8 +569,8 @@ function updateAchievements() {
 				getEl(rowId).insertCell(0).innerHTML = '<div class="achRowInfo" id="' + rowId + 'number"></div>'
 				numberelement = getEl(rowId + "number")
 			}
-			numberelement.parentElement.style.display = player.aarexModifications.showAchRowNums ? "" : "none"
-			if (player.aarexModifications.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
+			numberelement.parentElement.style.display = tmp.mod.showAchRowNums ? "" : "none"
+			if (tmp.mod.showAchRowNums) numberelement.innerHTML = "Secret row #" + rowsNum + "<br>" + n + " / 8<br>(" + Math.round(n * 100 / 8) + "%)"
 		}
 	}
 	getEl("nothingnessSecret").style.display = rowsShown ? "none" : ""
@@ -601,28 +601,28 @@ function getSecretAchAmount() {
 
 function toggleAchRowNums() {
 	// 0 == not visible, 1 == visible
-	player.aarexModifications.showAchRowNums = !player.aarexModifications.showAchRowNums;
+	tmp.mod.showAchRowNums = !tmp.mod.showAchRowNums;
 	updateAchievements();
-	getEl("showAchRowNums").textContent = (player.aarexModifications.showAchRowNums ? "Hide" : "Show") + " achievement row info";
+	getEl("showAchRowNums").textContent = (tmp.mod.showAchRowNums ? "Hide" : "Show") + " achievement row info";
 }
 
 function toggleCompletedAchs() {
 	// 0 == visible, 1 == not visible
-	player.aarexModifications.hideCompletedAchs = !player.aarexModifications.hideCompletedAchs;
+	tmp.mod.hideCompletedAchs = !tmp.mod.hideCompletedAchs;
 	updateAchievements();
-	getEl("hideCompletedAchs").textContent = (player.aarexModifications.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
+	getEl("hideCompletedAchs").textContent = (tmp.mod.hideCompletedAchs ? "Show" : "Hide") + " completed achievement rows";
 }
 
 function toggleSecretAchs() {
 	// 0 == visible, 1 == not visible
-	player.aarexModifications.hideSecretAchs = !player.aarexModifications.hideSecretAchs;
+	tmp.mod.hideSecretAchs = !tmp.mod.hideSecretAchs;
 	if (getEl("secretachievements").style.display == "block") showAchTab("normalachievements");
-	getEl("hideSecretAchs").textContent = (player.aarexModifications.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
+	getEl("hideSecretAchs").textContent = (tmp.mod.hideSecretAchs ? "Show" : "Hide") + " secret achievements";
 }
 
 function achMultLabelUpdate() {
         var labels = []
-        if (player.achievements.includes("r72") && player.aarexModifications.ngmX >= 4) labels.push("Galaxy Points")
+        if (player.achievements.includes("r72") && tmp.mod.ngmX >= 4) labels.push("Galaxy Points")
 	labels.push("Normal")
 	if (player.achievements.includes("r75")) labels.push("Infinity")
 	if (player.eternityUpgrades.includes(4)) labels.push("Time")

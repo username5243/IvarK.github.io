@@ -339,8 +339,8 @@
 						<td><button id="224" onclick="buyTimeStudy(224)" style="font-size: 8px;">Galaxy cost scaling starts 1 galaxy later for every 2000 Dimension Boosts.<span>Cost: 900 Time Theorems<span id="224req"></span></button></td>
 						<td><button id="225" onclick="buyTimeStudy(225)" style="font-size: 8px;">You gain extra RGs based on how high above infinity your replicanti are.<span id="225desc"></span><span>Cost: 900 Time Theorems<span id="225req"></span></button></td>
 						<td><button id="226" onclick="buyTimeStudy(226)" style="font-size: 8px;">You gain extra RGs based on your max RGs.<span id="226desc"></span><span>Cost: 900 Time Theorems<span id="226req"></span></button></td>
-						<td><button id="227" onclick="buyTimeStudy(227)" style="font-size: 8px;">Sacrifice affects the 4th Time Dimension with reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems<span id="227req"></span></button></td>
-						<td><button id="228" onclick="buyTimeStudy(228)" style="font-size: 8px;">Sacrifice scales better.<span>Cost: 900 Time Theorems<span id="228req"></span></button></td>
+						<td><button id="227" onclick="buyTimeStudy(227)" style="font-size: 8px;">Sacrifice boosts 4th Time Dimensions with a reduced effect.<span id="227desc"></span><span>Cost: 900 Time Theorems<span id="227req"></span></button></td>
+						<td><button id="228" onclick="buyTimeStudy(228)" style="font-size: 8px;">Sacrifice is stronger.<span>Cost: 900 Time Theorems<span id="228req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -702,7 +702,7 @@
 					</tr>
 					<tr id='mdmilestonesrow2b'>
 						<td><button class="milestonerewardlocked" id="reward26">Eternity reduces the Replicanti amount to ^0.9 instead.</button></td>
-						<td><button class="milestonerewardlocked" id="reward27">Unlock the "time since peak changed" mode for the Eternity autobuyer</button></td>
+						<td><button class="milestonerewardlocked" id="reward27">Unlock slow Meta Dimension autobuyers. (coming soon)</button></td>
 					</tr>
 				</table>
 				<div class="footer"></div>
@@ -1420,8 +1420,8 @@
 					<tr>
 						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px"></button></div></td>
 						<td><div><button id="animationoptionsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
-						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
-						<td><button id="updateratelimit" onclick="changeUpdateRateLimit()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 11px">Update rate limit: 5ms<br>(for desktop PCs)</button></td>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
+						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
 					</tr>
 					<tr>
 						<td><div><button id="hotkeys" onclick="toggleHotkeys()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
@@ -1486,7 +1486,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies - Alpha 1)</p>
+				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies - Alpha 2)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -3308,7 +3308,7 @@
 					<tr>
 						<td>
 							<div class="eterchallengediv" id="eterc13div" style="height: 140px; display: none">
-								<span>Dimension Boosts and total Galaxies boost each other, but square root their powers. (Not started)</span>
+								<span>Dimension Boosts and total Galaxies boost each other, but square root their powers.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3322,7 +3322,7 @@
 						</td>
 						<td>
 							<div class="eterchallengediv" id="eterc14div" style="height: 140px; display: none">
-								<span>Replicanti upgrade autobuyers are always on, but replicantis reduce all Normal Dimensions. (Not started)</span>
+								<span>Replicanti upgrade autobuyers are always on, but replicantis reduce all Normal Dimensions.</span>
 								<br>
 								<br>
 								<div class="outer">

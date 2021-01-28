@@ -783,14 +783,14 @@ function calcNGMX(data) {
 }
 
 function exitNGMM() {
-	delete player.aarexModifications.ngmX
+	delete tmp.mod.ngmX
 	delete player.galacticSacrifice
 	delete player.tickspeedBoosts
 	delete player.tdBoosts
 	delete player.pSac
 
 	tmp.ngmX = calcNGMX()
-	player.aarexModifications.ngmX = tmp.ngmX
+	tmp.mod.ngmX = tmp.ngmX
 	getEl("gSacrifice").style.display = "none"
 	ph.reset()
 }

@@ -64,7 +64,7 @@ function checkForEndMe() {
 		temp += player.challengeTimes[i]
 	}
 	if (temp <= 1800) giveAchievement("Not-so-challenging")
-	if (temp <= 20 || (temp <= 50 && player.aarexModifications.ngmX >= 4)) giveAchievement("End me")
+	if (temp <= 20 || (temp <= 50 && tmp.mod.ngmX >= 4)) giveAchievement("End me")
 	var temp2 = 0
 	for (var i = 0; i < order.length; i++) temp2 += player.infchallengeTimes[i]
 	infchallengeTimes = temp2
@@ -263,7 +263,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (tmp.qu.replicants.requirement.gte("1e12500000")) giveAchievement("Stop blocking me!")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")
 	if (tmp.qu.nanofield.rewards >= 21 && noTree) giveAchievement("But I don't want to grind!")
-	if (player.replicanti.amount.log10() >= (player.aarexModifications.ngudpV ? 268435456 : 36e6)) giveAchievement("Will it be enough?")
+	if (player.replicanti.amount.log10() >= (tmp.mod.ngudpV ? 268435456 : 36e6)) giveAchievement("Will it be enough?")
 	if (tmp.qu.bigRip.active) {
 		let ableToGetRid7 = ableToGetRid2 && player.epmult.eq(1)
 		let ableToGetRid8 = ableToGetRid7 && !tmp.qu.breakEternity.did

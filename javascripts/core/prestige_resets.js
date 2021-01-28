@@ -1,7 +1,7 @@
 function onQuantumAM(){
 	let x = 10
 	if (player.challenges.includes("challenge1")) x = 100
-	if (player.aarexModifications.ngmX > 3) x = 200
+	if (tmp.mod.ngmX > 3) x = 200
 	if (player.achievements.includes("r37")) x = 1000
 	if (player.achievements.includes("r54")) x = 2e5
 	if (player.achievements.includes("r55")) x = 1e10
@@ -247,7 +247,7 @@ function resetInfDimensions(full) {
 
 function resetTimeDimensions(full) {
 	let boostPower = getDimensionBoostPower()
-	let ngm4 = player.aarexModifications.ngmX >= 4
+	let ngm4 = tmp.mod.ngmX >= 4
 	player.timeShards = new Decimal(0)
 	player.tickThreshold = new Decimal(ngm4 ? 0.01 : 1)
 	player.totalTickGained = 0
@@ -680,7 +680,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
 		upgrades: bm ? player.dilation.upgrades : [],
-		autoUpgrades: bm ? player.dilation.autoUpgrades : player.aarexModifications.nguspV ? [] : undefined,
+		autoUpgrades: bm ? player.dilation.autoUpgrades : tmp.mod.nguspV ? [] : undefined,
 		rebuyables: {
 			1: 0,
 			2: 0,

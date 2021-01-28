@@ -1,13 +1,13 @@
 let ngmR = {
 	setup() {
 		tmp.ngmR = true
-		player.aarexModifications.ngmR = 1
+		tmp.mod.ngmR = 1
 
 		resetNormalDimensionCostMults()
 		resetTickspeed()
 	},
 	compile() {
-		tmp.ngmR = player.aarexModifications.ngmR !== undefined
+		tmp.ngmR = tmp.mod.ngmR !== undefined
 	},
 	adjustCostScale(x) {
 		let exp = 1.05

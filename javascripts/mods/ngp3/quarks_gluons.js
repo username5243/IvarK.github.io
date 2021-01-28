@@ -218,7 +218,7 @@ function updateColorPowers(log) {
 
 	colorBoosts.g = Math.pow(log.g + 1, 1/3) * 2 - 1
 	if (player.ghostify.ghostlyPhotons.unl) m *= tmp.le[3]
-	if (player.aarexModifications.ngumuV && player.masterystudies.includes("t362")) m += tmp.qu.replicants.quarks.add(1).log10() / 10
+	if (tmp.mod.ngumuV && player.masterystudies.includes("t362")) m += tmp.qu.replicants.quarks.add(1).log10() / 10
 	colorBoosts.g = (colorBoosts.g - 1) * m + 1
 
 	//Blue

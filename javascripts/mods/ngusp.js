@@ -1,5 +1,5 @@
 function canAutoDilUpgs() {
-	return player.aarexModifications.nguspV && player.eternityPoints.gte("1e40000")
+	return tmp.mod.nguspV && player.eternityPoints.gte("1e40000")
 }
 
 function autoBuyDilUpgs() {

@@ -1,6 +1,6 @@
 let LIGHT_SPEED = {
 	mult(id) {
-		let data = player.aarexModifications.ls
+		let data = tmp.mod.ls
 		return (data && data[id]) || 1
 	},
 	options: ["game", "rep", "nf", "tod", "bl"],
@@ -25,7 +25,7 @@ let LIGHT_SPEED = {
 		},
 	},
 	reset() {
-		let shown = player.aarexModifications.ls !== undefined
+		let shown = tmp.mod.ls !== undefined
 		getEl("lstabbtn").style.display = shown ? "" : "none"
 		if (!shown) return
 
@@ -43,8 +43,8 @@ let LIGHT_SPEED = {
 	changeOption(id) {
 		let speed = Math.pow(10, getEl("ls_" + id).value / 10)
 		getEl("ls_" + id + "_text").textContent = speed.toFixed(2)
-		if (speed == 1) delete player.aarexModifications.ls[id]
-		else player.aarexModifications.ls[id] = speed
+		if (speed == 1) delete tmp.mod.ls[id]
+		else tmp.mod.ls[id] = speed
 	}
 }
 let ls = LIGHT_SPEED

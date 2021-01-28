@@ -1,12 +1,12 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 1e68, 251: 5e71, 252: 5e71, 253: 5e71, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
+		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
-		time_mults: {241: 1, 242: 5, 243: 1.5, 252: 5, 253: 1.5, 251: 2.5, 252: 2.5, 253: 2.5, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
+		time_mults: {241: 1, 251: 2, 252: 2, 253: 2, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
 		ec: {},
 		dil: {}
 	},
@@ -121,8 +121,8 @@ var masteryStudies = {
 		322() {
 			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
-			if (log > 1e3 && player.aarexModifications.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
-			if (player.aarexModifications.newGameExpVersion) log += Math.pow(Math.log10(log + 10), 4) - 1
+			if (log > 1e3 && tmp.mod.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
+			if (tmp.mod.newGameExpVersion) log += Math.pow(Math.log10(log + 10), 4) - 1
 
 			log = softcap(log, "ms322_log")
 			//these are also required very much--more DT is more tickspeed is more DT
@@ -155,7 +155,7 @@ var masteryStudies = {
 			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
 		},
 		371() {
-			return Math.pow(extraReplGalaxies+1,player.aarexModifications.newGameExpVersion?.5:.3)
+			return Math.pow(extraReplGalaxies+1,tmp.mod.newGameExpVersion?.5:.3)
 		},
 		372() {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1

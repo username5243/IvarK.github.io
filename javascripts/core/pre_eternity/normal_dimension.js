@@ -70,7 +70,7 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 	if (hasTS(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
 	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
+	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) * (tmp.mod.newGameExpVersion ? 5 : 1)))
 	if (hasTS(234) && tier == 1) mult = mult.times(tmp.sacPow)
 	if (hasTS(193)) mult = mult.times(Decimal.pow(1.03, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1)).min("1e13000"))
 	if (tier == 8 && hasTS(214)) mult = mult.times((tmp.sacPow.pow(8)).min("1e46000").times(tmp.sacPow.pow(1.1).min(new Decimal("1e125000"))))
@@ -82,7 +82,7 @@ function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
 	
 	if (hasGalUpg(12) && (!hasGalUpg(42) || tmp.ngmX < 4)) mult = mult.times(galMults.u12())
 	if (player.pSac !== undefined) if (tier == 2) mult = mult.pow(puMults[13](hasPU(13, true)))
-	if (hasGalUpg(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
+	if (hasGalUpg(13) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.mod.ngmX > 3) && player.currentChallenge != "postcngm3_4") mult = mult.times(galMults.u13())
 	if (hasGalUpg(15)) mult = mult.times(galMults.u15())
 	if (hasGalUpg(35)) mult = mult.times(galMults.u35())
 	if (player.challenges.includes("postc4")) mult = mult.pow(1.05);
@@ -93,7 +93,7 @@ function getNormalDimensionGalaxyUpgradesBonus(tier,mult){
 function getAfterDefaultDilationLayerAchBonus(tier){
 	mult = new Decimal(1)
 	let timeAndDimMult = timeMult()
-	if (hasInfinityMult(tier) && !(player.aarexModifications.ngmX >= 4)) timeAndDimMult = dimMults().times(timeAndDimMult)
+	if (hasInfinityMult(tier) && !(tmp.mod.ngmX >= 4)) timeAndDimMult = dimMults().times(timeAndDimMult)
 	if (player.challenges.includes("postcngmm_1")||player.currentChallenge=="postcngmm_1") mult = mult.times(timeAndDimMult)
 	if (!player.galacticSacrifice) return mult
 	if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) mult = mult.times(3600 / (player.thisInfinityTime + 1800));
@@ -103,8 +103,8 @@ function getAfterDefaultDilationLayerAchBonus(tier){
 	if (player.achievements.includes("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
 	if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
 	if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
-	if (hasGalUpg(12) && hasGalUpg(42) && player.aarexModifications.ngmX >= 4) mult = mult.times(galMults.u12())
-	if (hasGalUpg(45) && player.aarexModifications.ngmX >= 4) {
+	if (hasGalUpg(12) && hasGalUpg(42) && tmp.mod.ngmX >= 4) mult = mult.times(galMults.u12())
+	if (hasGalUpg(45) && tmp.mod.ngmX >= 4) {
 		var e = hasGalUpg(46) ? galMults["u46"]() : 1
 		mult = mult.times(Math.pow(player["timeDimension" + tier].amount.plus(10).log10(), e))
 	}
@@ -176,7 +176,7 @@ function getDimensionFinalMultiplier(tier) {
 	mult = getStartingNDMult(tier) //contains sac
 	if (tmp.ngC && player.currentChallenge != "postcngc_1") mult = mult.times(ngC.condense.nds.eff(tier))
 
-	if (player.aarexModifications.newGameMinusVersion !== undefined) mult = mult.times(.1)
+	if (tmp.mod.newGameMinusVersion !== undefined) mult = mult.times(.1)
 	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !player.galacticSacrifice) {
 		if (tier == 4) mult = mult.pow(1.4)
 		if (tier == 2) mult = mult.pow(1.7)
@@ -187,8 +187,8 @@ function getDimensionFinalMultiplier(tier) {
 	mult = mult.times(getPostBreakInfNDMult())
 
 	let timeAndDimMult = timeMult()
-	if (hasInfinityMult(tier) && !(player.aarexModifications.ngmX >= 4)) timeAndDimMult = dimMults().times(timeAndDimMult)
-	if (!(player.aarexModifications.ngmX >= 4)) mult = mult.times(dimMults())
+	if (hasInfinityMult(tier) && !(tmp.mod.ngmX >= 4)) timeAndDimMult = dimMults().times(timeAndDimMult)
+	if (!(tmp.mod.ngmX >= 4)) mult = mult.times(dimMults())
 	if (!player.challenges.includes("postcngmm_1") && player.currentChallenge!="postcngmm_1") mult = mult.times(timeAndDimMult)
 	
 	if (tier == 1 && player.infinityUpgrades.includes("unspentBonus")) mult = mult.times(unspentBonus);
@@ -210,6 +210,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.currentChallenge == "postc4" && player.postC4Tier != tier && player.tickspeedBoosts == undefined) mult = mult.pow(0.25)
 	
 	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)
+	if (player.currentEternityChall == "eterc14") mult = mult.div(Decimal.pow(10, Math.pow(tmp.rm.log10(), 2)))
 	
 	if (tier == 8 && player.achievements.includes("ng3p27")) mult = mult.times(tmp.ig)	
 
@@ -250,7 +251,7 @@ function getDimensionDescription(tier) {
 }
 
 function getDimensionRateOfChangeDisplay(current, toAdd) {
-	if (player.aarexModifications.logRateChange)  return " (+" + shorten(current.add(toAdd).log10() - current.log10()) + " OoM/s)"
+	if (tmp.mod.logRateChange)  return " (+" + shorten(current.add(toAdd).log10() - current.log10()) + " OoM/s)"
 	else return " (+" + shorten(toAdd.div(current).times(100)) + "%/s)"
 }
 
@@ -303,7 +304,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 	let exp = 1
 	if (tmp.ngp3 && focusOn != "linear") exp = focusOn == "no-rg4" ? getMPTExp(focusOn) : tmp.mpte
 	if (exp > 1) ret = Decimal.pow(ret, exp)
-	if (player.aarexModifications.newGameMult !== undefined) {
+	if (tmp.mod.newGameMult !== undefined) {
 		ret = Decimal.times(ret, Math.log10(player.resets + 1) + 1)
 		ret = Decimal.times(ret, Math.log10(Math.max(player.galaxies, 0) + 1) * 5 + 1)
 	}
@@ -313,8 +314,8 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 function getMPTPreInfBase() {
 	let x = 2
 	if (player.tickspeedBoosts !== undefined) x = 1
-	if (player.aarexModifications.newGameExpVersion) x *= 10
-	if (player.aarexModifications.newGameMult) x *= 2.1
+	if (tmp.mod.newGameExpVersion) x *= 10
+	if (tmp.mod.newGameMult) x *= 2.1
 	if (tmp.ez) x *= 1.05
 	return x
 }
@@ -334,7 +335,7 @@ function getMPTBase(focusOn) {
 		} else ret *= 1.01
 	}
 	ret += getECReward(3)
-	if (player.galacticSacrifice !== undefined) if (hasGalUpg(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || player.aarexModifications.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
+	if (player.galacticSacrifice !== undefined) if (hasGalUpg(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.mod.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
 	if (focusOn == "no-QC5") return ret
 	if (tmp.ngp3) {
 		if (isQCRewardActive(5)) ret += tmp.qcRewards[5]
@@ -436,10 +437,10 @@ function getDimensionCostMultiplierIncrease() {
 	let ret = player.dimensionMultDecrease
 	if (tmp.ngmX >= 4) ret = Math.pow(ret, 1.25)
 	if (player.currentChallenge === 'postcngmm_2') {
-		exp = player.aarexModifications.ngmX >= 4 ? .9 : .5
+		exp = tmp.mod.ngmX >= 4 ? .9 : .5
 		ret = Math.pow(ret, exp)
 	} else if (player.challenges.includes('postcngmm_2')) {
-		expcomp = player.aarexModifications.ngmX >= 4 ? .95 : .9
+		expcomp = tmp.mod.ngmX >= 4 ? .95 : .9
 		ret = Math.pow(ret, expcomp)
 	}
 	return ret;
@@ -600,7 +601,7 @@ function infUpg12Pow() {
 	if (player.tickspeedBoosts !== undefined) toAdd = Math.min(Math.max(player.infinitied, 0), 45) * .01 + .05
 	else if (player.galacticSacrifice !== undefined) toAdd = Math.min(Math.max(player.infinitied, 0), 60) * .0025 + .05
 	if (tmp.ngC) toAdd *= Math.log10(player.money.plus(1).log10() + 1) + 1
-	if (player.aarexModifications.newGameExpVersion) toAdd *= 2
+	if (tmp.mod.newGameExpVersion) toAdd *= 2
 
 	return toAdd + 1
 }
@@ -630,7 +631,7 @@ function getInfinitiedMult() {
 	var add = player.galacticSacrifice ? 0 : 1
 	var base = (player.galacticSacrifice ? 1 : 0) + Decimal.add(getInfinitied(), 1).log10() * (player.galacticSacrifice ? 100 : 10)
 	var exp = (player.galacticSacrifice ? 2 : 1) * (hasTimeStudy(31) ? 4 : 1)
-	if (player.aarexModifications.ngmX >= 4) {
+	if (tmp.mod.ngmX >= 4) {
 		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !player.achievements.includes("r71")) exp += .2
 		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3
 	}
@@ -653,7 +654,7 @@ function getDimensionProductionPerSecond(tier) {
 	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || tmp.ngmX >= 5) ret = ret.times(player.chall2Pow)
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
-	if (player.aarexModifications.ngmX > 3) ret = ret.div(10)
+	if (tmp.mod.ngmX > 3) ret = ret.div(10)
 	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 
 	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")

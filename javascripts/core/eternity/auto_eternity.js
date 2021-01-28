@@ -2,6 +2,7 @@ function updateAutoEterMode() {
 	var modeText = ""
 	var modeCond = ""
 	getEl("priority13").disabled = false
+	if (player.autoEterMode == "replicanti" || player.autoEterMode == "peak") player.autoEterMode = "time"
 	if (player.autoEterMode == "time") {
 		modeText = "time"
 		modeCond = "Seconds between eternities:"
@@ -11,12 +12,6 @@ function updateAutoEterMode() {
 	} else if (player.autoEterMode == "relativebest") {
 		modeText = "X times best of last 10"
 		modeCond = modeText + " eternities:"
-	} else if (player.autoEterMode == "replicanti") {
-		modeText = "replicanti"
-		modeCond = "Amount of replicanti to wait until reset:"
-	} else if (player.autoEterMode == "peak") {
-		modeText = "peak"
-		modeCond = "Seconds to wait after latest peak gain:"
 	} else if (player.autoEterMode == "eternitied") {
 		modeText = "X times eternitied"
 		modeCond = modeText + ":"
@@ -40,9 +35,7 @@ function toggleAutoEterMode() {
 	if (player.autoEterMode == "amount") player.autoEterMode = "time"
 	else if (player.autoEterMode == "time") player.autoEterMode = "relative"
 	else if (player.autoEterMode == "relative") player.autoEterMode = "relativebest"
-	else if (player.autoEterMode == "relativebest" && moreEMsUnlocked() && getEternitied() >= 1e11) player.autoEterMode = "replicanti"
-	else if (player.autoEterMode == "replicanti" && moreEMsUnlocked() && getEternitied() >= 1e12) player.autoEterMode = "peak"
-	else if (player.autoEterMode == "peak" && player.achievements.includes("ng3p51")) player.autoEterMode = "eternitied"
+	else if (player.autoEterMode == "relativebest" && player.achievements.includes("ng3p51")) player.autoEterMode = "eternitied"
 	else if (player.autoEterMode == "eternitied") player.autoEterMode = "exponent"
 	else if ((player.autoEterMode == "peak" || player.autoEterMode == "exponent") && speedrunMilestonesReached > 24) player.autoEterMode = "manual"
 	else if (player.autoEterMode) player.autoEterMode = "amount"

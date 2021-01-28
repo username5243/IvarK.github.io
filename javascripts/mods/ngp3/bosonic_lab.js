@@ -247,7 +247,7 @@ function showBLTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
-	if (oldTab !== tabName) player.aarexModifications.tabsSave.tabBL = tabName
+	if (oldTab !== tabName) tmp.mod.tabsSave.tabBL = tabName
 	closeToolTip()
 }
 

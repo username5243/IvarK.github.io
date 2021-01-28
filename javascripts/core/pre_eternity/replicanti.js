@@ -15,9 +15,33 @@ function unlockReplicantis() {
 	}
 }
 
-function replicantiGalaxyBulkModeToggle() {
-	player.galaxyMaxBulk = !player.galaxyMaxBulk
-	getEl('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
+function replicantiIncrease(diff) {
+	if (!player.replicanti.unl) return
+	if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
+	else notContinuousReplicantiUpdating()
+	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
+
+	let auto = player.replicanti.galaxybuyer || player.currentEternityChall == "eterc14"
+	if (auto && tmp.ngC) ngC.condense.rep.buy()
+	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
+
+	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
+}
+
+function getReplicantiLimit(cap = false) {
+	if (player.boughtDims) return player.replicanti.limit
+	if (tmp.ngC && cap) {
+		let lim = new Decimal(Number.MAX_VALUE);
+		if (hasTS(52)) lim = lim.pow(tsMults[52]())
+		if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
+		if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
+		return lim;
+	}
+	return Number.MAX_VALUE
+}
+
+function isReplicantiLimitBroken() {
+	return hasTimeStudy(192)
 }
 
 function getReplMult(next) {
@@ -62,22 +86,6 @@ function upgradeReplicantiInterval() {
 	if (!isIntervalAffordable()) player.replicanti.interval = (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
 	getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
-}
-
-function getReplicantiLimit(cap = false) {
-	if (player.boughtDims) return player.replicanti.limit
-	if (tmp.ngC && cap) {
-		let lim = new Decimal(Number.MAX_VALUE);
-		if (hasTS(52)) lim = lim.pow(tsMults[52]())
-		if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
-		if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
-		return lim;
-	}
-	return Number.MAX_VALUE
-}
-
-function isReplicantiLimitBroken() {
-	return hasTimeStudy(192)
 }
 
 function isIntervalAffordable() {
@@ -133,6 +141,11 @@ function replicantiGalaxy() {
 	else player.replicanti.galaxies++
 	if (!tmp.ngp3 || !player.achievements.includes("ngpp16")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
 	galaxyReset(0)
+}
+
+function replicantiGalaxyBulkModeToggle() {
+	player.galaxyMaxBulk = !player.galaxyMaxBulk
+	getEl('replicantibulkmodetoggle').textContent = "Mode: " + (player.galaxyMaxBulk ? "Max" : "Singles")
 }
 
 function canGetReplicatedGalaxy() {
@@ -223,7 +236,7 @@ function replicantiGalaxyAutoToggle() {
 
 function getReplicantiInterval() {
 	let interval = player.replicanti.interval
-	if (player.aarexModifications.ngexV) interval *= .8
+	if (tmp.mod.ngexV) interval *= .8
 	if (hasTimeStudy(62)) interval /= tsMults[62]()
 	if (player.replicanti.amount.gt(Number.MAX_VALUE)||hasTimeStudy(133)) interval *= 10
 	if (hasTimeStudy(213)) interval /= tsMults[213]()
@@ -234,7 +247,7 @@ function getReplicantiInterval() {
 
 	interval = new Decimal(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
-	if (player.dilation.upgrades.includes('ngpp1') && player.aarexModifications.nguspV && !player.aarexModifications.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
+	if (player.dilation.upgrades.includes('ngpp1') && tmp.mod.nguspV && !tmp.mod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
 	if (masteryStudies.has(332)) interval = interval.div(getMTSMult(332))
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
@@ -260,7 +273,7 @@ function getReplScaleStart() {
 function getReplSpeed() {
 	let inc = .2
 	let exp = Math.floor(Decimal.log10(getReplScaleStart()))
-	if (hasDilationUpg('ngpp1') && (!player.aarexModifications.nguspV || player.aarexModifications.nguepV)) {
+	if (hasDilationUpg('ngpp1') && (!tmp.mod.nguspV || tmp.mod.nguepV)) {
 		let expDiv = 10
 		if (tmp.ngp3) expDiv = 9
 		let x = 1 + player.dilation.dilatedTime.max(1).log10() / expDiv

@@ -20,8 +20,10 @@ function getDimensionBoostPower(next, focusOn) {
 	}
 	if (hasTS(152) && tmp.ngC) ret = Decimal.mul(ret, tsMults[152]())
 	if (ECComps("eterc13") > 0) ret = Decimal.pow(ret, getECReward(13))
-
 	if (hasDilationStudy(6) && !inQC(3) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
+
+	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRG() + player.dilation.freeGalaxies)))
+
 	return new Decimal(ret)
 }
 
@@ -156,7 +158,7 @@ function getDimboostCostIncrease () {
 	if (player.currentChallenge=="postcngmm_1") return ret
 	if (player.galacticSacrifice) {
 		if (hasGalUpg(21)) ret -= 10
-		if (hasGalUpg(43) && player.aarexModifications.ngmX >= 4) {
+		if (hasGalUpg(43) && tmp.mod.ngmX >= 4) {
 			e = hasGalUpg(46) ? galMults["u46"]() : 1
 			if (player.achievements.includes("r75")) e *= 2
 			ret -= e
@@ -179,7 +181,7 @@ function getSupersonicStart() {
 	if (player.galacticSacrifice) return 1/0
 	let r = 56e4
 	if (tmp.ngC) r = 1
-	else if (player.aarexModifications.nguspV && !player.aarexModifications.nguepV) r = 1e5
+	else if (tmp.mod.nguspV && !tmp.mod.nguepV) r = 1e5
 	if (tmp.ngp3) {
 		if (masteryStudies.has(331)) r += 24e4
 		if (isNanoEffectUsed("supersonic_start")) if (tmp.nf.effects.supersonic_start) r += tmp.nf.effects.supersonic_start 

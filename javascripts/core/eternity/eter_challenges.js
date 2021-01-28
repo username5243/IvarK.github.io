@@ -397,7 +397,7 @@ function getECReward(x) {
 		let r=player.timeShards
 		if (r.gt(0)) r = r.pow(c / (m2 ? 2 : 10))
 		if (m2) return r.plus(1).min("1e10000")
-		if (!player.aarexModifications.newGameExpVersion) return r.plus(1).min("1e400")
+		if (!tmp.mod.newGameExpVersion) return r.plus(1).min("1e400")
 		if (r.lt("1e400")) return r.plus(1)
 		let log = Math.sqrt(r.log10() * 400)
 		return Decimal.pow(10, Math.min(50000, log))	
@@ -417,8 +417,8 @@ function doCheckECCompletionStuff(){
 		} else if (player.eternityChalls[player.currentEternityChall] < 5) {
 			player.eternityChalls[player.currentEternityChall] += 1
 		}
-		else if (player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] === undefined) player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
-		else player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, player.aarexModifications.eternityChallRecords[player.eternityChallUnlocked])
+		else if (tmp.mod.eternityChallRecords[player.eternityChallUnlocked] === undefined) tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
+		else tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, tmp.mod.eternityChallRecords[player.eternityChallUnlocked])
 		if (player.currentEternityChall === "eterc12" && player.achievements.includes("ng3p51")) {
 			if (player.eternityChalls.eterc11 === undefined) player.eternityChalls.eterc11 = 1
 			else if (player.eternityChalls.eterc11 < 5) player.eternityChalls.eterc11++
@@ -440,7 +440,7 @@ function doCheckECCompletionStuff(){
 
 function getECStarts() {
 	let starts = {}
-	starts[1] = player.aarexModifications.newGameExpVersion?1e3:2e4
+	starts[1] = tmp.mod.newGameExpVersion?1e3:2e4
 	starts[2] = tmp.ngC?1950:1300
 	starts[3] = tmp.ngC?13100:17300
 	starts[4] = tmp.ngC?5e7:1e8
@@ -455,7 +455,7 @@ function getECStarts() {
 
 function getECMults() {
 	let mults = {}
-	mults[1] = player.aarexModifications.newGameExpVersion?1e3:2e4
+	mults[1] = tmp.mod.newGameExpVersion?1e3:2e4
 	mults[2] = tmp.ngC?350:150
 	mults[3] = tmp.ngC?200:1250
 	mults[4] = tmp.ngC?25e6:5e7

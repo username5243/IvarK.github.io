@@ -40,7 +40,7 @@ function galaxyReset(bulk) {
 }
 
 getEl("secondSoftReset").onclick = function() {
-	let ngm4 = player.aarexModifications.ngmX ? player.aarexModifications.ngmX >= 4 : false
+	let ngm4 = tmp.mod.ngmX ? tmp.mod.ngmX >= 4 : false
 	let bool1 = !inNC(11) || ngm4
 	let bool2 = player.currentChallenge != "postc1"
 	let bool3 = player.currentChallenge != "postc5" || player.tickspeedBoosts == undefined
@@ -48,7 +48,7 @@ getEl("secondSoftReset").onclick = function() {
 	let bool5 = (player.currentEternityChall == "eterc6" || inQC(6)) && !tmp.be
 	var bool = bool1 && bool2  && bool3 && bool4 && !bool5 && !tmp.ri && !cantReset()
 	if (getAmount(inNC(4) || tmp.ngmX >= 5 ? 6 : 8) >= getGalaxyRequirement() && bool) {
-		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(player.aarexModifications.ngmX > 3))) maxBuyGalaxies(true);
+		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(tmp.mod.ngmX > 3))) maxBuyGalaxies(true);
 		else galaxyReset(1)
 	}
 }
@@ -73,9 +73,9 @@ function getGalaxyRequirement(offset = 0, display) {
 	let amount = 80 + base
 	let scaling = 0
 	if (player.galacticSacrifice != undefined) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
-	else if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
-	if (player.aarexModifications.ngmX > 3) amount -= 10
-	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
+	else if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
+	if (tmp.mod.ngmX > 3) amount -= 10
+	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
 	if (inNC(4) || tmp.ngmX >= 5) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (tmp.ngmX >= 4 ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
@@ -119,7 +119,7 @@ function getGalaxyRequirement(offset = 0, display) {
 				if (GUActive("rg7")) speed2 *= 0.9
 				if (GUActive("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100
 				if (GUActive("br7")) speed2 /= 1 + Math.log10(1 + player.eternityPoints.max(1).log10()) / 80
-				amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (player.aarexModifications.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
+				amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (tmp.mod.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
 				scaling = Math.max(scaling, 3)
 			}
 		}
@@ -136,7 +136,7 @@ function getGalaxyRequirement(offset = 0, display) {
 }
 
 function getGalaxyReqMultiplier() {
-	if (inNC(6, 1) && player.aarexModifications.ngexV != undefined && tmp.grd.gals <= 2) return 0
+	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
 	if (player.galacticSacrifice !== undefined) {

@@ -71,18 +71,18 @@ function startNormalChallenge(x) {
 		if (player.infinitied < 1 && player.eternities < 1 && !quantumed) return
 		startChallenge("challenge7", Number.MAX_VALUE)
 	}
-	if (player.aarexModifications.ngmX > 3) galacticSacrifice(false, true, x)
+	if (tmp.mod.ngmX > 3) galacticSacrifice(false, true, x)
 	else startChallenge("challenge" + x, Number.MAX_VALUE)
 }
 
 function inNC(x, n) {
 	if (x == 6) {
-		if (n == 1 && player.aarexModifications.ngexV && (player.currentChallenge == "" || player.currentChallenge.indexOf("postc") == 0) && player.currentChallenge != "postc1") return true
-		if (n == 1 && player.aarexModifications.ngexV && player.currentChallenge == "challenge6") return false
-		if (n == 2 && !player.aarexModifications.ngexV) return false
+		if (n == 1 && tmp.mod.ngexV && (player.currentChallenge == "" || player.currentChallenge.indexOf("postc") == 0) && player.currentChallenge != "postc1") return true
+		if (n == 1 && tmp.mod.ngexV && player.currentChallenge == "challenge6") return false
+		if (n == 2 && !tmp.mod.ngexV) return false
 	}
-	if (x == 0) return player.currentChallenge == "" && (!(player.aarexModifications.ngmX > 3) || !player.galacticSacrifice.chall) && inPxC(0)
-	return player.currentChallenge == "challenge" + x || (player.aarexModifications.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)
+	if (x == 0) return player.currentChallenge == "" && (!(tmp.mod.ngmX > 3) || !player.galacticSacrifice.chall) && inPxC(0)
+	return player.currentChallenge == "challenge" + x || (tmp.mod.ngmX > 3 && player.galacticSacrifice.chall == x) || inPxC(x)
 }
 
 function getTotalNormalChallenges() {
@@ -90,7 +90,7 @@ function getTotalNormalChallenges() {
 	if (player.galacticSacrifice) x += 2
 	else if (player.infinityUpgradesRespecced) x++
 	if (player.tickspeedBoosts != undefined) x++
-	if (player.aarexModifications.ngmX > 3) x++
+	if (tmp.mod.ngmX > 3) x++
 	return x
 }
 
@@ -109,7 +109,7 @@ function updateNCVisuals() {
 	if (isADSCRunning()) getEl("chall13Mult").style.display = "block"
 	else getEl("chall13Mult").style.display = "none"
 
-	if (inNC(14) && player.aarexModifications.ngmX > 3) getEl("c14Resets").style.display = "block"
+	if (inNC(14) && tmp.mod.ngmX > 3) getEl("c14Resets").style.display = "block"
 	else getEl("c14Resets").style.display = "none"
 
 	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
@@ -131,9 +131,9 @@ function updateWorstChallengeBonus() {
 	updateWorstChallengeTime()
 	var exp = player.galacticSacrifice ? 2 : 1
 	var timeeff = Math.max(33e-6, worstChallengeTime * 0.1)
-	var base = player.aarexModifications.ngmX >= 4 ? 3e4 : 3e3
+	var base = tmp.mod.ngmX >= 4 ? 3e4 : 3e3
 	var eff = Decimal.max(Math.pow(base / timeeff, exp), 1)
-	if (player.aarexModifications.ngmX >= 4) eff = eff.times(Decimal.pow(eff.plus(10).log10(), 5)) 
+	if (tmp.mod.ngmX >= 4) eff = eff.times(Decimal.pow(eff.plus(10).log10(), 5)) 
 	worstChallengeBonus = eff
 }
 
@@ -200,7 +200,7 @@ function getNextAt(chall) {
 		let retMod = nextAt[chall+"_ngm3"]
 		if (retMod) ret = retMod
 	}
-	if (player.aarexModifications.ngmX >= 4){
+	if (tmp.mod.ngmX >= 4){
 		let retMod = nextAt[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}
@@ -221,7 +221,7 @@ function getGoal(chall) {
 		let retMod = goals[chall+"_ngm3"]
 		if (retMod) ret = retMod
 	}
-	if (player.aarexModifications.ngmX >= 4){
+	if (tmp.mod.ngmX >= 4){
 		let retMod = goals[chall+"_ngm4"]
 		if (retMod) ret = retMod
 	}

@@ -140,7 +140,7 @@ function updateLightEmpowermentReq() {
 
 function lightEmpowerment(auto) {
 	if (!(player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq)) return
-	if (!auto && !player.achievements.includes("ng3p103") && !player.aarexModifications.leNoConf) {
+	if (!auto && !player.achievements.includes("ng3p103") && !tmp.mod.leNoConf) {
 		if (!player.achievements.includes("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
 		if (player.achievements.includes("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
 	}

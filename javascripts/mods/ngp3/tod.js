@@ -138,7 +138,7 @@ function showBranchTab(tabName) {
 			tab.style.display = 'none';
 		}
 	}
-	if (oldTab !== tabName) player.aarexModifications.tabsSave.tabBranch = tabName
+	if (oldTab !== tabName) tmp.mod.tabsSave.tabBranch = tabName
 	closeToolTip()
 }
 
@@ -570,7 +570,7 @@ var uq_names = {
 }
 
 function getUQName(rds) {
-	return uq_names[player.aarexModifications.uq_notation || "mixed"](rds)
+	return uq_names[tmp.mod.uq_notation || "mixed"](rds)
 }
 
 function getUQNameFromBranch(shorthand) {

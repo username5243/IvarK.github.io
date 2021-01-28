@@ -843,7 +843,7 @@ let tsMults = {
 		let bigRipped = inBigRip()
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
 		if (bigRipped && log > 900) log = Math.sqrt(log * 900)
-		else if (player.aarexModifications.newGameExpVersion) log = Math.min(log, 25000) // buff to NG+++^
+		else if (tmp.mod.newGameExpVersion) log = Math.min(log, 25000) // buff to NG+++^
 		else if (player.galacticSacrifice === undefined) log = Math.min(log, 2500)
 		if (log < 0) log = 0
 		
@@ -853,27 +853,27 @@ let tsMults = {
 		return Decimal.pow(10, log)
 	},
 	32() {
-		let ret = Math.pow(Math.max(player.resets, 1), player.aarexModifications.newGameMult ? 4 : 1)
+		let ret = Math.pow(Math.max(player.resets, 1), tmp.mod.newGameMult ? 4 : 1)
 		if (player.timestudy.studies.includes(197) && tmp.ngC) ret = Math.pow(ret, 3)
 		return ret
 	},
 	41() {
 		if (tmp.ngC) return 1.1
-		return player.aarexModifications.newGameExpVersion ? 1.5 : 1.2
+		return tmp.mod.newGameExpVersion ? 1.5 : 1.2
 	},
 	42() {
 		if (tmp.ngC) return 29/30
-		return (player.aarexModifications.newGameExpVersion ? 12 : 13) / 15
+		return (tmp.mod.newGameExpVersion ? 12 : 13) / 15
 	},
 	51(){
 		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * (player.replicanti.galaxies + 1), 160)
-		return player.aarexModifications.newGameExpVersion ? 1e30 : 1e15
+		return tmp.mod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
 		return tmp.ngC ? Decimal.pow(25, Math.log10(player.replicanti.amount.max(1).log10()/308.25+1)/Math.log10(2)) : (tmp.newNGP3E ? 100 : 10)
 	},
 	62() {
-		let r = player.aarexModifications.newGameExpVersion ? 4 : 3
+		let r = tmp.mod.newGameExpVersion ? 4 : 3
 		if (tmp.ngex) r--
 		if (tmp.ngC) r/=2
 		return r
@@ -882,7 +882,7 @@ let tsMults = {
 		return Decimal.pow(1.0004, player.totalTickGained)
 	},
 	141() {
-		if (player.achievements.includes("r137") && (player.aarexModifications.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
+		if (player.achievements.includes("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
 		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime+1) * Math.pow(player.thisInfinityTime+1, 0.125))).max(1)
 	},
 	211() {
@@ -890,7 +890,7 @@ let tsMults = {
 	},
 	212() {
 		let r = player.timeShards.max(2).log2()
-		if (player.aarexModifications.newGameExpVersion || tmp.ngC) return Math.min(Math.pow(r, 0.006), 1.15)
+		if (tmp.mod.newGameExpVersion || tmp.ngC) return Math.min(Math.pow(r, 0.006), 1.15)
 		return Math.min(Math.pow(r, 0.005), 1.1)
 	},
 	213() {

@@ -89,7 +89,7 @@ function infDimensionProduction(tier) {
 	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
 	if (player.currentEternityChall == "eterc11") return ret
 	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
-	if (player.aarexModifications.ngmX > 3) ret = ret.div(100)
+	if (tmp.mod.ngmX > 3) ret = ret.div(100)
 	ret = ret.times(infDimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
 	if (player.challenges.includes("postc6") && !inQC(3)) return ret.times(Decimal.div(1000, dilates(getTickspeed())).pow(0.0005))
@@ -109,7 +109,7 @@ function getInfDimPathIDMult(tier){
 	if (hasTimeStudy(72) && tier == 4) mult = mult.times(tmp.sacPow.pow(0.04).max(1).min("1e30000"))
 	if (hasTimeStudy(82)) mult = mult.times(Decimal.pow(1.0000109, Math.pow(player.resets, 2)).min(player.meta == undefined ? 1 / 0 : '1e80000'))
 	if (hasTimeStudy(92)) mult = mult.times(Decimal.pow(2, 600 / Math.max(player.bestEternity, 20)))
-	if (hasTimeStudy(162)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 234 : 11) * (player.aarexModifications.newGameExpVersion ? 5 : 1)))
+	if (hasTimeStudy(162)) mult = mult.times(Decimal.pow(10, (player.galacticSacrifice ? 234 : 11) * (tmp.mod.newGameExpVersion ? 5 : 1)))
 	return mult
 }
 
@@ -161,7 +161,7 @@ function infDimensionPower(tier) {
 		if (player.currentChallenge != "postcngc_1") mult = mult.times(cEff)
 	}
 
-	if (player.aarexModifications.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))
+	if (tmp.mod.ngmX >= 4 && player.achievements.includes("r73")) mult = mult.times(Decimal.pow(1 + player.tdBoosts, tier*tier))
 	if (ECComps("eterc2") !== 0 && tier == 1) mult = mult.times(getECReward(2))
   	if (ECComps("eterc4") !== 0) mult = mult.times(getECReward(4))
 

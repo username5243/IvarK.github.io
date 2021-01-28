@@ -36,7 +36,7 @@ let PLANCK = {
 			pl.updateTmp()
 			pl.updateDisplay()
 
-			let tabsSave = player.aarexModifications.tabsSave
+			let tabsSave = tmp.mod.tabsSave
 			pl.showTab((tabsSave.on && tabsSave.tabPl) || 'null')
 		},
 		updateTmp() {
@@ -150,7 +150,7 @@ let PLANCK = {
 		},
 		updateDisplayOnTick() {
 			getEl("plTierUp").className = "gluonupgrade " + (pl.canTier() ? "planckbtn" : "unavailablebtn")
-			PLANCK[player.aarexModifications.tabsSave.tabPl].updateDisplayOnTick()
+			PLANCK[tmp.mod.tabsSave.tabPl].updateDisplayOnTick()
 		},
 		showTab(x) {
 			//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
@@ -164,7 +164,7 @@ let PLANCK = {
 				if (tab.style.display == 'block') oldTab = tab.id
 				tab.style.display = tab.id == tabName ? 'block' : 'none'
 			}
-			if (!oldTab || oldTab != x) player.aarexModifications.tabsSave.tabPl = x
+			if (!oldTab || oldTab != x) tmp.mod.tabsSave.tabPl = x
 			closeToolTip()
 		},
 		tierReq() {

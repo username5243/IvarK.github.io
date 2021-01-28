@@ -2,8 +2,8 @@
 function quantum(auto, force, qc, isPC, bigRip, quick) {
 	if (tmp.ngp3 && tmp.qu.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
-	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
-	if (player.aarexModifications.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (tmp.ngmX >= 2 ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
+	var headstart = tmp.mod.newGamePlusVersion > 0 && !tmp.ngp3
+	if (tmp.mod.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (tmp.ngmX >= 2 ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!ph.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
 	var QCs = []
@@ -162,8 +162,8 @@ function getQuarkMult() {
 }
 
 function toggleQuantumConf() {
-	player.aarexModifications.quantumConf = !player.aarexModifications.quantumConf
-	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (player.aarexModifications.quantumConf ? "ON" : "OFF")
+	tmp.mod.quantumConf = !tmp.mod.quantumConf
+	getEl("quantumConfirmBtn").textContent = "Quantum confirmation: " + (tmp.mod.quantumConf ? "ON" : "OFF")
 }
 
 var averageQk = new Decimal(0)
@@ -268,7 +268,7 @@ function doQuantumProgress() {
 
 //v2.90142
 function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
-	var headstart = player.aarexModifications.newGamePlusVersion > 0 && !tmp.ngp3
+	var headstart = tmp.mod.newGamePlusVersion > 0 && !tmp.ngp3
 	var isQC = id !== undefined
 	if (implode && speedrunMilestonesReached < 1) {
 		showTab("dimensions")
@@ -440,7 +440,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (player.galacticSacrifice && !keepABnICs) player.autobuyers[12] = 13
 	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14
 	player.challenges = challengesCompletedOnEternity(bigRip)
-	if (bigRip && player.ghostify.milestones > 9 && player.aarexModifications.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
+	if (bigRip && player.ghostify.milestones > 9 && tmp.mod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
 
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 	if (tmp.ngp3) {
@@ -524,8 +524,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (bigRip ? tmp.bruActive[12] : isRewardEnabled(11) && isRewardEnabled(4)) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
 		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
-			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !player.aarexModifications.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
-			if (player.aarexModifications.nguspV) {
+			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !tmp.mod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
+			if (tmp.mod.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
 				for (var i = 4; i < 23; i++) if (player.dilation.upgrades.includes(getDilUpgId(i))) player.dilation.autoUpgrades.push(i)
 				updateExdilation()

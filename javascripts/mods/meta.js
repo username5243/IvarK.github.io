@@ -10,11 +10,11 @@ function getDilationMetaDimensionMultiplier() {
 	let pow = 0.1
 	let div = 1e40
 	if (isNanoEffectUsed("dt_to_ma_exp")) if (tmp.nf.effects.dt_to_ma_exp) pow = tmp.nf.effects.dt_to_ma_exp //this is a quick fix, but we need to fix this bug
-	if (player.aarexModifications.nguspV !== undefined) div = 1e50
-	if (player.aarexModifications.ngudpV && !player.aarexModifications.nguepV) {
+	if (tmp.mod.nguspV !== undefined) div = 1e50
+	if (tmp.mod.ngudpV && !tmp.mod.nguepV) {
 		let l = tmp.qu.colorPowers.b.plus(10).log10()
 		let x = 3 - Math.log10(l + 1)
-		if (player.aarexModifications.ngumuV) {
+		if (tmp.mod.ngumuV) {
 			if (x < 2) x = 2 - 2 * (2 - x) / (5 - x)
 		} else {
 			x = Math.max(x, 2)
@@ -42,7 +42,6 @@ function getMetaDimensionMultiplier(tier) {
 	if (tier == 1 && player.achievements.includes("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
 	if (tier == 1 && player.achievements.includes("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
 
-	ret = dilates(dilates(ret.max(1), 2), "meta")
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 	return ret
 }
@@ -101,7 +100,7 @@ function getMetaDimensionRateOfChange(tier) {
 	let toGain = getMetaDimensionProduction(tier + (inQC(4) ? 2 : 1));
 
 	var current = player.meta[tier].amount.max(1);
-	if (player.aarexModifications.logRateChange) {
+	if (tmp.mod.logRateChange) {
 		var change = current.add(toGain.div(10)).log10() - current.log10()
 		if (change < 0 || isNaN(change)) change = 0
 	} else var change  = toGain.times(10).dividedBy(current);
@@ -295,7 +294,7 @@ function getExtraDimensionBoostPower() {
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (!inQC(3)) r = r.add(1)
-	if (player.aarexModifications.nguspV) {
+	if (tmp.mod.nguspV) {
 		let l = r.log(2)
 		if (l > 1024) r = Decimal.pow(2, Math.pow(l * 32, 2/3))
 	}
@@ -338,7 +337,7 @@ function updateOverallMetaDimensionsStuff(){
 	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
 	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && player.aarexModifications.nguspV === undefined && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
+	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'
@@ -390,13 +389,13 @@ function getDil15Bonus() {
 	let x = 1
 	let max = 3
 
-	if (player.aarexModifications.nguspV !== undefined) x = Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
+	if (tmp.mod.nguspV !== undefined) x = Math.min(Math.max(player.dilation.dilatedTime.max(1).log10() / 10 - 6.25, 2), max)
 	else x = Math.min(Math.log10(player.dilation.dilatedTime.max(1e10).log(10)) + 1, max)
 
 	return x
 }
 
 function getMetaUnlCost() {
-	if (player.aarexModifications.nguspV) return 1e21
+	if (tmp.mod.nguspV) return 1e21
 	return 1e24
 }

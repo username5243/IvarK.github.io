@@ -1,6 +1,6 @@
 let CONDENSED = {
 	setup() {
-		player.aarexModifications.ngp3c = 1
+		tmp.mod.ngp3c = 1
 		player.condensed = {}
 	},
 	compile() {

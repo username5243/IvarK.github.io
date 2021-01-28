@@ -124,7 +124,7 @@ let Prestiges = {
 		if (id == "eternity" && !tmp.eterUnl) return false
 		if (id == "quantum" && !tmp.quUnl) return false
 
-		return !player.aarexModifications.layerHidden[id]
+		return !tmp.mod.layerHidden[id]
 	},
 	tmp: {},
 	reset() {
@@ -149,7 +149,7 @@ let Prestiges = {
 			var tabShown = false
 			var shown = false
 
-			if (ph.can(p) && !player.aarexModifications.layerHidden[p]) prestigeShown = true
+			if (ph.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
 			if (ph.shown(p)) tabShown = true
 			if (prestigeShown || tabShown) shown = true
 
@@ -197,7 +197,7 @@ let Prestiges = {
 		ph.tmp[layer].did = true
 		ph.tmp.layers++
 		getEl("hide" + layer).style.display = ""
-		getEl("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	},
 	setupHTML(layer) {
 		var html = ""
@@ -208,16 +208,16 @@ let Prestiges = {
 		getEl("hideLayers").innerHTML = html
 	},
 	hideOption(layer) {
-		if (player.aarexModifications.layerHidden[layer]) delete player.aarexModifications.layerHidden[layer]
-		else player.aarexModifications.layerHidden[layer] = true
+		if (tmp.mod.layerHidden[layer]) delete tmp.mod.layerHidden[layer]
+		else tmp.mod.layerHidden[layer] = true
 
-		if (layer == "eternity" && !player.aarexModifications.layerHidden.eternity) {
+		if (layer == "eternity" && !tmp.mod.layerHidden.eternity) {
 			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 			if (getEl("eternitychallenges").style.display == "block") showChallengeTab("normalchallenges")
 		}
 		if (layer == "quantum") handleDisplaysOutOfQuantum()
 
-		getEl("hide" + layer).innerHTML = (player.aarexModifications.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	}
 }
 

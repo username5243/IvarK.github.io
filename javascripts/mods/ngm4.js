@@ -33,11 +33,11 @@ function tdBoost(bulk) {
 }
 
 function resetTDBoosts() {
-	if (player.aarexModifications.ngmX > 3) return player.achievements.includes("r27") && player.currentChallenge == "" ? 3 : 0
+	if (tmp.mod.ngmX > 3) return player.achievements.includes("r27") && player.currentChallenge == "" ? 3 : 0
 }
 
 function resetTDsOnNGM4() {
-	if (player.aarexModifications.ngmX >= 4) resetTimeDimensions()
+	if (tmp.mod.ngmX >= 4) resetTimeDimensions()
 }
 
 //v2.1
@@ -51,7 +51,7 @@ function autoTDBoostBoolean() {
 	if (!player.autobuyers[14].isOn) return false
 	if (player.autobuyers[14].ticks * 100 < player.autobuyers[14].interval) return false
 	if (amount < req.amount) return false
-	if (player.aarexModifications.ngmX > 3 && inNC(14)) return false
+	if (tmp.mod.ngmX > 3 && inNC(14)) return false
 	if (player.autobuyers[14].overXGals <= player.galaxies) return true
 	if (player.autobuyers[14].priority < req.amount) return false
 	return true
@@ -67,8 +67,8 @@ getEl("buyerBtnTDBoost").onclick = function () {
 }
 
 function maxHighestTD() {
-	player.aarexModifications.maxHighestTD=!player.aarexModifications.maxHighestTD
-	getEl("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(player.aarexModifications.maxHighestTD?"N":"FF")
+	tmp.mod.maxHighestTD=!tmp.mod.maxHighestTD
+	getEl("maxHighestTD").textContent = "Buy Max the highest tier of Time Dimensions: O"+(tmp.mod.maxHighestTD?"N":"FF")
 }
 
 function getMaxTDCost() {

@@ -180,7 +180,7 @@ function getEmperorDimensionRateOfChange(dim) {
 	let toGain = getEmperorDimensionMultiplier(dim + 1).times(tmp.eds[dim + 1].workers).div(20)
 
 	var current = tmp.eds[dim].workers.add(tmp.eds[dim].progress).max(1)
-	if (player.aarexModifications.logRateChange) {
+	if (tmp.mod.logRateChange) {
 		var change = current.add(toGain).log10()-current.log10()
 		if (change < 0 || isNaN(change)) change = 0
 	} else var change = toGain.times(10).dividedBy(current)
