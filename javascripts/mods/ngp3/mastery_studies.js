@@ -1,6 +1,6 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 2e71, 262: 2e71, 263: 2e71, 264: 2e71, 265: 2e71, 266: 2e71, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
+		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 2e70, 262: 2e70, 263: 2e70, 264: 2e70, 265: 2e70, 266: 2e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
@@ -94,15 +94,15 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
-			return Math.floor(Math.pow(player.meta.resets, 2) / 2)
+			return Math.floor(Math.pow(player.meta.resets, 2) / 1.8)
 		},
 		252() {
 			if (hasNU(6)) return 0
-			return Math.floor(player.dilation.freeGalaxies / 7)
+			return Math.floor(player.dilation.freeGalaxies / 9)
 		},
 		253() {
 			if (hasNU(6)) return 0
-			return Math.floor(getTotalRG() / 4)
+			return Math.floor(getTotalRG() / 3)
 		},
 		273() {
 			return Math.sqrt(player.replicanti.chance + 1)
@@ -230,8 +230,8 @@ var masteryStudies = {
 	timeStudyDescs: {
 		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
 		251: "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
-		252: "Remote galaxy scaling starts 1 galaxy later per 7 Tachyonic Galaxies.",
-		253: "Remote galaxy scaling starts 1 galaxy later per 4 total Replicated Galaxies.",
+		252: "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
+		253: "Remote galaxy scaling starts 1 galaxy later per 3 total Replicated Galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
 		262: "The power of meta-antimatter effect is raised by 1.",
 		263: "Tachyonic Galaxies are 25% stronger.",
