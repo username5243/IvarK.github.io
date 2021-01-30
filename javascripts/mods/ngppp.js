@@ -123,8 +123,8 @@ function respecMasteryToggle() {
 var bankedEterGain
 function updateBankedEter(updateHtml = true) {
 	bankedEterGain = 0
-	if (player.achievements.includes("ng3p15")) bankedEterGain = player.eternities
-	if (player.achievements.includes("ng3p73")) bankedEterGain = nA(bankedEterGain, gainEternitiedStat())
+	if (hasAch("ng3p15")) bankedEterGain = player.eternities
+	if (hasAch("ng3p73")) bankedEterGain = nA(bankedEterGain, gainEternitiedStat())
 	bankedEterGain = nD(bankedEterGain, 20)
 	if (updateHtml) {
 		setAndMaybeShow("bankedEterGain", bankedEterGain > 0, '"You will gain "+getFullExpansion(bankedEterGain)+" banked eternities on next quantum."')
@@ -214,7 +214,7 @@ function toggleAutoQuantumMode() {
 	if (tmp.qu.reachedInfQK && tmp.qu.autobuyer.mode == "amount") tmp.qu.autobuyer.mode = "relative"
 	else if (tmp.qu.autobuyer.mode == "relative") tmp.qu.autobuyer.mode = "time"
 	else if (tmp.qu.autobuyer.mode == "time") tmp.qu.autobuyer.mode = "peak"
-	else if (player.achievements.includes("ng3p25") && tmp.qu.autobuyer.mode != "dilation") tmp.qu.autobuyer.mode = "dilation"
+	else if (hasAch("ng3p25") && tmp.qu.autobuyer.mode != "dilation") tmp.qu.autobuyer.mode = "dilation"
 	else tmp.qu.autobuyer.mode = "amount"
 	updateAutoQuantumMode()
 }
@@ -312,7 +312,7 @@ function switchAB() {
 		bulk: player.autobuyers[13].bulk,
 		on: player.autobuyers[13].isOn
 	}
-	if (player.galacticSacrifice !== undefined) if (player.autobuyers[12] % 1 !== 0) data.galSacrifice = {
+	if (inNGM(2)) if (player.autobuyers[12] % 1 !== 0) data.galSacrifice = {
 		amount: player.autobuyers[12].priority,
 		on: player.autobuyers[12].isOn
 	}
@@ -456,11 +456,11 @@ function getAMforGHPGain(){
 function getGHPGain() {
 	if (!ph.did("ghostify")) return new Decimal(1)
 	let log = getAMforGHPGain() / getQCGoalLog([6, 8], "ghp_gain") - 1
-	if (player.achievements.includes("ng3p58")) { 
+	if (hasAch("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
 		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
 		y = player.ghostify.ghostParticles.plus(Decimal.pow(10, log)).plus(10).log10()
-		if (!player.achievements.includes("ng3p84")) x = Math.min(x, 600 / y)
+		if (!hasAch("ng3p84")) x = Math.min(x, 600 / y)
 		log += x
 	}
 	return Decimal.pow(10, log).times(getGHPMult()).floor()
@@ -472,9 +472,9 @@ function getGHPBaseMult() {
 
 function getGHPMult() {
 	let x = getGHPBaseMult()
-	if (player.achievements.includes("ng3p93")) x = x.times(500)
-	if (player.achievements.includes("ng3p83")) x = x.times(ranking + 1)
-	if (player.achievements.includes("ng3p97")) x = x.times(Decimal.pow(player.ghostify.times + 1, 1/3))
+	if (hasAch("ng3p93")) x = x.times(500)
+	if (hasAch("ng3p83")) x = x.times(ranking + 1)
+	if (hasAch("ng3p97")) x = x.times(Decimal.pow(player.ghostify.times + 1, 1/3))
 	return x
 }
 
@@ -553,7 +553,7 @@ function ghostifyReset(implode, gain, amount, force) {
 
 	var bm = player.ghostify.milestones
 	if (bm >= 3) tmp.qu.electrons.mult += (4 - tmp.qu.pairedChallenges.completed) * 0.5
-	if (bm >= 7 && !force && player.achievements.includes("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
+	if (bm >= 7 && !force && hasAch("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
 	if (bm >= 16) giveAchievement("I rather oppose the theory of everything")
 
 	if (player.eternityPoints.e>=22e4&&player.ghostify.under) giveAchievement("Underchallenged")
@@ -969,7 +969,7 @@ function convertToNGP5(setup) {
 	if (setup) {
 		player.ghostify.milestones = 16
 		for (let x = 1; x <= 8; x++) player.achievements.push("ngpp1" + x)
-		for (let y = 1; y <= 8; y++) for (let x = 1; x <= 8; x++) if (!player.achievements.includes("ng3p" + (y  * 10 + x))) player.achievements.push("ng3p" + (y  * 10 + x))
+		for (let y = 1; y <= 8; y++) for (let x = 1; x <= 8; x++) if (!hasAch("ng3p" + (y  * 10 + x))) player.achievements.push("ng3p" + (y  * 10 + x))
 		player.achievements.push("ng3p91")
 		player.achievements.push("ng3p101")
 		player.achievements.push("ng3p111")

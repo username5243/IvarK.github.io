@@ -2,19 +2,19 @@ function getDimensionBoostPower(next, focusOn) {
 	if (inNC(11) || inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") return new Decimal(1);
 
 	var ret = 2
-	if (!player.galacticSacrifice) {
+	if (!inNGM(2)) {
 		if (player.infinityUpgrades.includes("resetMult")) ret = 2.5
 		if (player.challenges.includes("postc7")) ret = 4
 		if (player.currentChallenge == "postc7" || inQC(6) || hasTimeStudy(81)) ret = 10
 	}
 	if (player.boughtDims) ret += player.timestudy.ers_studies[4] + (next ? 1 : 0)
-	if (player.galacticSacrifice && hasGalUpg(23) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.ngmX >= 4) && player.currentChallenge != "postcngm3_4") ret *= galMults.u23()
+	if (hasGalUpg(23) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || inNGM(4)) && player.currentChallenge != "postcngm3_4") ret *= galMults.u23()
 	if (hasPU(31)) ret *= puMults[31]()
-	if (player.infinityUpgrades.includes("resetMult") && player.galacticSacrifice) ret *= 1.2 + 0.05 * player.infinityPoints.max(1).log(10)
-	if (!player.boughtDims && player.achievements.includes("r101")) ret = ret * 1.01
+	if (player.infinityUpgrades.includes("resetMult") && inNGM(2)) ret *= 1.2 + 0.05 * player.infinityPoints.max(1).log(10)
+	if (!player.boughtDims && hasAch("r101")) ret = ret * 1.01
 	if (hasTimeStudy(83)) ret = tsMults[83]().times(ret);
 	if (hasTimeStudy(231)) ret = tsMults[231]().times(ret)
-	if (tmp.ngmX >= 2) {
+	if (inNGM(2)) {
 		if (player.currentChallenge == "postc7" || inQC(6) || hasTimeStudy(81)) ret = Decimal.pow(ret, 3)
 		else if (player.challenges.includes("postc7")) ret = Decimal.pow(ret, 2)
 	}
@@ -48,7 +48,7 @@ function softReset(bulk, tier = 1) {
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
-	if (tmp.ngmX >= 5) resetIDsOnNGM5()
+	if (inNGM(5)) resetIDsOnNGM5()
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()
@@ -64,25 +64,25 @@ function softReset(bulk, tier = 1) {
 		getEl("confirmations").style.display = "inline-block";
 		getEl("sacConfirmBtn").style.display = "inline-block";
 	}
-	if (player.galacticSacrifice && player.galaxies > 0 && player.resets > (tmp.ngmX >= 5 ? 3 : 4)) {
+	if (inNGM(2) && player.galaxies > 0 && player.resets > (inNGM(5) ? 3 : 4)) {
 		getEl("gSacrifice").style.display = "inline-block"
 		getEl("gConfirmation").style.display = "inline-block"
 	}
 
 	hideDimensions()
 	tmp.tickUpdate = true;
-	if (!player.achievements.includes("r111")) setInitialMoney()
+	if (!hasAch("r111")) setInitialMoney()
 }
 
 function setInitialMoney() {
 	var x = 10
 	if (player.challenges.includes("challenge1")) x = 100
-	if (tmp.ngmX >= 4) x = 200
-	if (player.achievements.includes("ngm5p12")) x = 250
-	if (player.achievements.includes("r37")) x = 1000
-	if (player.achievements.includes("r54")) x = 2e5
-	if (player.achievements.includes("r55")) x = 1e10
-	if (player.achievements.includes("r78")) x = 2e25
+	if (inNGM(4)) x = 200
+	if (hasAch("ngm5p12")) x = 250
+	if (hasAch("r37")) x = 1000
+	if (hasAch("r54")) x = 2e5
+	if (hasAch("r55")) x = 1e10
+	if (hasAch("r78")) x = 2e25
 	player.money = new Decimal(x)
 }
 
@@ -132,8 +132,8 @@ function getShiftRequirement(bulk) {
 	var resetNum = player.resets + bulk
 	var maxTier = inNC(4) || player.pSac != undefined ? 6 : 8
 	let tier = Math.min(resetNum + 4, maxTier)
-	if (tmp.ngmX >= 4 && player.pSac == undefined) amount = 10
-	if (tier == maxTier) amount += Math.max(resetNum + (player.galacticSacrifice && player.tickspeedBoosts === undefined && hasGalUpg(21) ? 2 : 4) - maxTier, 0) * mult
+	if (inNGM(4) && player.pSac == undefined) amount = 10
+	if (tier == maxTier) amount += Math.max(resetNum + (inNGM(2) && player.tickspeedBoosts === undefined && hasGalUpg(21) ? 2 : 4) - maxTier, 0) * mult
 	var costStart = getSupersonicStart()
 	if (player.currentEternityChall == "eterc5") {
 		amount += Math.pow(resetNum, 3) + resetNum
@@ -154,13 +154,13 @@ function getShiftRequirement(bulk) {
 
 function getDimboostCostIncrease () {
 	let ret = 15
-	if (tmp.ngmX >= 4) ret += 5
+	if (inNGM(4)) ret += 5
 	if (player.currentChallenge=="postcngmm_1") return ret
-	if (player.galacticSacrifice) {
+	if (inNGM(2)) {
 		if (hasGalUpg(21)) ret -= 10
 		if (hasGalUpg(43) && tmp.mod.ngmX >= 4) {
 			e = hasGalUpg(46) ? galMults["u46"]() : 1
-			if (player.achievements.includes("r75")) e *= 2
+			if (hasAch("r75")) e *= 2
 			ret -= e
 		}
 		if (player.infinityUpgrades.includes('dimboostCost')) ret -= 1
@@ -168,7 +168,7 @@ function getDimboostCostIncrease () {
 	} else {
 		if (masteryStudies.has(261)) ret -= 1
 		if (inNC(4)) ret += 5
-		if (player.boughtDims && player.achievements.includes('r101')) ret -= Math.min(8, Math.pow(player.eternityPoints.max(1).log(10), .25))
+		if (player.boughtDims && hasAch('r101')) ret -= Math.min(8, Math.pow(player.eternityPoints.max(1).log(10), .25))
 	}
 	if (hasTimeStudy(211)) ret -= tsMults[211]()
 	if (hasTimeStudy(222)) ret -= tsMults[222]()
@@ -178,7 +178,7 @@ function getDimboostCostIncrease () {
 function getSupersonicStart() {
 	return 1/0
 	if (inQC(5)) return 0
-	if (player.galacticSacrifice) return 1/0
+	if (inNGM(2)) return 1/0
 	let r = 56e4
 	if (tmp.ngC) r = 1
 	else if (tmp.mod.nguspV && !tmp.mod.nguepV) r = 1e5
@@ -204,7 +204,7 @@ getEl("softReset").onclick = function () {
 	if (tmp.ri || getAmount(req.tier) < req.amount) return;
 	auto = false;
 	var pastResets = player.resets
-	if ((player.infinityUpgrades.includes("bulkBoost") || (player.achievements.includes("r28") && player.tickspeedBoosts !== undefined) || player.autobuyers[9].bulkBought) && player.resets > (inNC(4) || player.pSac != undefined ? 1 : 3) && (!inNC(14) || !(tmp.ngmX >= 4))) maxBuyDimBoosts(true);
+	if ((player.infinityUpgrades.includes("bulkBoost") || (hasAch("r28") && player.tickspeedBoosts !== undefined) || player.autobuyers[9].bulkBought) && player.resets > (inNC(4) || player.pSac != undefined ? 1 : 3) && (!inNC(14) || !(inNGM(4)))) maxBuyDimBoosts(true);
 	else softReset(1)
 	if (player.resets <= pastResets) return
 
@@ -229,7 +229,7 @@ function skipResets() {
 function getTotalResets() {
 	let r = player.resets + player.galaxies
 	if (player.tickspeedBoosts) r += player.tickspeedBoosts
-	if (tmp.ngmX >= 4) r += player.tdBoosts
+	if (inNGM(4)) r += player.tdBoosts
 	return r
 }
 

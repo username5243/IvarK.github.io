@@ -11,7 +11,7 @@ function updateGPHUnlocks() {
 function getGPHProduction() {
 	let ret = new Decimal(0)
 	if (inBigRip()) ret = player.dilation.dilatedTime.div("1e480")
-	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
+	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())
 }
@@ -19,7 +19,7 @@ function getGPHProduction() {
 function getDMProduction() {
 	let ret = new Decimal(0)
 	if (!inBigRip()) ret = player.dilation.dilatedTime.div("1e930")
-	if (player.achievements.includes("ng3p92")) ret = ret.add(1)
+	if (hasAch("ng3p92")) ret = ret.add(1)
 	if (ret.gt(1)) ret = ret.pow(0.02)
 	return ret.times(getFinalPhotonicFlow())
 }
@@ -53,7 +53,7 @@ function getLightThresholdIncrease(l) {
 
 function getPhotonicFlow() {
 	let x = new Decimal(1)
-	if (player.achievements.includes("ng3p81")) x = new Decimal(pl.on() ? fNu.tmp.nerfNeutral : 2.5)
+	if (hasAch("ng3p81")) x = new Decimal(pl.on() ? fNu.tmp.nerfNeutral : 2.5)
 	if (GDs.boostUnl('gph')) x = Decimal.pow(x, GDs.tmp.gph)
 	return x
 }
@@ -126,8 +126,8 @@ function getLightEmpowermentReq(le) {
 		scale = 1
 	}
 
-	if (player.achievements.includes("ng3p116")) x /= 2
-	if (player.achievements.includes("ng3p95")) x -= 1
+	if (hasAch("ng3p116")) x /= 2
+	if (hasAch("ng3p95")) x -= 1
 	if (bu62.active("gph")) x = 1/0
 
 	tmp.leReqScale = scale
@@ -140,19 +140,19 @@ function updateLightEmpowermentReq() {
 
 function lightEmpowerment(auto) {
 	if (!(player.ghostify.ghostlyPhotons.lights[7] >= tmp.leReq)) return
-	if (!auto && !player.achievements.includes("ng3p103") && !tmp.mod.leNoConf) {
-		if (!player.achievements.includes("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
-		if (player.achievements.includes("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
+	if (!auto && !hasAch("ng3p103") && !tmp.mod.leNoConf) {
+		if (!hasAch("ng3p92")) if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will gain a Light Empowerment from this. Are you sure you want to proceed?")) return
+		if (hasAch("ng3p92"))  if (!confirm("You will become a ghost, but Ghostly Photons will be reset. As a result, you will bulk buy the maximum number of Light Empowerments you can. Are you sure you want to proceed?")) return
 	}
 	if (!player.ghostify.ghostlyPhotons.enpowerments) getEl("leConfirmBtn").style.display = "inline-block"
 
-	if (player.achievements.includes("ng3p92")) maxLightEmpowerments()
+	if (hasAch("ng3p92")) maxLightEmpowerments()
 	else player.ghostify.ghostlyPhotons.enpowerments++
 	
-	if (player.achievements.includes("ng3p103")) return
+	if (hasAch("ng3p103")) return
 	ghostify(false, true)
 
-	if (player.achievements.includes("ng3p91")) return
+	if (hasAch("ng3p91")) return
 	player.ghostify.ghostlyPhotons.amount = new Decimal(0)
 	player.ghostify.ghostlyPhotons.darkMatter = new Decimal(0)
 	player.ghostify.ghostlyPhotons.ghostlyRays = new Decimal(0)

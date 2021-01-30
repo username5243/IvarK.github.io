@@ -1,5 +1,5 @@
 function babyRateUpdating(){
-	var eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((player.achievements.includes("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed())
+	var eggonRate = tmp.twr.times(getEmperorDimensionMultiplier(1)).times(3).div((hasAch("ng3p35")) ? 1 : 10).times(getSpinToReplicantiSpeed())
 	if (eggonRate.lt(3)){
 		getEl("eggonRate").textContent = shortenDimensions(eggonRate.times(60))
 		getEl("eggonRateTimeframe").textContent = "hour"
@@ -21,7 +21,7 @@ function preonGatherRateUpdating(){
 }
 
 function getGrowupRatePerMinute(){
-	return tmp.twr.plus(tmp.qu.replicants.amount).times(player.achievements.includes("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed())
+	return tmp.twr.plus(tmp.qu.replicants.amount).times(hasAch("ng3p35") ? 3 : 0.3).times(getSpinToReplicantiSpeed())
 }
 
 function growupRateUpdating(){
@@ -325,8 +325,8 @@ function maxReduceHatchSpeed() {
 
 function replicantReset(bulk = false) {
 	if (player.replicanti.amount.lt(tmp.qu.replicants.requirement)) return
-	if (!player.achievements.includes("ng3p47")) player.replicanti.amount = new Decimal(1)
-	if (player.achievements.includes("ng3p74") && bulk) {
+	if (!hasAch("ng3p47")) player.replicanti.amount = new Decimal(1)
+	if (hasAch("ng3p74") && bulk) {
 		let x = Math.floor(player.replicanti.amount.div(tmp.qu.replicants.requirement).log10() / 1e5) + 1
 		tmp.qu.replicants.amount = tmp.qu.replicants.amount.add(x)
 		tmp.qu.replicants.requirement = tmp.qu.replicants.requirement.times(Decimal.pow(10, x * 1e5))
@@ -395,7 +395,7 @@ function maxBuyLimit() {
 
 function getSpinToReplicantiSpeed(){
 	// log10(green spins) * log10(blue spins) *log10(red spins) 
-	if (!player.achievements.includes("ng3p54")) return 1
+	if (!hasAch("ng3p54")) return 1
 	var r = player.quantum.tod.r.spin.plus(10).log10()
 	var g = player.quantum.tod.g.spin.plus(10).log10()
 	var b = player.quantum.tod.b.spin.plus(10).log10()

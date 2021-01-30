@@ -23,7 +23,7 @@ function initialGalaxies() {
 function getGalaxyPower(ng, bi, noDil) {
 	let x = ng
 	if (!tmp.be) x = Math.max(ng - (bi ? 2 : 0), 0) + getExtraGalaxyPower(noDil)
-	if ((inNC(7) || inQC(4)) && player.galacticSacrifice) x *= x
+	if ((inNC(7) || inQC(4)) && inNGM(2)) x *= x
 	if (hasTimeStudy(173) && tmp.ngC) x *= 3
 	if (player.currentEternityChall == "eterc13") x = Math.sqrt(x * Math.sqrt(player.resets))
 	return x
@@ -32,16 +32,16 @@ function getGalaxyPower(ng, bi, noDil) {
 function getGalaxyEff(bi) {
 	let eff = 1
 	if (inNC(6, 2)) eff *= 1.5
-	if (player.galacticSacrifice) if (hasGalUpg(22)) eff *= tmp.mod.ngmX>3?2:5;
+	if (inNGM(2)) if (hasGalUpg(22)) eff *= tmp.mod.ngmX>3?2:5;
 	if (player.infinityUpgrades.includes("galaxyBoost")) eff *= tmp.ngC ? 4 : 2;
 	if (player.infinityUpgrades.includes("postGalaxy")) eff *= getPostGalaxyEff();
-	if (player.challenges.includes("postc5")) eff *= player.galacticSacrifice ? 1.15 : 1.1;
-	if (player.achievements.includes("r86")) eff *= player.galacticSacrifice ? 1.05 : 1.01
-	if (player.galacticSacrifice) {
-		if (player.achievements.includes("r83")) eff *= 1.05
-		if (player.achievements.includes("r45")) eff *= 1.02
+	if (player.challenges.includes("postc5")) eff *= inNGM(2) ? 1.15 : 1.1;
+	if (hasAch("r86")) eff *= inNGM(2) ? 1.05 : 1.01
+	if (inNGM(2)) {
+		if (hasAch("r83")) eff *= 1.05
+		if (hasAch("r45")) eff *= 1.02
 		if (player.infinityUpgrades.includes("postinfi51")) eff *= player.tickspeedBoosts != undefined ? 1.15 : 1.2
-		if (tmp.cp && player.achievements.includes("r67")) {
+		if (tmp.cp && hasAch("r67")) {
 			let x = tmp.cp
 			if (x < 0) x = 1
 			if (x > 4 && player.tickspeedBoosts != undefined) x = Math.sqrt(x - 1) + 2
@@ -50,8 +50,8 @@ function getGalaxyEff(bi) {
 		if (tmp.mod.ngmX >= 4) eff *= getNGM4GalaxyEff()
 	}
 	if (tmp.ngmR) eff *= 1.2
-	if (tmp.ngmX >= 3 && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
-	if (player.achievements.includes("ngpp8") && player.meta != undefined) eff *= 1.001;
+	if (inNGM(3) && (inNC(5) || player.currentChallenge == "postcngm3_3")) eff *= 0.75
+	if (hasAch("ngpp8") && player.meta != undefined) eff *= 1.001;
 	if (hasTimeStudy(212)) eff *= tsMults[212]()
 	if (hasTimeStudy(232) && bi) eff *= tsMults[232]()
 	if (tmp.ngC) eff *= getECReward(11) || 1 // yeah this'll be issues
@@ -65,7 +65,7 @@ function getGalaxyEff(bi) {
 }
 
 function getPostGalaxyEff() {
-	let ret = player.tickspeedBoosts != undefined ? 1.1 : player.galacticSacrifice ? 1.7 : 1.5
+	let ret = player.tickspeedBoosts != undefined ? 1.1 : inNGM(2) ? 1.7 : 1.5
 	if (tmp.mod.ngexV && !player.challenges.includes("postc5")) ret -= 0.05
 	return ret
 }
@@ -172,13 +172,13 @@ function getPostC3Mult() {
 function getPostC3Base() {
 	if (player.currentChallenge=="postcngmm_3") return 1
 	let perGalaxy = 0.005;
-	if (tmp.ngmX >= 4) perGalaxy = 0.002
+	if (inNGM(4)) perGalaxy = 0.002
 	if (inQC(2)) perGalaxy = 0
 	if (inBigRip()) {
 		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]
 		if (hasNU(12)) perGalaxy *= tmp.nu[12].free
 	}
-	if (!player.galacticSacrifice) return player.galaxies * perGalaxy + 1.05
+	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
 	if (tmp.cp > 1) {
 		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
 		else perGalaxy *= tmp.cp / 5 + .8
@@ -195,12 +195,12 @@ function getPostC3Base() {
 
 function getPostC3Exp() {
 	let x = 1
-	if (player.achievements.includes("r66") && tmp.mod.ngmX >= 4) {
+	if (hasAch("r66") && tmp.mod.ngmX >= 4) {
 		x *= Decimal.min(5, player.galacticSacrifice.galaxyPoints.div(1e58).max(1).pow(.05)).toNumber()
 		if (x > 1.25) x = Math.log10(8 * x) * 1.25
 		if (x > 4/3) x = 1 + x/4
 	}
-	if (player.galacticSacrifice !== undefined) {
+	if (inNGM(2)) {
 		let g = getGalaxyPower(0, false, true)
 		if (g < 7) return x * (1 + g / 5)
 		let y = 5
@@ -224,7 +224,7 @@ function getPostC3Exp() {
 
 function canBuyTickSpeed() {
 	if (player.currentEternityChall == "eterc9") return false
-	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && inNC(14) && player.tickBoughtThisInf.current > 307) return false
+	if (inNGM(2) && player.tickspeedBoosts == undefined && inNC(14) && player.tickBoughtThisInf.current > 307) return false
 	return canBuyDimension(3);
 }
 
@@ -235,7 +235,7 @@ function buyTickSpeed() {
 	if ((!inNC(5) && player.currentChallenge != "postc5") || player.tickspeedBoosts != undefined) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
 	else multiplySameCosts(player.tickSpeedCost)
 	if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !hasPU(41))) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (inNGM(5) && !hasPU(41))) player.chall2Pow = 0
 	if (!tmp.be) {
 		player.tickspeed = player.tickspeed.times(tmp.tsReduce)
 		if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(getPostC3Mult())
@@ -255,10 +255,10 @@ function resetTickspeed() {
 	//Tickspeed
 	let x = 1e3
 	if (tmp.mod.newGameExpVersion) x /= 2
-	if (player.achievements.includes("r36")) x *= 0.98
-	if (player.achievements.includes("r45")) x *= 0.98
-	if (player.achievements.includes("r66")) x *= 0.98
-	if (player.achievements.includes("r83")) x = Decimal.pow(0.95, player.galaxies).times(x)
+	if (hasAch("r36")) x *= 0.98
+	if (hasAch("r45")) x *= 0.98
+	if (hasAch("r66")) x *= 0.98
+	if (hasAch("r83")) x = Decimal.pow(0.95, player.galaxies).times(x)
 	if (tmp.ngmR) x = Decimal.pow(1.5, -player.galaxies).times(x)
 	player.tickspeed = new Decimal(x)
 
@@ -301,7 +301,7 @@ function buyMaxPostInfTickSpeed(mult) {
 
 	let buying = Math.floor((Math.sqrt(discriminant) - b) / (2 * a)) + 1
 	if (buying <= 0) return false
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !01)) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (inNGM(5) && !01)) player.chall2Pow = 0
 	if (!tmp.be || player.currentEternityChall == "eterc10") {
 		player.tickspeed = player.tickspeed.times(Decimal.pow(mult, buying));
 		if (player.challenges.includes("postc3") || player.currentChallenge == "postc3" || isIC3Trapped()) player.postC3Reward = player.postC3Reward.times(Decimal.pow(getPostC3Mult(), buying))
@@ -341,7 +341,7 @@ function buyMaxTickSpeed() {
 		if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease())
 	}
 	let mult = tmp.tsReduce
-	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (tmp.ngmX >= 5 && !hasPU(41))) player.chall2Pow = 0
+	if (inNC(2) || player.currentChallenge == "postc1" || tmp.ngmR || (inNGM(5) && !hasPU(41))) player.chall2Pow = 0
 	if (cannotUsePostInfTickSpeed()) {
 		while (player.money.gt(player.tickSpeedCost) && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || (player.currentChallenge == "postc5" && player.tickspeedBoosts == undefined))) {
 			player.money = player.money.minus(player.tickSpeedCost);
@@ -419,7 +419,7 @@ function updateTickspeed() {
 		label = (tick.e <= -1e12 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
 		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + (100 - 100 * tmp.ts.pre2.log10() / tmp.ts.pre1.log10()).toFixed(1) + "% subluminal)"
 	}
-	if (player.galacticSacrifice || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
+	if (inNGM(2) || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 
 	let speeds = []
 	let speedDescs = []
@@ -433,7 +433,7 @@ function updateTickspeed() {
 	}
 	if (speeds.length >= 1) label += ", Game speed: " + factorizeDescs(speeds, speedDescs) + (tmp.gameSpeed < 1 ? shorten(1 / tmp.gameSpeed) + "x slower" : shorten(tmp.gameSpeed) + "x faster")
 
-	if (player.galacticSacrifice && player.tickspeedBoosts == undefined && inNC(14)) {
+	if (inNGM(2) && player.tickspeedBoosts == undefined && inNC(14)) {
 		label += "<br>You have " + (308 - player.tickBoughtThisInf.current) + " tickspeed purchases left."
 		getEl("tickSpeedAmount").innerHTML = label
 	} else getEl("tickSpeedAmount").textContent = label

@@ -17,7 +17,7 @@ function buyMaxTDB(){
 	}
 	let b = 0
 	if (r.amount <= player.timeDimension8.bought) b = 1 + Math.floor((player.timeDimension8.bought - r.amount)/r.mult)
-	if (!player.achievements.includes("r73")) b = Math.min(1, b)
+	if (!hasAch("r73")) b = Math.min(1, b)
 	b = Math.max(0,b)
 	tdBoost(b)
 }
@@ -27,13 +27,13 @@ function tdBoost(bulk) {
 	if (player["timeDimension" + req.tier].bought < req.amount) return
 	if (cantReset()) return
 	player.tdBoosts += bulk
-	if (!player.achievements.includes("r36")) softReset(player.achievements.includes("r26") && player.resets >= player.tdBoosts ? 0 : -player.resets)
+	if (!hasAch("r36")) softReset(hasAch("r26") && player.resets >= player.tdBoosts ? 0 : -player.resets)
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
-	if (tmp.ngmX >= 5) giveAchievement("Accelerated")
+	if (inNGM(5)) giveAchievement("Accelerated")
 }
 
 function resetTDBoosts() {
-	if (tmp.mod.ngmX > 3) return player.achievements.includes("r27") && player.currentChallenge == "" ? 3 : 0
+	if (tmp.mod.ngmX > 3) return hasAch("r27") && player.currentChallenge == "" ? 3 : 0
 }
 
 function resetTDsOnNGM4() {
@@ -59,7 +59,7 @@ function autoTDBoostBoolean() {
 
 //v2.11
 function cantReset() {
-	return tmp.ngmX >= 4 && inNC(14) && getTotalResets() >= 10
+	return inNGM(4) && inNC(14) && getTotalResets() >= 10
 }
 
 getEl("buyerBtnTDBoost").onclick = function () {
@@ -72,7 +72,7 @@ function maxHighestTD() {
 }
 
 function getMaxTDCost() {
-	if (!player.achievements.includes("r36")) return Number.MAX_VALUE
+	if (!hasAch("r36")) return Number.MAX_VALUE
 	let x = Decimal.pow(Number.MAX_VALUE, 10)
 
 	if (player.currentChallenge == "postcngm3_1") x = new Decimal(1e60)
@@ -85,7 +85,7 @@ function getMaxTDCost() {
 
 function getNGM4GalaxyEff() {
 	let e = new Decimal(1)
-	if (player.achievements.includes("r66")) {
+	if (hasAch("r66")) {
 		e = e.times(Math.log10(player.galacticSacrifice.galaxyPoints.max(1e86).log10() + 14) / 2)
 		if (player.galacticSacrifice.galaxyPoints.gt(1e86)) e = e.add(player.galacticSacrifice.galaxyPoints.div(1e86).minus(1).min(10).div(100))
 	}

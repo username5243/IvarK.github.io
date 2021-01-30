@@ -2,7 +2,7 @@
 function getMetaAntimatterStart(bigRip) {
 	let x = 10
 	if (speedrunMilestonesReached >= 19 && !bigRip) x = 1e25
-	else if (player.achievements.includes("ngpp12")) x = 100
+	else if (hasAch("ngpp12")) x = 100
 	return new Decimal(x)
 }
 
@@ -38,9 +38,9 @@ function getMetaDimensionMultiplier(tier) {
 	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
 
 	//Achievements:
-	if (tier == 8 && player.achievements.includes("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
-	if (tier == 1 && player.achievements.includes("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
-	if (tier == 1 && player.achievements.includes("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
+	if (tier == 8 && hasAch("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
+	if (tier == 1 && hasAch("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
+	if (tier == 1 && hasAch("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
 
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 	return ret
@@ -49,7 +49,7 @@ function getMetaDimensionMultiplier(tier) {
 function getMetaDimensionGlobalMultiplier() {
 	let ret = getDilationMetaDimensionMultiplier()
 	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
-	if (player.achievements.includes("ngpp12")) ret = ret.times(1.1)
+	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//Qunatum Upgrades
 		if (GUActive("br4")) ret = ret.times(getBR4Effect())
@@ -60,9 +60,9 @@ function getMetaDimensionGlobalMultiplier() {
 
 		//Achievement Rewards
 		var ng3p13exp = Math.sqrt(Decimal.plus(quantumWorth, 1).log10())
-		if (player.achievements.includes("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
+		if (hasAch("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
 
-		if (player.achievements.includes("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
+		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
 	return ret
 }
@@ -78,11 +78,11 @@ function getMetaBoostPower() {
 	if (inQC(8)) return 1
 	let r = 2
 	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
-	if (player.achievements.includes("ngpp14") && !tmp.ngp3) r *= 1.01
+	if (hasAch("ngpp14") && !tmp.ngp3) r *= 1.01
 
 	let exp = 1
 	if (tmp.ngp3) exp = 1.05
-	if (player.achievements.includes("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
+	if (hasAch("ng3p26")) exp = 1.5 - 0.5 / Math.log2(player.meta.resets / 100 + 2)
 	return Math.pow(r, exp)
 }
 
@@ -153,7 +153,7 @@ function metaBoost() {
 
 		if (inQC(4)) if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
 	} else player.meta.resets++
-	if (player.achievements.includes("ng3p72")) return
+	if (hasAch("ng3p72")) return
 	player.meta.antimatter = getMetaAntimatterStart()
 	clearMetaDimensions()
 	if (!tmp.ngp3 || !tmp.qu.bigRip.active) getEl("quantumbtn").style.display="none"
@@ -302,7 +302,7 @@ function getExtraDimensionBoostPower() {
 }
 
 function getExtraDimensionBoostPowerUse() {
-	if (player.achievements.includes("ng3p71")) return player.meta.bestOverQuantums
+	if (hasAch("ng3p71")) return player.meta.bestOverQuantums
 	return player.meta.bestAntimatter
 }
 

@@ -341,8 +341,8 @@ function buyGluonUpg(color, id) {
 	updateGluonsTab("spend")
 	if (name == "gb3") {
 		var otherMults = 1
-		if (player.achievements.includes("r85")) otherMults *= 4
-		if (player.achievements.includes("r93")) otherMults *= 4
+		if (hasAch("r85")) otherMults *= 4
+		if (hasAch("r93")) otherMults *= 4
 		var old = getIPMultPower()
 		ipMultPower = 2.3
 		player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
@@ -421,7 +421,7 @@ function getBR1Effect() {
 function getRG3Effect() {
 	let exp = Math.sqrt(player.meta.resets)
 	if (exp > 36) exp = 6 * Math.sqrt(exp)
-	if (!player.achievements.includes("ng3p24")) exp = 1
+	if (!hasAch("ng3p24")) exp = 1
 	return Decimal.pow(player.resets, exp)
 }
 

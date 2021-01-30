@@ -1,5 +1,5 @@
 function getReplUnlCost() {
-	if (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined) return 1e80
+	if (inNGM(2) && player.tickspeedBoosts === undefined) return 1e80
 	if (tmp.ngC) return 1e111
 	return 1e140
 }
@@ -46,10 +46,10 @@ function isReplicantiLimitBroken() {
 
 function getReplMult(next) {
 	let exp = 2
-	if (player.galacticSacrifice !== undefined) exp = Math.max(2, Math.pow(player.galaxies, .4))
+	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
 	if (player.boughtDims) {
 		exp += (player.timestudy.ers_studies[3] + (next ? 1 : 0)) / 2
-		if (player.achievements.includes('r108')) exp *= 1.09;
+		if (hasAch('r108')) exp *= 1.09;
 	}
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
@@ -139,7 +139,7 @@ function replicantiGalaxy() {
 	if (!canGetReplicatedGalaxy()) return
 	if (player.galaxyMaxBulk) player.replicanti.galaxies = maxGal
 	else player.replicanti.galaxies++
-	if (!tmp.ngp3 || !player.achievements.includes("ngpp16")) player.replicanti.amount = Decimal.div(player.achievements.includes("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
+	if (!tmp.ngp3 || !hasAch("ngpp16")) player.replicanti.amount = Decimal.div(hasAch("r126") ? player.replicanti.amount : 1, Number.MAX_VALUE).max(1)
 	galaxyReset(0)
 }
 
@@ -153,7 +153,7 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return (player.achievements.includes("ngpp16") && tmp.ngp3) || !hasTimeStudy(131) || tmp.ngC
+	return (hasAch("ngpp16") && tmp.ngp3) || !hasTimeStudy(131) || tmp.ngC
 }
 
 function getMaxRG() {
@@ -241,7 +241,7 @@ function getReplicantiInterval() {
 	if (player.replicanti.amount.gt(Number.MAX_VALUE)||hasTimeStudy(133)) interval *= 10
 	if (hasTimeStudy(213)) interval /= tsMults[213]()
 	if (GUActive("gb1")) interval /= getGB1Effect()
-	if (player.replicanti.amount.lt(Number.MAX_VALUE) && player.achievements.includes("r134")) interval /= 2
+	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
 	interval /= ls.mult("rep")
 
@@ -258,7 +258,7 @@ function getReplicantiFinalInterval() {
 	let x = tmp.rep.baseInt
 	if (player.replicanti.amount.gt(getReplScaleStart())) {
 		if (player.boughtDims) {
-			let base = player.achievements.includes("r107") ? Math.max(player.replicanti.amount.log(2) / 1024, 1) : 1
+			let base = hasAch("r107") ? Math.max(player.replicanti.amount.log(2) / 1024, 1) : 1
 			x = Math.pow(base, -.25) * x.toNumber()
 		} else x = Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0) / tmp.rep.speeds.exp).times(x)
 	}

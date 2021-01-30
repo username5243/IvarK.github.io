@@ -193,7 +193,7 @@ function getBranchSpeedText(){
 	if (masteryStudies.has(431)) if (getMTSMult(431).gt(1)) text += "Mastery Study 431: " + shorten(getMTSMult(431)) + "x, "
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) text += "19th Big Rip upgrade: " + shorten(tmp.bru[19]) + "x, "
 	if (hasNU(4)) if (tmp.nu[4].gt(1)) text += "Fourth Neutrino Upgrade: " + shorten(tmp.nu[4]) + "x, "
-	if (player.achievements.includes("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
+	if (hasAch("ng3p48")) if (player.meta.resets > 1) text += "'Are you currently dying?' reward: " + shorten (Math.sqrt(player.meta.resets + 1)) + "x, "
 	if (player.ghostify.milestones >= 14) text += "Brave Milestone 14: " + shorten(getMilestone14SpinMult()) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.tod) + ", "
 	if (todspeed != 1) {
@@ -214,7 +214,7 @@ function getBranchSpeed() {
 	if (masteryStudies.has(431)) x = x.times(getMTSMult(431))
 	if (tmp.qu.bigRip.active && isBigRipUpgradeActive(19)) x = x.times(tmp.bru[19])
 	if (hasNU(4)) x = x.times(tmp.nu[4])
-	if (player.achievements.includes("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
+	if (hasAch("ng3p48")) x = x.times(Math.sqrt(player.meta.resets + 1))
 	if (player.ghostify.milestones >= 14) x = x.times(getMilestone14SpinMult())
 	if (GDs.boostUnl('tod')) x = x.pow(GDs.tmp.tod)
 	return x
@@ -256,7 +256,7 @@ function getMilestone14SpinMult(){
 function getQuarkSpinProduction(branch) {
 	let ret = getBranchUpgMult(branch, 1).times(getBranchFinalSpeed())
 	if (hasNU(4)) ret = ret.times(tmp.nu[4])
-	if (player.achievements.includes("ng3p74")) if (tmp.qu.tod[branch].decays) ret = ret.times(1 + tmp.qu.tod[branch].decays)
+	if (hasAch("ng3p74")) if (tmp.qu.tod[branch].decays) ret = ret.times(1 + tmp.qu.tod[branch].decays)
 	if (tmp.qu.bigRip.active) {
 		if (isBigRipUpgradeActive(18)) ret = ret.times(tmp.bru[18])
 		if (hasNU(12)) ret = ret.times(tmp.nu[12].normal)
@@ -329,22 +329,22 @@ let TREE_UPGRADES = {
 	5: {
 		baseCost(lvl) {
 			let exp = Math.pow(Math.max(0, lvl - 50), 1.5) + lvl
-			if (!player.achievements.includes("ng3p87")) exp += Math.max(lvl - 35, 0) * (lvl - 34) / 2
+			if (!hasAch("ng3p87")) exp += Math.max(lvl - 35, 0) * (lvl - 34) / 2
 			return Decimal.pow(2, exp).times(4e12)
 		},
 		scaleAdd(lvl) {
 			if (lvl > 50) return 2
-			if (lvl > 35 && !player.achievements.includes("ng3p87")) return 1
+			if (lvl > 35 && !hasAch("ng3p87")) return 1
 			return 0
 		},
 		effLvl(lvl) {
-			if (lvl > 500 && !player.achievements.includes("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
+			if (lvl > 500 && !hasAch("ng3p87")) lvl = Math.sqrt(lvl / 500) * 500
 			return lvl
 		},
 		eff(lvl) {
 			if (!tmp.eterUnl) return new Decimal(1)
 			let MA = player.meta.bestOverQuantums
-			if (player.achievements.includes("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
+			if (hasAch("ng3p87")) MA = MA.plus(player.meta.bestOverGhostifies)
 
 			let x = Decimal.pow(Math.log10(MA.add(1).log10() + 1) / 5 + 1, Math.sqrt(lvl))
 			if (!inBigRip() && tmp.qu.breakEternity.upgrades.includes(13)) x = x.max(Decimal.pow(1.1, Math.pow(MA.add(1).log10(), 1/3) * Math.sqrt(lvl)))
@@ -712,7 +712,7 @@ function getMaximumUnstableQuarks() {
 function getTreeUpgradeEfficiencyText(){
 	let text = ""
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17))) text += "Neutrino Boost 7: +" + shorten(tmp.nb[7]) + ", "
-	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
+	if (hasAch("ng3p62") && !tmp.qu.bigRip.active) text += "Finite Time Reward: +10%, "
 	if (hasBosonicUpg(43)) text += "Bosonic Lab Upgrade 18: " + shorten(tmp.blu[43]) + "x, "
 	if (text == "") return "No multipliers currently"
 	return text.slice(0, text.length-2)
@@ -721,7 +721,7 @@ function getTreeUpgradeEfficiencyText(){
 function getTreeUpgradeEfficiency(mod) {
 	let r = 1
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]
-	if (player.achievements.includes("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
+	if (hasAch("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1
 	if (hasBosonicUpg(43)) r *= tmp.blu[43]
 	return r
 }
@@ -741,7 +741,7 @@ function getBU1Power(branch) {
 
 function getBU2Power(branch) {
 	let x = getBranchUpgLevel(branch, 2)
-	if (player.achievements.includes("ng3p94")) x += getRadioactiveDecays(branch)
+	if (hasAch("ng3p94")) x += getRadioactiveDecays(branch)
 	return x
 }
 

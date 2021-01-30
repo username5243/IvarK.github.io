@@ -48,10 +48,10 @@ function startChallenge(name) {
 		player.break = true
 		getEl("break").innerHTML = "FIX INFINITY"
 	}
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95, player.galaxies));
+	if (hasAch("r36")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r45")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r66")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r83")) player.tickspeed = player.tickspeed.times(Decimal.pow(0.95, player.galaxies));
 
 	showTab('dimensions')
 	updateChallenges()
@@ -87,7 +87,7 @@ function inNC(x, n) {
 
 function getTotalNormalChallenges() {
 	let x = 11
-	if (player.galacticSacrifice) x += 2
+	if (inNGM(2)) x += 2
 	else if (player.infinityUpgradesRespecced) x++
 	if (player.tickspeedBoosts != undefined) x++
 	if (tmp.mod.ngmX > 3) x++
@@ -97,7 +97,7 @@ function getTotalNormalChallenges() {
 function updateNCVisuals() {
 	var chall = player.currentChallenge
 
-	if (inNC(2) || chall == "postc1" || tmp.ngmR || tmp.ngmX >= 5) getEl("chall2Pow").style.display = "inline-block"
+	if (inNC(2) || chall == "postc1" || tmp.ngmR || inNGM(5)) getEl("chall2Pow").style.display = "inline-block"
 	else getEl("chall2Pow").style.display = "none"
 
 	if (inNC(3) || chall == "postc1") getEl("chall3Pow").style.display = "inline-block"
@@ -129,7 +129,7 @@ function updateWorstChallengeTime() {
 
 function updateWorstChallengeBonus() {
 	updateWorstChallengeTime()
-	var exp = player.galacticSacrifice ? 2 : 1
+	var exp = inNGM(2) ? 2 : 1
 	var timeeff = Math.max(33e-6, worstChallengeTime * 0.1)
 	var base = tmp.mod.ngmX >= 4 ? 3e4 : 3e3
 	var eff = Decimal.max(Math.pow(base / timeeff, exp), 1)
@@ -158,7 +158,7 @@ function updateChallenges() {
 	if (player.currentChallenge === "") {
 		if (!player.challenges.includes("challenge1")) running.push("challenge1")
 	} else running.push(player.currentChallenge)
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		var chall = player.galacticSacrifice.chall
 		if (chall) running.push("challenge" + chall)
 	}
@@ -192,7 +192,7 @@ function updateChallenges() {
 
 function getNextAt(chall) {
 	let ret = nextAt[chall]
-	if (player.galacticSacrifice) {
+	if (inNGM(2)) {
 		let retMod = nextAt[chall+"_ngmm"]
 		if (retMod) ret = retMod
 	}
@@ -213,7 +213,7 @@ function getNextAt(chall) {
 
 function getGoal(chall) {
 	let ret = goals[chall]
-	if (player.galacticSacrifice) {
+	if (inNGM(2)) {
 		let retMod = goals[chall+"_ngmm"]
 		if (retMod) ret = retMod
 	}
@@ -233,7 +233,7 @@ function getGoal(chall) {
 }
 
 function checkICID(name) {
-	if (player.galacticSacrifice) {
+	if (inNGM(2)) {
 		var split = name.split("postcngm3_")
 		if (split[1] != undefined) return parseInt(split[1]) + 2
 
@@ -247,7 +247,7 @@ function checkICID(name) {
 		var split = name.split("postcngc_")
 		if (split[1] != undefined) {
 			var num = parseInt(split[1])
-			var offset = player.tickspeedBoosts != undefined ? 13 : player.galacticSacrifice !== undefined ? 11 : 8
+			var offset = player.tickspeedBoosts != undefined ? 13 : inNGM(2) ? 11 : 8
 			return num + offset
 		}
 
@@ -270,7 +270,7 @@ function resetIC1Reward() {
 
 	let ics = 0
 	for (var i = 0; i < player.challenges.length; i++) if (player.challenges[i].split("postc")[1]) ics++
-	infDimPow = Math.pow(tmp.ngmX >= 2 ? 2 : 1.3, ics)
+	infDimPow = Math.pow(inNGM(2) ? 2 : 1.3, ics)
 }
 
 // todo: Fix Normal Challenge IDs!

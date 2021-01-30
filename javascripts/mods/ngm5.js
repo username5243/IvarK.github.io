@@ -45,7 +45,7 @@ function maxAllIDswithAM() {
 }
 
 function resetIDsOnNGM5() {
-	if (tmp.ngmX >= 5) resetInfDimensions(true)
+	if (inNGM(5)) resetInfDimensions(true)
 }
 
 //Global Dimension unlocks
@@ -285,7 +285,7 @@ function getPUCost(x,r,l) {
 }
 
 function hasPU(x, r) { // x = upgrade id, r = level, nq = not quick matter reset
-	let e = tmp.ngmX >= 5
+	let e = inNGM(5)
 	if (r) return (e && player.pSac.rebuyables[x]) || 0
 	return e && player.pSac.upgs.includes(x)
 }
@@ -425,7 +425,7 @@ function getPDAcceleration() {
 
 //Paradox Layer Reset
 function resetPSac() {
-	if (tmp.ngmX >= 5) {
+	if (inNGM(5)) {
 		PXminpeak = new Decimal(0)
 		let keepPU = false //Wait until the next update comes.
 		let keepPUR = tmp.Greward >= 3

@@ -28,7 +28,7 @@ function updateQuantumChallenges() {
 			var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
 			var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
 			getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
-			getEl(property+"cost").textContent = "Cost: " + (!sc2 && !player.achievements.includes("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
+			getEl(property+"cost").textContent = "Cost: " + (!sc2 && !hasAch("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
 			getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
 			getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
 			getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
@@ -127,8 +127,8 @@ function getQCGoalLog(QCs, bigRip) {
 	feel free to never uncomment this :) but i think it might be a good idea for balance
 	*/
 	if (!bigRip) {
-		if (player.achievements.includes("ng3p96")) mult *= 0.95
-		if (player.achievements.includes("ng3p107")) mult *= 0.8
+		if (hasAch("ng3p96")) mult *= 0.95
+		if (hasAch("ng3p107")) mult *= 0.8
 		if (bu62.active("nf")) mult /= tmp.blu[62]
 	}
 	if (bigRip != "ghp_gain") {
@@ -360,7 +360,7 @@ function updateQCRewardsTemp() {
 }
 
 function getQCCost(QCs) {
-	if (player.achievements.includes("ng3p55")) return 0
+	if (hasAch("ng3p55")) return 0
 
 	let x = quantumChallenges.costs[QCs[0]]
 	if (QCs[1]) x += quantumChallenges.costs[QCs[1]]

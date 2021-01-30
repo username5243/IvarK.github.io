@@ -3,7 +3,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	if (tmp.ngp3 && tmp.qu.bigRip.active) force = true
 	if (!(isQuantumReached()||force)||implosionCheck) return
 	var headstart = tmp.mod.newGamePlusVersion > 0 && !tmp.ngp3
-	if (tmp.mod.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (tmp.ngmX >= 2 ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
+	if (tmp.mod.quantumConf&&!(auto||force)) if (!confirm(player.masterystudies?"Quantum will reset everything Eternity resets, and including all Eternity Content. You will gain a quark and unlock various upgrades." + (inNGM(2) ? " WARNING! THIS EXITS NG-- MODE DUE TO BALANCING REASONS!" : ""):"WARNING! Quantum wasn't fully implemented in NG++, so if you go Quantum now, you will gain quarks, but they'll have no use. Everything up to and including Eternity features will be reset.")) return
 	if (!ph.did("quantum")) if (!confirm("Are you sure you want to do this? You will lose everything you have!")) return
 
 	var QCs = []
@@ -108,7 +108,7 @@ function getQCtoQKEffect(){
 function getEPtoQKExp(){
 	let exp = testHarderNGp3 ? 0.5 : 0.6
 	if (tmp.newNGP3E) exp += 0.05
-	if (player.achievements.includes("ng3p28")) exp *= 1.01
+	if (hasAch("ng3p28")) exp *= 1.01
 	return exp
 }
 
@@ -120,11 +120,11 @@ function getEPtoQKMult(){
 
 function getAchBonusQKPreSoftcapMult(){
 	let log = 0
-	if (player.achievements.includes("ng3p16")) log += getEPtoQKMult()
-	if (player.achievements.includes("ng3p33")) log += Math.log10(getQCtoQKEffect())
-	if (player.achievements.includes("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
-	if (player.achievements.includes("ng3p65")) log += getTotalRadioactiveDecays()
-	if (player.achievements.includes("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
+	if (hasAch("ng3p16")) log += getEPtoQKMult()
+	if (hasAch("ng3p33")) log += Math.log10(getQCtoQKEffect())
+	if (hasAch("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
+	if (hasAch("ng3p65")) log += getTotalRadioactiveDecays()
+	if (hasAch("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
 	return log
 }
 
@@ -135,7 +135,7 @@ function quarkGain() {
 	if (!ph.did("quantum")) return new Decimal(1)
 	if (player.ghostify.milestones) ma = player.meta.bestAntimatter.max(1)
 
-	let log = (ma.log10() - 379.4) / (player.achievements.includes("ng3p63") ? 279.8 : 280)
+	let log = (ma.log10() - 379.4) / (hasAch("ng3p63") ? 279.8 : 280)
 	let logBoost = 2
 	let logBoostExp = 1.5
 	if (log > logBoost) log = Math.pow(log / logBoost, logBoostExp) * logBoost
@@ -157,7 +157,7 @@ function quarkGain() {
 
 function getQuarkMult() {
 	x = Decimal.pow(2, tmp.qu.multPower.total)
-	if (player.achievements.includes("ng3p93")) x = x.times(500)
+	if (hasAch("ng3p93")) x = x.times(500)
 	return x
 }
 
@@ -299,7 +299,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	// check if forced quantum
 	// otherwise, give rewards
 	if (force) {
-		if (bigRip && player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
+		if (bigRip && hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 		else bankedEterGain = 0
 	} else {
 		for (var i = tmp.qu.last10.length - 1; i > 0; i--) {
@@ -341,10 +341,10 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (inQC(1/0) && inQCModifier("?1") && inQCModifier("?2")) giveAchievement("Brutually Challenging")
 		if (inQC(1) && inQCModifier("ad") && inQCModifier("sm") && inQCModifier("ms") && inQCModifier("tb")) giveAchievement("Chaos, Chaos, Chaos!")
-		if (player.achievements.includes("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
+		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached > 0
-	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
+	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var oldTime = tmp.qu.time
 	tmp.qu.time = 0
 	updateQuarkDisplay()
@@ -406,7 +406,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	} else tmp.qu.gluons = 0;
 
 	if (player.tickspeedBoosts !== undefined) player.tickspeedBoosts = 0
-	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
 	else player.infinityPoints = new Decimal(0);
 
 	// more big rip stuff
@@ -437,7 +437,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	}
 		
 	player.money = onQuantumAM()
-	if (player.galacticSacrifice && !keepABnICs) player.autobuyers[12] = 13
+	if (inNGM(2) && !keepABnICs) player.autobuyers[12] = 13
 	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14
 	player.challenges = challengesCompletedOnEternity(bigRip)
 	if (bigRip && player.ghostify.milestones > 9 && tmp.mod.ngudpV) for (var u = 7; u < 10; u++) player.eternityUpgrades.push(u)
@@ -553,13 +553,13 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (oheHeadstart) player.replicanti.amount = new Decimal(1)
 	player.replicanti.galaxies = 0
 	updateRespecButtons()
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r36")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r45")) player.tickspeed = player.tickspeed.times(0.98);
 	if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
 	updateAutobuyers()
-	if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
-	if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+	if (hasAch("r85")) player.infMult = player.infMult.times(4);
+	if (hasAch("r93")) player.infMult = player.infMult.times(4);
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
 	resetInfDimensions();
 	updateChallenges();
 	updateNCVisuals()
@@ -567,7 +567,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	updateLastTenRuns()
 	updateLastTenEternities()
 	updateLastTenQuantums()
-	if (!player.achievements.includes("r133") && !bigRip) {
+	if (!hasAch("r133") && !bigRip) {
 		var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
 		for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
 	}

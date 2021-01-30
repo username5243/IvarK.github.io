@@ -30,7 +30,7 @@ function resetNGUdData(onQuantum) {
 		getEl("blackholeunlock").style.display = "inline-block"
 	}
 
-	if (onQuantum && player.achievements.includes("ng3p67") && tmp.mod.ngudpV && !tmp.mod.ngumuV) return
+	if (onQuantum && hasAch("ng3p67") && tmp.mod.ngudpV && !tmp.mod.ngumuV) return
 	for (let d = 1; d <= (tmp.mod.nguspV ? 8 : 4); d++) {
 		player["blackholeDimension" + d] = {
 			cost: blackholeDimStartCosts[d],

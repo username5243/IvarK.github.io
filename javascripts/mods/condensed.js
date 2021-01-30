@@ -230,7 +230,7 @@ let CONDENSED = {
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.infinityPoints
-				getEl("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (tmp.ngmX >= 5 ? " IP" : "")
+				getEl("infCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(5) ? " IP" : "")
 				getEl("infCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {
@@ -322,7 +322,7 @@ let CONDENSED = {
 				let costPart = ph.did("quantum") ? '' : 'Condense: '
 				let cost = this.cost(x)
 				let resource = player.eternityPoints
-				getEl("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (tmp.ngmX >= 4 ? " EP" : "")
+				getEl("timeCnd" + x).textContent = costPart + shortenPreInfCosts(cost) + (inNGM(4) ? " EP" : "")
 				getEl("timeCnd" + x).className = resource.gte(cost) ? 'storebtn' : 'unavailablebtn'
 			},
 			buy(x) {

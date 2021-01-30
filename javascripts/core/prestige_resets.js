@@ -2,10 +2,10 @@ function onQuantumAM(){
 	let x = 10
 	if (player.challenges.includes("challenge1")) x = 100
 	if (tmp.mod.ngmX > 3) x = 200
-	if (player.achievements.includes("r37")) x = 1000
-	if (player.achievements.includes("r54")) x = 2e5
-	if (player.achievements.includes("r55")) x = 1e10
-	if (player.achievements.includes("r78")) x = 2e25
+	if (hasAch("r37")) x = 1000
+	if (hasAch("r54")) x = 2e5
+	if (hasAch("r55")) x = 1e10
+	if (hasAch("r78")) x = 2e25
 	return new Decimal(x)
 }
 
@@ -22,7 +22,7 @@ function NC10NDCostsOnReset(){
 
 function replicantsResetOnQuantum(isQC){
 	tmp.qu.replicants.requirement = new Decimal("1e3000000")
-	tmp.qu.replicants.quarks = (!isQC && player.achievements.includes("ng3p45")) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
+	tmp.qu.replicants.quarks = (!isQC && hasAch("ng3p45")) ? tmp.qu.replicants.quarks.pow(2/3) : new Decimal(0)
 	tmp.qu.replicants.eggonProgress = new Decimal(0)
 	tmp.qu.replicants.eggons = new Decimal(0)
 	tmp.qu.replicants.babyProgress = new Decimal(0)
@@ -30,7 +30,7 @@ function replicantsResetOnQuantum(isQC){
 	tmp.qu.replicants.growupProgress = new Decimal(0)
 	for (let d = 1; d <= 8; d++) {
 		if (d == 8 || tmp.eds[d].perm < 10) tmp.qu.replicants.quantumFood += Math.round(tmp.eds[d].progress.toNumber() * 3) % 3
-		if (d != 1 || !player.achievements.includes("ng3p46") || isQC) {
+		if (d != 1 || !hasAch("ng3p46") || isQC) {
 			tmp.eds[d].workers = new Decimal(tmp.eds[d].perm)
 			tmp.eds[d].progress = new Decimal(0)
 		} else {
@@ -51,7 +51,7 @@ function nanofieldResetOnQuantum(){
 function doQuantumResetStuff(bigRip, isQC){
 	var headstart = player.meta !== undefined && !tmp.ngp3
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >=1
-	var keepABnICs = oheHeadstart || bigRip || player.achievements.includes("ng3p51")
+	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 
@@ -62,7 +62,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.challenges = keepABnICs ? player.challenges : []
 	player.currentChallenge = ""
 	player.infinitied = 0
-	player.infinitiedBank = headstart || player.achievements.includes("ng3p15") ? player.infinitiedBank : 0
+	player.infinitiedBank = headstart || hasAch("ng3p15") ? player.infinitiedBank : 0
 	player.bestInfinityTime = 9999999999
 	player.thisInfinityTime = 0
 	player.resets = keepABnICs ? 4 : 0
@@ -94,11 +94,11 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.postC8Mult = new Decimal(1)
 	player.overXGalaxies = keepABnICs ? player.overXGalaxies : 0
 	player.overXGalaxiesTickspeedBoost = keepABnICs || player.tickspeedBoosts == undefined ? player.overXGalaxiesTickspeedBoost : 0
-	player.postChallUnlocked = player.achievements.includes("r133") || bigRip ? order.length : 0
+	player.postChallUnlocked = hasAch("r133") || bigRip ? order.length : 0
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : player.achievements.includes("ng3p12") ? Math.max(Math.floor(1e8 / player.quantum.best), 2e4) : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : hasAch("ng3p12") ? Math.max(Math.floor(1e8 / player.quantum.best), 2e4) : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
@@ -111,17 +111,17 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.offlineProd = keepABnICs ? player.offlineProd : 0
 	player.offlineProdCost = keepABnICs ? player.offlineProdCost : 1e7
 	player.challengeTarget = 0
-	player.autoSacrifice = keepABnICs || player.achievements.includes("r133") ? player.autoSacrifice : 1
+	player.autoSacrifice = keepABnICs || hasAch("r133") ? player.autoSacrifice : 1
 	player.replicanti = {
 		amount: new Decimal(oheHeadstart ? 1 : 0),
 		unl: oheHeadstart,
 		chance: 0.01,
-		chanceCost: new Decimal(tmp.ngmX >= 2 ? 1e90 : 1e150),
+		chanceCost: new Decimal(inNGM(2) ? 1e90 : 1e150),
 		interval: 1000,
-		intervalCost: new Decimal(tmp.ngmX >= 2 ? 1e80 : 1e140),
+		intervalCost: new Decimal(inNGM(2) ? 1e80 : 1e140),
 		gal: 0,
 		galaxies: 0,
-		galCost: new Decimal(tmp.ngmX >= 2 ? 1e110 : 1e170),
+		galCost: new Decimal(inNGM(2) ? 1e110 : 1e170),
 		galaxybuyer: bigRipChanged ? turnSomeOn : oheHeadstart ? player.replicanti.galaxybuyer : undefined,
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
@@ -157,7 +157,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.dilation = {
 		studies: bigRip ? (tmp.bruActive[12] ? [1,2,3,4,5,6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
 		active: false,
-		tachyonParticles: (((player.achievements.includes("ng3p37") && (!bigRip || tmp.bruActive[11])) || player.achievements.includes("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones >= 16 && (!bigRip || player.achievements.includes("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
+		tachyonParticles: (((hasAch("ng3p37") && (!bigRip || tmp.bruActive[11])) || hasAch("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -184,12 +184,12 @@ function resetNormalDimensions(){
 }
 
 function doGalaxyResetStuff(bulk){
-	player.money = player.achievements.includes("r111") ? player.money : new Decimal(10)
+	player.money = hasAch("r111") ? player.money : new Decimal(10)
 	resetNormalDimensions()
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	player.sacrificed = new Decimal(0)
 	player.totalBoughtDims = resetTotalBought()
-	player.resets = player.achievements.includes("ng3p55") ? player.resets : 0
+	player.resets = hasAch("ng3p55") ? player.resets : 0
 	player.interval = null
 	player.tdBoosts = resetTDBoosts()
 	player.galaxies = player.galaxies + bulk
@@ -370,7 +370,7 @@ function doEternityResetStuff() {
 	player.dimensionMultDecreaseCost = getEternitied() > 19 ? player.dimensionMultDecreaseCost : 1e8
 	player.extraDimPowerIncrease = getEternitied() > 19 ? player.extraDimPowerIncrease : 0
 	player.dimPowerIncreaseCost = getEternitied() > 19 ? player.dimPowerIncreaseCost : 1e3    
-	player.postChallUnlocked = player.achievements.includes("r133") ? order.length : 0
+	player.postChallUnlocked = hasAch("r133") ? order.length : 0
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
 	resetInfDimensions(true)
@@ -436,9 +436,9 @@ function getToDOnGhostifyData(){
 		},
 		upgrades: {}
 	}
-	if (player.quantum.tod.b.decays && player.achievements.includes("ng3p86")) ret.b.decays = Math.floor(player.quantum.tod.b.decays * .75)
-	if (player.quantum.tod.r.decays && player.achievements.includes("ng3p86")) ret.r.decays = Math.floor(player.quantum.tod.r.decays * .75)
-	if (player.quantum.tod.g.decays && player.achievements.includes("ng3p86")) ret.g.decays = Math.floor(player.quantum.tod.g.decays * .75)
+	if (player.quantum.tod.b.decays && hasAch("ng3p86")) ret.b.decays = Math.floor(player.quantum.tod.b.decays * .75)
+	if (player.quantum.tod.r.decays && hasAch("ng3p86")) ret.r.decays = Math.floor(player.quantum.tod.r.decays * .75)
+	if (player.quantum.tod.g.decays && hasAch("ng3p86")) ret.g.decays = Math.floor(player.quantum.tod.g.decays * .75)
 	return ret
 }
 
@@ -453,7 +453,7 @@ function getBigRipOnGhostifyData(nBRU){
 		bestGals: tmp.qu.bigRip.bestGals,
 		savedAutobuyersNoBR: tmp.qu.bigRip.savedAutobuyersNoBR,
 		savedAutobuyersBR: tmp.qu.bigRip.savedAutobuyersBR,
-		spaceShards: new Decimal(player.achievements.includes("ng3p105") ? 1e25 : 0),
+		spaceShards: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm ? nBRU : []
 	}
 }
@@ -462,7 +462,7 @@ function getBreakEternityDataOnGhostify(nBEU, bm){
 	return {
 		unlocked: bm > 14,
 		break: bm > 14 ? tmp.qu.breakEternity.break : false,
-		eternalMatter: new Decimal(player.achievements.includes("ng3p105") ? 1e25 : 0),
+		eternalMatter: new Decimal(hasAch("ng3p105") ? 1e25 : 0),
 		upgrades: bm > 14 ? nBEU : [],
 		epMultPower: 0
 	}
@@ -609,7 +609,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
 	player.overXGalaxiesTickspeedBoost = player.tickspeedBoosts == undefined ? player.overXGalaxiesTickspeedBoost : 0
-	player.postChallUnlocked = player.achievements.includes("r133") ? order.length : 0
+	player.postChallUnlocked = hasAch("r133") ? order.length : 0
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
@@ -628,12 +628,12 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 		amount: new Decimal(bm ? 1 : 0),
 		unl: bm > 0,
 		chance: 0.01,
-		chanceCost: new Decimal(tmp.ngmX >= 2 ? 1e90 : 1e150),
+		chanceCost: new Decimal(inNGM(2) ? 1e90 : 1e150),
 		interval: 1000,
-		intervalCost: new Decimal(tmp.ngmX >= 2 ? 1e80 : 1e140),
+		intervalCost: new Decimal(inNGM(2) ? 1e80 : 1e140),
 		gal: 0,
 		galaxies: 0,
-		galCost: new Decimal(player.galacticSacrifice != undefined ? 1e110 : 1e170),
+		galCost: new Decimal(inNGM(2) ? 1e110 : 1e170),
 		galaxybuyer: player.replicanti.galaxybuyer,
 		auto: bm ? player.replicanti.auto : [false, false, false]
 	}
@@ -710,9 +710,9 @@ function doPreInfinityGhostifyResetStuff(implode){
 }
 
 function doInfinityGhostifyResetStuff(implode, bm){
-	if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4)
-	if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4)
-	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25)
+	if (hasAch("r85")) player.infMult = player.infMult.times(4)
+	if (hasAch("r93")) player.infMult = player.infMult.times(4)
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25)
 	player.challenges = challengesCompletedOnEternity()
 	IPminpeak = new Decimal(0)
 	if (isEmptiness) {
@@ -744,7 +744,7 @@ function doInfinityGhostifyResetStuff(implode, bm){
 }
 
 function doTOUSOnGhostify(bm){
-	if (player.achievements.includes("ng3p77")) { // theory of ultimate studies
+	if (hasAch("ng3p77")) { // theory of ultimate studies
 		player.timestudy.studies=[]
 		player.masterystudies=[]
 		for (var t = 0; t < all.length; t++) player.timestudy.studies.push(all[t])

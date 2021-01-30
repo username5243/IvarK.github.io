@@ -53,7 +53,7 @@ var masteryStudies = {
 			return tmp.qu.nanofield.rewards >= 16
 		},
 		14() {
-			return player.achievements.includes("ng3p34")
+			return hasAch("ng3p34")
 		}
 	},
 	unlockReqDisplays: {
@@ -496,8 +496,8 @@ function buyMasteryStudy(type, id, quick=false) {
 		}
 		if (id == 241 && !GUActive("gb3")) {
 			var otherMults = 1
-			if (player.achievements.includes("r85")) otherMults *= 4
-			if (player.achievements.includes("r93")) otherMults *= 4
+			if (hasAch("r85")) otherMults *= 4
+			if (hasAch("r93")) otherMults *= 4
 			var old = getIPMultPower()
 			if (!GUBought("gb3")) ipMultPower = 2.1
 			player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
@@ -511,7 +511,7 @@ function buyMasteryStudy(type, id, quick=false) {
 		if (id == 266 && player.replicanti.gal > 399) {
 			var gal = player.replicanti.gal
 			player.replicanti.gal = 0
-			player.replicanti.galCost = new Decimal(player.galacticSacrifice!=undefined?1e110:1e170)
+			player.replicanti.galCost = new Decimal(inNGM(2)?1e110:1e170)
 			player.replicanti.galCost = getRGCost(gal)
 			player.replicanti.gal = gal
 		}
@@ -520,7 +520,7 @@ function buyMasteryStudy(type, id, quick=false) {
 		}
 		if (id == 321){
 			var tiers = [ null, "first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight" ]
-			var isone = ((inQC(5)||inQC(7))&&focusOn!="linear")||(((inNC(13)&&player.tickspeedBoosts==undefined)||player.currentChallenge=="postc1"||player.currentChallenge=="postcngm3_1")&&player.galacticSacrifice!=undefined)
+			var isone = ((inQC(5)||inQC(7))&&focusOn!="linear")||(((inNC(13)&&player.tickspeedBoosts==undefined)||player.currentChallenge=="postc1"||player.currentChallenge=="postcngm3_1")&&inNGM(2))
 			if (isone) {
 				for (var i = 1; i<9; i++) {
 					player[tiers[i] + "Pow"] = player[tiers[i] + "Pow"].times(Decimal.pow(10, 430 * player[tiers[i] + "Bought"]/10))

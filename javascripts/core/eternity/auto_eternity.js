@@ -35,7 +35,7 @@ function toggleAutoEterMode() {
 	if (player.autoEterMode == "amount") player.autoEterMode = "time"
 	else if (player.autoEterMode == "time") player.autoEterMode = "relative"
 	else if (player.autoEterMode == "relative") player.autoEterMode = "relativebest"
-	else if (player.autoEterMode == "relativebest" && player.achievements.includes("ng3p51")) player.autoEterMode = "eternitied"
+	else if (player.autoEterMode == "relativebest" && hasAch("ng3p51")) player.autoEterMode = "eternitied"
 	else if (player.autoEterMode == "eternitied") player.autoEterMode = "exponent"
 	else if ((player.autoEterMode == "peak" || player.autoEterMode == "exponent") && speedrunMilestonesReached > 24) player.autoEterMode = "manual"
 	else if (player.autoEterMode) player.autoEterMode = "amount"
@@ -58,7 +58,7 @@ function toggleAutoEter(id) {
 
 function doAutoEterTick() {
 	if (!player.meta) return
-	if (player.achievements.includes("ngpp17")) {
+	if (hasAch("ngpp17")) {
 		if (player.masterystudies == undefined || tmp.be || !tmp.qu.bigRip.active) for (var d = 1; d < 9; d++) if (player.autoEterOptions["td" + d]) buyMaxTimeDimension(d)
 		if (player.autoEterOptions.epmult) buyMaxEPMult()
 		if (player.autoEterOptions.blackhole) {

@@ -847,7 +847,7 @@ let tsMults = {
 		else if (player.galacticSacrifice === undefined) log = Math.min(log, 2500)
 		if (log < 0) log = 0
 		
-		if (player.galacticSacrifice || !bigRipped) return Decimal.pow(10, log)
+		if (inNGM(2) || !bigRipped) return Decimal.pow(10, log)
 		log = softcap(log, "ts11_log_big_rip")
 		
 		return Decimal.pow(10, log)
@@ -882,11 +882,11 @@ let tsMults = {
 		return Decimal.pow(1.0004, player.totalTickGained)
 	},
 	141() {
-		if (player.achievements.includes("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
+		if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
 		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime+1) * Math.pow(player.thisInfinityTime+1, 0.125))).max(1)
 	},
 	211() {
-		return tmp.ngmX >= 2 ? 1 : 5
+		return inNGM(2) ? 1 : 5
 	},
 	212() {
 		let r = player.timeShards.max(2).log2()
@@ -897,7 +897,7 @@ let tsMults = {
 		return tmp.ngC ? 2 : (tmp.ngex ? 10 : 20)
 	},
 	222() {
-		return tmp.ngmX >= 2 ? 0.5 : 2
+		return inNGM(2) ? 0.5 : 2
 	},
 	221() {
 		return Decimal.pow(1.0025, player.resets)
@@ -919,7 +919,7 @@ let tsMults = {
 	},
 	231() {
 		let x = Decimal.pow(Math.max(player.resets, 1), 0.3)
-		if (tmp.ngp3 && player.achievements.includes("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(player.resets / 1e5 + 1, 1.25)))
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(player.resets / 1e5 + 1, 1.25)))
 		return x
 	},
 	232() {

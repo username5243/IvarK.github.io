@@ -58,7 +58,7 @@ function bosonicLabReset() {
 		glyphs: [],
 		enchants: {},
 		usedEnchants: tmp.bl.usedEnchants,
-		upgrades: player.achievements.includes("ng3p104") ? oldUpgs : [],
+		upgrades: hasAch("ng3p104") ? oldUpgs : [],
 		battery: new Decimal(0),
 		odSpeed: player.ghostify.bl.odSpeed
 	}
@@ -78,16 +78,16 @@ function bosonicLabReset() {
 	delete tmp.qu.nanofield.apgWoke
 
 	for (let g = 1; g <= br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(new Decimal(0))
-	if (!player.achievements.includes("ng3p104")) {
+	if (!hasAch("ng3p104")) {
 		let order = [11, 12, 13, 15, 14, 21, 22, 23, 24, 25, 31, 32, 33, 34, 35, 41, 42, 43, 44, 45]
 		for (let i = 0; i < startingEnchants; i++) {
 			if (i == order.length) break //this needs to make sure that it doesnt give you upgrades you havent unlocked yet
 			player.ghostify.bl.upgrades.push(order[i])
 		}
-		if (oldUpgs.includes(32) && player.achievements.includes("ng3p92")) player.ghostify.bl.upgrades.push(32)
+		if (oldUpgs.includes(32) && hasAch("ng3p92")) player.ghostify.bl.upgrades.push(32)
 	}
 
-	if (player.achievements.includes("ng3p98")) {
+	if (hasAch("ng3p98")) {
 		player.ghostify.wzb.wpb = Decimal.pow(3, player.ghostify.hb.higgs)
 		player.ghostify.wzb.zb = Decimal.pow(9, player.ghostify.hb.higgs)
 	}
@@ -102,7 +102,7 @@ function bosonicLabReset() {
 
 function higgsReset(auto) {
 	let oldHiggs = player.ghostify.hb.higgs
-	let resetNothing = pl.on() && player.achievements.includes("ng3p112")
+	let resetNothing = pl.on() && hasAch("ng3p112")
 	if (!player.ghostify.bl.am.gte(getHiggsRequirement())) return
 	if (!auto && !resetNothing && !tmp.mod.higgsNoConf && !confirm("You will exchange all your Bosonic Lab stuff for Higgs Bosons. Everything that Light Empowerments resets initally will be reset. Are you ready to proceed?")) return
 	addHiggs(getHiggsGain())

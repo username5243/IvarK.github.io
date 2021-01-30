@@ -212,7 +212,7 @@ function getECGoal(x) {
 	let expInit = ecExpData.inits[x]
 	let expIncrease = ecExpData.increases[x]
 	let completions = ECComps(x)
-	if (player.galacticSacrifice != undefined) {
+	if (inNGM(2)) {
 		expInit = ecExpData.inits[x + "_ngmm"] || expInit
 		expIncrease = ecExpData.increases[x + "_ngmm"] || expIncrease
 	}
@@ -261,7 +261,7 @@ function startEternityChallenge(n) {
 	updateBankedEter()
 	player.thisEternity = 0
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
-	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
 	else player.infinityPoints = new Decimal(0);
 	
 	doEternityResetStuff()
@@ -270,7 +270,7 @@ function startEternityChallenge(n) {
 	player.currentEternityChall =  "eterc" + n
 	player.galacticSacrifice = resetGalacticSacrifice(true)
 		
-	if (player.galacticSacrifice && getEternitied() < 2) player.autobuyers[12] = 13
+	if (inNGM(2) && getEternitied() < 2) player.autobuyers[12] = 13
 	if (player.tickspeedBoosts != undefined && getEternitied() < 2) player.autobuyers[13] = 14
 	if (player.dilation.active) {
 		player.dilation.active = false
@@ -284,8 +284,8 @@ function startEternityChallenge(n) {
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	setInitialResetPower()
-	if (player.achievements.includes("r36")) player.tickspeed = player.tickspeed.times(0.98);
-	if (player.achievements.includes("r45")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r36")) player.tickspeed = player.tickspeed.times(0.98);
+	if (hasAch("r45")) player.tickspeed = player.tickspeed.times(0.98);
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
 		for (let i = 0; i < autobuyers.length; i++) autobuyers.item(i).style.display = "none"
@@ -297,15 +297,15 @@ function startEternityChallenge(n) {
 	}
 	updateAutobuyers()
 	setInitialMoney()
-	if (player.achievements.includes("r85")) player.infMult = player.infMult.times(4);
-	if (player.achievements.includes("r93")) player.infMult = player.infMult.times(4);
-	if (player.achievements.includes("r104")) player.infinityPoints = new Decimal(2e25);
+	if (hasAch("r85")) player.infMult = player.infMult.times(4);
+	if (hasAch("r93")) player.infMult = player.infMult.times(4);
+	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
 	resetInfDimensions(true);
 	updateChallenges();
 	updateNCVisuals()
 	updateLastTenRuns()
 	updateLastTenEternities()
-	if (!player.achievements.includes("r133")) {
+	if (!hasAch("r133")) {
 		let infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
 		for (let i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
 	}
@@ -343,7 +343,7 @@ function startEternityChallenge(n) {
 }
 
 function isEC12Active() {
-	return player.currentEternityChall == "eterc12" || tmp.ngmX >= 5
+	return player.currentEternityChall == "eterc12" || inNGM(5)
 }
 
 function getEC12Mult() {
@@ -366,7 +366,7 @@ function ECComps(name) {
 }
 
 function getECReward(x) {
-	let m2 = player.galacticSacrifice !== undefined
+	let m2 = inNGM(2)
 	let pc = !(!tmp.ngC)
 	let ei = m2 || pc //either
 	let c = ECComps("eterc" + x)
@@ -419,7 +419,7 @@ function doCheckECCompletionStuff(){
 		}
 		else if (tmp.mod.eternityChallRecords[player.eternityChallUnlocked] === undefined) tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
 		else tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, tmp.mod.eternityChallRecords[player.eternityChallUnlocked])
-		if (player.currentEternityChall === "eterc12" && player.achievements.includes("ng3p51")) {
+		if (player.currentEternityChall === "eterc12" && hasAch("ng3p51")) {
 			if (player.eternityChalls.eterc11 === undefined) player.eternityChalls.eterc11 = 1
 			else if (player.eternityChalls.eterc11 < 5) player.eternityChalls.eterc11++
 		}

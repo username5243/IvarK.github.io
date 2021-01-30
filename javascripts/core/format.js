@@ -695,7 +695,7 @@ shortenMoney = function (money) {
 };
 
 shortenND = function (money) {
-	return formatValue(player.options.notation, money, 2, tmp.ngmX >= 4 ? Math.min(Math.max(3 - money.exponent, 0), 3) : 0)
+	return formatValue(player.options.notation, money, 2, inNGM(4) ? Math.min(Math.max(3 - money.exponent, 0), 3) : 0)
 }
 
 

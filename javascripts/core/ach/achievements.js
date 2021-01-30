@@ -359,7 +359,7 @@ function clearOldAchieves(){
         if (values.indexOf(player.achievements[i]) !== -1 ) {  // does index[i] exist in allAchievements as a value?
             toRemove.push(i); // mark it for removal
             achieveKey = Object.keys(allAchievements).find(function(key){ return allAchievements[key] === player.achievements[i];});
-            if (!player.achievements.includes(achieveKey)) { // check if new key already exists as well
+            if (!hasAch(achieveKey)) { // check if new key already exists as well
                 player.achievements.push(achieveKey); // if not... add it
             }
         } else if (allAchievements[player.achievements[i]] === undefined){
@@ -381,7 +381,7 @@ function checkAchievement(id) {
 	if ((id == "ngpp13" || id == "ngpp18") && player.exdilation) return false
 
 	//Mod check
-	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
+	if (id.split("ngm5p")[1]) return inNGM(5)
 	if (id.split("ngud")[1]) return player.exdilation != undefined
 	if (id.split("ngpp")[1]) return player.meta != undefined
 	if (id.split("ng3p")[1]) return tmp.ngp3
@@ -395,7 +395,7 @@ function checkAchievement(id) {
 
 function checkAchievementRow(id) {
 	//Mod check
-	if (id.split("ngm5p")[1]) return tmp.ngmX >= 5
+	if (id.split("ngm5p")[1]) return inNGM(5)
 	if (id.split("ngud")[1]) return player.exdilation != undefined
 	if (id.split("ngpp")[1]) return player.meta != undefined
 	if (id.split("ng3p")[1]) return tmp.ngp3
@@ -408,10 +408,10 @@ function checkAchievementRow(id) {
 }
 
 function giveAchievement(name, noUpdate) {
-	if (player.achievements.includes(name)) clearOldAchieves()
+	if (hasAch(name)) clearOldAchieves()
 
 	let id = allAchievementNums[name]
-	if (player.achievements.includes(id)) return false
+	if (hasAch(id)) return false
 	if (!checkAchievement(id)) return false
 
 	player.achievements.push(id)
@@ -447,24 +447,24 @@ function giveAchievement(name, noUpdate) {
 		setAndMaybeShow('bestTPOverGhostifies', true, '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 		dev.giveAllNGAchievements()
 		for (let i = 1; i <= 8; i++){
-			if (!player.achievements.includes("ngpp1" + i)) player.achievements.push("ngpp1" + i)
-			if (!player.achievements.includes("ng3p1" + i)) player.achievements.push("ng3p1" + i)
-			if (!player.achievements.includes("ng3p2" + i)) player.achievements.push("ng3p2" + i)
+			if (!hasAch("ngpp1" + i)) player.achievements.push("ngpp1" + i)
+			if (!hasAch("ng3p1" + i)) player.achievements.push("ng3p1" + i)
+			if (!hasAch("ng3p2" + i)) player.achievements.push("ng3p2" + i)
 		}
 	}
 	if (name == "I rather to oppose the theory of everything") getEl('autoDisableQuantum').style.display = ""
 	if (name == "Even Ghostlier than before") {
 		for (let i = 1; i <= 8; i++){
-			if (!player.achievements.includes("ng3p3" + i)) player.achievements.push("ng3p3" + i)
-			if (!player.achievements.includes("ng3p4" + i)) player.achievements.push("ng3p4" + i)
-			if (!player.achievements.includes("ng3p5" + i)) player.achievements.push("ng3p5" + i)
-			if (!player.achievements.includes("ng3p6" + i)) player.achievements.push("ng3p6" + i)
+			if (!hasAch("ng3p3" + i)) player.achievements.push("ng3p3" + i)
+			if (!hasAch("ng3p4" + i)) player.achievements.push("ng3p4" + i)
+			if (!hasAch("ng3p5" + i)) player.achievements.push("ng3p5" + i)
+			if (!hasAch("ng3p6" + i)) player.achievements.push("ng3p6" + i)
 		}
 	}
 	if (name == "The Power of Relativity") {
 		for (let i = 1; i <= 8; i++){
-			if (!player.achievements.includes("ng3p7" + i)) player.achievements.push("ng3p7" + i)
-			if (!player.achievements.includes("ng3p8" + i)) player.achievements.push("ng3p8" + i)
+			if (!hasAch("ng3p7" + i)) player.achievements.push("ng3p7" + i)
+			if (!hasAch("ng3p8" + i)) player.achievements.push("ng3p8" + i)
 		}
 		updateBosonicLimits()
 	}
@@ -477,6 +477,10 @@ function giveAchievement(name, noUpdate) {
 		else $.notify(name, "success");
 		updateAchievements()
 	}
+}
+
+function hasAch(x) {
+	return player.achievements.includes(x)
 }
 
 function updateAchievements() {
@@ -497,7 +501,7 @@ function updateAchievements() {
 				id = (allAchievementReplacements[id] && allAchievementReplacements[id]()) || id
 
 				var name = allAchievements[id]
-				if (player.achievements.includes(id)) {
+				if (hasAch(id)) {
 					n++
 					getEl(name).className = "achievementunlocked"
 				} else {
@@ -523,7 +527,7 @@ function updateAchievements() {
 			if (tmp.mod.showAchRowNums) numberelement.innerHTML = "Row #" + rowsNum + "<br>" + n + " / 8<br>(" + (n*12.5).toFixed(1) + "%)"
 		}
 	}
-    player.achPow = Decimal.pow(tmp.ngmX >= 5 ? 20 : tmp.ngmX >= 2 ? 5 : 1.5, amount)
+    player.achPow = Decimal.pow(inNGM(5) ? 20 : inNGM(2) ? 5 : 1.5, amount)
     getEl("achmultlabel").textContent = "Current achievement multiplier to " + achMultLabelUpdate() + " Dimensions: " + shortenMoney(player.achPow) + "x"
 	getEl("nothingness").style.display = rowsShown ? "none" : ""
 
@@ -546,7 +550,7 @@ function updateAchievements() {
 				var achId = "s" + achNum
 				if (achNum > 40) achId = "ng3ps" + (achNum - 30)
 				var name = allAchievements[achId]
-				if (player.achievements.includes(achId)) {
+				if (hasAch(achId)) {
 					n++
 					getEl(name).setAttribute('ach-tooltip', secretAchievementTooltips[achId])
 					getEl(name).className = "achievementunlocked"
@@ -586,12 +590,12 @@ function getSecretAchAmount() {
         var achNum = i * 10
         if (i <= 3) for (var l = 0; l < 8; l++) {
             achNum = i * 10 + l + 1
-            if (player.achievements.includes("s" + achNum)) {
+            if (hasAch("s" + achNum)) {
                 n++
             }
         } else for (var l = 0; l < 8; l++) {
             achNum = i * 10 + l - 29
-            if (player.achievements.includes("ng3ps" + achNum)){
+            if (hasAch("ng3ps" + achNum)){
                 n++
             }
         }
@@ -622,9 +626,9 @@ function toggleSecretAchs() {
 
 function achMultLabelUpdate() {
         var labels = []
-        if (player.achievements.includes("r72") && tmp.mod.ngmX >= 4) labels.push("Galaxy Points")
+        if (hasAch("r72") && tmp.mod.ngmX >= 4) labels.push("Galaxy Points")
 	labels.push("Normal")
-	if (player.achievements.includes("r75")) labels.push("Infinity")
+	if (hasAch("r75")) labels.push("Infinity")
 	if (player.eternityUpgrades.includes(4)) labels.push("Time")
 	return wordizeList(labels)
 }
@@ -639,7 +643,7 @@ function metaAchMultLabelUpdate() {
 }
 
 function bWtAchMultLabelUpdate() {
-	if (!player.achievements.includes("ng3p91")) {
+	if (!hasAch("ng3p91")) {
 		getEl("bWtAchMultLabel").style.display = "none"
 		return
 	}

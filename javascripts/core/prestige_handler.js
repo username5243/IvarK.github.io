@@ -27,7 +27,7 @@ let Prestiges = {
 		quantum() {
 			return player.money.log10() >= getQCGoalLog() &&
 				Decimal.gte(
-					player.achievements.includes("ng3p76") ? player.meta.bestOverQuantums : player.meta.antimatter, 
+					hasAch("ng3p76") ? player.meta.bestOverQuantums : player.meta.antimatter, 
 					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
 				) && (!tmp.ngp3 || ECComps("eterc14")) && quarkGain().gt(0)
 		},
@@ -40,16 +40,16 @@ let Prestiges = {
 	},
 	modReqs: {
 		paradox() {
-			return tmp.ngmX >= 5
+			return inNGM(5)
 		},
 		accelerate() {
 			return tmp.ngmX >= 6
 		},
 		galaxy() {
-			return tmp.ngmX >= 2
+			return inNGM(2)
 		},
 		interreality() {
-			return tmp.ngmX >= 2
+			return inNGM(2)
 		},
 		singularity() {
 			return tmp.ngSg

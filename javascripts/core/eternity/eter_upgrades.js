@@ -34,7 +34,7 @@ let ETER_UPGS = {
 			if (e > 1e5) soft = nS(e, cap)
 
 			let achReward = 1
-			if (player.achievements.includes("ngpp15")) {
+			if (hasAch("ngpp15")) {
 				if (tmp.ngC || tmp.ngp3) achReward = Decimal.pow(tmp.ngC ? 10 : 1e3, Math.pow(Decimal.log10(Decimal.add(e, 10)), tmp.ngC ? 3 : 4))
 				else return Decimal.pow(e, Math.min(1e4, Math.pow(e, .3)))
 			}
@@ -48,7 +48,7 @@ let ETER_UPGS = {
 			let eu2formula = "(x/200)^log4(2x)"
 			if (tmp.ngC) eu2formula = "(x/100)^log2(4x)"
 			if (player.boughtDims !== undefined) eu2formula = "x^log4(2x)"
-			else if (player.achievements.includes("ngpp15")) eu2formula = tmp.ngC ? "x^log10(x)^2" : shortenCosts(1e3) + "^log(x)^4"
+			else if (hasAch("ngpp15")) eu2formula = tmp.ngC ? "x^log10(x)^2" : shortenCosts(1e3) + "^log(x)^4"
 
 			return "Infinity Dimension multiplier based on Eternities. (" + eu2formula + ")"
 		}

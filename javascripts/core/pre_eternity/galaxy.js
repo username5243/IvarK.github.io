@@ -7,7 +7,7 @@ function galaxyReset(bulk) {
 	doGalaxyResetStuff(bulk)
 
 	NC10NDCostsOnReset()
-	if (tmp.ngmX >= 5) resetInfDimensions()
+	if (inNGM(5)) resetInfDimensions()
 	resetTDsOnNGM4()
 	reduceDimCosts()
 	skipResets()
@@ -23,13 +23,13 @@ function galaxyReset(bulk) {
 	if (player.infinitied < 1 && player.eternities == 0 && !quantumed) {
 		getEl("sacrifice").style.display = "none"
 		getEl("confirmation").style.display = "none"
-		if (player.galacticSacrifice && (player.galaxies > 0 || (player.galacticSacrifice ? player.galacticSacrifice.times > 0 : false))) {
+		if (inNGM(2) && (player.galaxies > 0 || (inNGM(2) ? player.galacticSacrifice.times > 0 : false))) {
 			getEl("gSacrifice").style.display = "inline-block"
 			getEl("gConfirmation").style.display = "inline-block"
 		}
 	}
-	if (!player.achievements.includes("r111")) setInitialMoney()
-	if (player.achievements.includes("r66")) player.tickspeed = player.tickspeed.times(0.98);
+	if (!hasAch("r111")) setInitialMoney()
+	if (hasAch("r66")) player.tickspeed = player.tickspeed.times(0.98);
 	if (tmp.quActive && bulk) {
 		if (player.masterystudies.includes("d7")) sacrificeGalaxy()
 		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
@@ -47,7 +47,7 @@ getEl("secondSoftReset").onclick = function() {
 	let bool4 = player.currentChallenge != "postc7"
 	let bool5 = (player.currentEternityChall == "eterc6" || inQC(6)) && !tmp.be
 	var bool = bool1 && bool2  && bool3 && bool4 && !bool5 && !tmp.ri && !cantReset()
-	if (getAmount(inNC(4) || tmp.ngmX >= 5 ? 6 : 8) >= getGalaxyRequirement() && bool) {
+	if (getAmount(inNC(4) || inNGM(5) ? 6 : 8) >= getGalaxyRequirement() && bool) {
 		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(tmp.mod.ngmX > 3))) maxBuyGalaxies(true);
 		else galaxyReset(1)
 	}
@@ -60,8 +60,8 @@ function getDistantScalingEffect(){
 	if (GUActive("br6")) speed /= getBR6Effect()
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
 	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
-	if (player.achievements.includes("ng3p98")) speed *= 0.9
-	if (player.achievements.includes("ng3p101")) speed *= 0.5
+	if (hasAch("ng3p98")) speed *= 0.9
+	if (hasAch("ng3p101")) speed *= 0.5
 	return speed
 }
 
@@ -72,11 +72,11 @@ function getGalaxyRequirement(offset = 0, display) {
 	let base = tmp.grd.gals * mult
 	let amount = 80 + base
 	let scaling = 0
-	if (player.galacticSacrifice != undefined) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
+	if (inNGM(2)) amount -= (hasGalUpg(22) && tmp.grd.gals >= 1) ? 80 : 60
 	else if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals < 2) amount -= tmp.grd.gals == 1 ? 40 : 50
 	if (tmp.mod.ngmX > 3) amount -= 10
 	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals >= 2) amount -= 2 * mult
-	if (inNC(4) || tmp.ngmX >= 5) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (tmp.ngmX >= 4 ? 20 : -30)
+	if (inNC(4) || inNGM(5)) amount = player.tickspeedBoosts == undefined ? 99 + base : amount + (inNGM(4) ? 20 : -30)
 	if (tmp.be) {
 		amount *= 50
 		if (tmp.qu.breakEternity.upgrades.includes(2)) amount /= getBreakUpgMult(2)
@@ -104,14 +104,14 @@ function getGalaxyRequirement(offset = 0, display) {
 			let speed = tmp.grd.speed
 			speed *= getDistantScalingEffect()
 			amount += getDistantAdd(tmp.grd.gals - distantStart + 1) * speed
-			if (tmp.grd.gals >= distantStart * 2.5 && player.galacticSacrifice != undefined) {
+			if (tmp.grd.gals >= distantStart * 2.5 && inNGM(2)) {
 				// 5 times worse scaling
 				amount += 4 * speed * getDistantAdd(tmp.grd.gals - distantStart * 2.5 + 1)
 				scaling = Math.max(scaling, 2)
 			} else scaling = Math.max(scaling, 1)
 		}
 
-		let hasRemote = !tmp.be && !hasNU(6) && !player.achievements.includes("ng3p117")
+		let hasRemote = !tmp.be && !hasNU(6) && !hasAch("ng3p117")
 		if (hasRemote) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
@@ -139,7 +139,7 @@ function getGalaxyReqMultiplier() {
 	if (inNC(6, 1) && tmp.mod.ngexV != undefined && tmp.grd.gals <= 2) return 0
 	if (player.currentChallenge == "postcngmm_1") return 60
 	let ret = 60
-	if (player.galacticSacrifice !== undefined) {
+	if (inNGM(2)) {
 		if (hasGalUpg(22)) ret -= 30
 	} else if (hasTimeStudy(42)) ret *= tsMults[42]()
 	if (inNC(4)) ret = 90
@@ -147,7 +147,7 @@ function getGalaxyReqMultiplier() {
 	if (player.infinityUpgrades.includes("galCost")) ret -= 5
 	if (player.infinityUpgrades.includes("postinfi52") && player.tickspeedBoosts == undefined) ret -= 3
 	if (player.dilation.upgrades.includes("ngmm12")) ret -= 10
-	if (player.galacticSacrifice !== undefined && hasTimeStudy(42)) ret *= tsMults[42]()
+	if (inNGM(2) && hasTimeStudy(42)) ret *= tsMults[42]()
 	return ret
 }
 
@@ -181,17 +181,17 @@ function getDistantPower() {
 
 function getDistantAdd(x) {
 	x *= getDistantPower()
-	if (player.galacticSacrifice !== undefined && player.tickspeedBoosts == undefined) return Math.pow(x, 1.5) + x
+	if (inNGM(2) && player.tickspeedBoosts == undefined) return Math.pow(x, 1.5) + x
 	return (x + 1) * x
 }
 
 function getRemoteScalingStart(galaxies) {
 	let n = tmp.ngC ? 150 : 800
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		n = 6
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2
 	}
-	else if (player.galacticSacrifice != undefined) n += 1e7
+	else if (inNGM(2)) n += 1e7
 	if (player.dilation.upgrades.includes(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
@@ -204,9 +204,9 @@ function getRemoteScalingStart(galaxies) {
 
 function maxBuyGalaxies(manual) {
 	let max = (manual || (!player.autobuyers[10].priority && tmp.ngp3)) ? 1/0 : player.autobuyers[10].priority
-	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && tmp.ngmX >= 3) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
+	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
 	if (max > player.galaxies) {
-		let amount = getAmount(inNC(4) || tmp.ngmX >= 5 ? 6 : 8)
+		let amount = getAmount(inNC(4) || inNGM(5) ? 6 : 8)
 		let increment = 1
 		let toSkip = 0
 		let check = 0

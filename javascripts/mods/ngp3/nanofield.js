@@ -126,7 +126,7 @@ var nanoRewards = {
 		3: {
 			start: 125,
 			active() {
-				return !player.achievements.includes("ng3p82")
+				return !hasAch("ng3p82")
 			},
 			mult(diff) {
 				return Decimal.pow(2, diff * (diff + 1))
@@ -244,7 +244,7 @@ function isNanoEffectUsed(x) {
 function getNanofieldSpeedText(){
 	text = ""
 	if (ph.did("ghostify") && tmp.qu.nanofield.rewards < 16) text += "Ghostify Bonus: " + shorten(player.ghostify.milestone >= 1 ? 6 : 3) + "x, "
-	if (player.achievements.includes("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
+	if (hasAch("ng3p78")) text += "'Aren't you already dead' reward: " +shorten(Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)) + "x, "
 	if (hasNU(15)) text += "Neutrino upgrade 15: " + shorten(tmp.nu[15]) + "x, "
 	if (GDs.unlocked()) text += "Gravity Well Energy: ^" + shorten(GDs.tmp.nf) + ", "
 	var lsSpeed = ls.mult("nf")
@@ -263,7 +263,7 @@ function getNanofieldSpeedText(){
 function getNanofieldSpeed() {
 	let x = 1
 	if (ph.did("ghostify")) x *= tmp.qu.nanofield.rewards >= 16 ? 1 : (player.ghostify.milestone >= 1 ? 6 : 3)
-	if (player.achievements.includes("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
+	if (hasAch("ng3p78")) x *= Math.sqrt(getTreeUpgradeLevel(8) * tmp.tue + 1)
 	if (hasNU(15)) x = tmp.nu[15].times(x)
 	if (GDs.boostUnl('nf')) x = Decimal.pow(x, GDs.tmp.nf)
 	return x

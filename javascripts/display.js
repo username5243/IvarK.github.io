@@ -27,14 +27,14 @@ function getGalaxyScaleName(x) {
 }
 
 function intergalacticDisplay(){
-	if (player.achievements.includes("ng3p27") && getShiftRequirement(0).tier == 8) {
+	if (hasAch("ng3p27") && getShiftRequirement(0).tier == 8) {
 		getEl("intergalacticLabel").parentElement.style.display = ""
 		let extra = Decimal.sub(tmp.igg, player.galaxies)
 		let nanopart = 1
 		if (isNanoEffectUsed("dil_effect_exp")) nanopart = tmp.nf.effects["dil_effect_exp"] || 1
 		getEl("intergalacticLabel").innerHTML = 
 			getGalaxyScaleName(tmp.igs) + 'Intergalactic Boost ' + 
-			(player.dilation.active || player.galacticSacrifice != undefined ? " (estimated)" : "") +
+			(player.dilation.active || inNGM(2) ? " (estimated)" : "") +
 			" (" + getFullExpansion(player.galaxies) + (extra.gt(0) ? " + " + 
 			getFullExpansion(extra.lt(1e12) ? Math.floor(extra.round().toNumber()) : extra) : "") + "): " + 
 			shorten(dilates(tmp.ig).pow(player.dilation.active ? nanopart : 1)) + 
@@ -76,7 +76,7 @@ function tickspeedDisplay(){
 		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + (100 * tmp.galRed - 100).toFixed(1) + "%)"
 		labels.push(label)
 
-		if (tmp.ngmX >= 2 || player.currentChallenge == "postc3" || player.challenges.includes("postc3") || inQC(6)) {
+		if (inNGM(2) || player.currentChallenge == "postc3" || player.challenges.includes("postc3") || inQC(6)) {
 			let ic3 = getPostC3Mult()
 			labels.push("multiply all Dimensions by " + (ic3 > 999.95 ? shorten(ic3) : new Decimal(ic3).toNumber().toPrecision(4)) + "x")
 		}
@@ -121,7 +121,7 @@ function mainStatsDisplay(){
 	getEl("boosts").style.display = showBoosts ? '' : 'none'
 	if (showBoosts) getEl("boosts").textContent = 'You have performed '+getFullExpansion(player.tickspeedBoosts)+' Tickspeed Boosts.'
 	getEl("galaxies").textContent = 'You have ' + getFullExpansion(player.galaxies) + ' Antimatter Galaxies.'
-	var showCancer = player.spreadingCancer > 0 && player.galacticSacrifice
+	var showCancer = player.spreadingCancer > 0 && inNGM(2)
 	getEl("spreadingCancer").style.display = showCancer ? '' : 'none'
 	if (showCancer) getEl("spreadingCancer").textContent = 'You have made '+getFullExpansion(player.spreadingCancer)+' total galaxies while using Cancer notation.'
 	getEl("totalTime").textContent = "You have played for " + timeDisplay(player.totalTimePlayed) + "."
@@ -138,7 +138,7 @@ function paradoxSacDisplay(){
 }
 
 function galaxySacDisplay(){
-	if (player.galacticSacrifice ? player.galacticSacrifice.times < 1 : true) getEl("gsStatistics").style.display = "none"
+	if (inNGM(2) ? player.galacticSacrifice.times < 1 : true) getEl("gsStatistics").style.display = "none"
 	else {
 		getEl("gsStatistics").style.display = ""
 		getEl("sacrificed").textContent = "You have Galactic Sacrificed "+getFullExpansion(player.galacticSacrifice.times) + " times."
@@ -193,7 +193,7 @@ function bestGhostifyDisplay(){
 }
 
 function ng3p51Display(){
-	if (!player.achievements.includes("ng3p51"))  getEl("bigRipStatistics").style.display = "none"
+	if (!hasAch("ng3p51"))  getEl("bigRipStatistics").style.display = "none"
 	else {
 		getEl("bigRipStatistics").style.display = ""
 		setAndMaybeShow("bigRipped", tmp.qu.bigRip.times, '"You have big ripped the universe " + getFullExpansion(tmp.qu.bigRip.times) + " times."')
@@ -274,14 +274,14 @@ function preBreakUpgradeDisplay(){
 	} else {
 		infinityUpgradesDisplay()
 		let based = []
-		if (player.galacticSacrifice !== undefined) based.push("Infinities")
+		if (inNGM(2)) based.push("Infinities")
 		if (tmp.ngC) based.push("your antimatter")
 		if (based.length > 0) {
 			var base = getMPTPreInfBase()
 			getEl("infi21desc").innerHTML = "Increase the multiplier for buying 10 Dimensions based on " + wordizeList(based) + "<br>" + base + "x -> "+(infUpg12Pow() * base).toPrecision(4) + "x"
 		}
 
-		if (player.galacticSacrifice !== undefined) getEl("infi33desc").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x"
+		if (inNGM(2)) getEl("infi33desc").innerHTML = "Dimension Boosts are stronger based on Infinity Points<br>Currently: " + (1.2 + 0.05 * player.infinityPoints.max(1).log(10)).toFixed(2) + "x"
 
 		var infi34Middle = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>Currently: " + shortenDimensions(getIPMult()) + " every " + timeDisplay(player.bestInfinityTime * 10) : ""
 		getEl("infi34desc").innerHTML = "Generate IP based on your fastest Infinity " + infi34Middle
@@ -423,7 +423,7 @@ function breakInfinityUpgradeDisplay(){
 	else if (player.infinityPoints.gte(20e6)) getEl("postinfi13").className = "infinistorebtn1"
 	else getEl("postinfi13").className = "infinistorebtnlocked"
 	if (player.infinityUpgrades.includes("bulkBoost")) getEl("postinfi23").className = "infinistorebtnbought"
-	else if (player.infinityPoints.gte(player.tickspeedBoosts!=undefined?2e4:player.galacticSacrifice?5e6:5e9)) getEl("postinfi23").className = "infinistorebtn1"
+	else if (player.infinityPoints.gte(player.tickspeedBoosts!=undefined?2e4:inNGM(2)?5e6:5e9)) getEl("postinfi23").className = "infinistorebtn1"
 	else getEl("postinfi23").className = "infinistorebtnlocked"
 	if (player.infinityUpgrades.includes("autoBuyerUpgrade")) getEl("postinfi33").className = "infinistorebtnbought"
 	else if (player.infinityPoints.gte(1e15)) getEl("postinfi33").className = "infinistorebtn1"
@@ -437,7 +437,7 @@ function breakInfinityUpgradeDisplay(){
 	getEl("postinfi41").innerHTML = "Galaxies are " + Math.round(getPostGalaxyEff() * 100 - 100) + "% stronger <br>Cost: "+shortenCosts(5e11)+" IP"
 	getEl("postinfi32").innerHTML = "Normal Dimensions gain a multiplier based on your slowest Normal Challenge time<br>Currently: "+shorten(worstChallengeBonus)+"x<br>Cost: " + shortenCosts(1e7) + " IP"
 	getEl("postinfi13").innerHTML = "You generate Infinities based on your fastest Infinity.<br>1 Infinity every " + timeDisplay(player.bestInfinityTime * 5) + " <br>Cost: " + shortenCosts(2e7) + " IP"
-	getEl("postinfi23").innerHTML = "Unlock the option to bulk buy Dimension" + (player.tickspeedBoosts == undefined ? "" : " and Tickspeed") + " Boosts <br>Cost: " + shortenCosts(player.tickspeedBoosts != undefined ? 2e4 : player.galacticSacrifice ? 5e6 : 5e9) + " IP"
+	getEl("postinfi23").innerHTML = "Unlock the option to bulk buy Dimension" + (player.tickspeedBoosts == undefined ? "" : " and Tickspeed") + " Boosts <br>Cost: " + shortenCosts(player.tickspeedBoosts != undefined ? 2e4 : inNGM(2) ? 5e6 : 5e9) + " IP"
 	getEl("postinfi33").innerHTML = "Autobuyers work twice as fast <br>Cost: " + shortenCosts(1e15) + " IP"
 	if (player.dimensionMultDecrease > 3) getEl("postinfi42").innerHTML = "Decrease the Dimension cost multiplier increase post-e308<br>" + player.dimensionMultDecrease + "x -> " + (player.dimensionMultDecrease - 1) + "x<br>Cost: " + shorten(player.dimensionMultDecreaseCost) +" IP"
 	else getEl("postinfi42").innerHTML = "Dimension cost multiplier increase<br>"+player.dimensionMultDecrease.toFixed(ECComps("eterc6") % 5 > 0 ? 1 : 0) + "x"
@@ -517,11 +517,11 @@ function INFINITYUPGRADESDisplay(){
 		preBreakUpgradeDisplay()
 	} else if (getEl("postinf").style.display == "block" && getEl("breaktable").style.display == "inline-block") {
 		breakInfinityUpgradeDisplay()
-		if (player.galacticSacrifice) breakNGm2UpgradeColumnDisplay()
-		if (player.galacticSacrifice && (player.infinityDimension3.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion? -20 : 0) || ph.did("quantum"))) {
+		if (inNGM(2)) breakNGm2UpgradeColumnDisplay()
+		if (inNGM(2) && (player.infinityDimension3.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion? -20 : 0) || ph.did("quantum"))) {
 			breakNGm2UpgradeRow5Display()
 		} else getEl("postinfir5").style.display = "none"
-		if (player.galacticSacrifice && (player.infinityDimension4.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion ? -20 : 0) || ph.did("quantum"))) {
+		if (inNGM(2) && (player.infinityDimension4.amount.gt(0) || player.eternities > (tmp.mod.newGameMinusVersion ? -20 : 0) || ph.did("quantum"))) {
 			breakNGm2UpgradeRow6Display()
 		} else getEl("postinfir6").style.display = "none"
 		if (tmp.ngC) ngC.breakInfUpgs.display()
@@ -539,7 +539,7 @@ function getEU2FormulaText(){
 	let eu2formula = "(x/200) ^ log4(2x)"
 	if (tmp.ngC) eu2formula = "(x/100) ^ log2(4x)"
 	if (player.boughtDims !== undefined) eu2formula = "x ^ log4(2x)"
-	else if (player.achievements.includes("ngpp15")) eu2formula = tmp.ngC ? "x ^ log10(x) ^ 2" : "x ^ log10(x) ^ 3.75"
+	else if (hasAch("ngpp15")) eu2formula = tmp.ngC ? "x ^ log10(x) ^ 2" : "x ^ log10(x) ^ 3.75"
 	return eu2formula
 }
 
@@ -580,7 +580,7 @@ function mainDilationDisplay(){
 
 function breakEternityDisplay(){
 	getEl("eternalMatter").textContent = shortenDimensions(tmp.qu.breakEternity.eternalMatter)
-	for (var u = 1; u <= (player.achievements.includes("ng3p101") ? 13 : player.ghostify.ghostlyPhotons.unl ? 10 : 7); u++) {
+	for (var u = 1; u <= (hasAch("ng3p101") ? 13 : player.ghostify.ghostlyPhotons.unl ? 10 : 7); u++) {
 		getEl("breakUpg" + u).className = (tmp.qu.breakEternity.upgrades.includes(u) && u != 7) ? "eternityupbtnbought" : tmp.qu.breakEternity.eternalMatter.gte(getBreakUpgCost(u)) ? "eternityupbtn" : "eternityupbtnlocked"
 		if (u == 8) getEl("breakUpg" + u + "Mult").textContent = (getBreakUpgMult(u) * 100 - 100).toFixed(1)
 		else if (u != 7 && u <= 10) getEl("breakUpg" + u + "Mult").textContent = shortenMoney(getBreakUpgMult(u))
@@ -646,8 +646,8 @@ function replicantiDisplay() {
 		let replGalCostPortion = player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1 Cost: " + shortenCosts(getRGCost()) + " IP" : ""
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
-			player.achievements.includes("ng3p67") ? "Get "
-			: player.achievements.includes("ngpp16") || (tmp.mod.ngp3c && hasEternityUpg(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+			hasAch("ng3p67") ? "Get "
+			: hasAch("ngpp16") || (tmp.mod.ngp3c && hasEternityUpg(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
 			: "Reset replicanti amount, but get "
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +
@@ -669,7 +669,7 @@ function replicantiDisplay() {
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		getEl("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
-		getEl("replicantireset").style.height = (player.achievements.includes("ngpp16") && (!player.achievements.includes("ng3p67")) ? 90 : 70) + "px"
+		getEl("replicantireset").style.height = (hasAch("ngpp16") && (!hasAch("ng3p67")) ? 90 : 70) + "px"
 		getEl("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
 		if (tmp.ngC) ngC.condense.rep.update()
 	} else {
@@ -693,15 +693,15 @@ function initialTimeStudyDisplay(){
 	getEl("91desc").textContent = "Currently: " + shortenMoney(Decimal.pow(10, Math.min(player.thisEternity, 18000)/60)) + "x"
 	getEl("92desc").textContent = "Currently: " + shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity, 20))) + "x"
 	getEl("93desc").textContent = "Currently: " +  shortenMoney(Decimal.pow(player.totalTickGained, 0.25).max(1)) + "x"
-	getEl("121desc").textContent = "Currently: " + (player.achievements.includes("ngpp11") ? 50 : (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5).toFixed(1) + "x"
-	getEl("122desc").textContent = "You gain " +  (player.achievements.includes("ngpp11") ? 50 : 35) + "x more EP"
+	getEl("121desc").textContent = "Currently: " + (hasAch("ngpp11") ? 50 : (253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5).toFixed(1) + "x"
+	getEl("122desc").textContent = "You gain " +  (hasAch("ngpp11") ? 50 : 35) + "x more EP"
 	getEl("123desc").textContent = "Currently: " + Math.sqrt(1.39*player.thisEternity/10).toFixed(1) + "x"
 	getEl("141desc").textContent = "Currently: " + shortenMoney(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime)*Math.pow(player.thisInfinityTime, 0.125))).max(1)) + "x"
 	getEl("142desc").textContent = "You gain " + shortenCosts(1e25) + "x more IP"
 	getEl("143desc").textContent = "Currently: " + shortenMoney(Decimal.pow(15, Math.log(player.thisInfinityTime)*Math.pow(player.thisInfinityTime, 0.125))) + "x"
 	getEl("151desc").textContent = shortenCosts(1e4) + "x multiplier on all Time Dimensions"
-	getEl("161desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 6660 : 616) *  ( tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
-	getEl("162desc").textContent = shortenCosts(Decimal.pow(10, (player.galacticSacrifice ? 234 : 11) * (tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
+	getEl("161desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 6660 : 616) *  ( tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all normal dimensions"
+	getEl("162desc").textContent = shortenCosts(Decimal.pow(10, (inNGM(2) ? 234 : 11) * (tmp.mod.newGameExpVersion ? 5 : 1))) + "x multiplier on all Infinity dimensions"
 	getEl("192desc").textContent = tmp.mod.ngp3c ? "The Replicanti limit is multiplied by your Time Shards." : "You can get beyond " + shortenMoney(Number.MAX_VALUE) + " replicantis, but the interval is increased the more you have"
 	getEl("193desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.03, Decimal.min(1e7, Decimal.div(getEternitied(), tmp.ngC ? 1e6 : 1))).min("1e13000")) + "x"
 	getEl("212desc").textContent = "Currently: " + ((tsMults[212]() - 1) * 100).toFixed(2) + "%"
@@ -856,7 +856,7 @@ function bankedInfinityDisplay(){
 	var bankedInfGain=gainBankedInf()
 	getEl("bankedInfGain").style.display = bankedInfGain>0 ? "block" : "none"
 	getEl("bankedInfGain").textContent = "You will gain " + getFullExpansion(bankedInfGain) + " banked infinities on next Eternity."
-	if (player.achievements.includes("ng3p73")) updateBankedEter(true)
+	if (hasAch("ng3p73")) updateBankedEter(true)
 }
 
 function updateNGM2RewardDisplay(){

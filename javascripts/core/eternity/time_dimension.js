@@ -8,14 +8,14 @@ function getBreakEternityTDMult(tier){
 	if (tmp.qu.bigRip.upgrades.includes(13)) ret = ret.times(player.replicanti.amount.max(1).pow(1e-6))
 	if (tier == 6 && player.ghostify.ghostlyPhotons.unl) ret = ret.times(tmp.le[6])
 	if (tier == 7 && tmp.qu.bigRip.upgrades.includes(16)) ret = ret.times(tmp.bru[16])
-	if (tier == 8 && player.achievements.includes("ng3p62")) ret = ret.pow(Math.log10(player.ghostify.time/10+1)/100+1)
+	if (tier == 8 && hasAch("ng3p62")) ret = ret.pow(Math.log10(player.ghostify.time/10+1)/100+1)
 	if (ret.lt(0)) ret = new Decimal(0)
 	return dilates(ret)
 }
 
 function doNGMatLeast4TDChanges(tier, ret){
 	//Tickspeed multiplier boost
-	let x = (tmp.ngmX >= 5) ? (hasPU(11) ? puMults[22] : new Decimal(1)) : player.postC3Reward
+	let x = (inNGM(5)) ? (hasPU(11) ? puMults[22] : new Decimal(1)) : player.postC3Reward
 	let exp = ([5, 3, 2, 1.5, 1, .5, 1/3, 0])[tier - 1]
 	if (x.gt(1e10)) x = Decimal.pow(10, Math.sqrt(x.log10() * 5 + 50))
 	if (hasGalUpg(25)) exp *= galMults.u25()
@@ -27,8 +27,8 @@ function doNGMatLeast4TDChanges(tier, ret){
 	if (hasGalUpg(12)) ret = ret.times(galMults.u12())
 	if (hasGalUpg(13) && player.currentChallenge!="postngm3_4") ret = ret.times(galMults.u13())
 	if (hasGalUpg(15)) ret = ret.times(galMults.u15())
-	if (tmp.ngmX >= 5 && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
-	if (hasGalUpg(44) && tmp.ngmX >= 4) {
+	if (inNGM(5) && tier == 2) ret = ret.pow(puMults[13](hasPU(13, true))) //NG-5, not NG-4.
+	if (hasGalUpg(44) && inNGM(4)) {
 		let e = hasGalUpg(46) ? galMults["u46"]() : 1
 		ret = ret.times(Decimal.pow(player[TIER_NAMES[tier]+"Amount"].plus(10).log10(), e * Math.pow(11 - tier, 2)))
 	}
@@ -38,9 +38,9 @@ function doNGMatLeast4TDChanges(tier, ret){
 
 function getERTDAchMults(){
 	if (!player.boughtDims) return 1
-	if (player.achievements.includes('r117')) {
+	if (hasAch('r117')) {
 		return 1 + Math.pow(Math.log(player.eternities), 1.5) / Math.log(100);
-	} else if (player.achievements.includes('r102')) {
+	} else if (hasAch('r102')) {
 		return 1 + Math.log(player.eternities) / Math.log(100);
 	}
 	return 1
@@ -80,12 +80,12 @@ function getTimeDimensionPower(tier) {
 	let dim = player["timeDimension" + tier]
 	let ret = dim.power.pow(player.boughtDims ? 1 : 2)
 
-	if (tmp.ngmX >= 5) ret = ret.times(getInfinityPowerEffect())
-	if (tmp.ngmX >= 4) ret = doNGMatLeast4TDChanges(tier, ret)
+	if (inNGM(5)) ret = ret.times(getInfinityPowerEffect())
+	if (inNGM(4)) ret = doNGMatLeast4TDChanges(tier, ret)
 
 	if (hasTimeStudy(11) && tier == 1) ret = ret.times(tsMults[11]())
 
-	if (player.achievements.includes("r105")) ret = ret.times(tmp.it)
+	if (hasAch("r105")) ret = ret.times(tmp.it)
 	ret = ret.times(getERTDAchMults())
 
 	let ret2 = calcNGM2atleastTDPreVPostDilMultiplier(tier)
@@ -94,13 +94,13 @@ function getTimeDimensionPower(tier) {
 
 	if (hasPU(21)) ret = ret.times(puMults[21]())
 	if (ECComps("eterc10") !== 0) ret = ret.times(getECReward(10))
-	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
-	if (player.galacticSacrifice !== undefined && hasGalUpg(43)) ret = ret.times(galMults.u43())
+	if (hasAch("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
+	if (hasGalUpg(43)) ret = ret.times(galMults.u43())
 	if (!player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && !tmp.ngC && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 	if (inQC(6)) ret = ret.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
 	ret = dilates(ret, 2)
-	if (player.galacticSacrifice !== undefined) ret = ret.times(ret2)
+	if (inNGM(2)) ret = ret.times(ret2)
 
 	ret = dilates(ret, 1)
 	if (tmp.quActive) ret = ret.times(colorBoosts.dim.b)
@@ -121,19 +121,19 @@ function getTimeDimensionProduction(tier) {
   	ret = ret.times(getTimeDimensionPower(tier))
   	if (tmp.mod.ngmX>3&&(inNC(2)||player.currentChallenge=="postc1"||player.pSac!=undefined)) ret = ret.times(player.chall2Pow)
   	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
-  	if (tmp.mod.ngmX>3&&(tier>1||!player.achievements.includes("r12"))) ret = ret.div(100)
+  	if (tmp.mod.ngmX>3&&(tier>1||!hasAch("r12"))) ret = ret.div(100)
   	if (tmp.mod.ngexV) ret = ret.div(10 / tier)
   	if (player.currentEternityChall == "eterc1") return new Decimal(0)
   	return ret
 }
 
 function getIC3EffFromFreeUpgs() {
-	return tmp.ngmX >= 2 ? 1 : 0
+	return inNGM(2) ? 1 : 0
 }
 
 function isTDUnlocked(t) {
 	if (t > 8) return false
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		if (haveSixDimensions() && t > 6) return false
 		return player.tdBoosts >= t - 1 
 	}
@@ -143,8 +143,8 @@ function isTDUnlocked(t) {
 function getTimeDimensionDescription(tier) {
 	let amt = player['timeDimension' + tier].amount
 	let bgt = player['timeDimension' + tier].bought
-	let tierAdd = ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5 ? 2 : 1) + tier
-	let tierMax = (haveSixDimensions() && tmp.ngmX == 4) || tmp.ngmX >= 5 ? 6 : 8
+	let tierAdd = ((inNC(7) && tmp.ngmX == 4) || inQC(4) || inNGM(5) ? 2 : 1) + tier
+	let tierMax = (haveSixDimensions() && tmp.ngmX == 4) || inNGM(5) ? 6 : 8
 
 	let toGain = new Decimal(0)
 	if (tierAdd <= tierMax) toGain = getTimeDimensionProduction(tierAdd).div(10)
@@ -164,15 +164,15 @@ function updateTimeDimensions() {
 				getEl("timeRow" + tier).style.display = "table-row"
 				getEl("timeD" + tier).textContent = DISPLAY_NAMES[tier] + " Time Dimension x" + shortenMoney(getTimeDimensionPower(tier));
 				getEl("timeAmount" + tier).textContent = getTimeDimensionDescription(tier);
-				getEl("timeMax" + tier).textContent = tmp.ngmX >= 4 && cost.gte(maxCost) ? "Maxed out!" : (ph.did("quantum") ? '' : "Cost: ") + (tmp.ngmX >= 4 ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
+				getEl("timeMax" + tier).textContent = inNGM(4) && cost.gte(maxCost) ? "Maxed out!" : (ph.did("quantum") ? '' : "Cost: ") + (inNGM(4) ? shortenPreInfCosts(cost) + "" : shortenDimensions(cost) + " EP")
 				if (getOrSubResourceTD(tier).gte(player["timeDimension" + tier].cost)) getEl("timeMax"+tier).className = "storebtn"
 			else getEl("timeMax" + tier).className = "unavailablebtn"
 			} else getEl("timeRow" + tier).style.display = "none"
 			if (tmp.ngC) ngC.condense.tds.update(tier)
 		}
 
-		if (tmp.ngmX >= 4) {
-			var isShift = player.tdBoosts + 1 < (tmp.ngmX >= 5 ? 6 : 8)
+		if (inNGM(4)) {
+			var isShift = player.tdBoosts + 1 < (inNGM(5) ? 6 : 8)
 			var req = getTDBoostReq()
 			getEl("tdReset").style.display = ""
 			getEl("tdResetLabel").textContent = "Time Dimension "+(isShift ? "Shift" : "Boost") + " (" + getFullExpansion(player.tdBoosts) + "): requires " + getFullExpansion(req.amount) + " " + DISPLAY_NAMES[req.tier] + " Time Dimensions"
@@ -180,105 +180,105 @@ function updateTimeDimensions() {
 			getEl("tdResetBtn").className = (player["timeDimension" + req.tier].bought < req.amount) ? "unavailablebtn" : "storebtn"
 		} else getEl("tdReset").style.display = "none"
 
-		getEl("tdCostLimit").textContent = tmp.ngmX >= 4 ? "You can spend up to " + shortenDimensions(maxCost) + " antimatter to Time Dimensions." : ""
+		getEl("tdCostLimit").textContent = inNGM(4) ? "You can spend up to " + shortenDimensions(maxCost) + " antimatter to Time Dimensions." : ""
 	}
 }
 
 function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
-	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || tmp.ngmX >= 5) p = p.plus(getTimeDimensionProduction(2))
+	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || inNGM(5)) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
-	if (tmp.ngmX >= 5) p = p.times(getPDAcceleration())
+	if (inNGM(5)) p = p.times(getPDAcceleration())
 
-	getEl("itmult").textContent = tmp.ngp3 && player.achievements.includes('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
+	getEl("itmult").textContent = tmp.ngp3 && hasAch('r105') ? 'Your "Infinite Time" multiplier is currently ' + shorten(tmp.it) + 'x.':''
 	getEl("timeShardAmount").textContent = shortenMoney(player.timeShards)
 	getEl("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 	if (player.currentEternityChall == "eterc7") getEl("timeShardsPerSec").textContent = "You are getting " + shortenDimensions(p) + " Eighth Infinity Dimensions per second."
-	else getEl("timeShardsPerSec").textContent = "You are getting " + (tmp.ngmX >= 5 && p < 100 ? shortenND(p) : shortenDimensions(p)) + " Time Shards per " + (tmp.PDunl ? "real-life " : "") + "second."
+	else getEl("timeShardsPerSec").textContent = "You are getting " + (inNGM(5) && p < 100 ? shortenND(p) : shortenDimensions(p)) + " Time Shards per " + (tmp.PDunl ? "real-life " : "") + "second."
 }
 
 var TIME_DIM_COSTS = {
 	1: {
 		cost() {
-			if (tmp.ngmX >= 4) return 10
+			if (inNGM(4)) return 10
 			return 1
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 1.5
+			if (inNGM(4)) return 1.5
 			return 3
 		}
 	},
 	2: {
 		cost() {
-			if (tmp.ngmX >= 4) return 20
+			if (inNGM(4)) return 20
 			return 5
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 2
+			if (inNGM(4)) return 2
 			return 9
 		}
 	},
 	3: {
 		cost() {
-			if (tmp.ngmX >= 4) return 40
+			if (inNGM(4)) return 40
 			return 100
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 3
+			if (inNGM(4)) return 3
 			return 27
 		}
 	},
 	4: {
 		cost() {
-			if (tmp.ngmX >= 4) return 80
+			if (inNGM(4)) return 80
 			return 1e3
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 20
+			if (inNGM(4)) return 20
 			return 81
 		}
 	},
 	5: {
 		cost() {
-			let x = tmp.ngmX >= 4 ? 160 : tmp.mod.newGamePlusVersion ? "1e2300" : "1e2350"
+			let x = inNGM(4) ? 160 : tmp.mod.newGamePlusVersion ? "1e2300" : "1e2350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 150
+			if (inNGM(4)) return 150
 			return 243
 		}
 	},
 	6: {
 		cost() {
-			let x = tmp.ngmX >= 4 ? 1e8 : tmp.mod.newGamePlusVersion ? "1e2500" : "1e2650"
+			let x = inNGM(4) ? 1e8 : tmp.mod.newGamePlusVersion ? "1e2500" : "1e2650"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 1e5
+			if (inNGM(4)) return 1e5
 			return 729
 		}
 	},
 	7: {
 		cost() {
-			let x = tmp.ngmX >= 4 ? 1e12 : tmp.mod.newGamePlusVersion ? "1e2700" : "1e3000"
+			let x = inNGM(4) ? 1e12 : tmp.mod.newGamePlusVersion ? "1e2700" : "1e3000"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 3e6
+			if (inNGM(4)) return 3e6
 			return 2143
 		}
 	},
 	8: {
 		cost() {
-			let x = tmp.ngmX >= 4 ? 1e18 : tmp.mod.newGamePlusVersion ? "1e3000" : "1e3350"
+			let x = inNGM(4) ? 1e18 : tmp.mod.newGamePlusVersion ? "1e3000" : "1e3350"
 			if (tmp.ngC) x = Decimal.pow(x, .25)
 			return new Decimal(x)
 		},
 		mult() {
-			if (tmp.ngmX >= 4) return 1e8
+			if (inNGM(4)) return 1e8
 			return 6561
 		}
 	},
@@ -289,7 +289,7 @@ function timeDimCost(tier, bought) {
 	let mult = TIME_DIM_COSTS[tier].mult()
 
 	let cost = Decimal.pow(mult, bought).times(base)
-	if (player.galacticSacrifice !== undefined) return cost
+	if (inNGM(2)) return cost
 
 	if (cost.gte(Number.MAX_VALUE)) cost = Decimal.pow(mult * 1.5, bought).times(base)
 	if (cost.gte("1e1300")) cost = Decimal.pow(mult * 2.2, bought).times(base)
@@ -306,7 +306,7 @@ function timeDimCost(tier, bought) {
 
 function buyTimeDimension(tier) {
 	let dim = player["timeDimension"+tier]
-	if (tmp.ngmX >= 4 && getAmount(1) < 1) {
+	if (inNGM(4) && getAmount(1) < 1) {
 		alert("You need to buy a first Normal Dimension to be able to buy Time Dimensions.")
 		return
 	}
@@ -317,7 +317,7 @@ function buyTimeDimension(tier) {
 	dim.amount = dim.amount.plus(1);
 	dim.bought += 1
 	if (inQC(6)) player.postC8Mult = new Decimal(1)
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) player.chall2Pow = 0
 	} else {
@@ -325,16 +325,16 @@ function buyTimeDimension(tier) {
 		dim.cost = timeDimCost(tier, dim.bought)
 		updateEternityUpgrades()
 	}
-	if (tier === 6 && tmp.ngmX >= 5) giveAchievement("Out of luck")
+	if (tier === 6 && inNGM(5)) giveAchievement("Out of luck")
 	return true
 }
 
 function getOrSubResourceTD(tier, sub) {
 	if (sub == undefined) {
-		if (tmp.ngmX >= 4) return player.money.min(getMaxTDCost())
+		if (inNGM(4)) return player.money.min(getMaxTDCost())
 		return player.eternityPoints
 	} else {
-		if (tmp.ngmX >= 4) player.money = player.money.sub(player.money.min(sub))
+		if (inNGM(4)) player.money = player.money.sub(player.money.min(sub))
 		else player.eternityPoints = player.eternityPoints.sub(player.eternityPoints.min(sub))
 	}
 }
@@ -347,11 +347,11 @@ function buyMaxTimeDimension(tier, bulk) {
 	let mult = TIME_DIM_COSTS[tier].mult()
 	if (!res.gte(dim.cost)) return
 
-	if (tmp.ngmX >= 4 && getAmount(1) < 1) return
+	if (inNGM(4) && getAmount(1) < 1) return
 	if (tmp.mod.maxHighestTD && tier < 8 && player["timeDimension" + (tier + 1)].bought > 0) return
 
 	let toBuy = 0
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		toBuy = Math.floor(res.div(dim.cost).times(mult - 1).add(1).log(mult))
 		if (bulk) toBuy = Math.min(toBuy, bulk)
 
@@ -383,7 +383,7 @@ function buyMaxTimeDimension(tier, bulk) {
 
 	dim.amount = dim.amount.plus(toBuy)
 	dim.bought += toBuy
-	if (tmp.ngmX >= 4) {
+	if (inNGM(4)) {
 		dim.power = Decimal.pow(getDimensionPowerMultiplier(), toBuy / 2).times(dim.power)
 		dim.cost = dim.cost.times(Decimal.pow(mult, toBuy))
 	} else {
@@ -392,7 +392,7 @@ function buyMaxTimeDimension(tier, bulk) {
 		if (inQC(6)) player.postC8Mult = new Decimal(1)
 		updateEternityUpgrades()
 	}
-	if (tier === 6 && tmp.ngmX >= 5) giveAchievement("Out of luck")
+	if (tier === 6 && inNGM(5)) giveAchievement("Out of luck")
 }
 
 function buyMaxTimeDimensions() {

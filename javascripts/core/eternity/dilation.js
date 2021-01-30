@@ -8,15 +8,15 @@ function hasDilationStudy(x) {
 
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
-	if (player.achievements.includes("ng3p11")) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
-	if (player.achievements.includes("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
+	if (hasAch("ng3p11")) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
+	if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
 	if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
 	if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 	if (tmp.quActive) gain = gain.times(colorBoosts.b)
 	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
-	if (player.achievements.includes("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / 1e4, 1) - 1)))
+	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / 1e4, 1) - 1)))
 	return gain
 }
 
@@ -35,8 +35,8 @@ function getBaseDTProduction() {
 	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 
 	if (tmp.ngp3) {
-		if (player.achievements.includes("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
-		if (player.achievements.includes("ngpp13")) gain = gain.times(2)
+		if (hasAch("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
+		if (hasAch("ngpp13")) gain = gain.times(2)
 
 		if (!isBigRipUpgradeActive(11)) gain = gain.times(getDTMultPostBRU11())
 	}
@@ -79,7 +79,7 @@ function getDilPower() {
 	let ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
-		if (player.achievements.includes("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
+		if (hasAch("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
 		if (masteryStudies.has(264)) ret = ret.times(5)
 		if (GUActive("br1")) ret = ret.times(getBR1Effect())
 		if (masteryStudies.has(341)) ret = ret.times(getMTSMult(341))
@@ -183,7 +183,7 @@ function dilates(x, m) {
 	let e = 1
 	let y = x
 	let a = false
-	if (player.dilation.active && m != 2 && (m != "meta" || !player.achievements.includes("ng3p63") || !inQC(0))) {
+	if (player.dilation.active && m != 2 && (m != "meta" || !hasAch("ng3p63") || !inQC(0))) {
 		e *= dilationPowerStrength()
 		if (tmp.mod.newGameMult) e = 0.9 + Math.min((player.dilation.dilatedTime.add(1).log10()) / 1000, 0.05)
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && !tmp.mod.nguspV) e += exDilationBenefit() * (1-e)
@@ -191,7 +191,7 @@ function dilates(x, m) {
 		if (player.dilation.rebuyables[5]) e += 0.0025 * (1 - 1 / Math.pow(player.dilation.rebuyables[5] + 1 , 1 / 3))
 		a = true
 	}
-	if (player.galacticSacrifice !== undefined && m != 1) {
+	if (inNGM(2) && m != 1) {
 		e *= dilationPowerStrength()
 		a = true
 	}
@@ -402,7 +402,7 @@ function buyDilationUpgrade(pos, max, isId) {
 		}
 		if (id[1] == 3) {
 			player.eternityBuyer.tpUpgraded = true
-			if (player.achievements.includes("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
+			if (hasAch("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
 		}
 		if (id[1] == 4) player.eternityBuyer.tpUpgraded = true
 	} else {
@@ -438,9 +438,9 @@ function getPassiveTTGen() {
 	if (player.dilation.tachyonParticles.plus(player.dilation.bestTP).gt("1e3333")) return 1e202
 
 	let r = getTTGenPart(player.dilation.tachyonParticles)
-	if (player.achievements.includes("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
+	if (hasAch("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
 	if (tmp.ngex) r *= .8
-	r /= (player.achievements.includes("ng3p51") ? 200 : 2e4)
+	r /= (hasAch("ng3p51") ? 200 : 2e4)
 	if (isLEBoostUnlocked(6)) r *= tmp.leBonus[6]
 	return r
 }
@@ -475,7 +475,7 @@ function updateDilationUpgradeButtons() {
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
-	getEl("dil41desc").textContent = "Currently: " + shortenMoney(player.achievements.includes("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
+	getEl("dil41desc").textContent = "Currently: " + shortenMoney(hasAch("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
 	if (player.dilation.studies.includes(6)) {
 		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		getEl("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';

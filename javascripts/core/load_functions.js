@@ -444,7 +444,7 @@ function setAarexModIfUndefined(){
 
 function doNGp3Init1(){
 	if (tmp.mod.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
-	tmp.ngpX = player.achievements.includes("ng3p111") && pl.save ? 5 :
+	tmp.ngpX = hasAch("ng3p111") && pl.save ? 5 :
 		player.masterystudies !== undefined ? 3 :
 		player.meta !== undefined ? 2 :
 		0
@@ -527,19 +527,19 @@ function dov7tov10(){
 	if (player.version < 9) {
 		player.version = 9
 		let achs = []
-		if (player.achievements.includes("r22")) {
+		if (hasAch("r22")) {
 			achs.push("r35")
 			player.achievements.splice(player.achievements.indexOf("r22"), 1)
 		}
-		if (player.achievements.includes("r35")) {
+		if (hasAch("r35")) {
 			achs.push("r76")
 			player.achievements.splice(player.achievements.indexOf("r35"), 1)
 		}
-		if (player.achievements.includes("r41")) {
+		if (hasAch("r41")) {
 			achs.push("r22")
 			player.achievements.splice(player.achievements.indexOf("r41"), 1)
 		}
-		if (player.achievements.includes("r76")) {
+		if (hasAch("r76")) {
 			achs.push("r41")
 			player.achievements.splice(player.achievements.indexOf("r76"), 1)
 		}
@@ -1038,7 +1038,7 @@ function doNGp3v199tov19995(){
         }
         if (tmp.mod.newGame3PlusVersion < 1.9975&&!tmp.qu.challenge) tmp.qu.challenge=[]
         if (tmp.mod.newGame3PlusVersion < 1.9979) {
-                player.dilation.bestTP=player.achievements.includes("ng3p18")?player.dilation.tachyonParticles:new Decimal(0)
+                player.dilation.bestTP=hasAch("ng3p18")?player.dilation.tachyonParticles:new Decimal(0)
                 player.old=false
         }
         if (tmp.mod.newGame3PlusVersion < 1.99795) player.options.animations.quarks = true
@@ -1244,23 +1244,23 @@ function doNGp3v19995tov21(){
                         player.infinitiedBank=nMx(player.infinitiedBank,1e6)
                         var filter=["timeMult","dimMult","timeMult2","unspentBonus","27Mult","18Mult","36Mult","resetMult","passiveGen","45Mult","resetBoost","galaxyBoost"]
                         for (var u=0;u<filter.length;u++) if (!player.infinityUpgrades.includes(filter[u])) player.infinityUpgrades.push(filter[u])
-                        if (!player.achievements.includes("r85")) player.infMult=Decimal.times(player.infMult,4)
-                        if (!player.achievements.includes("r93")) player.infMult=Decimal.times(player.infMult,4)
+                        if (!hasAch("r85")) player.infMult=Decimal.times(player.infMult,4)
+                        if (!hasAch("r93")) player.infMult=Decimal.times(player.infMult,4)
                         player.dimensionMultDecrease=2
                         player.tickSpeedMultDecrease=1.65
                         player.eternities=nMx(player.eternities,100)
-                        for (var c=2;c<(player.tickspeedBoosts!==undefined?16:player.galacticSacrifice!==undefined?15:13);c++) if (!player.challenges.includes("challenge"+c)) player.challenges.push("challenge"+c)
+                        for (var c=2;c<(player.tickspeedBoosts!==undefined?16:inNGM(2)?15:13);c++) if (!player.challenges.includes("challenge"+c)) player.challenges.push("challenge"+c)
                         player.replicanti.unl=true
                         player.replicanti.amount=Decimal.max(player.replicanti.amount,1)
                         if (!player.dilation.studies.includes(1)) player.dilation.studies.push(1)
                 }
-                if (!player.achievements.includes("r77")) player.achievements.push("r77")
-                if (!player.achievements.includes("r78")) player.achievements.push("r78")
-                if (!player.achievements.includes("r85")) player.achievements.push("r85")
-                if (!player.achievements.includes("r93")) player.achievements.push("r93")
-                if (!player.achievements.includes("r95")) player.achievements.push("r95")
-                if (!player.achievements.includes("r102")) player.achievements.push("r102")
-                if (!player.achievements.includes("r131")) player.achievements.push("r131")
+                if (!hasAch("r77")) player.achievements.push("r77")
+                if (!hasAch("r78")) player.achievements.push("r78")
+                if (!hasAch("r85")) player.achievements.push("r85")
+                if (!hasAch("r93")) player.achievements.push("r93")
+                if (!hasAch("r95")) player.achievements.push("r95")
+                if (!hasAch("r102")) player.achievements.push("r102")
+                if (!hasAch("r131")) player.achievements.push("r131")
                 tmp.mod.newGamePlusVersion=2
         }
         if (tmp.mod.newGame3PlusVersion < 2.1) {
@@ -1322,7 +1322,7 @@ function doNGp3v21tov221(){
         if (tmp.ngp3) setupNGP31Versions()
         if (tmp.mod.newGameMinusMinusVersion === undefined && !player.meta) {
                 if (player.exdilation == undefined && player.version == 13) player.version = 12
-                if (player.galacticSacrifice) {
+                if (inNGM(2)) {
                         player.galacticSacrifice.time = (player.lastUpdate - player.galacticSacrifice.last) / 100
                         tmp.mod.newGameMinusMinusVersion = 1.29
                         delete player.galacticSacrifice.last
@@ -1553,8 +1553,8 @@ function doERSv0tov102(){
                 delete player.eternityChallenges
         }
         if (tmp.mod.ersVersion<1.02) {
-                if (player.achievements.includes("r85")) player.infMult=player.infMult.times(4)
-                if (player.achievements.includes("r93")) player.infMult=player.infMult.times(4)
+                if (hasAch("r85")) player.infMult=player.infMult.times(4)
+                if (hasAch("r93")) player.infMult=player.infMult.times(4)
                 tmp.mod.ersVersion=1.02
         }
 }
@@ -1684,7 +1684,7 @@ function dov12tov122(){
                 if (player.bestEternity <= 0.01 || player.bestInfinityTime <= 0.01) giveAchievement("Less than or equal to 0.001");
         }
         if (player.version < 12.1) {
-                if (player.achievements.includes("s36")) {
+                if (hasAch("s36")) {
                         player.achievements.splice(player.achievements.indexOf("s36"), 1)
                         updateAchievements();
                 }
@@ -1794,7 +1794,7 @@ function setConfirmationsDisplay(){
         getEl("sacrifice").style.display = sacDisplay
         getEl("sacConfirmBtn").style.display = sacDisplay
 
-        var gSacDisplay = ph.did("galaxy") && (player.galacticSacrifice !== undefined && player.galaxies >= 1) ? "inline-block" : "none"
+        var gSacDisplay = ph.did("galaxy") && (inNGM(2) && player.galaxies >= 1) ? "inline-block" : "none"
         getEl("gConfirmation").style.display = gSacDisplay
         getEl("gConfirmation").style.display = gSacDisplay
         getEl("gSacrifice").style.display = gSacDisplay
@@ -1873,8 +1873,8 @@ function setDisplaysStuff1(){
 	getEl("respecMastery").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
 	getEl("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
 
-	if (player.galacticSacrifice) {
-		getEl("galaxy11").innerHTML = "Normal " + (tmp.ngmX >= 4 ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
+	if (inNGM(2)) {
+		getEl("galaxy11").innerHTML = "Normal " + (inNGM(4) ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
 		getEl("galaxy15").innerHTML = "Normal and Time Dimensions produce " + (ph.did("infinity") ? "faster based on your Infinities.<br>Currently: <span id='galspan15'></span>x" : "100x faster.") + "<br>Cost: 1 GP"
 	} else {
 		let base = getMPTPreInfBase()
@@ -1885,7 +1885,7 @@ function setDisplaysStuff1(){
 
 	for (let u = 1; u <= 4; u++) {
 		let benefits = [(u + 4) + "th Dimension unlocked"]
-		if (tmp.ngmX >= 3) benefits.push((u * 5) + " Tickspeed Boosts")
+		if (inNGM(3)) benefits.push((u * 5) + " Tickspeed Boosts")
 		if (u == 4) benefits.push("a Antimatter Galaxy")
 		getEl("infi4" + u + "desc").textContent = "Start with " +
 		wordizeList(benefits) + "."
@@ -1900,25 +1900,25 @@ function setDisplaysStuff1(){
 }
 
 function setChallengeDisplay(){
-        var showMoreBreak = player.galacticSacrifice ? "" : "none"
+        var showMoreBreak = inNGM(2) ? "" : "none"
         for (i=1;i<5;i++) getEl("postinfi0"+i).parentElement.style.display=showMoreBreak
         getEl("d1AutoChallengeDesc").textContent=(tmp.mod.ngmX>3?"Galactic Sacrifice":"Big Crunch")+" for the first time."
-        getEl("d5AutoChallengeDesc").textContent=tmp.mod.ngexV?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":player.galacticSacrifice?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>3?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
+        getEl("d5AutoChallengeDesc").textContent=tmp.mod.ngexV?"Each Dimension Boost reduces your tickspeed reduction by 0.1% additively, but galaxies are 50% stronger.":inNGM(2)?"Tickspeed upgrades"+(player.tickspeedBoosts==undefined?"":" and Tickspeed Boosts")+(tmp.mod.ngmX>3?" are weaker":" start out useless")+", but galaxies make them stronger.":"Tickspeed starts at 7%."
         getEl("tbAutoChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Whenever you buy 10 of a dimension or tickspeed, everything else of equal cost will increase to its next cost step.":"You can't get Tickspeed Boosts and Antimatter Galaxies are 25% weaker."
         getEl("autoDBChallengeDesc").textContent="There are only 6 dimensions, with Dimension Boost"+(player.tickspeedBoosts==undefined?"":", Tickspeed Boost,")+" and Antimatter Galaxy costs modified."
-        getEl("autoCrunchChallengeDesc").textContent="Each Normal Dimension produces the Dimension 2 tiers before it; First Dimensions produce reduced antimatter. "+(player.galacticSacrifice?"Galaxies are far more powerful.":"")
+        getEl("autoCrunchChallengeDesc").textContent="Each Normal Dimension produces the Dimension 2 tiers before it; First Dimensions produce reduced antimatter. "+(inNGM(2)?"Galaxies are far more powerful.":"")
         getEl("autoDSChallengeDesc").textContent=player.tickspeedBoosts==undefined?"Per-ten multiplier is always 1x, but the product of dimensions bought multiplies all dimensions.":"The product of amount is used instead of the product of bought."
         getEl("autoGSChallengeDesc").textContent=tmp.mod.ngmX>3?"You can hold up to 10 total Dimension Boosts, Time Dimension Boosts, Tickspeed Boosts, and Galaxies.":(tmp.mod.ngmX>2?"All galaxy upgrades from the third column are disabled and Tickspeed Boosts give 20 free tickspeed purchases each instead.":"You can only get 308 tickspeed upgrades. This count does not reset on resets.")
         getEl("autoTBChallengeDesc").textContent=tmp.mod.ngmX>3?"Dimension Boosts and Time Dimension Boosts divide Tickspeed Multiplier instead.":"Dimension Boosts and Galaxies only boost Galaxy point gain and Tickspeed Boosts are nerfed, but Galaxy points boost Tickspeed Boosts."
-        getEl("infPowEffectPowerDiv").innerHTML = tmp.ngmX >= 2 || tmp.ngC ? "which is raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
-        getEl("ngmmchalls").style.display=player.galacticSacrifice?"":"none"
+        getEl("infPowEffectPowerDiv").innerHTML = inNGM(2) || tmp.ngC ? "which is raised to the power of <span id='infPowEffectPower' style='font-size:35px; color: black'></span>, and then t" : "which is t"
+        getEl("ngmmchalls").style.display=inNGM(2)?"":"none"
         getEl("ngmmmchalls").style.display=player.tickspeedBoosts==undefined?"none":""
         getEl("ngm4chall").style.display=tmp.mod.ngmX>3?"":"none"
         getEl("irschalls").style.display=player.infinityUpgradesRespecced==undefined?"none":""
 }
 
 function setInfChallengeDisplay(){
-	let ngmm = player.galacticSacrifice !== undefined
+	let ngmm = inNGM(2)
 	let ngm3 = player.tickspeedBoosts !== undefined
 
 	if (ngmm) {
@@ -1936,7 +1936,7 @@ function setInfChallengeDisplay(){
 		getEl("ic3div").style.display=""
 		getEl("ic2div").appendChild(getEl("postc2").parentElement.parentElement)
 	}
-	getEl("postc2reward").textContent = "Reward: "+(player.galacticSacrifice?"S":"Get the sacrifice autobuyer, and s")+"acrifice is more powerful."
+	getEl("postc2reward").textContent = "Reward: "+(inNGM(2)?"S":"Get the sacrifice autobuyer, and s")+"acrifice is more powerful."
 
 	if (!ngm3) {
 		getEl("icngm3_row").style.display="none"
@@ -2000,13 +2000,13 @@ function setOtherChallDisplay(){
         getEl("postinfbtn").style.display=player.infinityUpgradesRespecced?"none":""
   
         if (player.infinityUpgradesRespecced != undefined) order = []
-        getEl("ic1desc").textContent="All the previous challenges (except for the Tickspeed challenge"+(player.galacticSacrifice?',':" and")+" Automatic Big Crunch challenge"+(player.galacticSacrifice?", and Automatic Galactic Sacrifice challenge":"")+") are applied at once."
-        getEl("ic1reward").textContent="Reward: Get "+(player.galacticSacrifice?2:1.3)+"x on all Infinity Dimensions for each Infinity Challenge completed."
+        getEl("ic1desc").textContent="All the previous challenges (except for the Tickspeed challenge"+(inNGM(2)?',':" and")+" Automatic Big Crunch challenge"+(inNGM(2)?", and Automatic Galactic Sacrifice challenge":"")+") are applied at once."
+        getEl("ic1reward").textContent="Reward: Get "+(inNGM(2)?2:1.3)+"x on all Infinity Dimensions for each Infinity Challenge completed."
         getEl("ic2desc").textContent=(player.tickspeedBoosts==undefined?"":"Infinity Dimensions are disabled, but Sacrifice is way stronger. ")+"You automatically sacrifice every 8 ticks once you have the 8th Dimension."
         getEl("ic4desc").textContent=player.tickspeedBoosts==undefined?"Only the latest bought Normal Dimension's production is normal, all other Normal Dimensions produce less.":"All Normal Dimension multipliers are square rooted without the dilation penalty."
         getEl("ic5desc").textContent=player.tickspeedBoosts==undefined?"When buying Normal Dimensions 1-4, everything with costs smaller or equal increases. When buying Normal Dimensions 5-8, everything with costs bigger or equal increases. When buying tickspeed, everything with the same cost increases.":"You can't get tickspeed upgrades and galaxies. Tickspeed Boosts boost tickspeed instead."
-        getEl("ic7desc").textContent="You can't get Antimatter Galaxies, but the Dimension Boost multiplier "+(player.galacticSacrifice?"is cubed":"is increased to 10x")+"."
-        getEl("ic7reward").textContent="Reward: The Dimension Boost multiplier "+(player.galacticSacrifice? "is squared":" is increased to 4x.")
+        getEl("ic7desc").textContent="You can't get Antimatter Galaxies, but the Dimension Boost multiplier "+(inNGM(2)?"is cubed":"is increased to 10x")+"."
+        getEl("ic7reward").textContent="Reward: The Dimension Boost multiplier "+(inNGM(2)? "is squared":" is increased to 4x.")
 }
 
 function setReplDisplay() {
@@ -2017,12 +2017,12 @@ function setReplDisplay() {
 
 function setTSDisplay(){
         getEl("41desc").textContent=tsMults[41]()
-        getEl("42desc").textContent=player.galacticSacrifice?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by "+(60*tsMults[42]())+" 8ths instead of 60."
+        getEl("42desc").textContent=inNGM(2)?"Galaxy cost multiplier is reduced by "+Math.round(tsMults[42]()*15)+"/15x.":"Galaxy cost increases by "+(60*tsMults[42]())+" 8ths instead of 60."
         getEl("61desc").innerHTML=tsMults[61]()+"x more EP"
         getEl("62desc").textContent=tsMults[62]()
-        getEl("81desc").textContent=player.galacticSacrifice?"is cubed":"becomes 10x"
+        getEl("81desc").textContent=inNGM(2)?"is cubed":"becomes 10x"
         getEl("131desc").textContent = tmp.ngC ? "You can get 50% more replicanti galaxies" : "Automatic replicanti galaxies are disabled, but you can get 50% more"
-        getEl("181desc").textContent = "You gain " + (player.galacticSacrifice !== undefined && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch") + " each second" + (tmp.ngC ? ", and the first three IP softcaps are 90% weaker":"")
+        getEl("181desc").textContent = "You gain " + (inNGM(2) && player.tickspeedBoosts === undefined ? "1% of your GP and IP gain on next reset" : "1% of your IP gained on crunch") + " each second" + (tmp.ngC ? ", and the first three IP softcaps are 90% weaker":"")
         getEl("191desc").textContent = "You bank 5% of your Infinities on Eternity."
         getEl("211desc").textContent=tsMults[211]()
         getEl("213desc").textContent=tsMults[213]()
@@ -2087,21 +2087,21 @@ function setSomeQuantumAutomationDisplay(){
         }
         getEl('replicantibulkmodetoggle').textContent="Mode: "+(player.galaxyMaxBulk?"Max":"Singles")
         getEl('versionDesc').style.display = tmp.ngp3 ? "" : "none"
-        getEl('toggleautoquantummode').style.display=(player.masterystudies?tmp.qu.reachedInfQK||player.achievements.includes("ng3p25"):false)?"":"none"
+        getEl('toggleautoquantummode').style.display=(player.masterystudies?tmp.qu.reachedInfQK||hasAch("ng3p25"):false)?"":"none"
         var autoAssignUnl = tmp.ngp3 && (ph.did("ghostify") || tmp.qu.reachedInfQK)
         getEl('autoAssign').style.display = autoAssignUnl ? "" : "none"
         getEl('autoAssignRotate').style.display = autoAssignUnl ? "" : "none"
-        getEl('autoReset').style.display=player.achievements.includes("ng3p47")?"":"none"
+        getEl('autoReset').style.display=hasAch("ng3p47")?"":"none"
 }
 
 function setReplAutoDisplay(){
-        getEl('replicantigalaxypowerdiv').style.display=player.achievements.includes("r106")&&player.boughtDims?"":"none"
+        getEl('replicantigalaxypowerdiv').style.display=hasAch("r106")&&player.boughtDims?"":"none"
         getEl("blackHoleAnimBtn").style.display="none"
         if (player.exdilation != undefined) {
                 if (player.dilation.studies.includes(1)) getEl("dilationeterupgrow").style.display="table-row"
                 getEl("blackHoleAnimBtn").textContent = "Black hole: " + ((player.options.animations.blackHole) ? "ON" : "OFF")
                 getEl("blackholeMax").style.display = tmp.mod.ngudpV || tmp.mod.nguspV ? "" : "none"
-                getEl("blackholeAuto").style.display = tmp.mod.ngudpV && player.achievements.includes("ngpp17") ? "" : "none"
+                getEl("blackholeAuto").style.display = tmp.mod.ngudpV && hasAch("ngpp17") ? "" : "none"
                 getEl('blackholeAuto').textContent="Auto: O"+(tmp.mod.ngudpV&&player.autoEterOptions.blackhole?"N":"FF")
                 if (player.blackhole.unl == true) {
                         getEl("blackholediv").style.display="inline-block"
@@ -2143,7 +2143,7 @@ function updateNGModeMessage(){
 	} else if (tmp.mod.newGamePlusVersion) ngModeMessages.push("Welcome to NG+, made by usavictor and Aarex! You start with many things unlocked and given to you immediately to get through the early game faster.")
 	if (player.infinityUpgradesRespecced) ngModeMessages.push('Welcome to Infinity Respecced, created by Aarex! In this mode, all of infinity upgrades are replaced with new upgrades except for the 2x IP mult, Break Infinity is removed, but there is new content in Infinity.')
 	if (player.boughtDims) ngModeMessages.push('Welcome to Eternity Respecced, created by dan-simon! In this mode, Eternity is changed to be balanced better without any scaling. Note: The port is not complete on this site, so you should search for the separate website for the mod itself to get the latest version.')
-	if (player.galacticSacrifice) {
+	if (inNGM(2)) {
 		if (tmp.mod.ngmX>4) ngModeMessages.push('Welcome to NG-5, the nerfed version of NG-4! This is very hardcore because you are stuck in more challenges. You are also stuck in Automated Big Crunches Challenge which is a big impact on this mod. Good luck! This mod is made by Aarex, with help from Anthios, Apeirogon, and TheMkeyHolder.')
 		else if (tmp.mod.ngmX>3) ngModeMessages.push('Welcome to NG-4, the nerfed version of NG-3! This mode features even more changes from NG---, and is very hardcore. WIP by Nyan Cat and edited by Aarex.')
 		else if (tmp.mod.newGame3MinusVersion) ngModeMessages.push('Welcome to NG-3, the nerfed version of NG--! This mode reduces tickspeed multiplier multiplier and nerfs galaxies, but has a new feature called \"Tickspeed Boosts\" and many more changes to NG--.')
@@ -2255,15 +2255,15 @@ function onLoad(noOffline) {
 		updateGalaxyControl()
 	} else if (getEl("ers_timestudies").style.display=="block") showEternityTab("timestudies",true)
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
-	setAndMaybeShow('bestTP',player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37"),'"Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
-	setAndMaybeShow('bestTPOverGhostifies',(player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37")) && ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
+	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
+	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	getEl('dilationmode').style.display=speedrunMilestonesReached>4?"":"none"
 	getEl('rebuyupgmax').style.display=speedrunMilestonesReached<26&&player.masterystudies?"":"none"
 	getEl('rebuyupgauto').style.display=speedrunMilestonesReached>6?"":"none"
 	getEl('toggleallmetadims').style.display=speedrunMilestonesReached>7?"":"none"
 	getEl('metaboostauto').style.display=speedrunMilestonesReached>14?"":"none"
 	getEl("autoBuyerQuantum").style.display=speedrunMilestonesReached>22?"":"none"
-	getEl('autoDisableQuantum').style.display=player.achievements.includes("ng3p66")?"":"none"
+	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
 	getEl("quarksAnimBtn").style.display=ph.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
 	getEl("maxTimeDimensions").style.display=removeMaxTD?"none":""
@@ -2273,7 +2273,7 @@ function onLoad(noOffline) {
 	GDs.unlDisplay()
 	var removeMaxTD=false
 	var removeMaxMD=false
-	if (player.achievements.includes("ngpp17")) {
+	if (hasAch("ngpp17")) {
 		for (d=1;d<9;d++) {
 			if (player.autoEterOptions["td"+d]) if (d>7) removeMaxTD=true
 			else break
@@ -2366,7 +2366,7 @@ function setupNGP31Versions() {
 		player.quantum.electrons.percentage = 1
 	} else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
-		if (!player.achievements.includes("ng3p111") && tmp.ngpX < 5) delete player.pl
+		if (!hasAch("ng3p111") && tmp.ngpX < 5) delete player.pl
 	}
 	tmp.mod.newGame3PlusVersion = 3
 }
@@ -2709,7 +2709,7 @@ function conToDeciPreEter(){
         player.infinitiedBank = nP(player.infinitiedBank)
         player.chall3Pow = new Decimal(player.chall3Pow)
         player.chall11Pow = new Decimal(player.chall11Pow)
-        if (player.galacticSacrifice !== undefined) {
+        if (inNGM(2)) {
         player.galacticSacrifice.galaxyPoints = Decimal.round(player.galacticSacrifice.galaxyPoints)
         if (player.dimPowerIncreaseCost !== undefined) player.dimPowerIncreaseCost = new Decimal(player.dimPowerIncreaseCost)
         }
@@ -2851,7 +2851,7 @@ function conToDeciMS(){
                 }
                 if (tmp.qu ? tmp.qu.autobuyer : false) tmp.qu.autobuyer.limit = new Decimal(tmp.qu.autobuyer.limit)
                 if (tmp.qu ? tmp.qu.electrons : false) if (typeof(tmp.qu.electrons.amount)=="string") tmp.qu.electrons.amount = Math.round(parseFloat(tmp.qu.electrons.amount)*4)/4
-                if (player.dilation.bestTP == undefined) player.dilation.bestTP = player.achievements.includes("ng3p18") || player.achievements.includes("ng3p37") ? player.dilation.tachyonParticles : 0
+                if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
                 player.dilation.bestTP = new Decimal(player.dilation.bestTP)
                 if (tmp.qu ? tmp.qu.replicants : false) {
                         tmp.qu.replicants.amount = new Decimal(tmp.qu.replicants.amount)
@@ -2965,15 +2965,15 @@ function loadAutoBuyerSettings() {
         getEl("prioritySac").value = player.autoSacrifice.priority
         getEl("bulkgalaxy").value = player.autobuyers[10].bulk
         getEl("priority13").value = formatValue("Scientific", new Decimal(player.eternityBuyer.limit), 2, player.autoEterMode == "exponent" ? 2 : 0)
-        if (player.achievements.includes("ng3p52") && player.eternityBuyer.presets !== undefined) {
+        if (hasAch("ng3p52") && player.eternityBuyer.presets !== undefined) {
         }
         if (player.autobuyers[12] !== undefined) getEl("priority14").value = formatValue("Scientific", new Decimal(player.autobuyers[12].priority), 2, 0)
-        if (tmp.ngmX >= 3 && player.autobuyers[13] % 1 !== 0) {
+        if (inNGM(3) && player.autobuyers[13] % 1 !== 0) {
                 getEl("priority15").value = player.autobuyers[13].priority
                 getEl("overGalaxiesTickspeedBoost").value = player.overXGalaxiesTickspeedBoost
                 getEl("bulkTickBoost").value = player.autobuyers[13].bulk
         }
-        if (tmp.ngmX >= 4 && player.autobuyers[14] % 1 !== 0) {
+        if (inNGM(4) && player.autobuyers[14] % 1 !== 0) {
                 getEl("priority16").value = player.autobuyers[14].priority
                 getEl("overGalaxiesTDBoost").value = player.autobuyers[14].overXGals
                 getEl("bulkTickBoost").value = player.autobuyers[14].bulk

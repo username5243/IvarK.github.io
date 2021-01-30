@@ -186,13 +186,13 @@ function updateFixedLightTemp() {
 }
 
 function updateInfiniteTimeTemp() {
-	if (!tmp.eterUnl || !player.achievements.includes("r105")) {
+	if (!tmp.eterUnl || !hasAch("r105")) {
 		tmp.it = new Decimal(1)
 		return
 	}
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
-		if (player.achievements.includes("ng3p56")) x *= 1.03
+		if (hasAch("ng3p56")) x *= 1.03
 		/*if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
 		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
 		if (!player.dilation.active && tmp.quActive && tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
@@ -217,7 +217,7 @@ function updateIntergalacticTemp() {
 	x += tmp.effAeg
 	if (pl.on()) x *= fNu.tmp.buffNeutral
 	if (hasBosonicUpg(52)) x = Decimal.pow(x, tmp.blu[52].ig)
-	if (player.achievements.includes("ng3p114")) x = Decimal.times(x, 1.3)
+	if (hasAch("ng3p114")) x = Decimal.times(x, 1.3)
 	tmp.igg = x
 
 	let igLog = Decimal.pow(x, Math.min(Math.sqrt(Decimal.max(x, 1).log10()) * 2, 2.5)) //Log10 of reward
@@ -280,16 +280,16 @@ function updateMatterSpeed(){
 }
 
 function updatePostInfiTemp() {
-	var exp11 = player.galacticSacrifice !== undefined ? 2 : 0.5
-	var exp21 = player.galacticSacrifice !== undefined ? 2 : 0.5
+	var exp11 = inNGM(2) ? 2 : 0.5
+	var exp21 = inNGM(2) ? 2 : 0.5
 
-	if (tmp.ngmX >= 4){
+	if (inNGM(4)){
 		exp11 += player.totalmoney.plus(10).div(10).log10() / 1e4
 		exp21 += player.money.plus(10).div(10).log10() / 1e4
 		base11 = player.totalmoney.plus(10).log10()
 		base21 = player.money.plus(10).log10()
 
-		if (player.achievements.includes("r72")) {
+		if (hasAch("r72")) {
 			exp11 *= 4
 			exp21 *= 4
 			base11 *= 4
@@ -499,7 +499,7 @@ function updateBreakEternityUpgradesTemp() {
 		updateBreakEternityUpgrade9Temp()
 		updateBreakEternityUpgrade10Temp()
 	}
-	if (player.achievements.includes("ng3p101")) updateBreakEternityUpgrade12Temp()
+	if (hasAch("ng3p101")) updateBreakEternityUpgrade12Temp()
 }
 
 function updateBRU1Temp() {

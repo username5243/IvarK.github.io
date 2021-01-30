@@ -10,8 +10,8 @@ function getTickspeedBoostRequirement(bulk = 1) {
 
 function tickspeedBoost(bulk) {
 	player.tickspeedBoosts += bulk
-	if (!player.achievements.includes("r27") || player.tickspeedBoosts > (tmp.ngmX >= 5 ? 4 * player.galaxies : 5 * player.galaxies - 8)) player.tdBoosts = resetTDBoosts()
-	softReset(player.achievements.includes("r27") && 5 * player.galaxies - 8 > player.tickspeedBoosts ? 0 : -player.resets, true)
+	if (!hasAch("r27") || player.tickspeedBoosts > (inNGM(5) ? 4 * player.galaxies : 5 * player.galaxies - 8)) player.tdBoosts = resetTDBoosts()
+	softReset(hasAch("r27") && 5 * player.galaxies - 8 > player.tickspeedBoosts ? 0 : -player.resets, true)
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 }
 
@@ -65,9 +65,9 @@ function manualTickspeedBoost() {
 	let req=getTickspeedBoostRequirement()
 	let amount=getAmount(req.tier)
 	if (!(amount >= req.amount)) return
-	if ((player.infinityUpgrades.includes("bulkBoost") || player.achievements.includes("r28")) && (!inNC(14) || !(tmp.mod.ngmX > 3))) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
+	if ((player.infinityUpgrades.includes("bulkBoost") || hasAch("r28")) && (!inNC(14) || !(tmp.mod.ngmX > 3))) tickspeedBoost(Math.floor((amount - req.amount) / req.mult + 1))
 	else tickspeedBoost(1)
-	if (tmp.ngmX >= 5) giveAchievement("TICK OVERDRIVE")
+	if (inNGM(5)) giveAchievement("TICK OVERDRIVE")
 }
 
 //v3.2
@@ -91,7 +91,7 @@ function getInitPostC3Power(){
 		if (ic3PowerTB > softCapStart) ic3PowerTB = Math.sqrt((ic3PowerTB - softCapStart) / frac + 1024) * 32 + softCapStart - 1024
 		if (inNC(15) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_3") ic3PowerTB *= tmp.mod.ngmX > 3 ? .2 : Math.max(player.galacticSacrifice.galaxyPoints.div(1e3).add(1).log(8),1)
 		else if (player.challenges.includes("postcngm3_3")) ic3PowerTB *= Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 15 + .6, 1)
-		if (player.achievements.includes("r67")) {
+		if (hasAch("r67")) {
 			let x = tmp.cp
 			if (x > 4) x = Math.sqrt(x - 1) + 2
 			ic3PowerTB *= x * .15 + 1

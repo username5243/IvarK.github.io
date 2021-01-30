@@ -93,10 +93,10 @@ let PLANCK = {
 			player.ghostify.times = 0
 			player.ghostify.best = 9999999999
 			player.ghostify.last10 = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
-			player.ghostify.ghostParticles = new Decimal(player.achievements.includes("ng3p115") ? 1e25 : 0)
+			player.ghostify.ghostParticles = new Decimal(hasAch("ng3p115") ? 1e25 : 0)
 			player.ghostify.neutrinos = getBrandNewNeutrinoData()
 			player.ghostify.neutrinos.boosts = 9
-			player.ghostify.neutrinos.upgrades = player.achievements.includes("ng3p115") ? [6] : []
+			player.ghostify.neutrinos.upgrades = hasAch("ng3p115") ? [6] : []
 			player.ghostify.multPower = 1
 			player.ghostify.ghostlyPhotons.enpowerments = 3
 			tmp.bl.ticks = new Decimal(0)
@@ -136,7 +136,7 @@ let PLANCK = {
 			"ARE YOU REALLY SURE YOU WANT TO DO THAT? BE WARNED, YOU WILL TAKE A BIG CHALLENGE. THIS IS REALLY YOUR LAST CHANCE!"
 		],
 		did() {
-			return player.achievements.includes("ng3p111") && pl.save
+			return hasAch("ng3p111") && pl.save
 		},
 		updateDisplay() {
 			getEl("planck").style.display = ph.can("planck") ? "" : "none"

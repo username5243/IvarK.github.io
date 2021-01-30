@@ -20,7 +20,7 @@ function updateBLUnlockDisplay() {
 function getBosonicWattGain() {
 	let x = Math.max(player.money.log10() / 2e16 - 1, 0)
 	if (pl.on()) x += fNu.tmp.buffOmega
-	if (player.achievements.includes("ng3p91")) x *= getAchBWtMult()
+	if (hasAch("ng3p91")) x *= getAchBWtMult()
 	if (isEnchantUsed(34)) x *= tmp.bEn[34]
 	if (pl.on()) x *= fNu.tmp.buffMu
 	if (GDs.boostUnl('bl')) x = Decimal.pow(x, getBosonicSpeedExp())
@@ -185,7 +185,7 @@ function getBosonicAMProduction() {
 	let exp = player.money.max(1).log10() / 15e15 - 3
 	let ret = Decimal.pow(10, exp).times(tmp.wzb.wbp)
 
-	if (player.achievements.includes("ng3p113")) ret = ret.times(Math.log10(player.replicanti.amount.max(1e10).log10()))
+	if (hasAch("ng3p113")) ret = ret.times(Math.log10(player.replicanti.amount.max(1e10).log10()))
 
 	ret = softcap(ret, "bam")
 	return ret
@@ -315,7 +315,7 @@ function updateBosonicStuffCosts() {
 
 function getBosonicFinalCost(x) {
 	x = new Decimal(x)
-	if (player.achievements.includes("ng3p91")) x = x.div(2)
+	if (hasAch("ng3p91")) x = x.div(2)
 	return x.ceil()
 }
 
@@ -350,7 +350,7 @@ function getExtractTime() {
 	let data = player.ghostify.bl
 	let r = new Decimal(br.scalings[data.typeToExtract] || 1/0)
 	r = r.div(tmp.wzb.wbt)
-	if (player.achievements.includes("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
+	if (hasAch("ng3p95")) r = r.div(Math.sqrt(1 + player.ghostify.hb.higgs))
 	return r
 }
 
