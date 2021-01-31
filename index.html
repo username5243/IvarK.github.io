@@ -1486,7 +1486,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies - Alpha 3)</p>
+				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies - Alpha 4)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4483,46 +4483,31 @@
 					B: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
 				</div>
 				Your quarks have a net <span id='colorCharge'></span>.<br>
-				<table class='qtable'><tr>
-					<td class="rqC">
-						<p>You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. <span id='rPowerRate' style='font-size:25px' class='red'></span
-					</td>
-					<td>
-						<p>You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. <span id='gPowerRate' style='font-size:25px' class='green'></span>
-					</td>
-					<td class="bqC">
-						<p>You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. <span id='bPowerRate' style='font-size:25px' class='blue'></span>
-					</td>
-				</tr><tr>
-					<td class="rqC">
-						Translated to <span id="boost">boosted </span><span class="red" id="redTranslation" style="font-size:35px">0.0</span>% increase in galaxy efficiency.</p>
-					</td>
-					<td>
-						Translated to <span class="green" id="greenTranslation" style="font-size:35px">0</span>% increase in extra Replicated Galaxies.</p>
-					</td>
-					<td class="bqC">
-						Translated to <span class="blue" id="blueTranslation" style="font-size:35px">1.0</span>x faster dilated time production.</span>
-					</td>
-				</tr></table>
-				<table class='qtable' id="colorDimTranslations">
+				<table class='qtable'>
 					<tr>
 						<td class="rqC">
-							Translated to <span class="red" id="redDimTranslation" style="font-size:35px">0.0</span>x faster normal Dimension productions.</p>
+							<p>You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. <span id='rPowerRate' style='font-size:25px' class='red'></span
 						</td>
 						<td>
-							Translated to <span class="green" id="greenDimTranslation" style="font-size:35px">0</span>x faster Infinity Dimension productions.</p>
+							<p>You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. <span id='gPowerRate' style='font-size:25px' class='green'></span>
 						</td>
 						<td class="bqC">
-							Translated to <span class="blue" id="blueDimTranslation" style="font-size:35px">1.0</span>x faster Time Dimension productions.</span>
+							<p>You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. <span id='bPowerRate' style='font-size:25px' class='blue'></span>
 						</td>
-					</tr><tr style="vertical-align: 0">
-						<td></td>
+					</tr><tr>
+						<td class="rqC">
+							Translated to <span class="red" id="redTranslation" style="font-size:35px">0.0</span>% increase in galaxy efficiency.</p>
+						</td>
 						<td>
-							<button class='gluonupgrade unavailablebtn' id='colorDimPowerUpg' style='width:210px' onclick='upgradeColorDimPower()'>Upgrade all the Quark boosts to Dimensions<br>Level: <span id="colorDimPowerUpgLevel">0</span><br>Cost: <span id="colorDimPowerUpgCost">0</span> QK</button><br><button class="storebtn" onclick='maxUpgradeColorDimPower()' style='width:210px'>Max buy the upgrade above</button>
+							Translated to <span class="green" id="greenTranslation" style="font-size:35px">0</span>% increase in extra Replicated Galaxies.</p>
 						</td>
-						<td></td>
+						<td class="bqC">
+							Translated to <span class="blue" id="blueTranslation" style="font-size:35px">1.0</span>x faster dilated time production.</span>
+						</td>
 					</tr>
 				</table>
+				<br>
+				You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quark energy.
 			</div>
 			<div class='quantumtab' id='gluons'>
 				<div>Your quantum worth (sum of quarks, colored quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth2">0</b>.</div>
@@ -4530,12 +4515,6 @@
 					<td class="rqC" colspan=2><p>You have <span id="rg" style="font-size:35px">0</span> red-green gluons.<br>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks to <span id='rgnext'>0</span>.</p></td>
 					<td class="gqC" colspan=2><p>You have <span id="gb" style="font-size:35px">0</span> green-blue gluons.<br>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks to <span id='gbnext'>0</span>.</p></td>
 					<td class="bqC" colspan=2><p>You have <span id="br" style="font-size:35px">0</span> blue-red gluons.<br>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue quarks to <span id='brnext'>0</span>.</p></td>
-				</tr><tr id="gluonCharger1">
-					<td colspan=6>You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quark energy, which allows you to generate up to <span id="quarkEnergyGluons" style="font-size:25px">0</span> gluons.</td>
-				</tr><tr id="gluonCharger2">
-					<td colspan=2><button class="gluonupgrade rg" id="generateRGGluons" onclick="generateGluons('rg')">Generate <span id="generateRGGluonsAmount">0</span> red-green gluons from red quarks</button></td>
-					<td colspan=2><button class="gluonupgrade gb" id="generateGBGluons" onclick="generateGluons('gb')">Generate <span id="generateGBGluonsAmount">0</span> green-blue gluons from green quarks</button></td>
-					<td colspan=2><button class="gluonupgrade br" id="generateBRGluons" onclick="generateGluons('br')">Generate <span id="generateBRGluonsAmount">0</span> blue-red gluons from blue quarks</button></td>
 				</tr><tr>
 					<td><button id='rgupg1' onclick='buyGluonUpg("rg",1)'>Remote Antimatter Galaxy cost scaling is approximately 2x slower.<br>Cost: 1 RG gluons</button></td>
 					<td><button id='rgupg2' onclick='buyGluonUpg("rg",2)'>Galaxies are more effective based on your Tachyonic Galaxies.<br><span id='rgupg2current'></span><br>Cost: 2 RG gluons</button></td>

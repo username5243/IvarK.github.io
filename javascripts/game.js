@@ -3837,10 +3837,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 		for (let u = 1; u <= 4; u++) while (buyElectronUpg(u, true)) bought = true
 		if (bought) updateElectrons()
 	}
-	if (isAutoGhostActive(7)) {
-		maxQuarkMult()
-		maxUpgradeColorDimPower()
-	}
+	if (isAutoGhostActive(7)) maxQuarkMult()
 }
 
 function checkGluonRounding(){

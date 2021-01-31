@@ -103,7 +103,6 @@ function getTimeDimensionPower(tier) {
 	if (inNGM(2)) ret = ret.times(ret2)
 
 	ret = dilates(ret, 1)
-	if (tmp.quActive) ret = ret.times(colorBoosts.dim.b)
 	if (player.dilation.upgrades.includes("ngmm2") && player.dilation.upgrades.includes(5) && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
 	if (tmp.ngC && ngC.tmp) ret = ret.times(ngC.condense.tds.eff(tier))
 

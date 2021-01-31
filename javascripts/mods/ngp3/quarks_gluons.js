@@ -183,12 +183,7 @@ function getColorPowerProduction(color) {
 colorBoosts={
 	r:1,
 	g:1,
-	b:1,
-	dim: {
-		r:1,
-		g:1,
-		b:1
-	}
+	b:1
 }
 
 function getCPLog(c) {
@@ -209,9 +204,7 @@ function updateColorPowers(log) {
 	if (log == undefined) log = getCPLogs()
 
 	//Red
-	colorBoosts.r=Math.pow(log.r,player.dilation.active?2/3:0.5)/10+1
-	if (colorBoosts.r>1.3) colorBoosts.r=Math.sqrt(colorBoosts.r*1.3)
-	if (colorBoosts.r>2.3&&(!player.dilation.active||getTreeUpgradeLevel(2)>7||ghostified)) colorBoosts.r=Math.pow(colorBoosts.r/2.3,0.5*(ghostified&&player.ghostify.neutrinos.boosts>4?1+tmp.nb[5]:1))*2.3
+	colorBoosts.r = Math.pow(log.r + 1, 0.25) - 1
 
 	//Green
 	let m = 1
@@ -237,70 +230,6 @@ function updateColorPowers(log) {
 	}
 	if (bLog < 0) bLog = 0
 	colorBoosts.b = Decimal.pow(10, bLog)
-
-	//Dimensions
-	updateColorDimPowers(log)
-}
-
-function updateColorDimPowers(log) {
-	if (log == undefined) log = getCPLogs()
-	
-	let expmult = inQC(6) ? 1 : 35
-	if (player.currentEternityChall == "eterc11") expmult /= 100
-	var rexp = Math.sqrt(player.money.add(1).log10()) * Math.pow(getColorDimPowerBase("r", log), 4/7) * expmult
-	var gexp = Math.sqrt(player.infinityPower.add(1).log10()) * Math.pow(getColorDimPowerBase("g", log), 4/7) * 5
-	var bexp = Math.sqrt(player.timeShards.add(1).log10()) * Math.pow(getColorDimPowerBase("b", log), 8/21)
-	
-	if (rexp > 1e12) rexp = Math.sqrt(rexp * 1e12)
-	if (rexp > 1e15) rexp = Math.sqrt(rexp * 1e15)
-
-	if (gexp > 1e9) gexp = Math.sqrt(gexp * 1e9)
-	if (gexp > 1e12) gexp = Math.sqrt(gexp * 1e12)
-
-	if (bexp > 1e6) bexp = Math.sqrt(bexp * 1e6)
-	if (bexp > 1e9) bexp = Math.sqrt(bexp * 1e9)
-
-	colorBoosts.dim.r = Decimal.pow(10, rexp)
-	colorBoosts.dim.g = Decimal.pow(10, gexp)
-	colorBoosts.dim.b = Decimal.pow(10, bexp)
-}
-
-function getColorDimPowerBase(color, log) {
-	if (log == undefined) log = getCPLogs()
-	let ret = Math.pow(log[color], 3/5)
-	ret *= Math.pow((tmp.qu.colorDimPower || 0) + 1, 2/5)
-	return ret
-}
-
-function getColorDimPowerUpgradeCost() {
-	return Decimal.pow(5, tmp.qu.colorDimPower || 0).times(3)
-}
-
-function upgradeColorDimPower() {
-	let cost = getColorDimPowerUpgradeCost()
-	if (!tmp.qu.quarks.gte(cost)) return
-	tmp.qu.quarks = tmp.qu.quarks.sub(cost).round()
-	tmp.qu.colorDimPower = (tmp.qu.colorDimPower || 0) + 1
-	updateQuantumWorth()
-	updateQuarksTabOnUpdate()
-}
-
-function maxUpgradeColorDimPower(){
-	var currCost = getColorDimPowerUpgradeCost()
-	var quarks = tmp.qu.quarks
-	if (!quarks.gte(currCost)) return
-	var log105 = Math.log10(5)
-	
-	var tobuy = Math.floor(quarks.times(4).plus(currCost).div(currCost).log10()/log105-1)
-	//log_5(4*totalquarks+currentcost)-1
-	var costToBuy = Decimal.pow(5,tobuy).minus(1).div(4).times(currCost).min(Decimal.pow(2,1024)) 
-	//only costs quarks if you have less than e308 of them
-	
-	tmp.qu.colorDimPower = (tmp.qu.colorDimPower || 0) + tobuy
-	tmp.qu.quarks = quarks.sub(costToBuy).round()
-	updateQuantumWorth()
-	updateQuarksTabOnUpdate()
-	upgradeColorDimPower() //in case there are some rounding issues, we will check and buy one more (if possible)
 }
 
 //Gluons
@@ -318,17 +247,6 @@ function getQuarkEnergyGain(ma) {
 
 function getQuarkEnergyGainMult() {
 	return 0.75
-}
-
-function generateGluons(mix) {
-	let firstColor = mix[0]
-	let toConsume = tmp.qu.usedQuarks[firstColor].min(tmp.qu.quarkEnergy.floor())
-	if (toConsume.eq(0)) return
-	tmp.qu.usedQuarks[firstColor] = tmp.qu.usedQuarks[firstColor].sub(toConsume).round()
-	tmp.qu.quarkEnergy = tmp.qu.quarkEnergy.sub(toConsume)
-	tmp.qu.gluons[mix] = tmp.qu.gluons[mix].add(toConsume).round()
-	updateColorCharge()
-	updateGluonsTabOnUpdate()
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -452,9 +370,7 @@ function updateQuarksTab(tab) {
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
 	getEl("greenTranslation").textContent = formatPercentage(colorBoosts.g - 1) + (tmp.pe ? "+" + formatPercentage(tmp.pe) :"")
 	getEl("blueTranslation").textContent = shortenMoney(colorBoosts.b)
-	getEl("redDimTranslation").textContent=shortenMoney(colorBoosts.dim.r)
-	getEl("greenDimTranslation").textContent=shortenMoney(colorBoosts.dim.g)
-	getEl("blueDimTranslation").textContent=shortenMoney(colorBoosts.dim.b)
+	getEl("quarkEnergy").textContent = shortenMoney(tmp.qu.quarkEnergy)
 
 	if (player.ghostify.milestones >= 8) {
 		var assortAmount=getAssortAmount()
@@ -486,18 +402,6 @@ function updateGluonsTab() {
 		getEl("gbupg8current").textContent = "Currently: " + shorten(getGU8Effect("gb")) + "x"
 		getEl("brupg8current").textContent = "Currently: " + shorten(getGU8Effect("br")) + "x"
 	}
-	let qkEnergy=tmp.qu.quarkEnergy
-	let rgGain=qkEnergy.floor().min(tmp.qu.usedQuarks.r)
-	let gbGain=qkEnergy.floor().min(tmp.qu.usedQuarks.g)
-	let brGain=qkEnergy.floor().min(tmp.qu.usedQuarks.b)
-	getEl("quarkEnergy").textContent = shortenMoney(qkEnergy)
-	getEl("quarkEnergyGluons").textContent = shortenDimensions(qkEnergy.floor())
-	getEl("generateRGGluons").className = "gluonupgrade " + (rgGain.gt(0) ? "rg" : "unavailablebtn")
-	getEl("generateRGGluonsAmount").textContent=shortenDimensions(rgGain)
-	getEl("generateGBGluons").className = "gluonupgrade " + (gbGain.gt(0) ? "gb" : "unavailablebtn")
-	getEl("generateGBGluonsAmount").textContent=shortenDimensions(gbGain)
-	getEl("generateBRGluons").className = "gluonupgrade " + (brGain.gt(0) ? "br" : "unavailablebtn")
-	getEl("generateBRGluonsAmount").textContent=shortenDimensions(brGain)
 	if (player.ghostify.milestones > 7) {
 		updateQuantumWorth("display")
 		updateGluonsTabOnUpdate("display")
@@ -517,21 +421,16 @@ function updateQuarksTabOnUpdate(mode) {
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
 	getEl("greenQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.g)
 	getEl("blueQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.b)
-	getEl("boost").style.display = player.dilation.active ? "" : "none"
 
 	var assortAmount = getAssortAmount()
 	var canAssign = assortAmount.gt(0)
 	getEl("quarkAssort").style.display = ""
 	getEl("quarkAssign").style.display = "none"
-	getEl("colorDimTranslations").style.display = ""
 
 	getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
 	getEl("redAssort").className = canAssign ? "storebtn" : "unavailablebtn"
 	getEl("greenAssort").className = canAssign ? "storebtn" : "unavailablebtn"
 	getEl("blueAssort").className = canAssign ? "storebtn" : "unavailablebtn"
-	getEl("colorDimPowerUpgLevel").textContent = getFullExpansion((tmp.qu.colorDimPower||0)+1)
-	getEl("colorDimPowerUpgCost").textContent = shortenDimensions(getColorDimPowerUpgradeCost())
-	getEl("colorDimPowerUpg").className = "gluonupgrade " + (tmp.qu.quarks.gte(getColorDimPowerUpgradeCost()) ? "storebtn" : "unavailablebtn")
 
 	var uq = tmp.qu.usedQuarks
 	var gl = tmp.qu.gluons

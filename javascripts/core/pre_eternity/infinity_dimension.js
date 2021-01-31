@@ -176,7 +176,6 @@ function infDimensionPower(tier) {
   	if (inNGM(2)) mult = mult.times(ec9)
 
   	mult = dilates(mult, 1)
-  	if (tmp.quActive) mult = mult.times(colorBoosts.dim.g)
 
 	if (tmp.ngC) mult = softcap(mult, "ids_ngC")
 	if (inNGM(4)) mult = softcap(mult, "ids_ngm4")

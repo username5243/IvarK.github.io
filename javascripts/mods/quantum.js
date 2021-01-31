@@ -499,7 +499,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			tmp.qu.bigRip.active = bigRip
 		}
 		getEl("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
-		updateColorDimPowers()
 		if (!oheHeadstart) {
 			player.eternityBuyer.dilationMode = false
 			player.eternityBuyer.dilationPerAmount = 10

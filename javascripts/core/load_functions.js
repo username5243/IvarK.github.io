@@ -2044,8 +2044,6 @@ function updateNGp3DisplayStuff(){
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
 	getEl('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
-	getEl("gluonCharger1").style.display = ""
-	getEl("gluonCharger2").style.display = ""
 	getEl("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
 	getEl("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
 	getEl("ratio_r").value = tmp.qu.assignAllRatios.r

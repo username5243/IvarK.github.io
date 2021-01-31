@@ -829,7 +829,6 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	getEl('bestTP').textContent = "Your best Tachyon particles in this Ghostify was " + shorten(player.dilation.bestTP) + "."
 	getEl("quantumbtn").style.display = "none"
 	updateColorCharge()
-	updateColorDimPowers()
 	updateGluonsTabOnUpdate("prestige")
 	updateQuantumWorth("quick")
 	updateBankedEter()

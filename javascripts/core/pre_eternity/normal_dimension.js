@@ -164,10 +164,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.currentChallenge == "postcngc_2" || player.currentChallenge == "postcngm3_2" || player.currentEternityChall == "eterc11") {
 		if (player.currentChallenge == "postcngc_2") mult = ngC.condense.nds.eff(tier)
 		else if (player.currentChallenge == "postcngm3_2") mult = tmp.infPow.max(1e100)
-		else if (player.currentEternityChall == "eterc11") {
-			mult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
-			if (tmp.quActive) x = x.times(colorBoosts.dim.r)
-		}
+		else if (player.currentEternityChall == "eterc11") mult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
 
 		if (tmp.ngC) mult = softcap(mult, "nds_ngC")
 		return mult
@@ -223,7 +220,6 @@ function getDimensionFinalMultiplier(tier) {
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
 	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
-	if (tmp.quActive) mult = mult.times(colorBoosts.dim.r)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
 

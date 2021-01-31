@@ -435,21 +435,20 @@ function buyDilationUpgrade(pos, max, isId) {
 }
 
 function getPassiveTTGen() {
-	if (player.dilation.tachyonParticles.plus(player.dilation.bestTP).gt("1e3333")) return 1e202
-
 	let r = getTTGenPart(player.dilation.tachyonParticles)
 	if (hasAch("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
 	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
 	if (isLEBoostUnlocked(6)) r *= tmp.leBonus[6]
+	if (tmp.ngp3) r = Math.min(r, 1e202)
 	return r
 }
 
 function getTTGenPart(x) {
 	if (!x) return new Decimal(0)
 	x = x.max(1).log10()
-	let y = 70
-	if (x > y) x = Math.sqrt((x - y + 5) * 5) + y - 5
+	let y = 68
+	if (x > y) x = Math.pow(x - y + 1, 2/3) + y
 	return Math.pow(10, x)
 }
 
@@ -588,10 +587,6 @@ function startDilatedEternity(auto, shortcut) {
 	eternity(true, true, undefined, true)
 	if (!onActive) player.dilation.active = true;
 	resetUP()
-	if (tmp.ngp3 && quantumed) {
-		updateColorCharge()
-		updateColorDimPowers()
-	}
 }
 
 function updateDilationDisplay() {
