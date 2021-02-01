@@ -1,12 +1,12 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 2e70, 262: 2e70, 263: 2e70, 264: 2e70, 265: 2e70, 266: 2e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
+		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
-		time_mults: {241: 1, 251: 2, 252: 2, 253: 2, 261: 6, 262: 6, 263: 6, 264: 6, 265: 6, 266: 6, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
+		time_mults: {241: 1, 251: 2, 252: 2, 253: 2, 261: 2, 262: 2, 263: 2, 264: 2, 265: 2, 266: 2, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
 		ec: {},
 		dil: {}
 	},
@@ -102,10 +102,7 @@ var masteryStudies = {
 		},
 		253() {
 			if (hasNU(6)) return 0
-			return Math.floor(getTotalRG() / 3)
-		},
-		273() {
-			return Math.sqrt(player.replicanti.chance + 1)
+			return Math.floor(getTotalRG() / 7) * 2
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
@@ -231,7 +228,7 @@ var masteryStudies = {
 		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
 		251: "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
-		253: "Remote galaxy scaling starts 1 galaxy later per 3 total Replicated Galaxies.",
+		253: "Remote galaxy scaling starts 2 galaxies later per 7 total Replicated Galaxies.",
 		261: "Dimension Boost costs scale by another 1 less.",
 		262: "The power of meta-antimatter effect is raised by 1.",
 		263: "Tachyonic Galaxies are 25% stronger.",
@@ -240,11 +237,11 @@ var masteryStudies = {
 		266: "Reduce the post-400 max replicated galaxy cost scaling.",
 		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
 		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
-		273: "Replicate chance boosts itself.",
+		273: "Replicate chance increases higher above 100%.",
 		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
 		282: "Increase the OoMs of replicate interval scaling by +100."
 	},
-	hasStudyEffect: [251, 252, 253, 273, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -254,9 +251,6 @@ var masteryStudies = {
 		},
 		253(x) {
 			return "+" + getFullExpansion(Math.floor(x))
-		},
-		273(x) {
-			return "^" + shorten(x)
 		},
 		281(x) {
 			return "+" + shorten(x) + " OoMs"

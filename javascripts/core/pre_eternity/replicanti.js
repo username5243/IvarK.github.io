@@ -108,9 +108,8 @@ function getRGCost(offset = 0, costChange) {
 			if (player.exdilation != undefined) for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += Math.pow(g - 389, 2)
 			if (player.meta != undefined) {
 				var isReduced = tmp.ngp3 && masteryStudies.has(266)
-				if (isReduced) {
-					increase += Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)
-				} else for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
+				if (isReduced) increase += (Math.pow(player.replicanti.gal + offset - scaleStart, 3) - Math.pow(Math.max(player.replicanti.gal - scaleStart, 0), 3)) * 10
+				else for (var g = Math.max(player.replicanti.gal, scaleStart - 1); g < player.replicanti.gal + offset; g++) increase += 5 * Math.floor(Math.pow(1.2, g - scaleStart + 6))
 			}
 		}
 		ret = ret.times(Decimal.pow(10, increase))
@@ -300,11 +299,14 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.chance = player.replicanti.chance
-	if (masteryStudies.has(273)) {
-		data.chance = Decimal.pow(data.chance, tmp.mts[273])
-		data.freq = 0
-		if (data.chance.gte("1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1) / Math.log10(2), tmp.mts[273])
-	}
+
+	let pow = 1
+	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(273) ? 1 : 0.5)
+	if (pow > 1) data.chance = Decimal.pow(data.chance, pow)
+
+	data.freq = 0
+	if (Decimal.gte(data.chance, "1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1), pow / Math.log10(2))
+
 	let estChance = data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3
 
 	data.baseInt = getReplicantiInterval()
