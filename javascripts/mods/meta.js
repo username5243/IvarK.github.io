@@ -318,6 +318,7 @@ function getMADimBoostPowerExp(ma) {
 		return power
 	}
 	if (hasDilationUpg("ngpp5")) power++
+	if (masteryStudies.has(262)) power += 0.5
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
 	return power
 }

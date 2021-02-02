@@ -166,7 +166,7 @@ function getDimboostCostIncrease () {
 		if (player.infinityUpgrades.includes('dimboostCost')) ret -= 1
 		if (player.infinityUpgrades.includes("postinfi50")) ret -= 0.5
 	} else {
-		if (masteryStudies.has(261)) ret -= 1
+		if (masteryStudies.has(261)) ret -= 0.5
 		if (inNC(4)) ret += 5
 		if (player.boughtDims && hasAch('r101')) ret -= Math.min(8, Math.pow(player.eternityPoints.max(1).log(10), .25))
 	}

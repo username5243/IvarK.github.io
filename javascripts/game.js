@@ -4845,7 +4845,7 @@ function ECRewardDisplayUpdating(){
 	getEl("ec10reward").textContent = "Reward: Time Dimensions gain a multiplier from your Infinities. Currently: " + shortenMoney(getECReward(10)) + "x "
 	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
 	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
-	getEl("ec13reward").textContent = "Reward: Everything except meta-antimatter gives a stronger boost to Dimension Boosts. (x^" + getECReward(13).toFixed(2) + ")"
+	getEl("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
 	getEl("ec14reward").textContent = "Reward: Slow down the base replicate interval by " + shorten(tmp.rep.ec14.interval) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14.ooms) + "x OoMs."
 
 	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"

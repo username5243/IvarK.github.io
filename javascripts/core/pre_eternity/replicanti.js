@@ -313,7 +313,7 @@ function updateReplicantiTemp() {
 	data.baseEst = Decimal.div(estChance, data.baseInt)
 
 	data.speeds = getReplSpeed()
-	if (ECComps("eterc14") > 0 && data.baseEst) {
+	if (data.baseEst) {
 		//Sub-1ms reduction -> Lower replicanti scaling
 		let div = data.baseEst.pow(getECReward(14))
 		data.ec14 = {

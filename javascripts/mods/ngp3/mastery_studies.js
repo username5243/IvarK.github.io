@@ -1,7 +1,7 @@
 var masteryStudies = {
 	initCosts: {
 		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
-		ec: {13: 1.7777777777777776e72, 14: 1.7777777777777776e72},
+		ec: {13: 1e71, 14: 1.7777777777777776e72},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
@@ -14,7 +14,7 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return 728e3 + (1500 + 3000 * comps) * comps
+			return 95e4 + (5e4 + 5e4 * comps) * comps
 		},
 		14() {
 			let comps = ECComps("eterc14")
@@ -229,8 +229,8 @@ var masteryStudies = {
 		251: "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
 		252: "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
 		253: "Remote galaxy scaling starts 2 galaxies later per 7 total Replicated Galaxies.",
-		261: "Dimension Boost costs scale by another 1 less.",
-		262: "The power of meta-antimatter effect is raised by 1.",
+		261: "Dimension Boost cost scales by 0.5 less.",
+		262: "The power of meta-antimatter effect is increased by ^0.5.",
 		263: "Tachyonic Galaxies are 25% stronger.",
 		264: "You gain 5x more Tachyon Particles.",
 		265: "Replicate chance upgrades can go over 100%.",
