@@ -1051,6 +1051,7 @@ function doNGPlusThreeNewPlayer(){
 	tmp.qu.electrons = getBrandNewElectronData()
 	tmp.qu.disabledRewards = {}
 	tmp.qu.metaAutobuyerWait = 0
+	tmp.qu.metaAutobuyerSlowWait = 0
 	tmp.qu.multPower = {rg : 0, gb : 0, br : 0, total : 0}
 	player.eternitiesBank = 0
 	tmp.qu.challenge = []
@@ -1753,17 +1754,16 @@ function updateInfCosts() {
 }
 
 function updateMilestones() {
+	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
 	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12]
-	for (i=0; i < (moreUnlocked ? 28 : 24); i++) {
+	for (i = 0; i < (moreUnlocked ? 28 : 24); i++) {
 		var name = "reward" + i;
-		if (i > 23) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
-		if (getEternitied() >= milestoneRequirements[i]) {
-			getEl(name).className = "milestonereward"
-		} else {
-			getEl(name).className = "milestonerewardlocked"
-		}
+		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
+		getEl(name).className = "milestonereward" + (eters >= milestoneRequirements[i] ? "" : "locked")
 	}
+	if (ph.did("quantum")) getEl("reward27").className = "milestonereward"
+
 	getEl("mdmilestonesrow1a").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow2a").style.display = moreUnlocked ? "" : "none"
@@ -3423,8 +3423,8 @@ function eternity(force, auto, presetLoad, dilated) {
 		loadAutoBuyerSettings()
 	}
 	Marathon2 = 0;
+	if (moreEMsUnlocked() && getEternitied() >= 1e9) player.dbPower = new Decimal(1)
 	doAutoEterTick()
-	if (tmp.ngp3 && player.dilation.upgrades.includes("ngpp3") && getEternitied() >= 1e9) player.dbPower = new Decimal(1)
 	if (tmp.ngp3) updateBreakEternity()
 }
 
@@ -3452,7 +3452,7 @@ function gainEternitiedStat() {
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
-	if (ph.did("quantum") && player.eternities < 1e5) ret = Math.max(ret, 20)
+	if (hasAch("ng3p12")) ret = nM(ret, 5)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
 	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
@@ -4111,6 +4111,7 @@ function dimensionButtonDisplayUpdating() {
    	getEl("idtabbtn").style.display = ((player.infDimensionsUnlocked[0] || ph.did("eternity")) && !inQC(8) && (inNGM(5) || ph.shown("infinity"))) ? "" : "none"
 	getEl("tdtabbtn").style.display = ((ph.shown("eternity") || inNGM(4)) && (!inQC(8) || tmp.be)) ? "" : "none"
 	getEl("mdtabbtn").style.display = ph.shown("eternity") && hasDilationStudy(6) ? "" : "none"
+	getEl('toggleallmetadims').style.display = moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12) ? "" : "none"
 }
 
 function ghostifyAutomationUpdating(diff){
@@ -4382,14 +4383,6 @@ function quantumOverallUpdating(diff){
 		if (player.masterystudies.includes("d11")) emperorDimUpdating(diff)
 		if (player.masterystudies.includes("d12")) nanofieldUpdating(diff)
 		if (player.masterystudies.includes("d13")) treeOfDecayUpdating(diff)
-	}
-	if (speedrunMilestonesReached>5) {
-		tmp.qu.metaAutobuyerWait+=diff*10
-		var speed=speedrunMilestonesReached>20?10/3:10
-		if (tmp.qu.metaAutobuyerWait>speed) {
-			tmp.qu.metaAutobuyerWait=tmp.qu.metaAutobuyerWait%speed
-			doAutoMetaTick()
-		}
 	}
 }
 
@@ -5106,6 +5099,7 @@ function gameLoop(diff) {
 				ghostifyAutomationUpdating(diff)
 			}
 			if (ph.did("quantum")) quantumOverallUpdating(diff)
+			preQuantumAutoNGP3(diff * 10)
 		}
 
 		replicantiIncrease(diff * 10)

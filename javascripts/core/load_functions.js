@@ -2258,7 +2258,6 @@ function onLoad(noOffline) {
 	getEl('dilationmode').style.display=speedrunMilestonesReached>4?"":"none"
 	getEl('rebuyupgmax').style.display=speedrunMilestonesReached<26&&player.masterystudies?"":"none"
 	getEl('rebuyupgauto').style.display=speedrunMilestonesReached>6?"":"none"
-	getEl('toggleallmetadims').style.display=speedrunMilestonesReached>7?"":"none"
 	getEl('metaboostauto').style.display=speedrunMilestonesReached>14?"":"none"
 	getEl("autoBuyerQuantum").style.display=speedrunMilestonesReached>22?"":"none"
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"

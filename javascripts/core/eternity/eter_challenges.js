@@ -141,7 +141,7 @@ let ecExpData = {
 		eterc11: 500,
 		eterc12: 110000,
 		eterc13: 245000000,
-		eterc14: 1/0,
+		eterc14: 365000000,
 		eterc1_ngmm: 1800,
 		eterc2_ngmm: 1125,
 		eterc3_ngmm: 1025,

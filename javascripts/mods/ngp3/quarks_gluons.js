@@ -204,7 +204,7 @@ function updateColorPowers(log) {
 	if (log == undefined) log = getCPLogs()
 
 	//Red
-	colorBoosts.r = Math.pow(log.r + 1, 0.25) - 1
+	colorBoosts.r = Math.pow(log.r + 1, 0.25)
 
 	//Green
 	let m = 1

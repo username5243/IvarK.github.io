@@ -61,33 +61,50 @@ function toggleAutoTT() {
 
 //v1.8
 const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
-function doAutoMetaTick() {
-	if (!player.masterystudies) return
-	if (player.autoEterOptions.rebuyupg && speedrunMilestonesReached > 6) {
-		if (speedrunMilestonesReached > 25) maxAllDilUpgs()
+
+function preQuantumAutoNGP3(diff) {
+	//Pre-Quantum Automation
+	let tickPerDiff = 10
+	if (speedrunMilestonesReached >= 21) tickPerDiff /= 3
+
+	tmp.qu.metaAutobuyerWait += diff
+	if (tmp.qu.metaAutobuyerWait >= tickPerDiff) {
+		doAutoMetaTick(Math.floor(tmp.qu.metaAutobuyerWait / tickPerDiff))
+		tmp.qu.metaAutobuyerWait = tmp.qu.metaAutobuyerWait % tickPerDiff
+	}
+}
+
+function doAutoMetaTick(ticks) {
+	//Slow
+	tmp.qu.metaAutobuyerSlowWait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
+	if (tmp.qu.metaAutobuyerSlowWait > 5) {
+		tmp.qu.metaAutobuyerSlowWait = tmp.qu.metaAutobuyerSlowWait % 5
+		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) buyMaxMetaDimension(d)
+	}
+
+	//Fast
+	if (player.autoEterOptions.rebuyupg && speedrunMilestonesReached >= 7) {
+		if (speedrunMilestonesReached >= 26) maxAllDilUpgs()
 		else for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 			var id = "r" + MAX_DIL_UPG_PRIORITIES[i]
 			if (isDilUpgUnlocked(id)) buyDilationUpgrade(id, false, true)
 		}
 	}
-	for (var d = 1; d <= 8; d++) {
-		var dim = d
-		if (player.autoEterOptions["md" + dim] && speedrunMilestonesReached >= 6 + dim) buyMaxMetaDimension(dim)
-	}
-	if (player.autoEterOptions.metaboost && speedrunMilestonesReached > 14) metaBoost()
+	for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && speedrunMilestonesReached >= 6 + d) buyMaxMetaDimension(d)
+	if (player.autoEterOptions.metaboost && speedrunMilestonesReached >= 15) metaBoost()
 }
 
 function toggleAllMetaDims() {
-	var turnOn
-	var id = 1
-	var stop = Math.min(speedrunMilestonesReached - 5, 9)
-	while (id < stop&&turnOn === undefined) {
-		if (!player.autoEterOptions["md" + id]) turnOn = true
-		else if (id > stop-2) turnOn = false
-		id++
+	let turnOn = false
+	let dim = 1
+	while (dim <= 8) {
+		if (!player.autoEterOptions["md" + dim]) turnOn = true
+		if (turnOn) break
+		dim++
 	}
-	for (id = 1; id < stop; id++) player.autoEterOptions["md" + id] = turnOn
-	getEl("metaMaxAllDiv").style.display = turnOn && stop > 7 && speedrunMilestonesReached > 27 ? "none" : ""
+
+	for (dim = 1; dim <= 8; dim++) player.autoEterOptions["md" + dim] = turnOn
+	getEl("metaMaxAllDiv").style.display = turnOn && speedrunMilestonesReached >= 28 ? "none" : ""
 }
 
 //v1.997

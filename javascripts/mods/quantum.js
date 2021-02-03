@@ -70,7 +70,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 }
 
 function getQuantumReq() {
-	return Decimal.pow(Number.MAX_VALUE, tmp.ngp3 ? 1.4 : 1)
+	return Decimal.pow(Number.MAX_VALUE, tmp.ngp3 ? 1.2 : 1)
 }
 
 function isQuantumReached() {
@@ -343,7 +343,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (inQC(1) && inQCModifier("ad") && inQCModifier("sm") && inQCModifier("ms") && inQCModifier("tb")) giveAchievement("Chaos, Chaos, Chaos!")
 		if (hasAch("ng3p73")) player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	} //bounds the else statement to if (force)
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached > 0
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var oldTime = tmp.qu.time
 	tmp.qu.time = 0
@@ -517,7 +517,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		}
 		getEl('dilationmode').style.display = speedrunMilestonesReached > 4 ? "" : "none"
 		getEl('rebuyupgauto').style.display = speedrunMilestonesReached > 6 ? "" : "none"
-		getEl('toggleallmetadims').style.display = speedrunMilestonesReached > 7 ? "" : "none"
 		getEl('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
 		if (bigRip ? tmp.bruActive[12] : isRewardEnabled(11) && isRewardEnabled(4)) player.dilation.upgrades.push(10)

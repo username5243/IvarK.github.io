@@ -49,8 +49,8 @@ function nanofieldResetOnQuantum(){
 }
 
 function doQuantumResetStuff(bigRip, isQC){
-	var headstart = player.meta !== undefined && !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >=1
+	var headstart = !tmp.ngp3
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
@@ -98,7 +98,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : hasAch("ng3p12") ? Math.max(Math.floor(1e8 / player.quantum.best), 2e4) : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : oheHeadstart ? 100 : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
@@ -379,7 +379,7 @@ function doEternityResetStuff() {
 	player.offlineProdCost = getEternitied() > 19 ? player.offlineProdCost : 1e7
 	player.challengeTarget = 0
 	player.autoSacrifice = getEternitied() > 6 ? player.autoSacrifice : 1
-	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0
@@ -731,14 +731,6 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	updateAutobuyers()
 	hideMaxIDButton()
 	ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
-	if (!bm) {
-		player.autobuyers[9].bulk = Math.ceil(player.autobuyers[9].bulk)
-		getEl("bulkDimboost").value = player.autobuyers[9].bulk
-		getEl("replicantidiv").style.display = "none"
-		getEl("replicantiunlock").style.display = "inline-block"
-		getEl("replicantiresettoggle").style.display = "none"
-		delete player.replicanti.galaxybuyer
-	}
 	updateLastTenRuns()
 	if ((getEl("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
 	resetInfDimensions(true)
