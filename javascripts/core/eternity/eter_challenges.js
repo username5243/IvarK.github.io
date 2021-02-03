@@ -140,7 +140,7 @@ let ecExpData = {
 		eterc10: 3000,
 		eterc11: 500,
 		eterc12: 110000,
-		eterc13: 1/0,
+		eterc13: 245000000,
 		eterc14: 1/0,
 		eterc1_ngmm: 1800,
 		eterc2_ngmm: 1125,
@@ -180,7 +180,7 @@ let ecExpData = {
 		eterc10: 300,
 		eterc11: 200,
 		eterc12: 12000,
-		eterc13: 1000000,
+		eterc13: 30000000,
 		eterc14: 800000,
 		eterc1_ngmm: 400,
 		eterc2_ngmm: 250,
@@ -221,7 +221,7 @@ function getECGoal(x) {
 		expIncrease = ecExpData.increases[x + "_ngc"] || expIncrease
 	}
 	let exp = expInit + expIncrease * completions
-	if (x == "ec13") exp += 600000 * Math.max(completions - 2, 0) * (completions - 3, 0)
+	if (x == "ec13") exp += 10000000 * Math.max(completions - 2, 0) * (completions - 3, 0)
 	return Decimal.pow(10, exp)
 }
 
@@ -276,7 +276,8 @@ function startEternityChallenge(n) {
 		player.dilation.active = false
 		if (tmp.ngp3 && ph.did("quantum")) updateColorCharge()
 	}
-	if (player.replicanti.unl && speedrunMilestonesReached < 22) player.replicanti.amount = new Decimal(1)
+	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	extraReplGalaxies = 0
 	resetReplicantiUpgrades()
 	player.tdBoosts = resetTDBoosts()

@@ -1,7 +1,7 @@
 var masteryStudies = {
 	initCosts: {
 		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
-		ec: {13: 1e71, 14: 1.7777777777777776e72},
+		ec: {13: 1e71, 14: 2e71},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
@@ -14,11 +14,11 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return 95e4 + (5e4 + 5e4 * comps) * comps
+			return 95e4 + 5e4 * comps
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return 255e5 + (4e6 + 2e6 * comps) * comps
+			return Decimal.pow(10, 275000 + 25000 * comps)
 		}
 	},
 	ecReqsStored: {},
@@ -27,7 +27,7 @@ var masteryStudies = {
 			return getFullExpansion(masteryStudies.ecReqsStored[13]) + " Dimension Boosts"
 		},
 		14() {
-			return getFullExpansion(masteryStudies.ecReqsStored[14]) + "% replicate chance"
+			return shortenCosts(masteryStudies.ecReqsStored[14]) + " replicantis"
 		}
 	},
 	unlockReqConditions: {
@@ -554,7 +554,7 @@ function canBuyMasteryStudy(type, id) {
 		if (!masteryStudies.spentable.includes("ec" + id)) return false
 		if (player.etercreq == id) return true
 		if (id == 13) return player.resets >= masteryStudies.ecReqsStored[13]
-		return Math.round(player.replicanti.chance * 100) >= masteryStudies.ecReqsStored[14]
+		return player.replicanti.amount.gte(masteryStudies.ecReqsStored[14])
 	}
 	return true
 }

@@ -16,12 +16,12 @@ function unlockReplicantis() {
 }
 
 function replicantiIncrease(diff) {
-	if (!player.replicanti.unl) return
+	if (!player.replicanti.unl || player.currentEternityChall == "eterc14") return
 	if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
 	else notContinuousReplicantiUpdating()
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
 
-	let auto = player.replicanti.galaxybuyer || player.currentEternityChall == "eterc14"
+	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 

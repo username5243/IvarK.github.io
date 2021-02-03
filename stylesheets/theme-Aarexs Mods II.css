@@ -211,7 +211,7 @@ button, div.storebtn {
 }
 
 #eternitybtn, #eternitystorebtn, #pasteternities, #tdtabbtn button, #timedimensions td:nth-child(4) .storebtn, .timetheorembtn, .timestudybought, .eternityupbtnbought, .milestonereward, #eterctabbtn, #eterchallengesbtn, #breakEternityTabbtn button, #autoEternityTabbtn button {
-	background-color: #7200e5 !important;
+	background-color: #9f3fff !important;
 	color: #191919 !important
 }
 
@@ -219,15 +219,15 @@ button, div.storebtn {
 	color: #191919 !important
 }
 
-#eternitybtn:hover, #eternitystorebtn:hover, #pasteternities:hover, #tdtabbtn button:hover, #timedimensions td:nth-child(4) .storebtn:hover, .timetheorembtn:hover, .timestudy, .timestudy.timedimstudy, .timestudy.passivestudy, .timestudybought.lightstudy, .eternityupbtn, #eterctabbtn:hover, #eterchallengesbtn:hover, #breakEternityTabbtn button:hover, #autoEternityTabbtn button:hover {
-	background-color: #8f39e5 !important;
+#eternitybtn:hover, #eternitystorebtn:hover, #pasteternities:hover, #tdtabbtn button:hover, #timedimensions td:nth-child(4) .storebtn:hover, .timetheorembtn:hover, .timestudy, .timestudy.timedimstudy, .timestudy.passivestudy, .timestudybought.lightstudy, .eternityupbtn, #eterctabbtn:hover, #eterchallengesbtn:hover, #breakEternityTabbtn button:hover {
+	background-color: #b76fff !important;
 	color: #191919 !important;
 	animation: none !important;
 	border: none !important
 }
 
 .EPAmount2, #timeShardAmount, #tickThreshold, #eternalMatter {
-	color: #7200e5 !important
+	color: #9f3fff !important
 }
 
 #timetheorems {
@@ -235,8 +235,8 @@ button, div.storebtn {
 	color: #191919 !important
 }
 
-.timestudy:hover, .eternityupbtn:hover, .timestudy.timedimstudy,:hover .timestudy.passivestudy:hover, .timestudy.lightstudy {
-	background-color: #9e57e5 !important
+.timestudy:hover, .eternityupbtn:hover, .timestudy.timedimstudy,:hover .timestudy.passivestudy:hover {
+	background-color: #c993ff !important
 }
 
 .timestudy.normaldimstudy, .timestudy.idlestudy {
@@ -294,28 +294,43 @@ button, div.storebtn {
 	background-color: #f2f2f2 !important;
 }
 
-.eternitychallengestudybought, .timestudybought.darkstudy {
-	background-color: #71219a !important;
-    color: #191919 !important
+.eternitychallengestudybought {
+	background-color: #5f00bf !important;
+	color: #e5e5e5 !important
 }
 
 .timestudy.darkstudy {
-	background-color: #5f2699 !important;
-	color: #191919 !important
+	background-color: #873fcf !important;
+	color: #e5e5e5 !important
 }
 
 .timestudy.darkstudy:hover {
-	background-color: #693a99 !important;
+	background-color: #a56fdb !important;
+	color: #e5e5e5 !important
+}
+
+.timestudybought.darkstudy {
+	background-color: #5f00bf !important;
+	color: #e5e5e5 !important
+}
+
+.timestudy.lightstudy {
+	background-color: #e7cfff !important;
 	color: #191919 !important
 }
 
 .timestudy.lightstudy:hover {
-	background-color: #ac72e5 !important;
+	background-color: #eddbff !important;
+	color: #191919 !important
+}
+
+.timestudybought.lightstudy {
+	background-color: #dfbfff !important;
 	color: #191919 !important
 }
 
 .eterchallengediv, .pc3completed {
-	background-color: #7200e5 !important;
+	background-color: #9f3fff !important;
 	border: none !important;
 	border-radius: 0px !important;
 	font-family: "Roboto" !important;

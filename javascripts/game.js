@@ -3604,7 +3604,7 @@ function dilAndBHDisplay() {
 }
 
 function replicantiShopABRun() {
-	if (getEternitied() >= 40 && (player.replicanti.auto[0] || player.currentEternityChall == "eterc14") && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
+	if (getEternitied() >= 40 && (player.replicanti.auto[0]) && player.currentEternityChall !== "eterc8" && isChanceAffordable()) {
 		var chance = Math.round(player.replicanti.chance * 100)
 		var maxCost = masteryStudies.has(265) ? 1 / 0 : new Decimal("1e1620").div(tmp.ngmX == 2 ? 1e60 : 1);
 		var bought = Math.max(Math.floor(player.infinityPoints.min(maxCost).div(player.replicanti.chanceCost).log(1e15) + 1), 0)
@@ -3613,11 +3613,11 @@ function replicantiShopABRun() {
 		player.replicanti.chanceCost = player.replicanti.chanceCost.times(Decimal.pow(1e15, bought))
 	}
 
-	if (getEternitied() >= 60 && (player.replicanti.auto[1] || player.currentEternityChall == "eterc14") && player.currentEternityChall !== "eterc8") {
+	if (getEternitied() >= 60 && (player.replicanti.auto[1]) && player.currentEternityChall !== "eterc8") {
 		while (player.infinityPoints.gte(player.replicanti.intervalCost) && player.currentEternityChall !== "eterc8" && isIntervalAffordable()) upgradeReplicantiInterval()
 	}
 
-	if (getEternitied() >= 80 && (player.replicanti.auto[2] || player.currentEternityChall == "eterc14") && player.currentEternityChall !== "eterc8") autoBuyRG()
+	if (getEternitied() >= 80 && (player.replicanti.auto[2]) && player.currentEternityChall !== "eterc8") autoBuyRG()
 }
 
 function failedEC12Check(){
