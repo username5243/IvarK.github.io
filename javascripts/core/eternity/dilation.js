@@ -447,8 +447,8 @@ function getPassiveTTGen() {
 function getTTGenPart(x) {
 	if (!x) return new Decimal(0)
 	x = x.max(1).log10()
-	let y = 68
-	if (x > y) x = Math.pow(x - y + 1, 2/3) + y
+	let y = 69
+	if (x > y) x = Math.pow(x - y + 1, 2/3) + y - 1
 	return Math.pow(10, x)
 }
 
