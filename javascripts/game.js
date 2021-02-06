@@ -3444,7 +3444,7 @@ function resetReplicantiUpgrades() {
 
 function challengesCompletedOnEternity(bigRip) {
 	var array = []
-	if (getEternitied() > 1 || bigRip || hasAch("ng3p51")) for (i = 1; i <= getTotalNormalChallenges(); i++) array.push("challenge" + i)
+	if (getEternitied() > 1 || bigRip || hasAch("ng3p51")) for (i = 1; i <= getTotalNormalChallenges() + 1; i++) array.push("challenge" + i)
 	if (hasAch("r133")) {
 		player.postChallUnlocked = order.length
 		for (i = 0; i < order.length; i++) array.push(order[i])
