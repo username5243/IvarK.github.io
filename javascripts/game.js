@@ -710,6 +710,7 @@ function updateNewPlayer(reseted) {
 			breakInfinity: false
 		}
 	}
+	tmp.mod = player.aarexModifications
 	if (modesChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
 	if (modesChosen.ngm === 2) ngmR.setup()
 	if (modesChosen.ngp == 2) { 
@@ -757,6 +758,12 @@ function doNGMinusNewPlayer(){
 }
 
 function doNGPlusOneNewPlayer(){
+	for (i = 1; i <= 13; i++) { // get all achievements up to and including row 13
+		for (j = 1; j <= 8; j++) {
+			player.achievements.push("r" + i + j)
+		}
+	}
+
 	player.money = new Decimal(2e25)
 	player.infinitiedBank = 5e9
 	player.infinityUpgrades = ["timeMult", "dimMult", "timeMult2", "unspentBonus", "27Mult", "18Mult", "36Mult", "resetMult", "passiveGen", "45Mult", "resetBoost", "galaxyBoost"]
@@ -772,11 +779,6 @@ function doNGPlusOneNewPlayer(){
 	player.eternityChalls.eterc4 = 1
 	player.eternityChalls.eterc10 = 1
 	player.dilation.studies = [1]
-	for (i = 1; i <= 13; i++) { // get all achievements up to and including row 13
-		for (j = 1; j <= 8; j++) {
-			player.achievements.push("r" + i + j)
-		}
-	}
 	tmp.mod.newGamePlusVersion = 2
 }
 
@@ -969,8 +971,8 @@ function getBrandNewPhotonsData(){
 	}
 }
 
-function getBrandNewBosonicLabData(){
-	return {
+function getBrandNewBosonicLabData() {
+	let x = {
 		watt: 0,
 		speed: 1,
 		ticks: 0,
@@ -986,9 +988,11 @@ function getBrandNewBosonicLabData(){
 		battery: 0,
 		odSpeed: 1
 	}
+	tmp.bl = x
+	return x
 }
 
-function getBrandNewWZBosonsData(){
+function getBrandNewWZBosonsData() {
 	return {
 		unl: false,
 		dP: 0,
@@ -1004,7 +1008,8 @@ function getBrandNewWZBosonsData(){
 	}
 }
 
-function getBrandNewGhostifyData(){
+function getBrandNewGhostifyData() {
+	player.ghostify = {}
 	return {
 		reached: false,
 		times: 0,
@@ -1079,7 +1084,6 @@ function doNGPlusThreeNewPlayer(){
 	player.dilation.bestTPOverGhostifies = 0
 	player.meta.bestOverGhostifies = 0
 	player.ghostify = getBrandNewGhostifyData()
-	tmp.bl = player.ghostify.bl
 	for (var g = 1; g < br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(0)
 	player.options.animations.ghostify = true
 	tmp.mod.ghostifyConf = true
@@ -3440,8 +3444,11 @@ function resetReplicantiUpgrades() {
 
 function challengesCompletedOnEternity(bigRip) {
 	var array = []
-	if (getEternitied() > 1 || bigRip || hasAch("ng3p51")) for (i = 1; i < (inNGM(2) ? 15 : 13); i++) array.push("challenge" + i)
-	if (hasAch("r133")) for (i = 0; i < order.length; i++) array.push(order[i])
+	if (getEternitied() > 1 || bigRip || hasAch("ng3p51")) for (i = 1; i <= getTotalNormalChallenges(); i++) array.push("challenge" + i)
+	if (hasAch("r133")) {
+		player.postChallUnlocked = order.length
+		for (i = 0; i < order.length; i++) array.push(order[i])
+	}
 	return array
 }
 

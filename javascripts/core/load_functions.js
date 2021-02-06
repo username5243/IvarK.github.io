@@ -79,7 +79,7 @@ function setPreBreakIfUndefined(){
 }
 
 function setPreEterIfUndefined(){
-        if (player.infMult === undefined) player.infMult = new Decimal(1)
+	if (player.infMult === undefined) player.infMult = new Decimal(1)
 	if (player.infMultCost === undefined) player.infMultCost = new Decimal(100)
 	if (player.tickSpeedMultDecrease === undefined) player.tickSpeedMultDecrease = 10
 	if (player.tickSpeedMultDecreaseCost === undefined) player.tickSpeedMultDecreaseCost = 3e6
@@ -282,7 +282,7 @@ function setABIfUndefined(){
 }
 
 function setPeakIfUndefined(){
-        GPminpeak = new Decimal(0)
+	GPminpeak = new Decimal(0)
 	IPminpeak = new Decimal(0)
 	EPminpeakType = 'normal'
 	EPminpeak = new Decimal(0)
@@ -423,17 +423,7 @@ function setAarexModIfUndefined(){
 
 	if (tmp.mod.tabsSave === undefined) tmp.mod.tabsSave = {on: false}
 	if (tmp.mod.noFooter == undefined) {
-                tmp.mod.noFooter = player.options.theme == "Aarex's Modifications" || player.options.theme == "Aarex's Mods II"
-        }
-        if (player.masterystudies !== undefined && tmp.mod.newGame3PlusVersion === undefined) {
-		forceHardReset = true
-		reset_game()
-		forceHardReset = false
-		return
-	}
-	if (tmp.mod.newGamePlusPlusVersion == undefined && tmp.mod.newGame3PlusVersion != undefined) {
-		delete player.masterystudies
-		delete tmp.mod.newGame3PlusVersion
+		tmp.mod.noFooter = player.options.theme == "Aarex's Modifications" || player.options.theme == "Aarex's Mods II"
 	}
 	if (tmp.mod.layerHidden === undefined) tmp.mod.layerHidden = {}
 	if (tmp.mod.render === undefined) tmp.mod.render = {tick: 0, rate: 1}
@@ -442,8 +432,7 @@ function setAarexModIfUndefined(){
 	getEl("renderrateslider").value = tmp.mod.render.rate
 }
 
-function doNGp3Init1(){
-	if (tmp.mod.newGame3PlusVersion >= 2.2) tmp.bl = player.ghostify.bl
+function doNGp3Init1() {
 	tmp.ngpX = hasAch("ng3p111") && pl.save ? 5 :
 		player.masterystudies !== undefined ? 3 :
 		player.meta !== undefined ? 2 :
@@ -831,60 +820,57 @@ function getGhostifyOnNewNGP3Data(){
 }
 
 function doInitNGp2NOT3Stuff(){
-        if (tmp.mod.newGamePlusPlusVersion === undefined && !player.masterystudies) { 
+	if (tmp.mod.newGamePlusPlusVersion === undefined && !player.masterystudies) { 
 		if (player.dilation.rebuyables[4] !== undefined) {
-                        var migratedUpgrades = []
-                        var v2_1check=player.version>13
-                        for (id=5;id<(v2_1check?18:14);id++) if (player.dilation.upgrades.includes(id)) migratedUpgrades.push(id>16?10:(id>12&&v2_1check)?("ngpp"+(id-10)):(id%4<1)?("ngpp"+(id/4-1)):Math.floor(id/4)*3+id%4)
-                        if (player.meta) {
-                                for (dim=1;dim<9;dim++) {
-                                        player.meta[dim].bought += player.meta[dim].tensBought * 10
-                                        delete player.meta[dim].tensBought
-                                }
-                                if (player.autoEterMode) tmp.mod.newGamePlusPlusVersion = 2.2
-                                else if (v2_1check) {
-                                        player.version = 12.1
-                                        tmp.mod.newGamePlusPlusVersion = 2.1
-                                } else if (player.meta) tmp.mod.newGamePlusPlusVersion = 2
-                        } else tmp.mod.newGamePlusPlusVersion = 1
-                        var newAchievements=[]
-                        var v2_3check=player.ep5xAutobuyer!==undefined
-                        for (id=0;id<player.achievements.length;id++) {
-                                r=player.achievements[id].split("r")[1]
-                                newAchievements.push(r>138?"ngpp"+(r-130):player.achievements[id])
-                                if (r>138) v2_3check=true
-                        }
-                        if (v2_3check) {
-                                tmp.mod.newGamePlusVersion = 1
-                                tmp.mod.newGamePlusPlusVersion = 2.3
-                                player.autoEterOptions = {epmult:player.ep5xAutobuyer}
-                                for (dim=1;dim<9;dim++) player.autoEterOptions["td"+dim] = player.timeDimensionAutobuyer
-                                player.achievements=newAchievements
-                                updateAchievements()
-                                delete player.timeDimensionAutobuyer
-                                delete player.ep5xAutobuyer
-                        }
-                        tmp.qu=player.quantum
-                        if (tmp.qu) {
-                                tmp.mod.newGamePlusPlusVersion = 2.901
-                                tmp.qu.time = player.totalTimePlayed
-                                tmp.qu.best = 9999999999
-                                tmp.qu.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
-                                tmp.mod.quantumConf = true
-                        }
-                        tmp.mod.newGamePlusVersion = 1
-                        if (confirm("Do you want to migrate your NG++ save into NG+++?")) {
-                                doNGP3NewPlayerStuff()
-                        }
-                        player.dilation.upgrades=migratedUpgrades
-                        resetDilationGalaxies()
-                }
-        } else if (player.dilation.rebuyables[4] == null) {
-                delete tmp.mod.meta
-                delete tmp.mod.autoEterMode
-                delete tmp.mod.autoEterOptions
-                delete tmp.qu
-        }
+			var migratedUpgrades = []
+			var v2_1check=player.version>13
+			for (id=5;id<(v2_1check?18:14);id++) if (player.dilation.upgrades.includes(id)) migratedUpgrades.push(id>16?10:(id>12&&v2_1check)?("ngpp"+(id-10)):(id%4<1)?("ngpp"+(id/4-1)):Math.floor(id/4)*3+id%4)
+			if (player.meta) {
+					for (dim=1;dim<9;dim++) {
+							player.meta[dim].bought += player.meta[dim].tensBought * 10
+							delete player.meta[dim].tensBought
+					}
+					if (player.autoEterMode) tmp.mod.newGamePlusPlusVersion = 2.2
+					else if (v2_1check) {
+							player.version = 12.1
+							tmp.mod.newGamePlusPlusVersion = 2.1
+					} else if (player.meta) tmp.mod.newGamePlusPlusVersion = 2
+			} else tmp.mod.newGamePlusPlusVersion = 1
+			var newAchievements=[]
+			var v2_3check=player.ep5xAutobuyer!==undefined
+			for (id=0;id<player.achievements.length;id++) {
+					r=player.achievements[id].split("r")[1]
+					newAchievements.push(r>138?"ngpp"+(r-130):player.achievements[id])
+					if (r>138) v2_3check=true
+			}
+			if (v2_3check) {
+					tmp.mod.newGamePlusVersion = 1
+					tmp.mod.newGamePlusPlusVersion = 2.3
+					player.autoEterOptions = {epmult:player.ep5xAutobuyer}
+					for (dim=1;dim<9;dim++) player.autoEterOptions["td"+dim] = player.timeDimensionAutobuyer
+					player.achievements=newAchievements
+					updateAchievements()
+					delete player.timeDimensionAutobuyer
+					delete player.ep5xAutobuyer
+			}
+			tmp.qu = player.quantum
+			if (tmp.qu) {
+					tmp.mod.newGamePlusPlusVersion = 2.901
+					tmp.qu.time = player.totalTimePlayed
+					tmp.qu.best = 9999999999
+					tmp.qu.last10 = [[600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0], [600*60*24*31, 0]]
+					tmp.mod.quantumConf = true
+			}
+			tmp.mod.newGamePlusVersion = 1
+			player.dilation.upgrades=migratedUpgrades
+			resetDilationGalaxies()
+		}
+	} else if (player.dilation.rebuyables[4] == null) {
+		delete tmp.mod.meta
+		delete tmp.mod.autoEterMode
+		delete tmp.mod.autoEterOptions
+		delete tmp.qu
+	}
 }
 
 function doNGP2v2tov2302(){
@@ -1283,36 +1269,8 @@ function doNGp3v21tov221(){
                 player.achievements=newAchievements
         }
         if (tmp.mod.newGame3PlusVersion < 2.2) {
-                player.ghostify.bl = {
-                        watt: 0,
-                        ticks: 0,
-                        speed: 1,
-                        am: 0,
-                        typeToExtract: 1,
-                        extracting: false,
-                        extractProgress: 0,
-                        autoExtract: 0,
-                        glyphs: [],
-                        enchants: {},
-                        usedEnchants: [],
-                        upgrades: [],
-                        battery: 0,
-                        odSpeed: 1
-                }
-                player.ghostify.wzb = {
-                        unl: false,
-                        dP: 0,
-                        dPUse: 0,
-                        wQkUp: true,
-                        wQkProgress: 0,
-                        zNeGen: 1,
-                        zNeProgress: 1,
-                        zNeReq: 1,
-                        wpb: 0,
-                        wnb: 0,
-                        wb: 0
-                }
-                tmp.bl=player.ghostify.bl
+                player.ghostify.bl = getBrandNewBosonicLabData()
+                player.ghostify.wzb = getBrandNewWZBosonsData()
         }
         if (tmp.mod.newGame3PlusVersion < 2.21) {
                 alert("Welcome to the NG+3.1 update! You are receiving this message because this save has been made before the update. This update changes and rebalances NG+3 significantly. The opportunity of NG+3L has been expired. Your journey now has been re-experienced.")
@@ -1699,7 +1657,7 @@ function dov12tov122(){
 function updateVersionsONLOAD(){
 	dov7tov10()
 	doNGM1Versions()
-	if (tmp.mod.newGamePlusVersion === undefined) if (player.eternities < 20 && ECComps("eterc1") > 0) tmp.mod.newGamePlusVersion = 1
+	if (tmp.mod.newGamePlusVersion === undefined && player.eternities < 20 && ECComps("eterc1") > 0) tmp.mod.newGamePlusVersion = 1
 	doInitNGp2NOT3Stuff()
 	doNGP2v2tov2302()
 	doQuantumRestore()
@@ -1730,6 +1688,7 @@ function doNGp3Init2(){
 		setupMasteryStudies()
 		updateUnlockedMasteryStudies()
 		updateSpentableMasteryStudies()
+		tmp.bl = player.ghostify.bl
 		delete tmp.badm
 	}
 	updateActiveLayers()
@@ -2168,7 +2127,7 @@ function onLoad(noOffline) {
 	if (tmp.qu == undefined || tmp.mod.newGamePlusPlusVersion == undefined) {
 		tmp.quActive = false
 		tmp.quUnl = false
-                speedrunMilestonesReached = 0
+		speedrunMilestonesReached = 0
 	}
 	ghostifyDenied = 0
 	setEverythingPreNGp3onLoad()
@@ -2349,9 +2308,9 @@ function setupNGP31Versions() {
 		alert("NG+3L is no longer supported. This save will now go through a mandatory migration to NG+3R.")
 		delete tmp.mod.ngp3lV
 	}
-	if (tmp.mod.newGame3PlusVersion < 2.3 || player.ghostify.hb.amount !== undefined) {
-		player.ghostify.hb = setupHiggsSave()
-	} else {
+	if (tmp.mod.newGame3PlusVersion === undefined) tmp.mod.newGame3PlusVersion = 2.21
+	if ((tmp.mod.newGame3PlusVersion < 2.3 && player.ghostify.hb === undefined) || player.ghostify.hb.amount !== undefined) player.ghostify.hb = setupHiggsSave()
+	else {
 		tmp.hb = player.ghostify.hb
 
 		delete tmp.hb.higgsUnspent

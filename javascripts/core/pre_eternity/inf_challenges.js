@@ -174,7 +174,7 @@ function updateChallenges() {
 		getEl("challenge7").textContent = "Trapped in"
 	}
 
-	if (inQC(6)) for (i=2;i<9;i++) if (i<3||i>5) {
+	if (inQC(6)) for (i = 2; i <= 8; i++) if (i == 2 || i >= 6) {
 		getEl("postc"+i).className = "onchallengebtn";
 		getEl("postc"+i).textContent = "Trapped in"
 	}
