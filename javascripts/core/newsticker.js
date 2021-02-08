@@ -424,16 +424,12 @@ amNewsArray = [
 ["Pfft, screw Gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
 ["NG-5 is being worked on! Now with 100% less matter.", "inNGM(4)", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
-["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
-["You gotta make that PP grow ;)", inNGM(5) && hasAch("ngm5p18"), "am215"]
+["'I will not let players exploit the game!' ~ Aarex", true, "am214"]
 /*NEXT ID: am216*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
 var scrollTimeouts = [];
-var nextMsgIndex;
-var nextMsgCond;
-var nextMsgId;
 
 function scrollNextMessage() {
         //don't run if hidden to save performance
@@ -442,7 +438,11 @@ function scrollNextMessage() {
         var s = getEl('news');
         updateNewsArray();
         tmp.blankedOut = false
-        
+
+		var nextMsgIndex
+		var nextMsgCond
+		var nextMsgId
+
         //select a message at random
         try {
 			nextMsgCond = false
@@ -451,7 +451,7 @@ function scrollNextMessage() {
 				var array = (hasAch("r22") && Math.random() > 0.5) ? amNewsArray : newsArray;
 				nextMsgIndex = Math.min(Math.floor(Math.random() * array.length), array.length);
 				nextMsgCond = eval(array[nextMsgIndex][1]);
-				nextMsgId = Math.min(array[nextMsgIndex][2], array.length);
+				nextMsgId = array[nextMsgIndex][2];
 			}
         } catch(e) {
                 console.log("Newsarray doesn't work at idx " + nextMsgIndex)
@@ -462,9 +462,9 @@ function scrollNextMessage() {
         //set the text
         var m = array[nextMsgIndex][0];
         if (nextMsgId == "am37") {
-                //coded by Naruyoko
-                var m = ""
-                for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
+			//coded by Naruyoko
+			var m = ""
+			for (var i = 0; i < 256; i++) m += String.fromCharCode(Math.random() * 95 + 32);
         }
         s.textContent = m
         
@@ -484,9 +484,9 @@ function scrollNextMessage() {
                 let rate = 100; //change this value to change the scroll speed
                 let transformDuration = dist / rate;
                 if (!player.options.newsHidden && !player.newsArray.includes(nextMsgId)) {
-                        player.newsArray.push(nextMsgId);
-                        if (player.newsArray.length>=50) giveAchievement("Fake News")
-                        if (player.newsArray.length>=400) giveAchievement("400% Breaking News")
+                        player.newsArray.push(nextMsgId)
+                        if (player.newsArray.length >= 50) giveAchievement("Fake News")
+                        if (player.newsArray.length >= 400) giveAchievement("400% Breaking News")
                 }
 
 
@@ -504,6 +504,15 @@ function scrollNextMessage() {
 		        } else scrollNextMessage()
                 }, Math.ceil(transformDuration * 1000)));
         }, 100));
+}
+
+function fixNewsArray() {
+	let news = []
+	for (let i = 0; i < player.newsArray.length; i++) {
+		let j = player.newsArray[i]
+		if (j !== null && j === j) news.push(j)
+	}
+	player.newsArray = news
 }
 
 function updateGhostlyNewsArray() {

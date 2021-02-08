@@ -139,6 +139,8 @@ let Prestiges = {
 				else getEl("hide" + p).style.display = "none"
 			} else getEl("hide" + p).style.display = "none"
 		}
+
+		ph.updateActive()
 	},
 	updateDisplay() {
 		ph.tmp.shown = 0
@@ -191,6 +193,12 @@ let Prestiges = {
 			getEl("quantumbtn").style.display = ""
 			if (!ph.tmp.quantum.shown) ph.tmp.shown++
 		}
+	},
+	updateActive() {
+		tmp.eterUnl = ph.did("eternity") && !pl.on() //&& !inQCModifier("tb")
+
+		tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !pl.on()
+		tmp.quActive = tmp.quUnl && !inQCModifier("ms")
 	},
 	onPrestige(layer) {
 		if (ph.tmp[layer].did) return

@@ -663,7 +663,7 @@ function replicantiDisplay() {
 				"Replicate interval slows down by " + tmp.rep.speeds.inc.toFixed(3) + "x per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp)) + " OoMs.<br>" +
 				"(2x slower per " + getFullExpansion(Math.floor(tmp.rep.speeds.exp * Math.log10(2) / Math.log10(tmp.rep.speeds.inc))) + " OoMs)<br>" +
 				"(The base interval was " + timeDisplayShort(Decimal.div(10, tmp.rep.baseEst), true, 2) + ")" :
-			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * getEC12Mult()) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
+			"Approximately "+ timeDisplay(Math.max((Math.log(Number.MAX_VALUE) - tmp.rep.ln) / tmp.rep.est.toNumber(), 0) * 10 * tmp.ec12Mult) + " until " + shorten(Number.MAX_VALUE) + " Replicantis."
 
 		getEl("replicantichance").className = (player.infinityPoints.gte(player.replicanti.chanceCost) && isChanceAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"

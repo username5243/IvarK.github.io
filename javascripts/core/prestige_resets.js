@@ -67,7 +67,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.thisInfinityTime = 0
 	player.resets = keepABnICs ? 4 : 0
 	player.tdBoosts = resetTDBoosts()
-	player.tickspeedBoosts = player.tickspeedBoosts !== undefined ? (keepABnICs ? 16 : 0) : undefined
+	if (inNGM(3)) player.tickspeedBoosts = keepABnICs ? 16 : 0
 	player.galaxies = keepABnICs ? 1 : 0
 	player.galacticSacrifice = resetGalacticSacrifice()
 	player.interval = null
@@ -347,6 +347,8 @@ function doEternityResetStuff() {
 	player.bestInfinityTime = 9999999999
 	player.thisInfinityTime = 0
 	player.resets = (getEternitied() > 3) ? 4 : 0
+	player.tdBoosts = resetTDBoosts()
+	if (inNGM(3)) player.tickspeedBoosts = (getEternitied() > 3) ? 16 : 0
 	player.challenges = challengesCompletedOnEternity()
 	player.currentChallenge = ""
 	player.galaxies = (getEternitied() > 3) ? 1 : 0
@@ -592,7 +594,7 @@ function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	player.thisInfinityTime = 0
 	player.resets = 0
 	player.tdBoosts = resetTDBoosts()
-	player.tickspeedBoosts = player.tickspeedBoosts !== undefined ? 16 : undefined
+	if (inNGM(3)) player.tickspeedBoosts = 16
 	player.galaxies = 0
 	player.interval = null
 	player.partInfinityPoint = 0

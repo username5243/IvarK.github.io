@@ -1691,7 +1691,6 @@ function doNGp3Init2(){
 		tmp.bl = player.ghostify.bl
 		delete tmp.badm
 	}
-	updateActiveLayers()
 	updateActiveBigRipUpgrades()
 	updateBosonicLimits()
 	updateTemp()
@@ -2865,7 +2864,9 @@ function conToDeciGhostify(){
 			player.ghostify.ghostlyPhotons.ghostlyRays=new Decimal(player.ghostify.ghostlyPhotons.ghostlyRays)
 			player.ghostify.ghostlyPhotons.darkMatter=new Decimal(player.ghostify.ghostlyPhotons.darkMatter)
 		}
-		if (tmp.bl && player.ghostify.wzb) {
+		if (player.ghostify.bl && player.ghostify.wzb) {
+			tmp.bl = player.ghostify.bl
+
 			tmp.bl.watt=new Decimal(tmp.bl.watt)
 			tmp.bl.speed=new Decimal(tmp.bl.speed)
 			tmp.bl.ticks=new Decimal(tmp.bl.ticks)

@@ -74,20 +74,13 @@ function updateTemp() {
 	if (player.replicanti.unl) updateReplicantiTemp()
 
 	tmp.inEC12 = isEC12Active()
-	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() : 1
+	tmp.ec12Mult = tmp.inEC12 ? getEC12Mult() / getPDAcceleration() : 1
 
-	let totalSpeed = gameSpeed * ls.mult("game") * getPDAcceleration()
+	let totalSpeed = gameSpeed * ls.mult("game")
 	if (tmp.gameSpeed != totalSpeed) {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
 	}
-}
-
-function updateActiveLayers() {
-	tmp.eterUnl = ph.did("eternity") && !pl.on() //&& !inQCModifier("tb")
-
-	tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !pl.on()
-	tmp.quActive = tmp.quUnl && !inQCModifier("ms")
 }
 
 function updateRedLightBoostTemp(){

@@ -1528,7 +1528,7 @@ function updateMoney() {
 		element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + 'x multiplier on all Dimensions (product of '+(inNGM(3)&&(inNC(13)||player.currentChallenge=="postc1")?"1+log10(amount)":"bought")+(mult==1?"":"*"+shorten(mult))+').'
 	}
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
-	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult / getPDAcceleration()) + "x" : ""
+	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
 }
 
 function updateCoinPerSec() {
@@ -3282,7 +3282,6 @@ function eternity(force, auto, presetLoad, dilated) {
 	var oldStat = getEternitied()
 	player.eternities = nA(player.eternities, gainEternitiedStat())
 	updateBankedEter()
-	if (inNGM(3)) player.tickspeedBoosts = 0
 	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0);
 
 	doEternityResetStuff()
@@ -3965,12 +3964,7 @@ function updateEPminpeak(diff, type) {
 	}
 	// for logarithm, we measure the amount of exponents gained from current
 	var currentEPmin = (EPminpeakType == 'logarithm' ? new Decimal(Math.max(0, newLog - Math.max(oldPoints.log10(), 0))) : gainedPoints).dividedBy(minutes)
-	if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) {
-		EPminpeak = currentEPmin
-		if (tmp.ngp3) player.peakSpent = 0
-	} else if (tmp.ngp3 && currentEPmin.gt(0)) {
-		player.peakSpent = diff + (player.peakSpent ? player.peakSpent : 0)
-	}
+	if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
 	return currentEPmin;
 }
 

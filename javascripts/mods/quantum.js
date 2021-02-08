@@ -472,7 +472,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			tmp.aeg = 0
 		} else if (QCs.length == 2) tmp.qu.pairedChallenges.current = id
 		tmp.qu.challenge = QCs
-		updateActiveLayers()
+		ph.updateActive()
 		updateInQCs()
 
 		if ((!isQC && player.ghostify.milestones < 6) || bigRip != tmp.qu.bigRip.active) tmp.qu.replicants.amount = new Decimal(0)

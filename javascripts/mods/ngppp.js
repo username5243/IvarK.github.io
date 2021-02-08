@@ -582,7 +582,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	
 	tmp.qu = player.quantum
 	updateInQCs()
-	updateActiveLayers()
+	ph.updateActive()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)
 	doEternityGhostifyResetStuff(implode, bm)	

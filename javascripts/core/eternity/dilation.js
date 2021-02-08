@@ -531,16 +531,16 @@ function getFreeGalaxyThresholdIncrease() {
 }
 
 function gainDilationGalaxies() {
-	if (!hasDilationStudy(1)) return
-
 	let thresholdMult = getFreeGalaxyThresholdIncrease()
 	let thresholdStart = getFreeGalaxyThresholdStart()
 	let galaxyMult = getFreeGalaxyGainMult()
+
 	let baseGain = Math.floor(player.dilation.dilatedTime.div(thresholdStart).log(thresholdMult) + 1)
-	if (baseGain < 0) baseGain = 0
-	let old = Math.round(player.dilation.freeGalaxies / galaxyMult)
-	player.dilation.freeGalaxies = Math.max(baseGain, old) * galaxyMult
-	player.dilation.nextThreshold = Decimal.pow(thresholdMult, baseGain).times(thresholdStart)
+	let oldGals = Math.round(player.dilation.freeGalaxies / galaxyMult)
+	let gained = Math.max(baseGain, oldGals)
+
+	player.dilation.freeGalaxies = gained * galaxyMult
+	player.dilation.nextThreshold = Decimal.pow(thresholdMult, gained).times(thresholdStart)
 }
 
 function getFreeGalaxyGainMult() {
@@ -553,7 +553,7 @@ function getFreeGalaxyGainMult() {
 	return Math.pow(galaxyMult, exp)
 }
 
-function getFreeGalaxyThresholdStart(){
+function getFreeGalaxyThresholdStart() {
 	return new Decimal(1000)
 }
 
