@@ -174,79 +174,41 @@ function updateColorCharge() {
 	updateQuarksTabOnUpdate()
 }
 
-function getColorPowerProduction(color) {
-	let ret = new Decimal(colorCharge[color])
-	ret = ret.add(colorCharge.qwBonus)
-	return ret
+function getColorPowerQuantity(color) {
+	return new Decimal(0)
+
+	let ret = Decimal.times(colorCharge[color], 10).max(1).log10()
+	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
+	return new Decimal(ret)
 }
 
-colorBoosts={
-	r:1,
-	g:1,
-	b:1
+colorBoosts = {
+	r: 1,
+	g: 1,
+	b: 1
 }
 
-function getCPLog(c) {
-	var x = Decimal.add(tmp.qu.colorPowers[c], 1).log10()
-	return x
-}
-
-function getCPLogs(c) {
-	return {
-		r: getCPLog("r"),
-		g: getCPLog("g"),
-		b: getCPLog("b")
-	}
-}
-
-function updateColorPowers(log) {
-	//Logs
-	if (log == undefined) log = getCPLogs()
-
+function updateColorPowers() {
 	//Red
-	colorBoosts.r = Math.pow(log.r + 1, 0.25)
+	colorBoosts.r = 1
 
 	//Green
-	let m = 1
-
-	colorBoosts.g = Math.pow(log.g + 1, 1/3) * 2 - 1
-	if (player.ghostify.ghostlyPhotons.unl) m *= tmp.le[3]
-	if (tmp.mod.ngumuV && player.masterystudies.includes("t362")) m += tmp.qu.replicants.quarks.add(1).log10() / 10
-	colorBoosts.g = (colorBoosts.g - 1) * m + 1
+	colorBoosts.g = 1
 
 	//Blue
-	let bLog = log.b
-	bLog = Math.sqrt(log.b + 1.5) - 1.5
-
-	let softcapStartLog = 3
-	let softcapPower = 1
-	if (player.ghostify.ghostlyPhotons.unl) softcapPower += tmp.le[4]
-	if (hasBosonicUpg(11)) softcapPower += tmp.blu[11]
-
-	if (Decimal.gt(bLog, softcapStartLog)) {
-		bLog = Decimal.div(bLog, softcapStartLog).pow(softcapPower / 2).times(softcapStartLog)
-		if (bLog.lt(100)) bLog = bLog.toNumber()
-		else bLog = Math.min(bLog.toNumber(), bLog.log10() * (40 + 10 * bLog.sub(90).log10()))
-	}
-	if (bLog < 0) bLog = 0
-	colorBoosts.b = Decimal.pow(10, bLog)
+	colorBoosts.b = 1
 }
 
 //Gluons
-function gainQuarkEnergy(ma_old, ma_new) {
-	if (!ma_new.gte(ma_old)) return
-	tmp.qu.quarkEnergy = tmp.qu.quarkEnergy.add(getQuarkEnergyGain(ma_new).sub(getQuarkEnergyGain(ma_old)).times(getQuarkEnergyGainMult()))
+function gainQuarkEnergy() {
+	tmp.qu.quarkEnergy = quantumWorth.add(1).log10()
 }
 
-function getQuarkEnergyGain(ma) {
-	let x = (ma.log10() - Math.log10(Number.MAX_VALUE) * 1.4) / 280
-	if (x < 0) x = -Math.pow(-x, 1.5)
-	else x = Math.pow(x, 1.5)
-	return Decimal.pow(10, x)
-}
-
-function getQuarkEnergyGainMult() {
-	return 0.75
+function updateQuarkEnergyEffects() {
+	tmp.qkEng = {
+		eff1: Math.log10(tmp.qu.quarkEnergy + 10),
+		eff2: tmp.qu.quarkEnergy / 10,
+	}
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -257,14 +219,7 @@ function buyGluonUpg(color, id) {
 	tmp.qu.upgrades.push(name)
 	tmp.qu.gluons[color] = tmp.qu.gluons[color].sub(GUCosts[id])
 	updateGluonsTab("spend")
-	if (name == "gb3") {
-		var otherMults = 1
-		if (hasAch("r85")) otherMults *= 4
-		if (hasAch("r93")) otherMults *= 4
-		var old = getIPMultPower()
-		ipMultPower = 2.3
-		player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
-	}
+	if (name == "gb3") bumpInfMult()
 	if (name == "rg4" && !tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
 	if (name == "gb4") player.tickSpeedMultDecrease = 1.25
 	updateQuantumWorth()
@@ -364,20 +319,23 @@ function getGU8Effect(type) {
 
 //Display
 function updateQuarksTab(tab) {
-	getEl("redPower").textContent=shortenMoney(tmp.qu.colorPowers.r)
-	getEl("greenPower").textContent=shortenMoney(tmp.qu.colorPowers.g)
-	getEl("bluePower").textContent=shortenMoney(tmp.qu.colorPowers.b)
+	getEl("redPower").textContent = shorten(tmp.qu.colorPowers.r)
+	getEl("greenPower").textContent = shorten(tmp.qu.colorPowers.g)
+	getEl("bluePower").textContent = shorten(tmp.qu.colorPowers.b)
+
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
 	getEl("greenTranslation").textContent = formatPercentage(colorBoosts.g - 1) + (tmp.pe ? "+" + formatPercentage(tmp.pe) :"")
-	getEl("blueTranslation").textContent = shortenMoney(colorBoosts.b)
-	getEl("quarkEnergy").textContent = shortenMoney(tmp.qu.quarkEnergy)
+	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
+
+	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
+	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qkEng.eff1 - 1)
+	getEl("quarkEnergyEffect2").textContent = shorten(tmp.qkEng.eff2)
 
 	if (player.ghostify.milestones >= 8) {
 		var assortAmount=getAssortAmount()
 		var colors=['r','g','b']
 		getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
-		for (c = 0; c < 3; c++) if (colorCharge[colors[c]].div(colorCharge.qwBonus).lte(1e16)) getEl(colors[c]+"PowerRate").textContent="+"+shorten(getColorPowerProduction(colors[c]))+"/s"
-		getEl("assignAllButton").className=(assortAmount.lt(1)?"unavailabl":"stor")+"ebtn"
+		getEl("assignAllButton").className = (assortAmount.lt(1) ? "unavailabl" : "stor") + "ebtn"
 		updateQuantumWorth("display")
 	}
 }
@@ -416,7 +374,6 @@ function updateQuarksTabOnUpdate(mode) {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML='<span class="'+color+'">'+color+'</span> charge of <span class="'+color+'" style="font-size:35px">' + shortenDimensions(colorCharge.normal.charge) + "</span>"
 	}
-	for (c = 0; c < 3; c++) getEl(colors[c]+"PowerRate").textContent="+"+shorten(getColorPowerProduction(colors[c]))+"/s"
 
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
 	getEl("greenQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.g)

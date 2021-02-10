@@ -193,15 +193,12 @@ dev.testTDCosts = function() {
 }
 
 dev.giveQuantumStuff = function(n){
-	player.quantum.usedQuarks.r = player.quantum.usedQuarks.r.plus(Decimal.pow(10,n+1))
-	player.quantum.usedQuarks.b = player.quantum.usedQuarks.b.plus(Decimal.pow(10,n+1))
-	player.quantum.usedQuarks.g = player.quantum.usedQuarks.g.plus(Decimal.pow(10,n+1))
-	player.quantum.gluons.rg = player.quantum.gluons.rg.plus(Decimal.pow(10,n))
-	player.quantum.gluons.gb = player.quantum.gluons.gb.plus(Decimal.pow(10,n))
-	player.quantum.gluons.br = player.quantum.gluons.br.plus(Decimal.pow(10,n))
-	player.quantum.colorPowers.r = player.quantum.colorPowers.r.plus(Decimal.pow(10,n+2))
-	player.quantum.colorPowers.b = player.quantum.colorPowers.b.plus(Decimal.pow(10,n+2))
-	player.quantum.colorPowers.g = player.quantum.colorPowers.g.plus(Decimal.pow(10,n+2))
+	player.quantum.usedQuarks.r = player.quantum.usedQuarks.r.plus(Decimal.pow(10, n+1))
+	player.quantum.usedQuarks.b = player.quantum.usedQuarks.b.plus(Decimal.pow(10, n+1))
+	player.quantum.usedQuarks.g = player.quantum.usedQuarks.g.plus(Decimal.pow(10, n+1))
+	player.quantum.gluons.rg = player.quantum.gluons.rg.plus(Decimal.pow(10, n))
+	player.quantum.gluons.gb = player.quantum.gluons.gb.plus(Decimal.pow(10, n))
+	player.quantum.gluons.br = player.quantum.gluons.br.plus(Decimal.pow(10, n))
 }
 
 dev.addReward = function(){

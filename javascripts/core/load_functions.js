@@ -1623,15 +1623,6 @@ function doNGSPUpdatingVersion(){
         }
 }
 
-function doInitInfMultStuff(){
-        ipMultPower=2
-        if (masteryStudies.has("t241")) ipMultPower=2.1
-        if (GUBought("gb3")) ipMultPower=2.3
-        if (tmp.mod.newGameExpVersion !== undefined) ipMultCostIncrease=4
-        else ipMultCostIncrease=10
-        getEl("infiMult").innerHTML = "You gain " + ipMultPower + "x more IP.<br>Currently: "+shortenDimensions(getIPMult()) +"x<br>Cost: "+shortenCosts(player.infMultCost)+" IP"
-}
-
 function dov12tov122(){
         if (player.version < 12) {
                 for (i=1; i<5; i++) {
@@ -1827,9 +1818,10 @@ function setDisplaysStuff1(){
   
 	getEl("bestAntimatterType").textContent = player.masterystudies && ph.did("quantum") ? "Your best meta-antimatter for this quantum" : "Your best-ever meta-antimatter"
 
-	getEl("masterystudyunlock").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "" : "none"
-	getEl("respecMastery").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
-	getEl("respecMastery2").style.display = player.dilation.upgrades.includes("ngpp6") && player.masterystudies ? "block" : "none"
+	let masteryUnl = masteryStudies.unl()
+	getEl("masterystudyunlock").style.display = masteryUnl ? "" : "none"
+	getEl("respecMastery").style.display = masteryUnl ? "block" : "none"
+	getEl("respecMastery2").style.display = masteryUnl ? "block" : "none"
 
 	if (inNGM(2)) {
 		getEl("galaxy11").innerHTML = "Normal " + (inNGM(4) ? "and Time " : "") + "Dimensions are " + (ph.did("infinity") ? "cheaper based on your Infinities.<br>Currently: <span id='galspan11'></span>x" : "99% cheaper.") + "<br>Cost: 1 GP"
@@ -2839,7 +2831,6 @@ function conToDeciMS(){
                         tmp.qu.tod.b.quarks = new Decimal(tmp.qu.tod.b.quarks)
                         tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
                 }
-                if (tmp.qu) tmp.qu.quarkEnergy = new Decimal(tmp.qu.quarkEnergy)
         }
 }
 

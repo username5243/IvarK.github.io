@@ -85,7 +85,7 @@ var masteryStudies = {
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
 	unl() {
-		return tmp.ngp3 && tmp.eterUnl && player.dilation.upgrades.includes("ngpp6")
+		return (tmp.ngp3 && tmp.eterUnl && player.dilation.upgrades.includes("ngpp6")) || tmp.quUnl
 	},
 	has(x) {
 		return this.unl() && (player.masterystudies.includes("t" + x) || (player.masterystudies.includes(x) && x[0] == "d"))
@@ -488,14 +488,7 @@ function buyMasteryStudy(type, id, quick=false) {
 			masteryStudies.costMult *= getMasteryStudyCostMult(id)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow, Math.floor(id / 10))
 		}
-		if (id == 241 && !GUActive("gb3")) {
-			var otherMults = 1
-			if (hasAch("r85")) otherMults *= 4
-			if (hasAch("r93")) otherMults *= 4
-			var old = getIPMultPower()
-			if (!GUBought("gb3")) ipMultPower = 2.1
-			player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
-		}
+		if (id == 241) bumpInfMult()
 		if (!hasNU(6) && (id == 251 || id == 252 || id == 253 || id == 301)) {
 			player.galaxies = 1
 		}

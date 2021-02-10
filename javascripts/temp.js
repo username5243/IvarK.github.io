@@ -320,6 +320,7 @@ function updateNGP3TempStuff() {
 			tmp.twr = getTotalWorkers()
 			tmp.tra = getTotalReplicants()
 		}
+		updateQuarkEnergyEffects()
 	}
 	updateMasteryStudyTemp()
 	if (tmp.quActive) {

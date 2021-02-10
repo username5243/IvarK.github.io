@@ -487,7 +487,7 @@ function respecTimeStudies(force, presetLoad) {
 	drawStudyTree()
 	if (!presetLoad) updateTimeStudyButtons(true)
 	if (gotAch) giveAchievement("You do know how these work, right?")
-	if (!GUBought("gb3")) ipMultPower = 2
+	doInitInfMultStuff()
 	if (player.replicanti.galaxybuyer) getEl("replicantiresettoggle").textContent = "Auto galaxy: ON"
 	else getEl("replicantiresettoggle").textContent = "Auto galaxy: OFF"
 }

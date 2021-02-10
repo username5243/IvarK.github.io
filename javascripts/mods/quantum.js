@@ -437,6 +437,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	}
 		
 	player.money = onQuantumAM()
+	doInitInfMultStuff()
 	if (inNGM(2) && !keepABnICs) player.autobuyers[12] = 13
 	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14
 	player.challenges = challengesCompletedOnEternity(bigRip)
@@ -444,7 +445,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 
 	player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 	if (tmp.ngp3) {
-		ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
 		player.dilation.times = 0
 		if (!force) {
 			var u = tmp.qu.usedQuarks
@@ -627,7 +627,7 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && speedrunMilestonesReached >= 6
 	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
-	let keepMSs = bigRip || (tmp.ngp3 && player.dilation.upgrades.includes("ngpp6"))
+	let keepMSs = bigRip || masteryStudies.unl()
 	getEl("masterystudyunlock").style.display = keepMSs ? "" : "none"
 	getEl("respecMastery").style.display = keepMSs ? "block" : "none"
 	getEl("respecMastery2").style.display = keepMSs ? "block" : "none"

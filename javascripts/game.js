@@ -283,21 +283,32 @@ function setupToDHTMLandData(){
 }
 
 function setupNanofieldHTMLandData(){
+	var rewards = 8
+	var size = 4
+
 	var nfRewards = getEl("nfRewards")
 	var row = 0
-	for (var r = 1; r <= 8; r += 2) {
-		nfRewards.insertRow(row).innerHTML = 
-			"<td id='nfRewardHeader" + r + "' class='milestoneText'></td>" +
-			"<td id='nfRewardHeader" + (r + 1) + "' class='milestoneText'></td>"
-		row++
-		nfRewards.insertRow(row).innerHTML = 
-			"<td id='nfRewardTier" + r + "' class='milestoneTextSmall'></td>" +
-			"<td id='nfRewardTier" + (r + 1) + "' class='milestoneTextSmall'></td>"
-		row++
-		nfRewards.insertRow(row).innerHTML = 
-			"<td><button class='nfRewardlocked' id='nfReward" + r + "'></button></td>" +
-			"<td><button class='nfRewardlocked' id='nfReward" + (r + 1) + "'></button></td>"
-		row++
+	for (let r = 1; r <= rewards; r += size) {
+		var rows = []
+		for (let i = 0; i < 3; i++) rows[i] = nfRewards.insertRow(row + i)
+		row += 3
+
+		for (let x = 0; x < size; x++) {
+			var rw = r + x
+			if (rw > rewards) break
+
+			var c0 = rows[0].insertCell(x)
+			var c1 = rows[1].insertCell(x)
+			var c2 = rows[2].insertCell(x)
+
+			c0.id = 'nfRewardHeader' + rw
+			c0.className = 'milestoneText'
+
+			c1.id = 'nfRewardTier' + rw
+			c1.className = 'milestoneTextSmall'
+
+			c2.innerHTML = "<button class='nfRewardlocked' id='nfReward" + rw + "'></button>"
+		}
 	}
 	getEl("nfReward7").style["font-size"] = "10px"
 	getEl("nfReward8").style["font-size"] = "10px"
@@ -4377,8 +4388,7 @@ function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
 		//Color Powers
 		var colorShorthands=["r","g","b"]
-		for (var c=0;c<3;c++) tmp.qu.colorPowers[colorShorthands[c]] = tmp.qu.colorPowers[colorShorthands[c]].add(getColorPowerProduction(colorShorthands[c]).times(diff))
-		updateColorPowers()
+		for (var c = 0;c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 
 		if (player.masterystudies.includes("d10")) replicantOverallUpdating(diff)
 		if (player.masterystudies.includes("d11")) emperorDimUpdating(diff)
@@ -4437,7 +4447,7 @@ function otherDimsUpdating(diff){
 	//Time Dimensions
 	let timeProd = getTimeDimensionProduction(1)
 	if (inNGM(5)) timeProd = getTimeDimensionProduction(2).add(timeProd)
-	player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
+	if (player.currentEternityChall !== "eterc7") player.timeShards = player.timeShards.plus(timeProd.times(diff)).max(0)
 
 	//Eternity Challenge 7
 	let id8Prod = getECReward(7)
@@ -4578,12 +4588,10 @@ function doEternityButtonDisplayUpdating(diff){
 									    ? ((player.currentEternityChall!=="" ? "Other challenges await..." : player.eternities>0 ? "" : "Other times await...") + " I need to become Eternal.") : "")
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) getEl("eternitybtnEPGain").innerHTML = "Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon Particles."
 		else {
-			if ((EPminpeak.lt(Decimal.pow(10,9)) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.lt(Decimal.pow(10, 1e9)))) {
-				getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall==""||player.options.theme=="Aarex's Modifications"))
-											  ? "Gain <b>"+(player.dilation.active?shortenMoney(getDilGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.":tmp.be?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter.":"Eternity points.") : "")
-			} else {
-				getEl("eternitybtnEPGain").innerHTML = "<b>Other times await... I need to become Eternal.</b>"
-			}
+			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
+				(EPminpeak.lt(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.lt(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
+				"Gain <b>" + (player.dilation.active?shortenMoney(getDilGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
+			: "")
 		}
 		var showEPmin=(player.currentEternityChall===""||player.options.theme=="Aarex's Modifications")&&EPminpeak>0&&player.eternities>0&&player.options.notation!='Morse code'&&player.options.notation!='Spazzy'&&(!(player.dilation.active||tmp.be)||isSmartPeakActivated)
 		if (EPminpeak.log10() < 1e5) {
@@ -5081,7 +5089,7 @@ function gameLoop(diff) {
 
 		if (tmp.ngp3) {
 			if (hasDilationStudy(1)) {
-				if (isBigRipUpgradeActive(20) || hasEternityUpg(15)) {
+				if (isBigRipUpgradeActive(20)) {
 					let gain = getDilGain()
 					if (player.dilation.tachyonParticles.lt(gain)) setTachyonParticles(gain)
 				} else if (player.dilation.active) ngp3DilationUpdating()

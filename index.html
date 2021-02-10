@@ -1447,22 +1447,25 @@
 			<div class='optionstab' id='light_speed' style='display:none'>
 				<table>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('game')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('game')"></div>
 					</div></td></tr>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate interval: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('rep')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
 					</div></td></tr>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('nf')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate interval: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
 					</div></td></tr>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('tod')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
 					</div></td></tr>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('gph')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
 					</div></td></tr>
 					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="30" value="0" class="slider" onchange="ls.changeOption('bl')"></div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
+					</div></td></tr>
+					<tr><td><div>
+						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
 					</div></td></tr>
 				</table>
 			</div>
@@ -1486,7 +1489,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.101: Rebalancing the Studies)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 1)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4486,28 +4489,28 @@
 				<table class='qtable'>
 					<tr>
 						<td class="rqC">
-							<p>You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. <span id='rPowerRate' style='font-size:25px' class='red'></span
+							<p>You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power.
 						</td>
 						<td>
-							<p>You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. <span id='gPowerRate' style='font-size:25px' class='green'></span>
+							<p>You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power.
 						</td>
 						<td class="bqC">
-							<p>You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. <span id='bPowerRate' style='font-size:25px' class='blue'></span>
+							<p>You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power.
 						</td>
 					</tr><tr>
 						<td class="rqC">
-							Translated to <span class="red" id="redTranslation" style="font-size:35px">0.0</span>% increase in galaxy efficiency.</p>
+							Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.</p>
 						</td>
 						<td>
-							Translated to <span class="green" id="greenTranslation" style="font-size:35px">0</span>% increase in extra Replicated Galaxies.</p>
+							Translated to +<span class="green" id="greenTranslation" style="font-size:35px"></span>% stronger replicanti upgrades.</p>
 						</td>
 						<td class="bqC">
-							Translated to <span class="blue" id="blueTranslation" style="font-size:35px">1.0</span>x faster dilated time production.</span>
+							Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon particles.</span>
 						</td>
 					</tr>
 				</table>
 				<br>
-				You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quark energy.
+				You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quark energy, giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% boost to all color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
 			</div>
 			<div class='quantumtab' id='gluons'>
 				<div>Your quantum worth (sum of quarks, colored quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth2">0</b>.</div>

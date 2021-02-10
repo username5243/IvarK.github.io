@@ -126,22 +126,17 @@ let ETER_UPGS = {
 	13: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
-		mult() {
-			let epLog = player.eternityPoints.add(1).log10()
-
-			return Decimal.pow(10, Math.pow(epLog, 0.4) / 100)
-		},
-		desc: () => "Eternity Points boost dilated time gain and you can buy all row-23 time studies."
+		desc: () => "You can buy all row-23 time studies."
 	},
 	14: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
-		desc: () => "The cost scaling of EP multiplier upgrades is reduced and you can buy all time studies from time study tree."
+		desc: () => "You can buy all time studies from time study tree."
 	},
 	15: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: 1/0,
-		desc: () => "You can passively generate Eternity Points and Tachyon Particles."
+		desc: () => "You can passively generate Eternity Points."
 	},
 
 	updateDisplayOnTick() {

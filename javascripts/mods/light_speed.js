@@ -3,13 +3,16 @@ let LIGHT_SPEED = {
 		let data = tmp.mod.ls
 		return (data && data[id]) || 1
 	},
-	options: ["game", "rep", "nf", "tod", "bl"],
+	options: ["game", "rep", "dil", "nf", "tod", "bl"],
 	reqs: {
 		game() {
 			return true
 		},
 		rep() {
 			return player.replicanti.unl || ph.did("eternity")
+		},
+		dil() {
+			return hasDilationStudy(1)
 		},
 		nf() {
 			return tmp.ngp3 && player.masterystudies.includes("d11")
@@ -37,12 +40,12 @@ let LIGHT_SPEED = {
 		if (!unl) return
 
 		let speed = ls.mult(id)
-		getEl("ls_" + id).value = Math.round(Math.log10(speed) * 10)
-		getEl("ls_" + id + "_text").textContent = speed.toFixed(2)
+		getEl("ls_" + id).value = Math.round(Math.log10(speed) * 10 + 30)
+		getEl("ls_" + id + "_text").textContent = shorten(speed)
 	},
 	changeOption(id) {
-		let speed = Math.pow(10, getEl("ls_" + id).value / 10)
-		getEl("ls_" + id + "_text").textContent = speed.toFixed(2)
+		let speed = Math.pow(10, getEl("ls_" + id).value / 10 - 3)
+		getEl("ls_" + id + "_text").textContent = shorten(speed)
 		if (speed == 1) delete tmp.mod.ls[id]
 		else tmp.mod.ls[id] = speed
 	}

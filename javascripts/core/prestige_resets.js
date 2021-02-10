@@ -732,7 +732,7 @@ function doInfinityGhostifyResetStuff(implode, bm){
 	updateNCVisuals()
 	updateAutobuyers()
 	hideMaxIDButton()
-	ipMultPower = GUActive("gb3") ? 2.3 : masteryStudies.has("t241") ? 2.2 : 2
+	doInitInfMultStuff()
 	updateLastTenRuns()
 	if ((getEl("metadimensions").style.display == "block" && !bm) || implode) showDimTab("antimatterdimensions")
 	resetInfDimensions(true)

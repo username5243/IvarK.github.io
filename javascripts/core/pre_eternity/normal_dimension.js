@@ -207,7 +207,6 @@ function getDimensionFinalMultiplier(tier) {
 	if (player.currentChallenge == "postc4" && player.postC4Tier != tier && player.tickspeedBoosts == undefined) mult = mult.pow(0.25)
 	
 	if (player.currentEternityChall == "eterc10") mult = mult.times(ec10bonus)
-	if (player.currentEternityChall == "eterc14") mult = mult.div(Decimal.pow(10, Math.pow(tmp.rm.log10(), 2)))
 	
 	if (tier == 8 && hasAch("ng3p27")) mult = mult.times(tmp.ig)	
 
@@ -240,7 +239,7 @@ function getDimensionDescription(tier) {
 
 	let toGain = new Decimal(0)
 	if (tierAdd <= tierMax) toGain = getDimensionProductionPerSecond(tierAdd).div(10)
-	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = DimensionProduction(1).add(toGain)
+	if (tier == 7 && player.currentEternityChall == "eterc7") toGain = infDimensionProduction(1).add(toGain)
 	if (tmp.inEC12) toGain = toGain.div(getEC12Mult())
 
 	return (!toGain.gt(0) ? getFullExpansion(bgt) : shortenND(amt)) + (player.money.e <= 1e6 ? " (" + getFullExpansion(bgt % 10) + ")" : "") + (toGain.gt(0) && player.money.e <= 1e9 ? getDimensionRateOfChangeDisplay(amt, toGain) : "")

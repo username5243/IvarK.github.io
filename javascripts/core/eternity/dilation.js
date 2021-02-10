@@ -14,7 +14,6 @@ function getDTMultPostBRU11(){
 	if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
-	if (tmp.quActive) gain = gain.times(colorBoosts.b)
 	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
 	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / 1e4, 1) - 1)))
 	return gain
@@ -27,8 +26,6 @@ function getBaseDTProduction() {
 
 	if (player.exdilation != undefined) gain = gain.times(getNGUDTGain())
 	gain = gain.times(getEternityBoostToDT())
-
-	if (hasEternityUpg(13)) gain = gain.times(ETER_UPGS[13].mult())
 
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
@@ -80,9 +77,11 @@ function getDilPower() {
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
 		if (hasAch("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
+
 		if (masteryStudies.has(264)) ret = ret.times(5)
-		if (GUActive("br1")) ret = ret.times(getBR1Effect())
 		if (masteryStudies.has(341)) ret = ret.times(getMTSMult(341))
+
+		if (tmp.quActive) ret = ret.times(colorBoosts.b)
 	}
 	if (player.dilation.rebuyables[6] && tmp.ngC) ret = ret.times(Decimal.pow(getDil6Base(), getDilUpgPower(6)))
 	if (player.dilation.upgrades.includes("ngpp2") && tmp.ngC) ret = ret.times(Decimal.mul(nA(getEternitied(), 1), player.dilation.dilatedTime.plus(1).sqrt()).log10()+1)
@@ -470,7 +469,7 @@ function updateDilationUpgradeButtons() {
 	var power = getDil3Power()
 	getEl("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
 	getEl("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
-	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(0.1)) + "x"
+	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."

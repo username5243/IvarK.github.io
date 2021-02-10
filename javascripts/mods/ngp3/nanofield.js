@@ -35,7 +35,7 @@ function updateNanoverseTab(){
 	getEl("rewards").textContent = getFullExpansion(rewards)
 	getEl("nfRewardScaling").textContent = getGalaxyScaleName(tmp.nf.scale) + "Nanorewards"
 
-	for (var reward = 1; reward < 9; reward++) {
+	for (var reward = 1; reward <= 8; reward++) {
 		getEl("nfReward" + reward).className = reward > rewards ? "nfRewardlocked" : "nfReward"
 		getEl("nfReward" + reward).textContent = wordizeList(nanoRewards.effectsUsed[reward].map(x => nanoRewards.effectDisplays[x](tmp.nf.effects[x])), true) + "."
 		getEl("nfRewardHeader" + reward).textContent = (rewards % 8 + 1 == reward ? "Next" : DISPLAY_NAMES[reward]) + " reward"

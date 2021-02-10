@@ -203,11 +203,9 @@ function updateExtraReplMult() {
 		if (masteryStudies.has(362)) exp = .4
 		if (masteryStudies.has(412)) exp = .5
 
-		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(),exp)
-		tmp.pe *= 0.67 * (masteryStudies.has(412) ? 1.25 : 1)
+		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(), exp)
+		tmp.pe *= 0 //0.67 * (masteryStudies.has(412) ? 1.25 : 1)
 		if (player.ghostify.ghostlyPhotons.unl) tmp.pe *= tmp.le[3]
-
-		x *= colorBoosts.g + tmp.pe
 	}
 	extraReplMulti = x
 }
