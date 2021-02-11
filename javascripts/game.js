@@ -3576,7 +3576,7 @@ function updateBlinkOfAnEye(){
 function canQuickBigRip() {
 	var x = false
 	if (!tmp.ngp3) return false
-	if (tmp.quUnl && player.masterystudies.includes("d14") && inQC(0) && tmp.qu.electrons.amount >= getQCCost([6, 8])) {
+	if (tmp.quUnl && masteryStudies.has("d14") && inQC(0) && tmp.qu.electrons.amount >= getQCCost([6, 8])) {
 		if (player.ghostify.milestones >= 2) x = true
 		else for (var p = 1; p <= 4; p++) {
 			var pcData = tmp.qu.pairedChallenges.order[p]
@@ -3752,7 +3752,7 @@ function doNGP3UnlockStuff(){
 		doGhostifyUnlockStuff()
 	}
 	var inEasierModeCheck = !inEasierMode()
-	if (player.masterystudies && (player.masterystudies.includes("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
+	if (player.masterystudies && (masteryStudies.has("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
 	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (pl.did()) {
 		pl.unlCheck()
@@ -4168,7 +4168,7 @@ function ghostifyAutomationUpdating(diff){
 	if (!tmp.quUnl) return
 
 	let limit = player.ghostify.automatorGhosts[13].o || 1 / 0
-	if (player.masterystudies.includes("d13") && isAutoGhostActive(13)) {
+	if (masteryStudies.has("d13") && isAutoGhostActive(13)) {
 		if (tmp.qu.bigRip.active) {
 			if (tmp.qu.time >= player.ghostify.automatorGhosts[13].u * 10 && tmp.qu.bigRip.times <= limit) quantumReset(true, true)
 		} else if (tmp.qu.time >= player.ghostify.automatorGhosts[13].t * 10 && tmp.qu.bigRip.times < limit) bigRip(true)
@@ -4186,7 +4186,7 @@ function ghostifyAutomationUpdating(diff){
 	}
 
 	if (!tmp.quActive) return
-	if (player.masterystudies.includes("d12")) {
+	if (masteryStudies.has("d12")) {
 		let colorShorthands = ["r", "g", "b"]
 		for (let c = 1; c <= 3; c++) {
 			let shorthand = colorShorthands[c - 1]
@@ -4199,7 +4199,7 @@ function ghostifyAutomationUpdating(diff){
 		}
 		if (isAutoGhostActive(6)) maxTreeUpg()
 	}
-	if (player.masterystudies.includes("d11") && isAutoGhostActive(11)) {
+	if (masteryStudies.has("d11") && isAutoGhostActive(11)) {
 		let ag = player.ghostify.automatorGhosts[11]
 		ag.t = (ag.t || 0) + diff
 
@@ -4388,12 +4388,16 @@ function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
 		//Color Powers
 		var colorShorthands=["r","g","b"]
-		for (var c = 0;c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
+		for (var c = 0; c < 3; c++) {
+			//console.log(colorShorthands[c], getColorPowerQuantity(colorShorthands[c]))
+			if (!ph.did("ghostify")) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
+		}
+		updateColorPowers()
 
-		if (player.masterystudies.includes("d10")) replicantOverallUpdating(diff)
-		if (player.masterystudies.includes("d11")) emperorDimUpdating(diff)
-		if (player.masterystudies.includes("d12")) nanofieldUpdating(diff)
-		if (player.masterystudies.includes("d13")) treeOfDecayUpdating(diff)
+		if (masteryStudies.has("d10")) replicantOverallUpdating(diff)
+		if (masteryStudies.has("d11")) emperorDimUpdating(diff)
+		if (masteryStudies.has("d12")) nanofieldUpdating(diff)
+		if (masteryStudies.has("d13")) treeOfDecayUpdating(diff)
 	}
 }
 
@@ -4885,7 +4889,7 @@ function challengeOverallDisplayUpdating(){
 				if (c == 5) getEl("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
 				else if (c != 2 && c != 8) getEl("qc" + c + "reward").textContent = shorten(x)
 			}
-			if (player.masterystudies.includes("d14")) bigRipUpgradeUpdating() //big rip
+			if (masteryStudies.has("d14")) bigRipUpgradeUpdating() //big rip
 		}
 	}
 }

@@ -281,6 +281,8 @@ function getReplSpeed() {
 
 	if (masteryStudies.has(281)) exp += tmp.mts[281]
 	if (GUActive("gb2")) exp *= 2
+	if (tmp.quActive) exp *= colorBoosts.g
+
 	if (masteryStudies.has(282)) exp += 100
 
 	//if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
@@ -354,7 +356,7 @@ function notContinuousReplicantiUpdating() {
 			var temp = Decimal.round(player.replicanti.amount.dividedBy(100))
 			if (chance < 1) {
 				let counter = 0
-				for (var i=0; i<100; i++) if (chance > Math.random()) counter++;
+				for (var i = 0; i < 100; i++) if (chance > Math.random()) counter++;
 				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
 				counter = 0
 			} else player.replicanti.amount = player.replicanti.amount.times(2)

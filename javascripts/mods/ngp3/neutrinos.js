@@ -281,7 +281,7 @@ var neutrinoUpgrades = {
 	3: {
 		eff() {
 			if (!tmp.quActive) return new Decimal(1)
-			let log = tmp.qu.colorPowers.b.log10()
+			let log = tmp.qu.colorPowers.b
 			let exp = Math.max(log / 1e4 + 1, 2)
 			let x
 			if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
@@ -305,7 +305,7 @@ var neutrinoUpgrades = {
 	7: {
 		eff() {
 			if (!tmp.quActive) return new Decimal(1)
-			var nu7 = tmp.qu.colorPowers.g.add(1).log10()/400
+			var nu7 = tmp.qu.colorPowers.g / 400
 			if (nu7 > 40) nu7 = Math.sqrt(nu7*10)+20
 			return Decimal.pow(10, nu7) 
 		},
@@ -331,7 +331,7 @@ var neutrinoUpgrades = {
 		eff() {
 			if (!tmp.quActive) return new Decimal(1)
 			var base = player.ghostify.ghostParticles.add(1).log10()
-			var colorsPortion = Math.pow(tmp.qu.colorPowers.r.add(tmp.qu.colorPowers.g).add(tmp.qu.colorPowers.b).add(1).log10(),1/3)
+			var colorsPortion = Math.pow(tmp.qu.colorPowers.r + tmp.qu.colorPowers.g + tmp.qu.colorPowers.b, 1/3)
 			return Decimal.pow(base, colorsPortion * 0.8 + 1).max(1)
 		},
 		effDesc(x) {

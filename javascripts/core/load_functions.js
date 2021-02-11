@@ -1689,7 +1689,6 @@ function doNGp3Init2(){
 	if (tmp.ngp3) {
 		if (player.eternityBuyer.presets === undefined) player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
 		if (player.meta.bestOverQuantums === undefined) player.meta.bestOverQuantums = player.meta.bestAntimatter
-		updateColorPowers()
 		tmp.be=tmp.qu.bigRip.active&&tmp.qu.breakEternity.break
 		getEl("eggonsCell").style.display = player.ghostify.neutrinos.upgrades.includes(2) ? "none" : ""
 		getEl("workerReplWhat").textContent = player.ghostify.neutrinos.upgrades.includes(2) ? "babies" : "eggons"
@@ -2780,58 +2779,60 @@ function conToDeciLateEter(){
 }
 
 function conToDeciMS(){
-        if (player.masterystudies) {
-                player.dbPower = new Decimal(player.dbPower)
-                player.meta.bestOverQuantums = Decimal.max(player.meta.bestOverQuantums, player.meta.bestAntimatter)
-                if (tmp.qu ? tmp.qu.usedQuarks : false) {
-                        tmp.qu.usedQuarks.r = new Decimal(tmp.qu.usedQuarks.r)
-                        tmp.qu.usedQuarks.g = new Decimal(tmp.qu.usedQuarks.g)
-                        tmp.qu.usedQuarks.b = new Decimal(tmp.qu.usedQuarks.b)
-                        tmp.qu.colorPowers.r = new Decimal(tmp.qu.colorPowers.r)
-                        tmp.qu.colorPowers.g = new Decimal(tmp.qu.colorPowers.g)
-                        tmp.qu.colorPowers.b = new Decimal(tmp.qu.colorPowers.b)
-                }
-                if (tmp.qu ? tmp.mod.newGame3PlusVersion > 1.5 : false) {
-                        tmp.qu.gluons.rg = new Decimal(tmp.qu.gluons.rg)
-                        tmp.qu.gluons.gb = new Decimal(tmp.qu.gluons.gb)
-                        tmp.qu.gluons.br = new Decimal(tmp.qu.gluons.br)
-                }
-                if (tmp.qu ? tmp.qu.autobuyer : false) tmp.qu.autobuyer.limit = new Decimal(tmp.qu.autobuyer.limit)
-                if (tmp.qu ? tmp.qu.electrons : false) if (typeof(tmp.qu.electrons.amount)=="string") tmp.qu.electrons.amount = Math.round(parseFloat(tmp.qu.electrons.amount)*4)/4
-                if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
-                player.dilation.bestTP = new Decimal(player.dilation.bestTP)
-                if (tmp.qu ? tmp.qu.replicants : false) {
-                        tmp.qu.replicants.amount = new Decimal(tmp.qu.replicants.amount)
-                        tmp.qu.replicants.requirement = new Decimal(tmp.qu.replicants.requirement)
-                        tmp.qu.replicants.quarks = new Decimal(tmp.qu.replicants.quarks)
-                        tmp.qu.replicants.quantumFoodCost = new Decimal(tmp.qu.replicants.quantumFoodCost)
-                        tmp.qu.replicants.limitCost = new Decimal(tmp.qu.replicants.limitCost)
-                        tmp.qu.replicants.eggonProgress = new Decimal(tmp.qu.replicants.eggonProgress)
-                        tmp.qu.replicants.eggons = new Decimal(tmp.qu.replicants.eggons)
-                        tmp.qu.replicants.hatchSpeedCost = new Decimal(tmp.qu.replicants.hatchSpeedCost)
-                        tmp.qu.replicants.babyProgress = new Decimal(tmp.qu.replicants.babyProgress)
-                        tmp.qu.replicants.babies = new Decimal(tmp.qu.replicants.babies)
-                        tmp.qu.replicants.ageProgress = new Decimal(tmp.qu.replicants.ageProgress)
-                }
-                if (tmp.qu ? (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] : false) : false) for (d=1;d<9;d++) {
-                        tmp.qu.emperorDimensions[d].workers = Decimal.round(tmp.qu.emperorDimensions[d].workers)
-                        tmp.qu.emperorDimensions[d].progress = Decimal.round(tmp.qu.emperorDimensions[d].progress)
-                }
-                if (tmp.qu ? tmp.qu.nanofield : false) {
-                        tmp.qu.nanofield.charge = new Decimal(tmp.qu.nanofield.charge)
-                        tmp.qu.nanofield.energy = new Decimal(tmp.qu.nanofield.energy)
-                        tmp.qu.nanofield.antienergy = new Decimal(tmp.qu.nanofield.antienergy)
-                        tmp.qu.nanofield.powerThreshold = new Decimal(tmp.qu.nanofield.powerThreshold)
-                }
-                if (tmp.qu ? tmp.qu.tod : false) {
-                        tmp.qu.tod.r.quarks = new Decimal(tmp.qu.tod.r.quarks)
-                        tmp.qu.tod.r.spin = new Decimal(tmp.qu.tod.r.spin)
-                        tmp.qu.tod.g.quarks = new Decimal(tmp.qu.tod.g.quarks)
-                        tmp.qu.tod.g.spin = new Decimal(tmp.qu.tod.g.spin)
-                        tmp.qu.tod.b.quarks = new Decimal(tmp.qu.tod.b.quarks)
-                        tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
-                }
-        }
+	if (player.masterystudies) {
+		player.dbPower = new Decimal(player.dbPower)
+		player.meta.bestOverQuantums = Decimal.max(player.meta.bestOverQuantums, player.meta.bestAntimatter)
+		if (tmp.qu && tmp.qu.usedQuarks) {
+			tmp.qu.usedQuarks.r = new Decimal(tmp.qu.usedQuarks.r)
+			tmp.qu.usedQuarks.g = new Decimal(tmp.qu.usedQuarks.g)
+			tmp.qu.usedQuarks.b = new Decimal(tmp.qu.usedQuarks.b)
+			if (typeof(tmp.qu.colorPowers.r) !== "number") {
+				tmp.qu.colorPowers.r = 0
+				tmp.qu.colorPowers.g = 0
+				tmp.qu.colorPowers.b = 0
+			}
+		}
+		if (tmp.qu ? tmp.mod.newGame3PlusVersion > 1.5 : false) {
+			tmp.qu.gluons.rg = new Decimal(tmp.qu.gluons.rg)
+			tmp.qu.gluons.gb = new Decimal(tmp.qu.gluons.gb)
+			tmp.qu.gluons.br = new Decimal(tmp.qu.gluons.br)
+		}
+		if (tmp.qu ? tmp.qu.autobuyer : false) tmp.qu.autobuyer.limit = new Decimal(tmp.qu.autobuyer.limit)
+		if (tmp.qu ? tmp.qu.electrons : false) if (typeof(tmp.qu.electrons.amount)=="string") tmp.qu.electrons.amount = Math.round(parseFloat(tmp.qu.electrons.amount)*4)/4
+		if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
+		player.dilation.bestTP = new Decimal(player.dilation.bestTP)
+		if (tmp.qu ? tmp.qu.replicants : false) {
+			tmp.qu.replicants.amount = new Decimal(tmp.qu.replicants.amount)
+			tmp.qu.replicants.requirement = new Decimal(tmp.qu.replicants.requirement)
+			tmp.qu.replicants.quarks = new Decimal(tmp.qu.replicants.quarks)
+			tmp.qu.replicants.quantumFoodCost = new Decimal(tmp.qu.replicants.quantumFoodCost)
+			tmp.qu.replicants.limitCost = new Decimal(tmp.qu.replicants.limitCost)
+			tmp.qu.replicants.eggonProgress = new Decimal(tmp.qu.replicants.eggonProgress)
+			tmp.qu.replicants.eggons = new Decimal(tmp.qu.replicants.eggons)
+			tmp.qu.replicants.hatchSpeedCost = new Decimal(tmp.qu.replicants.hatchSpeedCost)
+			tmp.qu.replicants.babyProgress = new Decimal(tmp.qu.replicants.babyProgress)
+			tmp.qu.replicants.babies = new Decimal(tmp.qu.replicants.babies)
+			tmp.qu.replicants.ageProgress = new Decimal(tmp.qu.replicants.ageProgress)
+		}
+		if (tmp.qu ? (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] : false) : false) for (d = 1; d <= 8 ; d++) {
+			tmp.qu.emperorDimensions[d].workers = Decimal.round(tmp.qu.emperorDimensions[d].workers)
+			tmp.qu.emperorDimensions[d].progress = Decimal.round(tmp.qu.emperorDimensions[d].progress)
+		}
+		if (tmp.qu && tmp.qu.nanofield) {
+			tmp.qu.nanofield.charge = new Decimal(tmp.qu.nanofield.charge)
+			tmp.qu.nanofield.energy = new Decimal(tmp.qu.nanofield.energy)
+			tmp.qu.nanofield.antienergy = new Decimal(tmp.qu.nanofield.antienergy)
+			tmp.qu.nanofield.powerThreshold = new Decimal(tmp.qu.nanofield.powerThreshold)
+		}
+		if (tmp.qu && tmp.qu.tod) {
+			tmp.qu.tod.r.quarks = new Decimal(tmp.qu.tod.r.quarks)
+			tmp.qu.tod.r.spin = new Decimal(tmp.qu.tod.r.spin)
+			tmp.qu.tod.g.quarks = new Decimal(tmp.qu.tod.g.quarks)
+			tmp.qu.tod.g.spin = new Decimal(tmp.qu.tod.g.spin)
+			tmp.qu.tod.b.quarks = new Decimal(tmp.qu.tod.b.quarks)
+			tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
+		}
+	}
 }
 
 function conToDeciGhostify(){

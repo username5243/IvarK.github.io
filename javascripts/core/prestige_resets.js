@@ -502,9 +502,9 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			b: new Decimal(0)
 		},
 		colorPowers: {
-			r: new Decimal(0),
-			g: new Decimal(0),
-			b: new Decimal(0)
+			r: 0,
+			g: 0,
+			b: 0
 		},
 		gluons: {
 			rg: new Decimal(0),

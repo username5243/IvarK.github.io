@@ -8,7 +8,6 @@ function updateQuantumWorth(mode) {
 	if (mode != "notation") {
 		if (mode != "display") {
 			quantumWorth = tmp.qu.quarks.add(tmp.qu.usedQuarks.r).add(tmp.qu.usedQuarks.g).add(tmp.qu.usedQuarks.b).add(tmp.qu.gluons.rg).add(tmp.qu.gluons.gb).add(tmp.qu.gluons.br).round()
-			colorCharge.qwBonus = quantumWorth.pow(.8).div(100)
 		}
 		if (player.ghostify.times) {
 			var automaticCharge = Math.max(Math.log10(quantumWorth.add(1).log10() / 150) / Math.log10(2), 0) + Math.max(tmp.qu.bigRip.spaceShards.add(1).log10() / 20 - 0.5, 0)
@@ -33,7 +32,7 @@ function updateQuantumWorth(mode) {
 	if (mode != "quick") for (var e=1;e<4;e++) getEl("quantumWorth"+e).textContent = shortenDimensions(quantumWorth)
 }
 
-//Quark Assertment Machine (Quark Assignation: NG+3L)
+//Quark Assertment Machine
 function getAssortPercentage() {
 	return tmp.qu.assortPercentage ? tmp.qu.assortPercentage : 100
 }
@@ -147,39 +146,43 @@ function rotateAutoAssign() {
 colorCharge = {
 	normal: {}
 }
-colorShorthands = {r:'red',
-	g:'green',
-	b:'blue'}
+colorShorthands = {
+	r: 'red',
+	g: 'green',
+	b: 'blue'
+}
 
 function updateColorCharge() {
 	if (!tmp.ngp3) return
-	var colors = ['r','g','b']
+	var colors = ['r', 'g', 'b']
+	var colorPowers = {}
 	for (var i = 0; i < 3; i++) {
-		var ret = new Decimal(0)
-		if (player.ghostify.milestones >= 2) ret = tmp.qu.usedQuarks[colors[i]]
-		colorCharge[colors[i]] = ret
+		var ret = Decimal.add(tmp.qu.usedQuarks[colors[i]], 1). log10()
+		colorCharge[colors[i]] = player.ghostify.milestones >= 2 ? ret : 0
+		colorPowers[colors[i]] = ret
 	}
 
-	var sorted=[]
-	for (var s = 1; s < 4; s++) {
+	var sorted = []
+	for (var s = 0; s < 3; s++) {
 		var search = ''
 		for (var i = 0; i < 3; i++) if (!sorted.includes(colors[i])&&(search==''||tmp.qu.usedQuarks[colors[i]].gte(tmp.qu.usedQuarks[search]))) search=colors[i]
 		sorted.push(search)
 	}
 
-	colorCharge.normal={color:sorted[0],charge:Decimal.sub(tmp.qu.usedQuarks[sorted[0]]).sub(tmp.qu.usedQuarks[sorted[1]])}
-	if (player.ghostify.milestones<2) colorCharge[sorted[0]]=colorCharge[sorted[0]].add(colorCharge.normal.charge)
-	if (tmp.qu.usedQuarks[sorted[0]].gt(0)&&colorCharge.normal.charge.eq(0)) giveAchievement("Hadronization")
+	colorCharge.normal = {
+		color: sorted[0],
+		charge: colorPowers[sorted[0]]
+	}
+	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
+	if (tmp.qu.usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
 	updateQuarksTabOnUpdate()
 }
 
 function getColorPowerQuantity(color) {
-	return new Decimal(0)
-
-	let ret = Decimal.times(colorCharge[color], 10).max(1).log10()
+	let ret = colorCharge[color]
 	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
-	return new Decimal(ret)
+	return ret
 }
 
 colorBoosts = {
@@ -190,25 +193,26 @@ colorBoosts = {
 
 function updateColorPowers() {
 	//Red
-	colorBoosts.r = 1
+	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r + 1) + 1
 
 	//Green
-	colorBoosts.g = 1
+	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g + 1) + 1
 
 	//Blue
-	colorBoosts.b = 1
+	colorBoosts.b = Math.pow(tmp.qu.colorPowers.b + 1, 2)
 }
 
 //Gluons
 function gainQuarkEnergy() {
-	tmp.qu.quarkEnergy = quantumWorth.add(1).log10()
+	let x = quantumWorth.add(1).log10()
+	tmp.qu.quarkEnergy = x
 }
 
 function updateQuarkEnergyEffects() {
-	tmp.qkEng = {
-		eff1: Math.log10(tmp.qu.quarkEnergy + 10),
-		eff2: tmp.qu.quarkEnergy / 10,
-	}
+	tmp.qkEng = {}
+
+	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy + 10)
+	tmp.qkEng.eff2 = tmp.qu.quarkEnergy * tmp.qkEng.eff1
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -324,7 +328,7 @@ function updateQuarksTab(tab) {
 	getEl("bluePower").textContent = shorten(tmp.qu.colorPowers.b)
 
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
-	getEl("greenTranslation").textContent = formatPercentage(colorBoosts.g - 1) + (tmp.pe ? "+" + formatPercentage(tmp.pe) :"")
+	getEl("greenTranslation").textContent = shorten(colorBoosts.g) + (tmp.pe ? "+" + shorten(tmp.pe) :"")
 	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
 
 	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
@@ -369,10 +373,10 @@ function updateGluonsTab() {
 //Display: On load
 function updateQuarksTabOnUpdate(mode) {
 	var colors = ['r','g','b']
-	if (colorCharge.normal.charge.eq(0)) getEl("colorCharge").innerHTML='neutral charge'
+	if (colorCharge.normal.charge == 0) getEl("colorCharge").innerHTML='neutral charge'
 	else {
 		var color = colorShorthands[colorCharge.normal.color]
-		getEl("colorCharge").innerHTML='<span class="'+color+'">'+color+'</span> charge of <span class="'+color+'" style="font-size:35px">' + shortenDimensions(colorCharge.normal.charge) + "</span>"
+		getEl("colorCharge").innerHTML='<span class="'+color+'">'+color+'</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>"
 	}
 
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
@@ -458,15 +462,15 @@ function drawQuarkAnimation(ts){
 	code=player.options.theme=="Aarex's Modifications"?"e5":"99"
 	if (getEl("quantumtab").style.display !== "none" && getEl("uquarks").style.display !== "none" && player.options.animations.quarks) {
 		qkctx.clearRect(0, 0, canvas.width, canvas.height);
-		quarks.sum=tmp.qu.colorPowers.r.max(1).log10()+tmp.qu.colorPowers.g.max(1).log10()+tmp.qu.colorPowers.b.max(1).log10()
-		quarks.amount=Math.ceil(Math.min(quarks.sum,200))
+		quarks.sum = tmp.qu.colorPowers.r + tmp.qu.colorPowers.g + tmp.qu.colorPowers.b
+		quarks.amount=Math.ceil(Math.min(quarks.sum, 200))
 		for (p=0;p<quarks.amount;p++) {
 			var particle=quarks['p'+p]
 			if (particle==undefined) {
 				particle={}
 				var random=Math.random()
-				if (random<=tmp.qu.colorPowers.r.max(1).log10()/quarks.sum) particle.type='r'
-				else if (random>=1-tmp.qu.colorPowers.b.max(1).log10()/quarks.sum) particle.type='b'
+				if (random<=tmp.qu.colorPowers.r/quarks.sum) particle.type='r'
+				else if (random>=1-tmp.qu.colorPowers.b/quarks.sum) particle.type='b'
 				else particle.type='g'
 				particle.motion=Math.random()>0.5?'in':'out'
 				particle.direction=Math.random()*Math.PI*2
@@ -476,8 +480,8 @@ function drawQuarkAnimation(ts){
 				particle.distance+=0.01
 				if (particle.distance>=1) {
 					var random=Math.random()
-					if (random<=tmp.qu.colorPowers.r.max(1).log10()/quarks.sum) particle.type='r'
-					else if (random>=1-tmp.qu.colorPowers.b.max(1).log10()/quarks.sum) particle.type='b'
+					if (random<=tmp.qu.colorPowers.r/quarks.sum) particle.type='r'
+					else if (random>=1-tmp.qu.colorPowers.b/quarks.sum) particle.type='b'
 					else particle.type='g'
 					particle.motion=Math.random()>0.5?'in':'out'
 					particle.direction=Math.random()*Math.PI*2
