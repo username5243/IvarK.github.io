@@ -8,8 +8,8 @@ function hasDilationStudy(x) {
 
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
-	if (hasAch("ng3p11")) gain = gain.times(Math.max(player.galaxies / 600 + 0.5, 1))
-	if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4,Math.sqrt(player.quantum.nanofield.rewards)))
+	if (hasAch("ng3p11")) gain = gain.times(3)
+	if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4, Math.sqrt(player.quantum.nanofield.rewards)))
 	if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
 	if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))

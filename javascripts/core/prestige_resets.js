@@ -50,7 +50,7 @@ function nanofieldResetOnQuantum(){
 
 function doQuantumResetStuff(bigRip, isQC){
 	var headstart = !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : tmp.ngp3
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 1
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active

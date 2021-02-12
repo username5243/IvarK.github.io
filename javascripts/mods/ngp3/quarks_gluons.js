@@ -171,7 +171,10 @@ function updateColorCharge() {
 
 	colorCharge.normal = {
 		color: sorted[0],
-		charge: colorPowers[sorted[0]]
+		charge: colorPowers[sorted[0]] * Decimal.div(
+			Decimal.sub(tmp.qu.usedQuarks[sorted[0]], tmp.qu.usedQuarks[sorted[1]]),
+			Decimal.add(tmp.qu.usedQuarks[sorted[0]], 1)
+		)
 	}
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (tmp.qu.usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
@@ -193,10 +196,10 @@ colorBoosts = {
 
 function updateColorPowers() {
 	//Red
-	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r + 1) + 1
+	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 2 + 1) / 3 + 1
 
 	//Green
-	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g + 1) + 1
+	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) + 1
 
 	//Blue
 	colorBoosts.b = Math.pow(tmp.qu.colorPowers.b + 1, 2)
@@ -211,7 +214,7 @@ function gainQuarkEnergy() {
 function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
-	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy + 10)
+	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy + 1) + 1
 	tmp.qkEng.eff2 = tmp.qu.quarkEnergy * tmp.qkEng.eff1
 }
 

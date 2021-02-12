@@ -3469,7 +3469,7 @@ function gainEternitiedStat() {
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
-	if (hasAch("ng3p12")) ret = nM(ret, 5)
+	if (hasAch("ng3p12")) ret = nM(ret, 100)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
 	if (tmp.ngC & exp > 0) ret = nM(ret, Decimal.pow(player.dilation.tachyonParticles.plus(1).log10() + 1, exp))
@@ -4593,7 +4593,7 @@ function doEternityButtonDisplayUpdating(diff){
 		if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) getEl("eternitybtnEPGain").innerHTML = "Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon Particles."
 		else {
 			getEl("eternitybtnEPGain").innerHTML = ((player.eternities > 0 && (player.currentEternityChall == "" || player.options.theme == "Aarex's Modifications")) ?
-				(EPminpeak.lt(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.lt(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
+				(EPminpeak.gte(1e9) && EPminpeakType == "logarithm") || (EPminpeakType == 'normal' && EPminpeak.gte(Decimal.pow(10, 1e9))) ? "<b>Other times await... I need to become Eternal.</b>" :
 				"Gain <b>" + (player.dilation.active?shortenMoney(getDilGain().sub(player.dilation.totalTachyonParticles)):shortenDimensions(gainedEternityPoints()))+"</b> "+(player.dilation.active?"Tachyon particles.": tmp.be ?"EP and <b>"+shortenDimensions(getEMGain())+"</b> Eternal Matter." : "Eternity points.")
 			: "")
 		}

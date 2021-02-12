@@ -651,10 +651,7 @@ function replicantiDisplay() {
 			: "Reset replicanti amount, but get "
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +
-			(extraReplGalaxies ? " + " + (
-				shiftDown ? shortenMoney(extraReplBase) + " x " + shortenMoney(extraReplMulti)
-				: getFullExpansion(extraReplGalaxies)
-			) + (extraReplBase > 325 ? " (softcapped)" : "") : "") +
+			(extraReplGalaxies > 0 ? " + " + getFullExpansion(extraReplGalaxies) : "") +
 			" replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
 
 		getEl("replicantiapprox").innerHTML = 

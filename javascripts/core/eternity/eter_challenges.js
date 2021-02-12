@@ -120,7 +120,7 @@ function resetEternityChallUnlocks() {
 	let ec = player.eternityChallUnlocked
 	if (!ec) return
 
-	if (ec <= 12) player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
+	if (ec <= 12) player.timestudy.theorem += ([null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
 
 	player.eternityChallUnlocked = 0
 	updateEternityChallenges()
@@ -412,30 +412,29 @@ function getECReward(x) {
 
 function doCheckECCompletionStuff(){
 	var forceRespec = false
-	if (player.currentEternityChall !== "") {
-		if (player.eternityChalls[player.currentEternityChall] === undefined) {
-			player.eternityChalls[player.currentEternityChall] = 1
-		} else if (player.eternityChalls[player.currentEternityChall] < 5) {
-			player.eternityChalls[player.currentEternityChall] += 1
-		}
-		else if (tmp.mod.eternityChallRecords[player.eternityChallUnlocked] === undefined) tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = player.thisEternity
-		else tmp.mod.eternityChallRecords[player.eternityChallUnlocked] = Math.min(player.thisEternity, tmp.mod.eternityChallRecords[player.eternityChallUnlocked])
-		if (player.currentEternityChall === "eterc12" && hasAch("ng3p51")) {
-			if (player.eternityChalls.eterc11 === undefined) player.eternityChalls.eterc11 = 1
-			else if (player.eternityChalls.eterc11 < 5) player.eternityChalls.eterc11++
-		}
-		if (tmp.ngp3 ? tmp.qu.autoEC && player.eternityChalls[player.currentEternityChall] < 5 : false) {
-			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
-			else player.timestudy.theorem += ([0,30,35,40,70,130,85,115,115,415,550,1,1])[player.etercreq]
-			player.eternityChallUnlocked = 0
-			tmp.qu.autoECN = player.etercreq
-		} else if (ph.did("ghostify") && player.ghostify.milestones > 1) {
-			if (player.etercreq > 12) player.timestudy.theorem += masteryStudies.costs.ec[player.etercreq]
-			else player.timestudy.theorem += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.etercreq]
-			player.eternityChallUnlocked = 0
-		} else forceRespec = true
+
+	var ec = player.currentEternityChall
+	var ecNum = player.eternityChallUnlocked
+	var data = player.eternityChalls
+	if (ec !== "") {
+		data[ec] = Math.min((data[ec] || 0) + 1, 5)
+
+		/*
+		R.I.P. Eternity Challenge Times (Active exploit)
+
+		//Speedruns
+		if (data[ec] == 5) tmp.mod.eternityChallRecords[ecNum] = Math.max(player.thisEternity, tmp.mod.eternityChallRecords[ecNum] || 1/0)
+		*/
+
+		//Special
+		if (hasAch("ng3p12")) resetEternityChallUnlocks()
+		else forceRespec = true
+		if (ec === "eterc12" && hasAch("ng3p51")) data.eterc11 = Math.min((data.eterc11 || 0) + 1, 5)
+
 		player.etercreq = 0
+		player.eternityChallUnlocked = 0
 	} else if (tmp.ngp3) delete tmp.qu.autoECN
+
 	return forceRespec
 }
 

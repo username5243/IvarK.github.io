@@ -383,8 +383,8 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	getEl("dilstudy6").style.display = player.meta ? "" : "none"
 	getEl("masteryportal").style.display = player.masterystudies ? "" : "none"
 	if (tmp.ngp3) {
-		getEl("masteryportal").innerHTML = player.dilation.upgrades.includes("ngpp6") ? "Mastery portal<span>Continue into mastery studies.</span>" : !player.dilation.studies.includes(1) ? "To be continued...." : "Mastery portal (" + (player.dilation.studies.includes(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
-		getEl("masteryportal").className = player.dilation.upgrades.includes("ngpp6") ? "dilationupg" : "timestudylocked"
+		getEl("masteryportal").innerHTML = masteryStudies.unl() ? "Mastery portal<span>Continue into mastery studies.</span>" : !hasDilationStudy(1) ? "To be continued...." : "Mastery portal (" + (hasDilationStudy(6) ? "66%: requires "+shortenCosts(1e100)+" dilated time upgrade)" : "33%: requires meta-dimensions)") 
+		getEl("masteryportal").className = masteryStudies.unl() ? "dilationupg" : "timestudylocked"
 	}
 }
 
@@ -692,24 +692,7 @@ var onNGP3 = false
 var poData
 
 function save_preset(id) {
-	if (player.boughtDims) {
-		let l = [];
-		for (let i = 1; i < 7; i++) {
-			if (i < 5 || getTotalTT(player) > 59) {
-				l.push(player.timestudy.ers_studies[i]);
-			}
-		}
-		presets[id].preset=l.join('/');
-	} else {
-		var mtsstudies=[]
-		if (tmp.ngp3) {
-			for (var mid = 0; mid < player.masterystudies.length; mid++) {
-				var t = player.masterystudies[mid].split("t")[1]
-				if (t) mtsstudies.push(t)
-			}
-		}
-		presets[id].preset = player.timestudy.studies + (mtsstudies.length > 0 ? "," + mtsstudies : "") + "|" + player.eternityChallUnlocked
-	}
+	presets[id].preset = getEl("preset_" + id +"_data").value
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	$.notify("Preset saved", "info")
 }
@@ -810,7 +793,7 @@ function openStudyPresets() {
 		try {
 			var id = poData[loadedPresets]
 			latestRow.innerHTML = getPresetLayout(id)
-			changePresetTitle(id, loadedPresets+1)
+			changePresetTitle(id, loadedPresets + 1)
 			loadedPresets++
 			onLoading = false
 		} catch (_) {}
@@ -819,18 +802,28 @@ function openStudyPresets() {
 }
 
 function getPresetLayout(id) {
-	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br><button class='storebtn' onclick='save_preset(" + id + ")'>Save</button><button class='storebtn' onclick='load_preset(" + id + ")'>Load</button>" + (onNGP3 ? "<button class='storebtn' style='font-size: 10px' onclick='load_preset(" + id + ", true)'>Eternity and Load</button>" : "") + "<button class='storebtn' onclick='rename_preset(" + id + ")'>Rename</button><button class='storebtn' onclick='move_preset(" + id + ",-1)'>Move up</button><button class='storebtn' onclick='move_preset(" + id + ",1)'>Move down</button><button class='storebtn' onclick='delete_preset(" + id + ")'>Delete</button>"
+	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br>" +
+		"<input id='preset_" + id +"_data' style='width: 75%'><br>" +
+
+		"<button class='storebtn' onclick='save_preset(" + id + ")'>Save</button>" +
+		"<button class='storebtn' onclick='load_preset(" + id + ")'>Load</button>" +
+		(onNGP3 ? "<button class='storebtn' style='font-size: 10px' onclick='load_preset(" + id + ", true)'>Eternity and Load</button>" : "") +
+		"<button class='storebtn' onclick='rename_preset(" + id + ")'>Rename</button>" +
+		"<button class='storebtn' onclick='move_preset(" + id + ",-1)'>Move up</button>" +
+		"<button class='storebtn' onclick='move_preset(" + id + ",1)'>Move down</button>" +
+		"<button class='storebtn' onclick='delete_preset(" + id + ")'>Delete</button>"
 }
 
 function changePresetTitle(id, placement) {
 	if (presets[id] === undefined) {
-		var preset = localStorage.getItem(btoa(presetPrefix+id))
+		var preset = localStorage.getItem(btoa(presetPrefix + id))
 		if (preset === null) {
 			presets[id] = {preset: "|0", title: "Deleted preset #" + placement}
 			localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 		} else presets[id] = JSON.parse(atob(preset))
 	}
 	getEl("preset_" + id + "_title").textContent = presets[id].title ? presets[id].title : "Preset #" + placement
+	getEl("preset_" + id + "_data").value = presets[id].preset
 }
 
 function hasTimeStudy(x) {

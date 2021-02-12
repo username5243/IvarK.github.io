@@ -94,7 +94,8 @@ var masteryStudies = {
 	timeStudyEffects: {
 		251() {
 			if (hasNU(6)) return 0
-			return Math.floor(Math.pow(player.meta.resets, 2) / 1.8)
+			let x = player.meta.resets
+			return x * (13 / (Math.abs(x / 50) + 1) + 2)
 		},
 		252() {
 			if (hasNU(6)) return 0
@@ -271,7 +272,7 @@ var masteryStudies = {
 }
 
 function enterMasteryPortal() {
-	if (player.dilation.upgrades.includes("ngpp6")) {
+	if (masteryStudies.unl()) {
 		recordUpDown(1)
 		showEternityTab("masterystudies")
 	}

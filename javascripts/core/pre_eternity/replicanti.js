@@ -192,7 +192,6 @@ function updateExtraReplBase() {
 	extraReplBase = 0
 	if (hasTimeStudy(225)) extraReplBase += tsMults[225]()
 	if (hasTimeStudy(226)) extraReplBase += tsMults[226]()
-	if (extraReplBase > 325) extraReplBase = (Math.sqrt(0.9216 + 0.16 * (extraReplBase - 324)) - 0.96) / 0.08 + 324
 }
 
 var extraReplMulti = 1
