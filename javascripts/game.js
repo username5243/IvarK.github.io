@@ -722,22 +722,24 @@ function updateNewPlayer(reseted) {
 		}
 	}
 	tmp.mod = player.aarexModifications
+	if (modesChosen.ngp) doNGPlusOneNewPlayer()
+	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
+	if (modesChosen.ngpp === 2) doNGPlusThreeNewPlayer()
+	if (modesChosen.ngp === 2) doNGPlusFourPlayer()
+
 	if (modesChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
 	if (modesChosen.ngm === 2) ngmR.setup()
-	if (modesChosen.ngp == 2) { 
-		doNGPlusFourPlayer()
-	} else if (modesChosen.ngp == 1) {
-		doNGPlusOneNewPlayer()
-	}
-	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
 	if (modesChosen.ngmm) {
 		tmp.ngmX = modesChosen.ngmm + 1
 		tmp.mod.ngmX = tmp.ngmX
 		doNGMinusTwoNewPlayer()
+
+		if (tmp.ngmX >= 3) doNGMinusThreeNewPlayer()
+		if (tmp.ngmX >= 5) doNGMinusFivePlayer()
+		if (tmp.ngmX >= 4) doNGMinusFourPlayer()
 	}
-	if (modesChosen.ngpp > 1) doNGPlusThreeNewPlayer()
+
 	if (modesChosen.rs == 1) doEternityRespeccedNewPlayer()
-	if (modesChosen.ngmm > 1) doNGMinusThreeNewPlayer()
 	if (modesChosen.arrows) doNGEXPNewPlayer()
 	if (modesChosen.ngud) doNGUDNewPlayer()
 	if (modesChosen.rs == 2) doInfinityRespeccedNewPlayer()
@@ -745,8 +747,6 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngud == 2) tmp.mod.ngudpV = 1.12
 	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
 	if (modesChosen.nguep) tmp.mod.nguepV = 1.03
-	if (modesChosen.ngmm > 3) doNGMinusFivePlayer()
-	if (modesChosen.ngmm > 2) doNGMinusFourPlayer()
 	if (modesChosen.ngmu) doNGMultipliedPlayer()
 	if (modesChosen.ngumu) tmp.mod.ngumuV = 1.03
 	if (modesChosen.ngpp == 3) tmp.mod.ngp3lV = 1
@@ -2024,7 +2024,7 @@ function toggle_mod(id) {
 	hasSubMod = Object.keys(modSubNames).includes(id)
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
-	if (id == "ngp" && subMode == 2 && (!(modes.ngpp >= 1) || !metaSave.ngp4)) subMode = 0
+	if (id == "ngp" && subMode == 2 && !metaSave.ngp4) subMode = 0
 	else if (id == "ngpp" && subMode == 1 && (modes.ngud || modes.ngex)) subMode = 2
 	else if (id == "ngpp" && subMode == 3 && modes.ngex) subMode = 0
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
@@ -2057,7 +2057,11 @@ function toggle_mod(id) {
 		modes.ngp=1
 		getEl("ngpBtn").textContent = "NG+: ON"
 	}
-	if (((id=="ngud"&&((subMode>1&&!modes.ngpp)||modes.ngpp==1))||(id=="ngex"&&modes.ngpp==1&&metaSave.ngp3ex))&&subMode) {
+	if (subMode && (
+		(id=="ngud"&&((subMode>=2&&!modes.ngpp)||modes.ngpp==1)) ||
+		(id=="ngp"&&subMode>=2) ||
+		(id=="ngex"&&modes.ngpp==1&&metaSave.ngp3ex)
+	)) {
 		modes.ngpp=2
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
