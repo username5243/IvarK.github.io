@@ -656,8 +656,8 @@ function updateNewPlayer(reseted) {
 		autoCrunchMode: "amount",
 		respec: false,
 		eternityBuyer: {
-				limit: new Decimal(0),
-				isOn: false
+			limit: new Decimal(0),
+			isOn: false
 		},
 		eterc8ids: 50,
 		eterc8repl: 40,
@@ -751,14 +751,16 @@ function updateNewPlayer(reseted) {
 	if (modesChosen.ngumu) tmp.mod.ngumuV = 1.03
 	if (modesChosen.ngpp == 3) tmp.mod.ngp3lV = 1
 	if (modesChosen.ngex) tmp.mod.ngexV = 0.1
+	if (modesChosen.ngc) ngC.setup()
+
+	if (modesChosen.ez) tmp.mod.ez = 1
 	if (modesChosen.aau) {
 		tmp.mod.aau = 1
 		tmp.mod.hideAchs = true
 		dev.giveAllAchievements(true)
 	}
 	if (modesChosen.ls) tmp.mod.ls = {}
-	if (modesChosen.ngc) ngC.setup()
-	if (modesChosen.ez) tmp.mod.ez = 1
+
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
 }
 
