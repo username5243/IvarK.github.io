@@ -134,6 +134,11 @@ function doQuantumResetStuff(bigRip, isQC){
 		studies: [],
 	}
 	resetEternityChallenges(bigRip, headstart)
+
+	//Multiplier cost fixes
+	player.dimensionMultDecrease = (keepABnICs ? 3 : 10) - parseFloat((ECComps("eterc6") * 0.2).toFixed(2))
+	player.tickSpeedMultDecrease = GUBought("gb4") ? 1.65 : (keepABnICs ? 2 : 10) - parseFloat((ECComps("eterc11") * 0.07).toFixed(2))
+
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
 	player.etercreq = 0
@@ -366,10 +371,10 @@ function doEternityResetStuff() {
 	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 	player.infMult = new Decimal(1)
 	player.infMultCost = new Decimal(10)
-	player.tickSpeedMultDecrease = getEternitied() > 19 ? player.tickSpeedMultDecrease : 10
-	player.tickSpeedMultDecreaseCost = getEternitied() > 19 ? player.tickSpeedMultDecreaseCost : 3e6
-	player.dimensionMultDecrease = getEternitied() > 19 ? player.dimensionMultDecrease : 10
-	player.dimensionMultDecreaseCost = getEternitied() > 19 ? player.dimensionMultDecreaseCost : 1e8
+	player.tickSpeedMultDecrease = getEternitied() >= 20 ? player.tickSpeedMultDecrease : 10
+	player.tickSpeedMultDecreaseCost = getEternitied() >= 20 ? player.tickSpeedMultDecreaseCost : 3e6
+	player.dimensionMultDecrease = getEternitied() >= 20 ? player.dimensionMultDecrease : 10
+	player.dimensionMultDecreaseCost = getEternitied() >= 20 ? player.dimensionMultDecreaseCost : 1e8
 	player.extraDimPowerIncrease = getEternitied() > 19 ? player.extraDimPowerIncrease : 0
 	player.dimPowerIncreaseCost = getEternitied() > 19 ? player.dimPowerIncreaseCost : 1e3    
 	player.postChallUnlocked = hasAch("r133") ? order.length : 0
@@ -750,6 +755,9 @@ function doTOUSOnGhostify(bm){
 		if (bm < 2) {
 			player.dimensionMultDecrease = 2
 			player.tickSpeedMultDecrease = 1.65
+		} else {
+			player.dimensionMultDecrease = 3 - parseFloat((ECComps("eterc6") * 0.2).toFixed(2))
+			player.tickSpeedMultDecrease = 2 - parseFloat((ECComps("eterc11") * 0.07).toFixed(2))
 		}
 	}
 }
