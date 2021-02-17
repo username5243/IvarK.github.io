@@ -116,10 +116,7 @@ function buyTimeStudy(name, quickBuy) {
 		player.timestudy.studies.push(name)
 		player.timestudy.theorem -= cost
 		updateBoughtTimeStudy(name)
-		if (name == 131 && speedrunMilestonesReached < 20) {
-			if (player.replicanti.galaxybuyer) getEl("replicantiresettoggle").textContent = "Auto galaxy ON (disabled)"
-			else getEl("replicantiresettoggle").textContent = "Auto galaxy OFF (disabled)"
-		}
+		if (name == 131) getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 		if (quickBuy) return
 		updateTimeStudyButtons(true)
 		drawStudyTree()
