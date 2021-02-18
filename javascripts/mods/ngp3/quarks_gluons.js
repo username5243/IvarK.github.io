@@ -207,8 +207,12 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuarkEnergy() {
-	let x = quantumWorth.add(1).log10()
+	let x = Math.sqrt(quantumWorth.add(1).log10() / 2) * getQuarkEnergyMult()
 	tmp.qu.quarkEnergy = x
+}
+
+function getQuarkEnergyMult() {
+	return 1
 }
 
 function updateQuarkEnergyEffects() {
@@ -337,6 +341,7 @@ function updateQuarksTab(tab) {
 	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qkEng.eff1 - 1)
 	getEl("quarkEnergyEffect2").textContent = shorten(tmp.qkEng.eff2)
+	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
 
 	if (player.ghostify.milestones >= 8) {
 		var assortAmount=getAssortAmount()
