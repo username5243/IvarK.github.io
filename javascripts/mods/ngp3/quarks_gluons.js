@@ -207,7 +207,7 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuarkEnergy() {
-	let x = Math.sqrt(quantumWorth.add(1).log10() / 2) * getQuarkEnergyMult()
+	let x = Math.cbrt(quantumWorth.add(1).log10() / 3) * getQuarkEnergyMult()
 	tmp.qu.quarkEnergy = x
 }
 
