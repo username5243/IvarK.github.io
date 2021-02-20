@@ -46,7 +46,7 @@ let PLANCK = {
 			if (eDk.save.unl) eDk.updateTmp()
 		},
 		can() {
-			return GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 50
+			return false //GDs.unlocked() && ranking >= 250 && GDs.tmp.ge >= 50
 		},
 		reqText() {
 			return "250.0 PC Ranking and 50.0 Gravity Energy"
