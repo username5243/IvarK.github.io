@@ -125,7 +125,7 @@ let ETER_UPGS = {
 	// NG+3: Post-Mastery Studies
 	13: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
-		cost: 1/0,
+		cost: "1e1000",
 		desc: () => "You can buy all row-23 time studies."
 	},
 	14: {

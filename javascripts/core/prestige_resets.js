@@ -160,7 +160,7 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.dead = true
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
-		studies: bigRip ? (tmp.bruActive[12] ? [1,2,3,4,5,6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached > 5 ? [1,2,3,4,5,6] : [1]) : [],
+		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
 		active: false,
 		tachyonParticles: (((hasAch("ng3p37") && (!bigRip || tmp.bruActive[11])) || hasAch("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
@@ -278,7 +278,7 @@ function resetEternityChallenges(bigRip, ngpp) {
 
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
-	if (!headstart) player.meta.bestAntimatter = Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums)
+	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
 	player.meta.resets = isRewardEnabled(27) ? (!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4) : 0
 	clearMetaDimensions()
 }
