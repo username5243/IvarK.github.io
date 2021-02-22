@@ -407,6 +407,7 @@ function updateQuarksTabOnUpdate(mode) {
 		var pair = (["rg", "gb", "br"])[p]
 		var diff = uq[pair[0]].min(uq[pair[1]])
 		getEl(pair + "gain").textContent = shortenDimensions(diff)
+		getEl(pair + "prev").textContent = shortenDimensions(uq[pair[0]])
 		getEl(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
 	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
