@@ -1446,28 +1446,39 @@
 			</div>
 			<div class='optionstab' id='light_speed' style='display:none'>
 				<table>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('game')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate interval: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
-					</div></td></tr>
-					<tr><td><div>
-						<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
-					</div></td></tr>
+					<tr>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('game')"></div>
+						</td>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate interval: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
+						</td>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
+						</td>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
+						</td>
+					</tr>
 				</table>
+				<br><br>
+				<button onclick="ls.resetOptions()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 20px">RESET ALL OPTIONS</button>
+				<br><br>
 			</div>
 			<div class='optionstab' id='secrets' style='display:none'>
 				<table>
@@ -1489,7 +1500,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 6.01)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 6.02)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>

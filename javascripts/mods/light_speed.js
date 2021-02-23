@@ -48,6 +48,12 @@ let LIGHT_SPEED = {
 		getEl("ls_" + id + "_text").textContent = shorten(speed)
 		if (speed == 1) delete tmp.mod.ls[id]
 		else tmp.mod.ls[id] = speed
+	},
+	resetOptions() {
+		if (!confirm("Are you sure do you want to reset these options? All speeds will go back to normal!")) return
+
+		tmp.mod.ls = {}
+		this.reset()
 	}
 }
 let ls = LIGHT_SPEED
