@@ -467,8 +467,9 @@ function updateDilationUpgradeButtons() {
 	}
 	var genSpeed = getPassiveTTGen()
 	var power = getDil3Power()
+	getEl("dil11desc").textContent = "Currently: " + shorten(Decimal.pow(2, getDilUpgPower(1))) + "x"
 	getEl("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
-	getEl("dil13desc").textContent = Decimal.gt(power, 3) ? "Gain " + shorten(power) + "x more Tachyon Particles." : "Triple the amount of Tachyon Particles gained."
+	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles.<br>Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
 	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
