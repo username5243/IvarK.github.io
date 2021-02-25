@@ -202,7 +202,7 @@ function updateColorPowers() {
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) + 1
 
 	//Blue
-	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2.5, 1), 3)
+	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2, 1), 3)
 }
 
 //Gluons
