@@ -20,7 +20,9 @@ function getNanospeedText(){
 }
 
 function updateNanoverseTab(){
-	var rewards = tmp.qu.nanofield.rewards
+	getEl("ns").textContent = getNanospeedText()
+
+	let rewards = tmp.qu.nanofield.rewards
 	getEl("quarksNanofield").textContent = shortenDimensions(tmp.qu.replicants.quarks)		
 	getEl("quarkCharge").textContent = shortenMoney(tmp.qu.nanofield.charge)
 	getEl("quarkChargeRate").textContent = shortenDimensions(getQuarkChargeProduction())
@@ -32,17 +34,21 @@ function updateNanoverseTab(){
 	getEl("quarkAntienergy").textContent = shortenMoney(tmp.qu.nanofield.antienergy)
 	getEl("quarkAntienergyRate").textContent = shortenMoney(getQuarkAntienergyProduction())
 	getEl("quarkChargeProductionCap").textContent = shortenMoney(getQuarkChargeProductionCap())
+
 	getEl("rewards").textContent = getFullExpansion(rewards)
 	getEl("nfRewardScaling").textContent = getGalaxyScaleName(tmp.nf.scale) + "Nanorewards"
 
-	for (var reward = 1; reward <= 8; reward++) {
-		getEl("nfReward" + reward).className = reward > rewards ? "nfRewardlocked" : "nfReward"
+	for (let reward = 1; reward <= 8; reward++) {
+		let oldClass = getEl("nfReward" + reward).className
+		let newClass = reward > rewards ? "nfRewardlocked" : "nfReward"
+		if (oldClass != newClass) getEl("nfReward" + reward).className = newClass
+
 		getEl("nfReward" + reward).textContent = wordizeList(nanoRewards.effectsUsed[reward].map(x => nanoRewards.effectDisplays[x](tmp.nf.effects[x])), true) + "."
 		getEl("nfRewardHeader" + reward).textContent = (rewards % 8 + 1 == reward ? "Next" : DISPLAY_NAMES[reward]) + " reward"
 		getEl("nfRewardTier" + reward).textContent = "Tier " + getFullExpansion(Math.ceil((rewards + 1 - reward) / 8)) + " / Power: " + tmp.nf.powers[reward].toFixed(1)
 	}
+
 	getEl("nfReward5").textContent = (tmp.nf.powers[5] > 15 ? nanoRewards.effectDisplays.light_threshold_speed(tmp.nf.effects.light_threshold_speed) : nanoRewards.effectDisplays.dil_effect_exp(tmp.nf.effects.dil_effect_exp)) + "."
-	getEl("ns").textContent = getNanospeedText()
 }
 
 function updateNanofieldAntipreon(){
