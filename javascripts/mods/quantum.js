@@ -156,7 +156,7 @@ function quarkGain() {
 }
 
 function getQuarkMult() {
-	x = Decimal.pow(2, tmp.qu.multPower.total)
+	x = new Decimal(1)
 	if (hasAch("ng3p93")) x = x.times(500)
 	return x
 }
@@ -690,9 +690,6 @@ function handleQuantumDisplays(prestige) {
 	updateColorCharge()
 	updateGluonsTabOnUpdate()
 	updateElectrons()
-
-	let dontshowrg4 = inQC(1) || QCIntensity(1) >= 1 || ph.did("ghostify")
-	getEl('rg4toggle').style.display = dontshowrg4 ? "none" : ""
 
 	updateQuantumChallenges()
 	updateQCTimes()

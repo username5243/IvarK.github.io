@@ -1500,7 +1500,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 7)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 8)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4435,7 +4435,7 @@
 			<table class="table" align="center" style="margin: auto">
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Quarks</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluons</button></td>
+					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluonic Boosts</button></td>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
 					<td id='electronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('electrons')">Electrons</button></td>
 					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Replicants</button></td>
@@ -4530,48 +4530,9 @@
 					<td class="rqC" colspan=2><p>You have <span id="rg" style="font-size:35px">0</span> red-green gluons.<br>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.</p></td>
 					<td class="gqC" colspan=2><p>You have <span id="gb" style="font-size:35px">0</span> green-blue gluons.<br>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks from <span id='gbprev'></span> to to <span id='gbnext'>0</span>.</p></td>
 					<td class="bqC" colspan=2><p>You have <span id="br" style="font-size:35px">0</span> blue-red gluons.<br>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue quarks from <span id='brprev'></span> to to <span id='brnext'>0</span>.</p></td>
-				</tr><tr>
-					<td><button id='rgupg1' onclick='buyGluonUpg("rg",1)'>Remote Antimatter Galaxy cost scaling is approximately 2x slower.<br>Cost: 1 RG gluons</button></td>
-					<td><button id='rgupg2' onclick='buyGluonUpg("rg",2)'>Galaxies are more effective based on your Tachyonic Galaxies.<br><span id='rgupg2current'></span><br>Cost: 2 RG gluons</button></td>
-					<td><button id='gbupg1' onclick='buyGluonUpg("gb",1)' style='font-size:8.5px'>You gain replicanti faster based on your tickspeed reduction multiplier.<br><span id='gbupg1current'></span><br>Cost: 1 GB gluons</button></td>
-					<td><button id='gbupg2' onclick='buyGluonUpg("gb",2)'>Replicate interval scaling is 2x slower.<br>Cost: 2 GB gluons</button></td>
-					<td><button id='brupg1' onclick='buyGluonUpg("br",1)'>You gain more tachyon particles based on your dilated time.<br><span id='brupg1current'></span><br>Cost: 1 BR gluons</button></td>
-					<td><button id='brupg2' onclick='buyGluonUpg("br",2)'>Sacrifice boosts dilated time production.<br><span id='brupg2current'></span><br><span id='brupg1current'></span>Cost: 2 BR gluons</button></td>
-				</tr><tr>
-					<td><button id='rgupg3' onclick='buyGluonUpg("rg",3)'>Dimension boosts boost first Meta Dimensions.<br><span id='rgupg3current'></span><br>Cost: 4 RG gluons</button></td>
-					<td>
-						<button id='rgupg4' onclick='buyGluonUpg("rg",4)'>Galaxies are 50% stronger, but electrons are 30% weaker and normal galaxies are 60% weaker.<br>Cost: 100 RG gluons</button><br>
-						<button class="storebtn" id='rg4toggle' onclick='toggleRG4Upg()' style='width:142.5px; height:15px; font-size:9px'>Toggle: ON</button>
-					</td>
-					<td><button id='gbupg3' onclick='buyGluonUpg("gb",3)'>The IP mult multiplies IP gain by 2.3x per upgrade.<br>Cost: 4 GB gluons</button></td>
-					<td><button id='gbupg4' onclick='buyGluonUpg("gb",4)'>Massively decrease the tickspeed cost multiplier increase to 1.25x.<br>Cost: 100 GB gluons</button></td>
-					<td><button id='brupg3' onclick='buyGluonUpg("br",3)'>Tachyon particles slightly boost dilated time production.<br>Cost: 4 BR gluons</button></td>
-					<td><button id='brupg4' onclick='buyGluonUpg("br",4)'>Multiplier per ten dimensions boosts Meta Dimensions.<br><span id='brupg4current'></span><br>Cost: 100 BR gluons</button></td>
-				</tr><tr id='gupgrow3'>
-					<td><button id='rgupg5' onclick='buyGluonUpg("rg",5)'>Slow down the Dark Matter Galaxy cost scaling by 13%.<br>Cost: <span id='rgupg5cost'></span> RG gluons</button></td>
-					<td><button id='rgupg6' onclick='buyGluonUpg("rg",6)'>Slow down the Distant Antimatter Galaxy cost scaling by 13.2%.<br>Cost: <span id='rgupg6cost'></span> RG gluons</button></td>
-					<td><button id='gbupg5' onclick='buyGluonUpg("gb",5)'>Normal Replicated Galaxies slow down the Dark Matter Galaxy cost scaling.<br><span id='gbupg5current'></span><br>Cost: <span id='gbupg5cost'></span> GB gluons</button></td>
-					<td><button id='gbupg6' onclick='buyGluonUpg("gb",6)'>Infinity power slows down the Distant Antimatter Galaxy cost scaling.<br><span id='gbupg6current'></span><br>Cost: <span id='gbupg6cost'></span> GB gluons</button></td>
-					<td><button id='brupg5' onclick='buyGluonUpg("br",5)'>Tachyon particles slow down the Dark Matter Galaxy cost scaling.<br><span id='brupg5current'></span><br>Cost: <span id='brupg5cost'></span> BR gluons</button></td>
-					<td><button id='brupg6' onclick='buyGluonUpg("br",6)' style='font-size:8.5px'>Meta-Dimension Boosts slow down the Distant Antimatter Galaxy cost scaling.<br><span id='brupg6current'></span><br>Cost: <span id='brupg6cost'></span> BR gluons</button></td>
-				</tr><tr id='gupgrow4'>
-					<td id='rgupg7col' colspan=2><button id='rgupg7' onclick='buyGluonUpg("rg",7)'>Slow down the Remote Antimatter Galaxy scaling by 10%.<br>Cost: <span id='rgupg7cost'></span> RG gluons</button></td>
-					<td id='rgupg8col'><button id='rgupg8' onclick='buyGluonUpg("rg",8)'>Red unstable quarks decay slower based on your RG gluons.<br><span id='rgupg8current'></span><br>Cost: <span id='rgupg8cost'></span> RG gluons</button></td>
-					<td id='gbupg7col' colspan=2><button id='gbupg7' onclick='buyGluonUpg("gb",7)'>Infinity Points slow down the Remote Antimatter Galaxy scaling.<br><span id='gbupg7current'></span><br>Cost: <span id='gbupg7cost'></span> GB gluons</button></td>
-					<td id='gbupg8col'><button id='gbupg8' onclick='buyGluonUpg("gb",8)'>Green unstable quarks decay slower based on your GB gluons.<br><span id='gbupg8current'></span><br>Cost: <span id='gbupg8cost'></span> GB gluons</button></td>
-					<td id='brupg7col' colspan=2><button id='brupg7' onclick='buyGluonUpg("br",7)'>Eternity Points slow down the Remote Antimatter Galaxy scaling.<br><span id='brupg7current'></span><br>Cost: <span id='brupg7cost'></span> BR gluons</button></td>
-					<td id='brupg8col'><button id='brupg8' onclick='buyGluonUpg("br",8)'>Blue unstable quarks decay slower based on your BR gluons.<br><span id='brupg8current'></span><br>Cost: <span id='brupg8cost'></span> BR gluons</button></td>
-				</tr><tr><td colspan=6>
-					Current QK gain multiplier: <span id='qkmultcurrent'></span>x
-				</td></tr><tr style='vertical-align:0'>
-					<td colspan=2><button id='rgqkbtn' onclick='buyQuarkMult("rg")'>You gain 2x more quarks.<br>Cost: <span id='rgqkcost'></span> RG gluons</button></td>
-					<td colspan=2>
-						<button id='gbqkbtn' onclick='buyQuarkMult("gb")'>You gain 2x more quarks.<br>Cost: <span id='gbqkcost'></span> GB gluons</button><br>
-						<button class="storebtn" onclick='maxQuarkMult()' style='width:190px'>Max QK mult</button>
-					</td>
-					<td colspan=2><button id='brqkbtn' onclick='buyQuarkMult("br")'>You gain 2x more quarks.<br>Cost: <span id='brqkcost'></span> BR gluons</button></td>
 				</tr></table>
 				<br><br>
+				<span style="font-size: 150%">🦀</span> 🦀 <b class="warning">GLUON UPGRADES ARE GONE</b> 🦀 <span style="font-size: 150%">🦀</span>
 			</div>
 			<div id="speedruns" class="quantumtab">
 				<div>Get your best quantum time faster than the requirement for a reward!</div>

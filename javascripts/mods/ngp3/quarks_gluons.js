@@ -242,9 +242,7 @@ function GUBought(id) {
 }
 
 function GUActive(id) {
-	if (!tmp.quActive) return false
-	if (id == "rg4") return tmp.rg4
-	return GUBought(id)
+	return false
 }
 
 function buyQuarkMult(name) {
@@ -353,25 +351,6 @@ function updateQuarksTab(tab) {
 }
 
 function updateGluonsTab() {
-	getEl("gbupg1current").textContent = "Currently: " + shorten(getGB1Effect()) + "x"
-	getEl("brupg1current").textContent = "Currently: " + shorten(getBR1Effect()) + "x"
-	getEl("rgupg2current").textContent = "Currently: " + (Math.pow(player.dilation.freeGalaxies / 5e3 + 1, 0.25) * 100 - 100).toFixed(1) + "%"
-	getEl("brupg2current").textContent = "Currently: " + shorten(Decimal.pow(2.2, Math.pow(tmp.sacPow.log10() / 1e6, 0.25))) + "x"
-	getEl("rgupg3current").textContent = "Currently: " + shorten(getRG3Effect()) + "x"
-	getEl("brupg4current").textContent = "Currently: " + shorten(getBR4Effect()) + "x"
-	if (player.masterystudies.includes("d9")) {
-		getEl("gbupg5current").textContent = "Currently: " + (Math.sqrt(player.replicanti.galaxies) / 5.5).toFixed(1) + "%"
-		getEl("brupg5current").textContent = "Currently: " + (100 - 100 / getBR5Effect()).toFixed(1) + "%"
-		getEl("gbupg6current").textContent = "Currently: " + (100-100/(1 + Math.pow(player.infinityPower.plus(1).log10(),0.25)/2810)).toFixed(1) + "%"
-		getEl("brupg6current").textContent = "Currently: " + (100 - 100 / getBR6Effect()).toFixed(1) + "%"
-		getEl("gbupg7current").textContent = "Currently: " + (100-100/(1 + Math.log10(1+player.infinityPoints.max(1).log10())/100)).toFixed(1) + "%"
-		getEl("brupg7current").textContent = "Currently: " + (100-100/(1 + Math.log10(1+player.eternityPoints.max(1).log10())/80)).toFixed(1) + "%"
-	}
-	if (player.masterystudies.includes("d13")) {
-		getEl("rgupg8current").textContent = "Currently: " + shorten(getGU8Effect("rg")) + "x"
-		getEl("gbupg8current").textContent = "Currently: " + shorten(getGU8Effect("gb")) + "x"
-		getEl("brupg8current").textContent = "Currently: " + shorten(getGU8Effect("br")) + "x"
-	}
 	if (player.ghostify.milestones > 7) {
 		updateQuantumWorth("display")
 		updateGluonsTabOnUpdate("display")
@@ -411,7 +390,7 @@ function updateQuarksTabOnUpdate(mode) {
 		getEl(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
 	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
-	if (player.masterystudies.includes("d13")) {
+	if (masteryStudies.has("d13")) {
 		getEl("redQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
 		getEl("greenQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.g)
 		getEl("blueQuarksToD").textContent = shortenDimensions(tmp.qu.usedQuarks.b)	
@@ -427,34 +406,6 @@ function updateGluonsTabOnUpdate(mode) {
 			br: new Decimal(0)
 		}
 	}
-	if (player.ghostify.milestones<8) mode = undefined
-	var names = ["rg","gb","br"]
-	var sevenUpgrades = player.masterystudies.includes("d9")
-	var eightUpgrades = player.masterystudies.includes("d13")
-	if (mode == undefined) for (r = 3; r < 5; r++) getEl("gupgrow" + r).style.display = sevenUpgrades ? "" : "none"
-	for (c = 0; c < 3; c++) {
-		if (mode==undefined) {
-			getEl(names[c] + "upg7col").setAttribute("colspan", eightUpgrades ? 1 : 2)
-			getEl(names[c] + "upg8col").style.display = eightUpgrades ? "" : "none"
-		}
-		if (mode == undefined || mode == "display") {
-			var name = names[c]
-			getEl(name).textContent = shortenDimensions(tmp.qu.gluons[name])
-			for (u = 1; u <= (eightUpgrades ? 8 : sevenUpgrades ? 7 : 4); u++) {
-				var upg = name + "upg" + u
-				if (u > 4) getEl(upg + "cost").textContent = shortenMoney(new Decimal(GUCosts[u]))
-				if (tmp.qu.upgrades.includes(name + u)) getEl(upg).className="gluonupgradebought small "+name
-				else if (tmp.qu.gluons[name].lt(GUCosts[u])) getEl(upg).className="gluonupgrade small unavailablebtn"
-				else getEl(upg).className="gluonupgrade small "+name
-			}
-			var upg = name + "qk"
-			var cost = Decimal.pow(100, tmp.qu.multPower[name] + Math.max(tmp.qu.multPower[name] - 467,0)).times(500)
-			getEl(upg+"cost").textContent = shortenDimensions(cost)
-			if (tmp.qu.gluons[name].lt(cost)) getEl(upg+"btn").className = "gluonupgrade unavailablebtn"
-			else getEl(upg + "btn").className = "gluonupgrade " + name
-		}
-	}
-	if (mode == undefined || mode == "display") getEl("qkmultcurrent").textContent = shortenDimensions(Decimal.pow(2, tmp.qu.multPower.total))
 }
 
 //Quarks animation
