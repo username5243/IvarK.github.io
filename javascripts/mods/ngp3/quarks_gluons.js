@@ -29,7 +29,7 @@ function updateQuantumWorth(mode) {
 			}
 		}
 	}
-	if (mode != "quick") for (var e=1;e<4;e++) getEl("quantumWorth"+e).textContent = shortenDimensions(quantumWorth)
+	if (mode != "quick") for (var e = 1; e <= 2; e++) getEl("quantumWorth" + e).textContent = shortenDimensions(quantumWorth)
 }
 
 //Quark Assertment Machine
@@ -351,10 +351,8 @@ function updateQuarksTab(tab) {
 }
 
 function updateGluonsTab() {
-	if (player.ghostify.milestones > 7) {
-		updateQuantumWorth("display")
-		updateGluonsTabOnUpdate("display")
-	}
+	if (player.ghostify.milestones > 7) updateGluonsTabOnUpdate("display")
+	getEl("quarkEnergy2").textContent = shorten(tmp.qu.quarkEnergy)
 }
 
 //Display: On load
