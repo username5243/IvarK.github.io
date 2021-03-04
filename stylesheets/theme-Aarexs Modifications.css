@@ -478,7 +478,7 @@ strong { color: #0072e5 }
 	color: #191919;
 	text-shadow: none
 }
-#quarkEnergy, #preonEnergy, #quarkEnergyRate, #quarkPowerThreshold { color: #72e500 !important }
+#quarkEnergy, #quarkEnergy2, #quarkEnergyEffect1, #quarkEnergyEffect2, #quarkEnergyMult, #preonEnergy, #quarkEnergyRate, #quarkPowerThreshold { color: #72e500 !important }
 #quarkPower, #rewards, #rewards_AP { color: #ace572 !important }
 #quarkAntienergy, #quarkAntienergyRate, #quarkChargeProductionCap { color: #4c0099 !important }
 .nfReward:hover { 
