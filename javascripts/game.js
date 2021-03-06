@@ -2117,10 +2117,12 @@ function toggle_mod(id) {
 }
 
 function show_mods() {
-	modsShown=!modsShown
-	getEl("modsBtn").textContent=modsShown?"Saves":"Mods"
-	getEl("savesTab").style.display=modsShown?"none":""
-	getEl("modsTab").style.display=modsShown?"":"none"
+	modsShown = !modsShown
+
+	getEl("savesTab").style.display = modsShown ? "none" : ""
+	getEl("modsTab").style.display = modsShown ? "" : "none"
+	getEl("newImportBtn").style.display = modsShown ? "none" : ""
+	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
 }
 
 getEl("animationoptionsbtn").onclick = function () {

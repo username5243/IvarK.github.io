@@ -1500,7 +1500,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 8.02)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 8.03)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4526,9 +4526,9 @@
 			</div>
 			<div class='quantumtab' id='gluons'>
 				<table id='gluonupgrades'><tr>
-					<td class="rqC">You have <span id="rg" style="font-size:35px">0</span> red-green gluons,<br>which multiply the red power by <span class="red">1.00</span>x, but subtract the green power by -<span class="green">0.00</span>.</td>
-					<td class="gqC">You have <span id="gb" style="font-size:35px">0</span> green-blue gluons,<br>which multiply the green power by <span class="green">1.00</span>x, but subtract the blue power by -<span class="blue">0.00</span>.</td>
-					<td class="bqC">You have <span id="br" style="font-size:35px">0</span> blue-red gluons,<br>which multiply the blue power by <span class="blue">1.00</span>x, but subtract the red power by -<span class="red">0.00</span>.</td>
+					<td class="rqC">You have <span id="rg" style="font-size:35px">0</span> red-green gluons,<br>which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.</td>
+					<td class="gqC">You have <span id="gb" style="font-size:35px">0</span> green-blue gluons,<br>which multiply the green power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the blue power by -<span class="blue" id="bPowerNerf">0.00</span>.</td>
+					<td class="bqC">You have <span id="br" style="font-size:35px">0</span> blue-red gluons,<br>which multiply the blue power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the red power by -<span class="red" id="rPowerNerf">0.00</span>.</td>
 				</tr><tr>
 					<td>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.</td>
 					<td>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks from <span id='gbprev'></span> to to <span id='gbnext'>0</span>.</td>
@@ -5387,35 +5387,36 @@
 	<div class="popup loadmenu" id="loadmenu" style="overflow-y:hidden; height: 360px">
 		<button class="closebtn storebtn" onclick="closeToolTip(true)">&times;</button>
 		<button class="storebtn" style="font-size: 15px" onclick="new_game()" style="display: inline">New save</button>
-		<button class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import</button>
-		<button id="modsBtn" class="storebtn" style="font-size: 15px" onclick="show_mods()" style="display: inline">Mods</button><br>
-		To load without offline progress, load while holding shift.
-		<div id="savesTab" style="height:300px;overflow-y:auto">
+		<button id="newImportBtn" class="storebtn" style="font-size: 15px" onclick="import_save('new')" style="display: inline">Import save</button>
+		<button id="cancelNewSaveBtn" class="storebtn" style="font-size: 15px; display: none" onclick="show_mods()" style="display: inline">Cancel</button><br>
+		<div id="savesTab" style="height:320px;overflow-y:auto">
+			To load without offline progress, load while holding shift.<br><br>
 			<table id='saves'>
 			</table>
 		</div>
-		<div id="modsTab" style="height:300px;overflow-y:auto;display:none">
+		<div id="modsTab" style="height:320px;overflow-y:auto;display:none">
+			Select a mod first before beginning your new journey.<br><br>
 			<b>Expansion Mods</b><br>
-			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline">NG++: OFF</button>
-			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline">NGUd: OFF</button>
-			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline">NG Condensed: OFF</button>			
+			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline" ach-tooltip="Adds new several end-game content. Featuring NG+3, the most popular mod yet!">NG++: OFF</button>
+			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline" ach-tooltip="Adds some end-game content including Black Hole.">NGUd: OFF</button>
+			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline" ach-tooltip="Tweaks the game with a new twist: Condensers.">NG Condensed: OFF</button>			
 			<br><br>
 			<b>Hellish Mods</b><br>
-			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline">NG--: OFF</button>
-			<button class="storebtn longbtn" id='ngm5rgBtn' style="font-size: 15px" onclick="toggle_mod('ngm5rg')" style="display: inline">NG-5 Regulated: OFF</button>
-			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline">Expert Mode: OFF</button>
+			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline" ach-tooltip="Make this game harder, but adds some mechanics to compromise.">NG--: OFF</button>
+			<button class="storebtn longbtn" id='ngm5rgBtn' style="font-size: 15px" onclick="toggle_mod('ngm5rg')" style="display: inline" ach-tooltip="A upcoming mod of NG-5.">NG-5 Regulated: OFF</button>
+			<button class="storebtn longbtn" id='ngexBtn' style="font-size: 15px" onclick="toggle_mod('ngex')" style="display: inline" ach-tooltip="Make this game harder with different stratagies">Expert Mode: OFF</button>
 			<br><br>
 			<b>Easy Mods</b><br>
-			<button class="storebtn longbtn" id='ngpBtn' style="font-size: 15px" onclick="toggle_mod('ngp')" style="display: inline">NG+: OFF</button>
-			<button class="storebtn longbtn" id='aauBtn' style="font-size: 15px" onclick="toggle_mod('aau')" style="display: inline">AAU: OFF</button>
-			<button class="storebtn longbtn" id='lsBtn' style="font-size: 15px" onclick="toggle_mod('ls')" style="display: inline">Light Speed: OFF</button>
+			<button class="storebtn longbtn" id='ngpBtn' style="font-size: 15px" onclick="toggle_mod('ngp')" style="display: inline" ach-tooltip="Make this game faster and start at Time Dilation.">NG+: OFF</button>
+			<button class="storebtn longbtn" id='aauBtn' style="font-size: 15px" onclick="toggle_mod('aau')" style="display: inline" ach-tooltip="Start with all achievements unlocked.">AAU: OFF</button>
+			<button class="storebtn longbtn" id='lsBtn' style="font-size: 15px" onclick="toggle_mod('ls')" style="display: inline" ach-tooltip="Allows you to tweak the game speed and speed up some mechanics.">Light Speed: OFF</button>
 			<!--
 			<button class="storebtn longbtn" id='ngprwBtn' style="font-size: 15px" onclick="toggle_mod('ngprw')" style="display: inline">NG+ Reworked: OFF</button>
 			<br>
 			Reset Mode #<input id='ngpLayer' type="number" onchange="changeNGPLayer()" min=0 value=0>
 			<br><br>
 			-->
-			<button class="storebtn longbtn" id='ezBtn' style="font-size: 15px" onclick="toggle_mod('ez')" style="display: inline">Barrier-Easing: OFF</button>
+			<button class="storebtn longbtn" id='ezBtn' style="font-size: 15px" onclick="toggle_mod('ez')" style="display: inline" ach-tooltip="Makes this game faster by removing some timewalls.">Barrier-Easing: OFF</button>
 			<br><br>
 			<b>Buffed Mods</b><br>
 			<button class="storebtn longbtn" id='ngmuBtn' style="font-size: 15px" onclick="toggle_mod('ngmu')" style="display: inline">NG*: OFF</button>
