@@ -19,39 +19,46 @@ button:hover {
 }
 
 .tabbtn {
-	background: linear-gradient(#bfff7f, #7fff7f) !important;
+	background: linear-gradient(#ffff7f, #bfff7f) !important;
 	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
 .secondarytabbtn {
-	background: linear-gradient(#dfefff, #dfdfff) !important;
+	background: linear-gradient(#bfffff, #bfbfff) !important;
 	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
 .storebtn {
-	background: linear-gradient(#bfff7f, #7fff7f) !important;
+	background: linear-gradient(#ffffbf, #dfffbf) !important;
 	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
 .unavailablebtn {
 	transform: scale(1) !important;
-	background: linear-gradient(#9f8f7f, #9f7f7f) !important;
+	background: linear-gradient(#bf7f7f, #7f7f7f) !important;
 	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
 	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25) !important;
-	color: rgba(0, 0, 0, 0.625) !important
+	color: rgba(127, 0, 0, 0.625) !important
 }
 
 .popup {
-	background: linear-gradient(#dfefff, #dfdfff) !important;
+	background: linear-gradient(#bfffff, #bfbfff) !important;
 	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
 	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25);
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
 .optionstab td div b, .popup div, .popup span, .popup b {
+	color: rgba(0, 0, 0, 0.625) !important
+}
+
+.infinitybtn {
+	background: linear-gradient(#ffff00, #ff7f00) !important;
+	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
+	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25) !important;
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
