@@ -185,6 +185,7 @@ function updateColorCharge() {
 function getColorPowerQuantity(color) {
 	let ret = colorCharge[color]
 	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
+	if (tmp.glB) ret = ret * tmp.glB[color].mult - tmp.glB[color].sub
 	return ret
 }
 
@@ -212,7 +213,7 @@ function gainQuarkEnergy() {
 }
 
 function getQuarkEnergyMult() {
-	return 1
+	return tmp.glB.enB1
 }
 
 function updateQuarkEnergyEffects() {
@@ -292,6 +293,20 @@ function maxQuarkMult() {
 	updateGluonsTabOnUpdate("spend")
 }
 
+function updateGluonicBoosts() {
+	tmp.glB = {}
+	let data = tmp.glB
+	let gluons = tmp.qu.gluons
+
+	data.r = { mult: 1, sub: 0 } //x -> x * [RG effect] - [BR effect]
+	data.g = { mult: 1, sub: 0 } //x -> x * [GB effect] - [RG effect]
+	data.b = { mult: 1, sub: 0 } //x -> x * [BR effect] - [GB effect]
+
+	data.enB1 = 1
+	data.enB2 = 0
+	data.enB3 = 0
+}
+
 function getGB1Effect() {
 	return Decimal.div(1, tmp.tsReduce).log10() / 100 + 1
 }
@@ -351,8 +366,16 @@ function updateQuarksTab(tab) {
 }
 
 function updateGluonsTab() {
-	if (player.ghostify.milestones > 7) updateGluonsTabOnUpdate("display")
+	let colors = ['r','g','b']
+
+	if (player.ghostify.milestones >= 8) updateGluonsTabOnUpdate("display")
 	getEl("quarkEnergy2").textContent = shorten(tmp.qu.quarkEnergy)
+
+	for (var c = 0; c < 3; c++) {
+		var color = colors[c]
+		getEl(color + "PowerBuff").textContent = shorten(tmp.glB[color].mult)
+		getEl(color + "PowerNerf").textContent = shorten(tmp.glB[color].sub)
+	}
 }
 
 //Display: On load
