@@ -213,7 +213,9 @@ function gainQuarkEnergy() {
 }
 
 function getQuarkEnergyMult() {
-	return tmp.glB.enB1
+	let x = 1
+	if (ENTANGLED_BOOSTS.has(1)) x = tmp.glB.enB1
+	return x
 }
 
 function updateQuarkEnergyEffects() {
@@ -302,9 +304,44 @@ function updateGluonicBoosts() {
 	data.g = { mult: 1, sub: 0 } //x -> x * [GB effect] - [RG effect]
 	data.b = { mult: 1, sub: 0 } //x -> x * [BR effect] - [GB effect]
 
-	data.enB1 = 1
-	data.enB2 = 0
-	data.enB3 = 0
+	let enAmt = gluons.rg
+	let masAmt = gluons.rg.add(gluons.gb).add(gluons.br)
+
+	for (var i = 1; i <= 3; i++) if (ENTANGLED_BOOSTS.has(i)) data["enB" + i] = ENTANGLED_BOOSTS[i].eff(ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt)
+}
+
+let ENTANGLED_BOOSTS = {
+	amt: 3, //temp
+	cost() {
+		
+	},
+	has(x) {
+		return this.amt >= this[x].req
+	},
+	mastered(x) {
+		return this.amt >= this[x].masReq
+	},
+	1: {
+		req: 1,
+		masReq: 2,
+		eff(x) {
+			return 1 //Math.sqrt(x.add(1).log10())
+		}
+	},
+	2: {
+		req: 4,
+		masReq: 1/0,
+		eff(x) {
+			return 1
+		}
+	},
+	3: {
+		req: 1/0,
+		masReq: 1/0,
+		eff(x) {
+			return 1
+		}
+	}
 }
 
 function getGB1Effect() {
