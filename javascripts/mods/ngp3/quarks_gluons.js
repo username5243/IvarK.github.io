@@ -307,11 +307,12 @@ function updateGluonicBoosts() {
 	let enAmt = gluons.rg
 	let masAmt = gluons.rg.add(gluons.gb).add(gluons.br)
 
-	for (var i = 1; i <= 3; i++) if (ENTANGLED_BOOSTS.has(i)) data["enB" + i] = ENTANGLED_BOOSTS[i].eff(ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt)
+	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) if (ENTANGLED_BOOSTS.has(i)) data["enB" + i] = ENTANGLED_BOOSTS[i].eff(ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt)
 }
 
 let ENTANGLED_BOOSTS = {
 	amt: 3, //temp
+	max: 6,
 	cost() {
 		
 	},
@@ -332,10 +333,31 @@ let ENTANGLED_BOOSTS = {
 		req: 4,
 		masReq: 1/0,
 		eff(x) {
-			return 1
+			return 0
 		}
 	},
 	3: {
+		req: 1/0,
+		masReq: 1/0,
+		eff(x) {
+			return 1
+		}
+	},
+	4: {
+		req: 1/0,
+		masReq: 1/0,
+		eff(x) {
+			return 1
+		}
+	},
+	5: {
+		req: 1/0,
+		masReq: 1/0,
+		eff(x) {
+			return 1
+		}
+	},
+	6: {
 		req: 1/0,
 		masReq: 1/0,
 		eff(x) {
@@ -394,8 +416,8 @@ function updateQuarksTab(tab) {
 	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
 
 	if (player.ghostify.milestones >= 8) {
-		var assortAmount=getAssortAmount()
-		var colors=['r','g','b']
+		var assortAmount = getAssortAmount()
+		var colors = ['r','g','b']
 		getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
 		getEl("assignAllButton").className = (assortAmount.lt(1) ? "unavailabl" : "stor") + "ebtn"
 		updateQuantumWorth("display")
@@ -462,6 +484,32 @@ function updateGluonsTabOnUpdate(mode) {
 			rg: new Decimal(0),
 			gb: new Decimal(0),
 			br: new Decimal(0)
+		}
+	}
+
+	getEl("entangledBoosts").textContent = getFullExpansion(ENTANGLED_BOOSTS.amt)
+
+	getEl("entangledBoostNext").textContent = ""
+	getEl("entangledBoostMaster").textContent = ""
+
+	var has = true
+	var mastered = true
+	for (var e = 1; e <= ENTANGLED_BOOSTS.max; e++) {
+		if (has && !ENTANGLED_BOOSTS.has(e)) {
+			has = false
+			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at Entangled Booster #" + ENTANGLED_BOOSTS[e].req + "."
+		}
+		if (mastered && !ENTANGLED_BOOSTS.mastered(e)) {
+			mastered = false
+			getEl("entangledBoostMaster").textContent = "Reach " + ENTANGLED_BOOSTS[e].masReq + " Entangled Boosters to master Boost #" + e + "."
+		}
+
+		var el = getEl("enB" + e + "Name")
+		el.parentElement.style.display = has ? "" : "none"
+
+		if (has) {
+			el.parentElement.className = mastered ? "yellow" : ""
+			el.textContent = DISPLAY_NAMES[e] + (mastered ? " Mastered" : "") + " Entangled Boost"
 		}
 	}
 }
