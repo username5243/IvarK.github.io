@@ -728,7 +728,7 @@ let plTime = 5.391247e-44
 function timeDisplayShort(time, rep, places) {
 	if (Decimal.gt(time, Number.MAX_VALUE)) {
 		if (Decimal.eq(time, 1 / 0)) return 'eternity'
-		return shorten(Decimal.div(time, 31556952e101)) + ' ae'
+		return shorten(Decimal.div(time, 31556952e10)) + ' ae'
 	}
 	time = time / 10
 	if (rep && time > 0 && time < 1) {
@@ -753,8 +753,8 @@ function timeDisplayShort(time, rep, places) {
 	if (time < 31556952 && rep) return Math.floor(time / 86400) + ' d & ' + ((time/3600) % 24).toFixed(1) + " h"
 	if (time < 31556952) return Math.floor(time / 86400) + ' d & ' + Math.floor((time/3600) % 24) + ":" + preformat(Math.floor((time / 60) % 60)) + ":" + preformat(Math.floor(time % 60))
 	if (time < 315569520) return Math.floor(time / 31556952) + ' y & ' + ((time / 86400) % 365.2425).toFixed(1) + ' d'
-	if (time < 31556952e100) return shorten(time / 315569520) + ' y'
-	return shorten(time / 31556952e100) + ' ae' //1 ae = 1 aeon = Estimated lifespan of a observable universe = e100 years
+	if (time < 31556952e9) return shorten(time / 315569520) + ' y'
+	return shorten(time / 31556952e9) + ' ae' //1 ae = 1 aeon = 1B years
 }
 
 function formatPercentage(x, digits = 1) {

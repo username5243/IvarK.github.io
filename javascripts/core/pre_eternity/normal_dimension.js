@@ -615,21 +615,28 @@ function infUpg13Pow() {
 }
 
 function dimMults() {
-	let exp = 1
+	let exp = getInfEffExp()
 	if (tmp.ngC) exp *= Decimal.log10(nA(getInfinitied(), 1)) + 1
 	if (inNGM(2)) exp *= 2
-	if (hasTS(31)) exp *= 4
 	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1), exp)
+}
+
+function getInfEffExp() {
+	let exp = 1
+	if (hasTS(31)) exp *= 4
+	if (ENTANGLED_BOOSTS.has(2)) exp *= tmp.glB.enB2
+	return exp
 }
 
 function getInfinitiedMult() {
 	var add = inNGM(2) ? 0 : 1
 	var base = (inNGM(2) ? 1 : 0) + Decimal.add(getInfinitied(), 1).log10() * (inNGM(2) ? 100 : 10)
-	var exp = (inNGM(2) ? 2 : 1) * (hasTimeStudy(31) ? 4 : 1)
+	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp()
 	if (tmp.mod.ngmX >= 4) {
 		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !hasAch("r71")) exp += .2
 		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3
 	}
+	if (exp > 10) return Decimal.pow(base, exp).add(add)
 	return add + Math.pow(base, exp)
 }
 

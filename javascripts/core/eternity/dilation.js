@@ -118,8 +118,9 @@ function getDilExp(disable) {
 	if (tmp.newNGP3E) ret += .1
 	if (player.meta !== undefined && !tmp.mod.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
-		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(3) && disable != "TU3") ret += getTreeUpgradeEffect(2)
-		if (ghostified && player.ghostify.neutrinos.boosts && disable != "neutrinos") ret += tmp.nb[1]
+		if (ENTANGLED_BOOSTS.has(3)) ret += tmp.glB.enB3
+		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") ret += getTreeUpgradeEffect(2)
+		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 1 && disable != "neutrinos") ret += tmp.nb[1]
 	}
 	return ret
 }

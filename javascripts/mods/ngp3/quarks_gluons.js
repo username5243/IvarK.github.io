@@ -214,7 +214,7 @@ function gainQuarkEnergy() {
 
 function getQuarkEnergyMult() {
 	let x = 1
-	if (ENTANGLED_BOOSTS.has(1)) x = tmp.glB.enB1
+	if (ENTANGLED_BOOSTS.has(1)) x += tmp.glB.enB1
 	return x
 }
 
@@ -311,7 +311,7 @@ function updateGluonicBoosts() {
 }
 
 let ENTANGLED_BOOSTS = {
-	amt: 3, //temp
+	amt: 10, //temp
 	max: 6,
 	cost() {
 		
@@ -326,21 +326,21 @@ let ENTANGLED_BOOSTS = {
 		req: 1,
 		masReq: 2,
 		eff(x) {
-			return 1 //Math.sqrt(x.add(1).log10())
+			return Math.log10(x.add(10).log10())
 		}
 	},
 	2: {
 		req: 4,
-		masReq: 1/0,
+		masReq: 10,
 		eff(x) {
-			return 0
+			return Math.sqrt(x.add(1).log10())
 		}
 	},
 	3: {
-		req: 1/0,
-		masReq: 1/0,
+		req: 5,
+		masReq: 10,
 		eff(x) {
-			return 1
+			return Math.pow(Math.log10(x.add(10).log10()), 2)
 		}
 	},
 	4: {

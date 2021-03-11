@@ -913,13 +913,7 @@ let tsMults = {
 		return x
 	},
 	232() {
-		var exp = 0.2
-		if (tmp.ngp3) {
-			if (player.ghostify.ghostlyPhotons.unl) exp = tmp.be ? 0.2 : 0
-			else if (player.galaxies >= 1e4 && !tmp.be) exp *= Math.max(6 - player.galaxies / 2e3, 0)
-		}
-		if (exp == 0) return 1
-		return Math.pow(1 + initialGalaxies() / 1000, exp)
+		return Math.pow(1 + player.galaxies / 1000, 0.2)
 	},
 
 	//NG Condensed
