@@ -208,8 +208,8 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuarkEnergy() {
-	let x = Math.cbrt(quantumWorth.add(1).log10() / 3) * getQuarkEnergyMult()
-	tmp.qu.quarkEnergy = x
+	let x = Math.cbrt(quantumWorth.add(1).log10()) * getQuarkEnergyMult() * 1.25
+	tmp.qu.quarkEnergy = isNaN(x) ? 0 : x
 }
 
 function getQuarkEnergyMult() {
@@ -221,8 +221,8 @@ function getQuarkEnergyMult() {
 function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
-	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy + 1) + 1
-	tmp.qkEng.eff2 = tmp.qu.quarkEnergy * tmp.qkEng.eff1
+	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1
+	tmp.qkEng.eff2 = tmp.qu.quarkEnergy * tmp.qkEng.eff1 / 1.7
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -304,43 +304,69 @@ function updateGluonicBoosts() {
 	data.g = { mult: 1, sub: 0 } //x -> x * [GB effect] - [RG effect]
 	data.b = { mult: 1, sub: 0 } //x -> x * [BR effect] - [GB effect]
 
-	let enAmt = gluons.rg
-	let masAmt = gluons.rg.add(gluons.gb).add(gluons.br)
+	let type = tmp.qu.entColor || "rg"
+	let enAmt = ENTANGLED_BOOSTS.gluonEffs[type](gluons[type])
+	let masAmt = Math.max(Math.max(
+		ENTANGLED_BOOSTS.gluonEffs.rg(gluons.rg),
+		ENTANGLED_BOOSTS.gluonEffs.gb(gluons.gb)),
+		ENTANGLED_BOOSTS.gluonEffs.br(gluons.br)
+	)
 
-	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) if (ENTANGLED_BOOSTS.has(i)) data["enB" + i] = ENTANGLED_BOOSTS[i].eff(ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt)
+	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * tmp.qu.entBoosts)
 }
 
 let ENTANGLED_BOOSTS = {
-	amt: 10, //temp
 	max: 6,
-	cost() {
-		
+	cost(x) {
+		if (x === undefined) x = tmp.qu.entBoosts || 0
+		return Math.pow(x + 1, 2)
+	},
+	buy() {
+		if (!(tmp.qu.quarkEnergy >= this.cost())) return
+		tmp.qu.entBoosts = (tmp.qu.entBoosts || 0) + 1
+		updateGluonsTabOnUpdate()
 	},
 	has(x) {
-		return this.amt >= this[x].req
+		return tmp.qu.entBoosts >= this[x].req
 	},
 	mastered(x) {
-		return this.amt >= this[x].masReq
+		return tmp.qu.entBoosts >= this[x].masReq
+	},
+	gluonEffs: {
+		rg(x) {
+			return Decimal.add(x, 1).log10()
+		},
+		gb(x) {
+			return Decimal.add(x, 1).log10()
+		},
+		br(x) {
+			return Decimal.add(x, 1).log10()
+		}
+	},
+	choose(x) {
+		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
+		tmp.qu.entColor = x
+		quantum(false, true)
 	},
 	1: {
 		req: 1,
 		masReq: 2,
 		eff(x) {
-			return Math.log10(x.add(10).log10())
+			return Math.cbrt(x)
 		}
 	},
 	2: {
 		req: 4,
 		masReq: 10,
 		eff(x) {
-			return Math.sqrt(x.add(1).log10())
+			return Math.sqrt(x)
 		}
 	},
 	3: {
 		req: 5,
 		masReq: 10,
 		eff(x) {
-			return Math.pow(Math.log10(x.add(10).log10()), 2)
+			return Math.pow(Math.log10(x + 1), 2)
 		}
 	},
 	4: {
@@ -434,7 +460,14 @@ function updateGluonsTab() {
 		var color = colors[c]
 		getEl(color + "PowerBuff").textContent = shorten(tmp.glB[color].mult)
 		getEl(color + "PowerNerf").textContent = shorten(tmp.glB[color].sub)
+		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(tmp.qu.gluons[color + colors[(c + 1) % 3]])
 	}
+
+	getEl("entangledBoost").className = "gluonupgrade " + (tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn")
+
+	getEl("enB1Eff").textContent = shorten(tmp.glB.enB1)
+	getEl("enB2Eff").textContent = shorten(tmp.glB.enB2)
+	getEl("enB3Eff").textContent = shorten(tmp.glB.enB3)
 }
 
 //Display: On load
@@ -487,7 +520,8 @@ function updateGluonsTabOnUpdate(mode) {
 		}
 	}
 
-	getEl("entangledBoosts").textContent = getFullExpansion(ENTANGLED_BOOSTS.amt)
+	getEl("entangledBoosts").textContent = getFullExpansion(tmp.qu.entBoosts || 0)
+	getEl("entangledBoostCost").textContent = shorten(ENTANGLED_BOOSTS.cost())
 
 	getEl("entangledBoostNext").textContent = ""
 	getEl("entangledBoostMaster").textContent = ""

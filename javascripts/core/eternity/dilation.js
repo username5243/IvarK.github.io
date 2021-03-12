@@ -479,7 +479,7 @@ function updateDilationUpgradeButtons() {
 	if (player.dilation.studies.includes(6)) {
 		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		getEl("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
-		getEl("dil54formula").textContent = tmp.ngp3 ? "(1.01^log(x))" : "(log(x)^0.5)"
+		getEl("dil54formula").textContent = tmp.ngp3 ? "(x^0.0045)" : "(log(x)^0.5)"
 		getEl("dil54desc").textContent = "Currently: " + shortenMoney(getDil17Bonus()) + 'x';
 	}
 	if (player.exdilation != undefined) getEl("dil42desc").textContent = "Currently: "+shortenMoney(getD18Bonus())+"x"

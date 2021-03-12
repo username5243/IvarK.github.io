@@ -4398,7 +4398,7 @@ function quantumOverallUpdating(diff){
 		var colorShorthands=["r","g","b"]
 		for (var c = 0; c < 3; c++) {
 			//console.log(colorShorthands[c], getColorPowerQuantity(colorShorthands[c]))
-			if (!ph.did("ghostify")) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
+			tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 		}
 		updateColorPowers()
 

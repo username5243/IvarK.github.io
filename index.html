@@ -1500,7 +1500,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 10)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 11)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4540,9 +4540,15 @@
 						<br>
 						You have <span id="entangledBoosts" style="font-size:35px">0</span> Entangled Boosters.
 						<br>
-						<button class="gluonupgrade storebtn" id="entangledBoost">Gain 1 Entangled Booster<br>(requires <span id="entangledBoostCost">1</span> Quantum Energy)</button>
+						<button class="gluonupgrade storebtn" id="entangledBoost" onclick="ENTANGLED_BOOSTS.buy()">Gain 1 Entangled Booster<br>(requires <span id="entangledBoostCost">1</span> Quantum Energy)</button>
 						<br><br>
 						<span id="entangledBoostNext">Next Entangled Boost unlocks at 1 Entangled Booster.</span>
+						<br><br>
+						Choose a gluon to boost Entangled Boosts:
+						<br>
+						<button class="gluonupgrade rg" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
+						<button class="gluonupgrade gb" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
+						<button class="gluonupgrade br" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
 						<br><br>
 						<span id="entangledBoostMaster">Reach ??? Entangled Boosters to master Boost #1.</span>
 						<br>

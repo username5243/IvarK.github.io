@@ -329,9 +329,9 @@ function getDil14Bonus() {
 }
 
 function getDil17Bonus() {
-	let r = player.meta.bestAntimatter.max(1).log10()
-	if (tmp.ngp3) r = Decimal.pow(1.01, r)
-	else r = Math.sqrt(r)
+	let r = player.meta.bestAntimatter.max(1)
+	if (tmp.ngp3) r = r.pow(0.0045)
+	else r = Math.sqrt(r.log10())
 	return r
 }
 
