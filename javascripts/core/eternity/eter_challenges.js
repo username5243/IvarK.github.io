@@ -403,7 +403,10 @@ function getECReward(x) {
 		let log = Math.sqrt(r.log10() * 400)
 		return Decimal.pow(10, Math.min(50000, log))	
 	}
-	if (x == 10) return Decimal.pow(getInfinitied(), m2 ? 2 : .9).times(Math.pow(c, pc ? 10 : 1) * (m2 ? 0.02 : 0.000002)).add(1).pow(getInfEffExp())
+	if (x == 10) {
+		let inf = getInfinitied()
+		return Decimal.pow(inf, m2 ? 2 : .9).times(Math.pow(c, pc ? 10 : 1) * (m2 ? 0.02 : 0.000002)).add(1).pow(getInfEffExp(inf))
+	}
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)

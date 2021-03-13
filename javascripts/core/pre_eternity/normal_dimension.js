@@ -615,23 +615,32 @@ function infUpg13Pow() {
 }
 
 function dimMults() {
-	let exp = getInfEffExp()
-	if (tmp.ngC) exp *= Decimal.log10(nA(getInfinitied(), 1)) + 1
+	let inf = getInfinitied()
+
+	let exp = getInfEffExp(inf)
+	if (tmp.ngC) exp *= Decimal.log10(nA(inf, 1)) + 1
 	if (inNGM(2)) exp *= 2
-	return Decimal.pow(Decimal.times(getInfinitied(), 0.2).add(1), exp)
+
+	return Decimal.pow(Decimal.times(inf, 0.2).add(1), exp)
 }
 
-function getInfEffExp() {
+function getInfBoostInput() {
+	var inf = getInfinitied()
+	return Decimal.pow(inf, getInfEffExp(inf))
+}
+
+function getInfEffExp(x) {
 	let exp = 1
 	if (hasTS(31)) exp *= 4
-	if (ENTANGLED_BOOSTS.has(2)) exp *= tmp.glB.enB2
+	if (masteryStudies.has(274)) exp *= getMTSMult(274)
 	return exp
 }
 
 function getInfinitiedMult() {
+	var inf = getInfinitied()
 	var add = inNGM(2) ? 0 : 1
-	var base = (inNGM(2) ? 1 : 0) + Decimal.add(getInfinitied(), 1).log10() * (inNGM(2) ? 100 : 10)
-	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp()
+	var base = (inNGM(2) ? 1 : 0) + Decimal.add(inf, 1).log10() * (inNGM(2) ? 100 : 10)
+	var exp = (inNGM(2) ? 2 : 1) * getInfEffExp(inf)
 	if (tmp.mod.ngmX >= 4) {
 		if ((player.currentChallenge == "postcngmm_1" || player.challenges.includes("postcngmm_1")) && !hasAch("r71")) exp += .2
 		else exp *= 1 + Math.log10(getInfinitied() + 1) / 3

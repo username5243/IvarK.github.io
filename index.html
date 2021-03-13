@@ -454,7 +454,7 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy241" onclick='buyMasteryStudy("t", 241)'>The IP mult multiplies IP gain by 2.2x per upgrade.</button></td>
+						<td><button class="timestudylocked" id="timestudy241" style='width: 200px; height: 100px' onclick='buyMasteryStudy("t", 241)'>The IP mult multiplies IP gain by 2.2x per upgrade.</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -487,9 +487,11 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
+						<td><button class="timestudylocked" id="timestudy274" style='font-size:10px' onclick='buyMasteryStudy("t", 274)'></button></td>
 						<td><button class="timestudylocked" id="timestudy271" style='font-size:10px' onclick='buyMasteryStudy("t", 271)'></button></td>
-						<td><button class="timestudylocked" id="timestudy272" onclick='buyMasteryStudy("t", 272)'></button></td>
+						<td><button class="timestudylocked" id="timestudy272" style='width: 200px; height: 100px' onclick='buyMasteryStudy("t", 272)'></button></td>
 						<td><button class="timestudylocked" id="timestudy273" onclick='buyMasteryStudy("t", 273)'></button></td>
+						<td><button class="timestudylocked" id="timestudy275" style='font-size:10px' onclick='buyMasteryStudy("t", 275)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1500,7 +1502,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 11)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 12)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4549,8 +4551,6 @@
 						<button class="gluonupgrade rg" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">RG</button>
 						<button class="gluonupgrade gb" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">GB</button>
 						<button class="gluonupgrade br" style="width: 48px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">BR</button>
-						<br><br>
-						<span id="entangledBoostMaster">Reach ??? Entangled Boosters to master Boost #1.</span>
 						<br>
 						Note: Mastered boosts are based on your best gluons instead!
 					</td>
@@ -4559,15 +4559,21 @@
 					<td id="enB1">
 						<b id="enB1Name" style="font-size: 25px">1st Entangled Boost</b>
 						<br>
+						<span id="enB1Type"></span>
+						<br>
 						Increase the quark energy multiplier by +<span id="enB1Eff" style="font-size:35px">???</span>x.
 					</td>
 					<td id="enB2">
 						<b id="enB2Name" style="font-size: 25px">2nd Entangled Boost</b>
 						<br>
-						Power up all bonuses from infinitied stat even more by ^<span id="enB2Eff" style="font-size:35px">???</span>.
+						<span id="enB2Type"></span>
+						<br>
+						Increase extra replicated galaxies by <span id="enB2Eff" style="font-size:35px">???</span>x.
 					</td>
 					<td id="enB3">
 						<b id="enB3Name" style="font-size: 25px">3rd Entangled Boost</b>
+						<br>
+						<span id="enB3Type"></span>
 						<br>
 						The exponent of TP gain formula is increased by +<span id="enB3Eff" style="font-size:35px">???</span>.
 					</td>
@@ -4575,15 +4581,21 @@
 					<td id="enB4">
 						<b id="enB4Name" style="font-size: 25px">1st Entangled Boost</b>
 						<br>
+						<span id="enB4Type"></span>
+						<br>
 						Boost something by <span id="enB4Eff" style="font-size:35px">???</span>x.
 					</td>
 					<td id="enB5">
 						<b id="enB5Name" style="font-size: 25px">2nd Entangled Boost</b>
 						<br>
+						<span id="enB5Type"></span>
+						<br>
 						Boost something by <span id="enB5Eff" style="font-size:35px">???</span>x.
 					</td>
 					<td id="enB6">
 						<b id="enB6Name" style="font-size: 25px">3rd Entangled Boost</b>
+						<br>
+						<span id="enB6Type"></span>
 						<br>
 						Boost something by <span id="enB6Eff" style="font-size:35px">???</span>x.
 					</td>

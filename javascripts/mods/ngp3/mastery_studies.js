@@ -1,12 +1,12 @@
 var masteryStudies = {
 	initCosts: {
-		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
+		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 274: 1/0, 275: 1/0, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1e71, 14: 1e71},
 		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
-		time_mults: {241: 1, 251: 2, 252: 2, 253: 2, 261: 2, 262: 2, 263: 2, 264: 2, 265: 2, 266: 2, 271: 2, 272: 2, 273: 2, 281: 4, 282: 4},
+		time_mults: {241: 1, 251: 2, 252: 2, 253: 2, 261: 2, 262: 2, 263: 2, 264: 2, 265: 2, 266: 2, 271: 9, 272: 1, 273: 9, 274: 0.3, 275: 0.3, 281: 1, 282: 1},
 		ec: {},
 		dil: {}
 	},
@@ -31,54 +31,66 @@ var masteryStudies = {
 		}
 	},
 	unlockReqConditions: {
-		7() {
+		241() {
+			return player.dilation.dilatedTime.gte(1e100)
+		},
+		272() {
+			return masteryStudies.bought >= 10
+		},
+		d7() {
 			return false //quantumWorth.gte(50)
 		},
-		8() {
+		d8() {
 			return tmp.qu.electrons.amount >= 16750
 		},
-		9() {
+		d9() {
 			return QCIntensity(8) >= 1
 		},
-		10() {
+		d10() {
 			return tmp.qu.pairedChallenges.completed == 4
 		},
-		11() {
+		d11() {
 			return tmp.eds[1].perm >= 10
 		},
-		12() {
+		d12() {
 			return tmp.eds[8].perm >= 10
 		},
-		13() {
+		d13() {
 			return tmp.qu.nanofield.rewards >= 16
 		},
-		14() {
+		d14() {
 			return hasAch("ng3p34")
 		}
 	},
 	unlockReqDisplays: {
-		7() {
+		241() {
+			return shorten(1e100) + " dilated time"
+		},
+		272() {
+			return "10 bought mastery studies"
+		},
+		d7() {
 			return "LOCKED UNTIL BETA V0.3" //"50 quantum worth"
 		},
-		8() {
+		d8() {
 			return getFullExpansion(16750) + " electrons"
 		},
-		9() {
+		d9() {
 			return "Complete Quantum Challenge 8"
 		},
-		10() {
+		d10() {
 			return "Complete Paired Challenge 4"
 		},
-		11() {
+		d11() {
 			return getFullExpansion(10) + " worker replicants"
 		},
-		12() {
+		d12() {
 			return getFullExpansion(10) + " Eighth Emperor Dimensions"
 		},
-		13() {
+		d13() {
 			return getFullExpansion(16) + " Nanofield rewards"
 		},
-		14() {
+		d14() {
 			return "Get 'The Challenging Day' achievement"
 		}
 	},
@@ -104,6 +116,10 @@ var masteryStudies = {
 		253() {
 			if (hasNU(6)) return 0
 			return Math.floor(getTotalRG() / 7) * 2
+		},
+		274(x) {
+			if (!x) x = getInfinitied()
+			return Decimal.add(x, 1).log10() / 5 + 1
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
@@ -239,10 +255,12 @@ var masteryStudies = {
 		271: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
 		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance increases higher above 100%.",
+		274: "Infinitied stat boosts itself to give stronger boosts.",
+		275: "Some boosts from Replicantis are greatly stronger.",
 		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		282: "Increase the OoMs of replicate interval scaling by +100."
+		282: "Increase the OoMs of replicate interval scaling by +100.",
 	},
-	hasStudyEffect: [251, 252, 253, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 274, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -253,13 +271,16 @@ var masteryStudies = {
 		253(x) {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
+		274(x) {
+			return "^" + shorten(x)
+		},
 		281(x) {
 			return "+" + shorten(x) + " OoMs"
 		},
 	},
 	ecsUpTo: 14,
 	unlocksUpTo: 14,
-	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [281], 272: [271, 273, 281, 282, "d8"], 273: [282], d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
+	allConnections: {241: [251, 253, 252], 251: [261, 262], 252: [263, 264], 253: [265, 266], 261: ["ec13"], 262: ["ec13"], 263: ["ec13"], 264: ["ec14"], 265: ["ec14"], 266: ["ec14"], ec13: ["d7"], ec14: ["d7"], d7: [272], 271: [274, 281], 272: [271, 273, "d8"], 273: [275, 282], d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {
 			return true //ph.did("quantum")
@@ -359,6 +380,7 @@ function setupMasteryStudiesHTML() {
 		var html = "<span id='ts" + name + "Desc'></span>"
 		if (masteryStudies.hasStudyEffect.includes(name)) html += "<br>Currently: <span id='ts" + name + "Current'></span>"
 		html += "<br>Cost: <span id='ts" + name + "Cost'></span> Time Theorems"
+		html += "<span id='ts" + name + "Req'></span>"
 		getEl("timestudy" + name).innerHTML = html
 	}
 }
@@ -436,15 +458,12 @@ function buyingDilStudyForQC() {
 function buyingDilStudyReplicant() {
 	showTab("quantumtab")
 	showQuantumTab("replicants")
-	getEl("timestudy322").style.display=""
 	updateReplicants()
 }
 
 function buyingDilStudyED() {
 	showTab("dimensions")
 	showDimTab("emperordimensions")
-	getEl("timestudy361").style.display = ""
-	getEl("timestudy362").style.display = ""
 	getEl("edtabbtn").style.display = ""
 	updateReplicants()
 }
@@ -539,9 +558,10 @@ function canBuyMasteryStudy(type, id) {
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
 		if (masteryStudies.latestBoughtRow > Math.floor(id / 10)) return false
 		if (!masteryStudies.spentable.includes(id)) return false
+		if (masteryStudies.unlockReqConditions[id] && !masteryStudies.unlockReqConditions[id]()) return false
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < masteryStudies.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
-		if (!ghostified && !(masteryStudies.unlockReqConditions[id] && masteryStudies.unlockReqConditions[id]())) return false
+		if (!ph.did("ghostidy") && !(masteryStudies.unlockReqConditions["d" + id] && masteryStudies.unlockReqConditions["d" + id]())) return false
 		if (!masteryStudies.spentable.includes("d" + id)) return false
 	} else {
 		if (player.timestudy.theorem < masteryStudies.costs.ec[id] || player.eternityChallUnlocked) return false
@@ -558,11 +578,13 @@ function updateMasteryStudyButtons() {
 	for (id = 0; id < masteryStudies.unlocked.length; id++) {
 		var name = masteryStudies.unlocked[id]
 		if (name + 0 == name) {
-			var className
+			var className = "timestudy"
 			var div = getEl("timestudy" + name)
-			if (player.masterystudies.includes("t" + name)) className = "timestudybought"
-			else if (canBuyMasteryStudy('t', name)) className = "timestudy"
-			else className = "timestudylocked"
+			if (!masteryStudies.has(name) && !canBuyMasteryStudy('t', name)) className = "timestudylocked"
+			else {
+				if (masteryStudies.has(name)) className += "bought"
+				if (name > 270) className += " elcstudy"
+			}
 			if (div.className !== className) div.className = className
 			if (masteryStudies.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
@@ -591,22 +613,25 @@ function updateMasteryStudyTextDisplay() {
 	getEl("costmult").textContent = shorten(masteryStudies.costMult)
 	getEl("totalmsbought").textContent = masteryStudies.bought
 	getEl("totalttspent").textContent = shortenDimensions(masteryStudies.ttSpent)
-	for (id = 0; id < masteryStudies.timeStudies.length; id++) {
-		var name = masteryStudies.timeStudies[id]
+	for (var i = 0; i < masteryStudies.timeStudies.length; i++) {
+		var name = masteryStudies.timeStudies[i]
 		if (!masteryStudies.unlocked.includes(name)) break
+
+		var req = masteryStudies.unlockReqDisplays[name] && masteryStudies.unlockReqDisplays[name]()
 		getEl("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
+		if (req) getEl("ts" + name + "Req").innerHTML = "<br>Requirement: " + req
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
-		if (!masteryStudies.unlocked.includes("ec"+id)) break
+		if (!masteryStudies.unlocked.includes("ec" + id)) break
 		getEl("ec" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.ec[id]) + " Time Theorems"
 		getEl("ec" + id + "Req").style.display = player.etercreq == id ? "none" : "block"
 		getEl("ec" + id + "Req").textContent = "Requirement: " + masteryStudies.ecReqDisplays[id]()
 	}
 	for (id = 7; id <= masteryStudies.unlocksUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("d" + id)) break
-		var req = masteryStudies.unlockReqDisplays[id]&&masteryStudies.unlockReqDisplays[id]()
+		var req = masteryStudies.unlockReqDisplays["d" + id] && masteryStudies.unlockReqDisplays["d" + id]()
 		getEl("ds" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.dil[id]) + " Time Theorems"
-		if (req) getEl("ds" + id + "Req").innerHTML = ghostified || !req ? "" : "<br>Requirement: " + req
+		if (req) getEl("ds" + id + "Req").innerHTML = ph.did("ghostify") ? "" : "<br>Requirement: " + req
 	}
 }
 

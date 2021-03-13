@@ -15,7 +15,7 @@ function getDTMultPostBRU11(){
 	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
-	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / 1e4, 1) - 1)))
+	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
 	return gain
 }
 
@@ -118,7 +118,7 @@ function getDilExp(disable) {
 	if (tmp.newNGP3E) ret += .1
 	if (player.meta !== undefined && !tmp.mod.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
-		if (ENTANGLED_BOOSTS.has(3)) ret += tmp.glB.enB3
+		if (ENTANGLED_BOOSTS.active(3)) ret += tmp.glB.enB3
 		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") ret += getTreeUpgradeEffect(2)
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 1 && disable != "neutrinos") ret += tmp.nb[1]
 	}

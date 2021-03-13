@@ -268,6 +268,8 @@ function buyManyInfinityDimension(tier, auto) {
 function buyMaxInfDims(tier, auto) {
 	if (tmp.ngC) ngC.condense.ids.max(tier)
 
+	if (player.currentEternityChall == "eterc8") return
+
 	let dim = player["infinityDimension"+tier]
 	let cost = getIDCost(tier)
 	if (player.infinityPoints.lt(cost)) return false

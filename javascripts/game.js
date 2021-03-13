@@ -5906,7 +5906,7 @@ function updatePowers() {
 	if (player.boughtDims) mult18 = getDimensionFinalMultiplier(1).max(1).times(getDimensionFinalMultiplier(8).max(1)).pow(0.02)
 	else mult18 = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(8)).pow(0.02)
 	if (player.currentEternityChall == "eterc10" || inQC(6)) {
-		ec10bonus = Decimal.pow(getInfinitied(), 1e3 * getInfEffExp()).max(1)
+		ec10bonus = Decimal.pow(getInfBoostInput(), 1e3).max(1)
 	} else {
 		ec10bonus = new Decimal(1)
 	}

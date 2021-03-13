@@ -197,6 +197,7 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
+	if (ENTANGLED_BOOSTS.active(2)) x *= tmp.glB.enB2
 	if (tmp.quActive) {
 		let exp = 1/3
 		if (masteryStudies.has(362)) exp = .4

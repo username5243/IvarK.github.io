@@ -2185,14 +2185,14 @@ br {
 .gluonupgradebought.gb { animation: gbupgbought 5s infinite }
 .gluonupgradebought.br { animation: brupgbought 5s infinite }
 
-#electrons .gluonupgrade.storebtn {
+#electrons .gluonupgrade.storebtn, .timestudy.elcstudy {
 	background-color: black !important;
 	border-color: #8e991e;
 	color: #8e991e;
 	animation: electronupg 5s infinite
 }
 
-#electrons .gluonupgrade.storebtn:hover {
+#electrons .gluonupgrade.storebtn:hover, .timestudy.elcstudy:hover {
 	background-color: #8e991e !important;
 	color: #ffffff;
 	animation: electronupg 5s infinite
