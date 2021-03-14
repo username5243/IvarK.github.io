@@ -439,7 +439,7 @@ function getPassiveTTGen() {
 	if (hasAch("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
 	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
-	if (isLEBoostUnlocked(6)) r *= tmp.leBonus[6]
+	if (ph.did("quantum")) r *= colorBoosts.b
 	if (tmp.ngp3) r = Math.min(r, 1e202)
 	return r
 }

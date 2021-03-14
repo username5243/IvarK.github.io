@@ -186,7 +186,7 @@ function getColorPowerQuantity(color) {
 	let ret = colorCharge[color]
 	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
 	if (tmp.glB) ret = ret * tmp.glB[color].mult - tmp.glB[color].sub
-	return ret
+	return Math.max(ret, 0)
 }
 
 colorBoosts = {
@@ -203,7 +203,7 @@ function updateColorPowers() {
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) + 1
 
 	//Blue
-	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2, 1), 3)
+	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2.5, 1), 2)
 }
 
 //Gluons

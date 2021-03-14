@@ -256,7 +256,7 @@ var masteryStudies = {
 		272: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 		273: "Replicate chance increases higher above 100%.",
 		274: "Infinitied stat boosts itself to give stronger boosts.",
-		275: "Some boosts from Replicantis are greatly stronger.",
+		275: "Some boosts from Replicantis are stronger.",
 		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
 		282: "Increase the OoMs of replicate interval scaling by +100.",
 	},
