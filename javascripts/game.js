@@ -4636,7 +4636,7 @@ function doQuantumButtonDisplayUpdating(diff){
 	getEl("quantumbtnFlavor").textContent = ((tmp.qu!==undefined?!tmp.qu.times&&(player.ghostify!==undefined?!player.ghostify.milestones:true):false)||!inQC(0)?(inBR?"I am":inQC(0)?"My computer is":tmp.qu.challenge.length>1?"These paired challenges are":"This challenge is")+" not powerful enough... ":"") + "I need to go quantum."
 	var showGain = ((ph.did("quantum") && tmp.qu.times) || (ph.did("ghostify") && player.ghostify.milestones)) && (inQC(0)||player.options.theme=="Aarex's Modifications") ? "QK" : ""
 	if (inBR) showGain = "SS"
-	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain "+shortenDimensions(quarkGain())+" quark"+(quarkGain().eq(1)?".":"s.") : ""
+	getEl("quantumbtnQKGain").textContent = showGain == "QK" ? "Gain "+shortenDimensions(quarkGain())+" anti-quark"+(quarkGain().eq(1)?".":"s.") : ""
 	if (showGain == "SS") getEl("quantumbtnQKGain").textContent = "Gain " + shortenDimensions(getSpaceShardsGain()) + " Space Shards."
 	if (showGain == "QK" && currentQKmin.gt(Decimal.pow(10, 1e5))) {
 		getEl("quantumbtnRate").textContent = ''

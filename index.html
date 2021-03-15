@@ -4440,8 +4440,8 @@
 		<div class='tab' id='quantumtab'>
 			<table class="table" align="center" style="margin: auto">
 				<tr>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Quarks</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Gluonic Boosts</button></td>
+					<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
+					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
 					<td id='electronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('electrons')">Electrons</button></td>
 					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Replicants</button></td>
@@ -4451,16 +4451,16 @@
 			</table>
 			<div class='quantumtab' id='uquarks'>
 				<canvas id="quarkCanvas"></canvas>
-				<div>Your quantum worth (sum of quarks, colored quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
+				<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
 				<table class='qtable'><tr>
 					<td class="rqC">
-						You have <span class="red" id="redQuarks" style="font-size:35px">0</span> red quarks.
+						You have <span class="red" id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
 					</td>
 					<td>
-						You have <span class="green" id="greenQuarks" style="font-size:35px">0</span> green quarks.
+						You have <span class="green" id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
 					</td>
 					<td class="bqC">
-						You have <span class="blue" id="blueQuarks" style="font-size:35px">0</span> blue quarks.
+						You have <span class="blue" id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
 					</td>
 				</tr><tr id="quarkAssort">
 					<td>
@@ -4489,7 +4489,7 @@
 					<button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button>
 				</div>
 				<div id="assortSettings">
-					You will get <span id="assort_amount"></span> colored quarks when you assort quarks<br>
+					You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks<br>
 					Assort percentage: <input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%<br>
 					<button class='storebtn' id="assort_percentage_10" style="width:50px" onclick="changeAssortPercentage(10)">10%</button>
 					<button class='storebtn' id="assort_percentage_25" style="width:50px" onclick="changeAssortPercentage(25)">25%</button>
@@ -4532,13 +4532,13 @@
 			</div>
 			<div class='quantumtab' id='gluons'>
 				<table id='gluonupgrades'><tr>
-					<td class="rqC">You have <span id="rg" style="font-size:35px">0</span> red-green gluons,<br>which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.</td>
-					<td class="gqC">You have <span id="gb" style="font-size:35px">0</span> green-blue gluons,<br>which multiply the green power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the blue power by -<span class="blue" id="bPowerNerf">0.00</span>.</td>
-					<td class="bqC">You have <span id="br" style="font-size:35px">0</span> blue-red gluons,<br>which multiply the blue power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the red power by -<span class="red" id="rPowerNerf">0.00</span>.</td>
+					<td class="rqC">You have <span id="rg" style="font-size:35px">0</span> red-green anti-gluons,<br>which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.</td>
+					<td class="gqC">You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,<br>which multiply the green power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the blue power by -<span class="blue" id="bPowerNerf">0.00</span>.</td>
+					<td class="bqC">You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,<br>which multiply the blue power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the red power by -<span class="red" id="rPowerNerf">0.00</span>.</td>
 				</tr><tr>
-					<td>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.</td>
-					<td>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green quarks from <span id='gbprev'></span> to to <span id='gbnext'>0</span>.</td>
-					<td>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue quarks from <span id='brprev'></span> to to <span id='brnext'>0</span>.</td>
+					<td>You will gain <span id='rggain'>0</span> on next quantum,<br>but reduce your red anti-quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.</td>
+					<td>You will gain <span id='gbgain'>0</span> on next quantum,<br>but reduce your green anti-quarks from <span id='gbprev'></span> to <span id='gbnext'>0</span>.</td>
+					<td>You will gain <span id='brgain'>0</span> on next quantum,<br>but reduce your blue anti-quarks from <span id='brprev'></span> to <span id='brnext'>0</span>.</td>
 				</tr><tr>
 					<td></td>
 					<td>
