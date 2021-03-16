@@ -468,31 +468,11 @@ function updateGluonsTab() {
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(tmp.qu.gluons[color + colors[(c + 1) % 3]])
 	}
 
-	getEl("entangledBoosts").textContent = getFullExpansion(tmp.qu.entBoosts || 0)
-	getEl("entangledBoostCost").textContent = shorten(ENTANGLED_BOOSTS.cost())
+	getEl("entangledBoost").className = "gluonupgrade " + (tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn")
 
-	getEl("entangledBoostNext").textContent = ""
-
-	var has = true
-	var mastered = true
-	var data = ENTANGLED_BOOSTS
-	for (var e = 1; e <= data.max; e++) {
-		if (has && !data.has(e)) {
-			has = false
-			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at Entangled Booster #" + data[e].req + "."
-		}
-		if (mastered && !data.mastered(e)) mastered = false
-
-		var el = getEl("enB" + e + "Name")
-		el.parentElement.style.display = has ? "" : "none"
-
-		if (has) {
-			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : ""
-			el.textContent = DISPLAY_NAMES[e] + (mastered ? " Mastered" : "") + " Entangled Boost"
-
-			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : ")<br>Reach " + getFullExpansion(data[e].masReq) + " Entangled Boosts to master this")
-		}
-	}
+	getEl("enB1Eff").textContent = shorten(tmp.glB.enB1)
+	getEl("enB2Eff").textContent = shorten(tmp.glB.enB2)
+	getEl("enB3Eff").textContent = shorten(tmp.glB.enB3)
 }
 
 //Display: On load
@@ -545,11 +525,31 @@ function updateGluonsTabOnUpdate(mode) {
 		}
 	}
 
-	getEl("entangledBoost").className = "gluonupgrade " + (tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn")
+	getEl("entangledBoosts").textContent = getFullExpansion(tmp.qu.entBoosts || 0)
+	getEl("entangledBoostCost").textContent = shorten(ENTANGLED_BOOSTS.cost())
 
-	getEl("enB1Eff").textContent = shorten(tmp.glB.enB1)
-	getEl("enB2Eff").textContent = shorten(tmp.glB.enB2)
-	getEl("enB3Eff").textContent = shorten(tmp.glB.enB3)
+	getEl("entangledBoostNext").textContent = ""
+
+	var has = true
+	var mastered = true
+	var data = ENTANGLED_BOOSTS
+	for (var e = 1; e <= data.max; e++) {
+		if (has && !data.has(e)) {
+			has = false
+			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at Entangled Booster #" + data[e].req + "."
+		}
+		if (mastered && !data.mastered(e)) mastered = false
+
+		var el = getEl("enB" + e + "Name")
+		el.parentElement.style.display = has ? "" : "none"
+
+		if (has) {
+			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : ""
+			el.textContent = DISPLAY_NAMES[e] + (mastered ? " Mastered" : "") + " Entangled Boost"
+
+			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : ")<br>Reach " + getFullExpansion(data[e].masReq) + " Entangled Boosts to master this")
+		}
+	}
 }
 
 //Quarks animation
