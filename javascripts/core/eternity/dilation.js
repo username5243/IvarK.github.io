@@ -520,9 +520,11 @@ function canBuyGalaxyThresholdUpg() {
 }
 
 function getFreeGalaxyThresholdIncrease() {
-	let dil2 = getDilUpgPower(2)
 	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : 1.35
-	thresholdMult += 3.65 * Math.pow(0.8, dil2)
+
+	let dil2 = getDilUpgPower(2)
+	if (dil2 > 0) thresholdMult += 3.65 * Math.pow(0.8, dil2)
+	else thresholdMult += 3.65
 
 	if (tmp.ngp3 && dil2 > 30) thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(Math.log10(dil2 / 3)))
 
