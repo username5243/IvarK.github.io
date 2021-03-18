@@ -118,7 +118,6 @@ function getDilExp(disable) {
 	if (tmp.newNGP3E) ret += .1
 	if (player.meta !== undefined && !tmp.mod.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
-		if (ENTANGLED_BOOSTS.active(3)) ret += tmp.glB.enB3
 		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") ret += getTreeUpgradeEffect(2)
 		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 1 && disable != "neutrinos") ret += tmp.nb[1]
 	}
@@ -370,12 +369,16 @@ function getDilUpgCost(id) {
 function getRebuyableDilUpgCost(id) {
 	let costGroup = DIL_UPG_COSTS["r"+id]
 	let amount = player.dilation.rebuyables[id] || 0
-	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1],amount))
+	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], amount))
 	if (tmp.mod.nguspV) {
-		if (id > 3) cost = cost.times(1e7)
-		if (id > 2 && cost.gte(1e25)) cost = Decimal.pow(10, Math.pow(cost.log10() / 2.5 - 5, 2))
-	} else if (id > 2) {
-		if (player.meta != undefined && amount >= costGroup[2]) return cost.times(Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2)/4))
+		if (id >= 4) cost = cost.times(1e7)
+		if (id >= 3 && cost.gte(1e25)) cost = Decimal.pow(10, Math.pow(cost.log10() / 2.5 - 5, 2))
+	} else if (id >= 3) {
+		if (player.meta != undefined && amount >= costGroup[2]) {
+			let costSS = Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2) / 4)
+			if (id == 3 && ENTANGLED_BOOSTS.active(3)) costSS = costSS.pow(1 / tmp.glB.enB3)
+			return cost.times(costSS)
+		}
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)
 	}
 	return cost

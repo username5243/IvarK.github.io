@@ -316,7 +316,7 @@ function updateGluonicBoosts() {
 }
 
 let ENTANGLED_BOOSTS = {
-	max: 6,
+	max: 9,
 	cost(x) {
 		if (x === undefined) x = tmp.qu.entBoosts || 0
 		return Math.pow(x + 1, 2)
@@ -340,7 +340,7 @@ let ENTANGLED_BOOSTS = {
 		return this[x].type == gluon[0] || this[x].type == gluon[1]
 	},
 	gluonEff(x) {
-		return Decimal.add(x, 1).log10()
+		return Math.sqrt(Decimal.add(x, 1).log10() * tmp.qu.quarkEnergy)
 	},
 	choose(x) {
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
@@ -349,48 +349,72 @@ let ENTANGLED_BOOSTS = {
 	},
 	1: {
 		req: 1,
-		masReq: 2,
+		masReq: 5,
 		type: "r",
 		eff(x) {
 			return Math.cbrt(x)
 		}
 	},
 	2: {
-		req: 4,
-		masReq: 10,
+		req: 2,
+		masReq: 7,
 		type: "g",
 		eff(x) {
 			return Math.log10(x + 1)
 		}
 	},
 	3: {
-		req: 5,
+		req: 4,
 		masReq: 10,
 		type: "b",
 		eff(x) {
-			return Math.pow(Math.log10(x + 1), 2)
+			return Math.log10(x + 1) + 1
 		}
 	},
 	4: {
-		req: 1/0,
+		req: 6,
 		masReq: 1/0,
-		type: "rg",
+		type: "b",
 		eff(x) {
 			return 1
 		}
 	},
 	5: {
-		req: 1/0,
+		req: 9,
 		masReq: 1/0,
-		type: "rg",
+		type: "r",
 		eff(x) {
 			return 1
 		}
 	},
 	6: {
-		req: 1/0,
+		req: 12,
 		masReq: 1/0,
-		type: "rg",
+		type: "g",
+		eff(x) {
+			return 1
+		}
+	},
+	7: {
+		req: 15,
+		masReq: 1/0,
+		type: "r",
+		eff(x) {
+			return 1
+		}
+	},
+	8: {
+		req: 18,
+		masReq: 1/0,
+		type: "b",
+		eff(x) {
+			return 1
+		}
+	},
+	9: {
+		req: 21,
+		masReq: 1/0,
+		type: "g",
 		eff(x) {
 			return 1
 		}
@@ -472,7 +496,15 @@ function updateGluonsTab() {
 
 	getEl("enB1Eff").textContent = shorten(tmp.glB.enB1)
 	getEl("enB2Eff").textContent = shorten(tmp.glB.enB2)
-	getEl("enB3Eff").textContent = shorten(tmp.glB.enB3)
+	getEl("enB3Eff").textContent = (100 - 100 / tmp.glB.enB3).toFixed(2)
+
+	getEl("enB4Eff").textContent = shorten(tmp.glB.enB4)
+	getEl("enB5Eff").textContent = shorten(tmp.glB.enB5)
+	getEl("enB6Eff").textContent = shorten(tmp.glB.enB6)
+
+	getEl("enB7Eff").textContent = shorten(tmp.glB.enB7)
+	getEl("enB8Eff").textContent = shorten(tmp.glB.enB8)
+	getEl("enB9Eff").textContent = shorten(tmp.glB.enB9)
 }
 
 //Display: On load
@@ -545,7 +577,7 @@ function updateGluonsTabOnUpdate(mode) {
 
 		if (has) {
 			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : ""
-			el.textContent = DISPLAY_NAMES[e] + (mastered ? " Mastered" : "") + " Entangled Boost"
+			el.textContent = (mastered ? " Mastered" : "") + " Entangled Boost #" + e
 
 			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : ")<br>Reach " + getFullExpansion(data[e].masReq) + " Entangled Boosts to master this")
 		}
