@@ -8,15 +8,22 @@ function hasDilationStudy(x) {
 
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
+
 	if (hasAch("ng3p11")) gain = gain.times(3)
-	if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4, Math.sqrt(player.quantum.nanofield.rewards)))
-	if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
-	if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
-	if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
-	if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
-	if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
-	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
+	if (ENTANGLED_BOOSTS.active(4)) gain = gain.times(tmp.glB.enB4)
 	return gain
+
+	/*
+		OLD STUFF
+
+		if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4, Math.sqrt(player.quantum.nanofield.rewards)))
+		if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
+		if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
+		if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
+		if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
+		if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
+		if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
+	*/
 }
 
 function getBaseDTProduction() {

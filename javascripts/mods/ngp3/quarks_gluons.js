@@ -312,7 +312,10 @@ function updateGluonicBoosts() {
 		ENTANGLED_BOOSTS.gluonEff(gluons.br)
 	)
 
-	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * tmp.qu.entBoosts)
+	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
+		if (!ENTANGLED_BOOSTS.has(i)) break
+		data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * tmp.qu.entBoosts)
+	}
 }
 
 let ENTANGLED_BOOSTS = {
@@ -324,6 +327,7 @@ let ENTANGLED_BOOSTS = {
 	buy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
 		tmp.qu.entBoosts = (tmp.qu.entBoosts || 0) + 1
+		updateGluonicBoosts()
 		updateGluonsTabOnUpdate()
 	},
 	has(x) {
@@ -368,15 +372,15 @@ let ENTANGLED_BOOSTS = {
 		masReq: 10,
 		type: "b",
 		eff(x) {
-			return Math.log10(x + 1) + 1
+			return Math.pow(x + 1, 0.2)
 		}
 	},
 	4: {
 		req: 6,
-		masReq: 1/0,
+		masReq: 12,
 		type: "b",
 		eff(x) {
-			return 1
+			return Decimal.pow(2, Math.pow(player.eternityPoints.add(1).log10(), 0.25))
 		}
 	},
 	5: {

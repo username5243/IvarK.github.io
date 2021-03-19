@@ -158,11 +158,15 @@ let neutrinoBoosts = {
 	max: 12,
 	1: {
 		eff(nt) {
-			let nb1mult = .75
-			if (tmp.newNGP3E) nb1mult = .8
-			if (isLEBoostUnlocked(7)) nb1mult *= tmp.leBonus[7]
-			let nb1neutrinos = nt[0].add(1).log10() + nt[1].add(1).log10() + nt[2].add(1).log10()
-			return Math.log10(1 + nb1neutrinos) * nb1mult
+			return 0
+
+			/*
+				let nb1mult = .75
+				if (tmp.newNGP3E) nb1mult = .8
+				if (isLEBoostUnlocked(7)) nb1mult *= tmp.leBonus[7]
+				let nb1neutrinos = nt[0].add(1).log10() + nt[1].add(1).log10() + nt[2].add(1).log10()
+				return Math.log10(1 + nb1neutrinos) * nb1mult
+			*/
 		},
 		cost: 1
 	},
