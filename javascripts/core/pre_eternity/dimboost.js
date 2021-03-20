@@ -176,17 +176,7 @@ function getDimboostCostIncrease () {
 }
 
 function getSupersonicStart() {
-	return 1/0
-	if (inQC(5)) return 0
-	if (inNGM(2)) return 1/0
-	let r = 56e4
-	if (tmp.ngC) r = 1
-	else if (tmp.mod.nguspV && !tmp.mod.nguepV) r = 1e5
-	if (tmp.ngp3) {
-		if (masteryStudies.has(331)) r += 24e4
-		if (isNanoEffectUsed("supersonic_start")) if (tmp.nf.effects.supersonic_start) r += tmp.nf.effects.supersonic_start 
-	}
-	return r
+	return inQC(5) ? 0 : 1/0
 }
 
 function getSupersonicMultIncrease() {

@@ -185,30 +185,6 @@ var softcap_data = {
 			start: 12e4,
 			pow: 0.5,
 			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 12e6,
-			pow: 2/3,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 12e7,
-			pow: 0.6,
-			derv: false
-		},
-		4: {
-			func: "pow",
-			start: 16e7,
-			pow: 0.5,
-			derv: false
-		},
-		5: {
-			func: "pow",
-			start: 20e7,
-			pow: 0.4,
-			derv: false
 		}
 	},
 	inf_time_log_dilation: {
@@ -227,18 +203,6 @@ var softcap_data = {
 			start: 100,
 			pow: 0.5,
 			derv: false
-		},
-		2: {
-			func: "pow",
-			start: 1e4,
-			pow: 0.4,
-			derv: false
-		},
-		3: {
-			func: "pow",
-			start: 2e4,
-			pow: .7,
-			derv: true
 		}
 	},
 	ig_log_high: { 
@@ -417,33 +381,6 @@ var softcap_data = {
 			start: 225,
 			pow: .5,
 			derv: false
-		}
-	},
-	EPtoQK: {
-		name: "log base 10 of the multiplier from Eternity Points to Quark gain",
-		1: {
-			func: "pow",
-			start: 1e3,
-			pow: .8,
-			derv: true
-		},
-		2: {
-			func: "pow",
-			start: 3e3,
-			pow: .7,
-			derv: true
-		},
-		3: {
-			func: "pow",
-			start: 1e4,
-			pow: .6,
-			derv: true
-		},
-		4: {
-			func: "pow",
-			start: 3e4,
-			pow: .5,
-			derv: true
 		}
 	},
 	qc3reward: {
@@ -868,7 +805,6 @@ function getSoftcapAmtFromId(id){
 		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
 		working_ts: () => getTickspeed().pow(-1).log10(),
 		bu45: () => bu.effects[45](),
-		EPtoQK: () => getEPtoQKMult(),
 		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
 		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
@@ -905,7 +841,6 @@ function hasSoftcapStarted(id, num){
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		ms322_log: tmp.ngp3,
-		EPtoQK: tmp.ngp3 && tmp.quActive,
 		qc3reward: tmp.ngp3 && tmp.qcRewards && tmp.qcRewards[3] !== undefined && tmp.quActive,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
@@ -1025,7 +960,6 @@ function updateSoftcapStatsTab(){
 		idbase: "softcap_idbase",
 		working_ts: "softcap_workts",
 		bu45: "softcap_bu45",
-		EPtoQK: "softcap_epqk",
 		qc3reward: "softcap_qc3",
 		mptd_log: "softcap_mptd",
 		// Condensened:

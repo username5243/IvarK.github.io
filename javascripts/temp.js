@@ -186,12 +186,8 @@ function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (hasAch("ng3p56")) x *= 1.03
-		/*if (ph.did("ghostify") && player.ghostify.neutrinos.boosts > 3) x *= tmp.nb[4]
-		if (isLEBoostUnlocked(8)) x *= tmp.leBonus[8]
-		if (!player.dilation.active && tmp.quActive && tmp.qu.breakEternity.upgrades.includes(inBigRip() ? 8 : 11)) x *= getBreakUpgMult(8)
-		//if (tmp.pce && tmp.pce.tb) x *= tmp.pce.tb
-		if (hasBosonicUpg(52)) x = Math.pow(x, tmp.blu[52].it)*/
-		x = softcap(x, "inf_time_log", 1)
+
+		x = softcap(x, "inf_time_log")
 		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")
 	}
 	tmp.it = Decimal.pow(10, x)
@@ -626,66 +622,4 @@ function updateWZBosonsTemp(){
 	if (isEnchantUsed(25)) zLogMult = tmp.bEn[25]
 
 	data.zbs = Decimal.pow(10, zLog * zLogMult) //Z Bosons boost to W Quark
-}
-
-function updateNanoEffectUsages() {
-	var data = []
-	tmp.nf.rewardsUsed = data
-	nanoRewards.effectToReward = {}
-
-	//First reward
-	var data2 = [hasBosonicUpg(21) ? "supersonic_start" : "hatch_speed"]
-	nanoRewards.effectsUsed[1] = data2
-
-	//Fifth reward
-	var data2 = ["dil_effect_exp"]
-	data2.push("light_threshold_speed")
-	nanoRewards.effectsUsed[5] = data2
-
-	//Seventh reward
-	var data2 = [hasBosonicUpg(22) ? "neutrinos" : "remote_start", "preon_charge"]
-	nanoRewards.effectsUsed[7] = data2
-
-	//Used Nanofield rewards
-	for (var x = 1; x <= 8; x++) {
-		var rewards = nanoRewards.effectsUsed[x]
-		for (var r = 0; r < rewards.length; r++) {
-			data.push(rewards[r])
-			nanoRewards.effectToReward[rewards[r]] = x
-		}
-	}
-}
-
-function updateNanoRewardPowers() {
-	var data = {}
-	tmp.nf.powers = data
-
-	for (var x = 1; x <= 8; x++) data[x] = getNanoRewardPower(x, tmp.nf.rewards)
-}
-
-function updateNanoRewardEffects() {
-	var data = {}
-	tmp.nf.effects = data
-
-	for (var e = 0; e < tmp.nf.rewardsUsed.length; e++) {
-		var effect = tmp.nf.rewardsUsed[e]
-		tmp.nf.effects[effect] = nanoRewards.effects[effect](tmp.nf.powers[nanoRewards.effectToReward[effect]])
-	}
-}
-
-function updateNanoRewardScaling() {
-	let d = nanoRewards.scaling
-	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
-	tmp.nf.scale -= 1
-}
-
-function updateNanoRewardTemp() {
-	tmp.nf = {}
-
-	if (!tmp.ngp3) return
-	if (!player.masterystudies.includes("d11")) return
-
-	updateNanoRewardScaling()
-	updateNanoEffectUsages()
-	//The rest is calculated by updateTemp().
 }

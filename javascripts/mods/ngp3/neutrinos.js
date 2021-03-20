@@ -1,13 +1,10 @@
 function updateNeutrinoBoostDisplay(){
-	if (player.ghostify.neutrinos.boosts >= 1) {
-		getEl("preNeutrinoBoost1").textContent = getDilExp("neutrinos").toFixed(2)
-		getEl("neutrinoBoost1").textContent = getDilExp().toFixed(2)
-	}
+	if (player.ghostify.neutrinos.boosts >= 1) getEl("neutrinoBoost1").textContent = shorten(tmp.nb[1])
 	if (player.ghostify.neutrinos.boosts >= 2) getEl("neutrinoBoost2").textContent = shorten(tmp.nb[2])
 	if (player.ghostify.neutrinos.boosts >= 3) getEl("neutrinoBoost3").textContent = shorten(tmp.nb[3])
-	if (player.ghostify.neutrinos.boosts >= 4) getEl("neutrinoBoost4").textContent = formatPercentage(tmp.nb[4] - 1)
+	if (player.ghostify.neutrinos.boosts >= 4) getEl("neutrinoBoost4").textContent = shorten(tmp.nb[4])
 	if (player.ghostify.neutrinos.boosts >= 5) getEl("neutrinoBoost5").textContent = formatPercentage(tmp.nb[5])
-	if (player.ghostify.neutrinos.boosts >= 6) getEl("neutrinoBoost6").textContent = formatPercentage(1 - 1 / tmp.nb[6])
+	if (player.ghostify.neutrinos.boosts >= 6) getEl("neutrinoBoost6").textContent = formatReductionPercentage(tmp.nb[6])
 	if (player.ghostify.neutrinos.boosts >= 7) {
 		let preEff = getTreeUpgradeEfficiency("noNB")
 		getEl("neutrinoBoost7").textContent = formatPercentage(tmp.nb[7] - 1)
@@ -158,15 +155,7 @@ let neutrinoBoosts = {
 	max: 12,
 	1: {
 		eff(nt) {
-			return 0
-
-			/*
-				let nb1mult = .75
-				if (tmp.newNGP3E) nb1mult = .8
-				if (isLEBoostUnlocked(7)) nb1mult *= tmp.leBonus[7]
-				let nb1neutrinos = nt[0].add(1).log10() + nt[1].add(1).log10() + nt[2].add(1).log10()
-				return Math.log10(1 + nb1neutrinos) * nb1mult
-			*/
+			return 1
 		},
 		cost: 1
 	},
@@ -184,9 +173,7 @@ let neutrinoBoosts = {
 	},
 	4: {
 		eff(nt) {
-			var nb4neutrinos = Math.pow(nt[0].add(1).log10(),2)+Math.pow(nt[1].add(1).log10(),2)+Math.pow(nt[2].add(1).log10(),2)
-			var nb4 = Math.pow(nb4neutrinos, .25) * 0.07 + 1
-			return nb4
+			return 1
 		},
 		cost: 6
 	},

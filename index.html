@@ -1506,7 +1506,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 15)</p>
+				<p id='versionDescBeta'>(Beta v0.2: Colored Anti-Quarks - Alpha 16)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1629,7 +1629,6 @@
 				<div id="softcap_idbase"></div>
 				<div id="softcap_workts"></div>
 				<div id="softcap_bu45"></div>
-				<div id="softcap_epqk"></div>
 				<div id="softcap_qc3"></div>
 				<div id="softcap_mptd"></div>
 				<div id="softcap_C_nd"></div>
@@ -2212,7 +2211,7 @@
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)" ach-tooltip="Have 900 galaxies without unlocking Time Dilation. Reward: You permanently keep your banked Infinities, and bank 5% of your Eternities on Quantum."><br></div>
 							</td>
 							<td>
-								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)"><br></div>
+								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)" ach-tooltip="Quantum in under 30 seconds."><br></div>
 							</td>
 							<td>
 								<div id="Old age" class="achievement achievementlocked" style="background-image: url(images/111.png)"><br></div>
@@ -4546,7 +4545,9 @@
 						<br>
 						You have <span id="entangledBoosts" style="font-size:35px">0</span> Entangled Boosters.
 						<br>
-						<button class="gluonupgrade storebtn" id="entangledBoost" onclick="ENTANGLED_BOOSTS.buy()">Gain 1 Entangled Booster<br>(requires <span id="entangledBoostCost">1</span> Quantum Energy)</button>
+						<button class="gluonupgrade storebtn" id="entangledBoost" style="width: 240px" onclick="ENTANGLED_BOOSTS.buy()">Gain 1 Entangled Booster<br>(requires <span id="entangledBoostCost">1</span> Quantum Energy)</button>
+						<br>
+						<button class='storebtn' onclick='ENTANGLED_BOOSTS.maxBuy()' style="width: 240px">Max buy Entangled Boosters</button>
 						<br><br>
 						<span id="entangledBoostNext">Next Entangled Boost unlocks at 1 Entangled Booster.</span>
 						<br><br>
@@ -4843,12 +4844,12 @@
 						<td>You have <span class="neutrinos" id="tauNeutrinos">0</span> Tau neutrinos.</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow1">
-						<td>They increase TP gain formula exponent from <span id="preNeutrinoBoost1"></span> to <span class="neutrinos" id="neutrinoBoost1">1.0</span>.</td>
+						<td id="neutrinoBoostCell1">They boost something by <span class="neutrinos" id="neutrinoBoost1">1.0</span>x.</td>
 						<td id="neutrinoBoostCell2">They boost something by <span class="neutrinos" id="neutrinoBoost2">1.0</span>x.</td>
 						<td id="neutrinoBoostCell3">They boost something by <span class="neutrinos" id="neutrinoBoost3">1.0</span>x.</td>
 					</tr>
 					<tr class="neutrinoBoosts" id="neutrinoBoostRow2">
-						<td>They make Infinite Time reward stronger by <span class="neutrinos" id="neutrinoBoost4">0.0</span>%.</td>
+						<td id="neutrinoBoostCell4">They boost something by <span class="neutrinos" id="neutrinoBoost4">1.0</span>x.</td>
 						<td id="neutrinoBoostCell5">They reduce the nerf to red power boost over 130% by <span class="neutrinos" id="neutrinoBoost5">100.0</span>%.</td>
 						<td id="neutrinoBoostCell6">They slow down Distant Antimatter Galaxies by <span class="neutrinos" id="neutrinoBoost6">0.0</span>%.<br>(Nerfed in Big Rip runs)</td>
 					</tr>
@@ -4950,8 +4951,8 @@
 							Is active: <input id="isAutoGhostOn6" type="checkbox" onchange="toggleAutoGhost(6)"></input>
 						</div></td>
 						<td id="autoGhost7"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-QK Upgrade Ghost</b><br>
-							(buys if possible)<br>
+							<b>Auto-Entangle Ghost</b><br>
+							(buys Entangled Boosters if possible)<br>
 							Power usage: <span id="ghostcost7">bug</span><br>
 							Is active: <input id="isAutoGhostOn7" type="checkbox" onchange="toggleAutoGhost(7)"></input>
 						</div></td>
@@ -4968,7 +4969,7 @@
 							Is active: <input id="isAutoGhostOn9" type="checkbox" onchange="toggleAutoGhost(9)"></input>
 						</div></td>
 						<td id="autoGhost10"><div class="autoBuyerDiv" style="display:block">
-							<b>Auto-Limit Upgrade Ghost</b><br>
+							<b>Auto-Worker Limit Ghost</b><br>
 							(buys if possible)<br>
 							Power usage: <span id="ghostcost10">bug</span><br>
 							Is active: <input id="isAutoGhostOn10" type="checkbox" onchange="toggleAutoGhost(10)"></input>

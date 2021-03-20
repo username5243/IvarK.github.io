@@ -3511,7 +3511,7 @@ function exitChallenge() {
 		updateEternityChallenges();
 		return
 	}
-	if (tmp.ngp3) if (!inQC(0)) quantum(false, true)
+	if (!inQC(0)) quantum(false, true)
 }
 
 function onChallengeFail() {
@@ -3862,7 +3862,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 		for (let u = 1; u <= 4; u++) while (buyElectronUpg(u, true)) bought = true
 		if (bought) updateElectrons()
 	}
-	if (isAutoGhostActive(7)) maxQuarkMult()
+	if (isAutoGhostActive(7)) ENTANGLED_BOOSTS.maxBuy()
 }
 
 function checkGluonRounding(){

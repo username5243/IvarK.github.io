@@ -176,28 +176,25 @@ var nanoRewards = {
 		preon_energy: function(x) {
 			return Decimal.pow(2.5, Math.sqrt(x))
 		},
-		supersonic_start: function(x) {
-			return Math.floor(Math.max(x - 3.5, 0) * 75e5)
-		},
 		neutrinos: function(x) {
-			return Decimal.pow(10, x * 10)
+			return Decimal.pow(10, Math.pow(x, 2) * 5)
 		},
 		light_threshold_speed: function(x) {
 			return Math.max(Math.sqrt(x + 1) / 4, 1)
 		},
 		unknown: function(x) {
-			return
+			return 1
 		}
 	},
 	effectDisplays: {
 		hatch_speed: function(x) {
-			return "eggons hatch " + shorten(x) + "x faster"
+			return "Eggons hatch " + shorten(x) + "x faster"
 		},
 		ma_effect_exp: function(x) {
 			return "meta-antimatter effect is buffed to ^" + x.toFixed(2)
 		},
 		dil_gal_gain: function(x) {
-			return "you gain " + (x * 100 - 100).toFixed(2) + "% more free galaxies"
+			return "you gain " + formatPercentage(x - 1) + "% more free galaxies"
 		},
 		dt_to_ma_exp: function(x) {
 			return "dilated time gives ^" + x.toFixed(3) + " boost to all Meta Dimensions"
@@ -217,9 +214,6 @@ var nanoRewards = {
 		preon_energy: function(x) {
 			return "you produce " + shorten(x) + "x faster preon energy"
 		},
-		supersonic_start: function(x) {
-			return "Dimension Supersonic scaling starts " + getFullExpansion(Math.floor(x)) + " later"
-		},
 		neutrinos: function(x) {
 			return "you gain " + shorten(x) + "x more neutrinos"
 		},
@@ -227,7 +221,7 @@ var nanoRewards = {
 			return "Light threshold increases " + x.toFixed(2) + "x slower"
 		},
 		unknown: function(x) {
-			return "???"
+			return "they boost something by " + shorten(x) + "x"
 		}
 	},
 	effectsUsed: {
@@ -329,6 +323,68 @@ function updateNextPreonEnergyThreshold(){
 	}
 	tmp.qu.nanofield.power += toSkip
 	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
+}
+
+function updateNanoEffectUsages() {
+	var data = []
+	tmp.nf.rewardsUsed = data
+	nanoRewards.effectToReward = {}
+
+	//First reward
+	var data2 = [hasBosonicUpg(21) ? "unknown" : "hatch_speed"]
+	nanoRewards.effectsUsed[1] = data2
+
+	//Fifth reward
+	var data2 = ["dil_effect_exp"]
+	data2.push("light_threshold_speed")
+	nanoRewards.effectsUsed[5] = data2
+
+	//Seventh reward
+	var data2 = [hasBosonicUpg(22) ? "neutrinos" : "remote_start", "preon_charge"]
+	nanoRewards.effectsUsed[7] = data2
+
+	//Used Nanofield rewards
+	for (var x = 1; x <= 8; x++) {
+		var rewards = nanoRewards.effectsUsed[x]
+		for (var r = 0; r < rewards.length; r++) {
+			data.push(rewards[r])
+			nanoRewards.effectToReward[rewards[r]] = x
+		}
+	}
+}
+
+function updateNanoRewardPowers() {
+	var data = {}
+	tmp.nf.powers = data
+
+	for (var x = 1; x <= 8; x++) data[x] = getNanoRewardPower(x, tmp.nf.rewards)
+}
+
+function updateNanoRewardEffects() {
+	var data = {}
+	tmp.nf.effects = data
+
+	for (var e = 0; e < tmp.nf.rewardsUsed.length; e++) {
+		var effect = tmp.nf.rewardsUsed[e]
+		tmp.nf.effects[effect] = nanoRewards.effects[effect](tmp.nf.powers[nanoRewards.effectToReward[effect]])
+	}
+}
+
+function updateNanoRewardScaling() {
+	let d = nanoRewards.scaling
+	for (let s = 1; s <= nanoRewards.scaling.max; s++) if (isNanoScalingActive(s) && tmp.qu.nanofield.rewards >= d[s].start) tmp.nf.scale = s
+	tmp.nf.scale -= 1
+}
+
+function updateNanoRewardTemp() {
+	tmp.nf = {}
+
+	if (!tmp.ngp3) return
+	if (!player.masterystudies.includes("d11")) return
+
+	updateNanoRewardScaling()
+	updateNanoEffectUsages()
+	//The rest is calculated by updateTemp().
 }
 
 function getAntiPreonGhostWake() {

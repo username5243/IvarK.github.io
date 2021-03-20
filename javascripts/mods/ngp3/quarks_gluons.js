@@ -322,11 +322,21 @@ let ENTANGLED_BOOSTS = {
 	max: 9,
 	cost(x) {
 		if (x === undefined) x = tmp.qu.entBoosts || 0
-		return Math.pow(x + 1, 2)
+		return Math.pow(x + 1, 1.5)
+	},
+	target() {
+		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5))
 	},
 	buy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
 		tmp.qu.entBoosts = (tmp.qu.entBoosts || 0) + 1
+		updateGluonicBoosts()
+		updateGluonsTabOnUpdate()
+		console.log(tmp.glB)
+	},
+	maxBuy() {
+		if (!(tmp.qu.quarkEnergy >= this.cost())) return
+		tmp.qu.entBoosts = this.target()
 		updateGluonicBoosts()
 		updateGluonsTabOnUpdate()
 	},
@@ -356,7 +366,10 @@ let ENTANGLED_BOOSTS = {
 		masReq: 5,
 		type: "r",
 		eff(x) {
-			return Math.cbrt(x)
+			return Math.pow(x, 0.15)
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	2: {
@@ -365,6 +378,9 @@ let ENTANGLED_BOOSTS = {
 		type: "g",
 		eff(x) {
 			return Math.log10(x + 1)
+		},
+		effDisplay(x) {
+			return x.toFixed(3)
 		}
 	},
 	3: {
@@ -373,6 +389,9 @@ let ENTANGLED_BOOSTS = {
 		type: "b",
 		eff(x) {
 			return Math.pow(x + 1, 0.2)
+		},
+		effDisplay(x) {
+			return formatReductionPercentage(x, 2)
 		}
 	},
 	4: {
@@ -381,6 +400,9 @@ let ENTANGLED_BOOSTS = {
 		type: "b",
 		eff(x) {
 			return Decimal.pow(2, Math.pow(player.eternityPoints.add(1).log10(), 0.25))
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	5: {
@@ -389,6 +411,9 @@ let ENTANGLED_BOOSTS = {
 		type: "r",
 		eff(x) {
 			return 1
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	6: {
@@ -397,6 +422,9 @@ let ENTANGLED_BOOSTS = {
 		type: "g",
 		eff(x) {
 			return 1
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	7: {
@@ -405,6 +433,9 @@ let ENTANGLED_BOOSTS = {
 		type: "r",
 		eff(x) {
 			return 1
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	8: {
@@ -413,6 +444,9 @@ let ENTANGLED_BOOSTS = {
 		type: "b",
 		eff(x) {
 			return 1
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	},
 	9: {
@@ -421,6 +455,9 @@ let ENTANGLED_BOOSTS = {
 		type: "g",
 		eff(x) {
 			return 1
+		},
+		effDisplay(x) {
+			return shorten(x)
 		}
 	}
 }
@@ -498,17 +535,10 @@ function updateGluonsTab() {
 
 	getEl("entangledBoost").className = "gluonupgrade " + (tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn")
 
-	getEl("enB1Eff").textContent = shorten(tmp.glB.enB1)
-	getEl("enB2Eff").textContent = shorten(tmp.glB.enB2)
-	getEl("enB3Eff").textContent = (100 - 100 / tmp.glB.enB3).toFixed(2)
-
-	getEl("enB4Eff").textContent = shorten(tmp.glB.enB4)
-	getEl("enB5Eff").textContent = shorten(tmp.glB.enB5)
-	getEl("enB6Eff").textContent = shorten(tmp.glB.enB6)
-
-	getEl("enB7Eff").textContent = shorten(tmp.glB.enB7)
-	getEl("enB8Eff").textContent = shorten(tmp.glB.enB8)
-	getEl("enB9Eff").textContent = shorten(tmp.glB.enB9)
+	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
+		if (!ENTANGLED_BOOSTS.has(i)) break
+		getEl("enB" + i + "Eff").textContent = ENTANGLED_BOOSTS[i].effDisplay(tmp.glB["enB" + i])
+	}
 }
 
 //Display: On load

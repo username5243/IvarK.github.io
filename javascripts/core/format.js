@@ -764,3 +764,8 @@ function formatPercentage(x, digits = 1) {
 	if (parseFloat(n) < 1e3 && !FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return n
 	return getFullExpansion(Math.round(x))
 }
+
+function formatReductionPercentage(x, digits = 1) {
+	digits += Math.floor(Math.log10(x))
+	return (100 - 100 / x).toFixed(digits)
+}

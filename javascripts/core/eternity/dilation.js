@@ -67,7 +67,7 @@ function getDilTimeGainPerSecond() {
 
 function getDTGainExp() {
 	let exp = GUActive("br3") ? 1.1 : 1
-	if (ph.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
+	//if (ph.has("ghostify") && player.ghostify && player.ghostify.ghostlyPhotons.unl) exp *= tmp.le[0]
 	return exp
 }
 
@@ -126,7 +126,6 @@ function getDilExp(disable) {
 	if (player.meta !== undefined && !tmp.mod.nguspV) ret += getDilUpgPower(4) / 4
 	if (tmp.ngp3) {
 		if ((!tmp.qu.bigRip.active || tmp.qu.bigRip.upgrades.includes(11)) && isTreeUpgActive(2) && disable != "TU3") ret += getTreeUpgradeEffect(2)
-		if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 1 && disable != "neutrinos") ret += tmp.nb[1]
 	}
 	return ret
 }
