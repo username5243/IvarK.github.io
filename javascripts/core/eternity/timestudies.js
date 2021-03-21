@@ -536,11 +536,7 @@ function importSpec () {
 	}
 }
 
-function exportStudyTree() {
-	let output = getEl('output');
-	let parent = output.parentElement;
-
-	parent.style.display = "";
+function getStudyTreeStr() {
 	if (player.boughtDims) {
 		let l = [];
 		for (let i = 1; i < 7; i++) {
@@ -548,7 +544,7 @@ function exportStudyTree() {
 				l.push(player.timestudy.ers_studies[i]);
 			}
 		}
-		output.value = l.join('/');
+		return l.join('/')
 	} else {
 		var mtsstudies=[]
 		if (tmp.ngp3) {
@@ -557,8 +553,16 @@ function exportStudyTree() {
 				if (t) mtsstudies.push(t - 230)
 			}
 		}
-		output.value = player.timestudy.studies + (mtsstudies.length ? "|ms" + mtsstudies : "") + "|" + player.eternityChallUnlocked
+		return player.timestudy.studies + (mtsstudies.length ? "|ms" + mtsstudies : "") + "|" + player.eternityChallUnlocked
 	}
+}
+
+function exportStudyTree() {
+	let output = getEl('output');
+	let parent = output.parentElement;
+
+	parent.style.display = "";
+	output.value = getStudyTreeStr()
 	output.onblur = function() { parent.style.display = "none";}
 	output.focus();
 	output.select();
@@ -644,36 +648,23 @@ function importStudyTree(input) {
 			drawStudyTree()
 		}
 	}
-};
+}
 
 function new_preset(importing) {
-	onImport=true
+	var input
+
 	if (importing) {
-		var input=prompt()
+		onImport = true
+		input = prompt()
+
+		onImport = false
 		if (input === null) return
-	} else if (player.boughtDims) {
-		let l = [];
-		for (let i = 1; i < 7; i++) {
-			if (i < 5 || getTotalTT(player) > 59) {
-				l.push(player.timestudy.ers_studies[i]);
-			}
-		}
-		var input=l.join('/');
-	} else {
-		var mtsstudies=[]
-		if (player.masterystudies) {
-			for (var id = 0; id < player.masterystudies.length; id++) {
-				var t = player.masterystudies[id].split("t")[1]
-				if (t) mtsstudies.push(t)
-			}
-		}
-		var input = player.timestudy.studies + (mtsstudies.length > 0 ? "," + mtsstudies : "") + "|" + player.eternityChallUnlocked
-	}
-	onImport = false
+	} else input = getStudyTreeStr()
+
 	var placement = 1
 	while (poData.includes(placement)) placement++
-	presets[placement] = {preset:input}
-	localStorage.setItem(btoa(presetPrefix+placement), btoa(JSON.stringify(presets[placement])))
+	presets[placement] = {preset: input}
+	localStorage.setItem(btoa(presetPrefix + placement), btoa(JSON.stringify(presets[placement])))
 	poData.push(placement)
 	latestRow = getEl("presets").insertRow(loadedPresets)
 	latestRow.innerHTML = getPresetLayout(placement)
@@ -689,7 +680,9 @@ var onNGP3 = false
 var poData
 
 function save_preset(id) {
-	presets[id].preset = getEl("preset_" + id +"_data").value
+	let data = getEl("preset_" + id +"_data").value
+	presets[id].preset = data != presets[id].preset ? data : getStudyTreeStr()
+	getEl("preset_" + id +"_data").value = presets[id].preset
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 	$.notify("Preset saved", "info")
 }
@@ -703,9 +696,18 @@ function load_preset(id, reset) {
 		player.respecMastery = true
 		eternity(false, false, true)
 	}
-	importStudyTree(presets[id].preset)
+	
+	let data = getEl("preset_" + id +"_data").value
+	let saved = false
+	if (data != presets[id].preset) {
+		presets[id].preset = data
+		localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+		saved = true
+	}
+
+	importStudyTree(preset)
 	closeToolTip()
-	$.notify("Preset loaded", "info")
+	$.notify("Preset" + (saved ? " saved and " : "") + " loaded", "info")
 }
 
 function delete_preset(presetId) {
