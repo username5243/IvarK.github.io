@@ -1098,6 +1098,22 @@ button {
 	margin: 5px;
 }
 
+.loadmenu tr {
+	position: relative;
+	width: 590px;
+	display: block
+}
+
+.metaOpts {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.metaOpts .storebtn {
+	width: 25px
+}
+
 .longbtn {
 	width: 257.5px
 }

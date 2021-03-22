@@ -1846,7 +1846,12 @@ function load_saves() {
 }
 
 function getSaveLayout(id) {
-	return "<b id='save_"+id+"_title'>Save #"+(loadedSaves+1)+"</b><div id='save_"+id+"_desc'></div><button class='storebtn' onclick='overwrite_save("+id+")'>Save</button><button class='storebtn' onclick='change_save("+id+")'>Load</button><button class='storebtn' onclick='rename_save("+id+")'>Rename</button><button class='storebtn' onclick='export_save("+id+")'>Export</button><button class='storebtn' onclick='import_save("+id+")'>Import</button><button class='storebtn' onclick='move("+id+",-1)'>Move up</button><button class='storebtn' onclick='move("+id+",1)'>Move down</button><button class='storebtn' onclick='delete_save("+id+")'>Delete</button>"
+	return "<b id='save_"+id+"_title'>Save #"+(loadedSaves+1)+"</b><div id='save_"+id+"_desc'></div><button class='storebtn' onclick='overwrite_save("+id+")'>Save</button><button class='storebtn' onclick='change_save("+id+")'>Load</button><button class='storebtn' onclick='rename_save("+id+")'>Rename</button><button class='storebtn' onclick='export_save("+id+")'>Export</button><button class='storebtn' onclick='import_save("+id+")'>Import</button><button class='storebtn' onclick='delete_save(" + id + ")'>Delete</button>" +
+
+	"<span class='metaOpts'>" +
+		"<button class='storebtn' onclick='move(" + id + ", -1)'>⭡</button>" +
+		"<button class='storebtn' onclick='move(" + id + ", 1)'>⭣</button>" +
+	"</span>"
 }
 
 function changeSaveDesc(saveId, placement) {
@@ -1895,7 +1900,7 @@ function changeSaveDesc(saveId, placement) {
 		if ((temp.exdilation || temp.meta) && !temp.aarexModifications.newGamePlusVersion) msg += ", The Grand Run [No NG+]"
 		if (temp.aarexModifications.aau) msg = (msg == "NG" ? "" : msg + ", ") + "AAU"
 		if (temp.aarexModifications.ls) msg = (msg == "NG" ? "" : msg + ", ") + "Light Speed"
-		msg = (msg == "NG" ? "" : "(<b>" + msg + "</b>)<br><br>") + (isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>"
+		msg = (msg == "NG" ? "(<b>Vanilla</b>)<br>" : "(<b>" + msg + "</b>)<br>") + (isSaveCurrent ? "Selected" : "Played for " + timeDisplayShort(temp.totalTimePlayed)) + "<br>"
 		var originalBreak = player.break
 		var originalNotation = player.options.notation
 		var originalCommas = player.options.commas

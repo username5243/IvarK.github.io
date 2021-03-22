@@ -1,4 +1,4 @@
-presets={}
+presets = {}
 
 // Time studies
 // Todo: Track how much TT you have bought
@@ -546,7 +546,7 @@ function getStudyTreeStr() {
 		}
 		return l.join('/')
 	} else {
-		var mtsstudies=[]
+		var mtsstudies = []
 		if (tmp.ngp3) {
 			for (id = 0; id < player.masterystudies.length; id++) {
 				var t = player.masterystudies[id].split("t")[1]
@@ -592,12 +592,12 @@ function importStudyTree(input) {
 			}
 		}
 	} else {
-		var splits = input.split("|")
+		var data = parsePreset(input)
 		var oldLength = player.timestudy.studies.length
 		var oldLengthMS = tmp.ngp3 && player.masterystudies.length
 
 		//Time studies
-		var studiesToBuy = splits[0].split(",");
+		var studiesToBuy = data.ts
 		var secondSplitPick = 0
 		var laterSecondSplits = []
 		var earlyDLStudies = []
@@ -607,10 +607,7 @@ function importStudyTree(input) {
 			if ((study < 120 || study > 150 || (secondSplitPick < 1 || study % 10 == secondSplitPick)) && (study < 220 || study > 240 || earlyDLStudies.includes(study + (study % 2 > 0 ? - 1 : 1)))) {
 				if (study > 120 && study < 150) secondSplitPick = study % 10
 				else if (study > 220 && study < 240) earlyDLStudies.push(study)
-				if (study > 240) {
-					//Old format compatability
-					buyMasteryStudy("t", study, true)
-				} else buyTimeStudy(study, true);
+				buyTimeStudy(study, true)
 			} else if (study < 150) laterSecondSplits.push(study)
 			else laterDLStudies.push(study)
 		}
@@ -618,24 +615,23 @@ function importStudyTree(input) {
 		for (var i=0; i < laterDLStudies.length; i++) buyTimeStudy(laterDLStudies[i], true)
 
 		//Mastery Studies
-		if (splits.length == 3) {
-			var studiesToBuy = splits[1].split(",");
+		if (data.ms) {
+			var studiesToBuy = data.ms
 			for (var i = 0; i < studiesToBuy.length; i++) {
-				var study = studiesToBuy[i]
-				if (study == "ms11") buyMasteryStudy("t", 241, true)
-				else buyMasteryStudy("t", parseInt(study) + 230, true)
+				var study = parseInt(studiesToBuy[i].split("t")[1])
+				buyMasteryStudy("t", study, true)
 			}
 		}
 
 		//Eternity Challenges
-		var ec = parseInt(splits[splits.length - 1])
+		var ec = data.ec
 		if (ec > 0) {
-			justImported = true;
-			if (ec > 12) {
-				buyMasteryStudy("ec", ec, true)
-				changeMS = true
-			} else getEl("ec" + parseInt(input.split("|")[1]) + "unl").click();
-			setTimeout(function(){ justImported = false; }, 100);
+			justImported = true
+
+			if (ec > 12) buyMasteryStudy("ec", ec, true)
+			else getEl("ec" + ec + "unl").click()
+
+			justImported = false
 		}
 		if (tmp.ngp3 && player.masterystudies.length > oldLengthMS) {
 			updateMasteryStudyCosts()
@@ -648,6 +644,52 @@ function importStudyTree(input) {
 			drawStudyTree()
 		}
 	}
+}
+
+function parsePreset(str) {
+	let splits = str.split("|")
+	let data = {}
+
+	let tsAssigned = false
+	let msAssigned = false
+	let ecAssigned = false
+
+	if (splits.length >= 1) {
+		tsAssigned = true
+
+		var tmpData = splits[0].split(",")
+		var tmpData2 = []
+		data.ts = tmpData
+	
+		for (var i = 0; i < tmpData.length; i++) {
+			let num = parseInt(tmpData[i])
+			if (num > 240) tmpData2.push("t" + num) //Old format compatability
+			else tmpData[i] = num
+		}
+
+		if (tmpData2.length > 0) {
+			data.ms = tmpData2
+			msAssigned = true
+		}
+	}
+	if (splits.length >= 3 && !msAssigned) {
+		msAssigned = true
+
+		var tmpData = splits[1].split(",")
+		for (var i = 0; i < tmpData.length; i++) tmpData[i] = "t" + (tmpData[i] == "ms11" ? 241 : parseInt(tmpData[i]) + 230)
+		data.ms = tmpData
+	}
+	if (splits.length >= 2) {
+		ecAssigned = true
+
+		data.ec = parseInt(splits[splits.length - 1])
+	}
+
+	return data
+}
+
+function shouldRespec(str) {
+	return true
 }
 
 function new_preset(importing) {
@@ -688,16 +730,20 @@ function save_preset(id) {
 }
 
 function load_preset(id, reset) {
-	if (reset) {
+	let data = getEl("preset_" + id +"_data").value
+
+	if (reset || shouldRespec(data)) {
 		var id7unlocked = player.infDimensionsUnlocked[7]
 		if (inBigRip()) id7unlocked = true
 		if (player.infinityPoints.lt(player.eternityChallGoal) || !id7unlocked) return
+
+		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?"))
+
 		player.respec = true
 		player.respecMastery = true
 		eternity(false, false, true)
 	}
-	
-	let data = getEl("preset_" + id +"_data").value
+
 	let saved = false
 	if (data != presets[id].preset) {
 		presets[id].preset = data
@@ -705,7 +751,7 @@ function load_preset(id, reset) {
 		saved = true
 	}
 
-	importStudyTree(preset)
+	importStudyTree(data)
 	closeToolTip()
 	$.notify("Preset" + (saved ? " saved and " : "") + " loaded", "info")
 }
@@ -801,16 +847,18 @@ function openStudyPresets() {
 }
 
 function getPresetLayout(id) {
-	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br>" +
+	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br><br>" +
 		"<input id='preset_" + id +"_data' style='width: 75%'><br>" +
 
 		"<button class='storebtn' onclick='save_preset(" + id + ")'>Save</button>" +
 		"<button class='storebtn' onclick='load_preset(" + id + ")'>Load</button>" +
-		(onNGP3 ? "<button class='storebtn' style='font-size: 10px' onclick='load_preset(" + id + ", true)'>Eternity and Load</button>" : "") +
 		"<button class='storebtn' onclick='rename_preset(" + id + ")'>Rename</button>" +
-		"<button class='storebtn' onclick='move_preset(" + id + ",-1)'>Move up</button>" +
-		"<button class='storebtn' onclick='move_preset(" + id + ",1)'>Move down</button>" +
-		"<button class='storebtn' onclick='delete_preset(" + id + ")'>Delete</button>"
+		"<button class='storebtn' onclick='delete_preset(" + id + ")'>Delete</button>" +
+
+		"<span class='metaOpts'>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ",-1)'>⭡</button>" +
+			"<button class='storebtn' onclick='move_preset(" + id + ",1)'>⭣</button>" +
+		"</span>"
 }
 
 function changePresetTitle(id, placement) {
@@ -834,9 +882,10 @@ let tsMults = {
 	11() {
 		let bigRipped = inBigRip()
 		let log = -player.tickspeed.div(1e3).pow(0.005).times(0.95).plus(player.tickspeed.div(1e3).pow(0.0003).times(0.95)).log10()
+
 		if (bigRipped && log > 900) log = Math.sqrt(log * 900)
 		else if (tmp.mod.newGameExpVersion) log = Math.min(log, 25000) // buff to NG+++^
-		else if (player.galacticSacrifice === undefined) log = Math.min(log, 2500)
+		else if (tmp.ngp3) log = Math.min(log, 2500)
 		if (log < 0) log = 0
 		
 		if (inNGM(2) || !bigRipped) return Decimal.pow(10, log)
