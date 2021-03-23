@@ -62,7 +62,7 @@ function getDilTimeGainPerSecond() {
 	if (player.dilation.upgrades.includes("ngp3c1") && tmp.ngC) gain = gain.times(50)
 	if (player.dilation.upgrades.includes("ngp3c2") && tmp.ngC) gain = gain.times(100)
 
-	return gain
+	return gain.times(ls.mult("dil"))
 }
 
 function getDTGainExp() {

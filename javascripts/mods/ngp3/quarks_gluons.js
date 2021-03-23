@@ -197,10 +197,10 @@ colorBoosts = {
 
 function updateColorPowers() {
 	//Red
-	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 2 + 1) / 3 + 1
+	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 2 + 1) / 2 + 1
 
 	//Green
-	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) + 1
+	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
 
 	//Blue
 	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2.5, 1), 2)
@@ -366,7 +366,7 @@ let ENTANGLED_BOOSTS = {
 		masReq: 5,
 		type: "r",
 		eff(x) {
-			return Math.pow(x, 0.15)
+			return Math.pow(x, 0.15) / 2
 		},
 		effDisplay(x) {
 			return shorten(x)

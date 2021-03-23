@@ -249,7 +249,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (player.meta.antimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.money.log10() >= 7.88e13 && tmp.qu.pairedChallenges.completed == 0) giveAchievement("The truth of anti-challenged")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
-	if (player.replicanti.amount.log10() >= 2e6 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
+	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
 	if (player.dilation.dilatedTime.log10() >= 411 && tmp.qu.notrelative) giveAchievement("Time is not relative")
 	if (!hasAch("ng3p42")) {

@@ -372,7 +372,7 @@ function setR17Tooltip() {
 	internal.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e333")) + " MA without having 2nd Meta Dimensions and Meta-Dimension Boosts. Reward: 1st Meta Dimensions are stronger based on meta antimatter.")
 	truth.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 7.88e13)) + " antimatter without having completed any paired challenges.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11.")
-	noDil.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 2e6)) + " replicanti without having Tachyon Particles. Reward: You start Quantums with the square root of your best TP as your Tachyon particle amount.")
+	noDil.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1/0)) + " replicanti without having Tachyon Particles. Reward: You start Quantums with the square root of your best TP as your Tachyon particle amount.")
 	dontWant.setAttribute('ach-tooltip', "Reach " + shorten(Decimal.pow(Number.MAX_VALUE, 1000)) + " IP while dilated, in QC2, and without having studies and First Dimensions during your current Eternity.")
 	noparadox.setAttribute('ach-tooltip', "Quantum without any Dilation upgrades. Reward: The sum of your best Quantum Challenge times boosts Quark gain.")
 }

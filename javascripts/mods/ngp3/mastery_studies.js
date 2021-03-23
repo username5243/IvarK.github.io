@@ -18,7 +18,7 @@ var masteryStudies = {
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, 275000 + 25000 * comps)
+			return Decimal.pow(10, 275000 + 250000 * comps)
 		}
 	},
 	ecReqsStored: {},
