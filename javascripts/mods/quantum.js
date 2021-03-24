@@ -433,15 +433,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (tmp.ngp3) {
 		player.dilation.times = 0
 		if (!force) {
-			var u = tmp.qu.usedQuarks
-			var g = tmp.qu.gluons
-			var p = ["rg", "gb", "br"]
-			var d = []
-			for (var c = 0; c < 3; c++) d[c] = u[p[c][0]].min(u[p[c][1]])
-			for (var c = 0; c < 3; c++) {
-				g[p[c]] = g[p[c]].add(d[c]).round()
-				u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
-			}
+			updateQuarksAndGluonsOnQuantum()
+
 			var qc = tmp.inQCs
 			onQCCompletion(qc, oldMoney, oldTime, dilTimes)
 			if (tmp.qu.pairedChallenges.respec) respecPCs()

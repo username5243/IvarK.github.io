@@ -311,10 +311,11 @@ function updateGluonicBoosts() {
 		ENTANGLED_BOOSTS.gluonEff(gluons.gb)),
 		ENTANGLED_BOOSTS.gluonEff(gluons.br)
 	)
+	let strEff = ENTANGLED_BOOSTS.strEff()
 
 	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
 		if (!ENTANGLED_BOOSTS.has(i)) break
-		data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * tmp.qu.entBoosts)
+		data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * strEff)
 	}
 }
 
@@ -354,9 +355,16 @@ let ENTANGLED_BOOSTS = {
 		return this[x].type == gluon[0] || this[x].type == gluon[1]
 	},
 	gluonEff(x) {
-		return Math.sqrt(Decimal.add(x, 1).log10() * tmp.qu.quarkEnergy)
+		return Math.sqrt(Decimal.add(x, 1).log10())
+	},
+	strEff(x) {
+		return Math.sqrt(tmp.qu.quarkEnergy) * tmp.qu.entBoosts
 	},
 	choose(x) {
+		if (!tmp.qu.entBoosts || tmp.qu.gluons.rg.max(tmp.qu.gluons.gb).max(tmp.qu.gluons.br).eq(0)) {
+			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
+			return
+		}
 		if (!confirm("This will perform a quantum reset without gaining anything. Are you sure?")) return
 		tmp.qu.entColor = x
 		quantum(false, true)
@@ -494,6 +502,20 @@ function getBR6Effect() {
 
 function getGU8Effect(type) {
 	return Math.pow(tmp.qu.gluons[type].div("1e565").add(1).log10() * 0.505 + 1, 1.5)
+}
+
+function updateQuarksAndGluonsOnQuantum() {
+	var u = tmp.qu.usedQuarks
+	var g = tmp.qu.gluons
+	var p = ["rg", "gb", "br"]
+	var d = []
+	for (var c = 0; c < 3; c++) d[c] = u[p[c][0]].min(u[p[c][1]])
+	for (var c = 0; c < 3; c++) {
+		g[p[c]] = g[p[c]].add(d[c]).round()
+		u[p[c][0]] = u[p[c][0]].sub(d[c]).round()
+	}
+
+	updateColorCharge()
 }
 
 //Display
