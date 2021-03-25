@@ -376,7 +376,7 @@ function updateMetaDimensions () {
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
 	var message = 'Lose all your previous progress, but '
-	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + ' meta-antimatter ' + (!inQC(0) ? "and " + shortenCosts(Decimal.pow(10, getQCGoalLog())) + " antimatter" : player.masterystudies ? "and an EC14 completion" : "")
+	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter ' + (!inQC(0) ? "and " + shortenCosts(Decimal.pow(10, getQCGoalLog())) + " antimatter" : tmp.ngp3 ? "and an EC14 completion" : "")
 	if (reqGotten && bigRipped && ph.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")

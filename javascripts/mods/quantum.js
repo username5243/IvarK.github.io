@@ -114,22 +114,25 @@ function getQKAchBonusLog() {
 	return log
 }
 
-function quarkGain() {
-	let ma = player.meta.antimatter.max(1)
-	let maReq = getQuantumReq()
-	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
-	
-	if (!ph.did("quantum")) return new Decimal(1)
-	if (player.ghostify.milestones) ma = player.meta.bestAntimatter.max(1)
+function getQuantumReqSource() {
+	return tmp.ngp3 ? player.meta.bestAntimatter : player.meta.antimatter
+}
 
-	let log = (ma.log10() / maReq.log10() - 1) * 2
-	let logBoostExp = 1.5 //4 (temp)
+function quarkGain() {
+	let ma = getQuantumReqSource().max(1)
+	let maReq = getQuantumReq()
+
+	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
+	if (!ph.did("quantum")) return new Decimal(1)
+
+	let log = (ma.log10() / maReq.log10() - 1) / 2
+	let logBoostExp = 4
 	log = Math.pow(log + 1, logBoostExp) - 1
 
 	log += getQKAchBonusLog()
 
 	var dlog = Math.log10(log)
-	let start = 5
+	let start = 2
 	if (dlog > start) {
 		let capped = Math.floor(Math.log10(Math.max(dlog + 2 - start, 1)) / Math.log10(2))
 		dlog = (dlog - Math.pow(2, capped) + 2 - start) / Math.pow(2, capped) + capped - 1 + start

@@ -27,7 +27,7 @@ let Prestiges = {
 		quantum() {
 			return player.money.log10() >= getQCGoalLog() &&
 				Decimal.gte(
-					hasAch("ng3p76") ? player.meta.bestOverQuantums : player.meta.antimatter, 
+					getQuantumReqSource(), 
 					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
 				) && (!tmp.ngp3 || ECComps("eterc14")) && quarkGain().gt(0)
 		},

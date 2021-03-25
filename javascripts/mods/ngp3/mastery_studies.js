@@ -14,11 +14,11 @@ var masteryStudies = {
 	ecReqs: {
 		13() {
 			let comps = ECComps("eterc13")
-			return 95e4 + 5e4 * comps
+			return 95e4 + 5e4 * Math.pow(comps, 2)
 		},
 		14() {
 			let comps = ECComps("eterc14")
-			return Decimal.pow(10, 275000 + 250000 * comps)
+			return Decimal.pow(10, 275000 * Math.pow(2, comps))
 		}
 	},
 	ecReqsStored: {},
