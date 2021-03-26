@@ -318,10 +318,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 				if (!ph.did("ghostify")) {
 					getEl("welcome").style.display = "flex"
 					getEl("welcomeMessage").innerHTML = "Congratulations for getting " + shorten(Number.MAX_VALUE) + " quarks! You have unlocked new QoL features, like quantum autobuyer modes, assign all, and auto-assignation!"
-					getEl('assignAll').style.display = ""
 					getEl('autoAssign').style.display = ""
 					getEl('autoAssignRotate').style.display = ""
-					getEl('ratioSettings').style.display = ""
 				}
 				getEl('toggleautoquantummode').style.display=""
 			}

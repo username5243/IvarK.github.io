@@ -47,6 +47,9 @@ var quantumTabs = {
 }
 
 function updateQuantumTabs() {
+	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
+	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
+
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
 		var id = quantumTabs.tabIds[i]
 		if (getEl(id).style.display == "block") quantumTabs.update[id]()

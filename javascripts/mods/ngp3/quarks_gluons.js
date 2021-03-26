@@ -525,13 +525,11 @@ function updateQuarksTab(tab) {
 	getEl("bluePower").textContent = shorten(tmp.qu.colorPowers.b)
 
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
-	getEl("greenTranslation").textContent = shorten(colorBoosts.g) + (tmp.pe ? "+" + shorten(tmp.pe) :"")
+	getEl("greenTranslation").textContent = formatReductionPercentage(colorBoosts.g)
 	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
 
-	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qkEng.eff1 - 1)
 	getEl("quarkEnergyEffect2").textContent = shorten(tmp.qkEng.eff2)
-	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
 
 	if (player.ghostify.milestones >= 8) {
 		var assortAmount = getAssortAmount()
@@ -546,7 +544,6 @@ function updateGluonsTab() {
 	let colors = ['r','g','b']
 
 	if (player.ghostify.milestones >= 8) updateGluonsTabOnUpdate("display")
-	getEl("quarkEnergy2").textContent = shorten(tmp.qu.quarkEnergy)
 
 	for (var c = 0; c < 3; c++) {
 		var color = colors[c]
@@ -578,8 +575,6 @@ function updateQuarksTabOnUpdate(mode) {
 
 	var assortAmount = getAssortAmount()
 	var canAssign = assortAmount.gt(0)
-	getEl("quarkAssort").style.display = ""
-	getEl("quarkAssign").style.display = "none"
 
 	getEl("assort_amount").textContent = shortenDimensions(assortAmount.times(getQuarkAssignMult()))
 	getEl("redAssort").className = canAssign ? "storebtn" : "unavailablebtn"
