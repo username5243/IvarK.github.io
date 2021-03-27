@@ -222,7 +222,7 @@ function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
 	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1
-	tmp.qkEng.eff2 = tmp.qu.quarkEnergy * tmp.qkEng.eff1 / 1.7
+	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 1.4
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -385,7 +385,7 @@ let ENTANGLED_BOOSTS = {
 		masReq: 7,
 		type: "g",
 		eff(x) {
-			return Math.log10(x + 1)
+			return Math.log10(x * 2 + 1) * 1.5 - 0.5
 		},
 		effDisplay(x) {
 			return x.toFixed(3)
@@ -552,7 +552,7 @@ function updateGluonsTab() {
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(tmp.qu.gluons[color + colors[(c + 1) % 3]])
 	}
 
-	getEl("entangledBoost").className = "gluonupgrade " + (tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn")
+	getEl("entangledBoost").className = tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn"
 
 	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
 		if (!ENTANGLED_BOOSTS.has(i)) break
@@ -627,10 +627,10 @@ function updateGluonsTabOnUpdate(mode) {
 		el.parentElement.style.display = has ? "" : "none"
 
 		if (has) {
-			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : ""
-			el.textContent = (mastered ? " Mastered" : "") + " Entangled Boost #" + e
+			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : "red"
+			el.textContent = (mastered ? " Mastered" : data.active(e) ? "" : "Inactive ") + " Entangled Boost #" + e
 
-			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : ")<br>Reach " + getFullExpansion(data[e].masReq) + " Entangled Boosts to master this")
+			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(data[e].masReq) + " Entangled Boosters to master)")
 		}
 	}
 }
