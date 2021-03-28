@@ -221,8 +221,8 @@ function getQuarkEnergyMult() {
 function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
-	tmp.qkEng.eff1 = Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1
-	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 1.4
+	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1, 2)
+	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 2.1
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -323,10 +323,10 @@ let ENTANGLED_BOOSTS = {
 	max: 9,
 	cost(x) {
 		if (x === undefined) x = tmp.qu.entBoosts || 0
-		return Math.pow(x + 1, 1.5)
+		return Math.pow(x / 2 + 1, 1.5)
 	},
 	target() {
-		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5))
+		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5) * 2)
 	},
 	buy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
@@ -385,7 +385,7 @@ let ENTANGLED_BOOSTS = {
 		masReq: 7,
 		type: "g",
 		eff(x) {
-			return Math.log10(x * 2 + 1) * 1.5 - 0.5
+			return Math.log10(x * 2 + 1) * 1.5 + 1
 		},
 		effDisplay(x) {
 			return x.toFixed(3)
