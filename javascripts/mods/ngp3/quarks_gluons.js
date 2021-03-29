@@ -619,7 +619,7 @@ function updateGluonsTabOnUpdate(mode) {
 	for (var e = 1; e <= data.max; e++) {
 		if (has && !data.has(e)) {
 			has = false
-			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at Entangled Booster #" + data[e].req + "."
+			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at " + data[e].req + " Entangled Boosters."
 		}
 		if (mastered && !data.mastered(e)) mastered = false
 
@@ -633,6 +633,8 @@ function updateGluonsTabOnUpdate(mode) {
 			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(data[e].masReq) + " Entangled Boosters to master)")
 		}
 	}
+
+	getEl("masterNote").style.display = data.mastered(1) ? "" : "none"
 }
 
 //Quarks animation
