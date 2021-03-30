@@ -193,12 +193,13 @@ dev.testTDCosts = function() {
 }
 
 dev.giveQuantumStuff = function(n){
-	player.quantum.usedQuarks.r = player.quantum.usedQuarks.r.plus(Decimal.pow(10, n+1))
-	player.quantum.usedQuarks.b = player.quantum.usedQuarks.b.plus(Decimal.pow(10, n+1))
-	player.quantum.usedQuarks.g = player.quantum.usedQuarks.g.plus(Decimal.pow(10, n+1))
-	player.quantum.gluons.rg = player.quantum.gluons.rg.plus(Decimal.pow(10, n))
-	player.quantum.gluons.gb = player.quantum.gluons.gb.plus(Decimal.pow(10, n))
-	player.quantum.gluons.br = player.quantum.gluons.br.plus(Decimal.pow(10, n))
+	player.quantum.usedQuarks.r = player.quantum.usedQuarks.r.add(n)
+	player.quantum.usedQuarks.b = player.quantum.usedQuarks.b.add(n)
+	player.quantum.usedQuarks.g = player.quantum.usedQuarks.g.add(n)
+	player.quantum.gluons.rg = player.quantum.gluons.rg.add(n)
+	player.quantum.gluons.gb = player.quantum.gluons.gb.add(n)
+	player.quantum.gluons.br = player.quantum.gluons.br.add(n)
+	updateColorCharge()
 }
 
 dev.addReward = function(){
@@ -210,13 +211,13 @@ dev.setReward = function(n){
 }
 
 dev.addSpin = function(n){
-	player.quantum.tod.r.spin = player.quantum.tod.r.spin.plus(Decimal.pow(10,n))
-	player.quantum.tod.b.spin = player.quantum.tod.b.spin.plus(Decimal.pow(10,n))
-	player.quantum.tod.g.spin = player.quantum.tod.g.spin.plus(Decimal.pow(10,n))
+	player.quantum.tod.r.spin = player.quantum.tod.r.spin.add(Decimal.pow(10,n))
+	player.quantum.tod.b.spin = player.quantum.tod.b.spin.add(Decimal.pow(10,n))
+	player.quantum.tod.g.spin = player.quantum.tod.g.spin.add(Decimal.pow(10,n))
 }
 
 dev.addGHP = function(n){
-	player.ghostify.ghostParticles = player.ghostify.ghostParticles.plus(Decimal.pow(10,n))
+	player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(Decimal.pow(10,n))
 }
 
 dev.setNeut = function(n){
@@ -226,9 +227,9 @@ dev.setNeut = function(n){
 }
 
 dev.addNeut = function(n){
-	player.ghostify.neutrinos.electron = player.ghostify.neutrinos.electron.plus(Decimal.pow(10,n))
-	player.ghostify.neutrinos.mu = player.ghostify.neutrinos.mu.plus(Decimal.pow(10,n))
-	player.ghostify.neutrinos.tau = player.ghostify.neutrinos.tau.plus(Decimal.pow(10,n))
+	player.ghostify.neutrinos.electron = player.ghostify.neutrinos.electron.add(Decimal.pow(10,n))
+	player.ghostify.neutrinos.mu = player.ghostify.neutrinos.mu.add(Decimal.pow(10,n))
+	player.ghostify.neutrinos.tau = player.ghostify.neutrinos.tau.add(Decimal.pow(10,n))
 }
 
 dev.giveNeutrinos = function(n){

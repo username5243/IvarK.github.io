@@ -374,7 +374,7 @@ let ENTANGLED_BOOSTS = {
 		masReq: 5,
 		type: "r",
 		eff(x) {
-			return Math.pow(x, 0.15) / 2
+			return Math.cbrt(x)
 		},
 		effDisplay(x) {
 			return shorten(x)
