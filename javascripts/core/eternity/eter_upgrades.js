@@ -130,7 +130,7 @@ let ETER_UPGS = {
 	},
 	14: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
-		cost: "1e5000000",
+		cost: "1e2500000",
 		desc: () => "You can buy all studies from time study tree."
 	},
 	15: {

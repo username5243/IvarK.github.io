@@ -125,7 +125,7 @@ function quarkGain() {
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 	if (!ph.did("quantum")) return new Decimal(1)
 
-	let log = Math.max(ma.log10() / maReq.log10() - 1.1, 0)
+	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 1.5
 	let logBoostExp = 4
 	log = Math.pow(log + 1, logBoostExp) - 1
 

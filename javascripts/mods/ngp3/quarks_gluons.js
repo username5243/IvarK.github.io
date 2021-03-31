@@ -78,10 +78,6 @@ function assignAll(auto) {
 	var oldQuarks = getAssortAmount()
 	var colors = ['r','g','b']
 	var mult = getQuarkAssignMult()
-	if (oldQuarks.lt(100)) {
-		if (!auto) $.notify("You can only use this feature if you will assign at least 100 quarks.")
-		return
-	}
 	for (c = 0; c < 3; c++) {
 		var toAssign = oldQuarks.times(ratios[colors[c]]/sum).round()
 		if (toAssign.gt(0)) {
@@ -183,9 +179,9 @@ function updateColorCharge() {
 }
 
 function getColorPowerQuantity(color) {
-	let ret = colorCharge[color]
+	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
-	if (tmp.glB) ret = ret * tmp.glB[color].mult - tmp.glB[color].sub
+	if (tmp.glB) ret = ret - tmp.glB[color].sub
 	return Math.max(ret, 0)
 }
 
@@ -203,7 +199,7 @@ function updateColorPowers() {
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
 
 	//Blue
-	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 2.5, 1), 2)
+	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 1.5 + 1, 1), 2)
 }
 
 //Gluons
@@ -222,7 +218,7 @@ function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
 	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1, 2)
-	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 2.1
+	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 4
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
@@ -300,9 +296,9 @@ function updateGluonicBoosts() {
 	let data = tmp.glB
 	let gluons = tmp.qu.gluons
 
-	data.r = { mult: Math.log10(gluons.rg.add(1).log10() + 1) + 1, sub: gluons.br.add(1).log10() } //x -> x * [RG effect] - [BR effect]
-	data.g = { mult: Math.log10(gluons.gb.add(1).log10() + 1) + 1, sub: gluons.rg.add(1).log10() } //x -> x * [GB effect] - [RG effect]
-	data.b = { mult: Math.log10(gluons.br.add(1).log10() + 1) + 1, sub: gluons.gb.add(1).log10() } //x -> x * [BR effect] - [GB effect]
+	data.r = { mult: getGluonEffBuff(gluons.rg), sub: getGluonEffNerf(gluons.br) } //x -> x * [RG effect] - [BR effect]
+	data.g = { mult: getGluonEffBuff(gluons.gb), sub: getGluonEffNerf(gluons.rg) } //x -> x * [GB effect] - [RG effect]
+	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb) } //x -> x * [BR effect] - [GB effect]
 
 	let type = tmp.qu.entColor || "rg"
 	let enAmt = ENTANGLED_BOOSTS.gluonEff(gluons[type])
@@ -319,14 +315,22 @@ function updateGluonicBoosts() {
 	}
 }
 
+function getGluonEffBuff(x) {
+	return Math.log10(Decimal.add(x, 1).log10() + 1) + 1
+}
+
+function getGluonEffNerf(x) {
+	return Math.pow(Decimal.add(x, 1).log10(), 2) / 2
+}
+
 let ENTANGLED_BOOSTS = {
 	max: 9,
 	cost(x) {
 		if (x === undefined) x = tmp.qu.entBoosts || 0
-		return Math.pow(x / 2 + 1, 1.5)
+		return Math.pow(x * 0.6 + 1, 1.5)
 	},
 	target() {
-		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5) * 2)
+		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5) / 0.6)
 	},
 	buy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
@@ -374,7 +378,7 @@ let ENTANGLED_BOOSTS = {
 		masReq: 5,
 		type: "r",
 		eff(x) {
-			return Math.cbrt(x)
+			return Math.cbrt(x) * 0.75
 		},
 		effDisplay(x) {
 			return shorten(x)

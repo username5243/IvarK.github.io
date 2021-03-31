@@ -621,6 +621,7 @@ function updateMasteryStudyTextDisplay() {
 		getEl("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
 		if (req) getEl("ts" + name + "Req").innerHTML = "<br>Requirement: " + req
 	}
+	console.log(player.etercreq)
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("ec" + id)) break
 		getEl("ec" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.ec[id]) + " Time Theorems"

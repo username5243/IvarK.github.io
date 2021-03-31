@@ -2023,6 +2023,8 @@ function setSomeQuantumAutomationDisplay(){
         var suffix = "NG" + (player.meta != undefined ? "pp" : "ud")
         getEl("uhDiv" + suffix).appendChild(getEl("Universal harmony"))
         getEl("feDiv" + suffix).appendChild(getEl("In the grim darkness of the far endgame"))
+        getEl("dil12desc").textContent = tmp.ngp3 ? "Tachyonic Galaxies scale slower." : "Tachyonic Galaxies scale slower, but reset dilated time and those galaxies."
+        getEl("dil13desc").textContent = tmp.ngp3 ? "Tachyonic Galaxies scale slower." : "Tachyonic Galaxies scale slower, but reset dilated time and those galaxies."
         getEl("dil14desc").textContent = tmp.mod.nguspV ? "Make the TP multiplier upgrade more powerful." : "Increase the exponent of the TP formula."
         getEl("dil52").style["font-size"] = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "10px" : "9px"
         getEl("dil52formula").style.display = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "none" : ""

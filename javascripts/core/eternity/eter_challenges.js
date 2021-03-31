@@ -410,7 +410,7 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) return [0, 0.1, 0.15, 0.2, 0.3, 0.5][c]
+	if (x == 14) return [0, 0.1, 0.15, 0.3, 0.6, 1][c]
 }
 
 function doCheckECCompletionStuff(){
@@ -436,7 +436,7 @@ function doCheckECCompletionStuff(){
 
 		player.etercreq = 0
 		player.eternityChallUnlocked = 0
-	} else if (tmp.ngp3) delete tmp.qu.autoECN
+	}
 
 	return forceRespec
 }

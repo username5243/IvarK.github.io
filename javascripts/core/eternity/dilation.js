@@ -9,6 +9,7 @@ function hasDilationStudy(x) {
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
 
+	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
 	if (hasAch("ng3p11")) gain = gain.times(3)
 	if (ENTANGLED_BOOSTS.active(4)) gain = gain.times(tmp.glB.enB4)
 	return gain
@@ -406,7 +407,7 @@ function buyDilationUpgrade(pos, max, isId) {
 		player.dilation.rebuyables[id[1]] = (player.dilation.rebuyables[id[1]] || 0) + 1
 		
 		if (id[1] == 2) {
-			if (speedrunMilestonesReached < 22) player.dilation.dilatedTime = new Decimal(0)
+			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
 		if (id[1] == 3) {
@@ -475,16 +476,23 @@ function updateDilationUpgradeButtons() {
 		}
 		if (unl) getEl("dil" + pos).className = hasDilationUpg(id) || (id == "r2" && !canBuyGalaxyThresholdUpg()) ? "dilationupgbought" : player.dilation.dilatedTime.gte(getDilUpgCost(id)) ? "dilationupg" : "dilationupglocked"
 	}
-	var genSpeed = getPassiveTTGen()
-	var power = getDil3Power()
+
 	getEl("dil11desc").textContent = "Currently: " + shorten(Decimal.pow(2, getDilUpgPower(1))) + "x"
-	getEl("dil12desc").textContent = "Scaling: " + getFreeGalaxyThresholdIncrease().toPrecision(4) + "x"
-	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles.<br>Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
+	getEl("dil12eff").textContent = "Scaling: +" + formatPercentage(getFreeGalaxyThresholdIncrease() - 1) + "%"
+
+	var power = getDil3Power()
+	getEl("dil13desc").innerHTML = "You gain " + shorten(power) + "x more Tachyon Particles."
+	getEl("dil13eff").innerHTML = "Currently: " + shorten(Decimal.pow(power, getDilUpgPower(3))) + "x"
+	getEl("dil14eff").innerHTML = tmp.mod.nguspV ? "Currently: 3x -> " + (getDilUpgPower(4) / 2 + 3).toFixed(2) + "x" : "Currently: ^0.25 -> ^" + (getDilUpgPower(4) / 4 + 0.25).toFixed(2)
+
 	getEl("dil22desc").innerHTML = tmp.ngC ? "Remote Galaxy scaling starts 25 galaxies later." : "Replicanti multiplier speeds up Time Dimensions.<br>Currently: " + shorten(tmp.rm.pow(getRepToTDExp())) + "x"
 	getEl("dil31desc").textContent = "Currently: " + shortenMoney(player.dilation.dilatedTime.max(1).pow(1000).max(1)) + "x"
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
+
+	var genSpeed = getPassiveTTGen()
 	getEl("dil41desc").textContent = "Currently: " + shortenMoney(hasAch("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
+
 	if (player.dilation.studies.includes(6)) {
 		getEl("dil51desc").textContent = "Currently: " + shortenMoney(getDil14Bonus()) + 'x';
 		getEl("dil52desc").textContent = "Currently: " + shortenMoney(getDil15Bonus()) + 'x';
