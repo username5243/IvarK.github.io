@@ -2,7 +2,7 @@ var masteryStudies = {
 	initCosts: {
 		time: {241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70, 271: 2.7434842249657063e76, 272: 2.7434842249657063e76, 273: 2.7434842249657063e76, 274: 1/0, 275: 1/0, 281: 6.858710562414266e76, 282: 6.858710562414266e76},
 		ec: {13: 1e71, 14: 1e71},
-		dil: {7: 2e81, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
+		dil: {7: 2e75, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
@@ -38,7 +38,7 @@ var masteryStudies = {
 			return masteryStudies.bought >= 10
 		},
 		d7() {
-			return false //quantumWorth.gte(50)
+			return tmp.qu.quarkEnergy >= 2.75 && false
 		},
 		d8() {
 			return tmp.qu.electrons.amount >= 16750
@@ -70,7 +70,7 @@ var masteryStudies = {
 			return "10 bought mastery studies"
 		},
 		d7() {
-			return "LOCKED UNTIL BETA V0.3" //"50 quantum worth"
+			return "SOON IN BETA V0.3"
 		},
 		d8() {
 			return getFullExpansion(16750) + " electrons"
@@ -333,16 +333,15 @@ function updateMasteryStudyCosts() {
 		if (!player.masterystudies.includes("t"+name)) setMasteryStudyCost(name,"t")
 	}
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
-		if (!masteryStudies.unlocked.includes("ec"+id)) break
-		setMasteryStudyCost(id,"ec")
+		if (!masteryStudies.unlocked.includes("ec" + id)) break
+		setMasteryStudyCost(id, "ec")
 		masteryStudies.ecReqsStored[id] = masteryStudies.ecReqs[id]()
 	}
 	for (id = 7; id <= masteryStudies.unlocksUpTo; id++) {
-		if (!masteryStudies.unlocked.includes("d"+id)) break
-		setMasteryStudyCost(id,"d")
+		if (!masteryStudies.unlocked.includes("d" + id)) break
+		setMasteryStudyCost(id, "d")
 	}
 	if (oldBought != masteryStudies.bought) updateSpentableMasteryStudies()
-	if (player.eternityChallUnlocked > 12) masteryStudies.ttSpent += masteryStudies.costs.ec[player.eternityChallUnlocked]
 	updateMasteryStudyTextDisplay()
 }
 
@@ -621,7 +620,6 @@ function updateMasteryStudyTextDisplay() {
 		getEl("ts" + name + "Cost").textContent = shorten(masteryStudies.costs.time[name])
 		if (req) getEl("ts" + name + "Req").innerHTML = "<br>Requirement: " + req
 	}
-	console.log(player.etercreq)
 	for (id = 13; id <= masteryStudies.ecsUpTo; id++) {
 		if (!masteryStudies.unlocked.includes("ec" + id)) break
 		getEl("ec" + id + "Cost").textContent = "Cost: " + shorten(masteryStudies.costs.ec[id]) + " Time Theorems"

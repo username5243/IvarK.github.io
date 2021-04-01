@@ -446,7 +446,6 @@ function buyDilationUpgrade(pos, max, isId) {
 
 function getPassiveTTGen() {
 	let r = getTTGenPart(player.dilation.tachyonParticles)
-	if (hasAch("ng3p18") && !tmp.qu.bigRip.active) r += getTTGenPart(player.dilation.bestTP) / 50
 	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
 	if (ph.did("quantum")) r *= colorBoosts.b

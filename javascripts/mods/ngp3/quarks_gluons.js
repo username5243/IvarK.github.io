@@ -316,28 +316,27 @@ function updateGluonicBoosts() {
 }
 
 function getGluonEffBuff(x) {
-	return Math.log10(Decimal.add(x, 1).log10() + 1) + 1
+	return Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
 }
 
 function getGluonEffNerf(x) {
-	return Math.pow(Decimal.add(x, 1).log10(), 2) / 2
+	return Math.pow(Decimal.add(x, 1).log10(), 2)
 }
 
 let ENTANGLED_BOOSTS = {
 	max: 9,
 	cost(x) {
 		if (x === undefined) x = tmp.qu.entBoosts || 0
-		return Math.pow(x * 0.6 + 1, 1.5)
+		return Math.pow(x, 1.5) + 1
 	},
 	target() {
-		return Math.floor(Math.pow(tmp.qu.quarkEnergy, 1 / 1.5) / 0.6)
+		return Math.floor(Math.pow(tmp.qu.quarkEnergy - 1, 1 / 1.5) + 1)
 	},
 	buy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
 		tmp.qu.entBoosts = (tmp.qu.entBoosts || 0) + 1
 		updateGluonicBoosts()
 		updateGluonsTabOnUpdate()
-		console.log(tmp.glB)
 	},
 	maxBuy() {
 		if (!(tmp.qu.quarkEnergy >= this.cost())) return
@@ -359,10 +358,10 @@ let ENTANGLED_BOOSTS = {
 		return this[x].type == gluon[0] || this[x].type == gluon[1]
 	},
 	gluonEff(x) {
-		return Math.sqrt(Decimal.add(x, 1).log10())
+		return Decimal.add(x, 1).log10()
 	},
 	strEff(x) {
-		return Math.sqrt(tmp.qu.quarkEnergy) * tmp.qu.entBoosts
+		return tmp.qu.entBoosts * 2 - 1
 	},
 	choose(x) {
 		if (!tmp.qu.entBoosts || tmp.qu.gluons.rg.max(tmp.qu.gluons.gb).max(tmp.qu.gluons.br).eq(0)) {
@@ -375,7 +374,7 @@ let ENTANGLED_BOOSTS = {
 	},
 	1: {
 		req: 1,
-		masReq: 5,
+		masReq: 3,
 		type: "r",
 		eff(x) {
 			return Math.cbrt(x) * 0.75
@@ -386,21 +385,21 @@ let ENTANGLED_BOOSTS = {
 	},
 	2: {
 		req: 2,
-		masReq: 7,
+		masReq: 10,
 		type: "g",
 		eff(x) {
-			return Math.log10(x * 2 + 1) * 1.5 + 1
+			return Math.log10(x * 2 + 1) * 1.25 + 1
 		},
 		effDisplay(x) {
 			return x.toFixed(3)
 		}
 	},
 	3: {
-		req: 4,
+		req: 3,
 		masReq: 10,
 		type: "b",
 		eff(x) {
-			return Math.pow(x + 1, 0.2)
+			return Math.pow(x / 3 + 1, 0.2)
 		},
 		effDisplay(x) {
 			return formatReductionPercentage(x, 2)

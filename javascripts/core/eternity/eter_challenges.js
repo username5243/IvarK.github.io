@@ -120,10 +120,11 @@ function resetEternityChallUnlocks() {
 	let ec = player.eternityChallUnlocked
 	if (!ec) return
 
-	if (ec <= 12) player.timestudy.theorem += ([null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
-
 	player.eternityChallUnlocked = 0
 	updateEternityChallenges()
+
+	if (ec <= 12) player.timestudy.theorem += ([null, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[ec]
+	else player.timestudy.theorem += masteryStudies.costs.ec[ec]
 }
 
 let ecExpData = {
@@ -410,10 +411,10 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) return [0, 0.1, 0.15, 0.3, 0.6, 1][c]
+	if (x == 14) return [0, 0.1, 0.15, 0.3, 0.5, 1][c]
 }
 
-function doCheckECCompletionStuff(){
+function doCheckECCompletionStuff() {
 	var forceRespec = false
 
 	var ec = player.currentEternityChall
@@ -430,12 +431,16 @@ function doCheckECCompletionStuff(){
 		*/
 
 		//Special
-		if (hasAch("ng3p12")) resetEternityChallUnlocks()
-		else forceRespec = true
-		if (ec === "eterc12" && hasAch("ng3p51")) data.eterc11 = Math.min((data.eterc11 || 0) + 1, 5)
+		if (hasAch("ng3p12")) {
+			if (ecNum > 12) {
+				getEl("ec" + ecNum + "Req").style.display = "block"
+				masteryStudies.ecReqsStored[ecNum] = masteryStudies.ecReqs[ecNum]()
+			}
+			player.etercreq = 0
+			resetEternityChallUnlocks()
+		} else forceRespec = true
 
-		player.etercreq = 0
-		player.eternityChallUnlocked = 0
+		if (ecNum == 12 && hasAch("ng3p51")) data.eterc11 = Math.min((data.eterc11 || 0) + 1, 5)
 	}
 
 	return forceRespec

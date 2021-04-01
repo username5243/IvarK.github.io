@@ -130,13 +130,13 @@ let ETER_UPGS = {
 	},
 	14: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
-		cost: "1e2500000",
-		desc: () => "You can buy all studies from time study tree."
+		cost: "1e3000000",
+		desc: () => "You can buy all row-22 time studies."
 	},
 	15: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
 		cost: "1e10000000",
-		desc: () => "You can passively generate Eternity Points."
+		desc: () => "You can buy up to 2 paths from second split."
 	},
 
 	updateDisplayOnTick() {

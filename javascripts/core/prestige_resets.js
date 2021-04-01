@@ -59,7 +59,13 @@ function doQuantumResetStuff(bigRip, isQC){
 	resetNormalDimensions()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.sacrificed = new Decimal(0)
-	player.challenges = keepABnICs ? player.challenges : []
+	if (!keepABnICs) {
+		temp = []
+		for (var i = 0; i < player.challenges.length; i++) {
+			if (!player.challenges[i].includes("post") && getEternitied() >= 1) temp.push(player.challenges[i])
+		}
+		player.challenges = temp
+	}
 	player.currentChallenge = ""
 	player.infinitied = 0
 	player.infinitiedBank = headstart || hasAch("ng3p15") ? player.infinitiedBank : 0
@@ -194,7 +200,7 @@ function doGalaxyResetStuff(bulk){
 	player.tickBoughtThisInf = updateTBTIonGalaxy()
 	player.sacrificed = new Decimal(0)
 	player.totalBoughtDims = resetTotalBought()
-	player.resets = hasAch("ng3p55") ? player.resets : 0
+	player.resets = moreEMsUnlocked() && getEternitied() >= 1e15 ? player.resets : 0
 	player.interval = null
 	player.tdBoosts = resetTDBoosts()
 	player.galaxies = player.galaxies + bulk
@@ -351,13 +357,14 @@ function doEternityResetStuff() {
 	player.sacrificed = new Decimal(0)
 	player.bestInfinityTime = 9999999999
 	player.thisInfinityTime = 0
-	player.resets = (getEternitied() > 3) ? 4 : 0
+	player.resets = (getEternitied() >= 4) ? 4 : 0
 	player.tdBoosts = resetTDBoosts()
 	if (inNGM(3)) player.tickspeedBoosts = (getEternitied() > 3) ? 16 : 0
 	player.challenges = challengesCompletedOnEternity()
 	player.currentChallenge = ""
-	player.galaxies = (getEternitied() > 3) ? 1 : 0
+	player.galaxies = (getEternitied() >= 4) ? 1 : 0
 	player.galacticSacrifice = newGalacticDataOnInfinity(true)
+	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
 	player.interval = null
 	player.autobuyers = (getEternitied() > 1) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 	player.break = getEternitied() > 1 ? player.break : false
@@ -720,7 +727,7 @@ function doPreInfinityGhostifyResetStuff(implode){
 function doInfinityGhostifyResetStuff(implode, bm){
 	if (hasAch("r85")) player.infMult = player.infMult.times(4)
 	if (hasAch("r93")) player.infMult = player.infMult.times(4)
-	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25)
+	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
 	player.challenges = challengesCompletedOnEternity()
 	IPminpeak = new Decimal(0)
 	if (isEmptiness) {

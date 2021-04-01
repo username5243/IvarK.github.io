@@ -125,7 +125,7 @@ function quarkGain() {
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
 	if (!ph.did("quantum")) return new Decimal(1)
 
-	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 1.5
+	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 2
 	let logBoostExp = 4
 	log = Math.pow(log + 1, logBoostExp) - 1
 
@@ -367,7 +367,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 				boughtI: player.timestudy.ipcost.log("1e100"),
 				boughtE: Math.round(player.timestudy.epcost.log(2))
 			}
-			if (player.eternityChallUnlocked > 12) tmp.qu.bigRip.storedTS.tt += masteryStudies.costs.ec[player.eternityChallUnlocked]
+			if (player.eternityChallUnlocked >= 12) tmp.qu.bigRip.storedTS.tt += masteryStudies.costs.ec[player.eternityChallUnlocked]
 			else tmp.qu.bigRip.storedTS.tt += ([0, 30, 35, 40, 70, 130, 85, 115, 115, 415, 550, 1, 1])[player.eternityChallUnlocked]
 			for (var s = 0; s < player.masterystudies.length; s++) if (player.masterystudies[s].indexOf("t") == 0) tmp.qu.bigRip.storedTS.studies.push(parseInt(player.masterystudies[s].split("t")[1]))
 		}

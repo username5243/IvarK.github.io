@@ -266,7 +266,7 @@ function canBuyStudy(name) {
 		case 12:
 			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length
 			if (hasRow(row - 1)) {
-				if (hasEternityUpg(10) || hasEternityUpg(14)) return true
+				if (hasEternityUpg(10)) return true
 				return have < 1
 			}
 			return false
@@ -287,7 +287,7 @@ function canBuyStudy(name) {
 			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (hasEternityUpg(11) && tmp.ngC) || hasEternityUpg(14))
 
 		case 23:
-			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || hasEternityUpg(11) || hasEternityUpg(13) || hasEternityUpg(14))
+			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || hasEternityUpg(11) || hasEternityUpg(13))
 	}
 }
 
@@ -430,21 +430,15 @@ function studiesUntil(id) {
 	}
 }
 
-function respecTimeStudies(force, presetLoad) {
-	var respecTime = player.respec || (force && (presetLoad || player.eternityChallUnlocked < 13))
-	var respecMastery = false
-	var gotAch = respecTime || player.timestudy.studies.length < 1
-	if (player.masterystudies) {
-		respecMastery=player.respecMastery||force
-		gotAch=gotAch && (respecMastery||player.masterystudies.length<1)
-		delete player.quantum.autoECN
-	}
+function respecTimeStudies(force) {
+	let respecTime = player.respec || force
+	let gotAch = !force
 	if (respecTime) {
 		if (player.boughtDims) {
 			var temp = player.timestudy.theorem
-			for (var id = 1; id < 7; id++) player.timestudy.theorem += player.timestudy.ers_studies[id] * (player.timestudy.ers_studies[id] + 1) / 2
+			for (var id = 1; id <= 6; id++) player.timestudy.theorem += player.timestudy.ers_studies[id] * (player.timestudy.ers_studies[id] + 1) / 2
 			if (temp > player.timestudy.theorem) gotAch = false
-			player.timestudy.ers_studies = [null,0,0,0,0,0,0]
+			player.timestudy.ers_studies = [null, 0, 0, 0, 0, 0, 0]
 		} else {
 			var bru7activated = isBigRipUpgradeActive(7)
 			for (var i = 0; i < all.length; i++) {
@@ -456,7 +450,15 @@ function respecTimeStudies(force, presetLoad) {
 			if (player.masterystudies) if (player.timestudy.studies.length>1) player.quantum.wasted = false
 			player.timestudy.studies = bru7activated ? [192] : []
 		}
+
+		if (player.respec) respecToggle()
 		if (player.eternityChallUnlocked <= 12) resetEternityChallUnlocks()
+	}
+
+	let respecMastery = false
+	if (tmp.ngp3) {
+		respecMastery = player.respecMastery || force
+		delete player.quantum.autoECN
 	}
 	if (respecMastery) {
 		var respecedMS = []
@@ -471,18 +473,19 @@ function respecTimeStudies(force, presetLoad) {
 			gotAch = false
 		}
 		player.masterystudies = respecedMS
+
+		if (player.respecMastery) respecMasteryToggle()
+
 		if (player.eternityChallUnlocked >= 13) resetEternityChallUnlocks()
 		respecUnbuyableTimeStudies()
 		updateMasteryStudyCosts()
-		if (!presetLoad) {
-			maybeShowFillAll()
-			updateMasteryStudyButtons()
-		}
+		maybeShowFillAll()
+		updateMasteryStudyButtons()
 		drawMasteryTree()
 	}
 
+
 	drawStudyTree()
-	if (!presetLoad) updateTimeStudyButtons(true)
 	if (gotAch) giveAchievement("You do know how these work, right?")
 	doInitInfMultStuff()
 	if (player.replicanti.galaxybuyer) getEl("replicantiresettoggle").textContent = "Auto galaxy: ON"
@@ -733,15 +736,10 @@ function load_preset(id, reset) {
 	let data = getEl("preset_" + id +"_data").value
 
 	if (reset || shouldRespec(data)) {
-		var id7unlocked = player.infDimensionsUnlocked[7]
-		if (inBigRip()) id7unlocked = true
-		if (player.infinityPoints.lt(player.eternityChallGoal) || !id7unlocked) return
+		if (!ph.can("eternity")) return
+		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?")) return
 
-		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?"))
-
-		player.respec = true
-		player.respecMastery = true
-		eternity(false, false, true)
+		eternity(false, true, true)
 	}
 
 	let saved = false
@@ -945,6 +943,7 @@ let tsMults = {
 	},
 	225() {
 		let x = Math.floor(player.replicanti.amount.e / 1e3)
+
 		let softcapEff = 2
 		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
 

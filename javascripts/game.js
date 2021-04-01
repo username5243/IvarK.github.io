@@ -1773,8 +1773,8 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12]
-	for (i = 0; i < (moreUnlocked ? 28 : 24); i++) {
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12, 1e15, 1e18]
+	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
 		getEl(name).className = "milestonereward" + (eters >= milestoneRequirements[i] ? "" : "locked")
@@ -1785,6 +1785,8 @@ function updateMilestones() {
 	getEl("mdmilestonesrow1b").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow2a").style.display = moreUnlocked ? "" : "none"
 	getEl("mdmilestonesrow2b").style.display = moreUnlocked ? "" : "none"
+	getEl("mdmilestonesrow3a").style.display = moreUnlocked ? "" : "none"
+	getEl("mdmilestonesrow3b").style.display = moreUnlocked ? "" : "none"
 }
 
 function moreEMsUnlocked() {
@@ -3238,13 +3240,13 @@ function updateRespecButtons() {
 	getEl("respecMastery2").className = className
 }
 
-function eternity(force, auto, presetLoad, dilated) {
-	var canEternity = force || (ph.can("eternity") && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
-	if (!canEternity) return
-	
-	if (force) player.currentEternityChall = "";
-	if (player.currentEternityChall !== "" && player.infinityPoints.lt(player.eternityChallGoal)) return false
-	if (player.thisEternity < player.bestEternity && !force) player.bestEternity = player.thisEternity
+function eternity(force, auto, forceRespec, dilated) {
+	var canEternity = force || ((forceRespec || ph.can("eternity")) && (auto || !player.options.eternityconfirm || confirm("Eternity will reset everything except achievements and challenge records. You will also gain an Eternity point and unlock various upgrades.")))
+	if (!canEternity) return false
+
+	if (force) player.currentEternityChall = ""
+	else if (player.thisEternity < player.bestEternity) player.bestEternity = player.thisEternity
+
 	if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
 	if (player.currentEternityChall == "eterc6" && ECComps("eterc6") < 5 && player.dimensionMultDecrease < 4) player.dimensionMultDecrease = Math.max(parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1)),2)
 	if (!GUActive("gb4")) if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
@@ -3260,7 +3262,6 @@ function eternity(force, auto, presetLoad, dilated) {
 		isEmptiness = false
 		ph.updateDisplay()
 	}
-	temp = []
 	if (gainedEternityPoints().gte(player.eternityPoints) && player.eternityPoints.gte("1e1185") && (tmp.ngp3 ? player.dilation.active && player.quantum.bigRip.active : false)) giveAchievement("Gonna go fast")
 	var oldEP = player.eternityPoints
 	player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
@@ -3275,11 +3276,8 @@ function eternity(force, auto, presetLoad, dilated) {
 	}
 	addEternityTime(array)
 	player.thisEternity = 0
-	var forceRespec = doCheckECCompletionStuff()
-	for (var i = 0; i < player.challenges.length; i++) {
-		if (!player.challenges[i].includes("post") && getEternitied() > 1) temp.push(player.challenges[i])
-	}
-	player.challenges = temp
+	forceRespec = doCheckECCompletionStuff() || forceRespec
+
 	player.infinitiedBank = nA(player.infinitiedBank, gainBankedInf())
 	if (player.dilation.active && (!force || player.infinityPoints.gte(Number.MAX_VALUE))) {
 		let gain = getDilGain()
@@ -3290,7 +3288,7 @@ function eternity(force, auto, presetLoad, dilated) {
 			setTachyonParticles(gain)
 		}
 	}
-	if (tmp.ngp3 && player.dilation.studies.includes(1) && !force) if (player.eternityBuyer.isOn && player.eternityBuyer.dilationMode) {
+	if (tmp.ngp3 && hasDilationStudy(1) && !force) if (player.eternityBuyer.isOn && player.eternityBuyer.dilationMode) {
 		if (player.eternityBuyer.dilMode == "amount" && !player.eternityBuyer.slowStopped) {
 			player.eternityBuyer.statBeforeDilation++
 			if (player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
@@ -3303,79 +3301,20 @@ function eternity(force, auto, presetLoad, dilated) {
 			return
 		}
 	}
+
 	var oldStat = getEternitied()
 	player.eternities = nA(player.eternities, gainEternitiedStat())
 	updateBankedEter()
-	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0);
 
 	doEternityResetStuff()
 		
-	if (inNGM(2) && getEternitied() < 2) player.autobuyers[12] = 13
-	if (inNGM(3) && getEternitied() < 2) player.autobuyers[13] = 14
-	var dilated2 = player.dilation.active
-	if (dilated2) {
-		player.dilation.active = false
-		if (tmp.ngp3 && ph.did("quantum")) updateColorCharge()
-	}
-	if (presetLoad === undefined) {
-		var pData = player.eternityBuyer.presets
-		if (pData !== undefined ? pData.on : false) {
-			var dilActive = pData.dil !== undefined ? pData.dil.on : false
-			var grindActive = pData.grind !== undefined ? pData.grind.on : false
-			if (dilated && dilActive) {
-				if (pData.selected > -1) {
-					pData.reselect=pData.selected
-					if (apLoaded && loadedAPs > pData.selected) getEl("apselected" + pData.selected).textContent = ""
-				}
-				pData.selected = "dil"
-				getEl("apDilSelected").textContent = ">>"
-				forceRespec = true
-				presetLoad = pData.dil.preset
-			} else if (hasEternityUpg(15) && player.eternityPoints.log10() >= oldEP.log10() * 1.01 && !dilated2 && grindActive) {
-				if (pData.selected > -1) {
-					pData.reselect=pData.selected
-					if (apLoaded && loadedAPs > pData.selected) getEl("apselected" + pData.selected).textContent = ""
-				}
-				pData.selected = "grind"
-				getEl("apGrindSelected").textContent = ">>"
-				forceRespec = true
-				presetLoad = pData.grind.preset
-			} else {
-				if (pData.reselect !== undefined) {
-					pData.selected = pData.reselect
-					forceRespec = true
-					presetLoad = pData[pData.order[pData.selected]].preset
-					getEl("apDilSelected").textContent = ""
-					getEl("apGrindSelected").textContent = ""
-					if (apLoaded && loadedAPs > pData.selected) getEl("apselected" + pData.selected).textContent = ">>"
-					delete pData.reselect
-				}
-				if (pData.selectNext > -1 && ((pData.selected < 0 && pData.order.length) || pData.reselect !== undefined || pData.order.length > 1)) {
-					pData.left--
-					if (pData.left < 1) {
-						if (apLoaded && loadedAPs > pData.selected && pData.selected > -1) getEl("apselected" + pData.selected).textContent = ""
-						pData.selected = pData.selectNext
-						for (var p = 1; p < pData.order.length; p++) {
-							if (pData[pData.order[(pData.selectNext + p) % pData.order.length]].on) {
-								pData.selectNext = (pData.selectNext + p) % pData.order.length
-								if (apLoaded && loadedAPs > pData.selectNext) getEl("apselected" + pData.selectNext).textContent = ">"
-								break
-							} else if (p == pData.order.length - 1) pData.selectNext = -1
-						}
-						pData.left = pData[pData.order[pData.selected]].length
-						forceRespec = true
-						presetLoad = pData[pData.order[pData.selected]].preset
-						if (apLoaded && loadedAPs > pData.selected) getEl("apselected" + pData.selected).textContent=">>"
-					}
-					getEl("eternitiesLeft").textContent = getFullExpansion(pData.left)
-				}
-			}
-		}
-	}
-	if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec, presetLoad)
-	if (typeof(presetLoad) == "string") importStudyTree(presetLoad)
-	if (player.respec) respecToggle()
-	if (player.respecMastery) respecMasteryToggle()
+	if (inNGM(2) && getEternitied() <= 1) player.autobuyers[12] = 13
+	if (inNGM(3) && getEternitied() <= 1) player.autobuyers[13] = 14
+
+	if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
+
+	player.dilation.active = false
+
 	giveAchievement("Time is relative")
 	player.replicanti.galaxies = 0
 	extraReplGalaxies = 0
@@ -3628,8 +3567,8 @@ function TPAnimationBtn(){
 }
 
 function dilAndBHDisplay() {
-	getEl("dilationTabbtn").style.display = (player.dilation.studies.includes(1)) ? "table-cell" : "none"
-	getEl("blackHoleTabbtn").style.display = player.dilation.studies.includes(1) && player.exdilation != undefined ? "table-cell" : "none"
+	getEl("dilationTabbtn").style.display = (hasDilationStudy(1)) ? "table-cell" : "none"
+	getEl("blackHoleTabbtn").style.display = hasDilationStudy(1) && player.exdilation != undefined ? "table-cell" : "none"
 	updateDilationUpgradeButtons()
 }
 
@@ -4401,10 +4340,7 @@ function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
 		//Color Powers
 		var colorShorthands=["r","g","b"]
-		for (var c = 0; c < 3; c++) {
-			//console.log(colorShorthands[c], getColorPowerQuantity(colorShorthands[c]))
-			tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
-		}
+		for (var c = 0; c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
 		updateColorPowers()
 
 		if (masteryStudies.has("d10")) replicantOverallUpdating(diff)
@@ -4843,7 +4779,7 @@ function progressBarUpdating(){
 		preEternityProgress()
 	} else if (hasAch('r127') && !hasAch('r128') && player.timestudy.studies.length == 0) {
 		r128Progress()
-	} else if (player.dilation.studies.includes(5) && player.dilation.active && !hasAch('r138') && player.timestudy.studies.length == 0) {
+	} else if (hasDilationStudy(5) && player.dilation.active && !hasAch('r138') && player.timestudy.studies.length == 0) {
 		r138Progress()
 	} else if (player.dilation.active && player.dilation.totalTachyonParticles.gte(getDilGain())) {
 		gainTPProgress()
@@ -4989,7 +4925,7 @@ function IPonCrunchPassiveGain(diff){
 }
 
 function EPonEternityPassiveGain(diff){
-	if (hasEternityUpg(15) || hasAch("ng3p93")) {
+	if (moreEMsUnlocked() && getEternitied() >= 1e18) {
 		player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints().times(diff / 100))
 		getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
 	}
@@ -5811,7 +5747,7 @@ window.addEventListener('keydown', function(event) {
 
 		case 77: // M
 			if (ndAutobuyersUsed<9||!player.challenges.includes("postc8")) getEl("maxall").onclick()
-			if (player.dilation.studies.includes(6)) {
+			if (hasDilationStudy(6)) {
 				var maxmeta=true
 				for (d = 1; d < 9; d++) {
 					if (player.autoEterOptions["meta" + d]) {
