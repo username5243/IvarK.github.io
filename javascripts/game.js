@@ -23,12 +23,14 @@ var gameSpeed = 1
 function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
-			"<a href='about.html' target='_newtab'>About</a> | " + 
-			"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " + 
+			"<a href='about.html' target='_newtab'>About</a> | " +  
 			(betaId != "" ?
-				"<a>Test server</a> (You are here) | " +
+				"<a>Test server</a> (You are currently here.) | " +
 				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
-			: "<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> (You are here) | ") + 
+			: 
+				"<a href='http://discord.gg/h9mDese' target='_newtab'>Discord</a> | " +
+				"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/v2.4-Gravitions/'>Test server</a> | "
+			) + 
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
 			"<a href='http://aarextiaokhiao.github.io' target='_newtab'>Aarex's Home</a>" + 
 		"</div></tr></td></table>"
