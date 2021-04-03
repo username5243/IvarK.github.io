@@ -119,11 +119,13 @@ function getQuantumReqSource() {
 }
 
 function quarkGain() {
+	if (!inQC(0)) return new Decimal(0)
+	if (!ph.did("quantum")) return new Decimal(1)
+
 	let ma = getQuantumReqSource().max(1)
 	let maReq = getQuantumReq()
 
 	if (!tmp.ngp3) return Decimal.pow(10, ma.log(10) / Math.log10(Number.MAX_VALUE) - 1).floor()
-	if (!ph.did("quantum")) return new Decimal(1)
 
 	let log = Math.max(ma.log10() / maReq.log10() - 1, 0) / 2
 	let logBoostExp = 4
@@ -434,7 +436,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (tmp.ngp3) {
 		player.dilation.times = 0
 		if (!force) {
-			updateQuarksAndGluonsOnQuantum()
+			gainQKOnQuantum()
 
 			var qc = tmp.inQCs
 			onQCCompletion(qc, oldMoney, oldTime, dilTimes)

@@ -507,7 +507,7 @@ function getGU8Effect(type) {
 	return Math.pow(tmp.qu.gluons[type].div("1e565").add(1).log10() * 0.505 + 1, 1.5)
 }
 
-function updateQuarksAndGluonsOnQuantum() {
+function gainQKOnQuantum() {
 	var u = tmp.qu.usedQuarks
 	var g = tmp.qu.gluons
 	var p = ["rg", "gb", "br"]
