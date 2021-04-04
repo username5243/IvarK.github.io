@@ -406,7 +406,7 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	4: {
-		req: 6,
+		req: 5,
 		masReq: 12,
 		type: "b",
 		eff(x) {
@@ -417,8 +417,8 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	5: {
-		req: 9,
-		masReq: 1/0,
+		req: 7,
+		masReq: 15,
 		type: "r",
 		eff(x) {
 			return 1
@@ -428,8 +428,8 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	6: {
-		req: 12,
-		masReq: 1/0,
+		req: 9,
+		masReq: 18,
 		type: "g",
 		eff(x) {
 			return 1
@@ -439,8 +439,8 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	7: {
-		req: 15,
-		masReq: 1/0,
+		req: 12,
+		masReq: 21,
 		type: "r",
 		eff(x) {
 			return 1
@@ -450,8 +450,8 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	8: {
-		req: 18,
-		masReq: 1/0,
+		req: 15,
+		masReq: 24,
 		type: "b",
 		eff(x) {
 			return 1
@@ -461,8 +461,8 @@ let ENTANGLED_BOOSTS = {
 		}
 	},
 	9: {
-		req: 21,
-		masReq: 1/0,
+		req: 18,
+		masReq: 27,
 		type: "g",
 		eff(x) {
 			return 1
