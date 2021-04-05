@@ -230,15 +230,6 @@ function getBranchFinalSpeed() {
 
 function getDecayRate(branch) {
 	let ret = Decimal.pow(2, getBU1Power(branch) * Math.max((getRadioactiveDecays(branch) - 8) / 10, 1)).div(getBranchUpgMult(branch, 3)).div(Decimal.pow(2, Math.max(0, getRDPower(branch) - 4) + 2))
-	if (branch == "r") {
-		if (GUActive("rg8")) ret = ret.div(getGU8Effect("rg"))
-	}
-	if (branch == "g") {
-		if (GUActive("gb8")) ret = ret.div(getGU8Effect("gb"))
-	}
-	if (branch == "b") {
-		if (GUActive("br8")) ret = ret.div(getGU8Effect("br"))
-	}
 	ret = ret.times(tmp.branchSpeed).min(Math.pow(2, 40))
 	ret = ret.times(getBranchDevSpeed())
 	return ret
@@ -323,7 +314,7 @@ let TREE_UPGRADES = {
 			return lvl
 		},
 		eff(lvl) {
-			return Math.sqrt(1 + Math.log10(lvl * 0.5 + 1) * 0.1)
+			return 1
 		}
 	},
 	5: {
@@ -445,7 +436,6 @@ function getTreeUpgradeEffect(upg) {
 function getTreeUpgradeEffectDesc(upg) {
 	if (upg == 1) return getFullExpansion(getTreeUpgradeEffect(upg))
 	if (upg == 2) return getDilExp("TU3").toFixed(2) + " -> " + getDilExp().toFixed(2)
-	if (upg == 4) return "^" + getFullExpansion(Math.round(getElectronBoost("noTree"))) + " -> ^" + getFullExpansion(Math.round(tmp.mpte))
 	if (upg == 8) return getTreeUpgradeEffect(8).toFixed(2)
 	return shortenMoney(getTreeUpgradeEffect(upg))
 }

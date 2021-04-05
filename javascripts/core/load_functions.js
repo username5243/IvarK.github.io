@@ -646,17 +646,11 @@ function doNGP3NewPlayerStuff(){
         player.eternityBuyer.slowStopped = false
         player.eternityBuyer.ifAD = false
         tmp.qu.autobuyer = {
-                enabled: false,
-                limit: 1,
-                mode: "amount",
-                peakTime: 0
-                }
-        tmp.qu.electrons = {
-                amount: 0,
-                sacGals: 0,
-                mult: 2,
-                rebuyables: [0,0,0,0]
-        }
+			enabled: false,
+			limit: 1,
+			mode: "amount",
+			peakTime: 0
+		}
         tmp.qu.disabledRewards = {}
         tmp.qu.metaAutobuyerWait = 0
         tmp.qu.multPower = {rg:0,gb:0,br:0,total:0}
@@ -975,14 +969,6 @@ function doQuantumRestore(){
 
 function doNGp3v15tov199(){
         if (tmp.mod.newGame3PlusVersion < 1.511) if (player.autoEterMode !== undefined) player.autoEterMode = "amount"
-        if ((tmp.qu ? !tmp.qu.electrons : false) && player.masterystudies) {
-                tmp.qu.electrons = {
-                        amount: 0,
-                        sacGals: 0,
-                        mult: 2,
-                        rebuyables: [0,0,0,0]
-                }
-        }
         if (tmp.mod.newGame3PlusVersion < 1.8) {
                 player.eternityBuyer.dilationMode = false
                 player.eternityBuyer.statBeforeDilation = 0
@@ -996,9 +982,7 @@ function doNGp3v15tov199(){
         if (tmp.mod.newGame3PlusVersion < 1.9) {
                 player.replicanti.intervalCost = Decimal.pow(1e10, Math.round(Math.log10(1000/player.replicanti.interval)/-Math.log10(0.9))+14)
                 tmp.qu.disabledRewards={}
-                tmp.qu.electrons.mult=2
         }
-        if (tmp.mod.newGame3PlusVersion < 1.901 && !tmp.qu.electrons.rebuyables) tmp.qu.electrons.rebuyables=[0,0,0,0]
         if (tmp.mod.newGame3PlusVersion < 1.95) {
                 tmp.qu.multPower=0
                 tmp.qu.challenge=0
@@ -2309,10 +2293,8 @@ function setupNGP31Versions() {
 		delete tmp.hb.particlesUnlocked
 		delete tmp.hb.field
 	}
-	if (tmp.mod.newGame3PlusVersion < 3) {
-		player.ghostify.gds = GDs.setup()
-		player.quantum.electrons.percentage = 1
-	} else {
+	if (tmp.mod.newGame3PlusVersion < 3) player.ghostify.gds = GDs.setup()
+	else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
 		if (!hasAch("ng3p111") && tmp.ngpX < 5) delete player.pl
 	}
@@ -2804,9 +2786,9 @@ function conToDeciMS(){
 			tmp.qu.gluons.br = new Decimal(tmp.qu.gluons.br)
 		}
 		if (tmp.qu ? tmp.qu.autobuyer : false) tmp.qu.autobuyer.limit = new Decimal(tmp.qu.autobuyer.limit)
-		if (tmp.qu ? tmp.qu.electrons : false) if (typeof(tmp.qu.electrons.amount)=="string") tmp.qu.electrons.amount = Math.round(parseFloat(tmp.qu.electrons.amount)*4)/4
 		if (player.dilation.bestTP == undefined) player.dilation.bestTP = hasAch("ng3p18") || hasAch("ng3p37") ? player.dilation.tachyonParticles : 0
 		player.dilation.bestTP = new Decimal(player.dilation.bestTP)
+		if (tmp.qu ? tmp.qu.electrons : false) delete tmp.qu.electrons //RIP positrons
 		if (tmp.qu ? tmp.qu.replicants : false) {
 			tmp.qu.replicants.amount = new Decimal(tmp.qu.replicants.amount)
 			tmp.qu.replicants.requirement = new Decimal(tmp.qu.replicants.requirement)

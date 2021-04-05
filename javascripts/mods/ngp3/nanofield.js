@@ -209,7 +209,7 @@ var nanoRewards = {
 			return "you produce " + shorten(x) + "x faster preon charge"
 		},
 		per_10_power: function(x) {
-			return "multiplier per ten dimensions is increased by " + x.toFixed(2) + "x before the electrons effect"
+			return "multiplier per ten dimensions is increased by " + x.toFixed(2) + "x"
 		},
 		preon_energy: function(x) {
 			return "you produce " + shorten(x) + "x faster preon energy"
@@ -387,7 +387,7 @@ function updateNanoRewardTemp() {
 	//The rest is calculated by updateTemp().
 }
 
-function getAntiPreonGhostWake() {
+function getAntipreonGhostWake() {
 	let x = 104
 	if (tmp.pce && tmp.pce.ms) x += Math.floor(tmp.pce.ms.ap)
 	return x

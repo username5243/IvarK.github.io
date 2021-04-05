@@ -341,7 +341,6 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (tmp.quActive && masteryStudies.has("d7")) x = getElectronBoost(focusOn)
 	return x
 }
 	

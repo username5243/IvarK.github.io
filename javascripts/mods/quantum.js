@@ -23,14 +23,12 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 			if (abletostart) {
 				if (!inQC(0)) return
 				if (QCType == 2 && tmp.qu.pairedChallenges.completed + 1 < qc) return
-				if (tmp.qu.electrons.amount < getQCCost(QCs)) return
 				if (bigRip) {
 					if (QCs[0] != 6 || QCs[1] != 8) return
 					if (tmp.qu.bigRip.conf && !auto) if (!confirm("Big Ripping the universe starts PC6+8, however, only dilation upgrades boost dilation except upgrades that multiply TP gain until you buy the eleventh upgrade, certain resources like Time Theorems and Time Studies will be changed, and only certain upgrades work in Big Rip. If you can beat PC6+8, you will be able to unlock the next layer. You can give your Time Theorems and Time Studies back by undoing Big Rip.")) return
 				} else if (QCType == 2) {
-					if (player.options.qcConf || (tmp.qu.pairedChallenges.completions.length == 0 && !ph.did("ghostify"))) if (!confirm("You will start a Quantum Challenge, but as a Paired Challenge, there will be two qcenges at once. Completing it boosts the rewards of the Quantum Challenges that you chose in this Paired Challenge. You will keep electrons & sacrificed galaxies, but they don't work in this Challenge.")) return
-				} else if (player.options.qcConf || (!QCIntensity(1) && !ph.did("ghostify"))) if (!confirm("You will do a Quantum reset, but you will not gain quarks, you keep your electrons & sacrificed galaxies, and you can't buy electron upgrades. You have to reach the set goal of antimatter while getting the meta-antimatter requirement to Quantum to complete this qcenge. Electrons and banked eternities have no effect in Quantum Challenges and your electrons and sacrificed galaxies don't reset until you end the challenge.")) return
-				tmp.qu.electrons.amount -= getQCCost(QCs)
+					if (player.options.qcConf || (tmp.qu.pairedChallenges.completions.length == 0 && !ph.did("ghostify"))) if (!confirm("You will start a Quantum Challenge, but as a Paired Challenge, there will be two qcenges at once. Completing it boosts the rewards of the Quantum Challenges that you chose in this Paired Challenge. You will keep positrons & sacrificed galaxies, but they don't work in this Challenge.")) return
+				} else if (player.options.qcConf || (!QCIntensity(1) && !ph.did("ghostify"))) if (!confirm("You will do a Quantum reset, but you will not gain quarks. You have to reach the set goal of antimatter while getting the meta-antimatter requirement to Quantum to complete this challenge. Banked eternities have no effect in Quantum Challenges.")) return
 			} else if (pcFocus && QCType == 1) {
 				if (QCIntensity(qc) >= 1 && !assigned.includes(qc)) {
 					if (!tmp.qu.pairedChallenges.order[pcFocus]) tmp.qu.pairedChallenges.order[pcFocus] = [qc]
@@ -447,11 +445,8 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		} //bounds if (!force)
 		tmp.qu.pairedChallenges.current = 0
 		if (!isQC) {
-			tmp.qu.electrons.amount = 0
-			tmp.qu.electrons.sacGals = 0
 			tmp.qu.challenge = []
 			tmp.qu.qcsMods.current = []
-			tmp.aeg = 0
 		} else if (QCs.length == 2) tmp.qu.pairedChallenges.current = id
 		tmp.qu.challenge = QCs
 		ph.updateActive()
@@ -621,17 +616,17 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 
 	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
 	if (tmp.quActive && !bigRip) {
-		let keepElc = keepQuantum && player.masterystudies.includes("d7")
+		let keepPos = keepQuantum && player.masterystudies.includes("d7")
 		let keepAnts = keepQuantum && player.masterystudies.includes("d10")
 		let keepNf = keepQuantum && player.masterystudies.includes("d11")
 		let keepToD = keepQuantum && player.masterystudies.includes("d12")
 
-		getEl("electronstabbtn").style.display = keepElc ? "" : "none"
+		getEl("positronstabbtn").style.display = keepPos ? "" : "none"
 		getEl("replicantstabbtn").style.display = keepAnts ? "" : "none"
 		getEl("nanofieldtabbtn").style.display = keepNf ? "" : "none"
 		getEl("todtabbtn").style.display = keepToD ? "" : "none"
 	
-		if (!keepElc && getEl("electrons").style.display == "block") showQuantumTab("uquarks")
+		if (!keepPos && getEl("positrons").style.display == "block") showQuantumTab("uquarks")
 		if (!keepAnts && getEl("replicants").style.display == "block") showQuantumTab("uquarks")
 		if (!keepNf && getEl("nanofield").style.display == "block") showQuantumTab("uquarks")
 		if (!keepToD && getEl("tod").style.display == "block") showQuantumTab("uquarks")
@@ -671,7 +666,6 @@ function handleQuantumDisplays(prestige) {
 	updateAssortPercentage()
 	updateColorCharge()
 	updateGluonsTabOnUpdate()
-	updateElectrons()
 
 	updateQuantumChallenges()
 	updateQCTimes()

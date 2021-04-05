@@ -31,8 +31,6 @@ function getMetaDimensionMultiplier(tier) {
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier, 0)))
 	ret = ret.times(tmp.mdgm) //Global multiplier of all Meta Dimensions
-	//Quantum upgrades
-	if (tier == 1 && GUActive("rg3")) ret = ret.times(getRG3Effect())
 
 	//QC Rewards:
 	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
@@ -51,9 +49,6 @@ function getMetaDimensionGlobalMultiplier() {
 	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
 	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
-		//Qunatum Upgrades
-		if (GUActive("br4")) ret = ret.times(getBR4Effect())
-
 		//QC Rewards
 		if (isQCRewardActive(3)) ret = ret.times(tmp.qcRewards[3])
 		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])

@@ -38,10 +38,10 @@ var masteryStudies = {
 			return masteryStudies.bought >= 10
 		},
 		d7() {
-			return tmp.qu.quarkEnergy >= 2.75 && false
+			return tmp.qu.quarkEnergy >= 2.75
 		},
 		d8() {
-			return tmp.qu.electrons.amount >= 16750
+			return false
 		},
 		d9() {
 			return QCIntensity(8) >= 1
@@ -70,10 +70,10 @@ var masteryStudies = {
 			return "10 bought mastery studies"
 		},
 		d7() {
-			return "SOON IN BETA V0.3"
+			return "2.75 quantum energy"
 		},
 		d8() {
-			return getFullExpansion(16750) + " electrons"
+			return "SOON IN BETA V0.4"
 		},
 		d9() {
 			return "Complete Quantum Challenge 8"
@@ -445,8 +445,6 @@ function getMasteryStudyCostMult(id) {
 
 function buyingD7Changes() {
 	showTab("quantumtab")
-	showQuantumTab("electrons")
-	updateElectrons()
 }
 
 function buyingDilStudyForQC() {

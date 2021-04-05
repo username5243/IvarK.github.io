@@ -919,15 +919,6 @@ function getBrandNewBigRipData(){
 	}
 }
 
-function getBrandNewElectronData(){
-	return {
-		amount: 0,
-		sacGals: 0,
-		mult: 2,
-		rebuyables: [0,0,0,0]
-	}
-}
-
 function getBrandNewPCData(){
 	return {
 		order: {},
@@ -1068,7 +1059,6 @@ function doNGPlusThreeNewPlayer(){
 	player.eternityBuyer.ifAD = false
 	player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
 	tmp.qu.autobuyer = {enabled: false, limit: 1, mode: "amount", peakTime: 0}
-	tmp.qu.electrons = getBrandNewElectronData()
 	tmp.qu.disabledRewards = {}
 	tmp.qu.metaAutobuyerWait = 0
 	tmp.qu.metaAutobuyerSlowWait = 0
@@ -1174,7 +1164,6 @@ function doNGPlusFourPlayer(){
 	player.quantum.times = 1
 	player.quantum.best = 10
 	for (var d = 7; d < 14; d++) player.masterystudies.push("d"+d)
-	player.quantum.electrons.mult = 6
 	for (var c = 1; c < 9; c++) player.quantum.challenges[c] = 2
 	player.quantum.pairedChallenges.completed = 4
 	player.quantum.nanofield.rewards = 19
@@ -1951,7 +1940,6 @@ function changeSaveDesc(saveId, placement) {
 					msg+=", Challenge completions: "+completions
 				} else {
 					msg+=", Best quantum: "+timeDisplayShort(temp.quantum.best)
-					if (temp.masterystudies.includes('d7')) msg+=", Electrons: "+shortenDimensions(temp.quantum.electrons.amount)
 				}
 			}
 		} else if (temp.exdilation==undefined?false:temp.blackhole.unl) {
@@ -2357,7 +2345,6 @@ function onNotationChange() {
 		updateQuarksTabOnUpdate()
 		updateGluonsTabOnUpdate("notation")
 		updateQuantumWorth("notation")
-		updateElectrons()
 		updateBankedEter()
 		updateQuantumChallenges()
 		updateBestPC68Display()
@@ -3251,7 +3238,7 @@ function eternity(force, auto, forceRespec, dilated) {
 
 	if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
 	if (player.currentEternityChall == "eterc6" && ECComps("eterc6") < 5 && player.dimensionMultDecrease < 4) player.dimensionMultDecrease = Math.max(parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1)),2)
-	if (!GUActive("gb4")) if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
+	if ((player.currentEternityChall == "eterc11" || (player.currentEternityChall == "eterc12" && ph.did("ghostify"))) && ECComps("eterc11") < 5) player.tickSpeedMultDecrease = Math.max(parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2)), 1.65)
 	if (player.infinitied < 10 && !force && !player.boughtDims) giveAchievement("Do you really need a guide for this?");
 	if (Decimal.round(player.replicanti.amount) == 9) giveAchievement("We could afford 9");
 	if (player.dimlife && !force) giveAchievement("8 nobody got time for that")
@@ -3530,7 +3517,7 @@ function updateBlinkOfAnEye(){
 function canQuickBigRip() {
 	var x = false
 	if (!tmp.ngp3) return false
-	if (tmp.quUnl && masteryStudies.has("d14") && inQC(0) && tmp.qu.electrons.amount >= getQCCost([6, 8])) {
+	if (tmp.quUnl && masteryStudies.has("d14") && inQC(0)) {
 		if (player.ghostify.milestones >= 2) x = true
 		else for (var p = 1; p <= 4; p++) {
 			var pcData = tmp.qu.pairedChallenges.order[p]
@@ -3620,7 +3607,7 @@ function notifyGhostifyMilestones(){
 	if (typeof notifyId2 == "undefined") notifyId2 = 16
 	if (notifyId2 <= 0) notifyId2 = 0
 	if (player.ghostify.milestones > notifyId2) {
-		$.notify("You became a ghost in at most "+getFullExpansion(tmp.bm[notifyId2])+"x quantumed stat! "+(["You now start with all Speedrun Milestones and all "+shorten(Number.MAX_VALUE)+" QK assignation features unlocked, all Paired Challenges completed, all Big Rip upgrades bought, Nanofield is 2x faster until you reach 16 rewards, and you get quarks based on your best MA this quantum", "From now on, colored quarks do not cancel, you keep your gluon upgrades, you can quick Big Rip, and completing an Eternity Challenge doesn't respec your Time Studies.", "You now keep your Electron upgrades", "From now on, Quantum doesn't reset your Tachyon particles unless you are in a QC, unstabilizing quarks doesn't lose your colored quarks, and you start with 5 of 1st upgrades of each Tree Branch", "From now on, Quantum doesn't reset your Meta-Dimension Boosts unless you are in a QC or undoing Big Rip", "From now on, Quantum doesn't reset your normal replicants unless you are in a QC or undoing Big Rip", "You now start with 10 worker replicants and Ghostify now doesn't reset Neutrinos.", "You are now gaining ^0.5 amount of quarks, ^0.5 amount of gluons, and 1% of Space Shards gained on Quantum per second.", "You now start with 10 Emperor Dimensions of each tier up to the second tier"+(tmp.mod.ngudpV?", and from now on, start Big Rips with the 3rd row of Eternity Upgrades":""), "You now start with 10 Emperor Dimensions of each tier up to the fourth tier", "You now start with 10 Emperor Dimensions of each tier up to the sixth tier, and the IP multiplier no longer costs IP", "You now start with 10 of each Emperor Dimension", "You now start with 16 Nanofield rewards", "You now start with "+shortenCosts(1e25)+" quark spins, and Branches are faster based on your spins", "You now start with Break Eternity unlocked and all Break Eternity upgrades bought and generate 1% of Eternal Matter gained on Eternity per second", "From now on, you gain 1% of quarks you will gain per second and you keep your Tachyon particles on Quantum and Ghostify outside of Big Rip."])[notifyId2]+".","success")
+		$.notify("You became a ghost in at most "+getFullExpansion(tmp.bm[notifyId2])+"x quantumed stat! "+(["You now start with all Speedrun Milestones and all "+shorten(Number.MAX_VALUE)+" QK assignation features unlocked, all Paired Challenges completed, all Big Rip upgrades bought, Nanofield is 2x faster until you reach 16 rewards, and you get quarks based on your best MA this quantum", "From now on, colored quarks do not cancel, you keep your gluon upgrades, you can quick Big Rip, and completing an Eternity Challenge doesn't respec your Time Studies.", "???", "From now on, Quantum doesn't reset your Tachyon particles unless you are in a QC, unstabilizing quarks doesn't lose your colored quarks, and you start with 5 of 1st upgrades of each Tree Branch", "From now on, Quantum doesn't reset your Meta-Dimension Boosts unless you are in a QC or undoing Big Rip", "From now on, Quantum doesn't reset your normal replicants unless you are in a QC or undoing Big Rip", "You now start with 10 worker replicants and Ghostify now doesn't reset Neutrinos.", "You are now gaining ^0.5 amount of quarks, ^0.5 amount of gluons, and 1% of Space Shards gained on Quantum per second.", "You now start with 10 Emperor Dimensions of each tier up to the second tier"+(tmp.mod.ngudpV?", and from now on, start Big Rips with the 3rd row of Eternity Upgrades":""), "You now start with 10 Emperor Dimensions of each tier up to the fourth tier", "You now start with 10 Emperor Dimensions of each tier up to the sixth tier, and the IP multiplier no longer costs IP", "You now start with 10 of each Emperor Dimension", "You now start with 16 Nanofield rewards", "You now start with "+shortenCosts(1e25)+" quark spins, and Branches are faster based on your spins", "You now start with Break Eternity unlocked and all Break Eternity upgrades bought and generate 1% of Eternal Matter gained on Eternity per second", "From now on, you gain 1% of quarks you will gain per second and you keep your Tachyon particles on Quantum and Ghostify outside of Big Rip."])[notifyId2]+".","success")
 		notifyId2++
 	}
 }
@@ -3803,12 +3790,7 @@ function ghostifyAutomationUpdatingPerSecond() {
 		} 
 	}
 	if (isAutoGhostActive(8)) buyMaxQuantumFood()
-	if (isAutoGhostActive(18)) {
-		let bought = false
-		for (let u = 1; u <= 4; u++) while (buyElectronUpg(u, true)) bought = true
-		if (bought) updateElectrons()
-	}
-	if (isAutoGhostActive(7)) ENTANGLED_BOOSTS.maxBuy()
+	if (isAutoGhostActive(7)) ENTANGLED_BOOSTS.maxBuy("glu", )
 }
 
 function checkGluonRounding(){
@@ -4098,10 +4080,10 @@ function ghostifyAutomationUpdating(diff){
 			let data = player.ghostify.wzb
 			let hasWNB = data.wnb.gt(0)
 
-			if (data.dPUse == 0 && data.dP.gt(0)) useAntiPreon(hasWNB ? 3 : 1)
-			if (data.dPUse == 1) useAntiPreon(hasWNB ? 3 : 2)
-			if (data.dPUse == 2) useAntiPreon(1)
-			if (data.dPUse == 3 && !hasWNB) useAntiPreon(2)
+			if (data.dPUse == 0 && data.dP.gt(0)) useAntipreon(hasWNB ? 3 : 1)
+			if (data.dPUse == 1) useAntipreon(hasWNB ? 3 : 2)
+			if (data.dPUse == 2) useAntipreon(1)
+			if (data.dPUse == 3 && !hasWNB) useAntipreon(2)
 		}
 	}
 	if (isAutoGhostActive(19)) {
@@ -4834,7 +4816,6 @@ function challengeOverallDisplayUpdating(){
 	if (getEl("challenges").style.display == "block") {
 		if (getEl("eternitychallenges").style.display == "block") ECRewardDisplayUpdating()
 		if (getEl("quantumchallenges").style.display == "block") {
-			if (tmp.qu.autoOptions.sacrifice) getEl("electronsAmount2").textContent="You have " + getFullExpansion(Math.round(tmp.qu.electrons.amount)) + " electrons."
 			for (var c=1;c<=9;c++) {
 				let x = tmp.qcRewards[c]
 				if (c == 5) getEl("qc5reward").textContent = getDimensionPowerMultiplier("linear").toFixed(2)
@@ -5160,7 +5141,6 @@ function simulateTime(seconds, real, id) {
 	if (player.meta !== undefined) storage.ma = player.meta.antimatter
 	if (tmp.ngp3) {
 		storage.dt = player.dilation.dilatedTime
-		storage.ec = tmp.qu.electrons.amount
 		storage.nr = tmp.qu.replicants.amount
 		storage.bAm = player.ghostify.bl.am
 	}
@@ -5184,7 +5164,6 @@ function simulateTime(seconds, real, id) {
 	if (storage.bp && player.blackhole.power.gt(storage.bp)) popupString+= ",<br> black hole power increased "+shortenMoney(player.blackhole.power.log10() - (Decimal.max(storage.bp, 1)).log10())+" orders of magnitude"
 	if (storage.ma && player.meta.antimatter.gt(storage.ma) && !ph.did("ghostify")) popupString+= ",<br> meta-antimatter increased "+shortenMoney(player.meta.antimatter.log10() - (Decimal.max(storage.ma, 1)).log10())+" orders of magnitude"
 	if (storage.dt) {
-		if (tmp.qu.electrons.amount > storage.ec && !ph.did("ghostify")) popupString+= ",<br> electrons increased by "+getFullExpansion(Math.round(tmp.qu.electrons.amount-storage.ec))
 		if (tmp.qu.replicants.amount.gt(storage.nr) && !ph.did("ghostify")) popupString+= ",<br> normal replicants increased "+shortenMoney(tmp.qu.replicants.amount.log10() - (Decimal.max(storage.nr, 1)).log10())+" orders of magnitude"
 		if (Decimal.gt(player.ghostify.bl.am, storage.bAm) && ph.did("ghostify")) popupString+= ",<br> Bosonic Antimatter increased "+shortenMoney(player.ghostify.bl.am.log10() - (Decimal.max(storage.bAm, 1)).log10())+" orders of magnitude"
 	}

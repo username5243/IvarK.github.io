@@ -103,7 +103,6 @@ function buyNeutrinoUpg(id) {
 		getEl("eggonsCell").style.display="none"
 		getEl("workerReplWhat").textContent="babies"
 	}
-	if (id == 5) updateElectrons(true)
 }
 
 function updateNeutrinoBoosts() {

@@ -210,7 +210,7 @@ function gainQuarkEnergy() {
 
 function getQuarkEnergyMult() {
 	let x = 1
-	if (ENTANGLED_BOOSTS.active(1)) x += tmp.glB.enB1
+	if (ENTANGLED_BOOSTS.active("glu", 1)) x += tmp.enB.glu1
 	return x
 }
 
@@ -222,19 +222,6 @@ function updateQuarkEnergyEffects() {
 }
 
 GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
-
-function buyGluonUpg(color, id) {
-	var name = color + id
-	if (tmp.qu.upgrades.includes(name) || tmp.qu.gluons[color].plus(0.001).lt(GUCosts[id])) return
-	tmp.qu.upgrades.push(name)
-	tmp.qu.gluons[color] = tmp.qu.gluons[color].sub(GUCosts[id])
-	updateGluonsTab("spend")
-	if (name == "gb3") bumpInfMult()
-	if (name == "rg4" && !tmp.qu.autoOptions.sacrifice) updateElectronsEffect()
-	if (name == "gb4") player.tickSpeedMultDecrease = 1.25
-	updateQuantumWorth()
-	updateGluonsTabOnUpdate()
-}
 
 function GUBought(id) {
 	return player.quantum && player.quantum.upgrades.includes(id)
@@ -293,7 +280,10 @@ function maxQuarkMult() {
 
 function updateGluonicBoosts() {
 	tmp.glB = {}
+	tmp.enB = {}
+
 	let data = tmp.glB
+	let enBData = ENTANGLED_BOOSTS
 	let gluons = tmp.qu.gluons
 
 	data.r = { mult: getGluonEffBuff(gluons.rg), sub: getGluonEffNerf(gluons.br) } //x -> x * [RG effect] - [BR effect]
@@ -301,17 +291,23 @@ function updateGluonicBoosts() {
 	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb) } //x -> x * [BR effect] - [GB effect]
 
 	let type = tmp.qu.entColor || "rg"
-	let enAmt = ENTANGLED_BOOSTS.gluonEff(gluons[type])
+	let enAmt = enBData.gluonEff(gluons[type])
 	let masAmt = Math.max(Math.max(
-		ENTANGLED_BOOSTS.gluonEff(gluons.rg),
-		ENTANGLED_BOOSTS.gluonEff(gluons.gb)),
-		ENTANGLED_BOOSTS.gluonEff(gluons.br)
+		enBData.gluonEff(gluons.rg),
+		enBData.gluonEff(gluons.gb)),
+		enBData.gluonEff(gluons.br)
 	)
-	let strEff = ENTANGLED_BOOSTS.strEff()
+	let strEff = enBData.strEff()
 
-	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
-		if (!ENTANGLED_BOOSTS.has(i)) break
-		data["enB" + i] = ENTANGLED_BOOSTS[i].eff((ENTANGLED_BOOSTS.mastered(i) ? masAmt : enAmt) * strEff)
+	let data2 = tmp.enB
+	for (var t = 0; t < enBData.types.length; t++) {
+		var name = enBData.types[t]
+		var typeData = enBData[name]
+
+		for (var i = 1; i <= typeData.max; i++) {
+			if (!enBData.has(name, i)) break
+			data2[name + i] = typeData[i].eff((enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
+		}
 	}
 }
 
@@ -324,45 +320,46 @@ function getGluonEffNerf(x) {
 }
 
 let ENTANGLED_BOOSTS = {
-	max: 9,
-	cost(x) {
-		if (x === undefined) x = tmp.qu.entBoosts || 0
-		return Math.pow(x, 1.5) + 1
-	},
-	target() {
-		return Math.floor(Math.pow(tmp.qu.quarkEnergy - 1, 1 / 1.5) + 1)
-	},
-	buy() {
-		if (!(tmp.qu.quarkEnergy >= this.cost())) return
-		tmp.qu.entBoosts = (tmp.qu.entBoosts || 0) + 1
+	buy(type) {
+		let data = this[type]
+		if (!(data.engAmt() >= data.cost())) return
+		data.set(data.amt() + 1)
 		updateGluonicBoosts()
-		updateGluonsTabOnUpdate()
+		ENTANGLED_BOOSTS.update(type)
 	},
-	maxBuy() {
-		if (!(tmp.qu.quarkEnergy >= this.cost())) return
-		tmp.qu.entBoosts = this.target()
+	maxBuy(type) {
+		let data = this[type]
+		if (!(data.engAmt() >= data.cost())) return
+		data.set(data.target())
 		updateGluonicBoosts()
-		updateGluonsTabOnUpdate()
+		ENTANGLED_BOOSTS.update(type)
 	},
-	has(x) {
-		return ph.did("quantum") && tmp.qu.entBoosts >= this[x].req
+
+	has(type, x) {
+		let data = this[type]
+		return ph.did("quantum") && data.amt() >= data[x].req
 	},
-	mastered(x) {
-		return ph.did("quantum") && tmp.qu.entBoosts >= this[x].masReq
-	},
-	active(x) {
-		if (!this.has(x)) return false
-		if (this.mastered(x)) return true
+	active(type, x) {
+		let data = this[type]
+
+		if (!this.has(type, x)) return false
+		if (this.mastered(type, x)) return true
 
 		let gluon = tmp.qu.entColor || "rg"
-		return this[x].type == gluon[0] || this[x].type == gluon[1]
+		return data[x].type == gluon[0] || data.type == gluon[1]
 	},
+	mastered(type, x) {
+		let data = this[type]
+		return ph.did("quantum") && data.amt() >= data[x].masReq
+	},
+
 	gluonEff(x) {
 		return Decimal.add(x, 1).log10()
 	},
 	strEff(x) {
-		return tmp.qu.entBoosts * 2 - 1
+		return (this.glu.amt() + this.pos.amt()) * 2 - 1
 	},
+
 	choose(x) {
 		if (!tmp.qu.entBoosts || tmp.qu.gluons.rg.max(tmp.qu.gluons.gb).max(tmp.qu.gluons.br).eq(0)) {
 			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
@@ -372,139 +369,204 @@ let ENTANGLED_BOOSTS = {
 		tmp.qu.entColor = x
 		quantum(false, true)
 	},
-	1: {
-		req: 1,
-		masReq: 3,
-		type: "r",
-		eff(x) {
-			return Math.cbrt(x) * 0.75
+
+	types: ["glu", "pos"],
+	glu: {
+		name: "Entangled",
+
+		cost(x) {
+			if (x === undefined) x = this.amt()
+			return Math.pow(x, 1.5) + 1
 		},
-		effDisplay(x) {
-			return shorten(x)
+		target() {
+			return Math.floor(Math.pow(this.engAmt() - 1, 1 / 1.5) + 1)
+		},
+
+		amt() {
+			return tmp.qu.entBoosts || 0
+		},
+		engAmt() {
+			return tmp.qu.quarkEnergy
+		},
+		set(x) {
+			tmp.qu.entBoosts = x
+		},
+
+		max: 9,
+		1: {
+			req: 1,
+			masReq: 3,
+			type: "r",
+			eff(x) {
+				return Math.cbrt(x) * 0.75
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		2: {
+			req: 2,
+			masReq: 10,
+			type: "g",
+			eff(x) {
+				return Math.log10(x * 2 + 1) * 1.25 + 1
+			},
+			effDisplay(x) {
+				return x.toFixed(3)
+			}
+		},
+		3: {
+			req: 3,
+			masReq: 10,
+			type: "b",
+			eff(x) {
+				return Math.pow(x / 3 + 1, 0.2)
+			},
+			effDisplay(x) {
+				return formatReductionPercentage(x, 2)
+			}
+		},
+		4: {
+			req: 5,
+			masReq: 12,
+			type: "b",
+			eff(x) {
+				return Decimal.pow(2, Math.pow(player.eternityPoints.add(1).log10(), 0.25))
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		5: {
+			req: 7,
+			masReq: 15,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		6: {
+			req: 9,
+			masReq: 18,
+			type: "g",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		7: {
+			req: 12,
+			masReq: 21,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		8: {
+			req: 15,
+			masReq: 24,
+			type: "b",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		9: {
+			req: 18,
+			masReq: 27,
+			type: "g",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
 		}
 	},
-	2: {
-		req: 2,
-		masReq: 10,
-		type: "g",
-		eff(x) {
-			return Math.log10(x * 2 + 1) * 1.25 + 1
+	pos: {
+		name: "Positronic",
+
+		cost(x) {
+			if (x === undefined) x = this.amt()
+			return Math.pow(x, 1.5) + 1
 		},
-		effDisplay(x) {
-			return x.toFixed(3)
+		target() {
+			return Math.floor(Math.pow(this.engAmt() - 1, 1 / 1.5) + 1)
+		},
+
+		amt() {
+			return 0
+		},
+		engAmt() {
+			return 2
+		},
+		set(x) {
+			//tmp.qu.entBoosts = x
+		},
+
+		max: 1,
+		1: {
+			req: 1,
+			masReq: 3,
+			type: "g",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
 		}
 	},
-	3: {
-		req: 3,
-		masReq: 10,
-		type: "b",
-		eff(x) {
-			return Math.pow(x / 3 + 1, 0.2)
-		},
-		effDisplay(x) {
-			return formatReductionPercentage(x, 2)
+
+	update(type) {
+		var data = ENTANGLED_BOOSTS
+		var typeData = data[type]
+
+		getEl("enB_" + type + "_amt").textContent = getFullExpansion(typeData.amt() || 0)
+		getEl("enB_" + type + "_cost").textContent = shorten(typeData.cost())
+		getEl("enB_" + type + "_next").textContent = ""
+
+		var has = true
+		var mastered = true
+
+		for (var e = 1; e <= typeData.max; e++) {
+			if (has && !data.has(type, e)) {
+				has = false
+				getEl("enB_" + type + "_next").textContent = "Next " + typeData.name + " Boost unlocks at " + typeData[e].req + " " + typeData.name + " Boosters."
+			}
+			if (mastered && !data.mastered(type, e)) mastered = false
+
+			var el = getEl("enB_" + type + e + "_name")
+			el.parentElement.style.display = has ? "" : "none"
+
+			if (has) {
+				el.parentElement.className = mastered ? "yellow" : data.active("glu", e) ? "green" : "red"
+				el.textContent = (mastered ? " Mastered" : data.active("glu", e) ? "" : "Inactive ") + " " + typeData.name + " Boost #" + e
+
+				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(typeData[e].masReq) + " " + typeData.name + " Boosters to master)")
+			}
 		}
 	},
-	4: {
-		req: 5,
-		masReq: 12,
-		type: "b",
-		eff(x) {
-			return Decimal.pow(2, Math.pow(player.eternityPoints.add(1).log10(), 0.25))
-		},
-		effDisplay(x) {
-			return shorten(x)
-		}
-	},
-	5: {
-		req: 7,
-		masReq: 15,
-		type: "r",
-		eff(x) {
-			return 1
-		},
-		effDisplay(x) {
-			return shorten(x)
-		}
-	},
-	6: {
-		req: 9,
-		masReq: 18,
-		type: "g",
-		eff(x) {
-			return 1
-		},
-		effDisplay(x) {
-			return shorten(x)
-		}
-	},
-	7: {
-		req: 12,
-		masReq: 21,
-		type: "r",
-		eff(x) {
-			return 1
-		},
-		effDisplay(x) {
-			return shorten(x)
-		}
-	},
-	8: {
-		req: 15,
-		masReq: 24,
-		type: "b",
-		eff(x) {
-			return 1
-		},
-		effDisplay(x) {
-			return shorten(x)
-		}
-	},
-	9: {
-		req: 18,
-		masReq: 27,
-		type: "g",
-		eff(x) {
-			return 1
-		},
-		effDisplay(x) {
-			return shorten(x)
+	updateOnTick(type) {
+		let data = this[type]
+
+		getEl("enB_" + type + "_buy").className = data.engAmt() >= data.cost() ? "storebtn" : "unavailablebtn"
+
+		for (var i = 1; i <= data.max; i++) {
+			if (!this.has(type, i)) break
+			getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
 		}
 	}
-}
-
-function getGB1Effect() {
-	return Decimal.div(1, tmp.tsReduce).log10() / 100 + 1
-}
-
-function getBR1Effect() {
-	return Math.sqrt(player.dilation.dilatedTime.add(10).log10()) / 2
-}
-
-function getRG3Effect() {
-	let exp = Math.sqrt(player.meta.resets)
-	if (exp > 36) exp = 6 * Math.sqrt(exp)
-	if (!hasAch("ng3p24")) exp = 1
-	return Decimal.pow(player.resets, exp)
-}
-
-function getBR4Effect() {
-	if (!tmp.eterUnl) return 1
-	return Decimal.pow(getDimensionPowerMultiplier(), 0.0003).max(1)
-}
-
-function getBR5Effect() {
-	if (!tmp.eterUnl) return 1
-	return 1 + Math.min(Math.sqrt(player.dilation.tachyonParticles.max(1).log10()) * 0.013, 0.14)
-}
-
-function getBR6Effect() {
-	if (!tmp.eterUnl) return 1
-	return 1 + player.meta.resets / 340
-}
-
-function getGU8Effect(type) {
-	return Math.pow(tmp.qu.gluons[type].div("1e565").add(1).log10() * 0.505 + 1, 1.5)
 }
 
 function gainQKOnQuantum() {
@@ -555,12 +617,7 @@ function updateGluonsTab() {
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(tmp.qu.gluons[color + colors[(c + 1) % 3]])
 	}
 
-	getEl("entangledBoost").className = tmp.qu.quarkEnergy >= ENTANGLED_BOOSTS.cost() ? "storebtn" : "unavailablebtn"
-
-	for (var i = 1; i <= ENTANGLED_BOOSTS.max; i++) {
-		if (!ENTANGLED_BOOSTS.has(i)) break
-		getEl("enB" + i + "Eff").textContent = ENTANGLED_BOOSTS[i].effDisplay(tmp.glB["enB" + i])
-	}
+	ENTANGLED_BOOSTS.updateOnTick("glu")
 }
 
 //Display: On load
@@ -611,33 +668,10 @@ function updateGluonsTabOnUpdate(mode) {
 		}
 	}
 
-	getEl("entangledBoosts").textContent = getFullExpansion(tmp.qu.entBoosts || 0)
-	getEl("entangledBoostCost").textContent = shorten(ENTANGLED_BOOSTS.cost())
+	ENTANGLED_BOOSTS.update("glu")
+	ENTANGLED_BOOSTS.update("pos") //Temp
 
-	getEl("entangledBoostNext").textContent = ""
-
-	var has = true
-	var mastered = true
-	var data = ENTANGLED_BOOSTS
-	for (var e = 1; e <= data.max; e++) {
-		if (has && !data.has(e)) {
-			has = false
-			getEl("entangledBoostNext").textContent = "Next Entangled Boost unlocks at " + data[e].req + " Entangled Boosters."
-		}
-		if (mastered && !data.mastered(e)) mastered = false
-
-		var el = getEl("enB" + e + "Name")
-		el.parentElement.style.display = has ? "" : "none"
-
-		if (has) {
-			el.parentElement.className = mastered ? "yellow" : data.active(e) ? "green" : "red"
-			el.textContent = (mastered ? " Mastered" : data.active(e) ? "" : "Inactive ") + " Entangled Boost #" + e
-
-			getEl("enB" + e + "Type").innerHTML = (mastered ? "(formerly " : "(") + data[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(data[e].masReq) + " Entangled Boosters to master)")
-		}
-	}
-
-	getEl("masterNote").style.display = data.mastered(1) ? "" : "none"
+	getEl("masterNote").style.display = ENTANGLED_BOOSTS.mastered("glu", 1) ? "" : "none"
 }
 
 //Quarks animation

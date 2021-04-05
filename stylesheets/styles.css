@@ -2124,11 +2124,11 @@ br {
     position: relative;
 }
 
-.qtable, .qtable_4col, #gluonupgrades {
+.qTable, .qTable_4col {
 	width:100%
 }
 
-.qtable td {
+.qTable td {
 	min-width: 33%;
 	width: 33%;
 	max-width: 33%;
@@ -2136,7 +2136,7 @@ br {
 	vertical-align: 0
 }
 
-.qtable_4col td {
+.qTable_4col td {
 	min-width: 25%;
 	width: 25%;
 	max-width: 25%;
@@ -2151,13 +2151,6 @@ br {
 #rg { animation: rg 5s infinite }
 #gb { animation: gb 5s infinite }
 #br { animation: br 5s infinite }
-
-#gluonupgrades td {
-	min-width:16.7%;
-	width:16.7%;
-	max-width:16.7%;
-	text-align:center
-}
 
 .gluonupgrade, .gluonupgradebought {
     font-weight: bold;
@@ -2201,17 +2194,17 @@ br {
 .gluonupgradebought.gb { animation: gbupgbought 5s infinite }
 .gluonupgradebought.br { animation: brupgbought 5s infinite }
 
-#electrons .gluonupgrade.storebtn, .timestudy.elcstudy {
+#positrons .gluonupgrade.storebtn, .timestudy.elcstudy {
 	background-color: black !important;
 	border-color: #8e991e;
 	color: #8e991e;
-	animation: electronupg 5s infinite
+	animation: positronupg 5s infinite
 }
 
-#electrons .gluonupgrade.storebtn:hover, .timestudy.elcstudy:hover {
+#positrons .gluonupgrade.storebtn:hover, .timestudy.elcstudy:hover {
 	background-color: #8e991e !important;
 	color: #ffffff;
-	animation: electronupg 5s infinite
+	animation: positronupg 5s infinite
 }
 
 #moreQCs {
@@ -2223,7 +2216,7 @@ br {
 	text-align: center
 }
 
-#replicants .qtable td { vertical-align: 0 }
+#replicants .qTable td { vertical-align: 0 }
 
 .upgbought {
 	color: black;
@@ -3312,7 +3305,7 @@ screen and (max-width: 480px) {
 	100% {background-color: #0000bf; border: 1px solid #00007f; color: #00001f}
 }
 
-@keyframes electronupg {
+@keyframes positronupg {
     0%  {box-shadow: inset 0px 0px 20px 0px #8e991e;}
     50% {box-shadow: inset 0px 0px 40px 0px #8e991e;}
     100% {box-shadow: inset 0px 0px 20px 0px #8e991e;}

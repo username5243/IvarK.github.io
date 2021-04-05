@@ -35,11 +35,11 @@ function showQuantumTab(tabName) {
 }
 
 var quantumTabs = {
-	tabIds: ["uquarks", "gluons", "electrons", "replicants", "nanofield", "tod"],
+	tabIds: ["uquarks", "gluons", "positrons", "replicants", "nanofield", "tod"],
 	update: {
 		uquarks: updateQuarksTab,
 		gluons: updateGluonsTab,
-		electrons: updateElectronsTab,
+		positrons() { ENTANGLED_BOOSTS.updateOnTick("pos") }, //temp
 		replicants: updateReplicantsTab,
 		nanofield: updateNanofieldTab,
 		tod: updateTreeOfDecayTab
@@ -572,7 +572,6 @@ function ghostifyReset(implode, gain, amount, force) {
 	if (tmp.qu.bigRip.active) switchAB()
 
 	var bm = player.ghostify.milestones
-	if (bm >= 3) tmp.qu.electrons.mult += (4 - tmp.qu.pairedChallenges.completed) * 0.5
 	if (bm >= 7 && !force && hasAch("ng3p68")) gainNeutrinos(Decimal.times(2e3 * tmp.qu.bigRip.bestGals, bulk), "all")
 	if (bm >= 16) giveAchievement("I rather oppose the theory of everything")
 

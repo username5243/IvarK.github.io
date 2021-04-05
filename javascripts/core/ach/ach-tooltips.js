@@ -323,7 +323,7 @@ function setR15Tooltip() {
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce dilated time 3x faster and gain more Tachyon particles based on your Replicated Galaxies.")
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to the 1st Meta Dimension based on total antimatter.") 
-	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies and electrons.")
+	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies.")
 }
 
 function setR16Tooltip() {
@@ -404,7 +404,7 @@ function setR19Tooltip() {
 	//ng3p52/////
 	let gofast = getEl("Gonna go fast")
 	//ng3p54/////
-	let timeBreak = getEl("Time Breaker")
+	//ng3p55/////
 	let immunity = getEl("Time Immunity")
 	let notSmart = getEl("You're not really smart.")
 	let soLife = getEl("And so your life?")
@@ -413,7 +413,6 @@ function setR19Tooltip() {
 	gofast.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 1185)) + " EP first, and then square your EP by disabling dilation while Big Ripped. Reward: Space shards multiply quark gain.")
 	immunity.setAttribute('ach-tooltip', "Get " + shorten(Decimal.pow(10, 8e7)) + " antimatter with one normal galaxy while in Eternity Challenge 7 and big ripped. Reward: Infinite Time is 3% stronger.")
 	notSmart.setAttribute('ach-tooltip', "Get " + shorten(1e215) + " Time Shards without having Time Study 11 while Big Ripped. Reward: Meta Dimensions get a multiplier based on time shards.")
-	timeBreak.setAttribute('ach-tooltip', "Break Eternity. Reward: Galaxies don't reset Dimension Boosts and Quantum Challenges now cost 0 electrons.")
 	soLife.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 3.5e5)) + " IP in Big Rip while dilated, with no EP multiplier upgrades and time studies. Reward: Square the Ghost Particle gain, with a hardcap at " + shortenCosts(1e10) + "x, and the hardcap is further lowered if you have more than " + shortenCosts(1e60) + " Ghost Particles.")
 }
 
@@ -437,7 +436,7 @@ function setR20Tooltip() {
 
 	//ACHIEVEMENT ROW 20
 	finite.setAttribute('ach-tooltip', "Get " + shortenCosts(1e33) + " Space Shards without Breaking Eternity within this Ghostify. Reward: Outside of Big Rips, Tree Upgrades are 10% stronger. In Big Rips, 8th Time Dimensions gain an small exponent boost based on your current Ghostify time.")
-	really.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 5000)) + " matter in Big Rip. Reward: Buying Electron upgrades doesn't consume Meta-Dimension Boosts.")
+	really.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 5000)) + " matter in Big Rip.")
 	grind.setAttribute('ach-tooltip', "Get the 21st Nanofield reward without having Tree Upgrades. Reward: Gain more Quarks based on Radioactive Decays.")
 	willenough.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, tmp.mod.ngudpV ? 268435456 : 36000000)) + " replicanti." + (willenoughReward != "" ? " Reward: " + willenoughReward + "." : ""))
 	pls.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 9.4e5)) + " IP in Big Rip while dilated, with no EP multiplier upgrades, time studies, and Break Eternity within this Ghostify. Reward: Each time you become a ghost, you gain " + shortenDimensions(2e3) + " galaxies worth of generated neutrinos, multiplied by your best-ever galaxy amount across all Big Rips.")

@@ -30,10 +30,7 @@ function galaxyReset(bulk) {
 	}
 	if (!hasAch("r111")) setInitialMoney()
 	if (hasAch("r66")) player.tickspeed = player.tickspeed.times(0.98);
-	if (tmp.quActive && bulk) {
-		if (player.masterystudies.includes("d7")) sacrificeGalaxy()
-		if (tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
-	}
+	if (tmp.quActive && tmp.qu.bigRip.active) tmp.qu.bigRip.bestGals = Math.max(tmp.qu.bigRip.bestGals, player.galaxies)
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts) gainNeutrinos(bulk, "gen")
 	hideDimensions()
 	tmp.tickUpdate = true;
@@ -55,9 +52,6 @@ getEl("secondSoftReset").onclick = function() {
 
 function getDistantScalingEffect(){
 	let speed = 1
-	if (GUActive("rg6")) speed *= 0.867
-	if (GUActive("gb6")) speed /= 1 + Math.pow(player.infinityPower.plus(1).log10(), 0.25) / 2810
-	if (GUActive("br6")) speed /= getBR6Effect()
 	if (ph.did("ghostify") && player.ghostify.neutrinos.boosts >= 6) speed /= tmp.nb[6]
 	if (hasBosonicUpg(45)) speed /= tmp.blu[45]
 	if (hasAch("ng3p98")) speed *= 0.9
@@ -116,9 +110,6 @@ function getGalaxyRequirement(offset = 0, display) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
 				let speed2 = tmp.grd.speed
-				if (GUActive("rg7")) speed2 *= 0.9
-				if (GUActive("gb7")) speed2 /= 1 + Math.log10(1 + player.infinityPoints.max(1).log10()) / 100
-				if (GUActive("br7")) speed2 /= 1 + Math.log10(1 + player.eternityPoints.max(1).log10()) / 80
 				amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (tmp.mod.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
 				scaling = Math.max(scaling, 3)
 			}
@@ -163,9 +154,6 @@ function getDistantScalingStart() {
 
 	if (tmp.grd.gals >= tmp.grd.darkStart) {
 		let push = 5 / tmp.grd.speed
-		if (GUActive("rg5")) push *= 1.13
-		if (GUActive("gb5")) push *= 1 + Math.sqrt(player.replicanti.galaxies) / 550
-		if (GUActive("br5")) push *= getBR5Effect()
 		n -= Math.ceil((tmp.grd.gals - tmp.grd.darkStart + 1) / push)
 	}
 

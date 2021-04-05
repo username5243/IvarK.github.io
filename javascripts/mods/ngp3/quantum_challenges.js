@@ -28,7 +28,7 @@ function updateQuantumChallenges() {
 			var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
 			var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
 			getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
-			getEl(property+"cost").textContent = "Cost: " + (!sc2 && !hasAch("ng3p55") ? "???" : getFullExpansion(getQCCost(subChalls))) + " electrons"
+			getEl(property+"cost").textContent = "Cost: Still none. ;/"
 			getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
 			getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
 			getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
@@ -60,7 +60,7 @@ function updateQuantumChallenges() {
 
 		getEl(property).textContent = ((!assigned.includes(qc) && pcFocus) ? (done ? "Choose" : "Not completed") : inQC(qc) ? "Running" : done ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
 		getEl(property).className = (!assigned.includes(qc) && pcFocus) ? (done ? "challengesbtn" : "lockedchallengesbtn") : inQC(qc) ? "onchallengebtn" : done ? "completedchallengesbtn" : "challengesbtn"
-		getEl(property + "cost").textContent = "Cost: " + getFullExpansion(getQCCost([qc])) + " electrons"
+		getEl(property + "cost").textContent = "Cost: None"
 		getEl(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog([qc]))) + " antimatter"
 	}
 	updateQCDisplaysSpecifics()
@@ -161,7 +161,6 @@ function onQCCompletion(qcs, am, time, dilTimes) {
 			if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
 				tmp.qu.challenges[qc1] = 2
 				tmp.qu.challenges[qc2] = 2
-				tmp.qu.electrons.mult += 0.5
 				tmp.qu.pairedChallenges.completed = tmp.qu.pairedChallenges.current
 				if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && am.e >= 1.65e9) giveAchievement("Back to Challenge One")
 				if (tmp.qu.pairedChallenges.current == 4) giveAchievement("Twice in a row")
@@ -178,10 +177,7 @@ function onQCCompletion(qcs, am, time, dilTimes) {
 		}
 	}
 	if (intensity == 1) {
-		if (!tmp.qu.challenges[qc1]) {
-			tmp.qu.challenges[qc1] = 1
-			tmp.qu.electrons.mult += 0.25
-		}
+		if (!tmp.qu.challenges[qc1]) tmp.qu.challenges[qc1] = 1
 		if (tmp.qu.challengeRecords[qc1] == undefined) tmp.qu.challengeRecords[qc1] = time
 		else tmp.qu.challengeRecords[qc1] = Math.min(tmp.qu.challengeRecords[qc1], time)
 		if (dilTimes == 0) tmp.qu.qcsNoDil["qc" + qc1] = 1
@@ -212,7 +208,6 @@ function updateQCTimes() {
 
 function respecPCs() {
 	let data = tmp.qu.pairedChallenges
-	tmp.qu.electrons.mult -= tmp.qu.pairedChallenges.completed * 0.5
 
 	data.order = {}
 	data.completed = 0

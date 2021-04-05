@@ -197,7 +197,7 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (ENTANGLED_BOOSTS.active(2)) x *= tmp.glB.enB2
+	if (ENTANGLED_BOOSTS.active("glu", 2)) x *= tmp.enB.glu2
 	if (tmp.quActive) {
 		let exp = 1/3
 		if (masteryStudies.has(362)) exp = .4
@@ -237,7 +237,6 @@ function getReplicantiInterval() {
 	if (hasTimeStudy(62)) interval /= tsMults[62]()
 	if (player.replicanti.amount.gt(Number.MAX_VALUE)||hasTimeStudy(133)) interval *= 10
 	if (hasTimeStudy(213)) interval /= tsMults[213]()
-	if (GUActive("gb1")) interval /= getGB1Effect()
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
 	interval /= ls.mult("rep")
@@ -280,7 +279,6 @@ function getReplSpeed() {
 	inc = inc + 1
 
 	if (masteryStudies.has(281)) exp += tmp.mts[281]
-	if (GUActive("gb2")) exp *= 2
 	if (tmp.quActive) exp *= colorBoosts.g
 
 	if (masteryStudies.has(282)) exp += 100

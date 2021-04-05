@@ -804,15 +804,15 @@ strong { color: #0072e5 }
     color: #191919 !important
 }
 
-#electrons .gluonupgrade.storebtn { 
+#positrons .gluonupgrade.storebtn { 
     background-color: #191919 !important;
     border: 2px solid #340 !important;
     animation: none !important
 }
 
-#electronsAmount,
-#electronsTranslation,
-#electronsEffect {
+#positronsAmount,
+#positronsTranslation,
+#positronsEffect {
     color: #d2e500 !important;
     font-weight: 500;
 }

@@ -9,14 +9,10 @@ function getTickspeedMultiplier() {
 
 function initialGalaxies() {
 	let g = player.galaxies
-	if (tmp.quActive && !tmp.be) {
-		g = Math.max(g - player.quantum.electrons.sacGals, 0)
-		g *= Math.max(Math.min(10 - (player.quantum.electrons.amount + g * getElectronGainFinalMult()) / 16857, 1), 0)
-	}
-	if (hasBosonicUpg(14)) g = Math.max(Math.min(player.galaxies, tmp.blu[14]), g)
-	if (GUActive("rg4")) g *= 0.4
+
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.mod.ngmX == 3) g = 0
+
 	return g
 }
 
@@ -58,8 +54,6 @@ function getGalaxyEff(bi) {
 
 	if (tmp.mod.nguspV !== undefined && player.dilation.active) eff *= exDilationBenefit() + 1
 	if (tmp.quActive) eff *= colorBoosts.r
-	if (GUActive("rg2")) eff *= Math.pow(player.dilation.freeGalaxies/5e3 + 1, 0.25)
-	if (GUActive("rg4")) eff *= 1.5
 	if (hasBosonicUpg(34)) eff *= tmp.blu[34]
 	return eff
 }
@@ -94,7 +88,7 @@ function getExtraGalaxyPower(noDil) {
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
 	}
 
-	//Antielectronic
+	//AntiElectronic
 	let aelcGalEff = 1
 	if (tmp.aeg > 0) {
 		aelcGalEff = getBaseAelcGalaxyEff()

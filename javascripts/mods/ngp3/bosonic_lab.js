@@ -97,11 +97,11 @@ function bosonicTick(diff) {
 	let apDiff
 	lData = player.ghostify.wzb
 	if (lData.dPUse) {
-		apDiff = diff.times(getAntiPreonLoss()).min(lData.dP).div(aplScalings[player.ghostify.wzb.dPUse])
+		apDiff = diff.times(getAntipreonLoss()).min(lData.dP).div(aplScalings[player.ghostify.wzb.dPUse])
 		if (isEnchantUsed(13)) apDiff = apDiff.times(tmp.bEn[13])
 		if (isNaN(apDiff.e)) apDiff = new Decimal(0)
 
-		lData.dP = lData.dP.sub(diff.times(getAntiPreonLoss()).min(lData.dP))
+		lData.dP = lData.dP.sub(diff.times(getAntipreonLoss()).min(lData.dP))
 		if (lData.dP.eq(0)) lData.dPUse = 0
 
 		if (lData.dPUse == 1) {
@@ -133,7 +133,7 @@ function bosonicTick(diff) {
 			lData.wpb = lData.wpb.add(lData.wnb.min(apDiff).times(tmp.wzb.zbs))
 			lData.wnb = lData.wnb.sub(lData.wnb.min(apDiff).times(tmp.wzb.zbs))
 		}
-	} else lData.dP = lData.dP.add(diff.times(getAntiPreonProduction()))
+	} else lData.dP = lData.dP.add(diff.times(getAntipreonProduction()))
 	lData.zNeReq=Decimal.pow(10, Math.sqrt(Math.max(Math.pow(lData.zNeReq.log10(),2) - diff / 100, 0)))
 	
 	//Bosonic Extractor
@@ -866,7 +866,7 @@ var bu = {
 		11: "Bosonic Antimatter increases blue Light effect.",
 		12: "???",
 		13: "Radioactive Decays boost the effect of Light Empowerments.",
-		14: "Sacrificed galaxies cancel less galaxies based on your free galaxies.",
+		14: "???",
 		15: "Ghostifies and dilated time power up each other.",
 		21: "Replace first Nanofield reward with a boost to slow down Dimension Supersonic scaling.",
 		22: "Replace seventh Nanofield reward with a boost to neutrino gain and preon charge.",
@@ -875,7 +875,7 @@ var bu = {
 		25: "???",
 		31: "Bosonic Antimatter boosts all Nanorewards.",
 		32: "You unlock more boosts from Light Empowerments.",
-		33: "Higgs Bosons reduce the costs of all electron upgrades.",
+		33: "???",
 		34: "All types of galaxies boost each other.",
 		35: "Replicantis boost Emperor Dimensions.",
 		41: "Intergalactic and Infinite Time rewards boost each other.",
@@ -919,15 +919,6 @@ var bu = {
 
 			return Math.max(x, 1)
 		},
-		14() {
-			if (!tmp.quActive) return 0
-			let x = Math.pow(Math.max(player.dilation.freeGalaxies / 20 - 1800, 0), 1.5)
-			let y = tmp.qu.electrons.sacGals
-			let z = Math.max(y, player.galaxies)
-			if (x > y) x = (x + y * 2) / 3
-			if (x > z) x = Math.pow((x - z + 1e5) * 1e10, 1/3) + z - 1e5
-			return Math.round(x)
-		},
 		15() {
 			let gLog = Decimal.max(player.ghostify.times, 1).log10()
 			if (tmp.newNGP3E) gLog += 2 * Math.sqrt(gLog)
@@ -951,10 +942,6 @@ var bu = {
 				else break
 			}
 			return ret
-		},
-		33() {
-			var div = tmp.newNGP3E ? 4 : 6
-			return (Math.sqrt(player.ghostify.hb.higgs + 1) - 1) / div + 1
 		},
 		34() {
 			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRG() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
@@ -1028,17 +1015,11 @@ var bu = {
 		12(x) {
 			return "-" + x.toFixed(5)
 		},
-		14(x) {
-			return getFullExpansion(x) + (x > tmp.qu.electrons.sacGals && !inBigRip() ? " (+" + getFullExpansion(Math.max(x - tmp.qu.electrons.sacGals, 0)) + " Antielectronic Galaxies)" : "")
-		},
 		15(x) {
 			return shorten(x.gh) + "x more Ghostifies & " + shorten(x.dt) + "x more DT"
 		},
 		31(x) {
 			return formatPercentage(x - 1) + "% stronger"
-		},
-		33(x) {
-			return "-" + x.toFixed(2) + " levels worth"
 		},
 		34(x) {
 			return formatPercentage(x - 1, 2) + "% stronger"
@@ -1093,7 +1074,7 @@ function changeOverdriveSpeed() {
 }
 
 //W & Z Bosons
-function getAntiPreonProduction() {
+function getAntipreonProduction() {
 	return 1 / 10
 }
 
@@ -1104,11 +1085,11 @@ var aplScalings = {
 	3: 48
 }
 
-function getAntiPreonLoss() {
+function getAntipreonLoss() {
 	return 1 / 30
 }
 
-function useAntiPreon(id) {
+function useAntipreon(id) {
 	player.ghostify.wzb.dPUse = id
 }
 
@@ -1123,9 +1104,9 @@ function updateWZBosonsTab() {
 	let data2 = tmp.wzb
 	let data3 = player.ghostify.wzb
 	let speed = getBosonicFinalSpeed()
-	let show0 = data3.dPUse == 1 && Decimal.div(getAntiPreonLoss(), aplScalings[1]).times(speed).times(tmp.wzb.zbs).gte(10)
+	let show0 = data3.dPUse == 1 && Decimal.div(getAntipreonLoss(), aplScalings[1]).times(speed).times(tmp.wzb.zbs).gte(10)
 	let gainSpeed = getOscillateGainSpeed()
-	let r = speed.times(data3.dPUse ? getAntiPreonLoss() : getAntiPreonProduction())
+	let r = speed.times(data3.dPUse ? getAntipreonLoss() : getAntipreonProduction())
 	getEl("ap").textContent = shorten(data3.dP)
 	getEl("apProduction").textContent = (data3.dPUse ? "-" : "+") + shorten(r) + "/s"
 	getEl("apUse").textContent = data3.dPUse == 0 ? "" : "You are currently consuming Anti-Preons to " + (["", "decay W Bosons", "oscillate Z Bosons", "convert W- to W+ Bosons"])[data3.dPUse] + "."

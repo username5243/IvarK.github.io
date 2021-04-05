@@ -529,13 +529,6 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			br: 0,
 			total: 0
 		},
-		electrons: {
-			amount: 0,
-			percentage: tmp.qu.electrons.percentage,
-			sacGals: 0,
-			mult: bm > 2 ? tmp.qu.electrons.mult : bm ? 6 : 2,
-			rebuyables: bm > 2 ? tmp.qu.electrons.rebuyables : [0,0,0,0]
-		},
 		challenge: [],
 		challenges: bm ? tmp.qu.challenges : {},
 		nonMAGoalReached: tmp.qu.nonMAGoalReached,

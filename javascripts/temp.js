@@ -239,9 +239,6 @@ function updateIntergalacticTemp() {
 
 function updateAntiElectronGalaxiesTemp(){
 	tmp.aeg = 0
-	if (!tmp.quActive) return
-
-	if (hasBosonicUpg(14) && !tmp.qu.bigRip.active) tmp.aeg = Math.max(tmp.blu[14] - tmp.qu.electrons.sacGals, 0)
 }
 
 function updateEffectiveAntiElectronGalaxiesTemp() {
@@ -344,7 +341,7 @@ function updateNGP3TempStuff() {
 function updateGhostifyTempStuff() {
 	GDs.updateTmp()
 	updateBosonicLabTemp()
-	tmp.apgw = (tmp.quActive && tmp.qu.nanofield.apgWoke) || getAntiPreonGhostWake()
+	tmp.apgw = (tmp.quActive && tmp.qu.nanofield.apgWoke) || getAntipreonGhostWake()
 	if (tmp.quActive) updatePPTITemp() //preon power threshold increase
 	if (ph.did("ghostify") && player.ghostify.ghostlyPhotons.unl) {
 		tmp.phF = getPhotonicFlow()

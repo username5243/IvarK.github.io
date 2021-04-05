@@ -1,5 +1,5 @@
 function bigRip(auto) {
-	if (!tmp.quActive || !player.masterystudies.includes("d14") || tmp.qu.electrons.amount < getQCCost([6, 8]) || !inQC(0)) return
+	if (!tmp.quActive || !player.masterystudies.includes("d14") || !inQC(0)) return
 	if (player.ghostify.milestones > 1) {
 		setPCsForBigRip()
 		quantum(auto, true, 4, true, true, true)
@@ -26,7 +26,6 @@ function setPCsForBigRip() {
 	let pcOrder = [null, 1, 2, 3, 4, 5, 7, 6, 8]
 	for (var c = 1; c <= 9; c++) if (QCIntensity(c)) tmp.qu.challenges[c] = c > 8 ? 1 : 2
 	for (let p = 1; p <= 4; p++) tmp.qu.pairedChallenges.order[p] = [pcOrder[p * 2 - 1], pcOrder[p * 2]]
-	tmp.qu.electrons.mult += (4 - tmp.qu.pairedChallenges.completed) * 0.5
 	tmp.qu.pairedChallenges.completed = 4
 }
 
