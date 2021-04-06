@@ -504,7 +504,7 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="dilstudy9" onclick='buyMasteryStudy("d", 9)'>Unlock Paired Challenges<br><span id="ds9Cost"></span><span id="ds9Req"></span></button></td>
-						<td><button class="timestudylocked" id="dilstudy10" onclick='buyMasteryStudy("d", 10)'>Unlock Replicants<br><span id="ds10Cost"></span><span id="ds10Req"></span></button></td>
+						<td><button class="timestudylocked" id="dilstudy10" onclick='buyMasteryStudy("d", 10)'>Unlock Duplicants<br><span id="ds10Cost"></span><span id="ds10Req"></span></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1279,7 +1279,7 @@
 			<div id="emperordimensions" class="dimtab">
 				You have <span class="rqC" id="rgEDs">1</span> red-green, <span class="gqC" id="gbEDs">1</span> green-blue, and <span class="bqC" id="brEDs">1</span> blue-red gluons.<br>
 				<div>
-					<p>You have <span id="replicantAmountED" style="font-size:35px; color: black">0</span> normal replicants.</p>
+					<p>You have <span id="replicantAmountED" style="font-size:35px; color: black">0</span> normal duplicants.</p>
 				</div>
 				<p>You have <span id="quantumFoodAmountED">0</span> quantum food.</p>
 				<button class='gluonupgrade storebtn' id='buyQuantumFoodED' onclick='buyQuantumFood()' style="width: 210px"></button><br>
@@ -1514,7 +1514,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 2)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 3)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2268,7 +2268,7 @@
 								<div id="The Challenging Day" class="achievement achievementlocked" style="background-image: url(images/130.png)" ach-tooltip="Complete 24 unique paired challenge combinations. Reward: Matter can bypass antimatter in QC6."></div>
 							</td>
 							<td>
-								<div id="An ant office?" class="achievement achievementlocked" style="background-image: url(images/131.png)" ach-tooltip="Promote a worker into the second Emperor Dimension. Reward: Replicants feed babies 10x faster."></div>
+								<div id="An ant office?" class="achievement achievementlocked" style="background-image: url(images/131.png)" ach-tooltip="Promote a worker into the second Emperor Dimension. Reward: Duplicants feed babies 10x faster."></div>
 							</td>
 							<td>
 								<div id="I can’t get my multipliers higher!" class="achievement achievementlocked" style="background-image: url(images/132.png)"><br></div>
@@ -4454,7 +4454,7 @@
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
 					<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
-					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Replicants</button></td>
+					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 					<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
 					<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
 				</tr>
@@ -4684,7 +4684,7 @@
 						You have <span id="positrons" style="font-size:35px">0</span> Positrons.
 					</td>
 					<td>
-						You have <span id="positronicEnergy" style="font-size:35px">0.0</span> positronic energy. (<span id="positronicEnergyMult" style="font-size: 25px">0.0</span>x)
+						You have <span id="enB_pos_eng" style="font-size:35px">0.0</span> positronic energy.
 					</td>
 					<td>
 						You have <span id="enB_pos_amt" style="font-size:35px">0</span> Positronic Boosters.
@@ -4702,7 +4702,7 @@
 						<br>
 						<span id="enB_pos1_type"></span>
 						<br>
-						<span id="enB_pos1_eff" style="font-size:35px">???</span>
+						Raise the multiplier per ten normal Dimensions to the power of ^<span id="enB_pos1_eff" style="font-size:35px"></span>.
 					</td>
 					<td></td>
 					<td></td>
@@ -4712,20 +4712,20 @@
 				You have <span id="replicantiAmount2">1</span> replicantis.<br>
 				You have <span class="rqC" id="rgRepl">1</span> red-green, <span class="gqC" id="gbRepl">1</span> green-blue, and <span class="bqC" id="brRepl">1</span> blue-red gluons.<br>
 				<table class='qTable'><tr><td>
-					You have <span id="replicantAmount" style="font-size:35px">0</span> normal replicants.<br>
+					You have <span id="replicantAmount" style="font-size:35px">0</span> normal duplicants.<br>
 					They are gathering <span id="normalReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
 					<button class="storebtn" id="replicantReset" style="width: 220px; height: 60px; font-size: 11px" onclick='replicantReset()'></button><br><button class="storebtn" id="autoReset" style="width: 220px" onclick='toggleAutoReset()'></button>
 				</td><td>
-					You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker replicants.<br>
+					You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker duplicants.<br>
 					They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>.<br>
-					Feed your normal replicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
+					Feed your normal duplicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
 					<button class='storebtn' id='feedNormal' style='width: 280px' onclick="feedReplicant(1)">Feed one with quantum food</button><br>
 					<button id='breakLimit' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
 					<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button>
 				</td><td>
-					You have <span id="babyReplAmount" style="font-size:35px">0</span> baby replicants.<br>
+					You have <span id="babyReplAmount" style="font-size:35px">0</span> baby duplicants.<br>
 					They are gathering <span id="babyReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
-					They will become normal replicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
+					They will become normal duplicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
 				</td></tr><tr><td>
 					You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span><br>
 					Translated to +<span id="quarkTranslation" style="font-size:35px">0</span>% added to green power.</p>

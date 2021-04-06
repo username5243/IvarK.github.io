@@ -297,16 +297,16 @@ function updateGluonicBoosts() {
 		enBData.gluonEff(gluons.gb)),
 		enBData.gluonEff(gluons.br)
 	)
-	let strEff = enBData.strEff()
 
 	let data2 = tmp.enB
 	for (var t = 0; t < enBData.types.length; t++) {
 		var name = enBData.types[t]
 		var typeData = enBData[name]
+		var strEff = typeData.eff()
 
 		for (var i = 1; i <= typeData.max; i++) {
 			if (!enBData.has(name, i)) break
-			data2[name + i] = typeData[i].eff((enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
+			data2[name + i] = typeData[i].eff((name != "glu" ? 1 : enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
 		}
 	}
 }
@@ -345,8 +345,9 @@ let ENTANGLED_BOOSTS = {
 		if (!this.has(type, x)) return false
 		if (this.mastered(type, x)) return true
 
+
 		let gluon = tmp.qu.entColor || "rg"
-		return data[x].type == gluon[0] || data.type == gluon[1]
+		return data[x].type == gluon[0] || data[x].type == gluon[1]
 	},
 	mastered(type, x) {
 		let data = this[type]
@@ -355,9 +356,6 @@ let ENTANGLED_BOOSTS = {
 
 	gluonEff(x) {
 		return Decimal.add(x, 1).log10()
-	},
-	strEff(x) {
-		return (this.glu.amt() + this.pos.amt()) * 2 - 1
 	},
 
 	choose(x) {
@@ -390,6 +388,10 @@ let ENTANGLED_BOOSTS = {
 		},
 		set(x) {
 			tmp.qu.entBoosts = x
+		},
+
+		eff(x) {
+			return (this.amt()) * 2 - 1 //temp
 		},
 
 		max: 9,
@@ -505,13 +507,17 @@ let ENTANGLED_BOOSTS = {
 		},
 
 		amt() {
-			return 0
+			return 1
 		},
 		engAmt() {
-			return 2
+			return 0
 		},
 		set(x) {
 			//tmp.qu.entBoosts = x
+		},
+
+		eff(x) {
+			return this.engAmt()
 		},
 
 		max: 1,
@@ -520,7 +526,7 @@ let ENTANGLED_BOOSTS = {
 			masReq: 3,
 			type: "g",
 			eff(x) {
-				return 1
+				return x + 1
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -560,6 +566,7 @@ let ENTANGLED_BOOSTS = {
 	updateOnTick(type) {
 		let data = this[type]
 
+		if (getEl("enB_" + type + "_eng") !== null) getEl("enB_" + type + "_eng").textContent = shorten(data.engAmt())
 		getEl("enB_" + type + "_buy").className = data.engAmt() >= data.cost() ? "storebtn" : "unavailablebtn"
 
 		for (var i = 1; i <= data.max; i++) {

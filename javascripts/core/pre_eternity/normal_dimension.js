@@ -341,6 +341,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
+	if (ENTANGLED_BOOSTS.active("pos", 1)) x *= tmp.enB.pos1
 	return x
 }
 	
