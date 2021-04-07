@@ -85,11 +85,11 @@ function getGalaxyRequirement(offset = 0, display) {
 			if (over >= 1) {
 				if (over >= 3) {
 					div /= Math.pow(over, 6) / 729
-					scaling = Math.max(scaling, 6)
+					scaling = Math.max(scaling, 5)
 				}
 				if (isLEBoostUnlocked(2) && tmp.be) div *= tmp.leBonus[2]
 				tmp.grd.speed = Math.pow(2, (tmp.grd.gals + 1 - 302500 / ghostlySpeed) * ghostlySpeed / div)
-				scaling = Math.max(scaling, 5)
+				scaling = Math.max(scaling, 4)
 			}
 		}
 
@@ -114,8 +114,6 @@ function getGalaxyRequirement(offset = 0, display) {
 				scaling = Math.max(scaling, 3)
 			}
 		}
-
-		if (tmp.grd.gals >= tmp.grd.darkStart) scaling = Math.max(scaling, 4)
 	}
 	amount = Math.ceil(amount)
 
@@ -137,7 +135,7 @@ function getGalaxyReqMultiplier() {
 	if (tmp.ngC) ret -= 35
 	if (player.infinityUpgrades.includes("galCost")) ret -= 5
 	if (player.infinityUpgrades.includes("postinfi52") && player.tickspeedBoosts == undefined) ret -= 3
-	if (player.dilation.upgrades.includes("ngmm12")) ret -= 10
+	if (hasDilationUpg("ngmm12")) ret -= 10
 	if (inNGM(2) && hasTimeStudy(42)) ret *= tsMults[42]()
 	return ret
 }
@@ -148,13 +146,11 @@ function getDistantScalingStart() {
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
 	if (hasTimeStudy(224)) n += Math.floor(player.resets / 2000)
-	if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
-	if (player.dilation.upgrades.includes("ngmm11")) n += 25
-	if (pl.on()) n -= fNu.tmp.nerfMu
-
-	if (tmp.grd.gals >= tmp.grd.darkStart) {
-		let push = 5 / tmp.grd.speed
-		n -= Math.ceil((tmp.grd.gals - tmp.grd.darkStart + 1) / push)
+	if (hasDilationUpg("ngmm11")) n += 25
+	if (tmp.ngp3) {
+		if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
+		if (ENTANGLED_BOOSTS.active("glu", 5)) n += tmp.enB.glu5
+		if (pl.on()) n -= fNu.tmp.nerfMu
 	}
 
 	if (tmp.grd.speed == 1) return Math.max(n, 0)
@@ -180,10 +176,11 @@ function getRemoteScalingStart(galaxies) {
 		if (player.challenges.includes("postcngm3_1")) n += tmp.cp / 2
 	}
 	else if (inNGM(2)) n += 1e7
-	if (player.dilation.upgrades.includes(5) && tmp.ngC) n += 25;
+	if (hasDilationUpg(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
 		if (masteryStudies.has(301)) n += getMTSMult(301)
+		if (ENTANGLED_BOOSTS.active("glu", 5)) n += tmp.enB.glu5
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 

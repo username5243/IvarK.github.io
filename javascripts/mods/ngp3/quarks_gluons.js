@@ -211,6 +211,7 @@ function gainQuarkEnergy() {
 function getQuarkEnergyMult() {
 	let x = 1
 	if (ENTANGLED_BOOSTS.active("glu", 1)) x += tmp.enB.glu1
+	if (ENTANGLED_BOOSTS.active("pos", 1)) x += tmp.enB.pos1
 	return x
 }
 
@@ -299,8 +300,8 @@ function updateGluonicBoosts() {
 	)
 
 	let data2 = tmp.enB
-	for (var t = 0; t < enBData.types.length; t++) {
-		var name = enBData.types[t]
+	for (var t = enBData.types.length; t > 0; t--) {
+		var name = enBData.types[t - 1]
 		var typeData = enBData[name]
 		var strEff = typeData.eff()
 
@@ -444,7 +445,7 @@ let ENTANGLED_BOOSTS = {
 			masReq: 15,
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.sqrt(x)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -520,10 +521,21 @@ let ENTANGLED_BOOSTS = {
 			return this.engAmt()
 		},
 
-		max: 1,
+		max: 2,
 		1: {
 			req: 1,
 			masReq: 3,
+			type: "g",
+			eff(x) {
+				return Math.cbrt(x + 1) - 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		2: {
+			req: 3,
+			masReq: 5,
 			type: "g",
 			eff(x) {
 				return x + 1
