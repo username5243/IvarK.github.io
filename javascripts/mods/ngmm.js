@@ -738,15 +738,15 @@ function getDil44Mult() {
 }
 
 function getDil45Mult() {
-	return player.replicanti.amount.max(1).log10() * 0+1
+	return player.replicanti.amount.max(1).log10() * 0 + 1
 }
 
 function getDil71Mult() {
-	return player.meta.bestAntimatter.max(1).log10() * 0+1
+	return player.meta.bestAntimatter.max(1).log10() * 0 + 1
 }
 
 function getDil72Mult() {
-	return player.meta.bestAntimatter.max(1).log10() * 0+1
+	return player.meta.bestAntimatter.max(1).log10() * 0 + 1
 }
 
 function getNewB60Mult(){

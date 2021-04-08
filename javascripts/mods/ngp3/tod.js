@@ -367,7 +367,7 @@ let TREE_UPGRADES = {
 			return lvl
 		},
 		eff(lvl) {
-			return Decimal.pow(player.replicanti.amount.max(1).log10() + 1, 0.25 * lvl)
+			return 1
 		}
 	},
 	8: {
@@ -381,7 +381,7 @@ let TREE_UPGRADES = {
 			return lvl
 		},
 		eff(lvl) {
-			return Math.sqrt(Math.log10(Decimal.add(player.meta.bestAntimatter, 1).log10() + 1) / 4) * Math.pow(lvl, 1/4)
+			return 1
 		}
 	}
 }
@@ -436,7 +436,6 @@ function getTreeUpgradeEffect(upg) {
 function getTreeUpgradeEffectDesc(upg) {
 	if (upg == 1) return getFullExpansion(getTreeUpgradeEffect(upg))
 	if (upg == 2) return getDilExp("TU3").toFixed(2) + " -> " + getDilExp().toFixed(2)
-	if (upg == 8) return getTreeUpgradeEffect(8).toFixed(2)
 	return shortenMoney(getTreeUpgradeEffect(upg))
 }
 

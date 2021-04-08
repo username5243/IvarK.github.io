@@ -89,7 +89,7 @@ function updateLightBoostDisplay(){
 	getEl("lightMax1").textContent = getFullExpansion(gphData.maxRed)
 	getEl("lightBoost1").textContent = tmp.le[0].toFixed(3)
 	getEl("lightBoost2").textContent = tmp.le[1].toFixed(2)
-	getEl("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
+	//getEl("lightBoost3").textContent = getFullExpansion(Math.floor(tmp.le[2]))
 	getEl("lightBoost4").textContent = formatPercentage(tmp.le[3] - 1)
 	getEl("lightBoost5").textContent = formatPercentage(tmp.le[4]) + (hasBosonicUpg(11) ? "+" + formatPercentage(tmp.blu[11]) : "")
 	getEl("lightBoost6").textContent = shorten(tmp.le[5])

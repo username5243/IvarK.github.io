@@ -307,7 +307,9 @@ function updateGluonicBoosts() {
 
 		for (var i = 1; i <= typeData.max; i++) {
 			if (!enBData.has(name, i)) break
-			data2[name + i] = typeData[i].eff((name != "glu" ? 1 : enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
+
+			var eff = typeData[i].eff
+			if (eff !== undefined) data2[name + i] = eff((name != "glu" ? 1 : enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
 		}
 	}
 }
@@ -317,7 +319,7 @@ function getGluonEffBuff(x) {
 }
 
 function getGluonEffNerf(x) {
-	return Math.pow(Decimal.add(x, 1).log10(), 2)
+	return Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(283) ? 1.8 : 2)
 }
 
 let ENTANGLED_BOOSTS = {
@@ -395,7 +397,7 @@ let ENTANGLED_BOOSTS = {
 			return (this.amt()) * 2 - 1 //temp
 		},
 
-		max: 9,
+		max: 10,
 		1: {
 			req: 1,
 			masReq: 3,
@@ -456,7 +458,7 @@ let ENTANGLED_BOOSTS = {
 			masReq: 18,
 			type: "g",
 			eff(x) {
-				return 1
+				return (Math.log10(x + 1) + 1) / 4
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -467,10 +469,10 @@ let ENTANGLED_BOOSTS = {
 			masReq: 21,
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.min(Math.cbrt(x + 1) - 1, 1)
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x)
 			}
 		},
 		8: {
@@ -478,10 +480,10 @@ let ENTANGLED_BOOSTS = {
 			masReq: 24,
 			type: "b",
 			eff(x) {
-				return 1
+				return 1.25
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return "x^" + shorten(x)
 			}
 		},
 		9: {
@@ -489,7 +491,18 @@ let ENTANGLED_BOOSTS = {
 			masReq: 27,
 			type: "g",
 			eff(x) {
-				return 1
+				return Math.pow(2 - 1 / Math.pow(x + 1, 0.1), 2)
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		10: {
+			req: 21,
+			masReq: 30,
+			type: "g",
+			eff(x) {
+				return Math.log10(x + 1) * 100
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -508,10 +521,10 @@ let ENTANGLED_BOOSTS = {
 		},
 
 		amt() {
-			return 1
+			return 0 //this.target()
 		},
 		engAmt() {
-			return 0
+			return player.galaxies
 		},
 		set(x) {
 			//tmp.qu.entBoosts = x
@@ -521,7 +534,7 @@ let ENTANGLED_BOOSTS = {
 			return this.engAmt()
 		},
 
-		max: 2,
+		max: 3,
 		1: {
 			req: 1,
 			masReq: 3,
@@ -542,6 +555,17 @@ let ENTANGLED_BOOSTS = {
 			},
 			effDisplay(x) {
 				return shorten(x)
+			}
+		},
+		3: {
+			req: 5,
+			masReq: 7,
+			type: "g",
+			eff(x) {
+				return Math.log10(x + 1) / 5 + 1
+			},
+			effDisplay(x) {
+				return (1 / x).toFixed(3)
 			}
 		}
 	},
@@ -583,7 +607,7 @@ let ENTANGLED_BOOSTS = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
+			if (tmp.enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
 		}
 	}
 }

@@ -199,7 +199,7 @@ function feedBlackHole(i, bulk) {
 	} else if (i == 3) {
 		let cost = Decimal.pow(10, 1e3 * player.blackhole.upgrades.replicanti + 2e4)
 		if (bulk) {
-			let toBuy = Math.floor(player.replicanti.amount.div(cost).log10() / 1e3 + 1)
+			let toBuy = Math.floor(tmp.rmPseudo.div(cost).log10() / 1e3 + 1)
 			let toSpend = Decimal.pow(10, 1e3 * toBuy - 1).times(cost)
 			player.replicanti.amount = player.replicanti.amount.minus(player.replicanti.amount.min(toSpend)).max(1)
 			player.blackhole.upgrades.replicanti += toBuy

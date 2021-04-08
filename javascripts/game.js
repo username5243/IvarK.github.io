@@ -4935,7 +4935,7 @@ function setTachyonParticles(x) {
 function passiveQuantumLevelStuff(diff){
 	let inBR = inBigRip()
 
-	if (inBR ? hasAch("ng3p103") : hasAch("ng3p112")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
+	if ((inBR ? hasAch("ng3p103") : hasAch("ng3p112")) && ph.can("ghostify")) player.ghostify.ghostParticles = player.ghostify.ghostParticles.add(getGHPGain().times(diff / 100))
 	if (hasAch("ng3p112")) player.ghostify.times = nA(player.ghostify.times, nM(getGhostifiedGain(), diff))
 
 	if (inBR || hasBosonicUpg(24)) tmp.qu.bigRip.spaceShards = tmp.qu.bigRip.spaceShards.add(getSpaceShardsGain().times(diff / 100))

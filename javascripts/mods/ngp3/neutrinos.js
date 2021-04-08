@@ -272,7 +272,7 @@ var neutrinoUpgrades = {
 		eff() {
 			if (!tmp.quActive) return new Decimal(1)
 			let log = tmp.qu.colorPowers.b
-			let exp = Math.max(log / 1e4 + 1, 2)
+			let exp = Math.pow(Math.log10(tmp.qu.colorPowers.b + 10) + 1, 2)
 			let x
 			if (exp > 2) x = Decimal.pow(Math.max(log / 250 + 1, 1), exp)
 			else x = Math.pow(Math.max(log / 250 + 1, 1), exp)

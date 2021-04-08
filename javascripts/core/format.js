@@ -730,6 +730,9 @@ function timeDisplayShort(time, rep, places) {
 		if (Decimal.eq(time, 1 / 0)) return 'eternity'
 		return shorten(Decimal.div(time, 31556952e10)) + ' ae'
 	}
+	if (rep && Decimal.lt(time, 1e-100) && Decimal.gt(time, 0)) {
+		return "1 / " + formatValue(player.options.notation, Decimal.div(10, time), places, 2) + " s"
+	}
 	time = time / 10
 	if (rep && time > 0 && time < 1) {
 		let log
@@ -758,11 +761,12 @@ function timeDisplayShort(time, rep, places) {
 }
 
 function formatPercentage(x, digits = 1) {
-	x *= 100
+	x = Decimal.times(x, 100)
+	if (x.gt(1e12)) return shorten(x)
 
 	let n = x.toFixed(digits)
 	if (parseFloat(n) < 1e3 && !FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return n
-	return getFullExpansion(Math.round(x))
+	return getFullExpansion(Math.round(x.toNumber()))
 }
 
 function formatReductionPercentage(x, digits = 1) {

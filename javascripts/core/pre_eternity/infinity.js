@@ -76,7 +76,7 @@ function getIPMult() {
 		if (hasAch("r55")) mult = mult.times(Math.min(Math.log10(Math.max(6000 / player.bestInfinityTime, 10)), 10))
 		if (hasAch("r41")) mult = mult.times(Math.pow(Math.log10(Math.max(player.spreadingCancer, 10)), .05))
 		if (hasAch("r51")) {
-			let galaxies = Math.max((player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies), 0) // just in case
+			let galaxies = Math.max((player.galaxies + (masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies) + player.dilation.freeGalaxies), 0) // just in case
 			if (galaxies < 5) mult = mult.times(Math.max(galaxies, 1))
 			else if (galaxies < 50) mult = mult.times(Decimal.pow(galaxies + 5, 0.5).plus(2))
 			else mult = mult.times(Decimal.pow(galaxies, 0.3).plus(7))
@@ -161,11 +161,15 @@ function getInfinitied() {
 }
 
 function getInfinitiedGain() {
-	let infGain=1
+	let infGain = 1
 	if (player.thisInfinityTime > 50 && hasAch("r87")) infGain = 250
 	if (hasTS(32)) infGain *= tsMults[32]()
 	if (hasAch("ng3p12")) infGain *= 100
-	if (hasAch("r133") && player.meta) infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
+	if (hasAch("r133") && player.meta) {
+		let exp = 0.25
+		if (ENTANGLED_BOOSTS.active("glu", 6)) exp = tmp.enB.glu6
+		infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
+	}
 	return nA(infGain, hasAch("r87") && inNGM(2) ? 249 : 0)
 }
 
@@ -247,7 +251,7 @@ function doCrunchInfinitiesGain(){
 	let infGain
 	if (player.currentEternityChall == "eterc4") {
 		infGain = 1
-		if (player.infinitied >= 16 - (ECComps("eterc4")*4)) {
+		if (player.infinitied >= 16 - (ECComps("eterc4") * 4)) {
 			setTimeout(exitChallenge, 500)
 			onChallengeFail()
 		}

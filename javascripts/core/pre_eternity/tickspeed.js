@@ -68,22 +68,26 @@ function getExtraGalaxyPower(noDil) {
 	let x = 0
 
 	//Replicated
-	let extraReplGalPower = 0
-	if (hasTimeStudy(133)) extraReplGalPower += player.replicanti.galaxies * 0.5
-	if (hasTimeStudy(132)) extraReplGalPower += player.replicanti.galaxies * 0.4
-	extraReplGalPower += extraReplGalaxies // extraReplGalaxies is a constant
-
-	let replPower = player.replicanti.galaxies
+	let replPower = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
 	let replGalEff = getReplGalaxyEff()
-	if (masteryStudies.has(342)) replPower = (replPower + extraReplGalPower) * replGalEff
+
+	let tsReplEff = 0
+	if (hasTimeStudy(133)) tsReplEff += 0.5
+	if (hasTimeStudy(132)) tsReplEff += 0.4
+
+	let extraReplGalPower = 0
+	extraReplGalPower += replPower * tsReplEff + extraReplGalaxies // extraReplGalaxies is a constant
+
+	if (masteryStudies.has(284)) replPower = (replPower + extraReplGalPower) * replGalEff
 	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
+
 	x += replPower
 
 	//Dilation
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (masteryStudies.has(343)) dilGalEff *= replGalEff
+		if (ENTANGLED_BOOSTS.active("glu", 7)) dilGalEff *= (replGalEff - 1) * tmp.enB.glu7 + 1
 
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
 	}
@@ -411,7 +415,7 @@ function updateTickspeed() {
 	if (showTickspeed) {
 		let tick = getTickspeed()
 		label = (tick.e <= -1e12 ? "Ticks" : "Tickspeed") + ": " + getTickspeedText(tick)
-		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + (100 - 100 * tmp.ts.pre2.log10() / tmp.ts.pre1.log10()).toFixed(1) + "% subluminal)"
+		if (!isTickDisabled() && tmp.ts.pre2.gt(tmp.ts.pre1)) label += " (" + formatReductionPercentage(tmp.ts.pre1.log10() / tmp.ts.pre2.log10()) + "% subluminal)"
 	}
 	if (inNGM(2) || player.currentChallenge == "postc3" || isIC3Trapped()) label = (showTickspeed ? label + ", Tickspeed m" : "M") + "ultiplier: " + formatValue(player.options.notation, player.postC3Reward, 2, 3)
 

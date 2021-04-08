@@ -29,10 +29,12 @@ let Prestiges = {
 				Decimal.gte(
 					getQuantumReqSource(), 
 					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
-				) && (!tmp.ngp3 || ECComps("eterc14")) && quarkGain().gt(0)
+				)
+				&& (!tmp.ngp3 || ECComps("eterc14"))
+				&& quarkGain().gt(0)
 		},
 		ghostify() {
-			return tmp.qu.bigRip.active ? this.quantum() : hasNU(16) || pl.on()
+			return tmp.qu.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()
 		},
 		planck() {
 			return pl.on() ? pl.canTier() : pl.can()

@@ -44,7 +44,7 @@ function growupRateUpdating(){
 function updateReplicantsTab(){
 	getEl("replicantiAmount2").textContent = shortenDimensions(player.replicanti.amount)
 	getEl("replicantReset").className = player.replicanti.amount.lt(tmp.qu.replicants.requirement) ? "unavailablebtn" : "storebtn"
-	getEl("replicantReset").innerHTML = "Reset replicanti amount for a replicant.<br>(requires " + shortenCosts(tmp.qu.replicants.requirement) + " replicanti)"
+	getEl("replicantReset").innerHTML = "Reset replicanti amount for a duplicant.<br>(requires " + shortenCosts(tmp.qu.replicants.requirement) + " replicanti)"
 	getEl("replicantAmount").textContent = shortenDimensions(tmp.qu.replicants.amount)
 	getEl("workerReplAmount").textContent = shortenDimensions(tmp.twr)
 	getEl("babyReplAmount").textContent = shortenDimensions(tmp.qu.replicants.babies)

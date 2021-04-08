@@ -28,8 +28,10 @@ function updateTemp() {
 		tmp.ri = false
 		return
 	}
+
 	tmp.nrm = 1
-	if (player.timestudy.studies.includes(101)) tmp.nrm = player.replicanti.amount.max(1)
+	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || player.replicanti.amount).max(1)
+
 	tmp.rg4 = false
 	if (tmp.ngpX >= 5) pl.updateTmp()
 
@@ -56,6 +58,8 @@ function updateTemp() {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
+	tmp.rmPseudo = player.replicanti.amount.max(masteryStudies.has(286) ? tmp.rm.pow(1 / 0.032) : 1)
+
 	updateExtraReplMult()
 	updateExtraReplBase()
 	extraReplGalaxies = Math.floor(extraReplBase * extraReplMulti)
@@ -186,6 +190,7 @@ function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (hasAch("ng3p56")) x *= 1.03
+		if (ENTANGLED_BOOSTS.active("glu", 9)) x *= tmp.enB.glu9
 
 		x = softcap(x, "inf_time_log")
 		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")

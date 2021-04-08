@@ -905,11 +905,11 @@ let tsMults = {
 		return (tmp.mod.newGameExpVersion ? 12 : 13) / 15
 	},
 	51(){
-		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * (player.replicanti.galaxies + 1), 160)
+		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * ((masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies) + 1), 160)
 		return tmp.mod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
-		return tmp.ngC ? Decimal.pow(25, Math.log10(player.replicanti.amount.max(1).log10()/308.25+1)/Math.log10(2)) : (tmp.newNGP3E ? 100 : 10)
+		return tmp.ngC ? Decimal.pow(25, Math.log10(tmp.rmPseudo.log10() / 308.25 + 1) / Math.log10(2)) : (tmp.newNGP3E ? 100 : 10)
 	},
 	62() {
 		let r = tmp.mod.newGameExpVersion ? 4 : 3
@@ -922,7 +922,7 @@ let tsMults = {
 	},
 	141() {
 		if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) return new Decimal(1e40)
-		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime+1) * Math.pow(player.thisInfinityTime+1, 0.125))).max(1)
+		return Decimal.div(1e45, Decimal.pow(15, Math.log(player.thisInfinityTime + 1) * Math.pow(player.thisInfinityTime + 1, 0.125))).max(1)
 	},
 	211() {
 		return inNGM(2) ? 1 : 5
@@ -942,12 +942,13 @@ let tsMults = {
 		return Decimal.pow(1.0025, player.resets)
 	},
 	225() {
-		let x = Math.floor(player.replicanti.amount.e / 1e3)
+		let x = Math.floor(tmp.rmPseudo.e / 1e3)
 
 		let softcapEff = 2
 		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
 
-		if (x > 100) x = Math.sqrt(x * 100)
+		let scLater = ENTANGLED_BOOSTS.active("glu", 10) ? tmp.enB.glu10 : 0
+		if (x > 100 + scLater) x = Math.sqrt((x - scLater) * 100) + scLater
 		return Math.floor(x)
 	},
 	226() {
@@ -987,13 +988,15 @@ let tsMults = {
 		return x
 	},
 	43() {
-		let x = player.replicanti.galaxies * 0.02
+		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		let x = rg * 0.02
 		if (hasTimeStudy(197)) x *= 3
 		return x + 1
 	},
 	52() {
-		let x = Math.sqrt(player.replicanti.galaxies/2)
-		if (hasTimeStudy(172)) x *= Math.cbrt(player.replicanti.galaxies/10+1)
+		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		let x = Math.sqrt(rg / 2)
+		if (hasTimeStudy(172)) x *= Math.cbrt(rg / 10 + 1)
 		return x + 1
 	},
 	63() {
@@ -1005,8 +1008,9 @@ let tsMults = {
 		return Decimal.pow(10, Math.sqrt(player.galaxies * 5))
 	},
 	172() {
+		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
 		let repl = player.replicanti.amount
-		if (hasTimeStudy(197)) repl = repl.pow(Math.sqrt(player.replicanti.galaxies/2.5+1))
+		if (hasTimeStudy(197)) repl = repl.pow(Math.sqrt(rg / 2.5 + 1))
 		else if (repl.gte("1e4000")) repl = Decimal.pow(repl.log10(), 1110.49).min(repl)
 	
 		let x = repl.plus(1).pow(1e-3)

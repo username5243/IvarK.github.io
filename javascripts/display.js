@@ -72,8 +72,8 @@ function tickspeedDisplay(){
 		else if (e >= 9) label = "divide the tick interval by " + shortenDimensions(Decimal.recip(mult))
 		else if (multNum > .9) label = 'reduce the tick interval by ' + shorten((1 - multNum) * 100) + '%'
 		else label = 'reduce the tick interval by ' + ((1 - multNum) * 100).toFixed(e) + '%'
-		if (tmp.galRed < 1) label += " (Redshifted galaxies by " + (100 - 100 * tmp.galRed).toFixed(1) + "%)"
-		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + (100 * tmp.galRed - 100).toFixed(1) + "%)"
+		if (tmp.galRed < 1) label += " (Redshifted galaxies by " + formatReductionPercentage(1 / tmp.galRed) + "%)"
+		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + formatPercentage(tmp.galRed - 1) + "%)"
 		labels.push(label)
 
 		if (inNGM(2) || player.currentChallenge == "postc3" || player.challenges.includes("postc3") || inQC(6)) {
@@ -633,13 +633,22 @@ function updateDimensionsDisplay() {
 function replicantiDisplay() {
 	if (player.replicanti.unl) {
 		let replGalOver = getMaxRG() - player.replicanti.gal
-		let chance = Decimal.times(tmp.rep.chance, 100)
+		let chance = tmp.rep.chance
 		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (tmp.ngC ? (" / ") + shortenDimensions(getReplicantiLimit()) : "")
 		getEl("replicantimult").textContent = shorten(getIDReplMult())
 		
-		let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10,1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
-		getEl("replicantichance").innerHTML = "Replicate "+(tmp.rep.freq?"amount: "+shorten(tmp.rep.freq)+"x":"chance: "+getFullExpansion(chance.gt(1e12)?chance:Math.round(chance.toNumber()))+"%") + chanceDisplayEnding
-		getEl("replicantiinterval").innerHTML = "Interval: "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100), true, 3) + (isIntervalAffordable() ? "<br>-> "+timeDisplayShort(Decimal.div(tmp.rep.interval, 100 / 0.9), true, 3)+" Cost: "+shortenCosts(player.replicanti.intervalCost)+" IP" : "")
+		let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
+	
+		getEl("replicantichance").innerHTML = "Replicate " + (tmp.rep.freq ? "amount: " + shorten(tmp.rep.freq) + "x" : "chance: " + formatPercentage(chance, 0) + "%") + chanceDisplayEnding
+
+		let baseInt = player.replicanti.interval
+		let interval = Decimal.div(tmp.rep.interval, 1e3).times(10)
+		getEl("replicantiinterval").innerHTML = "Interval: " + timeDisplayShort(interval, true, 3) +
+			(isIntervalAffordable() ?
+				"<br> -> " + timeDisplayShort(interval.times(getReplicantiBaseInterval(player.replicanti.interval * 0.9).div(tmp.rep.baseInt)), true, 3) + 
+				" Cost: " + shortenCosts(player.replicanti.intervalCost)+" IP"
+			: "")
+
 		let replGal = player.replicanti.gal
 		let replGalScale = replGal >= (tmp.ngC ? 250 : 400) ? 2 : replGal >= 100 ? 1 : 0
 		let replGalName = (replGalScale ? getGalaxyScaleName(replGalScale) : "Max ") + "Replicated Galaxies"

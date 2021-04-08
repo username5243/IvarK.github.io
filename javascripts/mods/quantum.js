@@ -68,7 +68,12 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 }
 
 function getQuantumReq() {
-	return Decimal.pow(Number.MAX_VALUE, tmp.ngp3 ? 1.2 : 1)
+	let exp = 1
+	if (tmp.ngp3) {
+		exp = 1.2
+		if (ENTANGLED_BOOSTS.active("pos", 3)) exp /= tmp.enB.pos3
+	}
+	return Decimal.pow(Number.MAX_VALUE, exp)
 }
 
 function isQuantumReached() {

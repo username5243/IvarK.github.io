@@ -487,18 +487,22 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy274" style='font-size:10px' onclick='buyMasteryStudy("t", 274)'></button></td>
-						<td><button class="timestudylocked" id="timestudy271" style='font-size:10px' onclick='buyMasteryStudy("t", 271)'></button></td>
+						<td><button class="timestudylocked" id="timestudy274" style='font-size:9px' onclick='buyMasteryStudy("t", 274)'></button></td>
+						<td><button class="timestudylocked" id="timestudy271" style='font-size:9px' onclick='buyMasteryStudy("t", 271)'></button></td>
 						<td><button class="timestudylocked" id="timestudy272" style='width: 200px; height: 100px' onclick='buyMasteryStudy("t", 272)'></button></td>
 						<td><button class="timestudylocked" id="timestudy273" onclick='buyMasteryStudy("t", 273)'></button></td>
 						<td><button class="timestudylocked" id="timestudy275" style='font-size:10px' onclick='buyMasteryStudy("t", 275)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
-					<tr>
-						<td><button class="timestudylocked" id="timestudy281" style='font-size:10px' onclick='buyMasteryStudy("t", 281)'></button></td>
+					<tr class="wideRow">
+						<td><button class="timestudylocked" id="timestudy283" style='font-size:9px' onclick='buyMasteryStudy("t", 283)'></button></td>
+						<td><button class="timestudylocked" id="timestudy284" style='font-size:9px' onclick='buyMasteryStudy("t", 284)'></button></td>
+						<td><button class="timestudylocked" id="timestudy281" style='font-size:7px' onclick='buyMasteryStudy("t", 281)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
-						<td><button class="timestudylocked" id="timestudy282" style='font-size:10px' onclick='buyMasteryStudy("t", 282)'></button></td>
+						<td><button class="timestudylocked" id="timestudy282" style='font-size:9px' onclick='buyMasteryStudy("t", 282)'></button></td>
+						<td><button class="timestudylocked" id="timestudy285" style='font-size:8px' onclick='buyMasteryStudy("t", 285)'></button></td>
+						<td><button class="timestudylocked" id="timestudy286" style='font-size:9px' onclick='buyMasteryStudy("t", 286)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1514,7 +1518,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 4)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 5)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4563,72 +4567,83 @@
 				</td>
 				<tr>
 					<td id="enB_glu1">
-						<b id="enB_glu1_name" style="font-size: 25px">1st Entangled Boost</b>
+						<b id="enB_glu1_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu1_type"></span>
 						<br>
-						Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:35px">???</span>x.
+						Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:35px"></span>x.
 					</td>
 					<td id="enB_glu2">
-						<b id="enB_glu2_name" style="font-size: 25px">2nd Entangled Boost</b>
+						<b id="enB_glu2_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu2_type"></span>
 						<br>
-						Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:35px">???</span>x.
+						Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:35px"></span>x.
 					</td>
 					<td id="enB_glu3">
-						<b id="enB_glu3_name" style="font-size: 25px">3rd Entangled Boost</b>
+						<b id="enB_glu3_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu3_type"></span>
 						<br>
-						The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:35px">???</span>% slower.
+						The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:35px"></span>% slower.
 					</td>
 				</tr>
 				<tr>
 					<td id="enB_glu4">
-						<b id="enB_glu4_name" style="font-size: 25px">4th Entangled Boost</b>
+						<b id="enB_glu4_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu4_type"></span>
 						<br>
-						Eternity Points speed up the production of dilated time by <span id="enB_glu4_eff" style="font-size:35px">???</span>x.
+						Eternity Points speed up the production of dilated time by <span id="enB_glu4_eff" style="font-size:35px"></span>x.
 					</td>
 					<td id="enB_glu5">
-						<b id="enB_glu5_name" style="font-size: 25px">5th Entangled Boost</b>
+						<b id="enB_glu5_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu5_type"></span>
 						<br>
-						All Antimatter Galaxy scalings start <span id="enB_glu5_eff" style="font-size:35px">???</span> later.
+						All Antimatter Galaxy scalings start <span id="enB_glu5_eff" style="font-size:35px"></span> later.
 					</td>
 					<td id="enB_glu6">
-						<b id="enB_glu6_name" style="font-size: 25px">6th Entangled Boost</b>
+						<b id="enB_glu6_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu6_type"></span>
 						<br>
-						<span id="enB_glu6_eff" style="font-size:35px">???</span>
+						Dilated time gives a ^<span id="enB_glu6_eff" style="font-size:35px"></span> boost to Infinitied stat.
 					</td>
 				</tr>
 				<tr>
 					<td id="enB_glu7">
-						<b id="enB_glu7_name" style="font-size: 25px">4th Entangled Boost</b>
+						<b id="enB_glu7_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu7_type"></span>
 						<br>
-						<span id="enB_glu7_eff" style="font-size:35px">???</span>
+						Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:35px"></span>%)
 					</td>
 					<td id="enB_glu8">
-						<b id="enB_glu8_name" style="font-size: 25px">5th Entangled Boost</b>
+						<b id="enB_glu8_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu8_type"></span>
 						<br>
-						<span id="enB_glu8_eff" style="font-size:35px">???</span>
+						Replicate interval upgrades greatly boost themselves.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:35px"></span>)
 					</td>
 					<td id="enB_glu9">
-						<b id="enB_glu9_name" style="font-size: 25px">6th Entangled Boost</b>
+						<b id="enB_glu9_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu9_type"></span>
 						<br>
-						<span id="enB_glu9_eff" style="font-size:35px">???</span>
+						Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:35px"></span>.
 					</td>
+				</tr>
+				<tr>
+					<td id="enB_glu10">
+						<b id="enB_glu10_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_glu10_type"></span>
+						<br>
+						Time study 225 softcap starts <span id="enB_glu10_eff" style="font-size:35px"></span> later.
+					</td>
+					<td></td>
+					<td></td>
 				</tr>
 			</table></div>
 			<div id="speedruns" class="quantumtab">
@@ -4711,7 +4726,13 @@
 						<br>
 						Raise the multiplier per ten normal Dimensions to the power of ^<span id="enB_pos2_eff" style="font-size:35px"></span>.
 					</td>
-					<td></td>
+					<td id="enB_pos3">
+						<b id="enB_pos3_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos3_type"></span>
+						<br>
+						Quantum requirement is reduced by ^<span id="enB_pos3_eff" style="font-size:35px"></span>.
+					</td>
 				</tr>
 			</table></div>
 			<div class='quantumtab' id='replicants'>
@@ -4826,11 +4847,11 @@
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)' style='font-size:9px'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)' style='font-size:9px'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)' style='font-size:9px'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span><br><span id="treeupg4cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span>x<br><span id="treeupg4cost"></span></button></td>
 					</tr><tr>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>Replicantis boost dilated time production.<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
+						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>???<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
 						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
 					</tr></table>
 					<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>

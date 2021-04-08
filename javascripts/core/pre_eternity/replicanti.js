@@ -54,7 +54,11 @@ function getReplMult(next) {
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
-	if (hasTimeStudy(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+	if (hasTimeStudy(102)) {
+		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		if (masteryStudies.has(285)) rg = Math.pow(rg, 1.25)
+		replmult = replmult.times(Decimal.pow(5, rg))
+	}
 	return replmult;
 }
 
@@ -74,16 +78,18 @@ function isChanceAffordable() {
 }
 
 function upgradeReplicantiInterval() {
-	if (!(player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable() && player.eterc8repl !== 0)) return 
+	if (!isIntervalAffordable() || !player.infinityPoints.gte(player.replicanti.intervalCost) || player.eterc8repl <= 0) return 
 	player.infinityPoints = player.infinityPoints.minus(player.replicanti.intervalCost)
+
 	player.replicanti.interval *= 0.9
+	if (!isIntervalAffordable()) player.replicanti.interval = (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
+
 	if (player.replicanti.interval < 1) {
 		let x = 1 / player.replicanti.interval
-		if (x > 1e10) x = Math.pow(x / 1e5, 2)
+		// if (x > 1e10) x = Math.pow(x / 1e5, 2)
 		player.replicanti.intervalCost = Decimal.pow("1e800", x)
-	}
-	else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
-	if (!isIntervalAffordable()) player.replicanti.interval = (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
+	} else player.replicanti.intervalCost = player.replicanti.intervalCost.times(1e10)
+
 	if (player.currentEternityChall == "eterc8") player.eterc8repl -= 1
 	getEl("eterc8repl").textContent = "You have " + player.eterc8repl + " purchases left."
 }
@@ -115,7 +121,7 @@ function getRGCost(offset = 0, costChange) {
 		ret = ret.times(Decimal.pow(10, increase))
 
 	}
-	if (hasTimeStudy(233) && !costChange) ret = ret.dividedBy(player.replicanti.amount.pow(0.3))
+	if (hasTimeStudy(233) && !costChange) ret = ret.dividedBy(tmp.rmPseudo.pow(0.3))
 	return ret
 }
 
@@ -231,15 +237,26 @@ function replicantiGalaxyAutoToggle() {
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
 
-function getReplicantiInterval() {
-	let interval = player.replicanti.interval
+function getReplicantiBaseInterval(speed) {
+	if (speed === undefined) speed = player.replicanti.interval
+	speed = new Decimal(speed)
+
+	if (ENTANGLED_BOOSTS.active("glu", 8)) {
+		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9))
+		speed = Decimal.pow(0.9, Math.pow(lvls, tmp.enB.glu8)).times(1e3)
+	}
+	return speed
+}
+
+function getReplicantiIntervalMult() {
+	let interval = 1
 	if (tmp.mod.ngexV) interval *= .8
 	if (hasTimeStudy(62)) interval /= tsMults[62]()
 	if (player.replicanti.amount.gt(Number.MAX_VALUE)||hasTimeStudy(133)) interval *= 10
 	if (hasTimeStudy(213)) interval /= tsMults[213]()
 	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 	if (isBigRipUpgradeActive(4)) interval /= 10
-	interval /= ls.mult("rep")
+	if (tmp.ngC) interval /= 20
 
 	interval = new Decimal(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
@@ -251,14 +268,13 @@ function getReplicantiInterval() {
 }
 
 function getReplicantiFinalInterval() {
-	let x = tmp.rep.baseInt
+	let x = tmp.rep.baseInt.div(ls.mult("rep"))
 	if (player.replicanti.amount.gt(getReplScaleStart())) {
 		if (player.boughtDims) {
 			let base = hasAch("r107") ? Math.max(player.replicanti.amount.log(2) / 1024, 1) : 1
 			x = Math.pow(base, -.25) * x.toNumber()
 		} else x = Decimal.pow(tmp.rep.speeds.inc, Math.max(player.replicanti.amount.log10() - tmp.rep.speeds.exp, 0) / tmp.rep.speeds.exp).times(x)
 	}
-	if (tmp.ngC) x = Decimal.div(x, 20)
 	return x
 }
 
@@ -307,20 +323,26 @@ function updateReplicantiTemp() {
 
 	let estChance = data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3
 
-	data.baseInt = getReplicantiInterval()
+	data.intUpg = getReplicantiBaseInterval()
+	data.intMult = getReplicantiIntervalMult()
+	data.baseInt = data.intUpg.times(data.intMult)
+
 	data.baseEst = Decimal.div(estChance, data.baseInt)
 
 	data.speeds = getReplSpeed()
-	if (data.baseEst) {
+	if (data.baseEst && ECComps("eterc14")) {
 		//Sub-1ms reduction -> Lower replicanti scaling
-		let div = data.baseEst.pow(getECReward(14))
+		let pow = getECReward(14)
+		let div = data.baseEst.pow(pow)
+
 		data.ec14 = {
 			interval: div,
-			ooms: div.log10() / 3 + 1
+			ooms: div.log10() / 2 + 1
 		}
-
 		data.speeds.exp *= data.ec14.ooms
-		data.baseInt = data.baseInt.div(data.ec14.interval)
+		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp, pow))
+
+		data.baseInt = data.baseInt.times(data.ec14.interval)
 		data.baseEst = data.baseEst.div(data.ec14.interval)
 	}
 
@@ -330,7 +352,7 @@ function updateReplicantiTemp() {
 	data.estLog = data.est.times(Math.log10(Math.E))
 }
 
-function runRandomReplicanti(chance){
+function runRandomReplicanti(chance) {
 	if (Decimal.gte(chance, 1)) {
 		player.replicanti.amount = player.replicanti.amount.times(2)
 		return
