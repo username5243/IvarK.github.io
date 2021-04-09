@@ -3,7 +3,7 @@ function getTickspeedMultiplier() {
 	let x = new Decimal(getGalaxyTickSpeedMultiplier())
 	if (tmp.be && tmp.qu.breakEternity.upgrades.includes(5)) x = x.div(getBreakUpgMult(5))
 	if (tmp.ngC && player.timestudy.studies.includes(25)) x = x.div(tsMults[25]())
-	if (inNC(6, 2)) x = x.add(player.resets * 1e-3)
+	if (inNC(6, 2)) x = x.add(getTotalDBs() * 1e-3)
 	return x.min(1)
 }
 
@@ -19,9 +19,9 @@ function initialGalaxies() {
 function getGalaxyPower(ng, bi, noDil) {
 	let x = ng
 	if (!tmp.be) x = Math.max(ng - (bi ? 2 : 0), 0) + getExtraGalaxyPower(noDil)
-	if ((inNC(7) || inQC(4)) && inNGM(2)) x *= x
+	if (inNC(7) && inNGM(2)) x *= x
 	if (hasTimeStudy(173) && tmp.ngC) x *= 3
-	if (player.currentEternityChall == "eterc13") x = Math.sqrt(x * Math.sqrt(player.resets))
+	if (player.currentEternityChall == "eterc13") x = Math.sqrt(x * Math.sqrt(getTotalDBs()))
 	return x
 }
 
@@ -68,7 +68,7 @@ function getExtraGalaxyPower(noDil) {
 	let x = 0
 
 	//Replicated
-	let replPower = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+	let replPower = getFullEffRGs()
 	let replGalEff = getReplGalaxyEff()
 
 	let tsReplEff = 0
@@ -114,7 +114,6 @@ function getGalaxyTickSpeedMultiplier() {
 		}
 		return 1
 	}
-	if (inQC(2)) return 0.89
 	let inRS = player.boughtDims != undefined || player.infinityUpgradesRespecced != undefined
 	let galaxies = getGalaxyPower(g, !inRS) * getGalaxyEff(true)
 	let baseMultiplier = 0.8
@@ -171,7 +170,6 @@ function getPostC3Base() {
 	if (player.currentChallenge=="postcngmm_3") return 1
 	let perGalaxy = 0.005;
 	if (inNGM(4)) perGalaxy = 0.002
-	if (inQC(2)) perGalaxy = 0
 	if (inBigRip()) {
 		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]
 		if (hasNU(12)) perGalaxy *= tmp.nu[12].free
@@ -366,7 +364,7 @@ function getTickspeedBeforeSoftcap() {
 	if (tmp.ngC) {
 		for (let i = 1; i <= 4; i++) if (hasInfinityMult(i)) tick = tick.div(dimMults())
 		if (player.infinityUpgrades.includes("postinfi82")) tick = tick.div(getTotalSacrificeBoost())
-		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), player.resets))
+		if (player.timestudy.studies.includes(12)) tick = tick.div(Decimal.pow(getDimensionBoostPower(), getTotalDBs()))
 	}
 	return tick
 }

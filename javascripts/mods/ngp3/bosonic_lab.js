@@ -944,7 +944,7 @@ var bu = {
 			return ret
 		},
 		34() {
-			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRG() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
+			var galPart = Math.log10(player.galaxies / 1e4 + 10) * Math.log10(getTotalRGs() / 1e4 + 10) * Math.log10(player.dilation.freeGalaxies / 1e4 + 10) * Math.log10(tmp.aeg / 1e4 + 10)
 			var exp = tmp.newNGP3E ? 1/6 : 1/8
 			var ret = Math.pow(galPart, exp) - 1
 			for (var i = 2; i < 10; i++){
@@ -969,7 +969,7 @@ var bu = {
 		},
 		43() {
 			if (!tmp.quActive) return 1
-			return Math.sqrt(colorBoosts.g + tmp.pe) / (inBigRip() ? 100 : 40) + 1
+			return Math.sqrt(colorBoosts.g) / (inBigRip() ? 100 : 40) + 1
 		},
 		45() {
 			if (!tmp.eterUnl) return 1

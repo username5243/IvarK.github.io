@@ -2,7 +2,6 @@
 
 function startChallenge(name) {
 	if (name == "postc3" && isIC3Trapped()) return
-	if (name == "challenge7" && inQC(4)) return
 	if ((name == "postc2" || name == "postc6" || name == "postc7" || name == "postc8") && inQC(6)) return
 	if (name.includes("post")) {
 		if (player.postChallUnlocked < checkICID(name)) return
@@ -15,7 +14,6 @@ function startChallenge(name) {
 	doNormalChallengeResetStuff()
 	player.currentChallenge = name
 	player.challengeTarget = target
-	NC10NDCostsOnReset()
 	
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
@@ -114,6 +112,8 @@ function updateNCVisuals() {
 
 	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
 	else getEl("quickReset").style.display = "none"
+
+	getEl("qc2Gals").style.display = inQC(2) ? "block" : ""
 }
 
 function inMatterChallenge() {

@@ -22,6 +22,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 			var abletostart = QCType == 2 ? QCs[1] !== undefined : !pcFocus
 			if (abletostart) {
 				if (!inQC(0)) return
+				if (QCs.includes(4)) return
 				if (QCType == 2 && tmp.qu.pairedChallenges.completed + 1 < qc) return
 				if (bigRip) {
 					if (QCs[0] != 6 || QCs[1] != 8) return
@@ -329,7 +330,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 				getEl('toggleautoquantummode').style.display=""
 			}
 		}
-		if (!inQC(4)) if (player.meta.resets < 1) giveAchievement("Infinity Morals")
+		if (!inQC(4) && player.meta.resets == 0) giveAchievement("Infinity Morals")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (inQC(1/0) && inQCModifier("?1") && inQCModifier("?2")) giveAchievement("Brutually Challenging")
 		if (inQC(1) && inQCModifier("ad") && inQCModifier("sm") && inQCModifier("ms") && inQCModifier("tb")) giveAchievement("Chaos, Chaos, Chaos!")
@@ -417,7 +418,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
 	
-	doQuantumResetStuff(bigRip, isQC)
+	doQuantumResetStuff(bigRip, isQC, QCs)
 	// ghostify achievement reward - "Kee-hee-hee!"
 	if (ph.did("ghostify") && bigRip) {
 		player.timeDimension8 = {
@@ -480,7 +481,6 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
 		}
-		getEl("metaAntimatterEffectType").textContent = inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
 		if (!oheHeadstart) {
 			player.eternityBuyer.dilationMode = false
 			player.eternityBuyer.dilationPerAmount = 10

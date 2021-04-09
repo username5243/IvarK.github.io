@@ -1,7 +1,7 @@
 function dimShiftDisplay(){
 	var shiftRequirement = getShiftRequirement(0);
 	var isShift = getMaxUnlockableDimensions() < (haveSixDimensions() ? 6 : 8)
-	getEl("resetLabel").textContent = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' ('+ getFullExpansion(Math.ceil(player.resets)) +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
+	getEl("resetLabel").textContent = 'Dimension ' + (isShift ? "Shift" : player.resets < getSupersonicStart() ? "Boost" : "Supersonic") + ' (' + getFullExpansion(Math.ceil(player.resets)) + (getTotalDBs() > player.resets ? " + " + getFullExpansion(Math.ceil(getExtraDBs())) : "") +'): requires ' + getFullExpansion(Math.ceil(shiftRequirement.amount)) + " " + DISPLAY_NAMES[shiftRequirement.tier] + " Dimensions"
 	getEl("softReset").textContent = "Reset the game for a " + (isShift ? "new Dimension" : "Boost")
 }
 
@@ -16,7 +16,7 @@ function tickspeedBoostDisplay(){
 
 function galaxyReqDisplay(){
 	var nextGal = getGalaxyRequirement(0, true)
-	var totalReplGalaxies = getTotalRG()
+	var totalReplGalaxies = getTotalRGs()
 	var totalTypes = tmp.aeg ? 4 : player.dilation.freeGalaxies ? 3 : totalReplGalaxies ? 2 : 1
 	getEl("secondResetLabel").innerHTML = getGalaxyScaleName(nextGal.scaling) + (nextGal.scaling <= 3 ? "Antimatter " : "") + ' Galaxies ('+ getFullExpansion(player.galaxies) + (totalTypes > 1 ? ' + ' + getFullExpansion(totalReplGalaxies) : '') + (totalTypes > 2 ? ' + ' + getFullExpansion(Math.round(player.dilation.freeGalaxies)) : '') + (totalTypes > 3 ? ' + ' + getFullExpansion(tmp.aeg) : '') +'): requires ' + getFullExpansion(nextGal.amount) + ' '+DISPLAY_NAMES[inNC(4) || player.pSac != undefined ? 6 : 8]+' Dimensions'
 }
@@ -661,7 +661,7 @@ function replicantiDisplay() {
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +
 			(extraReplGalaxies > 0 ? " + " + getFullExpansion(extraReplGalaxies) : "") +
-			" replicated galax" + (getTotalRG() == 1 ? "y" : "ies") + " created."
+			" replicated galax" + (getTotalRGs() == 1 ? "y" : "ies") + " created."
 
 		getEl("replicantiapprox").innerHTML = 
 			tmp.ngp3 && player.dilation.upgrades.includes("ngpp1") && player.timestudy.studies.includes(192) && player.replicanti.amount.gte(Number.MAX_VALUE) && (!tmp.mod.nguspV || tmp.mod.nguepV) ? 
@@ -689,12 +689,12 @@ function initialTimeStudyDisplay(){
 	let dbExp = ECComps("eterc13") ? getECReward(13) : 1
 
 	getEl("11desc").textContent = "Currently: " + shortenMoney(tsMults[11]()) + "x"
-	getEl("32desc").textContent = "You gain " + getFullExpansion(tsMults[32]()) + "x more Infinities (based on Dimension Boosts)"
+	getEl("32desc").textContent = "You gain " + getFullExpansion(Math.ceil(tsMults[32]())) + "x more Infinities (based on Dimension Boosts)"
 	getEl("51desc").textContent = "You gain " + shortenCosts(tmp.mod.newGameExpVersion ? 1e30 : 1e15) + "x more IP"
 	getEl("71desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.25).max(1).min("1e210000")) + "x"
 	getEl("72desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.04).max(1).min("1e30000")) + "x"
 	getEl("73desc").textContent = "Currently: " + shortenMoney(tmp.sacPow.pow(0.005).max(1).min("1e1300")) + "x"
-	getEl("82desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.0000109, Decimal.pow(player.resets, 2)).min(player.meta==undefined?1/0:'1e80000')) + "x"
+	getEl("82desc").textContent = "Currently: " + shortenMoney(Decimal.pow(1.0000109, Decimal.pow(getTotalDBs(), 2)).min(player.meta==undefined?1/0:'1e80000')) + "x"
 	getEl("83desc").textContent = "Currently: " + shorten(tsMults[83]().pow(dbExp)) + "x"
 	getEl("91desc").textContent = "Currently: " + shortenMoney(Decimal.pow(10, Math.min(player.thisEternity, 18000)/60)) + "x"
 	getEl("92desc").textContent = "Currently: " + shortenMoney(Decimal.pow(2, 600/Math.max(player.bestEternity, 20))) + "x"

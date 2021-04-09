@@ -9,7 +9,7 @@ function onQuantumAM(){
 	return new Decimal(x)
 }
 
-function NC10NDCostsOnReset(){
+function NC10NDCostsOnReset() {
 	if (inNC(10) || player.currentChallenge == "postc1") {
 		player.thirdCost = new Decimal(100)
 		player.fourthCost = new Decimal(500)
@@ -48,7 +48,7 @@ function nanofieldResetOnQuantum(){
 	tmp.qu.nanofield.powerThreshold = new Decimal(50)
 }
 
-function doQuantumResetStuff(bigRip, isQC){
+function doQuantumResetStuff(bigRip, isQC, QCs){
 	var headstart = !tmp.ngp3
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 1
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
@@ -168,7 +168,14 @@ function doQuantumResetStuff(bigRip, isQC){
 	player.dilation = {
 		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
 		active: false,
-		tachyonParticles: (((hasAch("ng3p37") && (!bigRip || tmp.bruActive[11])) || hasAch("ng3p71")) && !inQCModifier("ad")) ? player.dilation.bestTP.pow((player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (!isQC && player.ghostify.milestones > 3) ? 1 : 0.5) : new Decimal(0),
+		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
+			!QCs.includes(3) &&
+			!inQCModifier("ad") ?
+				player.dilation.bestTP.pow(
+					(player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (player.ghostify.milestones >= 4 && !isQC) ? 1
+					: 0.5
+				)
+			: new Decimal(0),
 		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -190,26 +197,38 @@ function doQuantumResetStuff(bigRip, isQC){
 	if (tmp.ngp3) resetMasteryStudies(bigRip)
 }
 
-function resetNormalDimensions(){
-	resetDimensions()
+function resetDimensions() {
+	resetNormalDimensions()
+	if (inNGM(5)) resetInfDimensions()
+	resetTDsOnNGM4()
+
+	reduceDimCosts()
 }
 
-function doGalaxyResetStuff(bulk){
-	player.money = hasAch("r111") ? player.money : new Decimal(10)
-	resetNormalDimensions()
-	player.tickBoughtThisInf = updateTBTIonGalaxy()
-	player.sacrificed = new Decimal(0)
+function doDimBoostResetStuff() {
+	setInitialMoney()
+	setInitialResetPower()
+	resetDimensions()
+
 	player.totalBoughtDims = resetTotalBought()
-	player.resets = moreEMsUnlocked() && getEternitied() >= 1e15 ? player.resets : 0
-	player.interval = null
-	player.tdBoosts = resetTDBoosts()
-	player.galaxies = player.galaxies + bulk
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
+	player.sacrificed = new Decimal(0)
 	player.chall3Pow = new Decimal(0.01)
-	if (!pl.on()) player.matter = new Decimal(0)
+	player.matter = new Decimal(0)
 	player.chall11Pow = new Decimal(1)
 	player.postC4Tier = 1
 	player.postC8Mult = new Decimal(1)
+
+	if (player.currentChallenge == "postc2") {
+		player.eightAmount = new Decimal(1)
+		player.eightBought = 1
+	}
+}
+
+function doGalaxyResetStuff() {
+	player.resets = 0
+	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
+	player.tdBoosts = resetTDBoosts()
+	doDimBoostResetStuff()
 }
 
 function doNormalChallengeResetStuff(){

@@ -84,7 +84,7 @@ function checkYoDawg(){
 function checkUniversalHarmony() {
 	if (hasAch("ngpp18")) return
 	if (player.meta != undefined) {
-		if (player.galaxies < 700 || getTotalRG() < 700 || player.dilation.freeGalaxies < 700) return
+		if (player.galaxies < 700 || getTotalRGs() < 700 || player.dilation.freeGalaxies < 700) return
 	} else if (player.exdilation != undefined) {
 		if (player.galaxies != player.replicanti.galaxies || player.galaxies != player.dilation.freeGalaxies || player.galaxies < 300) return
 	} else return
@@ -243,7 +243,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
 	if (player.meta.resets == 8 && player.meta.antimatter.log10() >= 1500) giveAchievement("We are not going squared.")
-	if (player.eightBought >= 4e6 && (getTotalRG() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
+	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
 	if (player.old && player.meta.antimatter.log10() >= 1700) giveAchievement("Old memories come true")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.antimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")

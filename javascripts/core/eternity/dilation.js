@@ -18,12 +18,10 @@ function getDTMultPostBRU11(){
 		OLD STUFF
 
 		if (hasAch("ng3p41")) gain = gain.times(Decimal.pow(4, Math.sqrt(player.quantum.nanofield.rewards)))
-		if (isQCRewardActive(1)) gain = gain.times(tmp.qcRewards[1])
 		if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 		if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 		if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
 		if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
-		if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(player.replicanti.amount.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
 	*/
 }
 
@@ -84,7 +82,7 @@ function getDilPower() {
 	let ret = Decimal.pow(getDil3Power(), getDilUpgPower(3))
 	if (hasDilationUpg("ngud1")) ret = ret.times(getD18Bonus())
 	if (tmp.ngp3) {
-		if (hasAch("ng3p11")) ret = ret.times(Math.max(getTotalRG() / 125, 1))
+		if (hasAch("ng3p11")) ret = ret.times(Math.max(getTotalRGs() / 125, 1))
 
 		if (masteryStudies.has(264)) ret = ret.times(5)
 		if (masteryStudies.has(341)) ret = ret.times(getMTSMult(341))

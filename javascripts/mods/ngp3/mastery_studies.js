@@ -115,7 +115,7 @@ var masteryStudies = {
 		},
 		253() {
 			if (hasNU(6)) return 0
-			return Math.floor(getTotalRG() / 7) * 2
+			return Math.floor(getTotalRGs() / 7) * 2
 		},
 		274(x) {
 			if (!x) x = getInfinitied()
@@ -124,6 +124,10 @@ var masteryStudies = {
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
 			return x / Math.pow(Math.log10(x + 1) + 1, 2)
+		},
+		285() {
+			let rg = getFullEffRGs()
+			return Math.log10(rg / 100 + 1) / 2 + 1
 		},
 		301() {
 			if (hasNU(6)) return 0
@@ -175,7 +179,7 @@ var masteryStudies = {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1
 		},
 		373() {
-			return Math.pow(player.galaxies+1,0.55)
+			return Math.pow(player.galaxies + 1, 0.55)
 		},
 		381() {
 			return Decimal.min(tmp.tsReduce, 1).log10() / -135 + 1
@@ -261,10 +265,10 @@ var masteryStudies = {
 		282: "Increase the OoMs of replicate interval scaling by +100.",
 		283: "Reduce the gluon effect nerfs by ^0.9.",
 		284: "All Replicated Galaxies work evenly.",
-		285: "Replicated Galaxies give a stronger multiplier to Replicanti multiplier.",
+		285: "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
 		286: "All Replicanti boosts are based on Replicanti multiplier.",
 	},
-	hasStudyEffect: [251, 252, 253, 274, 281, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 274, 281, 285, 301, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -280,6 +284,9 @@ var masteryStudies = {
 		},
 		281(x) {
 			return "+" + shorten(x) + " OoMs"
+		},
+		285(x) {
+			return "^" + x.toFixed(3)
 		},
 	},
 	ecsUpTo: 14,
@@ -325,7 +332,7 @@ function updateMasteryStudyCosts() {
 		var t = player.masterystudies[id].split("t")[1]
 		if (t) {
 			setMasteryStudyCost(t, "t")
-			masteryStudies.ttSpent += masteryStudies.costs.time[t]
+			masteryStudies.ttSpent += masteryStudies.costs.time[t] < 1/0 ? masteryStudies.costs.time[t] : 0
 			masteryStudies.costMult *= getMasteryStudyCostMult(t)
 			masteryStudies.latestBoughtRow = Math.max(masteryStudies.latestBoughtRow,Math.floor(t/10))
 			masteryStudies.bought++

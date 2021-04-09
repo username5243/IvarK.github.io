@@ -1437,7 +1437,7 @@ function doNGm3v21tov3202() {
                 for (var u=0;u<player.galacticSacrifice.upgrades.length;u++) if (player.galacticSacrifice.upgrades[u]!=34) newUpgs.push(player.galacticSacrifice.upgrades[u])
                 player.galacticSacrifice.upgrades=newUpgs
                 tmp.mod.newGame3MinusVersion = 3
-                if (tmp.mod.ngmX>3) reduceDimCosts()
+                if (tmp.mod.ngmX >= 4) reduceDimCosts()
         } else if (!tmp.mod.ngmX && player.tickspeedBoosts !== undefined) {
                 tmp.mod.newGame4MinusVersion = 1
                 reduceDimCosts()
@@ -2013,7 +2013,7 @@ function setSomeQuantumAutomationDisplay(){
         getEl("dil52").style["font-size"] = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "10px" : "9px"
         getEl("dil52formula").style.display = !tmp.ngp3 || tmp.mod.nguspV !== undefined ? "none" : ""
         getEl("exDilationDesc").innerHTML = tmp.mod.nguspV ? 'making galaxies <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% stronger in dilation.' : 'making dilation <span id="exDilationBenefit" style="font-size:25px; color: black">0</span>% less severe.'
-        getEl("metaAntimatterEffectType").textContent=inQC(3) ? "multiplier on all Infinity Dimensions" : "extra multiplier per Dimension Boost"
+        getEl("metaAntimatterEffectType").textContent = "extra multiplier per Dimension Boost"
         if (player.meta) {
                 getEl('epmultauto').textContent="Auto: O"+(player.autoEterOptions.epmult?"N":"FF")
                 for (i=1;i<9;i++) getEl("td"+i+'auto').textContent="Auto: O"+(player.autoEterOptions["td"+i]?"N":"FF")

@@ -317,7 +317,7 @@ let GDs = {
 				return hasBosonicUpg(63) || !pl.on()
 			},
 			eff(x) {
-				return Math.pow(x + 1, 1/3)
+				return Math.log10(x + 1) + 1
 			},
 			rdExp: 0.5
 		},

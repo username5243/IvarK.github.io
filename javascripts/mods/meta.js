@@ -50,7 +50,7 @@ function getMetaDimensionGlobalMultiplier() {
 	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//QC Rewards
-		if (isQCRewardActive(3)) ret = ret.times(tmp.qcRewards[3])
+		if (isQCRewardActive(1)) ret = ret.times(tmp.qcRewards[1])
 		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
 
 		//Achievement Rewards
@@ -289,7 +289,6 @@ function getExtraDimensionBoostPower() {
 	if (inQC(7) || inQC(9)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
-	if (!inQC(3)) r = r.add(1)
 	if (tmp.mod.nguspV) {
 		let l = r.log(2)
 		if (l > 1024) r = Decimal.pow(2, Math.pow(l * 32, 2/3))
@@ -308,11 +307,6 @@ function getExtraDimensionBoostPowerExponent(ma = player.meta.antimatter){
 
 function getMADimBoostPowerExp(ma) {
 	let power = 8
-	if (inQC(3)) {
-		power = Math.pow(ma.log10() / 8, 2)
-		if (power > 1e8) power = Math.pow(power * 1e6, 4/7)
-		return power
-	}
 	if (hasDilationUpg("ngpp5")) power++
 	if (masteryStudies.has(262)) power += 0.5
 	if (isNanoEffectUsed("ma_effect_exp")) power += tmp.nf.effects.ma_effect_exp
@@ -334,7 +328,7 @@ function updateOverallMetaDimensionsStuff(){
 	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
 	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && (inQC(3) || tmp.qu.nanofield.rewards >= 2) && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
+	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2 && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'

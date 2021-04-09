@@ -50,7 +50,7 @@ function hideMaxIDButton(onLoad = false) {
 function infDimensionDescription(tier) {
 	let amt = player['infinityDimension' + tier].amount
 	let bgt = player['infinityDimension' + tier].bought
-	let tierAdd = (inQC(4) || inNGM(5) ? 2 : 1) + tier
+	let tierAdd = (inNGM(5) ? 2 : 1) + tier
 	let tierMax = inNGM(5) ? 6 : 8
 
 	let toGain = new Decimal(0)
@@ -81,18 +81,17 @@ function updateInfinityDimensions() {
 }
 
 function infDimensionProduction(tier) {
-	if (inQC(8)) return new Decimal(0)
+	if (inQC(1) || inQC(8)) return new Decimal(0)
 	if (tier == 9) return getTimeDimensionProduction(1).pow(ECComps("eterc7") * 0.2).max(1).minus(1)
 	let dim = player["infinityDimension" + tier]
 	let ret = dim.amount
-	if (inQC(4) && tier == 1) ret = ret.plus(player.infinityDimension2.amount.floor())
 	if (player.tickspeedBoosts !== undefined && player.currentChallenge == "postc2") return new Decimal(0)
 	if (player.currentEternityChall == "eterc11") return ret
 	if (player.currentEternityChall == "eterc7") ret = dilates(ret.div(tmp.ngC ? 1 : player.tickspeed.div(1000)))
 	if (tmp.mod.ngmX > 3) ret = ret.div(100)
 	ret = ret.times(infDimensionPower(tier))
 	if (player.pSac!=undefined) ret = ret.times(player.chall2Pow)
-	if (player.challenges.includes("postc6") && !inQC(3)) return ret.times(Decimal.div(1000, dilates(getTickspeed())).pow(0.0005))
+	if (player.challenges.includes("postc6")) return ret.times(Decimal.div(1000, dilates(getTickspeed())).pow(0.0005))
 	return ret
 }
 
@@ -107,7 +106,7 @@ function getTotalIDEUMult(){
 function getInfDimPathIDMult(tier){
 	let mult = new Decimal(1)
 	if (hasTimeStudy(72) && tier == 4) mult = mult.times(tmp.sacPow.pow(0.04).max(1).min("1e30000"))
-	if (hasTimeStudy(82)) mult = mult.times(Decimal.pow(1.0000109, Math.pow(player.resets, 2)).min(player.meta == undefined ? 1 / 0 : '1e80000'))
+	if (hasTimeStudy(82)) mult = mult.times(Decimal.pow(1.0000109, Math.pow(getTotalDBs(), 2)).min(player.meta == undefined ? 1 / 0 : '1e80000'))
 	if (hasTimeStudy(92)) mult = mult.times(Decimal.pow(2, 600 / Math.max(player.bestEternity, 20)))
 	if (hasTimeStudy(162)) mult = mult.times(Decimal.pow(10, (inNGM(2) ? 234 : 11) * (tmp.mod.newGameExpVersion ? 5 : 1)))
 	return mult
@@ -136,7 +135,6 @@ function infDimensionPower(tier) {
   	let dim = player["infinityDimension" + tier]
   	if (player.currentEternityChall == "eterc2" || player.currentEternityChall == "eterc10") return new Decimal(0)
   	if (player.currentEternityChall == "eterc11") return new Decimal(1)
-  	if (inQC(3)) return getExtraDimensionBoostPower()
   
 	let mult = getStartingIDPower(tier)
   	mult = mult.times(infDimPow)
@@ -313,7 +311,7 @@ function getInfinityPowerEffectExp() {
 				if (x > 7) x += 1
 			} else x = galaxies
 		}
-		else if (player.challenges.includes("postcngm3_2")) x = Math.pow(galaxies + (player.resets + player.tickspeedBoosts) / 30, 0.7)
+		else if (player.challenges.includes("postcngm3_2")) x = Math.pow(galaxies + (getTotalDBs() + player.tickspeedBoosts) / 30, 0.7)
 		x = Math.max(x , 7)
 	}
 	if (x > 100) x = 50 * Math.log10(x)

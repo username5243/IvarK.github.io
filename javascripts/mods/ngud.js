@@ -70,7 +70,7 @@ function getBlackholeDimensionProduction(tier) {
 
 
 function getBlackholeDimensionRateOfChange(tier) {
-	let toGain = getBlackholeDimensionProduction(tier + (inQC(4) ? 2 : 1))
+	let toGain = getBlackholeDimensionProduction(tier + 1)
 	var current = Decimal.max(player["blackholeDimension" + tier].amount, 1);
 	if (tmp.mod.logRateChange) {
 		var change = current.add(toGain.div(10)).log10() - current.log10()

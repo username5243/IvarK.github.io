@@ -308,7 +308,7 @@ var neutrinoUpgrades = {
 			return { 
 				normal: Math.sqrt(player.galaxies * .0035 + 1),
 				free: player.dilation.freeGalaxies * .035 + 1,
-				replicated: Math.sqrt(getTotalRG()) * .0175 + 1 //NU12 
+				replicated: Math.sqrt(getTotalRGs()) * .0175 + 1 //NU12 
 			}
 		},
 		effDesc(x) {

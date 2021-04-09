@@ -381,7 +381,7 @@ let CONDENSED = {
 			getEl("postinfi82").innerHTML = "Dimensional Sacrifice also divides tickspeed, and both other upgrades in this row use better formulas<br>Cost: "+shortenCosts(1e36)+" IP"
 		},
 		70() {
-			let r = Math.sqrt(player.resets)
+			let r = Math.sqrt(getTotalDBs())
 			//if (r > 1e3) r = Math.log10(r * 100) * 200
 			let mult = Math.pow(1.02, r)
 			return mult;

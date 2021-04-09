@@ -892,7 +892,7 @@ let tsMults = {
 		return Decimal.pow(10, log)
 	},
 	32() {
-		let ret = Math.pow(Math.max(player.resets, 1), tmp.mod.newGameMult ? 4 : 1)
+		let ret = Math.pow(Math.max(getTotalDBs(), 1), tmp.mod.newGameMult ? 4 : 1)
 		if (player.timestudy.studies.includes(197) && tmp.ngC) ret = Math.pow(ret, 3)
 		return ret
 	},
@@ -905,7 +905,7 @@ let tsMults = {
 		return (tmp.mod.newGameExpVersion ? 12 : 13) / 15
 	},
 	51(){
-		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * ((masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies) + 1), 160)
+		if (tmp.ngC) return Decimal.pow((ngC.save.repl + 1) * (getFullEffRGs() + 1), 160)
 		return tmp.mod.newGameExpVersion ? 1e30 : 1e15
 	},
 	61() {
@@ -939,7 +939,7 @@ let tsMults = {
 		return inNGM(2) ? 0.5 : 2
 	},
 	221() {
-		return Decimal.pow(1.0025, player.resets)
+		return Decimal.pow(1.0025, getTotalDBs())
 	},
 	225() {
 		let x = Math.floor(tmp.rmPseudo.e / 1e3)
@@ -959,8 +959,8 @@ let tsMults = {
 		return Math.pow(tmp.sacPow.max(10).log10(), 10)
 	},
 	231() {
-		let x = Decimal.pow(Math.max(player.resets, 1), 0.3)
-		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(player.resets / 1e5 + 1, 1.25)))
+		let x = Decimal.pow(Math.max(getTotalDBs(), 1), 0.3)
+		if (tmp.ngp3 && hasAch("ngpp15")) x = x.max(Decimal.pow(10, Math.pow(getTotalDBs() / 1e5 + 1, 1.25)))
 		return x
 	},
 	232() {
@@ -988,13 +988,13 @@ let tsMults = {
 		return x
 	},
 	43() {
-		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		let rg = getFullEffRGs()
 		let x = rg * 0.02
 		if (hasTimeStudy(197)) x *= 3
 		return x + 1
 	},
 	52() {
-		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		let rg = getFullEffRGs()
 		let x = Math.sqrt(rg / 2)
 		if (hasTimeStudy(172)) x *= Math.cbrt(rg / 10 + 1)
 		return x + 1
@@ -1008,7 +1008,7 @@ let tsMults = {
 		return Decimal.pow(10, Math.sqrt(player.galaxies * 5))
 	},
 	172() {
-		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
+		let rg = getFullEffRGs()
 		let repl = player.replicanti.amount
 		if (hasTimeStudy(197)) repl = repl.pow(Math.sqrt(rg / 2.5 + 1))
 		else if (repl.gte("1e4000")) repl = Decimal.pow(repl.log10(), 1110.49).min(repl)

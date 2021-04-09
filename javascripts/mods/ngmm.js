@@ -7,7 +7,7 @@ function getGSAmount(offset=0) {
 	let galaxies = getGSGalaxies() + offset
 	let y = getGSGalaxyExp(galaxies)
 	let z = getGSDimboostExp(galaxies)
-	let resetMult = player.resets
+	let resetMult = getTotalDBs()
 	if (inNGM(4)) resetMult = resetMult + player.tdBoosts / 2 - 1
 	resetMult -= inNC(4) ?  2 : 4
 	if (player.tickspeedBoosts !== undefined) resetMult = (resetMult + 1) / 2
@@ -24,7 +24,7 @@ function getGSAmount(offset=0) {
 	if (inNGM(4)) {
 		var e = hasGalUpg(46) ? galMults["u46"]() : 1
 		if (hasGalUpg(41)) ret = ret.times(Decimal.max(player.tickspeedBoosts, 1).pow(e))
-		if (hasGalUpg(43)) ret = ret.times(Decimal.max(player.resets, 1).pow(e * (hasAch("r75") ? 2 : 1)))
+		if (hasGalUpg(43)) ret = ret.times(Decimal.max(getTotalDBs(), 1).pow(e * (hasAch("r75") ? 2 : 1)))
 		if (hasGalUpg(45)) ret = ret.times(player.eightAmount.max(1).pow(e))
 		if (player.challenges.includes("postcngm3_1")) ret = ret.times(Decimal.pow(3, tmp.cp))
 		let a = 0
@@ -64,7 +64,7 @@ function getGPMultipliers(){
 
 function getGSGalaxies() {
 	let galaxies = player.galaxies + player.dilation.freeGalaxies;
-	let rg = player.replicanti.galaxies
+	let rg = getFullEffRGs()
 	if (player.timestudy.studies.includes(133)) rg *= 1.5
 	if (player.timestudy.studies.includes(132)) rg *= 1.4
 	if (hasAch("r121")) galaxies += 30.008
@@ -457,7 +457,7 @@ getEl("postinfi04").onclick = function() {
 //v1.41
 function galIP(){
 	let gal = player.galaxies
-	let rg = player.replicanti.galaxies
+	let rg = getFullEffRGs()
 	if (player.timestudy.studies.includes(132)) rg *= 1.4
 	if (player.timestudy.studies.includes(133)) rg *= 1.5
 	if (hasAch("r122")) gal += 100*rg 
@@ -759,16 +759,16 @@ function calcG13Exp(){
 	let exp = 3
 	if (hasAch("r75") && inNGM(4)) exp *= 2
 	if (player.infinityUpgrades.includes("postinfi62") && hasAch("r117") && player.tickspeedBoosts == undefined) {
-		if (player.currentEternityChall === "") exp *= Math.pow(.8 + Math.log(player.resets + 3), 2.08)
+		if (player.currentEternityChall === "") exp *= Math.pow(.8 + Math.log(getTotalDBs() + 3), 2.08)
 		else if (player.currentEternityChall == "eterc9" || player.currentEternityChall == "eterc7" || player.currentEternityChall == "eterc6") {
-			exp *= Math.pow(.8 + Math.log(player.resets + 3) * (hasAch("r124") ? (8 - player.bestEternity || 6) : 1), 0.5 + hasAch("r124") ? 0.5 : 0)
+			exp *= Math.pow(.8 + Math.log(getTotalDBs() + 3) * (hasAch("r124") ? (8 - player.bestEternity || 6) : 1), 0.5 + hasAch("r124") ? 0.5 : 0)
 		}
-		else exp *= Math.pow(.8 + Math.log(player.resets+3), 0.5 + hasAch("r124") ? 0.1 : 0)
+		else exp *= Math.pow(.8 + Math.log(getTotalDBs() + 3), 0.5 + hasAch("r124") ? 0.1 : 0)
 	} else if (player.infinityUpgrades.includes("postinfi62")){
-		if (player.currentEternityChall === "") exp *= Math.pow(Math.log(player.resets + 3), 2)
-		else exp *= Math.pow(Math.log(player.resets + 3), 0.5)
+		if (player.currentEternityChall === "") exp *= Math.pow(Math.log(getTotalDBs() + 3), 2)
+		else exp *= Math.pow(Math.log(getTotalDBs() + 3), 0.5)
 	}
-	if (player.tickspeedBoosts != undefined && hasAch("r101")) exp *= Math.pow(Math.max(1, 2*player.galaxies), 1/3)
+	if (player.tickspeedBoosts != undefined && hasAch("r101")) exp *= Math.pow(Math.max(1, 2 * player.galaxies), 1/3)
 	if (hasAch("r81") && player.currentEternityChall === "") exp += 7
 	if (player.tickspeedBoosts != undefined && exp > 100) exp = Math.sqrt(exp) * 10
 	if (player.tickspeedBoosts != undefined && hasAch("r117")) exp += Math.sqrt(exp)

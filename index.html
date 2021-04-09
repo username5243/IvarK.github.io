@@ -95,6 +95,7 @@
 		<div id="chall13Mult"></div>
 		<div id="c14Resets"></div>
 		<div id="ec12Mult"></div>
+		<div id="qc2Gals"></div>
 		<div>
 			<p>You have <span id="coinAmount" onclick="onAntimatterClick()" style="font-size:25px; color: black">0</span> antimatter.</p>
 		</div>
@@ -1518,7 +1519,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 5)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 5.01)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1641,7 +1642,6 @@
 				<div id="softcap_idbase"></div>
 				<div id="softcap_workts"></div>
 				<div id="softcap_bu45"></div>
-				<div id="softcap_qc3"></div>
 				<div id="softcap_mptd"></div>
 				<div id="softcap_C_nd"></div>
 				<div id="softcap_C_ts"></div>
@@ -3374,7 +3374,7 @@
 					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc1div">
-								<span>Normal Dimensions 3-8 don't produce anything. You don't lose everything when you buy Normal Dimensions or tickspeed.</span>
+								<span>There are only Meta Dimensions, but First Meta Dimensions produce antimatter instead.</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3382,13 +3382,13 @@
 									<br>
 									<span id="qc1cost"></span><br>
 									<span id="qc1goal"></span><br>
-									Reward: First & Second Dimensions boost dilated time production. Currently: <span id="qc1reward"></span>x
+									Reward: Dimension Boosts boost Meta Dimensions by <span id="qc1reward"></span>x
 								</div>
 							</div>
 						</td>
 						<td>
 							<div class="quantumchallengediv" id="qc2div">
-								<span>Galaxies have no effect.</span>
+								<span>You have a limit of 2,000 total galaxies. There are no extra replicated galaxies and Tachyon Particles are resetted. (WIP)</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3402,7 +3402,7 @@
 						</td>
 						<td>
 							<div class="quantumchallengediv" id="qc3div">
-								<span>Only meta-antimatter can boost Infinity Dimensions, but meta-antimatter cannot boost dimension boosts.</span>
+								<span>Replicated Galaxies are replaced with Replicanti Self-Boosts. (Coming soon)</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -3410,7 +3410,7 @@
 									<br>
 									<span id="qc3cost"></span><br>
 									<span id="qc3goal"></span><br>
-									Reward: Infinity Power boosts Meta Dimensions at greatly reduced rate. Currently: <span id="qc3reward"></span>x
+									Reward: Replicantis generate <span id="qc3reward"></span> free Dimension Boosts.
 								</div>
 							</div>
 						</td>
@@ -3418,7 +3418,7 @@
 					<tr>
 						<td>
 							<div class="quantumchallengediv" id="qc4div">
-								<span>Automatic Big Crunch Challenge is applied to your Normal, Infinity, Time and Meta Dimensions. Meta-Dimension Boost cost scales less, but their buffs are nullified.</span>
+								<span>Automatic Big Crunch Challenge is applied to Meta Dimensions, but some boosts work. (WIP, broken)</span>
 								<br>
 								<br>
 								<div class="outer">
@@ -4456,11 +4456,11 @@
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
 					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
 					<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
 					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 					<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
 					<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
+					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
 				</tr>
 			</table>
 			<div class='quantumtab' id='uquarks'>
@@ -4704,7 +4704,7 @@
 					<td>
 						You have <span id="enB_pos_amt" style="font-size:35px">0</span> Positronic Boosters.
 						<br>
-						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> Positronic Energy</button>
+						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> energy</button>
 						<br>
 						<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
 						<br><br>
@@ -4731,7 +4731,7 @@
 						<br>
 						<span id="enB_pos3_type"></span>
 						<br>
-						Quantum requirement is reduced by ^<span id="enB_pos3_eff" style="font-size:35px"></span>.
+						Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
 					</td>
 				</tr>
 			</table></div>
@@ -4754,8 +4754,7 @@
 					They are gathering <span id="babyReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
 					They will become normal duplicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
 				</td></tr><tr><td>
-					You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span><br>
-					Translated to +<span id="quarkTranslation" style="font-size:35px">0</span>% added to green power.</p>
+					You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span>
 				</td><td>
 					You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
 					<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()' style="width: 210px"></button><br>

@@ -3,16 +3,16 @@ let DISPLAY_NAMES = [null, "First", "Second", "Third", "Fourth", "Fifth", "Sixth
 let initCost = [null, 10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24]
 let costMults = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15]
 
-function resetDimensions() {
+function resetNormalDimensions() {
 	let costs = initCost
-	if (inNC(10) || player.currentChallenge == "postc1") costs = [null, 10, 100, 100, 500, 2500, 2e4, 2e5, 4e6]
-
 	for (var d = 1; d <= 8; d++) {
 		var name = TIER_NAMES[d]
 		player[name + "Amount"] = new Decimal(0)
 		player[name + "Bought"] = 0
 		player[name + "Cost"] = new Decimal(costs[d])
 	}
+
+	NC10NDCostsOnReset()
 	resetNormalDimensionCostMults()
 
 	if (tmp.ngC) ngC.resetNDs()
@@ -129,7 +129,7 @@ let dCurrentC7 = [null, 0, 0, 0, 0,
 
 function getStartingNDMult(tier) {
 	let mPerDB = getDimensionBoostPower()
-	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, player.resets - tier + 1 + (hasPU(22) ? player.tdBoosts - tier : 0))
+	let dbMult = player.resets < tier ? new Decimal(1) : Decimal.pow(mPerDB, getTotalDBs() - tier + 1 + (hasPU(22) ? player.tdBoosts - tier : 0))
 
 	let mptMult = new Decimal(1)
 	if (inNC(9) || player.currentChallenge === "postc1") {
@@ -158,13 +158,13 @@ function getStartingNDMult(tier) {
 }
 
 function getDimensionFinalMultiplier(tier) {
-	if (!tmp.infPow) updateInfinityPowerEffects()
+	if (tier == 1 && !tmp.infPow) updateInfinityPowerEffects()
 	let mult = new Decimal(1)
 
 	if (player.currentChallenge == "postcngc_2" || player.currentChallenge == "postcngm3_2" || player.currentEternityChall == "eterc11") {
 		if (player.currentChallenge == "postcngc_2") mult = ngC.condense.nds.eff(tier)
 		else if (player.currentChallenge == "postcngm3_2") mult = tmp.infPow.max(1e100)
-		else if (player.currentEternityChall == "eterc11") mult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), player.resets - tier + 1).max(1))
+		else if (player.currentEternityChall == "eterc11") mult = tmp.infPow.times(Decimal.pow(getDimensionBoostPower(), getTotalDBs() - tier + 1).max(1))
 
 		if (tmp.ngC) mult = softcap(mult, "nds_ngC")
 		return mult
@@ -300,7 +300,7 @@ function getDimensionPowerMultiplier(focusOn, debug) {
 	if (tmp.ngp3 && focusOn != "linear") exp = focusOn == "no-rg4" ? getMPTExp(focusOn) : tmp.mpte
 	if (exp > 1) ret = Decimal.pow(ret, exp)
 	if (tmp.mod.newGameMult !== undefined) {
-		ret = Decimal.times(ret, Math.log10(player.resets + 1) + 1)
+		ret = Decimal.times(ret, Math.log10(getTotalDBs() + 1) + 1)
 		ret = Decimal.times(ret, Math.log10(Math.max(player.galaxies, 0) + 1) * 5 + 1)
 	}
 	return ret
@@ -413,14 +413,13 @@ function getMaxUnlockableDimensions() {
 
 function getMaxGeneralDimensions() {
 	return Math.min(
-		inQC(1) ? 2
-		: player.currentEternityChall == "eterc3" ? 4	
-		: 8
-	, getMaxUnlockableDimensions())
+		inQC(1) ? 0 : player.currentEternityChall == "eterc3" ? 4 : 8
+		, getMaxUnlockableDimensions()
+	)
 }
 
 function getDimensionSteps() {
-	return inNGM(5) || inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) ? 2 : 1
+	return inNGM(5) || inNC(7) || player.currentChallenge == "postcngm3_3" ? 2 : 1
 }
 
 function getMaxDimensionsOutsideOfChallenges() {
@@ -533,10 +532,6 @@ function buyBulkDimension(tier, bulk, auto) {
 		if (toBuy < 1) break
 		let newCost = player[name + "Cost"].times(Decimal.pow(player.costMultipliers[tier - 1], toBuy - 1).times(Decimal.pow(mi, (toBuy - 1) * (toBuy - 2) / 2)))
 		let newMult = player.costMultipliers[tier - 1].times(Decimal.pow(mi, toBuy - 1))
-		if (!inQC(1)) {
-			if (player.money.gte(newCost)) player.money = player.money.sub(newCost)
-			else if (player.dimensionMultDecrease > 3) player.money = new Decimal(0)
-		}
 		player[name + "Amount"] = player[name + "Amount"].add(toBuy * 10)
 		recordBought(name, toBuy * 10)
 		player[name + "Cost"] = newCost.times(newMult)
@@ -555,8 +550,8 @@ function canQuickBuyDim(tier) {
 }
 
 function getOrSubResource(tier, sub) {
-	if (sub == undefined || inQC(1)) {
-		if (tier > 2 && (inNC(10) || player.currentChallenge == "postc1")) return player[TIER_NAMES[tier-2] + "Amount"]
+	if (sub == undefined) {
+		if (tier > 2 && (inNC(10) || player.currentChallenge == "postc1")) return player[TIER_NAMES[tier - 2] + "Amount"]
 		return player.money
 	} else {
 		if (tier > 2 && (inNC(10) || player.currentChallenge == "postc1")) {
@@ -651,7 +646,7 @@ function getInfinitiedMult() {
 
 function getDimensionProductionPerSecond(tier) {
 	let ret = player[TIER_NAMES[tier] + 'Amount'].floor()
-	if ((inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4)) && !inNGM(2)) {
+	if ((inNC(7) || player.currentChallenge == "postcngm3_3") && !inNGM(2)) {
 		if (tier == 4) ret = ret.pow(1.3)
 		else if (tier == 2) ret = ret.pow(1.5)
 	}
@@ -666,7 +661,7 @@ function getDimensionProductionPerSecond(tier) {
 	if (tier == 1 && (inNC(3) || player.currentChallenge == "postc1")) ret = ret.times(player.chall3Pow)
 	if (player.tickspeedBoosts != undefined) ret = ret.div(10)
 	if (tmp.mod.ngmX > 3) ret = ret.div(10)
-	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || inQC(4) || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
+	if (tier == 1 && (inNC(7) || player.currentChallenge == "postcngm3_3" || player.pSac !== undefined)) ret = ret.plus(getDimensionProductionPerSecond(2))
 
 	let tick = dilates(Decimal.div(1e3, getTickspeed()), "tick")
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) tick = tick.pow(tmp.nf.effects.dil_effect_exp)

@@ -61,7 +61,7 @@ function calcVanillaTSTDMult(tier){
 	let ret = new Decimal(1)
 	if (hasTimeStudy(73) && tier == 3) ret = ret.times(tmp.sacPow.pow(0.005).min(new Decimal("1e1300")))
 	if (hasTimeStudy(93)) ret = ret.times(Decimal.pow(player.totalTickGained, 0.25).max(1))
-	if (hasTimeStudy(103)) ret = ret.times(Math.max(player.replicanti.galaxies, 1))
+	if (hasTimeStudy(103)) ret = ret.times(Math.max(getFullEffRGs(), 1))
 	if (hasTimeStudy(151)) ret = ret.times(1e4)
 	if (hasTimeStudy(221)) ret = ret.times(tsMults[221]())
 	if (hasTimeStudy(227) && tier == 4) ret = ret.times(tsMults[227]())
@@ -113,7 +113,7 @@ function getTimeDimensionPower(tier) {
 }
 
 function getTimeDimensionProduction(tier) {
-  	if (player.currentEternityChall == "eterc1" || player.currentEternityChall == "eterc10" || (!tmp.be && inQC(8))) return new Decimal(0)
+  	if (player.currentEternityChall == "eterc1" || player.currentEternityChall == "eterc10" || inQC(1) || (!tmp.be && inQC(8))) return new Decimal(0)
   	let dim = player["timeDimension" + tier]
   	if (player.currentEternityChall == "eterc11") return dim.amount
   	let ret = dim.amount
@@ -142,7 +142,7 @@ function isTDUnlocked(t) {
 function getTimeDimensionDescription(tier) {
 	let amt = player['timeDimension' + tier].amount
 	let bgt = player['timeDimension' + tier].bought
-	let tierAdd = ((inNC(7) && tmp.ngmX == 4) || inQC(4) || inNGM(5) ? 2 : 1) + tier
+	let tierAdd = ((inNC(7) && tmp.ngmX == 4) || inNGM(5) ? 2 : 1) + tier
 	let tierMax = (haveSixDimensions() && tmp.ngmX == 4) || inNGM(5) ? 6 : 8
 
 	let toGain = new Decimal(0)
@@ -185,7 +185,7 @@ function updateTimeDimensions() {
 
 function updateTimeShards() {
 	let p = getTimeDimensionProduction(1)
-	if ((inNC(7) && tmp.ngmX == 4) || inQC(4) || inNGM(5)) p = p.plus(getTimeDimensionProduction(2))
+	if ((inNC(7) && tmp.ngmX == 4) || inNGM(5)) p = p.plus(getTimeDimensionProduction(2))
 	if (tmp.inEC12) p = p.div(tmp.ec12Mult)
 	if (inNGM(5)) p = p.times(getPDAcceleration())
 

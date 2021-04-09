@@ -256,7 +256,7 @@ function updateEffectiveAntiElectronGalaxiesTemp() {
 function updateTS431ExtraGalTemp() {
 	tmp.eg431 = tmp.effAeg * 5
 	if (isLEBoostUnlocked(1)) {
-		tmp.leBonus[1].total = (colorBoosts.g + tmp.pe - 1) * tmp.leBonus[1].effect
+		tmp.leBonus[1].total = (colorBoosts.g - 1) * tmp.leBonus[1].effect
 		tmp.eg431 += tmp.leBonus[1].total
 	}
 }
@@ -340,7 +340,6 @@ function updateNGP3TempStuff() {
 		tmp.be = inBigRip() && tmp.qu.breakEternity.break
 		tmp.tue = getTreeUpgradeEfficiency()
 	} else tmp.be = false
-	tmp.rg4 = tmp.quActive && tmp.qu.upgrades.includes("rg4") && (tmp.qu.rg4 || inQC(1) || QCIntensity(1))
 }
 
 function updateGhostifyTempStuff() {
@@ -511,7 +510,7 @@ function updateBRU8Temp() {
 	tmp.bru[8] = new Decimal(1)
 	if (!inBigRip()) return
 
-	tmp.bru[8] = Decimal.pow(2, getTotalRG()) // BRU8
+	tmp.bru[8] = Decimal.pow(2, getTotalRGs()) // BRU8
 	if (!hasNU(11)) tmp.bru[8] = tmp.bru[8].min(Number.MAX_VALUE)
 }
 

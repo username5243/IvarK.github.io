@@ -383,21 +383,6 @@ var softcap_data = {
 			derv: false
 		}
 	},
-	qc3reward: {
-		name: "log base 10 of Quantum Challenge 3 reward",
-		1: {
-			func: "pow",
-			start: 1331,
-			pow: .5,
-			derv: false
-		}, 
-		2: {
-			func: "log",
-			start: 4096,
-			mul: 4 / Math.log10(8), /* log2(4096)=12, so 4/3s that is 16 and 16**3 = 4096 */
-			pow: 3
-		}
-	},
 	mptd_log: { //NOT USED IN ANYTHING YET, JUST TESTING SO PLS DONT REMOVE
 		name: "log base 10 of multiplier per ten dimensions",
 		1: {
@@ -805,7 +790,6 @@ function getSoftcapAmtFromId(id){
 		idbase: () => getStartingIDPower(1).max(getStartingIDPower(2)).max(getStartingIDPower(3)).max(getStartingIDPower(4)).max(getStartingIDPower(5)).max(getStartingIDPower(6)).max(getStartingIDPower(7)).max(getStartingIDPower(8)).max(1).log10(),
 		working_ts: () => getTickspeed().pow(-1).log10(),
 		bu45: () => bu.effects[45](),
-		qc3reward: () => Decimal.plus(qcRewards["effects"][3](QCIntensity(3)), 1).log10(),
 		mptd_log: () => Decimal.log10(tmp.mptb) * tmp.mpte,
 
 		// Condensened: () =>
@@ -841,7 +825,6 @@ function hasSoftcapStarted(id, num){
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
 		ms322_log: tmp.ngp3,
-		qc3reward: tmp.ngp3 && tmp.qcRewards && tmp.qcRewards[3] !== undefined && tmp.quActive,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		bam: tmp.ngp3,
@@ -960,7 +943,6 @@ function updateSoftcapStatsTab(){
 		idbase: "softcap_idbase",
 		working_ts: "softcap_workts",
 		bu45: "softcap_bu45",
-		qc3reward: "softcap_qc3",
 		mptd_log: "softcap_mptd",
 		// Condensened:
 		nds_ngC: "softcap_C_nd",

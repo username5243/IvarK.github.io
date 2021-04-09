@@ -1533,13 +1533,14 @@ function updateMoney() {
 	}
 	if (inNC(14) && inNGM(4)) getEl("c14Resets").textContent = "You have "+getFullExpansion(10-getTotalResets())+" resets left."
 	getEl("ec12Mult").textContent = tmp.inEC12 ? "Time speed: 1 / " + shorten(tmp.ec12Mult) + "x" : ""
+	if (inQC(2)) getEl("qc2Gals").textContent = "You have a total of " + getFullExpansion(Math.floor(player.galaxies + getTotalRGs() + player.dilation.freeGalaxies)) + " / " + getFullExpansion(2000) + " galaxies."
 }
 
 function updateCoinPerSec() {
 	var element = getEl("coinsPerSec");
-	var ret = getDimensionProductionPerSecond(1)
+	var ret = inQC(1) ? getMetaDimensionProduction(1) : getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
-	element.textContent = 'You are getting ' + shortenND(ret) + ' antimatter per second.'
+	element.textContent = ret.gt(0) && ret.lte("1e100000") ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : ""
 }
 
 var clickedAntimatter
@@ -3971,7 +3972,7 @@ function infinityRespeccedDMUpdating(diff){
 function changingDecimalSystemUpdating(){
 	getEl("decimalMode").style.visibility = "hidden"
 	if (break_infinity_js) {
-		player.totalmoney = Decimal.pow(10, 9e15-1)
+		player.totalmoney = Decimal.pow(10, 9e15 - 1)
 		player.money = player.totalmoney
 		clearInterval(gameLoopIntervalId)
 		alert("You have reached the limit of break_infinity.js. In order for the game to continue functioning, the game will switch the library to logarithmica_numerus.js, requiring a game reload, but will have a higher limit. You cannot change libraries for this save again in the future.")
@@ -3999,17 +4000,23 @@ function requiredInfinityUpdating(diff){
 	if (tmp.ri) return
 	if (player.infinityUpgradesRespecced != undefined) infinityRespeccedDMUpdating(diff)
 
-	let steps = getDimensionSteps()
-	let dims = getMaxGeneralDimensions()
-	for (let tier = dims - steps; tier >= 1; tier--) {
-		var name = TIER_NAMES[tier];
-		player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + steps).times(diff / 10))
+	if (!inQC(1)) {
+		let steps = getDimensionSteps()
+		let dims = getMaxGeneralDimensions()
+		for (let tier = dims - steps; tier >= 1; tier--) {
+			var name = TIER_NAMES[tier];
+			player[name + 'Amount'] = player[name + 'Amount'].plus(getDimensionProductionPerSecond(tier + steps).times(diff / 10))
+		}
+		if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
 	}
-	if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
 
-	var tempa = getDimensionProductionPerSecond(1).times(diff)
-	player.money = player.money.plus(tempa)	
+	var tempa = getDimensionProductionPerSecond(1)
+	if (inQC(1)) tempa = getMetaDimensionProduction(1)
+
+	tempa = tempa.times(diff)
+	player.money = player.money.plus(tempa)
 	player.totalmoney = player.totalmoney.plus(tempa)
+
 	if (isInfiniteDetected()) return
 	if (inBigRip()) {
 		tmp.qu.bigRip.totalAntimatter = tmp.qu.bigRip.totalAntimatter.add(tempa)
@@ -4346,7 +4353,7 @@ function metaDimsUpdating(diff){
 }
 
 function infinityTimeMetaBlackHoleDimUpdating(diff){
-	var step = inQC(4) || inNGM(5) ? 2 : 1
+	var step = inNGM(5) ? 2 : 1
 	var stepT = inNC(7) && inNGM(4) ? 2 : step
 	var max = inNGM(5) ? 6 : 8
 	for (let tier = 1 ; tier <= max; tier++) {
@@ -4371,7 +4378,9 @@ function dimensionPageTabsUpdating(){
 	if (!showProdTab) player.options.chart.on=false
 }
 
-function otherDimsUpdating(diff){
+function otherDimsUpdating(diff) {
+	if (inQC(1)) return
+
 	//Infinity Dimensions
 	let infProd = infDimensionProduction(1)
 	if (inNGM(5)) infProd = infDimensionProduction(2).add(infProd)

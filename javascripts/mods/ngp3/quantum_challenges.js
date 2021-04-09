@@ -1,6 +1,6 @@
 var quantumChallenges = {
 	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
-	goalLogs: [null, 6.65e9, 7.68e10, 4.525e10, 5.325e10, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 8e16]
+	goalLogs: [null, 1/0, 1/0, 1/0, 1/0, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 8e16]
 }
 
 var assigned
@@ -289,9 +289,8 @@ let qcRewards = {
 	effects: {
 		1: function(comps) {
 			if (comps == 0) return 1
-			let base = getDimensionFinalMultiplier(1).times(getDimensionFinalMultiplier(2)).max(1).log10()
-			let exp = 0.225 + comps * .025
-			return Decimal.pow(10, Math.pow(base, exp) / 200)
+			let exp = comps / 4 + 0.25
+			return Decimal.pow(10, Math.pow(getTotalDBs() / 1e5, exp) / 5)
 		},
 		2: function(comps) {
 			if (comps == 0) return 1
@@ -299,16 +298,9 @@ let qcRewards = {
 			return Math.pow(1.2 + comps * 0.2, exp)
 		},
 		3: function(comps) {
-			if (comps == 0) return 1
-			let ipow = player.infinityPower.plus(1).log10()
-			let exp = 0.5
-			if (tmp.newNGP3E) exp += Math.sqrt(exp) / 10
-			
-			let log = Math.pow(ipow / 2e8, exp) 
-			if (comps >= 2) log += Math.pow(ipow / 1e9, 4/9 + comps / 9)
-			
-			log = softcap(log, "qc3reward")
-			return Decimal.pow(10, log)
+			if (comps == 0) return 0
+			let exp = comps / 3 + 1
+			return Math.pow((tmp.rmPseudo || player.replicanti.amount).log10() / 8e4, exp) * 2e3
 		},
 		4: function(comps) {
 			if (comps == 0) return 1
@@ -318,7 +310,7 @@ let qcRewards = {
 		},
 		5: function(comps) {
 			if (comps == 0) return 0
-			return Math.log10(1 + player.resets) * comps
+			return Math.log10(1 + getTotalDBs()) * comps
 		},
 		6: function(comps) {
 			if (comps == 0) return 1

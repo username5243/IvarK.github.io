@@ -20,19 +20,23 @@ function getDimensionBoostPower(next, focusOn) {
 	}
 	if (hasTS(152) && tmp.ngC) ret = Decimal.mul(ret, tsMults[152]())
 	if (ECComps("eterc13") > 0) ret = Decimal.pow(ret, getECReward(13))
-	if (hasDilationStudy(6) && !inQC(3) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
+	if (hasDilationStudy(6) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
 
-	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRG() + player.dilation.freeGalaxies)))
+	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies)))
 
 	return new Decimal(ret)
 }
 
 function softReset(bulk, tier = 1) {
 	if (tmp.ri) return;
+
 	var oldResets = player.resets
-	player.resets += bulk;
-	if (player.masterystudies) if (player.resets > 4) player.old = false
+	player.resets += bulk
+
+	if (tmp.ngp3 && player.resets > 4) player.old = false
+
 	if (inNC(14) && player.tickspeedBoosts == undefined) player.tickBoughtThisInf.pastResets.push({resets: player.resets, bought: player.tickBoughtThisInf.current})
+
 	if (moreEMsUnlocked() && getEternitied() >= 1e9 && tier == 1) {
 		skipResets()
 		if (!pl.on()) player.matter = new Decimal(0)
@@ -40,23 +44,8 @@ function softReset(bulk, tier = 1) {
 		player.dbPower = getDimensionBoostPower()
 		return
 	}
-	resetDimensions()
-	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
-	if (inNGM(5)) resetIDsOnNGM5()
-	resetTDsOnNGM4()
-	reduceDimCosts()
-	skipResets()
-	if (player.currentChallenge == "postc2") {
-		player.eightAmount = new Decimal(1);
-		player.eightBought = 1;
-	}
-	setInitialResetPower()
+
+	doDimBoostResetStuff()
 
 	if (player.resets > 4 && tmp.ngmX < 5) {
 		getEl("confirmation").style.display = "inline-block";
@@ -64,6 +53,7 @@ function softReset(bulk, tier = 1) {
 		getEl("confirmations").style.display = "inline-block";
 		getEl("sacConfirmBtn").style.display = "inline-block";
 	}
+
 	if (inNGM(2) && player.galaxies > 0 && player.resets > (inNGM(5) ? 3 : 4)) {
 		getEl("gSacrifice").style.display = "inline-block"
 		getEl("gConfirmation").style.display = "inline-block"
@@ -206,7 +196,7 @@ getEl("softReset").onclick = function () {
 function skipResets() {
 	if (inNC(0)) {
 		var upToWhat = 0
-		for (var s = 1;s < 4; s++) if (player.infinityUpgrades.includes("skipReset" + s)) upToWhat = s
+		for (var s = 1; s < 4; s++) if (player.infinityUpgrades.includes("skipReset" + s)) upToWhat = s
 		if (player.infinityUpgrades.includes("skipResetGalaxy")) {
 			upToWhat = 4 
 			if (player.galaxies < 1) player.galaxies = 1
@@ -223,4 +213,12 @@ function getTotalResets() {
 	return r
 }
 
+function getTotalDBs() {
+	return player.resets + getExtraDBs()
+}
 
+function getExtraDBs() {
+	let x = 0
+	if (isQCRewardActive(3)) x += tmp.qcRewards[3]
+	return x
+}

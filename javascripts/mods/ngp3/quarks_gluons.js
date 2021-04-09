@@ -380,7 +380,7 @@ let ENTANGLED_BOOSTS = {
 			return Math.pow(x, 1.5) + 1
 		},
 		target() {
-			return Math.floor(Math.pow(this.engAmt() - 1, 1 / 1.5) + 1)
+			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) + 1)
 		},
 
 		amt() {
@@ -517,14 +517,14 @@ let ENTANGLED_BOOSTS = {
 			return Math.pow(x, 1.5) + 1
 		},
 		target() {
-			return Math.floor(Math.pow(this.engAmt() - 1, 1 / 1.5) + 1)
+			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) + 1)
 		},
 
 		amt() {
-			return 0 //this.target()
+			return 0
 		},
 		engAmt() {
-			return player.galaxies
+			return masteryStudies.has("d7") ? (player.galaxies + getTotalRGs()) / 1e3 : 0
 		},
 		set(x) {
 			//tmp.qu.entBoosts = x
@@ -551,7 +551,7 @@ let ENTANGLED_BOOSTS = {
 			masReq: 5,
 			type: "g",
 			eff(x) {
-				return x + 1
+				return Math.pow(x * 1e3 + 1, 1.25)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -562,10 +562,10 @@ let ENTANGLED_BOOSTS = {
 			masReq: 7,
 			type: "g",
 			eff(x) {
-				return Math.log10(x + 1) / 5 + 1
+				return Math.log10(x / 2 + 1) / 2 + 1
 			},
 			effDisplay(x) {
-				return (1 / x).toFixed(3)
+				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
 			}
 		}
 	},
@@ -609,6 +609,8 @@ let ENTANGLED_BOOSTS = {
 			if (!this.has(type, i)) break
 			if (tmp.enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
 		}
+
+		if (type == "pos") getEl("enB_pos3_exp").textContent = "^" + (1 / tmp.enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp.enB.pos3)))
 	}
 }
 

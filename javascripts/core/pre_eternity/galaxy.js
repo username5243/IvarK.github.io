@@ -1,22 +1,17 @@
 function galaxyReset(bulk) {
 	if (tmp.ri) return
-	if (autoS) auto = false;
-	autoS = true;
-	if (player.sacrificed == 0 && bulk > 0) giveAchievement("I don't believe in Gods");
-	if (player.tickspeedBoosts) player.tickspeedBoosts = 0
-	doGalaxyResetStuff(bulk)
 
-	NC10NDCostsOnReset()
-	if (inNGM(5)) resetInfDimensions()
-	resetTDsOnNGM4()
-	reduceDimCosts()
+	if (autoS) auto = false
+	autoS = true
+
+	player.tickBoughtThisInf = updateTBTIonGalaxy()
+
+	if (player.sacrificed == 0 && bulk > 0) giveAchievement("I don't believe in Gods");
+
+	player.galaxies += bulk
+	if (!moreEMsUnlocked() || getEternitied() < 1e15) doGalaxyResetStuff()
+
 	skipResets()
-	if (player.currentChallenge == "postc2") {
-		player.eightAmount = new Decimal(1);
-		player.eightBought = 1;
-		player.resets = 4;
-	}
-	setInitialResetPower();
 
 	if (player.options.notation == "Emojis") player.spreadingCancer += bulk
 
@@ -145,7 +140,7 @@ function getDistantScalingStart() {
 	let n = tmp.ngC ? 1 : 100
 	n += getECReward(5)
 	if (hasTimeStudy(223)) n += 7
-	if (hasTimeStudy(224)) n += Math.floor(player.resets / 2000)
+	if (hasTimeStudy(224)) n += Math.floor(getTotalDBs() / 2000)
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
 		if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]

@@ -55,9 +55,11 @@ function getReplMult(next) {
 	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
 	if (hasTimeStudy(102)) {
-		let rg = masteryStudies.has(284) ? getTotalRG() : player.replicanti.galaxies
-		if (masteryStudies.has(285)) rg = Math.pow(rg, 1.25)
-		replmult = replmult.times(Decimal.pow(5, rg))
+		let rg = getFullEffRGs()
+		let base = new Decimal(replmult)
+
+		replmult = base.times(Decimal.pow(5, rg))
+		if (masteryStudies.has(285)) replmult = replmult.max(base.pow(getMTSMult(285)))
 	}
 	return replmult;
 }
@@ -203,21 +205,27 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (ENTANGLED_BOOSTS.active("glu", 2)) x *= tmp.enB.glu2
 	if (tmp.quActive) {
-		let exp = 1/3
-		if (masteryStudies.has(362)) exp = .4
-		if (masteryStudies.has(412)) exp = .5
-
-		tmp.pe = Math.pow(tmp.qu.replicants.quarks.add(1).log10(), exp)
-		tmp.pe *= 0 //0.67 * (masteryStudies.has(412) ? 1.25 : 1)
-		if (player.ghostify.ghostlyPhotons.unl) tmp.pe *= tmp.le[3]
+		if (inQC(2) || inQC(3)) x = 0
+		if (ENTANGLED_BOOSTS.active("glu", 2)) x *= tmp.enB.glu2
 	}
 	extraReplMulti = x
 }
 
-function getTotalRG() {
+function getTotalRGs() {
+	if (inQC(3)) return 0
+
 	return player.replicanti.galaxies + extraReplGalaxies
+}
+
+function getFullEffRGs(min) {
+	if (inQC(3)) return 0
+
+	let x = player.replicanti.galaxies
+	if (masteryStudies.has(284)) x = getTotalRGs()
+	else if (min) x = Math.min(x, player.replicanti.gal)
+
+	return x
 }
 
 function getReplGalaxyEff() {
@@ -340,7 +348,7 @@ function updateReplicantiTemp() {
 			ooms: div.log10() / 2 + 1
 		}
 		data.speeds.exp *= data.ec14.ooms
-		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp, pow))
+		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
 
 		data.baseInt = data.baseInt.times(data.ec14.interval)
 		data.baseEst = data.baseEst.div(data.ec14.interval)
