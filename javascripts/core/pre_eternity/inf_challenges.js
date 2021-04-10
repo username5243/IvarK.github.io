@@ -352,3 +352,69 @@ function loadICData(){
 		postcngc_2:new Decimal("1e27225"),
 	}
 }
+
+//Infinity Challenge 3
+function getIC3Mult() {
+	let base = getIC3Base()
+	let exp = getIC3Exp()
+	if (exp > 1) return Decimal.pow(base,exp)
+	return base
+}
+
+function getIC3Base() {
+	if (player.currentChallenge=="postcngmm_3") return 1
+	let perGalaxy = 0.005;
+	if (inNGM(4)) perGalaxy = 0.002
+	if (inBigRip()) {
+		if (ghostified && player.ghostify.neutrinos.boosts>8) perGalaxy *= tmp.nb[9]
+		if (hasNU(12)) perGalaxy *= tmp.nu[12].free
+	}
+	if (!inNGM(2)) return player.galaxies * perGalaxy + 1.05
+	if (tmp.cp > 1) {
+		if (player.tickspeedBoosts != undefined) perGalaxy *= tmp.cp / 10 + .9
+		else perGalaxy *= tmp.cp / 5 + .8
+	}
+	let g = initialGalaxies()
+	perGalaxy *= getGalaxyEff()
+	let ret = getGalaxyPower(g) * perGalaxy + 1.05
+	if (inNC(6, 1) || player.currentChallenge == "postc1") ret -= tmp.mod.ngmX > 3 ? 0.02 : 0.05
+	else if (tmp.mod.ngmX == 3) ret -= 0.03
+	if (hasPU(23)) ret += puMults[23]()
+	if (tmp.be && ret > 1e8) ret = Math.pow(Math.log10(ret) + 2, 8)
+	return ret
+}
+
+function getIC3Exp() {
+	let x = 1
+	if (hasAch("r66") && tmp.mod.ngmX >= 4) {
+		x *= Decimal.min(5, player.galacticSacrifice.galaxyPoints.div(1e58).max(1).pow(.05)).toNumber()
+		if (x > 1.25) x = Math.log10(8 * x) * 1.25
+		if (x > 4/3) x = 1 + x/4
+	}
+	if (inNGM(2)) {
+		let g = getGalaxyPower(0, false, true)
+		if (g < 7) return x * (1 + g / 5)
+		let y = 5
+		let z = .5
+		if (tmp.ec > 29) {
+			if (player.currentEternityChall == "" || player.currentEternityChall == "eterc12") {
+				z = .9
+				if (tmp.ec > 53) y = 1.4 - ((tmp.ec - 54) / 15)
+				else if (tmp.ec > 42) y = 2
+				else if (tmp.ec > 37) y = 3.5
+			} else z = .6
+		}
+		x *= 2 + Math.pow(g - 5, z) / y
+	}
+	if (tmp.ngC) {
+		let g = player.galaxies
+		x *= Math.log2(g + 1) * 10 + 1
+	}
+	return x
+}
+
+function resetIC3Mult() {
+	//IC3 Multiplier
+	ic3Power = getInitPostC3Power()
+	player.postC3Reward = Decimal.pow(getIC3Mult(), ic3Power)	
+}

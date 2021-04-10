@@ -6,7 +6,7 @@ function getMetaAntimatterStart(bigRip) {
 	return new Decimal(x)
 }
 
-function getDilationMetaDimensionMultiplier() {
+function getDilationMDMultiplier() {
 	let pow = 0.1
 	let div = 1e40
 	if (isNanoEffectUsed("dt_to_ma_exp")) if (tmp.nf.effects.dt_to_ma_exp) pow = tmp.nf.effects.dt_to_ma_exp //this is a quick fix, but we need to fix this bug
@@ -26,11 +26,11 @@ function getDilationMetaDimensionMultiplier() {
 	return ret
 }
 
-function getMetaDimensionMultiplier(tier) {
+function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier, 0)))
-	ret = ret.times(tmp.mdgm) //Global multiplier of all Meta Dimensions
+	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//QC Rewards:
 	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
@@ -40,23 +40,44 @@ function getMetaDimensionMultiplier(tier) {
 	if (tier == 1 && hasAch("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
 	if (tier == 1 && hasAch("ng3p17")) ret = ret.times(Math.max(1,Math.log10(player.totalmoney.plus(10).log10())))
 
+	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
+
+	//Quantum Challenges:
+	if (inQC(4)) {
+		if (tier == 2) ret = ret.pow(1.3)
+		else if (tier == 4) ret = ret.pow(1.5)
+	}
 	return ret
 }
 
-function getMetaDimensionGlobalMultiplier() {
-	let ret = getDilationMetaDimensionMultiplier()
+function getMDGlobalMult() {
+	if (inQC(4)) return tmp.mdGMSideA.max(tmp.mdGMSideB)
+	return tmp.mdGMSideA.times(tmp.mdGMSideB)
+}
+
+function getMDGlobalMultSideA() {
+	let ret = getDilationMDMultiplier()
 	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
-	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
 		//QC Rewards
 		if (isQCRewardActive(1)) ret = ret.times(tmp.qcRewards[1])
-		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
 
 		//Achievement Rewards
 		var ng3p13exp = Math.sqrt(Decimal.plus(quantumWorth, 1).log10())
 		if (hasAch("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
+	}
+	return ret
+}
 
+function getMDGlobalMultSideB() {
+	let ret = new Decimal(1)
+	if (hasAch("ngpp12")) ret = ret.times(1.1)
+	if (tmp.ngp3) {
+		//QC Rewards
+		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
+
+		//Achievement Rewards
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
 	return ret
@@ -81,18 +102,18 @@ function getMetaBoostPower() {
 	return Math.pow(r, exp)
 }
 
-function getMetaDimensionDescription(tier) {
+function getMDDescription(tier) {
 	if (tier > Math.min(7, player.meta.resets + 3) - (inQC(4) ? 1 : 0)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
 		if (player.meta.bestOverGhostifies.log10() > 1e4) return a
-		let b = ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMetaDimensionRateOfChange(tier), 2, 2) + dimDescEnd
+		let b = ' (' + dimMetaBought(tier) + ')  (+' + formatValue(player.options.notation, getMDRateOfChange(tier), 2, 2) + dimDescEnd
 		return a+b
 	}
 }
 
-function getMetaDimensionRateOfChange(tier) {
-	let toGain = getMetaDimensionProduction(tier + (inQC(4) ? 2 : 1));
+function getMDRateOfChange(tier) {
+	let toGain = getMDProduction(tier + (inQC(4) ? 2 : 1));
 
 	var current = player.meta[tier].amount.max(1);
 	if (tmp.mod.logRateChange) {
@@ -119,10 +140,7 @@ function clearMetaDimensions () { //Resets costs and amounts
 
 function getMetaShiftRequirement() { 
 	var mdb = player.meta.resets
-	var data = {tier: Math.min(8, mdb + 4), amount: 20}
-	var inQC4 = inQC(4)
-	data.mult = inQC4 ? 5.5 : 15
-	if (masteryStudies.has(312)) data.mult -= 1
+	var data = {tier: Math.min(8, mdb + 4), amount: 20, mult: 15}
 
 	data.amount += data.mult * Math.max(mdb - 4, 0)
 	if (isTreeUpgActive(1)) data.amount -= getTreeUpgradeEffect(1)
@@ -131,7 +149,7 @@ function getMetaShiftRequirement() {
 	return data
 }
 
-function getMetaDimensionBoostRequirement(){
+function getMDBoostRequirement(){
 	return getMetaShiftRequirement()
 }
 
@@ -146,7 +164,7 @@ function metaBoost() {
 		}
 		player.meta.resets += Math.floor((player.meta[8].bought - req.amount) / req.mult) + 1
 
-		if (inQC(4)) if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
+		if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
 	} else player.meta.resets++
 	if (hasAch("ng3p72")) return
 	player.meta.antimatter = getMetaAntimatterStart()
@@ -276,13 +294,9 @@ getEl("metaSoftReset").onclick = function () {
 	metaBoost();
 }
 
-function getMetaDimensionProduction(tier) {
+function getMDProduction(tier) {
 	let ret = player.meta[tier].amount.floor()
-	if (inQC(4)) {
-		if (tier == 1) ret = ret.plus(player.meta[2].amount.floor().pow(1.3))
-		else if (tier == 4) ret = ret.pow(1.5)
-	}
-	return ret.times(getMetaDimensionMultiplier(tier));
+	return ret.times(getMDMultiplier(tier));
 }
 
 function getExtraDimensionBoostPower() {
@@ -328,10 +342,13 @@ function updateOverallMetaDimensionsStuff(){
 	getEl("metaAntimatterAmount").textContent = shortenMoney(player.meta.antimatter)
 	getEl("metaAntimatterBest").textContent = shortenMoney(player.meta.bestAntimatter)
 	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2 && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
+
+	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2 && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
-	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMetaDimensionProduction(1)) + ' meta-antimatter per second.'
+	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMDProduction(1)) + ' meta-antimatter per second.'
+
+	getEl("qc4Mults").textContent = inQC(4) ? "Side A: " + shorten(tmp.mdGMSideA) + "x" + (tmp.mdGMSideA.gte(tmp.mdGMSideB) ? " (used)" : "") + ", Side B: " + shorten(tmp.mdGMSideB) + "x" + (tmp.mdGMSideB.gte(tmp.mdGMSideA) ? " (used)" : "") : ""
 }
 
 function updateMetaDimensions () {
@@ -343,8 +360,8 @@ function updateMetaDimensions () {
 		showDim = showDim || canBuyMetaDimension(tier)
 		getEl(tier + "MetaRow").style.display = showDim ? "" : "none"
 		if (showDim) {
-			getEl(tier + "MetaD").textContent = DISPLAY_NAMES[tier] + " Meta Dimension x" + formatValue(player.options.notation, getMetaDimensionMultiplier(tier), 2, 1)
-			getEl("meta" + tier + "Amount").textContent = getMetaDimensionDescription(tier)
+			getEl(tier + "MetaD").textContent = DISPLAY_NAMES[tier] + " Meta Dimension x" + formatValue(player.options.notation, getMDMultiplier(tier), 2, 1)
+			getEl("meta" + tier + "Amount").textContent = getMDDescription(tier)
 			getEl("meta" + tier).textContent = autod ? "Auto: " + (player.autoEterOptions["md" + tier] ? "ON" : "OFF") : "Cost: " + formatValue(player.options.notation, player.meta[tier].cost, useTwo, 0) + " MA"
 			getEl('meta' + tier).className = autod ? "storebtn" : canAffordMetaDimension(player.meta[tier].cost) ? 'storebtn' : 'unavailablebtn'
 			getEl("metaMax"+tier).textContent = (autod ? (shiftDown ? "Singles: " : ph.did("ghostify") ? "" : "Cost: ") : "Until 10: ") + formatValue(player.options.notation, ((shiftDown && autod) ? player.meta[tier].cost : getMetaMaxCost(tier)), useTwo, 0) + " MA"

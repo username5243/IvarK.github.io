@@ -1538,7 +1538,7 @@ function updateMoney() {
 
 function updateCoinPerSec() {
 	var element = getEl("coinsPerSec");
-	var ret = inQC(1) ? getMetaDimensionProduction(1) : getDimensionProductionPerSecond(1)
+	var ret = inQC(1) ? getMDProduction(1) : getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
 	element.textContent = ret.gt(0) && ret.lte("1e100000") ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : ""
 }
@@ -3370,7 +3370,6 @@ function eternity(force, auto, forceRespec, dilated) {
 	getEl("totaltickgained").textContent = "You've gained "+getFullExpansion(player.totalTickGained)+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true;
-	playerInfinityUpgradesOnEternity()
 	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
 	updateEternityChallenges()
 	if (player.eternities <= 1) {
@@ -3808,7 +3807,7 @@ function doNGm2CorrectPostC3Reward(){
 	/*
 	this should be for testing purposes only so i can properly hack in TDB/DB
 
-	player.postC3Reward = Decimal.pow(getPostC3Mult(), getInitPostC3Power() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
+	player.postC3Reward = Decimal.pow(getIC3Mult(), getInitPostC3Power() + player.tickspeedMultiplier.div(10).log(getTickSpeedCostMultiplierIncrease()))
 	*/
 }
 
@@ -4011,7 +4010,7 @@ function requiredInfinityUpdating(diff){
 	}
 
 	var tempa = getDimensionProductionPerSecond(1)
-	if (inQC(1)) tempa = getMetaDimensionProduction(1)
+	if (inQC(1)) tempa = getMDProduction(1)
 
 	tempa = tempa.times(diff)
 	player.money = player.money.plus(tempa)
@@ -4342,8 +4341,8 @@ function quantumOverallUpdating(diff){
 }
 
 function metaDimsUpdating(diff){
-	player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
-	if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMetaDimensionProduction(1).times(diff))
+	player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(1).times(diff))
+	if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(2).times(diff))
 	if (tmp.quActive && inQC(0)) gainQuarkEnergy(player.meta.bestAntimatter, player.meta.antimatter)
 	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
 	if (tmp.ngp3) {
@@ -4355,14 +4354,23 @@ function metaDimsUpdating(diff){
 function infinityTimeMetaBlackHoleDimUpdating(diff){
 	var step = inNGM(5) ? 2 : 1
 	var stepT = inNC(7) && inNGM(4) ? 2 : step
+	var stepM = inQC(4) ? 2 : step
+	var stepB = step
+
 	var max = inNGM(5) ? 6 : 8
+
 	for (let tier = 1 ; tier <= max; tier++) {
-		if (tier <= max - step){
-			player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
-			if (hasDilationStudy(6)) player.meta[tier].amount = player.meta[tier].amount.plus(getMetaDimensionProduction(tier + step).times(diff / 10))
-			if (isBHDimUnlocked(tier + step)) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + step).times(diff / 10))
-		}
+		// Infinity
+		if (tier <= max - step) player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
+
+		// Time
 		if ((tmp.eterUnl || inNGM(4)) && tier <= max - stepT) player["timeDimension" + tier].amount = player["timeDimension" + tier].amount.plus(getTimeDimensionProduction(tier + stepT).times(diff / 10))
+
+		// Black Hole
+		if (isBHDimUnlocked(tier + stepB) && tier <= max - stepB) player["blackholeDimension"+tier].amount = player["blackholeDimension" + tier].amount.plus(getBlackholeDimensionProduction(tier + stepB).times(diff / 10))
+
+		// Emperor
+		if (hasDilationStudy(6) && tier <= max - stepM) player.meta[tier].amount = player.meta[tier].amount.plus(getMDProduction(tier + stepM).times(diff / 10))
 	}
 }
 
@@ -4429,7 +4437,7 @@ function nonERFreeTickUpdating(){
 	gain = Math.ceil(new Decimal(player.timeShards).dividedBy(player.tickThreshold).log10() / Math.log10(thresholdMult) / thresholdExp)
 	player.totalTickGained += gain
 	player.tickspeed = player.tickspeed.times(Decimal.pow(tmp.tsReduce, gain))
-	player.postC3Reward = Decimal.pow(getPostC3Mult(), gain * getIC3EffFromFreeUpgs()).times(player.postC3Reward)
+	player.postC3Reward = Decimal.pow(getIC3Mult(), gain * getIC3EffFromFreeUpgs()).times(player.postC3Reward)
 	var base = inNGM(4) ? 0.01 : (player.tickspeedBoosts ? .1 : 1)
 	player.tickThreshold = Decimal.pow(thresholdMult, player.totalTickGained * thresholdExp).times(base)
 	getEl("totaltickgained").textContent = "You've gained " + getFullExpansion(player.totalTickGained) + " tickspeed upgrades."
@@ -5040,7 +5048,7 @@ function gameLoop(diff) {
 				} else if (player.dilation.active) ngp3DilationUpdating()
 			}
 			if (player.ghostify.milestones >= 8 && tmp.quActive) passiveQuantumLevelStuff(diff)
-			if (hasEternityUpg(15)) updateEternityUpgrades() // to fix the 5ep upg display
+			if (ETER_UPGS.has(15)) updateEternityUpgrades() // to fix the 5ep upg display
 			if (ph.did("ghostify")) {
 				if (GDs.unlocked()) {
 					// Gravity Dimensions

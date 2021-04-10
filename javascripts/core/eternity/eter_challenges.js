@@ -336,7 +336,6 @@ function startEternityChallenge(n) {
 	getEl("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
 	hideDimensions()
 	tmp.tickUpdate = true;
-	playerInfinityUpgradesOnEternity()
 	updateEternityChallenges()
 	Marathon2 = 0
 	resetUP()

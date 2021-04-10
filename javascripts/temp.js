@@ -41,7 +41,12 @@ function updateTemp() {
 	tmp.sacPow = calcTotalSacrificeBoost()
 	updateQCRewardsTemp()
 
-	if (player.meta !== undefined) tmp.mdgm = getMetaDimensionGlobalMultiplier() //Update global multiplier of all Meta Dimensions
+	if (player.meta !== undefined) {
+		//Update global multiplier of all Meta Dimensions
+		tmp.mdGMSideA = getMDGlobalMultSideA()
+		tmp.mdGMSideB = getMDGlobalMultSideB()
+		tmp.mdGlobalMult = getMDGlobalMult()
+	}
 	tmp.mptb = getMPTBase()
 	tmp.mpte = getMPTExp()
 	updatePostInfiTemp()

@@ -80,7 +80,7 @@ function getBlackholeDimensionRateOfChange(tier) {
 }
 
 function getBlackholeDimensionDescription(tier) {
-	if (!isBHDimUnlocked(tier + (inQC(4) ? 2 : 1))) return getFullExpansion(player['blackholeDimension' + tier].bought)
+	if (!isBHDimUnlocked(tier + 1)) return getFullExpansion(player['blackholeDimension' + tier].bought)
 	else return shortenDimensions(player['blackholeDimension' + tier].amount) + ' (+' + formatValue(player.options.notation, getBlackholeDimensionRateOfChange(tier), 2, 2) + dimDescEnd;
 }
 

@@ -9,7 +9,10 @@ function galaxyReset(bulk) {
 	if (player.sacrificed == 0 && bulk > 0) giveAchievement("I don't believe in Gods");
 
 	player.galaxies += bulk
-	if (!moreEMsUnlocked() || getEternitied() < 1e15) doGalaxyResetStuff()
+
+	if (moreEMsUnlocked() && getEternitied() >= 1e15) setInitialResetPower()
+	else doGalaxyResetStuff()
+
 
 	skipResets()
 
@@ -105,7 +108,7 @@ function getGalaxyRequirement(offset = 0, display) {
 			let remoteStart = getRemoteScalingStart()
 			if (tmp.grd.gals >= remoteStart) {
 				let speed2 = tmp.grd.speed
-				amount *= Math.pow(1 + (GUActive("rg1") ? 1 : 2) / (tmp.mod.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
+				amount *= Math.pow(1 + 2 / (tmp.mod.ngmX > 3 ? 10 : 1e3), (tmp.grd.gals - remoteStart + 1) * speed2)
 				scaling = Math.max(scaling, 3)
 			}
 		}

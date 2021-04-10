@@ -76,10 +76,7 @@ function tickspeedDisplay(){
 		if (tmp.galRed > 1) label += " (Blueshifted galaxies by " + formatPercentage(tmp.galRed - 1) + "%)"
 		labels.push(label)
 
-		if (inNGM(2) || player.currentChallenge == "postc3" || player.challenges.includes("postc3") || inQC(6)) {
-			let ic3 = getPostC3Mult()
-			labels.push("multiply all Dimensions by " + (ic3 > 999.95 ? shorten(ic3) : new Decimal(ic3).toNumber().toPrecision(4)) + "x")
-		}
+		if (player.currentChallenge == "postc3" || player.challenges.includes("postc3") || isIC3Trapped()) labels.push("multiply all Dimensions by " + formatValue(player.options.notation, getIC3Mult(), 2, 4) + "x")
 
 		getEl("tickLabel").innerHTML = wordizeList(labels, true) + "."
 
@@ -656,7 +653,7 @@ function replicantiDisplay() {
 		getEl("replicantimax").innerHTML = replGalName + ": " + getFullExpansion(replGal) + (replGalOver > 1 ? "+" + getFullExpansion(replGalOver) : "") + replGalCostPortion
 		getEl("replicantireset").innerHTML = (
 			hasAch("ng3p67") ? "Get "
-			: hasAch("ngpp16") || (tmp.mod.ngp3c && hasEternityUpg(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
+			: hasAch("ngpp16") || (tmp.mod.ngp3c && ETER_UPGS.has(6)) ? "Divide replicanti amount by " + shorten(Number.MAX_VALUE) + ", but get "
 			: "Reset replicanti amount, but get "
 		) + "1 free galaxy.<br>" +
 			getFullExpansion(player.replicanti.galaxies) +

@@ -22,7 +22,6 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 			var abletostart = QCType == 2 ? QCs[1] !== undefined : !pcFocus
 			if (abletostart) {
 				if (!inQC(0)) return
-				if (QCs.includes(4)) return
 				if (QCType == 2 && tmp.qu.pairedChallenges.completed + 1 < qc) return
 				if (bigRip) {
 					if (QCs[0] != 6 || QCs[1] != 8) return

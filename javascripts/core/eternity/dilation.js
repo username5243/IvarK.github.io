@@ -21,7 +21,6 @@ function getDTMultPostBRU11(){
 		if (masteryStudies.has(322)) gain = gain.times(getMTSMult(322))
 		if (masteryStudies.has(341)) gain = gain.times(getMTSMult(341))
 		if (isTreeUpgActive(7)) gain = gain.times(getTreeUpgradeEffect(7))
-		if (GUActive("br2")) gain = gain.times(Decimal.pow(2.2, Math.pow(tmp.sacPow.max(1).log10() / 1e6, 0.25)))
 	*/
 }
 
@@ -156,9 +155,9 @@ function getReqForTPGain() {
 function getNGUDTGain(){
 	let gain = new Decimal(1)
 	gain = gain.times(getBlackholePowerEffect())
-	if (hasEternityUpg(7)) gain = gain.times(1 + Math.log10(Math.max(1, player.money.log(10))) / 40)
-	if (hasEternityUpg(8)) gain = gain.times(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20)
-	if (hasEternityUpg(9)) gain = gain.times(1 + Math.log10(Math.max(1, player.eternityPoints.log(10))) / 10)
+	if (ETER_UPGS.has(7)) gain = gain.times(1 + Math.log10(Math.max(1, player.money.log(10))) / 40)
+	if (ETER_UPGS.has(8)) gain = gain.times(1 + Math.log10(Math.max(1, player.infinityPoints.log(10))) / 20)
+	if (ETER_UPGS.has(9)) gain = gain.times(1 + Math.log10(Math.max(1, player.eternityPoints.log(10))) / 10)
 	return gain
 }
 

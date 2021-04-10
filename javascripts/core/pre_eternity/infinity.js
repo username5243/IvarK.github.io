@@ -318,12 +318,15 @@ function bigCrunch(autoed) {
 		if (gainedInfinityPoints().dividedBy(player.thisInfinityTime).gt(player.autoIP) && !player.break) player.autoIP = gainedInfinityPoints().dividedBy(player.thisInfinityTime);
 		if (player.thisInfinityTime<player.autoTime) player.autoTime = player.thisInfinityTime;
 	}
+
 	auto = autoS; //only allow autoing if prev crunch was autoed
 	autoS = true;
-	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
-	var g11MultShown = player.infinitied > 0 || player.eternities !== 0 || ph.did("quantum")
+
+	if (player.currentEternityChall !== "eterc12") player.bestInfinityTime = Math.min(player.bestInfinityTime, player.thisInfinityTime)
 	doCrunchInfinitiesGain()
 	doCrunchResetStuff()
+
+	var g11MultShown = ph.did("infinity")
 	doAfterResetCrunchStuff(g11MultShown)
 }
 
@@ -436,7 +439,6 @@ function canBuyIPMult() {
 function doInitInfMultStuff() {
 	ipMultPower=2
 	if (masteryStudies.has(241)) ipMultPower=2.2
-	if (GUBought("gb3")) ipMultPower=2.3
 
 	if (tmp.mod.newGameExpVersion !== undefined) ipMultCostIncrease=4
 	else ipMultCostIncrease=10

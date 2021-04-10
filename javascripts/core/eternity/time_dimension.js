@@ -50,9 +50,9 @@ function calcNGM2atleastTDPreVPostDilMultiplier(tier){
 	let ret2 = new Decimal(1)
 	if (player.currentEternityChall == "eterc9") ret2 = ret2.times(tmp.infPow)
 	if (ECComps("eterc1") !== 0) ret2 = ret2.times(getECReward(1))
-	if (hasEternityUpg(4)) ret2 = ret2.times(ETER_UPGS[4].mult())
-	if (hasEternityUpg(5)) ret2 = ret2.times(ETER_UPGS[5].mult())
-	if (hasEternityUpg(6)) ret2 = ret2.times(ETER_UPGS[6].mult())
+	if (ETER_UPGS.has(4)) ret2 = ret2.times(ETER_UPGS[4].mult())
+	if (ETER_UPGS.has(5)) ret2 = ret2.times(ETER_UPGS[5].mult())
+	if (ETER_UPGS.has(6)) ret2 = ret2.times(ETER_UPGS[6].mult())
 	if (tmp.ngex) ret2 = ret2.div(10 / tier)
 	return ret2
 }

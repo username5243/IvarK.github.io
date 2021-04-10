@@ -191,7 +191,7 @@ function canBuyStudy(name) {
 				return hasTS(13)
 				break; 
 			case 35: 
-				return hasTS(34) && (player.infinityPoints.plus(1).log10() >= 9000 || hasEternityUpg(11))
+				return hasTS(34) && (player.infinityPoints.plus(1).log10() >= 9000 || ETER_UPGS.has(11))
 				break;
 			case 43: 
 				return hasTS(33)
@@ -266,7 +266,7 @@ function canBuyStudy(name) {
 		case 12:
 			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length
 			if (hasRow(row - 1)) {
-				if (hasEternityUpg(10)) return true
+				if (ETER_UPGS.has(10)) return true
 				return have < 1
 			}
 			return false
@@ -274,7 +274,7 @@ function canBuyStudy(name) {
 		case 7:
 			if (!hasTS(61)) return false;
 			if (player.dilation.upgrades.includes(8)) return true;
-			if (hasEternityUpg(10) && tmp.ngC) return true;
+			if (ETER_UPGS.has(10) && tmp.ngC) return true;
 			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
 			if (hasTS(201)) return have2 < 2;
 			return have2 < 1
@@ -284,10 +284,10 @@ function canBuyStudy(name) {
 
 		case 22:
 			if (tmp.ngC && total < 4500) return false;
-			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (hasEternityUpg(11) && tmp.ngC) || hasEternityUpg(14))
+			return hasTS(210 + Math.round(col/2)) && (((name % 2 == 0) ? !hasTS(name-1) : !hasTS(name+1)) || (ETER_UPGS.has(11) && tmp.ngC) || ETER_UPGS.has(14))
 
 		case 23:
-			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || hasEternityUpg(11) || hasEternityUpg(13))
+			return (hasTS(220 + Math.floor(col*2)) || hasTS(220 + Math.floor(col*2-1))) && (!hasTS((name%2 == 0) ? name-1 : name+1) || ETER_UPGS.has(11) || ETER_UPGS.has(13))
 	}
 }
 

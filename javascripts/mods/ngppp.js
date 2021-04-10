@@ -205,7 +205,7 @@ function maxAllDilUpgs() {
 //v1.99874
 function maybeShowFillAll() {
 	var display = "none"
-	if ((hasEternityUpg(10) && hasEternityUpg(11)) || hasEternityUpg(14)) display = "block"
+	if ((ETER_UPGS.has(10) && ETER_UPGS.has(11)) || ETER_UPGS.has(14)) display = "block"
 	getEl("fillAll").style.display = display
 	getEl("fillAll2").style.display = display
 }

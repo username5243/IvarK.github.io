@@ -90,7 +90,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.lastTenEternities = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 	player.infMult = new Decimal(1)
 	player.infMultCost = new Decimal(10)
-	player.tickSpeedMultDecrease = keepABnICs ? player.tickSpeedMultDecrease : GUBought("gb4") ? 1.25 : 10
+	player.tickSpeedMultDecrease = keepABnICs ? player.tickSpeedMultDecrease : 10
 	player.tickSpeedMultDecreaseCost = keepABnICs ? player.tickSpeedMultDecreaseCost : 3e6
 	player.dimensionMultDecrease = keepABnICs ? player.dimensionMultDecrease : 10
 	player.dimensionMultDecreaseCost = keepABnICs ? player.dimensionMultDecreaseCost : 1e8
@@ -143,7 +143,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 
 	//Multiplier cost fixes
 	player.dimensionMultDecrease = (keepABnICs ? 3 : 10) - parseFloat((ECComps("eterc6") * 0.2).toFixed(2))
-	player.tickSpeedMultDecrease = GUBought("gb4") ? 1.65 : (keepABnICs ? 2 : 10) - parseFloat((ECComps("eterc11") * 0.07).toFixed(2))
+	player.tickSpeedMultDecrease = (keepABnICs ? 2 : 10) - parseFloat((ECComps("eterc11") * 0.07).toFixed(2))
 
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
@@ -205,7 +205,7 @@ function resetDimensions() {
 	reduceDimCosts()
 }
 
-function doDimBoostResetStuff() {
+function doDimBoostResetStuff(layer = 1) {
 	setInitialMoney()
 	setInitialResetPower()
 	resetDimensions()
@@ -224,30 +224,29 @@ function doDimBoostResetStuff() {
 	}
 }
 
-function doGalaxyResetStuff() {
+function doGalaxyResetStuff(layer = 2) {
 	player.resets = 0
 	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
 	player.tdBoosts = resetTDBoosts()
+
 	doDimBoostResetStuff()
 }
 
-function doNormalChallengeResetStuff(){
-	player.money = new Decimal(10)
-	resetNormalDimensions()
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
+function doCrunchResetStuff(layer = 3) {
 	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.thisInfinityTime = 0
-	player.resets = 0
+	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.galaxies = 0
-	player.interval = null
-	player.galacticSacrifice = newGalacticDataOnInfinity()
-	player.chall2Pow = 1
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
+
+	if (tmp.ngmX >= 2) player.galacticSacrifice = newGalacticDataOnInfinity(layer >= 3)
+	if (tmp.ngmX >= 5) resetPSac()
+
+	player.thisInfinityTime = 0
+
+	doGalaxyResetStuff()
+}
+
+function doNormalChallengeResetStuff() {
+	doCrunchResetStuff()
 }
 
 function resetInfDimensions(full) {
@@ -345,89 +344,60 @@ function checkSecondSetOnCrunchAchievements(){
 	if (player.challenges.length >= getTotalNormalChallenges() + order.length + 1) giveAchievement("Anti-antichallenged")
 }
 
-function doCrunchResetStuff() {
-	player.galacticSacrifice = newGalacticDataOnInfinity()
-	player.money = new Decimal(10)
-	resetNormalDimensions()
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
-	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.bestInfinityTime = (player.currentEternityChall !== "eterc12") ? Math.min(player.bestInfinityTime, player.thisInfinityTime) : player.bestInfinityTime
-	player.thisInfinityTime = 0
-	player.resets = 0
-	player.interval = null
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.chall2Pow = 1
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
-	player.galaxies = 0
-	resetTDsOnNGM4()
-}
-
-function doEternityResetStuff() {
-	player.money = new Decimal(10)
-	player.tickBoughtThisInf = resetTickBoughtThisInf()
-	resetNormalDimensions()
-	player.infinitied = 0
-	player.totalBoughtDims = resetTotalBought()
-	player.sacrificed = new Decimal(0)
-	player.bestInfinityTime = 9999999999
-	player.thisInfinityTime = 0
-	player.resets = (getEternitied() >= 4) ? 4 : 0
-	player.tdBoosts = resetTDBoosts()
-	if (inNGM(3)) player.tickspeedBoosts = (getEternitied() > 3) ? 16 : 0
-	player.challenges = challengesCompletedOnEternity()
-	player.currentChallenge = ""
-	player.galaxies = (getEternitied() >= 4) ? 1 : 0
-	player.galacticSacrifice = newGalacticDataOnInfinity(true)
+function doEternityResetStuff(layer = 4) {
 	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
-	player.interval = null
-	player.autobuyers = (getEternitied() > 1) ? player.autobuyers : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-	player.break = getEternitied() > 1 ? player.break : false
-	player.costMultipliers = [new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-	player.partInfinityPoint = 0
-	player.partInfinitied = 0
-	player.chall2Pow = 1
-	player.chall3Pow = new Decimal(0.01)
-	player.matter = new Decimal(0)
-	player.chall11Pow = new Decimal(1)
-	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
 	player.infMult = new Decimal(1)
 	player.infMultCost = new Decimal(10)
+	playerInfinityUpgradesOnEternity()
+
+	player.currentChallenge = ""
+	player.challengeTarget = 0
+	player.challenges = challengesCompletedOnEternity()
+	player.postChallUnlocked = hasAch("r133") ? order.length : 0
+
+	if (getEternitied() < 1) {
+		player.autobuyers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+		player.break = false
+	}
+	if (!player.challenges.includes("postc2")) player.autoSacrifice = 1
+
+	player.partInfinityPoint = 0
+	player.partInfinitied = 0
+	player.autoIP = new Decimal(0)
+	player.autoTime = 1e300
+
+	player.bestInfinityTime = 9999999999
+	player.lastTenRuns = [[600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)], [600*60*24*31, new Decimal(0)]]
+
 	player.tickSpeedMultDecrease = getEternitied() >= 20 ? player.tickSpeedMultDecrease : 10
 	player.tickSpeedMultDecreaseCost = getEternitied() >= 20 ? player.tickSpeedMultDecreaseCost : 3e6
 	player.dimensionMultDecrease = getEternitied() >= 20 ? player.dimensionMultDecrease : 10
 	player.dimensionMultDecreaseCost = getEternitied() >= 20 ? player.dimensionMultDecreaseCost : 1e8
-	player.extraDimPowerIncrease = getEternitied() > 19 ? player.extraDimPowerIncrease : 0
-	player.dimPowerIncreaseCost = getEternitied() > 19 ? player.dimPowerIncreaseCost : 1e3    
-	player.postChallUnlocked = hasAch("r133") ? order.length : 0
-	player.postC4Tier = 1
-	player.postC8Mult = new Decimal(1)
-	resetInfDimensions(true)
-	resetTimeDimensions()
-	player.offlineProd = getEternitied() > 19 ? player.offlineProd : 0
-	player.offlineProdCost = getEternitied() > 19 ? player.offlineProdCost : 1e7
-	player.challengeTarget = 0
-	player.autoSacrifice = getEternitied() > 6 ? player.autoSacrifice : 1
+	player.offlineProd = getEternitied() >= 20 ? player.offlineProd : 0
+	player.offlineProdCost = getEternitied() >= 20 ? player.offlineProdCost : 1e7
+	if (tmp.ngmX >= 2) {
+		player.extraDimPowerIncrease = getEternitied() >= 20 ? player.extraDimPowerIncrease : 0
+		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
+	}
+
 	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
-	player.autoIP = new Decimal(0)
-	player.autoTime = 1e300
-	player.peakSpent = tmp.ngp3 ? 0 : undefined
-	player.eterc8ids = 50
-	player.eterc8repl = 40
-	player.dimlife = true
-	player.dead = true
+	if (tmp.ngp3) player.peakSpent = 0
+
 	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
 	player.currentEternityChall = ""
-	player.quantum = tmp.qu
-	player.dontWant = tmp.ngp3 ? true : undefined
+	player.eterc8ids = 50
+	player.eterc8repl = 40
+
+	player.dimlife = true
+	player.dead = true
+	if (tmp.ngp3) player.dontWant = true
+
+	doCrunchResetStuff(layer)
+	resetInfDimensions(true)
 }
 
 function getReplicantsOnGhostifyData(){

@@ -97,9 +97,9 @@ function infDimensionProduction(tier) {
 
 function getTotalIDEUMult(){
 	let mult = new Decimal(1)
-	if (hasEternityUpg(1)) mult = mult.times(ETER_UPGS[1].mult())
-	if (hasEternityUpg(2)) mult = mult.times(ETER_UPGS[2].mult())
-	if (hasEternityUpg(3)) mult = mult.times(ETER_UPGS[3].mult())
+	if (ETER_UPGS.has(1)) mult = mult.times(ETER_UPGS[1].mult())
+	if (ETER_UPGS.has(2)) mult = mult.times(ETER_UPGS[2].mult())
+	if (ETER_UPGS.has(3)) mult = mult.times(ETER_UPGS[3].mult())
 	return mult
 }
 

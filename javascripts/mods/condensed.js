@@ -116,7 +116,7 @@ let CONDENSED = {
 			costScale() {
 				let x = 1
 				if (player.infinityUpgrades.includes("postinfi70")) x *= 0.6
-				if (hasEternityUpg(12)) x *= 2/3 
+				if (ETER_UPGS.has(12)) x *= 2/3 
 				//uh wtf is this supposed to be s
 				//so i changed it cause im almost certain its wrong but feel free to change back
 				return Math.pow(1.5, x) + 1
@@ -188,7 +188,7 @@ let CONDENSED = {
 			},
 			costScale() {
 				let x = 1
-				if (hasEternityUpg(12)) x *= 2/3
+				if (ETER_UPGS.has(12)) x *= 2/3
 				return x
 			},
 			costDiv() {
@@ -284,7 +284,7 @@ let CONDENSED = {
 			},
 			costScale() {
 				let x = 1
-				if (hasEternityUpg(12)) x *= 2/3
+				if (ETER_UPGS.has(12)) x *= 2/3
 				return x
 			},
 			costDiv() {

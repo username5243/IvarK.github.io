@@ -222,16 +222,6 @@ function updateQuarkEnergyEffects() {
 	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 4
 }
 
-GUCosts = [null, 1, 2, 4, 100, 7e15, 4e19, 3e28, "1e570"]
-
-function GUBought(id) {
-	return player.quantum && player.quantum.upgrades.includes(id)
-}
-
-function GUActive(id) {
-	return false
-}
-
 function buyQuarkMult(name) {
 	var cost = Decimal.pow(100, tmp.qu.multPower[name] + Math.max(tmp.qu.multPower[name] - 467, 0)).times(500)
 	if (tmp.qu.gluons[name].lt(cost)) return

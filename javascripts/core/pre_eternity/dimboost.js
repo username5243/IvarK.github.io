@@ -76,19 +76,12 @@ function setInitialMoney() {
 	player.money = new Decimal(x)
 }
 
-function setInitialTickspeed() {
-	resetTickspeed()
-
-	//IC3 Multiplier
-	ic3Power = getInitPostC3Power()
-	player.postC3Reward = Decimal.pow(getPostC3Mult(), ic3Power)
-}
-
 function setInitialResetPower() {
 	var dimensionBoostPower = getDimensionBoostPower()
 	if (tmp.ngp3 && getEternitied() >= 1e9 && player.dilation.upgrades.includes("ngpp6")) player.dbPower = dimensionBoostPower
 
-	setInitialTickspeed()
+	resetTickspeed()
+	resetIC3Mult()
 }
 
 function maxBuyDimBoosts(manual) {

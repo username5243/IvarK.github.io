@@ -1,4 +1,8 @@
 let ETER_UPGS = {
+	has(x) {	
+		return tmp.eterUnl && player.eternityUpgrades.includes(x)
+	},
+
 	total: 15,
 	1: {
 		unl: () => true,
@@ -154,7 +158,7 @@ let ETER_UPGS = {
 			let unl = this[i].unl()
 
 			getEl("eter" + i).parentElement.style.display = unl ? "" : "none"
-			if (unl) getEl("eter" + i).className = hasEternityUpg(i) ? "eternityupbtnbought" : player.eternityPoints.gte(this[i].cost) ? "eternityupbtn" : "eternityupbtnlocked"
+			if (unl) getEl("eter" + i).className = ETER_UPGS.has(i) ? "eternityupbtnbought" : player.eternityPoints.gte(this[i].cost) ? "eternityupbtn" : "eternityupbtnlocked"
 		}
 	}
 }
@@ -175,15 +179,11 @@ function buyEternityUpgrade(name) {
 	}
 }
 
-function hasEternityUpg(x) {
-	return tmp.eterUnl && player.eternityUpgrades.includes(x)
-}
-
 function getEPMultCost(bought) {
 	let base = 50
 	let expAdd = 0
 	if (tmp.ngmX < 2) {
-		if (bought > 1334 && !hasEternityUpg(14)) expAdd += Math.pow(Math.max(bought - 1334, 0), 1.2)
+		if (bought > 1334 && !ETER_UPGS.has(14)) expAdd += Math.pow(Math.max(bought - 1334, 0), 1.2)
 
 		if (bought >= 482) base = 1e3
 		else if (bought >= 154) base = 500
