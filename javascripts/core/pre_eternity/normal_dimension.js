@@ -68,7 +68,7 @@ function getNormalDimensionVanillaTimeStudyBonus(tier){
 	var mult = new Decimal(1)
 	if (hasTS(71) && tier !== 8) mult = mult.times(tmp.sacPow.pow(0.25).min("1e210000"));
 	if (hasTS(91)) mult = mult.times(Decimal.pow(10, Math.min(player.thisEternity, 18000) / 60));
-	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
+	let useHigherNDReplMult = player.dilation.active && masteryStudies.has("t323")
 	if (!useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (hasTS(161)) mult = mult.times(Decimal.pow(10, (inNGM(2) ? 6660 : 616) * (tmp.mod.newGameExpVersion ? 5 : 1)))
 	if (hasTS(234) && tier == 1) mult = mult.times(tmp.sacPow)
@@ -217,7 +217,7 @@ function getDimensionFinalMultiplier(tier) {
 	if (mult.gt(10)) mult = dilates(mult.max(1), 1)
 	if (player.dilation.upgrades.includes(6)) mult = mult.times(player.dilation.dilatedTime.max(1).pow(308))
 	if (tier == 1 && player.tickspeedBoosts == undefined && player.infinityUpgrades.includes("postinfi60")) mult = mult.times(getNewB60Mult())
-	let useHigherNDReplMult = !player.dilation.active ? false : !player.masterystudies ? false : masteryStudies.has("t323")
+	let useHigherNDReplMult = player.dilation.active && masteryStudies.has("t323")
 	if (useHigherNDReplMult) mult = mult.times(tmp.nrm)
 	if (player.dilation.active && isNanoEffectUsed("dil_effect_exp")) mult = mult.pow(tmp.nf.effects.dil_effect_exp)
 	if (isBigRipUpgradeActive(1)) mult = mult.times(tmp.bru[1])
