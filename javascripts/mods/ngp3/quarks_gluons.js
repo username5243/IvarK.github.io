@@ -511,13 +511,13 @@ let ENTANGLED_BOOSTS = {
 		},
 
 		amt() {
-			return 0
+			return tmp.qu.pos.boosts
 		},
 		engAmt() {
-			return masteryStudies.has("d7") ? (player.galaxies + getTotalRGs()) / 1e3 : 0
+			return tmp.qu.pos.eng
 		},
 		set(x) {
-			//tmp.qu.entBoosts = x
+			tmp.qu.pos.boosts = x
 		},
 
 		eff(x) {

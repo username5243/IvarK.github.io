@@ -995,3 +995,14 @@ function convertToNGP5(setup) {
 		pl.save.on = true
 	} else ph.reset()
 }
+
+//Temp
+function setupPositronSave() {
+	return {
+		amt: 0,
+		sacBoosts: 0,
+		sacGals: 0,
+		eng: 0,
+		boosts: 0
+	}
+}
