@@ -416,7 +416,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var dilTimes = player.dilation.times
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
 	var turnSomeOn = !bigRip || player.quantum.bigRip.upgrades.includes(1)
-	
+
 	doQuantumResetStuff(bigRip, isQC, QCs)
 	// ghostify achievement reward - "Kee-hee-hee!"
 	if (ph.did("ghostify") && bigRip) {

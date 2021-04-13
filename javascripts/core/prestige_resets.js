@@ -169,7 +169,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
 		active: false,
 		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
-			!QCs.includes(3) &&
+			(!isQC || !QCs.includes(3)) &&
 			!inQCModifier("ad") ?
 				player.dilation.bestTP.pow(
 					(player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (player.ghostify.milestones >= 4 && !isQC) ? 1
@@ -512,6 +512,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			gb: new Decimal(0),
 			br: new Decimal(0)
 		},
+		pos: setupPositronSave(),
 		multPower: {
 			rg: 0,
 			gb: 0,
