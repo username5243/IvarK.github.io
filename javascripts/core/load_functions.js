@@ -487,10 +487,6 @@ function setSaveStuffHTML(){
 }
 
 function setSomeEterEraStuff2(){
-        getEl("automation_ng" + (tmp.mod.ngmX > 3 ? "m4" : "") + "_placement").appendChild(getEl("autobuyers"))
-	if (tmp.mod.ngmX > 3) getEl("autobuyers").style.display="none"
-	getEl("autobuyers").className=(tmp.mod.ngmX>3?"":"inf")+"tab"
-	getEl("autobuyersbtn").style.display=tmp.mod.ngmX>3?"none":""
 	loadAutoBuyerSettings();
 	var updatedLTR = []
 	for (var lastRun = 0; lastRun < 10; lastRun++) {
@@ -2223,6 +2219,7 @@ function onLoad(noOffline) {
 	showAchTab((tabsSave.on && (tabsSave.tabAchs == 'normalachievements' || tabsSave.tabAchs == 'secretachievements') && tabsSave.tabAchs) || 'normalachievements')
         showChallengesTab((tabsSave.on && tabsSave.tabChalls) || 'normalchallenges')
         showGalTab((tabsSave.on && tabsSave.tabGalaxy && player.pSac !== undefined) || 'galUpgs')
+	showAutoTab((tabsSave.on && tabsSave.tabAuto) || 'autobuyers')
 	showInfTab((tabsSave.on && tabsSave.tabInfinity) || 'preinf')
 	showEternityTab((tabsSave.on && tabsSave.tabEternity) || 'timestudies', true)
 	showQuantumTab((tabsSave.on && tabsSave.tabQuantum) || 'uquarks')

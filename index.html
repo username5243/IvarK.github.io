@@ -118,7 +118,7 @@
 			<button id="statisticsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('statistics')">Statistics</button>
 			<button id="achievementsbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('achievements')">Achievements</button>
 			<button id="challengesbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick="showTab('challenges')">Challenges</button>
-			<button id="automationbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick='showTab("autobuyers")'>Automation</button>
+			<button id="automationbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn" onclick='showTab("automation")'>Automation</button>
 			<button id="accTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="acceleratebtn" onclick='showTab("accTab")'>Accelerate</button>
 			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn paradoxbtn" onclick='showTab("paradox")'>Paradox</button>
 			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")' class="tabbtn galaxybtn">Galaxy</button>
@@ -1520,7 +1520,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 5.04)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 6)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -3630,7 +3630,18 @@
 			</div>
 			<div class="footer"></div>
 		</div>
-		<div id="automation_ngm4_placement"></div>
+		<div id="automation" class="tab">
+			<table class="table" align="center" style="margin: auto">
+				<tr>
+					<td id="abbtn_pos_yes_auto"></td>
+					<td id="agbtn_pos_yes_auto"></td>
+					<td><button class="secondarytabbtn" onclick="showAutoTab('control')">Others</button></td>
+				</tr>
+			</table>
+			<div id="ab_pos_yes_auto"></div>
+			<div id="ag_pos_yes_auto"></div>
+			<div class="autotab" id="control">Coming soon...</div>
+		</div>
 		<div id="paradox" class="tab">
 			<table class="table" id="pUpgs" style="margin: 0 auto">
 				<!-- setupParadoxUpgs() -->
@@ -3790,14 +3801,12 @@
 				<div id="infinityPoints1" style="color: black; font-size: 15px; width: 40%; margin: 0 auto">You have made x Infinity points.</div>
 				<br>
 			</div>
-			<tr>
-				<td><button class="secondarytabbtn" onclick="showInfTab('preinf')">Upgrades</button><td>
-				<td><button id="autobuyersbtn" class="secondarytabbtn" onclick="showInfTab('autobuyers')">Autobuyers</button><td>
-				<td><button id="postinfbtn" class="secondarytabbtn" onclick="showInfTab('postinf')" >Break Infinity</button><td>
-				<td><button id="replicantitabbtn" class="secondarytabbtn" onclick="showInfTab('replicantis')">Replicantis</button><td>
-				<td><button id="singularitytabbtn" class="secondarytabbtn" onclick="showInfTab('singularity')">Singularity</button><td>
-				<td><button id="dimtechstabbtn" class="secondarytabbtn" onclick="showInfTab('dimtechs')">Dim-techs</button><td>
-			</tr>
+			<button class="secondarytabbtn" onclick="showInfTab('preinf')">Upgrades</button>
+			<span id="abbtn_pos_no_auto"><button id="autobuyersbtn" class="secondarytabbtn" onclick="showAutoTab('autobuyers')">Autobuyers</button></span>
+			<button id="postinfbtn" class="secondarytabbtn" onclick="showInfTab('postinf')" >Break Infinity</button>
+			<button id="replicantitabbtn" class="secondarytabbtn" onclick="showInfTab('replicantis')">Replicantis</button>
+			<button id="singularitytabbtn" class="secondarytabbtn" onclick="showInfTab('singularity')">Singularity</button>
+			<button id="dimtechstabbtn" class="secondarytabbtn" onclick="showInfTab('dimtechs')">Dim-techs</button>
 			<div id="preinf" class="inftab">
 			<br>
 			<table id="preinfupgrades" class="table" style="margin: 0 auto"></table>
@@ -3830,7 +3839,7 @@
 			<div><button id="infmultbuyer" class="storebtn" onclick="infMultAutoToggle()" style="display:none; height: 25px; width: 190px; font-size:10px; margin-top: 3px;"></button></div>
 			<div class="footer"></div>
 		</div>
-		<div id="automation_ng_placement"></div>
+		<div id="ab_pos_no_auto"></div>
 		<div id="autobuyers" class="inftab">
 			<br>
 			<button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
@@ -4697,10 +4706,11 @@
 			<div class='quantumtab' id='positrons'><table class="qTable">
 				<tr>
 					<td>
-						You have <span id="positrons" style="font-size:35px">0</span> Positrons.
+						You have <span id="positrons_amt" style="font-size:35px">0</span> Positrons.<br>
+						<button class="gluonupgrade storebtn" id="sac_mdb" onclick="sacrificeMDBs()"></button>
 					</td>
 					<td>
-						You have <span id="enB_pos_eng" style="font-size:35px">0.0</span> positronic charge.
+						<span id="sac_gals" style="font-size:35px">0.00</span> total galaxies are converted into <span id="enB_pos_eng" style="font-size:35px">0.0</span> positronic charge.
 					</td>
 					<td>
 						You have <span id="enB_pos_amt" style="font-size:35px">0</span> Positronic Boosters.
@@ -4866,7 +4876,7 @@
 			<table class="table" align="center" style="margin: auto">
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showGhostifyTab('neutrinos')">Neutrinos</button></td>
-					<td><button class="secondarytabbtn" onclick="showGhostifyTab('automaticghosts')">Automator Ghosts</button></td>
+					<td id="agbtn_pos_no_auto"><button class="secondarytabbtn" id="agtabbtn" onclick="showAutoTab('automaticghosts')">Automator Ghosts</button></td>
 					<td><button class="secondarytabbtn" onclick="showGhostifyTab('bravemilestones')">Brave Milestones</button></td>
 					<td id="gphtabbtn"><button class="secondarytabbtn" onclick="showGhostifyTab('gphtab')">Ghostly Photons</button></td>
 					<td id="bltabbtn"><button class="secondarytabbtn" onclick="showGhostifyTab('bltab')">Bosonic Lab</button></td>
@@ -4938,6 +4948,7 @@
 					</tr>
 				</table>
 			</div>
+			<div id="ag_pos_no_auto"></div>
 			<div id="automaticghosts" class="ghostifytab">
 				<div>Your quantum worth (sum of quarks, colored quarks, and gluons) is currently <b class="QKAmount" id="quantumWorth2">0</b>.</div>
 				<table class='qTable'>
@@ -5558,6 +5569,7 @@
 			<button id="progressBarBtn" onclick="toggleProgressBar()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showStats" onclick="setStatsDisplay(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideRepresentation" onclick="toggleRepresentation()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
+			<button id="showAuto" onclick="toggleAutoTab()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showAchs" onclick="setAchsDisplay(true)" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="showAchRowNums" onclick="toggleAchRowNums()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideCompletedAchs" onclick="toggleCompletedAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
@@ -5726,6 +5738,7 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/mastery_studies.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/nanofield.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/neutrinos.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/positrons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/planck.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_challenges.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_speedruns.js"></script>

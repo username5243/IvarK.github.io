@@ -877,3 +877,72 @@ function updateGalaxyUpgradesDisplay(){
 	var curr43 = tmp.mod.ngmX >= 4 ? "" : "<br>Currently: <span id='galspan43'>?</span>x"
 	getEl("galaxy43").innerHTML = text43 + curr43 + "<br>Cost: <span id='galcost43'></span> GP"
 }
+
+//Automation Tabs
+let autoTab
+
+function showAutoTab(tabName) {
+	if (getEl("automationbtn").style.display != "") {
+		var autoPos = {
+			autobuyers: showInfTab,
+			automaticghosts: showGhostifyTab
+		}
+		autoPos[tabName](tabName)
+		return
+	}
+
+	//iterate over all elements in div_tab class. Hide everything that's not tabName and show tabName
+	var tabs = document.getElementsByClassName('autotab');
+	var tab;
+	var oldTab
+	for (var i = 0; i < tabs.length; i++) {
+		tab = tabs.item(i);
+		if (tab.style.display == 'block') oldTab = tab.id
+		if (tab.id === tabName) {
+			tab.style.display = 'block';
+		} else {
+			tab.style.display = 'none';
+		}
+	}
+
+	autoTab = tabName
+	if (oldTab !== tabName) tmp.mod.tabsSave.tabAuto = tabName
+}
+
+function moveAutoTabs() {
+	let autoUnl = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
+	let autoShown = autoUnl && tmp.mod.showAuto
+
+	getEl("showAuto").style.display = autoUnl ? "" : "none"
+	getEl("showAuto").textContent = (tmp.mod.showAuto ? "Hide" : "Show") + " general automation tab"
+
+	getEl("automationbtn").style.display = autoShown ? "" : "none"
+
+	moveAutoTab("autobuyers", "ab", "autobuyersbtn", "inf", autoShown, "preinf")
+
+	moveAutoTab("automaticghosts", "ag", "agtabbtn", "ghostify", autoShown, "neutrinos")
+	getEl("agbtn_pos_no_auto").style.display = autoShown ? "none" : ""
+}
+
+function toggleAutoTab() {
+	tmp.mod.showAuto = !tmp.mod.showAuto
+	moveAutoTabs()
+}
+
+function moveAutoTab(id, abb, btn, pos, autoShown, back) {
+	let word = "_pos_" + (autoShown ? "yes" : "no") + "_auto"
+
+	getEl(abb + word).appendChild(getEl(id))
+	getEl(abb + "btn" + word).appendChild(getEl(btn))
+	if (getEl(id).className != "autotab" && autoShown) {
+		var autoPos = {
+			autobuyers: showInfTab,
+			automaticghosts: showGhostifyTab
+		}
+		autoPos[id](back)
+
+		if (autoTab == id) getEl(id).style.display = ""
+	}
+	if (!autoShown && autoTab == id) getEl(id).style.display = "none"
+	getEl(id).className = autoShown ? "autotab" : pos + "tab"
+}

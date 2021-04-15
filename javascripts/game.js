@@ -3858,6 +3858,7 @@ setInterval(function() {
  	failedEC12Check()
 
 	// Other 
+	moveAutoTabs()
 	updateChallTabDisplay()
 	updateOrderGoals()
 	bankedInfinityDisplay()
@@ -4645,7 +4646,6 @@ function normalSacDisplay(){
 }
 
 function sacLayersDisplay(){
-	getEl("automationbtn").style.display = inNGM(4) && (player.challenges.includes("challenge1") || player.infinitied > 0 || player.eternities != 0 || ph.did("quantum")) && !isEmptiness ? "inline-block" : "none"
 	if (getEl("paradox").style.display=='block') updatePUMults()
 	if (getEl("galaxy").style.display=='block') {
 		galacticUpgradeSpanDisplay()

@@ -39,7 +39,7 @@ var quantumTabs = {
 	update: {
 		uquarks: updateQuarksTab,
 		gluons: updateGluonsTab,
-		positrons() { ENTANGLED_BOOSTS.updateOnTick("pos") }, //temp
+		positrons: updatePositronsTab, //temp
 		replicants: updateReplicantsTab,
 		nanofield: updateNanofieldTab,
 		tod: updateTreeOfDecayTab
@@ -662,7 +662,6 @@ function showGhostifyTab(tabName) {
 		}
 	}
 	if (oldTab !== tabName) tmp.mod.tabsSave.tabGhostify = tabName
-	closeToolTip()
 }
 
 function updateGhostifyTabs() {
@@ -994,15 +993,4 @@ function convertToNGP5(setup) {
 		player.achievements.push("ng3p111")
 		pl.save.on = true
 	} else ph.reset()
-}
-
-//Temp
-function setupPositronSave() {
-	return {
-		amt: 0,
-		sacBoosts: 0,
-		sacGals: 0,
-		eng: 0,
-		boosts: 0
-	}
 }
