@@ -218,8 +218,8 @@ function getQuarkEnergyMult() {
 function updateQuarkEnergyEffects() {
 	tmp.qkEng = {}
 
-	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.qu.quarkEnergy / 1.7 + 1) + 1, 2)
-	tmp.qkEng.eff2 = Math.pow(tmp.qu.quarkEnergy, 2) * tmp.qkEng.eff1 / 4
+	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.totalQE / 1.7 + 1) + 1, 2)
+	tmp.qkEng.eff2 = Math.pow(tmp.totalQE, 2) * tmp.qkEng.eff1 / 4
 }
 
 function buyQuarkMult(name) {

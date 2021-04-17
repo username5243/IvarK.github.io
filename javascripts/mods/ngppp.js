@@ -47,7 +47,8 @@ var quantumTabs = {
 }
 
 function updateQuantumTabs() {
-	getEl("quarkEnergy").textContent = shorten(tmp.qu.quarkEnergy)
+	getEl("quarkEnergy").textContent = shorten(tmp.totalQE)
+	getEl("quarkEnergySub").innerHTML = masteryStudies.has("d7") ? "<br>(" + shorten(tmp.qu.quarkEnergy - tmp.totalQE) + " were converted)" : ""
 	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {

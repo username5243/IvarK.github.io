@@ -323,6 +323,10 @@ function updateNGP3TempStuff() {
 			tmp.twr = getTotalWorkers()
 			tmp.tra = getTotalReplicants()
 		}
+
+		tmp.totalQE = tmp.qu.quarkEnergy
+		if (masteryStudies.has("d7")) tmp.totalQE -= tmp.qu.pos.consumedQE || 0
+
 		updateGluonicBoosts()
 		updateQuarkEnergyEffects()
 	}
