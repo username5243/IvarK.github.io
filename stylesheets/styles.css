@@ -2207,6 +2207,11 @@ br {
 	animation: positronupg 5s infinite
 }
 
+.timestudybought.elcstudy {
+    background: #eeff32;
+	border-color: #8e991e
+}
+
 #moreQCs {
 	width: 100%
 }

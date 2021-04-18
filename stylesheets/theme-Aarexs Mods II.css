@@ -408,16 +408,16 @@ button, div.storebtn {
 	color: #0000e5 !important
 }
 
-#dilstudy7.dilationupgbought, #positronstabbtn button, #positrons .gluonupgrade.storebtn {
+#dilstudy7.dilationupgbought, .timestudybought.elcstudy, #positronstabbtn button, #positrons .gluonupgrade.storebtn {
 	background-color: #e5e500 !important;
 	animation: none !important
 }
 
-#dilstudy7.dilationupg, #positronstabbtn button:hover, #positrons .gluonupgrade.storebtn:hover {
+#dilstudy7.dilationupg, .timestudy.elcstudy, #positronstabbtn button:hover, #positrons .gluonupgrade.storebtn:hover {
 	background-color: #e5e539 !important
 }
 
-#dilstudy7.dilationupg:hover {
+#dilstudy7.dilationupg:hover, .timestudy.elcstudy:hover {
 	background-color: #e5e557 !important
 }
 

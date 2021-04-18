@@ -1403,7 +1403,8 @@
 			<table class="table" align="center" style="margin: auto">
 				<tr>
 					<td><button class="secondarytabbtn" onclick="showOptionTab('saving')">Saves</button></td>
-					<td><button class="secondarytabbtn" onclick="showOptionTab('otheroptions')">Options</button></td>
+					<td><button class="secondarytabbtn" onclick="showOptionTab('displays')">Displays</button></td>
+					<td><button class="secondarytabbtn" onclick="showOptionTab('otheroptions')">Other Options</button></td>
 					<td id="lstabbtn"><button class="secondarytabbtn" onclick="showOptionTab('light_speed')">Light Speed</button></td>
 					<td id="secretoptionsbtn"><button class="secondarytabbtn" onclick="showOptionTab('secrets')">Secrets</button></td>
 				</tr>
@@ -1435,7 +1436,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class='optionstab' id='otheroptions' style='display:none'>
+			<div class='optionstab' id='displays' style='display:none'>
 				<table>
 					<tr>
 						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px"></button></div></td>
@@ -1444,18 +1445,28 @@
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="hotkeys" onclick="toggleHotkeys()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
-						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
-						<td><div><button id="confirmations" onclick="showConfirmations()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
-					</tr>
-					<tr>
 						<td><div><button onclick="showVisibilityMenu()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
 						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
-						<td><div><button id="toggleLogRateChange" onclick="toggleLogRateChange()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div></td>
+					</tr>
+				</table>
+			</div>
+			<div class='optionstab' id='otheroptions' style='display:none'>
+				<table>
+					<tr>
+						<td></td>
+						<td><div><button id="hotkeys" onclick="toggleHotkeys()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%">Disable hotkeys</button></div></td>
+						<td></td>
 					</tr>
 					<tr>
-						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
+						<td><div><button id="notation" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:10px"></button></div></td>
+						<td><div><button id="toggleLogRateChange" onclick="toggleLogRateChange()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 						<td><div><button id="decimalMode" onclick="switchDecimalMode()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
+					</tr>
+					<tr>
+						<td><div><button id="confirmations" onclick="showConfirmations()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
+						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
 						<td><div><button id="performanceTicks" onclick="togglePerformanceTicks()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 					</tr>
 					<tr>
@@ -1520,7 +1531,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 7)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 7.01)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
