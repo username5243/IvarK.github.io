@@ -66,6 +66,53 @@ let Prestiges = {
 			return false //tmp.ngp3
 		}
 	},
+	resetFuncs: {
+		paradox() {
+			pSac()
+		},
+		accelerate() {
+			//Coming soon...
+		},
+		galaxy() {
+			galacticSacrifice()
+		},
+		infinity() {
+			bigCrunch()
+		},
+		eternity() {
+			getEl("eternitybtn").onclick()
+		},
+		interreality() {
+			//Coming soon...
+		},
+		singularity() {
+			//Coming soon...
+		},
+		quantum() {
+			if (player.meta) {
+				if (!inAnyQC()) quantum(false, false, 0)
+				else quantum()
+			}
+		},
+		ghostify() {
+			ghostify()
+		},
+		planck() {
+			pl.reset()
+		}
+	},
+	tabLocs: {
+		paradox: "paradox",
+		accelerate: "accTab",
+		galaxy: "galaxy",
+		infinity: "infinity",
+		eternity: "eternitystore",
+		interreality: "irTab",
+		singularity: "sgTab",
+		quantum: "quantumtab",
+		ghostify: "ghostify",
+		planck: "plTab"
+	},
 	can(id) {
 		return ph.tmp[id] && ph.reqs[id]()
 	},
@@ -128,6 +175,11 @@ let Prestiges = {
 
 		return !tmp.mod.layerHidden[id]
 	},
+	onHotkey(shiftDown) {
+		let layer = ph.tmp.lastDid
+		if (shiftDown) showTab(ph.tabLocs[layer])
+		else ph.resetFuncs[layer]()
+	},
 	tmp: {},
 	reset() {
 		var did = false
@@ -136,7 +188,10 @@ let Prestiges = {
 			var p = ph.order[x - 1]
 			if (ph.modReqs[p] === undefined || ph.modReqs[p]()) {
 				ph.tmp[p] = {}
-				if (!did && ph.didData[p]()) did = true
+				if (!did && ph.didData[p]()) {
+					did = true
+					ph.tmp.lastDid = p
+				}
 				if (did) ph.onPrestige(p)
 				else getEl("hide" + p).style.display = "none"
 			} else getEl("hide" + p).style.display = "none"

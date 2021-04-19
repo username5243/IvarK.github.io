@@ -3131,11 +3131,12 @@ function updateCheckBoxes() {
 
 function updateHotkeys() {
 	let html = "Hotkeys: 1-8 to buy 10 Dimensions, shift+1-8 to buy 1 Dimension, T to buy max Tickspeed upgrades, shift+T to buy one Tickspeed upgrade, M to Max All,<br>S to Sacrifice"
+	html += ", P to reset at latest unlocked layer"
 	if (!hasAch("r136")) html += ", D to Dimension Boost"
 	if (!hasAch("ng3p51")) {
 		if (inNGM(3)) html += ", B to Tickspeed Boost"
 		if (inNGM(4)) html += ", N to Time Dimension Boost"
-		html += ", G to buy a Galaxy"
+		html += ", G to " + (ph.did("galaxy") ? "Galactic Sacrifice" : "buy a Galaxy")
 	}
 	html += ", C to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
 	if (hasAch("r136")) html += ", D to Dilate Time"
@@ -5737,6 +5738,7 @@ window.addEventListener('keydown', function(event) {
 
 		case 71: // G
 			if (hasAch("ng3p51")) ghostify()
+			else if (ph.did("galaxy")) galacticSacrifice()
 			else getEl("secondSoftReset").onclick()
 		break;
 
@@ -5761,6 +5763,9 @@ window.addEventListener('keydown', function(event) {
 			}
 		break;
 
+		case 80: // P, reset at latest layer
+			ph.onHotkey(shiftDown)
+		break;
 
 		case 81: // Q, for quantum.
 			if (player.meta) {
