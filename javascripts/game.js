@@ -1458,11 +1458,6 @@ function setTheme(name) {
 	head.appendChild(link);
 }
 
-getEl("theme").onclick = function () {
-	closeToolTip()
-	getEl('thememenu').style.display="flex"
-}
-
 function doWeakerPowerReductionSoftcapNumber(num,start,exp){
 	if (num < start || num < 1) return num
 	return start*(( (num/start)**exp -1)/exp+1)
@@ -1544,7 +1539,7 @@ function updateCoinPerSec() {
 	var element = getEl("coinsPerSec");
 	var ret = inQC(1) ? getMDProduction(1) : getDimensionProductionPerSecond(1)
 	if (tmp.inEC12) ret = ret.div(tmp.ec12Mult)
-	element.textContent = ret.gt(0) && ret.lte("1e100000") ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : ""
+	element.innerHTML = ret.gt(0) && ret.lte("1e100000") ? 'You are getting ' + shortenND(ret) + ' antimatter per second.' : "<br>"
 }
 
 var clickedAntimatter
@@ -2127,20 +2122,10 @@ function show_mods() {
 	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
 }
 
-getEl("animationoptionsbtn").onclick = function () {
+function showOptions(id) {
 	closeToolTip();
-	getEl("animationoptions").style.display = "flex";
-};
-
-getEl("confirmations").onclick = function () {
-	closeToolTip();
-	getEl("confirmationoptions").style.display = "flex";
-};
-
-function showVisibilityMenu() {
-	closeToolTip();
-	getEl("visibilityoptions").style.display = "flex";
-};
+	getEl(id).style.display = "flex"
+}
 
 function showNextModeMessage() {
 	if (ngModeMessages.length > 0) {
@@ -2390,7 +2375,6 @@ function switchCommas(id) {
 
 var notationMenuDone = false
 getEl("notation").onclick = function () {
-	closeToolTip()
 	if (!notationMenuDone) {
 		notationMenuDone = true
 		let notationsTable = getEl("notationOptions")
@@ -2422,7 +2406,7 @@ getEl("notation").onclick = function () {
 		getEl("selectAF5LN").setAttribute("ach-tooltip", "Select Aarex's Funny 5-letter Notation")
 		getEl("selectCommasAF5LN").setAttribute("ach-tooltip", "Aarex's Funny 5-letter Notation on exponents")
 	}
-	getEl("notationmenu").style.display = "block"
+	showOptions("notationmenu")
 };
 
 function openNotationOptions() {
@@ -5723,7 +5707,7 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 67: // C
-			bigCrunch()
+			ph.onHotkey("infinity")
 		break;
 
 		case 68: // D
@@ -5733,12 +5717,12 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 69: // E, also, nice.
-			getEl("eternitybtn").onclick();
+			ph.onHotkey("eternity")
 		break;
 
 		case 71: // G
-			if (hasAch("ng3p51")) ghostify()
-			else if (ph.did("galaxy")) galacticSacrifice()
+			if (hasAch("ng3p51")) ph.onHotkey("ghostify")
+			else if (ph.did("galaxy")) ph.onHotkey("galaxy")
 			else getEl("secondSoftReset").onclick()
 		break;
 
@@ -5764,14 +5748,11 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 80: // P, reset at latest layer
-			ph.onHotkey(shiftDown)
+			ph.onHotkey()
 		break;
 
 		case 81: // Q, for quantum.
-			if (player.meta) {
-				if (!inAnyQC()) quantum(false,false,0)
-				else quantum()
-			} 
+			ph.onHotkey("quantum")
 		break;
 
 		case 82: //R
@@ -5800,14 +5781,6 @@ window.addEventListener('keyup', function(event) {
 	}
 		if (Math.random() <= 1e-6) giveAchievement("keyboard broke?")
 	if (!player.options.hotkeys || controlDown === true || document.activeElement.type === "text") return false
-	switch (event.keyCode) {
-		case 67: // C
-			bigCrunch()
-		break;
-
-		
-		
-	}
 }, false);
 
 function getUnspentBonus() {

@@ -99,7 +99,6 @@
 		<div>
 			<p>You have <span id="coinAmount" onclick="onAntimatterClick()" style="font-size:25px; color: black">0</span> antimatter.</p>
 		</div>
-
 		<div id="coinsPerSec">You are getting 0 antimatter per second.</div>
 
 		<tr id="tickSpeedRow" style="visibility: hidden">
@@ -1439,16 +1438,22 @@
 			<div class='optionstab' id='displays' style='display:none'>
 				<table>
 					<tr>
-						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px"></button></div></td>
-						<td><div><button id="animationoptionsbtn" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
+						<td><div><button id="theme" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 12px" onclick="showOptions('thememenu')"></button></div></td>
+						<td><div><button id="animationoptionsbtn" class="storebtn" onclick="showOptions('animationoptions')" style="color:black; width: 200px; height: 55px; font-size:160%;">Animations</button></div></td>
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="updaterate">Update Rate: 50ms</b><input id="updaterateslider" style="width: 170px;" type="range" min="0" max="200" value="50" class="slider" ></div></td>
 						<td><div class="storebtn" style="color:black; width: 198px; height: 55px; font-size: 130%; text-align: center"><b id="renderrate">Render rate: 1 tick</b><input id="renderrateslider" style="width: 170px;" type="range" min="1" max="20" value="1" class="slider"></div></td>
 					</tr>
 					<tr>
-						<td><div><button onclick="showVisibilityMenu()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
+						<td><div><button onclick="showOptions('visibilityoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide stuff</button></div></td>
 						<td><div><button id="tabsSave" onclick="toggleTabsSave()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button></div></td>
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Shortcuts: OFF</button></div></td>
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div></td>
+					</tr>
+					<tr>
+						<td><div><button onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div></td>
+						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
 					</tr>
 				</table>
 			</div>
@@ -1465,7 +1470,7 @@
 						<td><div><button id="decimalMode" onclick="switchDecimalMode()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 					</tr>
 					<tr>
-						<td><div><button id="confirmations" onclick="showConfirmations()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
+						<td><div><button id="confirmations" onclick="showOptions('confirmationoptions')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Confirmations</button></div></td>
 						<td><div><button id="retry" onclick="toggleChallengeRetry()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size:120%"></button></div></td>
 						<td><div><button id="performanceTicks" onclick="togglePerformanceTicks()" class="storebtn" style="color:black; width: 200px; height: 55px"></button></div></td>
 					</tr>
@@ -1531,7 +1536,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 7.02)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 7.03)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -3651,7 +3656,46 @@
 			</table>
 			<div id="ab_pos_yes_auto"></div>
 			<div id="ag_pos_yes_auto"></div>
-			<div class="autotab" id="control">Coming soon...</div>
+			<div class="autotab" id="control">
+				<table class="qTable">
+					<tr>
+						<td class="yellow">
+							<b style="font-size: 24px">Infinity</b>
+						</td>
+						<td class="violet">
+							<b style="font-size: 24px">Eternity</b>
+						</td>
+						<td class="green">
+							<b style="font-size: 24px">Quantum</b>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							Coming soon...
+						</td>
+						<td>
+							Coming soon...
+						</td>
+						<td>
+							Coming soon...
+						</td>
+					</tr>
+					<tr>
+						<td class="violet">
+							<b style="font-size: 24px">Ghostify</b>
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>
+							Coming soon...
+						</td>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
 		</div>
 		<div id="paradox" class="tab">
 			<table class="table" id="pUpgs" style="margin: 0 auto">
@@ -5587,8 +5631,11 @@
 			<button id="hideCompletedAchs" onclick="toggleCompletedAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideSecretAchs" onclick="toggleSecretAchs()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
 			<button id="hideProductionTab" onclick="toggleProductionTab()" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button>
-			<div id="hideLayers"></div>
 		</div>
+	</div>
+	<div class="popup optionmenu" id="layervisibilitymenu">
+		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
+		<div class="scrollablemenu" id="hideLayers"></div>
 	</div>
 	<div class="popup optionmenu" id="confirmationoptions">
 		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>

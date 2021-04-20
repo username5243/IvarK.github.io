@@ -932,17 +932,20 @@ function toggleAutoTab() {
 function moveAutoTab(id, abb, btn, pos, autoShown, back) {
 	let word = "_pos_" + (autoShown ? "yes" : "no") + "_auto"
 
-	getEl(abb + word).appendChild(getEl(id))
+	let elm = getEl(id)
+	let rootId = elm.parentElement.id
+
+	if (abb + word != rootId) getEl(abb + word).appendChild(elm)
 	getEl(abb + "btn" + word).appendChild(getEl(btn))
-	if (getEl(id).className != "autotab" && autoShown) {
+	if (elm.className != "autotab" && autoShown) {
 		var autoPos = {
 			autobuyers: showInfTab,
 			automaticghosts: showGhostifyTab
 		}
 		autoPos[id](back)
 
-		if (autoTab == id) getEl(id).style.display = ""
+		if (autoTab == id) elm.style.display = ""
 	}
-	if (!autoShown && autoTab == id) getEl(id).style.display = "none"
+	if (!autoShown && autoTab == id) elm.style.display = "none"
 	getEl(id).className = autoShown ? "autotab" : pos + "tab"
 }

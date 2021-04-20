@@ -175,10 +175,11 @@ let Prestiges = {
 
 		return !tmp.mod.layerHidden[id]
 	},
-	onHotkey(shiftDown) {
-		let layer = ph.tmp.lastDid
-		if (shiftDown) showTab(ph.tabLocs[layer])
-		else ph.resetFuncs[layer]()
+	onHotkey(layer) {
+		if (!layer) layer = ph.tmp.lastDid
+		if (shiftDown) {
+			if (ph.shown(layer)) showTab(ph.tabLocs[layer])
+		} else ph.resetFuncs[layer]()
 	},
 	tmp: {},
 	reset() {
