@@ -946,6 +946,6 @@ function moveAutoTab(id, abb, btn, pos, autoShown, back) {
 
 		if (autoTab == id) elm.style.display = ""
 	}
-	if (!autoShown && autoTab == id) elm.style.display = "none"
+	if (elm.className == "autotab" && !autoShown && autoTab == id) elm.style.display = "none"
 	getEl(id).className = autoShown ? "autotab" : pos + "tab"
 }

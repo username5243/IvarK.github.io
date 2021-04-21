@@ -325,7 +325,7 @@ function updateNGP3TempStuff() {
 		}
 
 		tmp.totalQE = tmp.qu.quarkEnergy
-		if (masteryStudies.has("d7")) tmp.totalQE -= tmp.qu.pos.consumedQE || 0
+		if (pos.unl()) tmp.totalQE -= pos.save.consumedQE || 0
 
 		updateGluonicBoosts()
 		updateQuarkEnergyEffects()

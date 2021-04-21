@@ -39,7 +39,7 @@ var quantumTabs = {
 	update: {
 		uquarks: updateQuarksTab,
 		gluons: updateGluonsTab,
-		positrons: updatePositronsTab, //temp
+		positrons: pos.updateTab, //temp
 		replicants: updateReplicantsTab,
 		nanofield: updateNanofieldTab,
 		tod: updateTreeOfDecayTab
@@ -48,7 +48,7 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(tmp.totalQE)
-	getEl("quarkEnergySub").innerHTML = masteryStudies.has("d7") ? "<br>(" + shorten(tmp.qu.quarkEnergy - tmp.totalQE) + " were converted)" : ""
+	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(tmp.qu.quarkEnergy - tmp.totalQE) + " were converted)" : ""
 	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {

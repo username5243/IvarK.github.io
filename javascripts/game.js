@@ -48,7 +48,7 @@ function setupAutobuyerHTMLandData(){
 		return tmp.ngC ? 0.3 : 0.6
 	}
 
-	buyAutobuyer = function(id) {
+	buyAutobuyer = function(id, quick) {
    		if (player.infinityUpgradesRespecced != undefined && player.autobuyers[id].interval == 100 && id > 8) {
 			if (player.autobuyers[id].bulkBought || player.infinityPoints.lt(1e4) || id > 10) return
 			player.infinityPoints = player.infinityPoints.sub(1e4)
@@ -63,16 +63,13 @@ function setupAutobuyerHTMLandData(){
 		if (player.autobuyers[id].interval <= 100) {
 			player.autobuyers[id].bulk = Math.min(player.autobuyers[id].bulk * 2, 1e100);
 			player.autobuyers[id].cost = Math.ceil(2.4*player.autobuyers[id].cost);
-			var b1 = true;
-			for (let i=0;i<8;i++) {
-				if (player.autobuyers[i].bulk < 512) b1 = false;
-			}
-			if (b1) giveAchievement("Bulked up");
 		} else {
 			player.autobuyers[id].interval = Math.max(player.autobuyers[id].interval * getAutobuyerReduction(), 100);
 			if (player.autobuyers[id].interval > 120) player.autobuyers[id].cost *= 2; //if your last purchase wont be very strong, dont double the cost
 		}
-		updateAutobuyers();
+		if (!quick) updateAutobuyers()
+
+		return true
 	}
 
 	getEl("buyerBtn" + 1).onclick = function () { 
@@ -2827,6 +2824,12 @@ function updateAutobuyers() {
 			else getEl("buyerBtn" + tier).innerHTML = reduction + "% smaller interval <br>Cost: " + shortenDimensions(player.autobuyers[tier-1].cost) + currencyEnd
 		}
 	}
+
+	var b1 = true;
+	for (let i = 0; i < 8; i++) {
+		if (player.autobuyers[i].bulk < 512) b1 = false;
+	}
+	if (b1) giveAchievement("Bulked up");
 
     	if (player.autobuyers[8].interval <= 100) {
         	getEl("buyerBtnTickSpeed").style.display = "none"

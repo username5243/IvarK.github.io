@@ -1536,7 +1536,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 7.03)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 8)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -3899,6 +3899,8 @@
 			<br>
 			<button class="storebtn" id="toggleautobuyers" style="font-size: 100%; width: 150px; height: 40px; margin: 3px" onclick="toggleAutoBuyers()">Enable/disable autobuyers</button>
 			<button class="storebtn" id="togglebulk" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="toggleBulk()">Disable bulk buy</button>
+			<button class="storebtn" id="maxAutobuyerUpgrades" style="font-size: 100%; width: 150px; height: 40px;margin: 3px" onclick="maxAutobuyerUpgrades()">Max autobuyer upgrades</button>
+			<br>
 			<button class="storebtn" id="togglecrunchmode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleCrunchMode()">Auto crunch mode: amount</button>
 			<button class="storebtn" id="toggleautoetermode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleAutoEterMode()">Auto eternity mode: amount</button>
 			<button class="storebtn" id="toggleautoquantummode" style="font-size: 100%; width: 150px; height: 40px;margin: 3px; display: none" onclick="toggleAutoQuantumMode()"></button>
@@ -4759,17 +4761,45 @@
 					</tr>
 				</table>
 			</div>
-			<div class='quantumtab' id='positrons'><table class="qTable">
+			<div class='quantumtab' id='positrons'><table class="qTable_4col">
 				<tr>
-					<td>
+					<td colspan=4>
 						You have <span id="positrons_amt" style="font-size:35px">0</span> Positrons.<br>
 						<button class="gluonupgrade storebtn" id="sac_mdb" onclick="sacrificeMDBs()"></button>
 					</td>
+				</tr>
+				<tr>
 					<td>
-						<span id="sac_gals" style="font-size:35px">0.00</span> total galaxies are converted into <span id="enB_pos_eng" style="font-size:35px">0.0</span> positronic charge.
+						<b style="font-size: 25px">Dimensional</b> (<span id="pos_pow_ng">0.00</span> Power)
+						<br>
+						<span id="pos_gals_ng">0.00</span> Antimatter Galaxies + <span id="pos_eng_ng">0.00</span> Energy -><br>
+						<span id="pos_char_ng" style="font-size: 15px">0.00</span> Charge
 					</td>
 					<td>
-						You have <span id="enB_pos_amt" style="font-size:35px">0</span> Positronic Boosters.
+						<b style="font-size: 25px">Replicanti</b> (<span id="pos_pow_rg">0.00</span> Power)
+						<br>
+						<span id="pos_gals_rg">0.00</span> Replicated Galaxies + <span id="pos_eng_rg">0.00</span> Energy -><br>
+						<span id="pos_char_rg" style="font-size: 15px">0.00</span> Charge
+					</td>
+					<td>
+						<b style="font-size: 25px">Extra</b> (<span id="pos_pow_eg">0.00</span> Power)
+						<br>
+						<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
+						<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
+					</td>
+					<td>
+						<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
+						<br>
+						<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
+						<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						You have <span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge.
+					</td>
+					<td colspan=2>
+						You have <span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters.
 						<br>
 						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
 						<br>
@@ -4799,6 +4829,13 @@
 						<span id="enB_pos3_type"></span>
 						<br>
 						Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
+					</td>
+					<td id="enB_pos4">
+						<b id="enB_pos4_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos4_type"></span>
+						<br>
+						Boost something by <span id="enB_pos4_eff" style="font-size:35px"></span>x.
 					</td>
 				</tr>
 			</table></div>
@@ -5565,7 +5602,7 @@
 			<b>Expansion Mods</b><br>
 			<button class="storebtn longbtn" id='ngppBtn' style="font-size: 15px" onclick="toggle_mod('ngpp')" style="display: inline" ach-tooltip="Adds new several end-game content. Featuring NG+3, the most popular mod yet!">NG++: OFF</button>
 			<button class="storebtn longbtn" id='ngudBtn' style="font-size: 15px" onclick="toggle_mod('ngud')" style="display: inline" ach-tooltip="Adds some end-game content including Black Hole.">NGUd: OFF</button>
-			<button class="storebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="toggle_mod('ngc')" style="display: inline" ach-tooltip="Tweaks the game with a new twist: Condensers.">NG Condensed: OFF</button>			
+			<button class="unavailablebtn longbtn" id='ngcBtn' style="font-size: 15px" onclick="alert('This mode is temporaily closed due to the conflicts of NG+3R.')" style="display: inline" ach-tooltip="Tweaks the game with a new twist: Condensers.">NG Condensed: OFF</button>			
 			<br><br>
 			<b>Hellish Mods</b><br>
 			<button class="storebtn longbtn" id='ngmmBtn' style="font-size: 15px" onclick="toggle_mod('ngmm')" style="display: inline" ach-tooltip="Make this game harder, but adds some mechanics to compromise.">NG--: OFF</button>

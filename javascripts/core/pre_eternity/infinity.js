@@ -452,3 +452,7 @@ function bumpInfMult() {
 	doInitInfMultStuff()
 	player.infMult = player.infMult.div(otherMults).pow(Math.log10(getIPMultPower()) / Math.log10(old)).times(otherMults)
 }
+
+function maxAutobuyerUpgrades() {
+	alert("Coming tomorrow.")
+}

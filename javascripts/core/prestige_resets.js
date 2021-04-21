@@ -512,7 +512,7 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			gb: new Decimal(0),
 			br: new Decimal(0)
 		},
-		pos: setupPositronSave(),
+		pos: pos.setup(),
 		multPower: {
 			rg: 0,
 			gb: 0,

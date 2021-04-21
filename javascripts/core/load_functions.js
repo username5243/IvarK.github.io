@@ -2141,13 +2141,13 @@ function onLoad(noOffline) {
 	setTSDisplay()
 	setReplAutoDisplay()
 	setSomeQuantumAutomationDisplay()
-	if (player.pSac !== undefined) {
+	if (tmp.ngmX >= 5) {
 		updateParadoxUpgrades()
-                updatePUCosts()
-                updateGalstones()
+		updatePUCosts()
+		updateGalstones()
         ParadoxUpgradeButtonTypeDisplay() // ng-5 updating
-        }
-        updateGalaxyTabs()
+	}
+	updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
 	handleDisplaysOutOfQuantum()
 	hideDimensions()
@@ -2157,7 +2157,7 @@ function onLoad(noOffline) {
 	checkForEndMe()
 	updateAutobuyers()
 	updatePriorities()
-        updateMilestones()
+	updateMilestones()
 	loadInfAutoBuyers()
 	updateEternityUpgrades()
 	updateTheoremButtons()
@@ -2289,7 +2289,7 @@ function setupNGP31Versions() {
 	else {
 		if (player.ghostify.gds.gdBoosts === undefined) player.ghostify.gds = GDs.setup()
 		if (!hasAch("ng3p111") && tmp.ngpX < 5) delete player.pl
-		if (!tmp.qu.pos) tmp.qu.pos = setupPositronSave()
+		if (!tmp.qu.pos) tmp.qu.pos = pos.setup()
 	}
 	tmp.mod.newGame3PlusVersion = 3
 }
@@ -2814,6 +2814,7 @@ function conToDeciMS(){
 			tmp.qu.tod.b.spin = new Decimal(tmp.qu.tod.b.spin)
 		}
 	}
+	pos.compile()
 }
 
 function conToDeciGhostify(){

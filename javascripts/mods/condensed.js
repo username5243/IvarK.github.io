@@ -4,6 +4,11 @@ let CONDENSED = {
 		player.condensed = {}
 	},
 	compile() {
+		if (player.condensed !== undefined) {
+			alert("This mode is temporaily closed due to the conflicts of NG+3R. You will now exit NG+3C because of this.")
+			delete player.condensed
+		}
+		/*
 		delete ngC.tmp
 
 		tmp.ngC = player.condensed !== undefined
@@ -15,6 +20,7 @@ let CONDENSED = {
 		if (ngC.save.inf === undefined) ngC.resetIDs()
 		if (ngC.save.repl === undefined) ngC.resetRepl()
 		if (ngC.save.time === undefined) ngC.resetTDs()
+		*/
 	},
 	updateTmp() {
 		let data = {}

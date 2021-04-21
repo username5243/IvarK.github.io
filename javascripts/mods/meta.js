@@ -29,7 +29,7 @@ function getDilationMDMultiplier() {
 function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
-	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier - (masteryStudies.has("d7") ? tmp.qu.pos.sacBoosts : 0), 0)))
+	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier - (pos.unl() ? pos.save.sacBoosts : 0), 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//QC Rewards:

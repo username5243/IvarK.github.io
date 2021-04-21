@@ -511,20 +511,20 @@ let ENTANGLED_BOOSTS = {
 		},
 
 		amt() {
-			return tmp.qu.pos.boosts
+			return pos.save.boosts
 		},
 		engAmt() {
-			return tmp.qu.pos.eng
+			return pos.save.eng
 		},
 		set(x) {
-			tmp.qu.pos.boosts = x
+			pos.save.boosts = x
 		},
 
 		eff(x) {
 			return this.engAmt()
 		},
 
-		max: 3,
+		max: 4,
 		1: {
 			req: 1,
 			masReq: 3,
@@ -551,6 +551,17 @@ let ENTANGLED_BOOSTS = {
 			req: 5,
 			masReq: 7,
 			type: "g",
+			eff(x) {
+				return Math.log10(x / 2 + 1) / 2 + 1
+			},
+			effDisplay(x) {
+				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
+			}
+		},
+		4: {
+			req: 1/0,
+			masReq: 1/0,
+			type: "r",
 			eff(x) {
 				return Math.log10(x / 2 + 1) / 2 + 1
 			},
