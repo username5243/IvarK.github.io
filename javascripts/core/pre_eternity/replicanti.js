@@ -207,7 +207,7 @@ function updateExtraReplMult() {
 	let x = 1
 	if (tmp.quActive) {
 		if (inQC(2) || inQC(3)) x = 0
-		if (ENTANGLED_BOOSTS.active("glu", 2)) x *= tmp.enB.glu2
+		if (enB.active("glu", 2)) x *= tmp.enB.glu2
 	}
 	extraReplMulti = x
 }
@@ -249,7 +249,7 @@ function getReplicantiBaseInterval(speed) {
 	if (speed === undefined) speed = player.replicanti.interval
 	speed = new Decimal(speed)
 
-	if (ENTANGLED_BOOSTS.active("glu", 8)) {
+	if (enB.active("glu", 8)) {
 		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9))
 		speed = Decimal.pow(0.9, Math.pow(lvls, tmp.enB.glu8)).times(1e3)
 	}

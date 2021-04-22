@@ -48,8 +48,8 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(tmp.totalQE)
-	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(tmp.qu.quarkEnergy - tmp.totalQE) + " were converted)" : ""
-	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult())
+	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult() - getQuarkEnergySubMult())
+	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(pos.save.consumedQE) + " QE and " + shorten(getQuarkEnergySubMult()) + "x were converted)" : ""
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
 		var id = quantumTabs.tabIds[i]

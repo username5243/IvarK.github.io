@@ -263,7 +263,8 @@ function multiplySameCosts(cost) {
 		if (player[tiers[i] + "Cost"].e == cost.e) player[tiers[i] + "Cost"] = player[tiers[i] + "Cost"].times(tierCosts[i])
 	}
 	if (player.tickSpeedCost.e == cost.e) player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier)
-	//the above line is broken in C9 in NGC&NG+++, but i think its a bug elsewhere
+
+	// the above line is broken in C9 in NG+3C & NG+++, but i think its a bug elsewhere
 	// the bug is getTickspeedCostMultiplier is not defined
 }
 
@@ -341,7 +342,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (ENTANGLED_BOOSTS.active("pos", 2)) x *= tmp.enB.pos2
+	if (enB.active("pos", 2)) x *= tmp.enB.pos2
 	return x
 }
 	

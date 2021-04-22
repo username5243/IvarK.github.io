@@ -10,8 +10,10 @@ function galaxyReset(bulk) {
 
 	player.galaxies += bulk
 
-	if (moreEMsUnlocked() && getEternitied() >= 1e15) setInitialResetPower()
-	else doGalaxyResetStuff()
+	if (moreEMsUnlocked() && getEternitied() >= 1e15 && !player.dilation.active) {
+		//To resolve: 1e15 Eternities Milestone is buggy in dilation runs
+		setInitialResetPower()
+	} else doGalaxyResetStuff()
 
 
 	skipResets()
@@ -147,7 +149,7 @@ function getDistantScalingStart() {
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
 		if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
-		if (ENTANGLED_BOOSTS.active("glu", 5)) n += tmp.enB.glu5
+		if (enB.active("glu", 5)) n += tmp.enB.glu5
 		if (pl.on()) n -= fNu.tmp.nerfMu
 	}
 
@@ -178,7 +180,7 @@ function getRemoteScalingStart(galaxies) {
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
 		if (masteryStudies.has(301)) n += getMTSMult(301)
-		if (ENTANGLED_BOOSTS.active("glu", 5)) n += tmp.enB.glu5
+		if (enB.active("glu", 5)) n += tmp.enB.glu5
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 

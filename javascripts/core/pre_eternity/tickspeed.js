@@ -87,7 +87,7 @@ function getExtraGalaxyPower(noDil) {
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (ENTANGLED_BOOSTS.active("glu", 7)) dilGalEff *= (replGalEff - 1) * tmp.enB.glu7 + 1
+		if (enB.active("glu", 7)) dilGalEff *= (replGalEff - 1) * tmp.enB.glu7 + 1
 
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
 	}

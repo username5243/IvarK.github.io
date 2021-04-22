@@ -167,7 +167,7 @@ function getInfinitiedGain() {
 	if (hasAch("ng3p12")) infGain *= 100
 	if (hasAch("r133") && player.meta) {
 		let exp = 0.25
-		if (ENTANGLED_BOOSTS.active("glu", 6)) exp = tmp.enB.glu6
+		if (enB.active("glu", 6)) exp = tmp.enB.glu6
 		infGain = nM(player.dilation.dilatedTime.pow(.25).max(1), infGain)
 	}
 	return nA(infGain, hasAch("r87") && inNGM(2) ? 249 : 0)
@@ -454,5 +454,10 @@ function bumpInfMult() {
 }
 
 function maxAutobuyerUpgrades() {
-	alert("Coming tomorrow.")
+	let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+	for (var i = 0; i < order.length; i++) {
+		var id = order[i]
+		while (buyAutobuyer(id, true)) {}
+	}
+	updateAutobuyers()
 }

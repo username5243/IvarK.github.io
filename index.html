@@ -1536,7 +1536,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 8)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 9)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4601,7 +4601,7 @@
 						<br>
 						(+<span id='rggain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.)
 						<br><br>
-						<button class="gluonupgrade rg" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Boost Entangled Boosts</button>
+						<button id="entangle_rg" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Boost Entangled Boosts</button>
 					</td>
 					<td>
 						You have <span id="gb" style="font-size:35px">0</span> red-green anti-gluons,
@@ -4610,7 +4610,7 @@
 						<br>
 						(+<span id='gbgain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gbprev'></span> to <span id='gbnext'>0</span>.)
 						<br><br>
-						<button class="gluonupgrade gb" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Boost Entangled Boosts</button>
+						<button id="entangle_gb" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Boost Entangled Boosts</button>
 					</td>
 					<td>
 						You have <span id="br" style="font-size:35px">0</span> red-green anti-gluons,
@@ -4619,7 +4619,7 @@
 						<br>
 						(+<span id='brgain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='brprev'></span> to <span id='brnext'>0</span>.)
 						<br><br>
-						<button class="gluonupgrade br" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Boost Entangled Boosts</button>
+						<button id="entangle_br" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Boost Entangled Boosts</button>
 					</td>
 				</tr>
 				<td colspan=3>
@@ -4639,21 +4639,21 @@
 						<br>
 						<span id="enB_glu1_type"></span>
 						<br>
-						Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:35px"></span>x.
+						Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:25px"></span>x.
 					</td>
 					<td id="enB_glu2">
 						<b id="enB_glu2_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu2_type"></span>
 						<br>
-						Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:35px"></span>x.
+						Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:25px"></span>x.
 					</td>
 					<td id="enB_glu3">
 						<b id="enB_glu3_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu3_type"></span>
 						<br>
-						The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:35px"></span>% slower.
+						The cost superscaling of 3x TP upgrade is <span id="enB_glu3_eff" style="font-size:25px"></span>% slower.
 					</td>
 				</tr>
 				<tr>
@@ -4662,21 +4662,21 @@
 						<br>
 						<span id="enB_glu4_type"></span>
 						<br>
-						Eternity Points speed up the production of dilated time by <span id="enB_glu4_eff" style="font-size:35px"></span>x.
+						Eternity Points speed up the production of dilated time by <span id="enB_glu4_eff" style="font-size:25px"></span>x.
 					</td>
 					<td id="enB_glu5">
 						<b id="enB_glu5_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu5_type"></span>
 						<br>
-						All Antimatter Galaxy scalings start <span id="enB_glu5_eff" style="font-size:35px"></span> later.
+						All Antimatter Galaxy scalings start <span id="enB_glu5_eff" style="font-size:25px"></span> later.
 					</td>
 					<td id="enB_glu6">
 						<b id="enB_glu6_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu6_type"></span>
 						<br>
-						Dilated time gives a ^<span id="enB_glu6_eff" style="font-size:35px"></span> boost to Infinitied stat.
+						Dilated time gives a ^<span id="enB_glu6_eff" style="font-size:25px"></span> boost to Infinitied stat.
 					</td>
 				</tr>
 				<tr>
@@ -4685,21 +4685,21 @@
 						<br>
 						<span id="enB_glu7_type"></span>
 						<br>
-						Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:35px"></span>%)
+						Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:25px"></span>%)
 					</td>
 					<td id="enB_glu8">
 						<b id="enB_glu8_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu8_type"></span>
 						<br>
-						Replicate interval upgrades greatly boost themselves.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:35px"></span>)
+						Replicate interval upgrades greatly boost themselves.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:25px"></span>)
 					</td>
 					<td id="enB_glu9">
 						<b id="enB_glu9_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_glu9_type"></span>
 						<br>
-						Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:35px"></span>.
+						Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:25px"></span>.
 					</td>
 				</tr>
 				<tr>
@@ -4763,79 +4763,129 @@
 			</div>
 			<div class='quantumtab' id='positrons'><table class="qTable_4col">
 				<tr>
-					<td colspan=4>
-						You have <span id="positrons_amt" style="font-size:35px">0</span> Positrons.<br>
-						<button class="gluonupgrade storebtn" id="sac_mdb" onclick="sacrificeMDBs()"></button>
+					<td class="yellow" colspan=2>
+						<span id="pos_formula"></span>
+						<span id="pos_amt" style="font-size:25px">0</span> Positrons
+					</td>
+					<td>
+						<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
+					</td>
+					<td>
+						<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
+						<br>
+						<span id="enB_pos_next"></span>
 					</td>
 				</tr>
 				<tr>
-					<td>
+					<td class="yellow" colspan=2>
+						<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
+					</td>
+					<td colspan=2>
+						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
+						<br>
+						<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="dark_yellow">
 						<b style="font-size: 25px">Dimensional</b> (<span id="pos_pow_ng">0.00</span> Power)
 						<br>
 						<span id="pos_gals_ng">0.00</span> Antimatter Galaxies + <span id="pos_eng_ng">0.00</span> Energy -><br>
 						<span id="pos_char_ng" style="font-size: 15px">0.00</span> Charge
 					</td>
-					<td>
+					<td class="dark_yellow">
 						<b style="font-size: 25px">Replicanti</b> (<span id="pos_pow_rg">0.00</span> Power)
 						<br>
 						<span id="pos_gals_rg">0.00</span> Replicated Galaxies + <span id="pos_eng_rg">0.00</span> Energy -><br>
 						<span id="pos_char_rg" style="font-size: 15px">0.00</span> Charge
 					</td>
-					<td>
-						<b style="font-size: 25px">Extra</b> (<span id="pos_pow_eg">0.00</span> Power)
-						<br>
-						<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
-						<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
-					</td>
-					<td>
-						<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
-						<br>
-						<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
-						<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
-					</td>
-				</tr>
-				<tr>
-					<td colspan=2>
-						You have <span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge.
-					</td>
-					<td colspan=2>
-						You have <span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters.
-						<br>
-						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
-						<br>
-						<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
-						<br><br>
-						<span id="enB_pos_next"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="enB_pos1">
+					<td id="enB_pos1" colspan=2>
 						<b id="enB_pos1_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_pos1_type"></span>
 						<br>
 						Increase the quantum energy multiplier by +<span id="enB_pos1_eff" style="font-size:35px"></span>x.
 					</td>
-					<td id="enB_pos2">
+				<tr>
+				</tr>
+					<td class="dark_yellow">
+						<b style="font-size: 25px">Extragalactic</b> (<span id="pos_pow_eg">0.00</span> Power)
+						<br>
+						<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
+						<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
+					</td>
+					<td class="dark_yellow">
+						<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
+						<br>
+						<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
+						<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
+					</td>
+					<td id="enB_pos2" colspan=2>
 						<b id="enB_pos2_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_pos2_type"></span>
 						<br>
 						Raise the multiplier per ten normal Dimensions to the power of ^<span id="enB_pos2_eff" style="font-size:35px"></span>.
 					</td>
-					<td id="enB_pos3">
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos3" colspan=2>
 						<b id="enB_pos3_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_pos3_type"></span>
 						<br>
 						Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
 					</td>
-					<td id="enB_pos4">
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos4" colspan=2>
 						<b id="enB_pos4_name" style="font-size: 25px"></b>
 						<br>
 						<span id="enB_pos4_type"></span>
 						<br>
-						Boost something by <span id="enB_pos4_eff" style="font-size:35px"></span>x.
+						Before multipliers, Meta Dimension Boosts strengthen the QE formula from ^0.333 to ^<span id="enB_pos4_eff" style="font-size:35px"></span>.
+					</td>
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos5" colspan=2>
+						<b id="enB_pos5_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos5_type"></span>
+						<br>
+						Boost something by <span id="enB_pos5_eff" style="font-size:35px"></span>x.
+					</td>
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos6" colspan=2>
+						<b id="enB_pos6_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos6_type"></span>
+						<br>
+						Boost something by <span id="enB_pos6_eff" style="font-size:35px"></span>x.
+					</td>
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos7" colspan=2>
+						<b id="enB_pos7_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos7_type"></span>
+						<br>
+						Boost something by <span id="enB_pos7_eff" style="font-size:35px"></span>x.
+					</td>
+				<tr>
+				</tr>
+					<td colspan=2></td>
+					<td id="enB_pos8" colspan=2>
+						<b id="enB_pos8_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos8_type"></span>
+						<br>
+						Boost something by <span id="enB_pos8_eff" style="font-size:35px"></span>x.
 					</td>
 				</tr>
 			</table></div>

@@ -71,7 +71,7 @@ function getQuantumReq() {
 	let exp = 1
 	if (tmp.ngp3) {
 		exp = 1.2
-		if (ENTANGLED_BOOSTS.active("pos", 3)) exp /= tmp.enB.pos3
+		if (enB.active("pos", 3)) exp /= tmp.enB.pos3
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }

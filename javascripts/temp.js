@@ -90,6 +90,8 @@ function updateTemp() {
 		tmp.gameSpeed = totalSpeed
 		tmp.tickUpdate = true
 	}
+
+	dev.boosts.update()
 }
 
 function updateRedLightBoostTemp(){
@@ -195,7 +197,7 @@ function updateInfiniteTimeTemp() {
 	var x = (3 - getTickspeed().log10()) * 5 * Math.pow(10, -6)
 	if (tmp.ngp3) {
 		if (hasAch("ng3p56")) x *= 1.03
-		if (ENTANGLED_BOOSTS.active("glu", 9)) x *= tmp.enB.glu9
+		if (enB.active("glu", 9)) x *= tmp.enB.glu9
 
 		x = softcap(x, "inf_time_log")
 		if (player.dilation.active) x = softcap(x, "inf_time_log_dilation")

@@ -11,7 +11,7 @@ function getDTMultPostBRU11(){
 
 	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(tmp.rmPseudo.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
 	if (hasAch("ng3p11")) gain = gain.times(3)
-	if (ENTANGLED_BOOSTS.active("glu", 4)) gain = gain.times(tmp.enB.glu4)
+	if (enB.active("glu", 4)) gain = gain.times(tmp.enB.glu4)
 	return gain
 
 	/*
@@ -380,7 +380,7 @@ function getRebuyableDilUpgCost(id) {
 	} else if (id >= 3) {
 		if (player.meta != undefined && amount >= costGroup[2]) {
 			let costSS = Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2) / 4)
-			if (id == 3 && ENTANGLED_BOOSTS.active("glu", 3)) costSS = costSS.pow(1 / tmp.enB.glu3)
+			if (id == 3 && enB.active("glu", 3)) costSS = costSS.pow(1 / tmp.enB.glu3)
 			return cost.times(costSS)
 		}
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)

@@ -204,15 +204,21 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuarkEnergy() {
-	let x = Math.cbrt(quantumWorth.add(1).log10()) * getQuarkEnergyMult() * 1.25
+	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
+	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuarkEnergyMult() - getQuarkEnergySubMult()) * 1.25
 	tmp.qu.quarkEnergy = isNaN(x) ? 0 : x
 }
 
 function getQuarkEnergyMult() {
 	let x = 1
-	if (ENTANGLED_BOOSTS.active("glu", 1)) x += tmp.enB.glu1
-	if (ENTANGLED_BOOSTS.active("pos", 1)) x += tmp.enB.pos1
+	if (dev.boosts.tmp[1]) x += dev.boosts.tmp[1]
+	if (enB.active("glu", 1)) x += tmp.enB.glu1
+	if (enB.active("pos", 1)) x += tmp.enB.pos1
 	return x
+}
+
+function getQuarkEnergySubMult() {
+	return 0
 }
 
 function updateQuarkEnergyEffects() {
@@ -274,7 +280,7 @@ function updateGluonicBoosts() {
 	tmp.enB = {}
 
 	let data = tmp.glB
-	let enBData = ENTANGLED_BOOSTS
+	let enBData = enB
 	let gluons = tmp.qu.gluons
 
 	data.r = { mult: getGluonEffBuff(gluons.rg), sub: getGluonEffNerf(gluons.br) } //x -> x * [RG effect] - [BR effect]
@@ -312,39 +318,40 @@ function getGluonEffNerf(x) {
 	return Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(283) ? 1.8 : 2)
 }
 
-let ENTANGLED_BOOSTS = {
+let enB = {
 	buy(type) {
 		let data = this[type]
 		if (!(data.engAmt() >= data.cost())) return
 		data.set(data.amt() + 1)
 		updateGluonicBoosts()
-		ENTANGLED_BOOSTS.update(type)
+		enB.update(type)
 	},
 	maxBuy(type) {
 		let data = this[type]
 		if (!(data.engAmt() >= data.cost())) return
 		data.set(data.target())
 		updateGluonicBoosts()
-		ENTANGLED_BOOSTS.update(type)
+		enB.update(type)
 	},
 
 	has(type, x) {
 		let data = this[type]
-		return ph.did("quantum") && data.amt() >= data[x].req
+		return this[type].unl() && data.amt() >= data[x].req
 	},
 	active(type, x) {
-		let data = this[type]
+		let data = this[type][x]
 
 		if (!this.has(type, x)) return false
+		if (!tmp.enB[type + x]) return false
+		if (data.activeReq && !data.activeReq()) return false
 		if (this.mastered(type, x)) return true
 
-
 		let gluon = tmp.qu.entColor || "rg"
-		return data[x].type == gluon[0] || data[x].type == gluon[1]
+		return data.type == gluon[0] || data.type == gluon[1]
 	},
 	mastered(type, x) {
 		let data = this[type]
-		return ph.did("quantum") && data.amt() >= data[x].masReq
+		return data.amt() >= data[x].masReq
 	},
 
 	gluonEff(x) {
@@ -352,6 +359,7 @@ let ENTANGLED_BOOSTS = {
 	},
 
 	choose(x) {
+		if ((tmp.qu.entColor || "rg") == x) return
 		if (!tmp.qu.entBoosts || tmp.qu.gluons.rg.max(tmp.qu.gluons.gb).max(tmp.qu.gluons.br).eq(0)) {
 			alert("You need to get at least 1 Entangled Boost and have gluons before choosing a type!")
 			return
@@ -364,6 +372,9 @@ let ENTANGLED_BOOSTS = {
 	types: ["glu", "pos"],
 	glu: {
 		name: "Entangled",
+		unl() {
+			return tmp.quActive
+		},
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
@@ -501,13 +512,16 @@ let ENTANGLED_BOOSTS = {
 	},
 	pos: {
 		name: "Positronic",
+		unl() {
+			return pos.unl()
+		},
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Math.pow(x, 1.5) + 1
+			return Math.pow(x, 1.5) * 2e3 + 1
 		},
 		target() {
-			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) + 1)
+			return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
 		},
 
 		amt() {
@@ -524,24 +538,36 @@ let ENTANGLED_BOOSTS = {
 			return this.engAmt()
 		},
 
-		max: 4,
+		max: 8,
 		1: {
 			req: 1,
 			masReq: 3,
+			activeReq() {
+				return pos.save.eng >= 500
+			},
+			activeDispReq() {
+				return "500 Positronic Charge"
+			},
 			type: "g",
 			eff(x) {
-				return Math.cbrt(x + 1) - 1
+				return Math.sqrt(x / 1e3 + 1) - 1
 			},
 			effDisplay(x) {
 				return shorten(x)
 			}
 		},
 		2: {
-			req: 3,
-			masReq: 5,
-			type: "g",
+			req: 1,
+			masReq: 1/0,
+			activeReq() {
+				return pos.save.eng >= 100
+			},
+			activeDispReq() {
+				return "100 Positronic Charge"
+			},
+			type: "r",
 			eff(x) {
-				return Math.pow(x * 1e3 + 1, 1.25)
+				return Math.pow(x / 500 + 1, 1.25)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -550,29 +576,85 @@ let ENTANGLED_BOOSTS = {
 		3: {
 			req: 5,
 			masReq: 7,
-			type: "g",
+			activeReq() {
+				return pos.save.eng >= 2e3
+			},
+			activeDispReq() {
+				return shorten(2e3) + " Positronic Charge"
+			},
+			type: "b",
 			eff(x) {
-				return Math.log10(x / 2 + 1) / 2 + 1
+				return Math.log10(x / 2e3 + 1) / 2 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
 			}
 		},
 		4: {
-			req: 1/0,
+			req: 7,
+			masReq: 10,
+			activeReq() {
+				return pos.save.eng >= 5e3
+			},
+			activeDispReq() {
+				return shorten(5e3) + " Positronic Charge"
+			},
+			type: "r",
+			eff(x) {
+				return 1 / (2 + 1 / (player.meta.resets / 10 + 1))
+			},
+			effDisplay(x) {
+				return x.toFixed(3)
+			}
+		},
+		5: {
+			req: 9,
 			masReq: 1/0,
 			type: "r",
 			eff(x) {
-				return Math.log10(x / 2 + 1) / 2 + 1
+				return 1
 			},
 			effDisplay(x) {
-				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
+				return shorten(x)
+			}
+		},
+		6: {
+			req: 11,
+			masReq: 1/0,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		7: {
+			req: 13,
+			masReq: 1/0,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		8: {
+			req: 15,
+			masReq: 1/0,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
 			}
 		}
 	},
 
 	update(type) {
-		var data = ENTANGLED_BOOSTS
+		var data = enB
 		var typeData = data[type]
 
 		getEl("enB_" + type + "_amt").textContent = getFullExpansion(typeData.amt() || 0)
@@ -583,6 +665,8 @@ let ENTANGLED_BOOSTS = {
 		var mastered = true
 
 		for (var e = 1; e <= typeData.max; e++) {
+			var active = data.active(type, e)
+
 			if (has && !data.has(type, e)) {
 				has = false
 				getEl("enB_" + type + "_next").textContent = "Next " + typeData.name + " Boost unlocks at " + typeData[e].req + " " + typeData.name + " Boosters."
@@ -593,10 +677,10 @@ let ENTANGLED_BOOSTS = {
 			el.parentElement.style.display = has ? "" : "none"
 
 			if (has) {
-				el.parentElement.className = mastered ? "yellow" : data.active("glu", e) ? "green" : "red"
-				el.textContent = (mastered ? " Mastered" : data.active("glu", e) ? "" : "Inactive ") + " " + typeData.name + " Boost #" + e
+				el.parentElement.className = !active ? "red" : mastered ? "yellow" : "green"
+				el.textContent = (active ? "" : "Inactive ") + (mastered ? "Mastered " : "") + " " + typeData.name + " Boost #" + e
 
-				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(typeData[e].masReq) + " " + typeData.name + " Boosters to master)")
+				getEl("enB_" + type + e + "_type").innerHTML = (mastered ? "(formerly " : "(") + typeData[e].type.toUpperCase() + "-type boost" + (mastered ? ")" : " - Get " + getFullExpansion(typeData[e].masReq) + " " + typeData.name + " Boosters to master)") + (typeData[e].activeDispReq ? "<br>Requirement: " + typeData[e].activeDispReq() : "")
 			}
 		}
 	},
@@ -610,10 +694,9 @@ let ENTANGLED_BOOSTS = {
 			if (!this.has(type, i)) break
 			if (tmp.enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
 		}
-
-		if (type == "pos") getEl("enB_pos3_exp").textContent = "^" + (1 / tmp.enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp.enB.pos3)))
 	}
 }
+let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum() {
 	var u = tmp.qu.usedQuarks
@@ -663,7 +746,7 @@ function updateGluonsTab() {
 		getEl(color + colors[(c + 1) % 3]).textContent = shortenDimensions(tmp.qu.gluons[color + colors[(c + 1) % 3]])
 	}
 
-	ENTANGLED_BOOSTS.updateOnTick("glu")
+	enB.updateOnTick("glu")
 }
 
 //Display: On load
@@ -714,10 +797,15 @@ function updateGluonsTabOnUpdate(mode) {
 		}
 	}
 
-	ENTANGLED_BOOSTS.update("glu")
-	ENTANGLED_BOOSTS.update("pos") //Temp
+	enB.update("glu")
+	enB.update("pos") //Temp
 
-	getEl("masterNote").style.display = ENTANGLED_BOOSTS.mastered("glu", 1) ? "" : "none"
+	let type = tmp.qu.entColor || "rg"
+	getEl("entangle_rg").className = "gluonupgrade " + (type == "rg" ? "chosenbtn" : "rg")
+	getEl("entangle_gb").className = "gluonupgrade " + (type == "gb" ? "chosenbtn" : "gb")
+	getEl("entangle_br").className = "gluonupgrade " + (type == "br" ? "chosenbtn" : "br")
+
+	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"
 }
 
 //Quarks animation
@@ -730,8 +818,8 @@ var code
 function drawQuarkAnimation(ts){
 	centerX = canvas.width/2
 	centerY = canvas.height/2
-	maxDistance=Math.sqrt(Math.pow(centerX,2)+Math.pow(centerY,2))
-	code=player.options.theme=="Aarex's Modifications"?"e5":"99"
+	maxDistance = Math.sqrt(Math.pow(centerX,2)+Math.pow(centerY,2))
+	code = player.options.theme=="Aarex's Modifications"?"e5":"99"
 	if (getEl("quantumtab").style.display !== "none" && getEl("uquarks").style.display !== "none" && player.options.animations.quarks) {
 		qkctx.clearRect(0, 0, canvas.width, canvas.height);
 		quarks.sum = tmp.qu.colorPowers.r + tmp.qu.colorPowers.g + tmp.qu.colorPowers.b

@@ -246,3 +246,65 @@ dev.giveAllEmpowerments = function(){
 	let diff = player.ghostify.ghostlyPhotons.enpowerments - old > 0
 	$.notify("Gave " + getFullExpansion(diff) + " Light Empowerments.", diff ? "success" : "error")
 }
+
+//Placeholder for future boosts
+dev.boosts = {
+	on: false,
+	tmp: {},
+	update() {
+		let data = { on: this.on }
+
+		if (this.on) {
+			for (var i = 1; i <= 5; i++) {
+				if (this[i].unl()) {
+					if (this.tmp[i] === undefined) console.log("Activating boost #" + i)
+					data[i] = this[i].eff()
+				}
+			}
+		}
+		if (this.on != this.tmp.on) console.log("Dev boosts: " + this.on)
+
+		this.tmp = data
+	},
+	1: {
+		unl() {
+			return tmp.quActive
+		},
+		eff(x) {
+			//Quantum worth adds QE multiplier
+			if (x === undefined) x = quantumWorth
+			return Math.pow(quantumWorth.add(1).log10() + 1, 0.5)
+		},
+	},
+	2: {
+		unl() {
+			return false
+		},
+		eff(x) {
+		}
+	},
+	3: {
+		unl() {
+			
+		},
+		eff() {
+			
+		},
+	},
+	4: {
+		unl() {
+			
+		},
+		eff() {
+			
+		},
+	},
+	5: {
+		unl() {
+			
+		},
+		eff() {
+			
+		},
+	}
+}

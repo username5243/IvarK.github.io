@@ -947,7 +947,7 @@ let tsMults = {
 		let softcapEff = 2
 		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
 
-		let scLater = ENTANGLED_BOOSTS.active("glu", 10) ? tmp.enB.glu10 : 0
+		let scLater = enB.active("glu", 10) ? tmp.enB.glu10 : 0
 		if (x > 100 + scLater) x = Math.sqrt((x - scLater) * 100) + scLater
 		return Math.floor(x)
 	},

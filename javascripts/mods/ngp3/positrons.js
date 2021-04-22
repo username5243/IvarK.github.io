@@ -3,10 +3,7 @@ let POSITRONS = {
 		return {
 			amt: 0,
 			eng: 0,
-			boosts: 0,
-
-			sacBoosts: 0,
-			consumedQE: 0
+			boosts: 0
 		}
 	},
 	compile() {
@@ -25,19 +22,24 @@ let POSITRONS = {
 			tg: {sac: 0, qe: 0, pc: 0}
 		}
 		data.eng = data.gals.ng.pc + data.gals.rg.pc + data.gals.eg.pc + data.gals.tg.pc
+		data.consumedQE = data.gals.ng.qe + data.gals.rg.qe + data.gals.eg.qe + data.gals.tg.qe
 
 		if (data.sacGals) delete data.sacGals
+		if (data.sacBoosts) delete data.sacBoosts
 	},
 	unl() {
-		return pos.save && masteryStudies.has("d7")
+		return tmp.quActive && pos.save && masteryStudies.has("d7")
+	},
+	toggle() {
+		pos.save.on = !pos.save.on
+		quantum(false, true)
 	},
 	updateTab() {
-		ENTANGLED_BOOSTS.updateOnTick("pos")
+		enB.updateOnTick("pos")
 
-		let amt = getMaxConvertableMDBs()
-		getEl("sac_mdb").className = "gluonupgrade " + (amt == 0 ? "unavailablebtn" : "storebtn")
-		getEl("sac_mdb").textContent = "Convert " + shortenDimensions(amt) + " Meta-Dimension Boosts and " + shorten(0) + " Quantum Energy for +" + shortenDimensions(getPositronAmt(pos.save.sacBoosts + amt) - pos.save.amt) + " Positrons"
-		getEl("positrons_amt").textContent = shortenDimensions(pos.save.amt)
+		getEl("pos_formula").innerHTML = pos.save.on ? "0 MDBs + 0.00x QE multiplier -><br>" : ""
+		getEl("pos_toggle").textContent = pos.save.on ? "ON" : "OFF"
+		getEl("pos_amt").textContent = getFullExpansion(pos.save.amt)
 
 		let types = ["ng", "rg", "eg", "tg"]
 		let data = pos.save.gals
@@ -50,37 +52,8 @@ let POSITRONS = {
 			getEl("pos_eng_" + type).textContent = shorten(typeData.qe)
 			getEl("pos_char_" + type).textContent = shorten(typeData.pc)
 		}
+	
+		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / tmp.enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp.enB.pos3)))
 	}
 }
 let pos = POSITRONS
-
-function getMaxConvertableMDBs() {
-	let x = Math.floor(player.meta.resets / 4)
-	let diff = x - pos.save.sacBoosts
-
-	return Math.max(diff, 0)
-}
-
-function getConvertibleMDBsFromQE(x) {
-	return 0
-}
-
-function getQEFromConvertedMDBs(x) {
-	return 0
-}
-
-function sacrificeMDBs() {
-	let amt = getMaxConvertableMDBs()
-	if (amt == 0) return
-
-	pos.save.sacBoosts += amt
-	pos.save.consumedQE += getQEFromConvertedMDBs(pos.save.sacBoosts) - getQEFromConvertedMDBs(pos.save.sacBoosts - amt)
-	pos.save.amt = getPositronAmt(pos.save.sacBoosts)
-
-	player.meta.antimatter = getMetaAntimatterStart()
-	clearMetaDimensions()
-}
-
-function getPositronAmt(x) {
-	return Math.pow(x, 2)
-}
