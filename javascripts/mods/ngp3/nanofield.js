@@ -28,7 +28,7 @@ function updateNanoverseTab(){
 	getEl("quarkChargeRate").textContent = shortenDimensions(getQuarkChargeProduction())
 	getEl("quarkLoss").textContent = shortenDimensions(getQuarkLossProduction())
 	getEl("preonEnergy").textContent = shortenMoney(tmp.qu.nanofield.energy)
-	getEl("quarkEnergyRate").textContent = shortenMoney(getQuarkEnergyProduction())
+	getEl("quarkEnergyRate").textContent = shortenMoney(getQuantumEnergyProduction())
 	getEl("quarkPower").textContent = getFullExpansion(tmp.qu.nanofield.power)
 	getEl("quarkPowerThreshold").textContent = shortenMoney(tmp.qu.nanofield.powerThreshold)
 	getEl("quarkAntienergy").textContent = shortenMoney(tmp.qu.nanofield.antienergy)
@@ -90,7 +90,7 @@ function getQuarkLossProduction() {
 	return ret
 }
 
-function getQuarkEnergyProduction() {
+function getQuantumEnergyProduction() {
 	let ret = tmp.qu.nanofield.charge.sqrt()
 	if (masteryStudies.has(411)) ret = ret.times(getMTSMult(411))
 	if (masteryStudies.has(421)) ret = ret.times(getMTSMult(421))

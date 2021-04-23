@@ -329,6 +329,8 @@ function updateNGP3TempStuff() {
 		tmp.totalQE = tmp.qu.quarkEnergy
 		if (pos.unl()) tmp.totalQE -= pos.save.consumedQE || 0
 
+		pos.updateTmp()
+
 		updateGluonicBoosts()
 		updateQuarkEnergyEffects()
 	}

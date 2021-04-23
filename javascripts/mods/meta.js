@@ -29,7 +29,7 @@ function getDilationMDMultiplier() {
 function getMDMultiplier(tier) {
 	if (player.currentEternityChall === "eterc11") return new Decimal(1)
 	let ret = Decimal.pow(getPerTenMetaPower(), Math.floor(player.meta[tier].bought / 10))
-	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(player.meta.resets + 1 - tier, 0)))
+	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? pos.tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
 	//QC Rewards:
@@ -157,7 +157,7 @@ function metaBoost() {
 	let req = getMetaShiftRequirement()
 	let isNU1ReductionActive = hasNU(1) ? !tmp.qu.bigRip.active : false
 	if (!(player.meta[req.tier].bought>=req.amount)) return
-	if (isRewardEnabled(27) && req.tier > 7) {
+	if (speedrunMilestonesReached >= 27 && req.tier > 7) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()

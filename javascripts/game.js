@@ -2113,11 +2113,14 @@ function toggle_mod(id) {
 	*/
 }
 
-function show_mods() {
-	modsShown = !modsShown
+function show_mods(type = 'basic') {
+	modsShown = modsShown ? false : type
 
 	getEl("savesTab").style.display = modsShown ? "none" : ""
-	getEl("modsTab").style.display = modsShown ? "" : "none"
+	getEl("modsTab").style.display = modsShown === 'basic' ? "" : "none"
+	getEl("advModsTab").style.display = modsShown === 'adv' ? "" : "none"
+
+	getEl("newAdvSaveBtn").style.display = modsShown ? "none" : ""
 	getEl("newImportBtn").style.display = modsShown ? "none" : ""
 	getEl("cancelNewSaveBtn").style.display = modsShown ? "" : "none"
 }
@@ -3593,7 +3596,27 @@ function updateNGpp16Reward(){
 function notifyQuantumMilestones(){
 	if (typeof notifyId == "undefined") notifyId = 24
 	if (speedrunMilestonesReached > notifyId) {
-		$.notify("You have unlocked the "+timeDisplayShort(speedrunMilestones[notifyId + 1]*10)+" speedrun milestone! "+(["You now start with 20,000 eternities when going Quantum","You unlocked the Time Theorem autobuyer","You now start with all Eternity Challenges completed and\nEternity Upgrades bought","You now start with Dilation unlocked","You unlocked the Dilation option for the Eternity autobuyer","You now start with all dilation studies and\nnon-rebuyable dilation upgrades before Meta Dimensions unlocked, except the passive TT gen upgrade","You unlocked the First Meta Dimension autobuyer","You unlocked the Second Meta Dimension autobuyer","You unlocked the Third Meta Dimension autobuyer","You unlocked the Fourth Meta Dimension autobuyer","You unlocked the Fifth Meta Dimension autobuyer, and you now keep Time Studies and the passive TT gen upgrade","You unlocked the Sixth Meta Dimension autobuyer","You unlocked the Seventh Meta Dimension autobuyer","You unlocked Eighth Meta Dimension autobuyer, and\nall non-rebuyable dilation upgrades","You unlocked the Meta-Dimension Boost autobuyer","You now keep your Mastery Studies","All Meta Dimensions are instantly available for purchase on Quantum","You now start with "+shortenCosts(1e13)+" eternities","You now start with "+shortenCosts(1e25)+" meta-antimatter on reset","You can now turn on automatic replicated galaxies regardless of your second Time Study split path","Rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster","You now start with "+shortenCosts(1e100)+" dilated time on Quantum, and dilated time only resets on Quantum","You unlocked the Quantum autobuyer","You now keep your Replicanti on Eternity","You unlocked the manual mode for the Eternity autobuyer and got the sacrifice galaxy autobuyer","Your rebuyable dilation upgrade autobuyer can now buy the maximum upgrades possible","You now can buy max Meta-Dimension Boosts and start with 4 Meta-Dimension Boosts","From now on, you can gain banked infinities based on your post-crunch infinitied stat"])[notifyId]+".","success")
+		$.notify("You have gone quantum in under " + timeDisplayShort(speedrunMilestones[notifyId + 1] * 10) + "! " + ([
+			"You now start with all Eternity Challenges completed",
+			"You have unlocked the Time Theorem autobuyer",
+			"You now start with all Eternity Upgrades bought",
+			"You now start with Time Dilation unlocked",
+			"You now start with all 8 Time Dimensions",
+			"You now keep all your dilation upgrades expect the repeatables",
+			"You now keep all your time studies",
+			"You now keep all your dilation upgrades that boost TP gain",
+
+			"You now can keep all your Mastery Studies",
+			"You now can automatically buy repeatable dilation upgrades",
+			"The interval of auto-dilation upgrades and MDBs is now reduced by 5% (repeats for each following milestone)",
+			"The interval of auto-slow MDBs is now reduced by 1 tick per milestone (repeats for each following milestone)",
+			"You have unlocked the Meta-Dimension Boost autobuyer",
+			"You now can auto-dilate for each interval of eternities",
+			"???",
+			"???",
+
+			"You now keep your Mastery Studies","All Meta Dimensions are instantly available for purchase on Quantum","You now start with "+shortenCosts(1e13)+" eternities","You now start with "+shortenCosts(1e25)+" meta-antimatter on reset","You can now turn on automatic replicated galaxies regardless of your second Time Study split path","Rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster","You now start with "+shortenCosts(1e100)+" dilated time on Quantum, and dilated time only resets on Quantum","You unlocked the Quantum autobuyer","You now keep your Replicanti on Eternity","You unlocked the manual mode for the Eternity autobuyer and got the sacrifice galaxy autobuyer","Your rebuyable dilation upgrade autobuyer can now buy the maximum upgrades possible","You now can buy max Meta-Dimension Boosts and start with 4 Meta-Dimension Boosts","From now on, you can gain banked infinities based on your post-crunch infinitied stat"
+		])[notifyId]+".","success")
 		notifyId++
 	}
 }
@@ -4202,11 +4225,11 @@ function nanofieldUpdating(diff){
 	if (tmp.qu.nanofield.producingCharge) nanofieldProducingChargeUpdating(diff)
 	if (hasBosonicUpg(51)) {
 		tmp.qu.nanofield.charge = tmp.qu.nanofield.charge.add(getQuarkChargeProduction().times(diff))
-		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(getQuarkEnergyProduction().times(diff).div(100))
+		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(getQuantumEnergyProduction().times(diff).div(100))
 	}
 	if (toAddAE.gt(0)) {
 		tmp.qu.nanofield.antienergy = tmp.qu.nanofield.antienergy.add(toAddAE).min(getQuarkChargeProductionCap())
-		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuarkEnergyProduction()))
+		tmp.qu.nanofield.energy = tmp.qu.nanofield.energy.add(toAddAE.div(AErate).times(getQuantumEnergyProduction()))
 	}
 	if (toAddAE.gt(0) || hasBosonicUpg(51)) {
 		updateNextPreonEnergyThreshold()

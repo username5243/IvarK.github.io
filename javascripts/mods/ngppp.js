@@ -48,8 +48,8 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(tmp.totalQE)
-	getEl("quarkEnergyMult").textContent = shorten(getQuarkEnergyMult() - getQuarkEnergySubMult())
-	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(pos.save.consumedQE) + " QE and " + shorten(getQuarkEnergySubMult()) + "x were converted)" : ""
+	getEl("quarkEnergyMult").textContent = shorten(getQuantumEnergyMult() - getQuantumEnergySubMult())
+	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(pos.save.consumedQE) + " QE and " + shorten(getQuantumEnergySubMult()) + "x were converted)" : ""
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
 		var id = quantumTabs.tabIds[i]
@@ -787,6 +787,8 @@ function updateAutoGhosts(load) {
 	getEl("consumedPower").textContent = powerConsumed.toFixed(2)
 	isAutoGhostsSafe = data.power >= powerConsumed
 	getEl("tooMuchPowerConsumed").style.display = isAutoGhostsSafe ? "none" : ""
+
+	getEl("agbtn_pos_yes_auto").style.display = ph.did("ghostify") ? "" : "none"
 }
 
 function toggleAutoGhost(id) {

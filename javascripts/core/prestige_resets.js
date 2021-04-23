@@ -108,7 +108,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
-	player.eternityUpgrades = isRewardEnabled(3) && (!bigRip || tmp.bruActive[12]) ? [1,2,3,4,5,6] : []
+	player.eternityUpgrades = speedrunMilestonesReached >= 3 (!bigRip || tmp.bruActive[12]) ? [1,2,3,4,5,6] : []
 	player.epmult = new Decimal(1)
 	player.epmultCost = new Decimal(500)
 	resetInfDimensions(true)
@@ -132,7 +132,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
 	resetTimeDimensions(true)
-	player.timestudy = isRewardEnabled(11) && (!bigRip || tmp.bruActive[12]) ? player.timestudy : {
+	player.timestudy = speedrunMilestonesReached >= 11 && (!bigRip || tmp.bruActive[12]) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
@@ -166,7 +166,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.dead = true
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
-		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : isRewardEnabled(4) ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
+		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : speedrunMilestonesReached >= 4 ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
 		active: false,
 		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
 			(!isQC || !QCs.includes(3)) &&
@@ -176,12 +176,12 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 					: 0.5
 				)
 			: new Decimal(0),
-		dilatedTime: new Decimal(speedrunMilestonesReached > 21 && isRewardEnabled(4) && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
+		dilatedTime: new Decimal(speedrunMilestonesReached >= 22 && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
-		upgrades: speedrunMilestonesReached > 5 && isRewardEnabled(4) && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
+		upgrades: speedrunMilestonesReached >= 6 && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
 		autoUpgrades: [],
 		rebuyables: {
 			1: 0,
@@ -294,7 +294,7 @@ function resetTimeDimensions(full) {
 
 function resetEternityChallenges(bigRip, ngpp) {
 	player.eternityChalls = {}
-	if (ngpp || (bigRip ? tmp.bruActive[2] : isRewardEnabled(1))) { 
+	if (ngpp || (bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 1)) { 
 		for (let ec = 1; ec <= (ngpp ? 12 : 14); ec++) player.eternityChalls['eterc' + ec] = 5
 	}
 	resetEternityChallUnlocks()
@@ -303,12 +303,12 @@ function resetEternityChallenges(bigRip, ngpp) {
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
 	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
-	player.meta.resets = isRewardEnabled(27) ? (!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4) : 0
+	player.meta.resets = speedrunMilestonesReached >= 27 ? (!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4) : 0
 	clearMetaDimensions()
 }
 
 function resetMasteryStudies(bigRip) {
-	if (bigRip ? !tmp.bruActive[12] : speedrunMilestonesReached < 16 || !isRewardEnabled(11)) {
+	if (bigRip ? !tmp.bruActive[12] : speedrunMilestonesReached < 16) {
 		let respeccedMS = []
 		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
 		player.masteryStudies = respeccedMS

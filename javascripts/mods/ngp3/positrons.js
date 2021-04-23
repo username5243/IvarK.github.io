@@ -14,6 +14,10 @@ let POSITRONS = {
 		if (data === undefined) return
 		pos.save = data
 
+		if (!data.on) {
+			data.amt = 0
+			data.eng = 0
+		}
 		if (!data.boosts) data.boosts = 0
 		if (!data.gals) data.gals = {
 			ng: {sac: 0, qe: 0, pc: 0},
@@ -30,9 +34,34 @@ let POSITRONS = {
 	unl() {
 		return tmp.quActive && pos.save && masteryStudies.has("d7")
 	},
+	on() {
+		return pos.unl() && pos.save.on
+	},
 	toggle() {
 		pos.save.on = !pos.save.on
 		quantum(false, true)
+	},
+	updateTmp() {
+		let data = {}
+		pos.tmp = data
+
+		if (!pos.unl()) return
+
+		data["pow_ng"] = 1
+		data["pow_rg"] = 0
+		data["pow_eg"] = 0
+		data["pow_tg"] = 0
+
+		if (pos.on()) {
+			let qeMult = getQuantumEnergyMult()
+			let mdbs = Math.floor(player.meta.resets / 10)
+
+			data["sac_mdb"] = 0
+			data["sac_qem"] = 0
+		} else {
+			data["sac_mdb"] = 0
+			data["sac_qem"] = 0
+		}
 	},
 	updateTab() {
 		enB.updateOnTick("pos")
@@ -47,7 +76,7 @@ let POSITRONS = {
 			var type = types[i]
 			var typeData = pos.save.gals[type]
 
-			getEl("pos_pow_" + type).textContent = shorten(0)
+			getEl("pos_pow_" + type).textContent = shorten(pos.tmp["pow_" + type])
 			getEl("pos_gals_" + type).textContent = shorten(typeData.sac)
 			getEl("pos_eng_" + type).textContent = shorten(typeData.qe)
 			getEl("pos_char_" + type).textContent = shorten(typeData.pc)

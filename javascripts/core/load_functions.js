@@ -1960,10 +1960,6 @@ function updateNGp3DisplayStuff(){
 		getEl("ts"+t+"Desc").innerHTML=(typeof(d)=="function"?d():d)||"Unknown desc."
 	}
 	updateMasteryStudyCosts()
-	getEl('reward3disable').textContent="6 hours reward: O"+(tmp.qu.disabledRewards[3]?"FF":"N")
-	getEl('reward4disable').textContent="4.5 hours reward: O"+(tmp.qu.disabledRewards[4]?"FF":"N")
-	getEl('reward11disable').textContent="33.3 mins reward: O"+(tmp.qu.disabledRewards[11]?"FF":"N")
-	getEl('reward27disable').textContent="10 seconds reward: O"+(tmp.qu.disabledRewards[27]?"FF":"N")
 	getEl('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
@@ -2508,8 +2504,13 @@ function delete_save(saveId) {
 }
 
 var ngModeMessages=[]
-function new_game(id) {
-	show_mods()
+function new_game(type) {
+	if (!modsShown && type != "adv") {
+		alert('This button is coming soon. I recommend you to use the button on the right to make your new save.')
+		return
+	}
+
+	show_mods(type)
 	if (modsShown) return
 
 	//if (modes.ngmm == 4 && !confirm("Warning: NG-5 is currently in balance testing! It is not recommended to play this mod until a more stable version has been released. However, if you want to help test NG+5, you can disregard this message. You can contribute by talking in the NG-5 channel on the NG+3 Discord Server.")) return
@@ -2536,11 +2537,13 @@ function new_game(id) {
 	$.notify("Save created", "info")
 	localStorage.setItem(metaSaveId,btoa(JSON.stringify(metaSave)))
 	closeToolTip()
+
 	showDimTab('antimatterdimensions')
 	showStatsTab('stats')
 	showAchTab('normalachievements')
-        showChallengesTab('normalchallenges')
-        showGalTab('galUpgs')
+	showAutoTab('autobuyers')
+	showChallengesTab('normalchallenges')
+	showGalTab('galUpgs')
 	showInfTab('preinf')
 	showEternityTab('timestudies', true)
 	showQuantumTab('uquarks')

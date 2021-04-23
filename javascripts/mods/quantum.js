@@ -475,7 +475,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 					player.infmultbuyer = true
 					for (var d=0;d<8;d++) player.infDimBuyers[d] = true
 				}
-				if (isRewardEnabled(11)) unstoreTT()
+				if (speedrunMilestonesReached >= 12) unstoreTT()
 			}
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
@@ -492,7 +492,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			}
 		}
 		player.eternityBuyer.statBeforeDilation = 0
-		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&(speedrunMilestonesReached<18||!isRewardEnabled(4))) {
+		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&speedrunMilestonesReached<18) {
 			player.autoEterMode="amount"
 			updateAutoEterMode()
 		}
@@ -500,9 +500,9 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		getEl('rebuyupgauto').style.display = speedrunMilestonesReached > 6 ? "" : "none"
 		getEl('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
-		if (bigRip ? tmp.bruActive[12] : isRewardEnabled(11) && isRewardEnabled(4)) player.dilation.upgrades.push(10)
-		else tmp.qu.wasted = (!isRewardEnabled(11) || bigRip) && tmp.qu.bigRip.storedTS === undefined
-		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached > 13 && isRewardEnabled(4)) {
+		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
+		else tmp.qu.wasted = bigRip && tmp.qu.bigRip.storedTS === undefined
+		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached >= 14) {
 			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !tmp.mod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
 			if (tmp.mod.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)

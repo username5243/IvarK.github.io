@@ -205,11 +205,11 @@ function updateColorPowers() {
 //Gluons
 function gainQuarkEnergy() {
 	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
-	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuarkEnergyMult() - getQuarkEnergySubMult()) * 1.25
+	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuantumEnergyMult() - getQuantumEnergySubMult()) * 1.25
 	tmp.qu.quarkEnergy = isNaN(x) ? 0 : x
 }
 
-function getQuarkEnergyMult() {
+function getQuantumEnergyMult() {
 	let x = 1
 	if (dev.boosts.tmp[1]) x += dev.boosts.tmp[1]
 	if (enB.active("glu", 1)) x += tmp.enB.glu1
@@ -217,7 +217,8 @@ function getQuarkEnergyMult() {
 	return x
 }
 
-function getQuarkEnergySubMult() {
+function getQuantumEnergySubMult() {
+	if (pos.on()) return pos.tmp.sac_pos
 	return 0
 }
 
