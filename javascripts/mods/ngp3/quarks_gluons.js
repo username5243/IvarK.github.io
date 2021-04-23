@@ -218,7 +218,7 @@ function getQuantumEnergyMult() {
 }
 
 function getQuantumEnergySubMult() {
-	if (pos.on()) return pos.tmp.sac_pos
+	if (pos.on()) return pos.tmp.sac_qem
 	return 0
 }
 
