@@ -288,7 +288,7 @@ function preHiggsNGp3AchieveCheck(){
 	if (ranking >= 165) giveAchievement("Pulling an All-Nighter")
 	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
 	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
-	if (tmp.qu.best >= 200) giveAchievement("And the winner is...")
+	if (tmp.qu.best <= 200) giveAchievement("And the winner is...")
 	if (qMs.tmp.amt >= 24) giveAchievement("Special Relativity")
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")

@@ -309,19 +309,7 @@ function getNanoRewardReqFixed(n) {
 }
 
 function updateNextPreonEnergyThreshold(){
-	let en = tmp.qu.nanofield.energy
-	let increment = 0.5
-	let toSkip = 0
-	var check = 0
-	while (en.gte(getNanoRewardReq(increment * 2))) {
-		increment *= 2
-	}
-	while (increment >= 1) {
-		check = toSkip + increment
-		if (en.gte(getNanoRewardReq(check))) toSkip += increment
-		increment /= 2
-	}
-	tmp.qu.nanofield.power += toSkip
+	tmp.qu.nanofield.power += doBulkSpent(tmp.qu.nanofield.energy, getNanoRewardReqFixed, tmp.qu.nanofield.power).toBuy
 	tmp.qu.nanofield.powerThreshold = getNanoRewardReq(1)
 }
 

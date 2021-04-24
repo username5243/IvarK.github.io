@@ -90,13 +90,7 @@ function maxBuyDimBoosts(manual) {
 	let maxamount = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
 	
 	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || manual) {
-		let x = 1
-		let r = 0
-		while (maxamount >= getFixedShiftReq(player.resets + x * 2 - 1)) x *= 2
-		while (x >= 1) {
-			if (maxamount >= getFixedShiftReq(player.resets + x + r - 1)) r += x
-			x /= 2
-		}
+		let r = doBulkSpent(maxamount, getFixedShiftReq, player.resets, true).toBuy
 
 		if (r >= 750) giveAchievement("Costco sells dimboosts now")
 		if (r >= 1) softReset(r)
@@ -109,7 +103,7 @@ function getFixedShiftReq(n){
 	return getShiftRequirement(n - player.resets).amount
 }
 
-function getShiftRequirement(bulk) {
+function getShiftRequirement(bulk = 0) {
 	let amount = 20
 	let mult = getDimboostCostIncrease()
 	var resetNum = player.resets + bulk

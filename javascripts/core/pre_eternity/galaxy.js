@@ -191,17 +191,5 @@ function getRemoteScalingStart(galaxies) {
 function maxBuyGalaxies(manual) {
 	let max = (manual || (!player.autobuyers[10].priority && tmp.ngp3)) ? 1/0 : player.autobuyers[10].priority
 	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
-	if (max > player.galaxies) {
-		let amount = getAmount(inNC(4) || inNGM(5) ? 6 : 8)
-		let increment = 1
-		let toSkip = 0
-		let check = 0
-		while (amount >= getGalaxyRequirement(increment*2) && max > player.galaxies + increment) increment *= 2
-		while (increment >= 1) {
-			check = toSkip + increment
-			if (amount >= getGalaxyRequirement(check) && max > player.galaxies + check) toSkip += increment
-			increment /= 2
-		}
-		galaxyReset(toSkip + 1)
-	}
+	if (max > player.galaxies) galaxyReset(doBulkSpent(getAmount(inNC(4) || inNGM(5) ? 6 : 8), getGalaxyRequirement, 0, true).toBuy) //Offset function
 }

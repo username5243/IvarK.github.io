@@ -160,17 +160,8 @@ function getFixedRDPower(x){
 }
 
 function getLowerBoundDecays(branch){
-	let lvl = getBranchUpgLevel(branch, 2)
 	//getRDPower(branch)
-	var canget = 0
-	var x = 1
-	while (lvl >= getFixedRDPower(x * 2 - 1)) x *= 2
-	while (x >= 1) {
-		if (lvl >= getFixedRDPower(x + y - 1)) canget += x
-		x /= 2
-	}
-	return canget
-	// it is at least this many, and may be a few (almost certainly 1) more
+	return doBulkSpent(getBranchUpgLevel(branch, 2), getFixedRDPower, 0, true).toBuy
 }
 
 function canUnstable(branch) {
@@ -610,7 +601,7 @@ function maxTreeUpg() {
 function maxBranchUpg(branch, weak) {
 	var colors = {r: "red", g: "green", b: "blue"}
 	var bData = tmp.qu.tod[branch]
-	for (var u = (weak ? 2 : 1); u < 4; u++) {
+	for (var u = (weak ? 2 : 1); u <= 3; u++) {
 		var oldLvl = getBranchUpgLevel(branch, u)
 		var scaleStart = branchUpgCostScales[u - 1][1]
 		var cost = getBranchUpgCost(branch, u)

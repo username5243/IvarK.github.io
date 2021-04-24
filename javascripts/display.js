@@ -762,6 +762,7 @@ function ABTypeDisplay(){
 	else getEl("galaxybulk").style.display = "none"
 	if (getEternitied() >= 100 && player.meta) getEl("toggleautoetermode").style.display = "inline-block"
 	else getEl("toggleautoetermode").style.display = "none"
+	getEl("maxAutobuyerUpgrades").style.display = tmp.ngp3 ? "" : "none"
 }
 
 function infPoints2Display(){

@@ -208,32 +208,13 @@ function buyEPMult() {
 
 function buyMaxEPMult() {
 	if (player.eternityPoints.lt(player.epmultCost)) return
-	var bought=Math.round(player.epmult.ln()/Math.log(5))
-	var increment=1
-	while (player.eternityPoints.gte(getEPMultCost(bought + increment * 2 - 1))) {
-		increment *= 2
-	}
-	var toBuy = increment
-	for (p = 0; p < 53; p++) {
-		increment /= 2
-		if (increment < 1) break
-		if (player.eternityPoints.gte(getEPMultCost(bought + toBuy + increment - 1))) toBuy += increment
-	}
-	var num = toBuy
-	var newEP = player.eternityPoints
-	while (num > 0) {
-		var temp = newEP
-		var cost = getEPMultCost(bought+num-1)
-		if (newEP.lt(cost)) {
-			newEP = player.eternityPoints.sub(cost)
-			toBuy--
-		} else newEP = newEP.sub(cost)
-		if (newEP.eq(temp) || num > 9007199254740992) break
-		num--
-	}
-	player.eternityPoints = newEP
-	if (isNaN(newEP.e)) player.eternityPoints = new Decimal(0)
+	let bought = Math.round(player.epmult.ln() / Math.log(5))
+	let data = doBulkSpent(player.eternityPoints, getEPMultCost, bought)
+
+	player.eternityPoints = data.res
+	let toBuy = data.toBuy
+
 	player.epmult = player.epmult.times(Decimal.pow(5, toBuy))
-	player.epmultCost = getEPMultCost(bought+toBuy)
+	player.epmultCost = getEPMultCost(bought + toBuy)
 	getEl("epmult").innerHTML = "You gain 5 times more EP<p>Currently: "+shortenDimensions(player.epmult)+"x<p>Cost: "+shortenDimensions(player.epmultCost)+" EP"
 }

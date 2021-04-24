@@ -11,7 +11,7 @@ let POSITRONS = {
 		if (tmp.qu === undefined) return
 
 		let data = tmp.qu.pos
-		if (data === undefined) return
+		if (data === undefined) data = pos.setup()
 		pos.save = data
 
 		if (!data.on) {

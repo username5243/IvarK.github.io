@@ -29,32 +29,15 @@ dev.giveAllNGAchievements = function() {
 }
 
 dev.forceMaxDB = function(){
-	let x = .5
-	let y = 0
 	if (getShiftRequirement(0).tier < 8) {
 		player.resets += Decimal.gte(getAmount(getShiftRequirement(0).tier), getShiftRequirement(0).amount) ? 1 : 0
 		return
 	}
-	let a = getAmount(8)
-	while (getFixedShiftReq(player.resets + 2 * x - 1) <= a) x *= 2
-	while (x >= 1) {
-		if (a >= getFixedShiftReq(player.resets + x + y - 1)) y += x
-		x /= 2
-	}
-	player.resets += y
+	player.resets += doBulkSpent(getAmount(8), getShiftRequirement, 0, true).toBuy
 }
 
 dev.forceMaxTDB = function(){
-	let x = .5
-	let y = 0
-	//change to TSB
-	let a = getAmount(8)
-	while (getTickspeedBoostRequirement(2*x - 1).amount <= a) x *= 2
-	while (x >= 1) {
-		if (a >= getTickspeedBoostRequirement(x + y).amount) y += x
-		x /= 2
-	}
-	player.tickspeedBoosts += y
+	player.tickspeedBoosts += doBulkSpent(getAmount(8), getTickspeedBoostRequirement, player.resets, true).toBuy
 }
 
 dev.doubleEverything = function() {
@@ -262,7 +245,7 @@ dev.boosts = {
 				}
 			}
 		}
-		if (this.on != this.tmp.on) console.log("Dev boosts: " + this.on)
+		//if (this.on != this.tmp.on) console.log("Dev boosts: " + this.on)
 
 		this.tmp = data
 	},

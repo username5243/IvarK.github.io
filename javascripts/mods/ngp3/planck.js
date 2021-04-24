@@ -40,6 +40,8 @@ let PLANCK = {
 			pl.showTab((tabsSave.on && tabsSave.tabPl) || 'null')
 		},
 		updateTmp() {
+			if (!pl.save) return
+
 			fNu.updateTmp()
 			if (sEt.save.unl) sEt.updateTmp()
 			if (hf.save.unl) hf.updateTmp()
@@ -52,7 +54,7 @@ let PLANCK = {
 			return "250.0 PC Ranking and 50.0 Gravity Energy"
 		},
 		on() {
-			return tmp.ngpX >= 5 && pl.save.on
+			return tmp.ngpX >= 5 && pl.save && pl.save.on
 		},
 		reset() {
 			if (pl.on()) {
@@ -263,7 +265,7 @@ let PLANCK = {
 			}
 		},
 		radioactivityToMatter() {
-			return GDs.radioactivity(1) + 1
+			return 1 //GDs.radioactivity(1) + 1
 		},
 		decayGain() {
 			return player.matter.max(1).log10() / 100 + 1

@@ -417,9 +417,10 @@ function setupHTMLAndData() {
 	GDs.setupHTML()
 }
 
-function updateNewPlayer(reseted) {
-	if (reseted) {
-		var modesChosen = {
+function updateNewPlayer(mode) {
+	let modesChosen = {}
+	if (mode == "reset") {
+		modesChosen = {
 			ngm: tmp.mod.ngmR !== undefined ? 2 : tmp.mod.newGameMinusVersion !== undefined ? 1 : 0,
 			ngp: tmp.mod.ngpX ? tmp.mod.ngpX - 2 : tmp.mod.ngp4V !== undefined ? 2 : tmp.mod.newGamePlusVersion !== undefined ? 1 : 0,
 			arrows: tmp.mod.newGameExpVersion !== undefined,
@@ -436,8 +437,10 @@ function updateNewPlayer(reseted) {
 			ngc: tmp.ngC,
 			ez: tmp.mod.ez !== undefined
 		}
-	} 
-	else var modesChosen = modes
+	} else if (mode == "new") {
+		modesChosen = modes
+	}
+
 	player = {
 		money: new Decimal(modesChosen.ngmm>2?200:modesChosen.ngp>1?20:10),
 		tickSpeedCost: new Decimal(1000),
@@ -2038,10 +2041,10 @@ function toggle_mod(id) {
 		getEl("aauBtn").textContent = "AAU: OFF"
 		getEl("lsBtn").textContent = "Light Speed: OFF"
 	}
-	if ((id=="ngp"||id=="aau"||id=="ls"||((id=="ngpp"||(id=="ngud"&&subMode>1))&&!metaSave.ngp3ex))&&subMode) {
+	/*if ((id=="ngp"||id=="aau"||id=="ls"||((id=="ngpp"||(id=="ngud"&&subMode>1))&&!metaSave.ngp3ex))&&subMode) {
 		modes.ngex=0
 		getEl("ngexBtn").textContent = "Expert Mode: OFF"
-	}
+	}*/
 	if ((id=="ngpp"||id=="ngud")&&subMode) {
 		if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
 		modes.rs=0
@@ -2254,7 +2257,7 @@ function reset_game() {
 	if (!forceHardReset) if (!confirm("Do you really want to erase all your progress in this save?")) return
 	clearInterval(gameLoopIntervalId)
 	infiniteDetected = false
-	updateNewPlayer(true)
+	updateNewPlayer("reset")
 	if (!game_loaded) {
 		set_save(metaSave.current, player)
 		document.location.reload(true)
@@ -2832,121 +2835,129 @@ function updateAutobuyers() {
 		}
 	}
 
-	var b1 = true;
-	for (let i = 0; i < 8; i++) {
-		if (player.autobuyers[i].bulk < 512) b1 = false;
-	}
-	if (b1) giveAchievement("Bulked up");
+	var b1 = 0
+	for (let i = 0; i < 8; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].bulk >= 512) b1++
+	if (b1 == 8) giveAchievement("Bulked up")
 
-    	if (player.autobuyers[8].interval <= 100) {
-        	getEl("buyerBtnTickSpeed").style.display = "none"
-        	getEl("toggleBtnTickSpeed").style.display = "inline-block"
-        	maxedAutobuy++;
+	if (player.autobuyers[8].interval <= 100) {
+		getEl("buyerBtnTickSpeed").style.display = "none"
+		getEl("toggleBtnTickSpeed").style.display = "inline-block"
+		maxedAutobuy++;
 	}
 
 	if (player.autobuyers[11].interval <= 100) {
-        	getEl("buyerBtnInf").style.display = "none"
-        	maxedAutobuy++
-    	}
+		getEl("buyerBtnInf").style.display = "none"
+		maxedAutobuy++
+	}
 
-    	if (canBreakInfinity()) {
-        	getEl("postinftable").style.display = "inline-block"
-        	getEl("breaktable").style.display = "inline-block"
-        	getEl("abletobreak").style.display = "none"
+	if (canBreakInfinity()) {
+		getEl("postinftable").style.display = "inline-block"
+		getEl("breaktable").style.display = "inline-block"
+		getEl("abletobreak").style.display = "none"
 		getEl("break").style.display = "inline-block"
 	} else {
-        	getEl("postinftable").style.display = "none"
-        	getEl("breaktable").style.display = "none"
+		getEl("postinftable").style.display = "none"
+		getEl("breaktable").style.display = "none"
 		getEl("abletobreak").textContent = "You need to " + (tmp.mod.ngexV ? "complete all Normal Challenges" : "get Automated Big Crunch interval to 0.1") + " to be able to break infinity"
 		getEl("abletobreak").style.display = "block"
 		getEl("break").style.display = "none"
 		getEl("break").textContent = "BREAK INFINITY"
-    	}
-
-    	if (player.autoSacrifice.interval <= 100) {
-        	getEl("buyerBtnSac").style.display = "none"
-        	if (inNGM(2) || player.infinityUpgradesRespecced) maxedAutobuy++;
-    	}
-    	if (inNGM(2)) if (player.autobuyers[12].interval <= 100) {
-        	getEl("buyerBtnGalSac").style.display = "none"
-        	maxedAutobuy++;
-    	}
-    	if (inNGM(3)) if (player.autobuyers[13].interval <= 100) {
-        	getEl("buyerBtnTickspeedBoost").style.display = "none"
-        	maxedAutobuy++;
-    	}
-    	if (inNGM(4)) if (player.autobuyers[14].interval <= 100) {
-        	getEl("buyerBtnTDBoost").style.display = "none"
-        	maxedAutobuy++;
-    	}
-
-    	getEl("buyerBtnTickSpeed").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[8].cost + currencyEnd
-	getEl("buyerBtnDimBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[9].cost + currencyEnd
-    	getEl("buyerBtnGalaxies").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[10].cost + currencyEnd
-    	getEl("buyerBtnInf").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
-    	getEl("buyerBtnSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autoSacrifice.cost + currencyEnd
-    	if (player.autobuyers[9].interval <= 100) {
-        	if (player.infinityUpgradesRespecced && !player.autobuyers[9].bulkBought) getEl("buyerBtnDimBoost").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
-        	else getEl("buyerBtnDimBoost").style.display = "none"
-        	maxedAutobuy++;
 	}
-    	if (player.autobuyers[10].interval <= 100) {
-        	if (player.infinityUpgradesRespecced && !player.autobuyers[10].bulkBought) getEl("buyerBtnGalaxies").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
-        	else getEl("buyerBtnGalaxies").style.display = "none"
-        	maxedAutobuy++;
-    	}
-    	if (inNGM(2)) getEl("buyerBtnGalSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[12].cost + currencyEnd
-	if (inNGM(3)) getEl("buyerBtnTickspeedBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[13].cost + currencyEnd
-	if (inNGM(4)) getEl("buyerBtnTDBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[14].cost + currencyEnd
+
+	if (player.autoSacrifice.interval <= 100) {
+		getEl("buyerBtnSac").style.display = "none"
+		if (inNGM(2) || player.infinityUpgradesRespecced) maxedAutobuy++;
+	}
+
+	getEl("buyerBtnTickSpeed").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[8].cost + currencyEnd
+	getEl("buyerBtnDimBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[9].cost + currencyEnd
+	getEl("buyerBtnGalaxies").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[10].cost + currencyEnd
+	getEl("buyerBtnInf").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[11].cost + " IP"
+	getEl("buyerBtnSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autoSacrifice.cost + currencyEnd
+	if (player.autobuyers[9].interval <= 100) {
+		if (player.infinityUpgradesRespecced && !player.autobuyers[9].bulkBought) getEl("buyerBtnDimBoost").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
+		else getEl("buyerBtnDimBoost").style.display = "none"
+		maxedAutobuy++;
+	}
+	if (player.autobuyers[10].interval <= 100) {
+		if (player.infinityUpgradesRespecced && !player.autobuyers[10].bulkBought) getEl("buyerBtnGalaxies").innerHTML = "Buy bulk feature<br>Cost: "+shortenCosts(1e4)+currencyEnd
+		else getEl("buyerBtnGalaxies").style.display = "none"
+		maxedAutobuy++;
+	}
+
+	//NG-X Hell
+	if (inNGM(2)) {
+		getEl("buyerBtnGalSac").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[12].cost + currencyEnd
+		if (player.autobuyers[12].interval <= 100) {
+			getEl("buyerBtnGalSac").style.display = "none"
+			maxedAutobuy++;
+		}
+	}
+	if (inNGM(3)) {
+		getEl("buyerBtnTickspeedBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[13].cost + currencyEnd
+		if (player.autobuyers[13].interval <= 100) {
+			getEl("buyerBtnTickspeedBoost").style.display = "none"
+			maxedAutobuy++;
+		}
+	}
+	if (inNGM(4)) {
+		getEl("buyerBtnTDBoost").innerHTML = reduction + "% smaller interval <br>Cost: " + player.autobuyers[14].cost + currencyEnd
+		if (player.autobuyers[14].interval <= 100) {
+			getEl("buyerBtnTDBoost").style.display = "none"
+			maxedAutobuy++;
+		}
+	}
 
 	if (maxedAutobuy >= 9) giveAchievement("Age of Automation");
-    	if (maxedAutobuy >= getTotalNormalChallenges() + 1) giveAchievement("Definitely not worth it");
-    	if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
+	if (maxedAutobuy >= getTotalNormalChallenges() + 1) giveAchievement("Definitely not worth it");
+	if (e100autobuy >= 8) giveAchievement("Professional bodybuilder");
 
-    	for (var i=0; i<8; i++) {
-        	if (player.autobuyers[i]%1 !== 0) getEl("autoBuyer"+(i+1)).style.display = "inline-block"
-	}
-    	if (player.autobuyers[8]%1 !== 0) getEl("autoBuyerTickSpeed").style.display = "inline-block"
-    	if (player.autobuyers[9]%1 !== 0) getEl("autoBuyerDimBoost").style.display = "inline-block"
-    	if (player.autobuyers[10]%1 !== 0) getEl("autoBuyerGalaxies").style.display = "inline-block"
-    	if (player.autobuyers[11]%1 !== 0) getEl("autoBuyerInf").style.display = "inline-block"
-    	if (player.autoSacrifice%1 !== 0) getEl("autoBuyerSac").style.display = "inline-block"
 
-    	for (var i=1; i<=12; i++) {
-        	player.autobuyers[i-1].isOn = getEl(i + "ison").checked;
-    	}
-
-    	player.autoSacrifice.isOn = getEl("13ison").checked
-
-    	if (inNGM(2)) {
-        	if (player.autobuyers[12]%1 !== 0) getEl("autoBuyerGalSac").style.display = "inline-block"
-        	player.autobuyers[12].isOn = getEl("14ison").checked
-    	}
-
-    	if (inNGM(3)) {
-        	if (player.autobuyers[13]%1 !== 0) getEl("autoBuyerTickspeedBoost").style.display = "inline-block"
-        	player.autobuyers[13].isOn = getEl("15ison").checked
-    	}
-
-    	if (inNGM(4)) {
-        	if (player.autobuyers[14]%1 !== 0) getEl("autoTDBoost").style.display = "inline-block"
-        	player.autobuyers[14].isOn = getEl("16ison").checked
-    	}
-
-    	player.eternityBuyer.isOn = getEl("eternityison").checked
-
-		player.eternityBuyer.dilationMode = getEl("dilatedeternityison").checked
-        player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value),2)
-		if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
-			dilateTime(true)
-			return
+	ndAutobuyersUsed = 0
+	for (var i = 0; i < 8; i++) {
+		if (player.autobuyers[i] % 1 !== 0) {
+			getEl("autoBuyer" + (i + 1)).style.display = "inline-block"
+			player.autobuyers[i].isOn = getEl((i + 1) + "ison").checked
+			if (player.autobuyers[i].isOn) ndAutobuyersUsed++
 		}
+	}
+	getEl("maxall").style.display = ndAutobuyersUsed >= 8 && player.challenges.includes("postc8") ? "none" : ""
 
-		if (tmp.qu && tmp.qu.autobuyer) tmp.qu.autobuyer.enabled = getEl("quantumison").checked
-    	priorityOrder()
-    	ndAutobuyersUsed=0
-    	for (i = 0; i < 9; i++) if (player.autobuyers[i] % 1 !== 0 && player.autobuyers[i].isOn) ndAutobuyersUsed++
-	getEl("maxall").style.display=ndAutobuyersUsed>8&&player.challenges.includes("postc8") ? "none" : ""
+	if (player.autobuyers[8] % 1 !== 0) getEl("autoBuyerTickSpeed").style.display = "inline-block"
+	if (player.autobuyers[9] % 1 !== 0) getEl("autoBuyerDimBoost").style.display = "inline-block"
+	if (player.autobuyers[10] % 1 !== 0) getEl("autoBuyerGalaxies").style.display = "inline-block"
+	if (player.autobuyers[11] % 1 !== 0) getEl("autoBuyerInf").style.display = "inline-block"
+	for (var i = 9; i <= 12; i++) player.autobuyers[i-1].isOn = getEl(i + "ison").checked
+	if (player.autoSacrifice % 1 !== 0) {
+		getEl("autoBuyerSac").style.display = "inline-block"
+		player.autoSacrifice.isOn = getEl("13ison").checked
+	}
+	player.eternityBuyer.isOn = getEl("eternityison").checked
+
+	//NG-X
+	if (inNGM(2) && player.autobuyers[12] % 1 !== 0) {
+		getEl("autoBuyerGalSac").style.display = "inline-block"
+		player.autobuyers[12].isOn = getEl("14ison").checked
+	}
+	if (inNGM(3) && player.autobuyers[13] % 1 !== 0) {
+		getEl("autoBuyerTickspeedBoost").style.display = "inline-block"
+		player.autobuyers[13].isOn = getEl("15ison").checked
+	}
+	if (inNGM(4) && player.autobuyers[14] % 1 !== 0) {
+		getEl("autoTDBoost").style.display = "inline-block"
+		player.autobuyers[14].isOn = getEl("16ison").checked
+	}
+
+	//NG+3
+	player.eternityBuyer.dilationMode = getEl("dilatedeternityison").checked
+	player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value),2)
+	if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
+		dilateTime(true)
+		return
+	}
+
+	if (tmp.qu && tmp.qu.autobuyer) tmp.qu.autobuyer.enabled = getEl("quantumison").checked
+	priorityOrder()
 }
 
 function autoBuyerArray() {
@@ -3043,6 +3054,46 @@ function fromValue(value) {
 	value = value.replace(',','')
 	if (E[0] === "") return Decimal.fromMantissaExponent(Math.pow(10,parseFloat(E[1])%1), parseInt(E[1]))
 	return Decimal.fromString(value)
+}
+
+let MAX_BULK = Math.pow(2, 60)
+function doBulkSpent(res, scaling, bought, fixed, max) {
+	if (!max) max = MAX_BULK
+
+	//Maximize (Multiply)
+	let inc = 1
+	while (inc <= MAX_BULK && nGE(res, scaling(bought + inc * 2 - 1))) inc *= 2
+
+	//Maximize (Add)
+	let toBuy = 0
+	for (var p = 1; p < 53; p++) {
+		if (toBuy + inc <= MAX_BULK && nGE(res, scaling(bought + toBuy + inc - 1))) toBuy += inc
+		inc /= 2
+
+		if (inc < 1) break
+	}
+
+	//Sum-checking failsafe
+	if (!fixed) {
+		let num = toBuy
+		let newRes = res
+		while (num > 0 && num <= 9007199254740992) {
+			let temp = newRes
+			let cost = scaling(bought + num - 1)
+			if (newRes.lt(cost)) {
+				newRes = dS(res, cost)
+				toBuy--
+			} else newRes = dS(newRes, cost)
+			if (nE(newRes, temp)) break
+			num--
+		}
+
+		res = newRes
+		if (isNaN(newRes.e)) res = new Decimal(0)
+		else if (isNaN(newRes)) res = 0
+	}
+
+	return {res: res, toBuy: toBuy}
 }
 
 function updatePriorities() {
@@ -4983,7 +5034,7 @@ function TTpassiveGain(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.ngp3 ? (ph.did("quantum") && tmp.qu.times > 1 && qMs.tmp.amt < 28) : false, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(tmp.qu.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.quUnl && !ph.did("ghostify") && tmp.qu.best >= 10, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(tmp.qu.time)+"</b>"')
 }
 
 function updateInfinityTimes(){

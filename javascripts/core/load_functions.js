@@ -428,7 +428,7 @@ function setAarexModIfUndefined(){
 }
 
 function doNGp3Init1() {
-	tmp.ngpX = hasAch("ng3p111") && pl.save ? 5 :
+	tmp.ngpX = hasAch("ng3p111") && player.pl && pl.save ? 5 :
 		player.masterystudies !== undefined ? 3 :
 		player.meta !== undefined ? 2 :
 		0
@@ -2315,7 +2315,7 @@ function load_game(noOffline, init) {
 	}
 	if (infiniteCheck) exportInfiniteSave()
 	if (infiniteCheck || infiniteCheck2) {
-		updateNewPlayer(true)
+		updateNewPlayer("reset")
 		infiniteCheck2 = false
 	}
 	onLoad(noOffline)
@@ -2509,7 +2509,7 @@ function new_game(type) {
 
 	save_game(true)
 	clearInterval(gameLoopIntervalId)
-	updateNewPlayer()
+	updateNewPlayer("new")
 	infiniteCheck2 = false
 	var oldId=metaSave.current
 	metaSave.current=1

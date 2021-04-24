@@ -1,3 +1,4 @@
+//Number < Infinity, Decimal > Infinity
 function nP(a) {
 	if (typeof a == "string") {
 		return nN(new Decimal(a))
@@ -57,4 +58,38 @@ function nG(a,b) {
 	if (typeof(a)=="number") return false
 	if (typeof(b)=="number") return true
 	return a.gt(b)
+}
+
+function nGE(a,b) {
+	if (typeof(a)=="number"&&typeof(b)=="number") return a>=b
+	if (typeof(a)=="number") return false
+	if (typeof(b)=="number") return true
+	return a.gte(b)
+}
+
+function nE(a,b) {
+	if (typeof(a)=="number"&&typeof(b)=="number") return a==b
+	if (typeof(a)=="number") return false
+	if (typeof(b)=="number") return false
+	return a.eq(b)
+}
+
+function nLE(a,b) {
+	if (typeof(a)=="number"&&typeof(b)=="number") return a<=b
+	if (typeof(a)=="number") return true
+	if (typeof(b)=="number") return false
+	return a.lte(b)
+}
+
+function nL(a,b) {
+	if (typeof(a)=="number"&&typeof(b)=="number") return a<b
+	if (typeof(a)=="number") return true
+	if (typeof(b)=="number") return false
+	return a.lt(b)
+}
+
+//Number or Decimal
+function dS(a,b) {
+	if (typeof(a)=="number"&&typeof(b)=="number") return a-b
+	return Decimal.sub(a,b)
 }

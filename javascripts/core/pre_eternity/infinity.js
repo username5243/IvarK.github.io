@@ -457,7 +457,7 @@ function maxAutobuyerUpgrades() {
 	let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	for (var i = 0; i < order.length; i++) {
 		var id = order[i]
-		while (buyAutobuyer(id, true)) {}
+		while (buyAutobuyer(id - 1, true)) {}
 	}
 	updateAutobuyers()
 }

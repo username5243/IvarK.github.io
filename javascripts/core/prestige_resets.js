@@ -132,7 +132,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
 	resetTimeDimensions(true)
-	player.timestudy = qMs.tmp.amt < 3 || (bigRip && !tmp.bruActive[12]) ? player.timestudy : {
+	player.timestudy = (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 3) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),

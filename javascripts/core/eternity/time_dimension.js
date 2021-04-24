@@ -350,6 +350,7 @@ function buyMaxTimeDimension(tier, bulk) {
 	if (tmp.mod.maxHighestTD && tier < 8 && player["timeDimension" + (tier + 1)].bought > 0) return
 
 	let toBuy = 0
+
 	if (inNGM(4)) {
 		toBuy = Math.floor(res.div(dim.cost).times(mult - 1).add(1).log(mult))
 		if (bulk) toBuy = Math.min(toBuy, bulk)
@@ -358,26 +359,10 @@ function buyMaxTimeDimension(tier, bulk) {
 
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac != undefined) player.chall2Pow = 0
 	} else {
-		let increment = 1
-		while (player.eternityPoints.gte(timeDimCost(tier, dim.bought + increment - 1))) increment *= 2
-		while (increment>=1) {
-			if (player.eternityPoints.gte(timeDimCost(tier, dim.bought + toBuy + increment - 1))) toBuy += increment
-			increment /= 2
-		}
-		let num = toBuy
-		let newEP = player.eternityPoints
-		while (num > 0) {
-			let temp = newEP
-			let cost = timeDimCost(tier, dim.bought + num - 1)
-			if (newEP.lt(cost)) {
-				newEP = player.eternityPoints.sub(cost)
-				toBuy--
-			} else newEP = newEP.sub(cost)
-			if (newEP.eq(temp) || num > 9007199254740992) break
-			num--
-		}
-		player.eternityPoints = newEP
-		if (isNaN(newEP.e)) player.eternityPoints = new Decimal(0)
+		let data = doBulkSpent(player.eternityPoints, (x) => timeDimCost(tier, x), dim.bought)
+
+		player.eternityPoints = data.res
+		toBuy = data.toBuy
 	}
 
 	dim.amount = dim.amount.plus(toBuy)

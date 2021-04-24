@@ -171,28 +171,11 @@ function getMaxRG() {
 
 function autoBuyRG() {
 	if (!player.infinityPoints.gte(getRGCost())) return
-	let increment = 1
-	while (player.infinityPoints.gte(getRGCost(increment - 1))) increment *= 2
-	let toBuy = 0
-	while (increment >= 1) {
-		if (player.infinityPoints.gte(getRGCost(toBuy + increment - 1))) toBuy += increment
-		increment /= 2
-	}
-	let newIP = player.infinityPoints
-	let cost = getRGCost(toBuy - 1)
-	let toBuy2 = toBuy
-	while (toBuy > 0 && newIP.div(cost).lt(1e16)) {
-		if (newIP.gte(cost)) newIP = newIP.sub(cost)
-		else {
-			newIP = player.infinityPoints.sub(cost)
-			toBuy2--
-		}
-		toBuy--
-		cost = getRGCost(toBuy - 1)
-	}
-	player.replicanti.infinityPoints = newIP
-	player.replicanti.galCost = getRGCost(toBuy2, true)
-	player.replicanti.gal += toBuy2
+
+	let data = doBulkSpent(player.infinityPoints, getRGCost, 0)
+	player.replicanti.infinityPoints = data.res
+	player.replicanti.galCost = getRGCost(data.toBuy, true)
+	player.replicanti.gal += data.toBuy
 }
 
 var extraReplBase = 0
