@@ -2,7 +2,7 @@
 function resetNGUdData(onQuantum) {
 	if (!tmp.mod.newGameUpdateVersion) return
 
-	if (speedrunMilestonesReached >= 3) for (var u = 7; u <= 9; u++) player.eternityUpgrades.push(u)
+	if (qMs.tmp.amt >= 3) for (var u = 7; u <= 9; u++) player.eternityUpgrades.push(u)
 
 	player.exdilation = {
 		unspent: new Decimal(0),
@@ -16,7 +16,7 @@ function resetNGUdData(onQuantum) {
 	if (player.meta !== undefined) player.exdilation.spent[4] = new Decimal(0)
 
 	player.blackhole = {
-		unl: speedrunMilestonesReached >= 5,
+		unl: qMs.tmp.amt >= 5,
 		upgrades: {
 			dilatedTime: 0,
 			bankedInfinities: 0,
@@ -25,7 +25,7 @@ function resetNGUdData(onQuantum) {
 		},
 		power: new Decimal(0)
 	}
-	if (speedrunMilestonesReached < 5) {
+	if (qMs.tmp.amt < 5) {
 		getEl("blackholediv").style.display = "none"
 		getEl("blackholeunlock").style.display = "inline-block"
 	}

@@ -629,7 +629,7 @@ function updateMasteryStudyButtons() {
 }
 
 function updateMasteryStudyTextDisplay() {
-	if (!player.masterystudies) return
+	if (!tmp.ngp3) return
 	getEl("costmult").textContent = shorten(masteryStudies.costMult)
 	getEl("totalmsbought").textContent = masteryStudies.bought
 	getEl("totalttspent").textContent = shortenDimensions(masteryStudies.ttSpent)

@@ -87,7 +87,7 @@ button, div.storebtn {
 	color: #0072e5 !important
 }
 
-.unavailablebtn, .infinistorebtnlocked, .lockedchallengesbtn, .newdimlocked, .timestudylocked, .milestonerewardlocked, .dilationupglocked, .dilationupgrebuyablelocked, .nfRewardlocked, .eternitychallengestudylocked {
+.unavailablebtn, .infinistorebtnlocked, .lockedchallengesbtn, .newdimlocked, .timestudylocked, .milestonerewardlocked, .qMs_locked, .dilationupglocked, .dilationupgrebuyablelocked, .nfRewardlocked, .eternitychallengestudylocked {
 	background-color: #999999 !important
 }
 
@@ -377,8 +377,9 @@ button, div.storebtn {
 	color: #00e5e5 !important
 }
 
-#metadimensions table #quantum.storebtn, .quantumbtn, #pastquantums, #dilstudy8.dilationupgbought, #qctabbtn, #qcsbtn, #dilstudy9.dilationupgbought, #pccompletionsbtn {
+#metadimensions table #quantum.storebtn, .quantumbtn, #pastquantums, .qMs_reward, #dilstudy8.dilationupgbought, #qctabbtn, #qcsbtn, #dilstudy9.dilationupgbought, #pccompletionsbtn {
 	background-color: #009900 !important;
+	border-color: #009900 !important;
 	color: #191919 !important
 }
 

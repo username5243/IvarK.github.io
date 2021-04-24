@@ -1623,8 +1623,17 @@ button {
     background: #737373;
 }
 
+.milestoneText {
+    font-size: 20px;
+}
+
+.milestoneTextSmall {
+    font-size: 15px;
+}
+
 .milestonereward,
-.galStonereward {
+.galStonereward,
+.qMs_reward {
     width: 250px;
     height: 60px;
     color: black;
@@ -1638,7 +1647,20 @@ button {
     font-size: 12px;
 }
 
-.milestonerewardlocked {
+.galStonereward {
+    border: 1px solid #1E90FF !important;
+    background-color: #4169E1 !important;
+}
+
+.qMs_reward {
+    border: 1px solid #32c832 !important;
+    background-color: #0a640a !important;
+    color: #32c832;
+}
+
+.milestonerewardlocked,
+.galStonerewardlocked,
+.qMs_locked {
     width: 250px;
     height: 60px;
     color: black;
@@ -1653,30 +1675,11 @@ button {
 }
 
 .galStonerewardlocked {
-    width: 250px;
-    height: 60px;
-    color: black;
-    background: #696969;
-    font-weight: bold;
-    font-family: Typewriter;
     border: 1px solid #1E90FF;
-    transition-duration: 0.2s;
-    border-radius: 4px;
-    vertical-align: top;
-    font-size: 12px;
 }
 
-.galStonereward {
-    border: 1px solid #1E90FF !important;
-    background-color: #4169E1 !important;
-}
-
-.milestoneText, .galStonesText {
-    font-size: 20px;
-}
-
-.milestoneTextSmall {
-    font-size: 15px;
+.qMs_locked {
+    border: 1px solid #0a640a;
 }
 
 #production {

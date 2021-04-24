@@ -50,7 +50,7 @@ function nanofieldResetOnQuantum(){
 
 function doQuantumResetStuff(bigRip, isQC, QCs){
 	var headstart = !tmp.ngp3
-	var oheHeadstart = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 1
+	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
 	var turnSomeOn = !bigRip || tmp.bruActive[1]
 	var bigRipChanged = tmp.ngp3 && bigRip != player.quantum.bigRip.active
@@ -104,11 +104,11 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : speedrunMilestonesReached > 17 ? 1e13 : oheHeadstart ? 100 : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : qMs.tmp.amt > 17 ? 1e13 : oheHeadstart ? 100 : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
-	player.eternityUpgrades = speedrunMilestonesReached >= 3 (!bigRip || tmp.bruActive[12]) ? [1,2,3,4,5,6] : []
+	if (qMs.tmp.amt < 3 || (bigRip && !tmp.bruActive[12])) player.eternityUpgrades = []
 	player.epmult = new Decimal(1)
 	player.epmultCost = new Decimal(500)
 	resetInfDimensions(true)
@@ -132,7 +132,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 		auto: bigRipChanged ? [turnSomeOn, turnSomeOn, turnSomeOn] : oheHeadstart ? player.replicanti.auto : [false, false, false]
 	}
 	resetTimeDimensions(true)
-	player.timestudy = speedrunMilestonesReached >= 11 && (!bigRip || tmp.bruActive[12]) ? player.timestudy : {
+	player.timestudy = qMs.tmp.amt < 3 || (bigRip && !tmp.bruActive[12]) ? player.timestudy : {
 		theorem: 0,
 		amcost: new Decimal("1e20000"),
 		ipcost: new Decimal(1),
@@ -166,7 +166,9 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.dead = true
 	if (!player.dilation.bestTP) player.dilation.bestTP = player.dilation.tachyonParticles
 	player.dilation = {
-		studies: bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) : speedrunMilestonesReached >= 4 ? (speedrunMilestonesReached >= 6 ? [1, 2, 3, 4, 5, 6] : speedrunMilestonesReached >= 5 ? [1, 2, 3, 4, 5] : [1]) : [],
+		studies:
+			bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) :
+			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : qMs.tmp.amt >= 5 ? [1] : [],
 		active: false,
 		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
 			(!isQC || !QCs.includes(3)) &&
@@ -175,19 +177,19 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 					(player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (player.ghostify.milestones >= 4 && !isQC) ? 1
 					: 0.5
 				)
-			: new Decimal(0),
-		dilatedTime: new Decimal(speedrunMilestonesReached >= 22 && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
+			: new Decimal(qMs.tmp.amt >= 5 ? 1 : 0),
+		dilatedTime: new Decimal(qMs.tmp.amt >= 22 && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
 		freeGalaxies: 0,
-		upgrades: speedrunMilestonesReached >= 6 && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
+		upgrades: qMs.tmp.amt >= 7 && (!bigRip || tmp.bruActive[12]) ? [4,5,6,7,8,9,"ngpp1","ngpp2"] : [],
 		autoUpgrades: [],
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: speedrunMilestonesReached >= 8 ? player.dilation.rebuyables[3] : 0,
-			4: speedrunMilestonesReached >= 8 ? player.dilation.rebuyables[4] : 0,
+			3: qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0,
+			4: qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
 		}
 	}
 	resetNGUdData(true)
@@ -294,7 +296,7 @@ function resetTimeDimensions(full) {
 
 function resetEternityChallenges(bigRip, ngpp) {
 	player.eternityChalls = {}
-	if (ngpp || (bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 1)) { 
+	if (ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1)) { 
 		for (let ec = 1; ec <= (ngpp ? 12 : 14); ec++) player.eternityChalls['eterc' + ec] = 5
 	}
 	resetEternityChallUnlocks()
@@ -303,12 +305,12 @@ function resetEternityChallenges(bigRip, ngpp) {
 function doMetaDimensionsReset(bigRip, headstart, isQC) {
 	player.meta.antimatter = getMetaAntimatterStart(bigRip)
 	if (!headstart) player.meta.bestAntimatter = false ? Decimal.max(player.meta.antimatter, player.meta.bestOverQuantums) : player.meta.antimatter
-	player.meta.resets = speedrunMilestonesReached >= 27 ? (!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4) : 0
+	player.meta.resets = qMs.tmp.amt >= 19 ? (!isQC && player.ghostify.milestones >= 5 && (bigRip !== undefined || bigRip == tmp.qu.bigRip.active) ? player.meta.resets : 4) : 0
 	clearMetaDimensions()
 }
 
 function resetMasteryStudies(bigRip) {
-	if (bigRip ? !tmp.bruActive[12] : speedrunMilestonesReached < 16) {
+	if (bigRip ? !tmp.bruActive[12] : qMs.tmp.amt < 10) {
 		let respeccedMS = []
 		for (var d = 7; d <= 13; d++) if (player.masterystudies.includes("d" + d)) respeccedMS.push("d" + d)
 		player.masteryStudies = respeccedMS
@@ -380,7 +382,7 @@ function doEternityResetStuff(layer = 4) {
 		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
 	}
 
-	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (qMs.tmp.amt < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0

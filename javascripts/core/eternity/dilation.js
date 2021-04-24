@@ -588,7 +588,7 @@ function getBaseDilGalaxyEff() {
 }
 
 var failsafeDilateTime = false
-function startDilatedEternity(auto, shortcut) {
+function dilateTime(auto, shortcut) {
 	if (shortcut && player.dilation.active) return
 	if (failsafeDilateTime) return
 	if (!player.dilation.studies.includes(1)) return

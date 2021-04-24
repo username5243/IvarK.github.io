@@ -140,7 +140,7 @@
 					<td><button class="secondarytabbtn" onclick="showEternityTab('timestudies')">Time studies</button></td>
 					<td id="masterystudyunlock"><button class="secondarytabbtn" onclick="showEternityTab('masterystudies')">Mastery studies</button></td>
 					<td><button class="secondarytabbtn" onclick="showEternityTab('eternityupgrades')">Eternity upgrades</button></td>
-					<td><button class="secondarytabbtn" onclick="showEternityTab('milestones')">Eternity milestones</button></td>
+					<td><button class="secondarytabbtn" onclick="showEternityTab('milestones')">Milestones</button></td>
 					<td id="dilationTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('dilation')">Time Dilation</button></td>
 					<td id="blackHoleTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('blackhole')">Black hole</button></td>
 					<td id="breakEternityTabbtn"><button class="secondarytabbtn" onclick="showEternityTab('breakEternity')">Break Eternity</button></td>
@@ -736,7 +736,7 @@
 				<table>
 					<tr>
 						<td>
-						  <button id="enabledilation" class="dilationbtn" onclick="startDilatedEternity()">Dilate time.</button>
+						  <button id="enabledilation" class="dilationbtn" onclick="dilateTime()">Dilate time.</button>
 						</td>
 						<td id="reversedilationdiv" style='display:none'>
 						  <button id="reversedilation" class="dilationbtn" style='font-size: 0.7rem' onclick="reverseDilation()"></button>
@@ -1536,7 +1536,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 10)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 11)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2228,10 +2228,10 @@
 								<div id="I don't have enough fuel!" class="achievement achievementlocked" style="background-image: url(images/105.png)"><br></div>
 							</td>
 							<td>
-								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities, and completing Eternity Challenges doesn't respec studies."><br></div>
+								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities."><br></div>
 							</td>
 							<td>
-								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions and each time you buy '3x TP' upgrade, your TP amount is increased by 3x."><br></div>
+								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
 							</td>
 							<td>
 								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades."><br></div>
@@ -2240,7 +2240,7 @@
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)" ach-tooltip="Have 900 galaxies without unlocking Time Dilation. Reward: You permanently keep your banked Infinities, and bank 5% of your Eternities on Quantum."><br></div>
 							</td>
 							<td>
-								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)" ach-tooltip="Quantum in under 30 seconds."><br></div>
+								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)" ach-tooltip="Quantum in under 20 seconds."><br></div>
 							</td>
 							<td>
 								<div id="Old age" class="achievement achievementlocked" style="background-image: url(images/111.png)"><br></div>
@@ -3822,24 +3822,24 @@
 			<div class="galaxytab" id="galStones">
 				<table class="table" align="center" style="margin: auto" id="galStones">
 					<tr>
-						<td class="galStonesText">1 Sacrifice:</td>
-						<td class="galStonesText">2 Sacrifices:</td>
+						<td class="milestoneText">1 Sacrifice:</td>
+						<td class="milestoneText">2 Sacrifices:</td>
 					</tr>
 					<tr>
 						<td><button class="galStonerewardlocked" id="Greward0">Unlock the Third Infinity Dimension</button></td>
 						<td><button class="galStonerewardlocked" id="Greward1">Start with 20 Paradoxes on Sacrifice</button></td>
 					</tr>
 					<tr>
-						<td class="galStonesText">5 Sacrifices:</td>
-						<td class="galStonesText">10 Sacrifices:</td>
+						<td class="milestoneText">5 Sacrifices:</td>
+						<td class="milestoneText">10 Sacrifices:</td>
 					</tr>
 					<tr>
 						<td><button class="galStonerewardlocked" id="Greward2">You keep rebuyable Paradox upgrades on Sacrifice</button></td>
 						<td><button class="galStonerewardlocked" id="Greward3">Start with 25 Paradoxes per Sacrifice performed (Disabled in Challenges)</button></td>
 					</tr>
 					<tr>
-						<td class="galStonesText">25 Sacrifcies:</td>
-						<td class="galStonesText">50 Sacrifices:</td>
+						<td class="milestoneText">25 Sacrifcies:</td>
+						<td class="milestoneText">50 Sacrifices:</td>
 					</tr>
 					<tr>
 						<td><button class="galStonerewardlocked" id="Greward4">Unlock Paradox Dimensions</button></td>
@@ -4528,7 +4528,7 @@
 					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
 					<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
 					<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Speedrun Milestones</button></td>
+					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
 				</tr>
 			</table>
 			<div class='quantumtab' id='uquarks'>
@@ -4715,46 +4715,114 @@
 				</tr>
 			</table></div>
 			<div id="speedruns" class="quantumtab">
-				<div>Get your best quantum time faster than the requirement for a reward!</div>
-				<div>Note: The new speedrun milestones haven't been implemented yet! Check back later.</div>
-				<table style="margin: auto">
-					<tr id="speedrunRow1">
-						<td><div id="speedrunMilestone1" style="background-image: url(images/quantum_speedruns/1.png)" ach-tooltip="Reward: Start with all Eternity Challenges completed."></div></td>
-						<td><div id="speedrunMilestone2" style="background-image: url(images/quantum_speedruns/2.png)" ach-tooltip="Reward: Unlock the Time Theorem autobuyer."></div></td>
-						<td><div id="speedrunMilestone3" style="background-image: url(images/quantum_speedruns/3.png)" ach-tooltip="Reward: Start with all Eternity Upgrades bought."></div></td>
-						<td><div id="speedrunMilestone4" style="background-image: url(images/quantum_speedruns/4.png)" ach-tooltip="Reward: Start with Time Dilation unlocked."></div></td>
-						<td><div id="speedrunMilestone5" style="background-image: url(images/quantum_speedruns/5.png)" ach-tooltip="Reward: Start with all 8 Time Dimensions."></div></td>
-						<td><div id="speedrunMilestone6" style="background-image: url(images/quantum_speedruns/6.png)" ach-tooltip="Reward: Keep all your dilation upgrades expect the repeatables."></div></td>
-						<td><div id="speedrunMilestone7" style="background-image: url(images/quantum_speedruns/7.png)" ach-tooltip="Reward: Keep all your time studies."></div></td>
-						<td><div id="speedrunMilestone8" style="background-image: url(images/quantum_speedruns/8.png)" ach-tooltip="Reward: Keep all your dilation upgrades that boost TP gain."></div></td>
+				<table class="qTable">
+					<tr>
+						<td>
+							<b style="font-size: 25px">Speedrun</b><br>
+							Your best quantum time is <span id="qMs_sr_target" style="font-size: 15px">0 seconds</span>,<br>
+							which giving you <span id="qMs_sr_points" style="font-size: 15px">0</span> Milestone Points.
+						</td>
+						<td>
+							<b style="font-size: 25px">Energetic</b><br>
+							Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>,<br>
+							which giving you <span id="qMs_en_points" style="font-size: 15px">0</span> Milestone Points.
+						</td>
+						<td style="visibility: hidden">
+							<b style="font-size: 25px">Challenging</b><br>
+							You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges,<br>
+							which giving you <span id="qMs_ch_points" style="font-size: 15px">0</span> Milestone Points.
+						</td>
 					</tr>
-					<tr id="speedrunRow2">
-						<td><div id="speedrunMilestone9" style="background-image: url(images/quantum_speedruns/9.png)" ach-tooltip="Reward: Keep all your Mastery Studies."></div></td>
-						<td><div id="speedrunMilestone10" style="background-image: url(images/quantum_speedruns/10.png)" ach-tooltip="Reward: You can automatically buy repeatable dilation upgrades."</div></td>
-						<td><div id="speedrunMilestone11" style="background-image: url(images/quantum_speedruns/11.png)" ach-tooltip="Reward: Reduce the interval of auto-dilation upgrades and MDBs by 5%. (repeats for each following milestone)"></div></td>
-						<td><div id="speedrunMilestone12" style="background-image: url(images/quantum_speedruns/12.png)" ach-tooltip="Reward: Reduce the interval of auto-slow MDBs by 1 tick per milestone. (repeats for each following milestone)"></div></td>
-						<td><div id="speedrunMilestone13" style="background-image: url(images/quantum_speedruns/13.png)" ach-tooltip="Reward: Unlock the Meta-Dimension Boost autobuyer."></div></td>
-						<td><div id="speedrunMilestone14" style="background-image: url(images/quantum_speedruns/14.png)" ach-tooltip="Reward: You can auto-dilate for each interval of eternities."></div></td>
-						<td><div id="speedrunMilestone15" style="background-image: url(images/quantum_speedruns/15.png)" ach-tooltip="Reward: ???"></div></td>
-						<td><div id="speedrunMilestone16" style="background-image: url(images/quantum_speedruns/16.png)" ach-tooltip="Reward: ???"></div></td>
+					<tr>
+						<td class="green" colspan=3>
+							You have got a total of <span id="qMs_points" style="font-size: 35px">0</span> Milestone Points!
+						</td>
 					</tr>
-					<tr id="speedrunRow3">
-						<td><div id="speedrunMilestone17" style="background-image: url(images/quantum_speedruns/17.png)" ach-tooltip="Reward: All Meta Dimensions are available for purchase on Quantum."></div></td>
-						<td><div id="speedrunMilestone18" style="background-image: url(images/quantum_speedruns/18.png)"></div></td>
-						<td><div id="speedrunMilestone19" style="background-image: url(images/quantum_speedruns/19.png)"></div></td>
-						<td><div id="speedrunMilestone20" style="background-image: url(images/quantum_speedruns/20.png)" ach-tooltip="Reward: ???"></div></td>
-						<td><div id="speedrunMilestone21" style="background-image: url(images/quantum_speedruns/21.png)" ach-tooltip="Reward: The rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster."></div></td>
-						<td><div id="speedrunMilestone22" style="background-image: url(images/quantum_speedruns/22.png)"></div></td>
-						<td><div id="speedrunMilestone23" style="background-image: url(images/quantum_speedruns/23.png)" ach-tooltip="Reward: Unlock the Quantum autobuyer."></div></td>
-						<td><div id="speedrunMilestone24" style="background-image: url(images/quantum_speedruns/24.png)" ach-tooltip="Reward: Replicanti does not reset on Eternity."></div></td>
+				</table>
+				<br>
+				<table class="table" align="center" style="margin: auto" id="qMs_rewards">
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_1"></td>
+						<td class="milestoneText" id="qMs_req_2"></td>
+						<td class="milestoneText" id="qMs_req_3"></td>
+						<td class="milestoneText" id="qMs_req_4"></td>
 					</tr>
-					<tr id="speedrunRow4">
-						<td colspan=2></td>
-						<td><div id="speedrunMilestone25" style="background-image: url(images/quantum_speedruns/25.png)" ach-tooltip="Reward: Unlock the manual mode for the Eternity autobuyer and get the sacrifice galaxy autobuyer."></div></td>
-						<td><div id="speedrunMilestone26" style="background-image: url(images/quantum_speedruns/26.png)" ach-tooltip="Reward: The rebuyable dilation upgrade autobuyer can buy the maximum upgrades possible."></div></td>
-						<td><div id="speedrunMilestone27" style="background-image: url(images/quantum_speedruns/27.png)" ach-tooltip="Reward: You can buy max Meta-Dimension Boosts, and start with 4 Meta-Dimension Boosts."></div></td>
-						<td><div id="speedrunMilestone28" style="background-image: url(images/quantum_speedruns/28.png)" ach-tooltip="Reward: You gain banked infinities based on your post-crunch infinitied stat."></div></td>
-						<td colspan=2></td>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_1" style="font-size: 11px"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_2"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_3"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_4"></button></td>
+					</tr>
+
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_5"></td>
+						<td class="milestoneText" id="qMs_req_6"></td>
+						<td class="milestoneText" id="qMs_req_7"></td>
+						<td class="milestoneText" id="qMs_req_8"></td>
+					</tr>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_5" style="font-size: 11px"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_6"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_7"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_8"></button></td>
+					</tr>
+
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_9"></td>
+						<td class="milestoneText" id="qMs_req_10"></td>
+						<td class="milestoneText" id="qMs_req_11"></td>
+						<td class="milestoneText" id="qMs_req_12"></td>
+					</tr>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_9"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_10"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_11"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_12" style="font-size: 11px"></button></td>
+					</tr>
+
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_13"></td>
+						<td class="milestoneText" id="qMs_req_14"></td>
+						<td class="milestoneText" id="qMs_req_15"></td>
+						<td class="milestoneText" id="qMs_req_16"></td>
+					</tr>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_13" style="font-size: 11px"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_14"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_15" style="font-size: 11px"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_16"></button></td>
+					</tr>
+
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_17"></td>
+						<td class="milestoneText" id="qMs_req_18"></td>
+						<td class="milestoneText" id="qMs_req_19"></td>
+						<td class="milestoneText" id="qMs_req_20"></td>
+					</tr>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_17"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_18"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_19"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_20"></button></td>
+					</tr>
+
+					<!-- NEXT ROW -->
+					<tr>
+						<td class="milestoneText" id="qMs_req_21"></td>
+						<td class="milestoneText" id="qMs_req_22"></td>
+						<td class="milestoneText" id="qMs_req_23"></td>
+						<td class="milestoneText" id="qMs_req_24"></td>
+					</tr>
+					<tr>
+						<td><button class="qMs_locked" id="qMs_reward_21"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_22"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_23"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_24"></button></td>
 					</tr>
 				</table>
 			</div>
@@ -5893,7 +5961,7 @@
 <script type="text/javascript" src="javascripts/mods/ngp3/positrons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/planck.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quantum_challenges.js"></script>
-<script type="text/javascript" src="javascripts/mods/ngp3/quantum_speedruns.js"></script>
+<script type="text/javascript" src="javascripts/mods/ngp3/quantum_milestones.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/quarks_gluons.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/replicants.js"></script>
 <script type="text/javascript" src="javascripts/mods/ngp3/tod.js"></script>

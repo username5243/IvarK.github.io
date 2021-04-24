@@ -277,7 +277,7 @@ function startEternityChallenge(n) {
 		player.dilation.active = false
 		if (tmp.ngp3 && ph.did("quantum")) updateColorCharge()
 	}
-	if (speedrunMilestonesReached < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	if (qMs.tmp.amt < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	extraReplGalaxies = 0
 	resetReplicantiUpgrades()
@@ -430,7 +430,7 @@ function doCheckECCompletionStuff() {
 		*/
 
 		//Special
-		if (hasAch("ng3p12")) {
+		if (qMs.tmp.amt >= 1) {
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
 				masteryStudies.ecReqsStored[ecNum] = masteryStudies.ecReqs[ecNum]()

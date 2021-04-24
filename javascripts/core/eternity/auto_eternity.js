@@ -16,16 +16,14 @@ function updateAutoEterMode() {
 		modeText = "X times eternitied"
 		modeCond = modeText + ":"
 	} else if (player.autoEterMode == "exponent") {
-		modeText = "Power-Raising"
+		modeText = "eternitied^X"
 		modeCond = "Wait until your gain reaches ^x of total eternities: "
-	} else if (player.autoEterMode == "manual") {
-		modeText = "dilate only"
-		modeCond = "Does nothing to eternity"
-		getEl("priority13").disabled = true
-		getEl("autoEterValue").disabled = true
-	} else {
+	} else if (player.autoEterMode == "amount") {
 		modeText = "amount"
 		modeCond = "Amount of EP to wait until reset:"
+	} else {
+		modeText = "[DELETED]"
+		modeCond = "Click the auto-eternity mode!"
 	}
 	getEl("toggleautoetermode").textContent = "Auto eternity mode: " + modeText
 	getEl("eterlimittext").textContent = modeCond
@@ -35,9 +33,8 @@ function toggleAutoEterMode() {
 	if (player.autoEterMode == "amount") player.autoEterMode = "time"
 	else if (player.autoEterMode == "time") player.autoEterMode = "relative"
 	else if (player.autoEterMode == "relative") player.autoEterMode = "relativebest"
-	else if (player.autoEterMode == "relativebest" && hasAch("ng3p51")) player.autoEterMode = "eternitied"
+	else if (player.autoEterMode == "relativebest" && qMs.tmp.amt >= 4) player.autoEterMode = "eternitied"
 	else if (player.autoEterMode == "eternitied") player.autoEterMode = "exponent"
-	else if ((player.autoEterMode == "peak" || player.autoEterMode == "exponent") && speedrunMilestonesReached > 24) player.autoEterMode = "manual"
 	else if (player.autoEterMode) player.autoEterMode = "amount"
 	updateAutoEterMode()
 }
@@ -66,7 +63,7 @@ function doAutoEterTick() {
 			feedBlackholeMax()
 		}
 	}
-	if (player.autoEterOptions.tt && !player.dilation.upgrades.includes(10) && speedrunMilestonesReached > 1) maxTheorems()
+	if (player.autoEterOptions.tt && !player.dilation.upgrades.includes(10) && qMs.tmp.amt >= 2) maxTheorems()
 }
 
 var apLoaded = false

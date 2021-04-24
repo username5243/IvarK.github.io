@@ -628,7 +628,6 @@ function doNGP3NewPlayerStuff(){
                 gb: 0,
                 br: 0
         }
-        player.eternityBuyer.dilationMode = false
         player.eternityBuyer.statBeforeDilation = 0
         player.eternityBuyer.dilationPerAmount = 10
         player.eternityBuyer.dilMode = "amount"
@@ -805,7 +804,7 @@ function getGhostifyOnNewNGP3Data(){
 }
 
 function doInitNGp2NOT3Stuff(){
-	if (tmp.mod.newGamePlusPlusVersion === undefined && !player.masterystudies) { 
+	if (tmp.mod.newGamePlusPlusVersion === undefined && !tmp.ngp3) { 
 		if (player.dilation.rebuyables[4] !== undefined) {
 			var migratedUpgrades = []
 			var v2_1check=player.version>13
@@ -935,7 +934,7 @@ function doQuantumRestore(){
         if (tmp.mod.newGamePlusPlusVersion < 2.9013) if (tmp.mod.quantumConf===undefined||tmp.qu.times<1) tmp.mod.quantumConf=true
         if (tmp.mod.newGamePlusPlusVersion < 2.90142) tmp.mod.newGamePlusPlusVersion = 2.90142
         if (tmp.mod.newGame3PlusVersion < 1.01) tmp.mod.dbPower = new Decimal(getDimensionBoostPower())
-        if ((tmp.mod.newGame3PlusVersion && !player.masterystudies) || tmp.mod.newGame3PlusVersion < 1.02) player.masterystudies = []
+        if ((tmp.mod.newGame3PlusVersion && !tmp.ngp3) || tmp.mod.newGame3PlusVersion < 1.02) player.masterystudies = []
         if (tmp.mod.newGame3PlusVersion < 1.21) player.replicanti.chanceCost = Decimal.pow(1e15, player.replicanti.chance * 100 + 9)
         if ((quantumRestore && player.masterystudies) || tmp.mod.newGame3PlusVersion < 1.5) {
                 tmp.qu.usedQuarks = {
@@ -961,7 +960,6 @@ function doQuantumRestore(){
 function doNGp3v15tov199(){
         if (tmp.mod.newGame3PlusVersion < 1.511) if (player.autoEterMode !== undefined) player.autoEterMode = "amount"
         if (tmp.mod.newGame3PlusVersion < 1.8) {
-                player.eternityBuyer.dilationMode = false
                 player.eternityBuyer.statBeforeDilation = 0
                 player.eternityBuyer.dilationPerAmount = 10
                 tmp.qu.autobuyer = {
@@ -1493,7 +1491,7 @@ function doERSv0tov102(){
 }
 
 function doNGExpv0tov111(){
-        if (tmp.mod.newGameExpVersion === undefined && !player.masterystudies && Decimal.gt(player.infMultCost,10) && Math.round(Decimal.div(player.infMultCost,10).log(4)*1e3)%1e3<1) tmp.mod.newGameExpVersion = 1
+        if (tmp.mod.newGameExpVersion === undefined && !tmp.ngp3 && Decimal.gt(player.infMultCost,10) && Math.round(Decimal.div(player.infMultCost,10).log(4)*1e3)%1e3<1) tmp.mod.newGameExpVersion = 1
         if (tmp.mod.newGameExpVersion < 1.11) tmp.mod.newGameExpVersion = 1.11
 }
 
@@ -2090,7 +2088,7 @@ function onLoad(noOffline) {
 	if (tmp.qu == undefined || tmp.mod.newGamePlusPlusVersion == undefined) {
 		tmp.quActive = false
 		tmp.quUnl = false
-		speedrunMilestonesReached = 0
+		qMs.tmp.amt = 0
 	}
 	ghostifyDenied = 0
 	setEverythingPreNGp3onLoad()
@@ -2177,34 +2175,28 @@ function onLoad(noOffline) {
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
 	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
 	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
-	getEl('dilationmode').style.display=speedrunMilestonesReached>4?"":"none"
-	getEl('rebuyupgmax').style.display=speedrunMilestonesReached<26&&player.masterystudies?"":"none"
-	getEl('rebuyupgauto').style.display=speedrunMilestonesReached>6?"":"none"
-	getEl('metaboostauto').style.display=speedrunMilestonesReached>14?"":"none"
-	getEl("autoBuyerQuantum").style.display=speedrunMilestonesReached>22?"":"none"
+	getEl('dilationmode').style.display = qMs.tmp.amt >= 15 ? "" : "none"
+	getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
+	getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
+	getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
+	getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
 	getEl("quarksAnimBtn").style.display=ph.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
-	getEl("maxTimeDimensions").style.display=removeMaxTD?"none":""
-	getEl("metaMaxAllDiv").style.display=removeMaxMD?"none":""
+
+	var removeMaxTD = false
+	if (hasAch("ngpp17")) {
+		for (d = 1 ; d <= 8; d++) {
+			if (player.autoEterOptions["td" + d]) if (d == 8) removeMaxTD=true
+			else break
+		}
+	}
+	getEl("maxTimeDimensions").style.display = removeMaxTD ? "none" : ""
+
 	getEl("edtabbtn").style.display=tmp.quUnl&&player.masterystudies.includes("d11")?"":"none"
 	getEl("ghostifyAnimBtn").style.display=ph.did("ghostify")?"inline-block":"none"
 	GDs.unlDisplay()
-	var removeMaxTD=false
-	var removeMaxMD=false
-	if (hasAch("ngpp17")) {
-		for (d=1;d<9;d++) {
-			if (player.autoEterOptions["td"+d]) if (d>7) removeMaxTD=true
-			else break
-		}
-	}
-	if (speedrunMilestonesReached > 27) {
-		for (d=1;d<9;d++) {
-			if (player.autoEterOptions["md"+d]) if (d>7) removeMaxMD=true
-			else break
-		}
-	}
-	notifyId=speedrunMilestonesReached
+	notifyId=qMs.tmp.amt
 	notifyId2=player.masterystudies===undefined?0:player.ghostify.milestones
 	showHideFooter()
 	getEl("newsbtn").textContent=(player.options.newsHidden?"Show":"Hide")+" news ticker"
@@ -2705,7 +2697,7 @@ function conToDeciLateEter(){
         if (tmp.qu) {
                 if (tmp.qu.last10) for (i=0;i<10;i++) tmp.qu.last10[i][1] = new Decimal(tmp.qu.last10[i][1])
                 tmp.qu.quarks = new Decimal(tmp.qu.quarks);
-                if (!player.masterystudies) tmp.qu.gluons = (tmp.qu.gluons ? tmp.qu.gluons.rg !== null : true) ? new Decimal(0) : new Decimal(tmp.qu.gluons);
+                if (!tmp.ngp3) tmp.qu.gluons = (tmp.qu.gluons ? tmp.qu.gluons.rg !== null : true) ? new Decimal(0) : new Decimal(tmp.qu.gluons);
                 tmp.qu.neutronstar.quarks = new Decimal(tmp.qu.neutronstar.quarks);
                 tmp.qu.neutronstar.metaAntimatter = new Decimal(tmp.qu.neutronstar.metaAntimatter);
                 tmp.qu.neutronstar.dilatedTime = new Decimal(tmp.qu.neutronstar.dilatedTime);

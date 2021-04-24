@@ -1479,7 +1479,7 @@ function doStrongerPowerReductionSoftcapDecimal(num,start,exp){
 }
 
 function showTab(tabName, init) {
-	if (tabName == 'quantumtab' && !player.masterystudies) {
+	if (tabName == 'quantumtab' && !tmp.ngp3) {
 		alert("Because Quantum was never fully developed due to the abandonment of development, you cannot access the Quantum tab in NG++. This is the definitive endgame.")
 		return
 	}
@@ -2335,6 +2335,7 @@ function onNotationChange() {
 	updateExdilation()
 	updateMilestones()
 	if (tmp.ngp3) {
+		qMs.updateDisplay()
 		updateQuarksTabOnUpdate()
 		updateGluonsTabOnUpdate("notation")
 		updateQuantumWorth("notation")
@@ -2916,24 +2917,31 @@ function updateAutobuyers() {
     	}
 
     	player.autoSacrifice.isOn = getEl("13ison").checked
+
     	if (inNGM(2)) {
         	if (player.autobuyers[12]%1 !== 0) getEl("autoBuyerGalSac").style.display = "inline-block"
         	player.autobuyers[12].isOn = getEl("14ison").checked
     	}
+
     	if (inNGM(3)) {
         	if (player.autobuyers[13]%1 !== 0) getEl("autoBuyerTickspeedBoost").style.display = "inline-block"
         	player.autobuyers[13].isOn = getEl("15ison").checked
     	}
+
     	if (inNGM(4)) {
         	if (player.autobuyers[14]%1 !== 0) getEl("autoTDBoost").style.display = "inline-block"
         	player.autobuyers[14].isOn = getEl("16ison").checked
     	}
+
     	player.eternityBuyer.isOn = getEl("eternityison").checked
+
+		player.eternityBuyer.dilationMode = getEl("dilatedeternityison").checked
         player.eternityBuyer.dilationPerAmount = Math.max(parseInt(getEl("prioritydil").value),2)
-		if (player.eternityBuyer.isOn&&player.eternityBuyer.dilationMode&&player.eternityBuyer.statBeforeDilation>=player.eternityBuyer.dilationPerAmount&&!player.eternityBuyer.slowStopped&&player.eternityBuyer.dilMode=="amount") {
-			startDilatedEternity(true)
+		if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
+			dilateTime(true)
 			return
 		}
+
 		if (tmp.qu && tmp.qu.autobuyer) tmp.qu.autobuyer.enabled = getEl("quantumison").checked
     	priorityOrder()
     	ndAutobuyersUsed=0
@@ -3092,13 +3100,13 @@ function updatePriorities() {
 	if (tmp.ngp3) {
 		const dilValue = parseFloat(getEl("prioritydil").value)
 		if (dilValue == Math.round(dilValue) && dilValue > 1) player.eternityBuyer.dilationPerAmount = dilValue
+		if (player.eternityBuyer.dilationMode && player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
+			dilateTime(true)
+			return
+		}
 	
 		const quantumValue = fromValue(getEl("priorityquantum").value)
 		if (!isNaN(break_infinity_js ? quantumValue : quantumValue.l) && tmp.qu.autobuyer) tmp.qu.autobuyer.limit = quantumValue
-		if (player.eternityBuyer.isOn&&player.eternityBuyer.dilationMode&&player.eternityBuyer.statBeforeDilation>=player.eternityBuyer.dilationPerAmount&&!player.eternityBuyer.slowStopped&&player.eternityBuyer.dilMode=="amount") {
-			startDilatedEternity(true)
-			return
-		}
 
 		const autoDisableQuantum = parseFloat(getEl("priorityAutoDisableQuantum").value)
 		if (autoDisableQuantum == Math.round(autoDisableQuantum) && autoDisableQuantum >= 0) tmp.qu.autobuyer.autoDisable = autoDisableQuantum
@@ -3116,10 +3124,9 @@ function updateCheckBoxes() {
 	if (player.autoSacrifice.isOn) getEl("13ison").checked = "true"
 	else getEl("13ison").checked = ""
 	getEl("eternityison").checked = player.eternityBuyer.isOn
-	if (tmp.ngp3) {
-		getEl("dilatedeternityison").checked = player.eternityBuyer.dilationMode
-		if (tmp.qu) if (tmp.qu.autobuyer) getEl("quantumison").checked = tmp.qu.autobuyer.enabled
-	} else getEl("dilatedeternityison").checked = false
+
+	getEl("dilatedeternityison").checked = player.eternityBuyer.dilationMode
+	if (tmp.qu && tmp.qu.autobuyer) getEl("quantumison").checked = tmp.qu.autobuyer.enabled
 }
 
 function updateHotkeys() {
@@ -3276,16 +3283,10 @@ function eternity(force, auto, forceRespec, dilated) {
 			setTachyonParticles(gain)
 		}
 	}
-	if (tmp.ngp3 && hasDilationStudy(1) && !force) if (player.eternityBuyer.isOn && player.eternityBuyer.dilationMode) {
-		if (player.eternityBuyer.dilMode == "amount" && !player.eternityBuyer.slowStopped) {
-			player.eternityBuyer.statBeforeDilation++
-			if (player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
-				startDilatedEternity(true)
-				return
-			}
-		}
-		if (player.eternityBuyer.dilMode=="upgrades"&&player.eternityBuyer.tpUpgraded) {
-			startDilatedEternity(true)
+	if (!dilated && player.eternityBuyer.dilationMode) {
+		player.eternityBuyer.statBeforeDilation++
+		if (player.eternityBuyer.statBeforeDilation >= player.eternityBuyer.dilationPerAmount) {
+			dilateTime(true)
 			return
 		}
 	}
@@ -3419,7 +3420,7 @@ function gainEternitiedStat() {
 function gainBankedInf() {
 	let ret = 0 
 	let numerator = player.infinitied
-	if (speedrunMilestonesReached > 27 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
+	if (qMs.tmp.amt > 27 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
 	let frac = 0.05
 	if (hasTimeStudy(191)) ret = nM(numerator, frac)
 	if (hasAch("r131")) ret = nA(nM(numerator, frac), ret)
@@ -3594,30 +3595,10 @@ function updateNGpp16Reward(){
 }
 
 function notifyQuantumMilestones(){
-	if (typeof notifyId == "undefined") notifyId = 24
-	if (speedrunMilestonesReached > notifyId) {
-		$.notify("You have gone quantum in under " + timeDisplayShort(speedrunMilestones[notifyId + 1] * 10) + "! " + ([
-			"You now start with all Eternity Challenges completed",
-			"You have unlocked the Time Theorem autobuyer",
-			"You now start with all Eternity Upgrades bought",
-			"You now start with Time Dilation unlocked",
-			"You now start with all 8 Time Dimensions",
-			"You now keep all your dilation upgrades expect the repeatables",
-			"You now keep all your time studies",
-			"You now keep all your dilation upgrades that boost TP gain",
-
-			"You now can keep all your Mastery Studies",
-			"You now can automatically buy repeatable dilation upgrades",
-			"The interval of auto-dilation upgrades and MDBs is now reduced by 5% (repeats for each following milestone)",
-			"The interval of auto-slow MDBs is now reduced by 1 tick per milestone (repeats for each following milestone)",
-			"You have unlocked the Meta-Dimension Boost autobuyer",
-			"You now can auto-dilate for each interval of eternities",
-			"???",
-			"???",
-
-			"You now keep your Mastery Studies","All Meta Dimensions are instantly available for purchase on Quantum","You now start with "+shortenCosts(1e13)+" eternities","You now start with "+shortenCosts(1e25)+" meta-antimatter on reset","You can now turn on automatic replicated galaxies regardless of your second Time Study split path","Rebuyable Dilation upgrade and Meta Dimension autobuyers are 3x faster","You now start with "+shortenCosts(1e100)+" dilated time on Quantum, and dilated time only resets on Quantum","You unlocked the Quantum autobuyer","You now keep your Replicanti on Eternity","You unlocked the manual mode for the Eternity autobuyer and got the sacrifice galaxy autobuyer","Your rebuyable dilation upgrade autobuyer can now buy the maximum upgrades possible","You now can buy max Meta-Dimension Boosts and start with 4 Meta-Dimension Boosts","From now on, you can gain banked infinities based on your post-crunch infinitied stat"
-		])[notifyId]+".","success")
+	if (typeof notifyId == "undefined") notifyId = qMs.tmp.amt
+	if (qMs.tmp.amt > notifyId) {
 		notifyId++
+		$.notify("You have got a total of " + qMs[notifyId].req + " Milestone Points! " + qMs[notifyId].effGot(), "success")
 	}
 }
 
@@ -3876,6 +3857,7 @@ setInterval(function() {
 	updateChallTabDisplay()
 	updateOrderGoals()
 	bankedInfinityDisplay()
+	qMs.update()
 	notifyQuantumMilestones()
 	updateQuantumWorth()
 	updateNGM2RewardDisplay()
@@ -4362,7 +4344,7 @@ function quantumOverallUpdating(diff){
 function metaDimsUpdating(diff){
 	player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(1).times(diff))
 	if (inQC(4)) player.meta.antimatter = player.meta.antimatter.plus(getMDProduction(2).times(diff))
-	if (tmp.quActive && inQC(0)) gainQuarkEnergy(player.meta.bestAntimatter, player.meta.antimatter)
+	if (tmp.quActive && inQC(0)) gainQuantumEnergy(player.meta.bestAntimatter, player.meta.antimatter)
 	player.meta.bestAntimatter = player.meta.bestAntimatter.max(player.meta.antimatter)
 	if (tmp.ngp3) {
 		player.meta.bestOverQuantums = player.meta.bestOverQuantums.max(player.meta.antimatter)
@@ -5001,7 +4983,7 @@ function TTpassiveGain(diff){
 }
 
 function thisQuantumTimeUpdating(){
-	setAndMaybeShow("quantumClock", tmp.ngp3 ? (ph.did("quantum") && tmp.qu.times > 1 && speedrunMilestonesReached < 28) : false, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(tmp.qu.time)+"</b>"')
+	setAndMaybeShow("quantumClock", tmp.ngp3 ? (ph.did("quantum") && tmp.qu.times > 1 && qMs.tmp.amt < 28) : false, '"Quantum time: <b class=\'QKAmount\'>"+timeDisplayShort(tmp.qu.time)+"</b>"')
 }
 
 function updateInfinityTimes(){
@@ -5386,7 +5368,7 @@ function dimBoostABTick(){
 
 var timer = 0
 function autoBuyerTick() {
-	if (tmp.quUnl && speedrunMilestonesReached >= 23 && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
+	if (tmp.quUnl && qMs.tmp.amt >= 23 && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
 	
 	if (getEternitied() >= 100 && isEterBuyerOn()) autoEternityABTick()
 
@@ -5741,7 +5723,7 @@ window.addEventListener('keydown', function(event) {
 
 		case 68: // D
 			if (shiftDown && hasAch("ngpp11")) metaBoost()
-			else if (hasAch("r136")) startDilatedEternity(false, true)
+			else if (hasAch("r136")) dilateTime(false, true)
 			else getEl("softReset").onclick()
 		break;
 
@@ -5769,7 +5751,7 @@ window.addEventListener('keydown', function(event) {
 				var maxmeta=true
 				for (d = 1; d < 9; d++) {
 					if (player.autoEterOptions["meta" + d]) {
-						if (d > 7 && speedrunMilestonesReached < 28) maxmeta = false
+						if (d > 7 && qMs.tmp.amt < 28) maxmeta = false
 					} else break
 				}
 				if (maxmeta) getEl("metaMaxAll").onclick()

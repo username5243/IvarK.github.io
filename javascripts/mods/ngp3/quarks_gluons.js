@@ -203,10 +203,11 @@ function updateColorPowers() {
 }
 
 //Gluons
-function gainQuarkEnergy() {
+function gainQuantumEnergy() {
 	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
 	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuantumEnergyMult() - getQuantumEnergySubMult()) * 1.25
 	tmp.qu.quarkEnergy = isNaN(x) ? 0 : x
+	tmp.qu.bestEnergy = Math.max(tmp.qu.bestEnergy || 0, tmp.qu.quarkEnergy)
 }
 
 function getQuantumEnergyMult() {
@@ -789,7 +790,7 @@ function updateQuarksTabOnUpdate(mode) {
 }
 
 function updateGluonsTabOnUpdate(mode) {
-	if (!player.masterystudies) return
+	if (!tmp.ngp3) return
 	else if (!tmp.qu.gluons.rg) {
 		tmp.qu.gluons = {
 			rg: new Decimal(0),

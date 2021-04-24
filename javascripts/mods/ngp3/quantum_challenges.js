@@ -192,7 +192,7 @@ function QCIntensity(num) {
 
 function updateQCTimes() {
 	getEl("qcsbtn").style.display = "none"
-	if (!player.masterystudies) return
+	if (!tmp.ngp3) return
 	var temp = 0
 	var tempcounter = 0
 	for (var i = 1; i < 9; i++) {

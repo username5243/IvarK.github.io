@@ -318,7 +318,7 @@ function setR15Tooltip() {
 	//ng3p15/////
 	let old = getEl("Old age")
 	let rid = getEl("I already got rid of you...")
-	let winner = getEl("And the winner is...")
+	//ng3p18/////
 
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce dilated time 3x faster and gain more Tachyon particles based on your Replicated Galaxies.")
@@ -338,23 +338,11 @@ function setR16Tooltip() {
 	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
-	special.setAttribute('ach-tooltip', "Quantum in under 5 seconds. Reward: Start with all Infinity Dimensions unlocked if you have at least 25 eternities.")
+	special.setAttribute('ach-tooltip', "Get all 24 Quantum Milestones. Reward: Start with all Infinity Dimensions unlocked if you have at least 25 eternities.")
 	memories.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e1700")) + " MA without ever buying 5th-8th Normal Dimensions or having more than 4 Dimension Boosts in this quantum. Reward: The 4 RG upgrade is stronger based on your Meta-Dimension Boosts.")
 	squared.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e1500"))+" MA with exactly 8 Meta-Dimension Boosts. Reward: Get a multiplier to the 8th Meta Dimension based on your 1st Meta Dimension.")
 	morals.setAttribute('ach-tooltip', "Quantum without any Meta-Dimension Boosts. Reward: Meta-Dimension Boosts boost itself at a reduced rate.")
 	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2. Reward: The Eternity Points boost to Quark gain is 1% stronger.")
-}
-
-function setQSRTooltip() {
-	// Quantum Speedruns (3/28)
-	let tfms = getEl("speedrunMilestone18")
-	let tms = getEl("speedrunMilestone19")
-	let tfms2 = getEl("speedrunMilestone22")
-
-	//QUANTUM SPEEDRUNS
-	tfms.setAttribute('ach-tooltip', "Reward: Start with " + shortenCosts(1e13) + " Eternities.")
-	tms.setAttribute('ach-tooltip', "Reward: Start with " + shortenCosts(1e25) + " meta-antimatter on reset.")
-	tfms2.setAttribute('ach-tooltip', "Reward: Start with " + shortenCosts(1e100) + " Dilated Time, and dilated time only resets on Quantum.")
 }
 
 function setR17Tooltip() {
@@ -562,7 +550,6 @@ function setPreNGP3AchievementTooltip() {
 function setNGP3AchievementTooltip() {
 	// ng+3 achievements
 	setBMTooltip()
-	setQSRTooltip()
 	setR15Tooltip()
 	setR16Tooltip()
 	setR17Tooltip()

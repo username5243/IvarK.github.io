@@ -35,10 +35,11 @@ function showQuantumTab(tabName) {
 }
 
 var quantumTabs = {
-	tabIds: ["uquarks", "gluons", "positrons", "replicants", "nanofield", "tod"],
+	tabIds: ["uquarks", "gluons", "speedruns", "positrons", "replicants", "nanofield", "tod"],
 	update: {
 		uquarks: updateQuarksTab,
 		gluons: updateGluonsTab,
+		speedruns: qMs.updateDisplayOnTick,
 		positrons: pos.updateTab, //temp
 		replicants: updateReplicantsTab,
 		nanofield: updateNanofieldTab,
@@ -58,9 +59,9 @@ function updateQuantumTabs() {
 }
 
 function toggleAutoTT() {
-	if (speedrunMilestonesReached < 2) maxTheorems()
+	if (qMs.tmp.amt < 2) maxTheorems()
 	else player.autoEterOptions.tt = !player.autoEterOptions.tt
-	getEl("theoremmax").innerHTML = speedrunMilestonesReached > 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+	getEl("theoremmax").innerHTML = qMs.tmp.amt > 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
 }
 
 //v1.8
@@ -69,7 +70,7 @@ const MAX_DIL_UPG_PRIORITIES = [6, 4, 3, 1, 2]
 function preQuantumAutoNGP3(diff) {
 	//Pre-Quantum Automation
 	let tickPerDiff = 10
-	if (speedrunMilestonesReached >= 21) tickPerDiff /= 3
+	if (qMs.tmp.amt >= 12) tickPerDiff *= Math.pow(0.9, Math.pow(qMs.tmp.amt - 12 + 1, 1 + Math.max(qMs.tmp.amt - 20, 0) / 10))
 
 	tmp.qu.metaAutobuyerWait += diff
 	if (tmp.qu.metaAutobuyerWait >= tickPerDiff) {
@@ -79,23 +80,29 @@ function preQuantumAutoNGP3(diff) {
 }
 
 function doAutoMetaTick(ticks) {
-	//Slow
-	tmp.qu.metaAutobuyerSlowWait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
-	if (tmp.qu.metaAutobuyerSlowWait > 5) {
-		tmp.qu.metaAutobuyerSlowWait = tmp.qu.metaAutobuyerSlowWait % 5
-		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) buyMaxMetaDimension(d)
-	}
+	//Meta Dimensions
+	let slowSpeed = 5
+	if (qMs.tmp.amt >= 13) slowSpeed = Math.max(5 - (qMs.tmp.amt - 13 + 1), 1)
 
-	//Fast
-	if (player.autoEterOptions.rebuyupg && speedrunMilestonesReached >= 7) {
-		if (speedrunMilestonesReached >= 26) maxAllDilUpgs()
+	let wait = tmp.qu.metaAutobuyerSlowWait
+	wait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
+	if (tmp.qu.metaAutobuyerSlowWait >= slowSpeed) {
+		var bulk = Math.floor(wait / slowSpeed)
+		wait = wait % slowSpeed
+		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) buyMaxMetaDimension(d, bulk)
+	}
+	wait = tmp.qu.metaAutobuyerSlowWait
+
+	//Others
+	var bulk = ticks
+	if (player.autoEterOptions.rebuyupg && qMs.tmp.amt >= 7) {
+		if (qMs.tmp.amt >= 24) maxAllDilUpgs()
 		else for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 			var id = "r" + MAX_DIL_UPG_PRIORITIES[i]
 			if (isDilUpgUnlocked(id)) buyDilationUpgrade(id, false, true)
 		}
 	}
-	for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && speedrunMilestonesReached >= 6 + d) buyMaxMetaDimension(d)
-	if (player.autoEterOptions.metaboost && speedrunMilestonesReached >= 15) metaBoost()
+	if (player.autoEterOptions.metaboost) metaBoost()
 }
 
 function toggleAllMetaDims() {
@@ -108,7 +115,7 @@ function toggleAllMetaDims() {
 	}
 
 	for (dim = 1; dim <= 8; dim++) player.autoEterOptions["md" + dim] = turnOn
-	getEl("metaMaxAllDiv").style.display = turnOn && speedrunMilestonesReached >= 28 ? "none" : ""
+	getEl("metaMaxAllDiv").style.display = turnOn && qMs.tmp.amt >= 28 ? "none" : ""
 }
 
 //v1.997
@@ -258,54 +265,6 @@ function toggleRG4Upg() {
 }
 
 var nanospeed = 1
-
-
-function openAfterEternity() {
-	showEternityTab("autoEternity")
-	showTab("eternitystore")
-}
-
-function toggleABEter() {
-	getEl("eternityison").checked = !player.eternityBuyer.isOn
-	updateAutobuyers()
-}
-
-function updateAutoEterValue() {
-	getEl("priority13").value = getEl("autoEterValue").value
-	updatePriorities()
-}
-
-function toggleAutoEterIfAD() {
-	player.eternityBuyer.ifAD = !player.eternityBuyer.ifAD
-	getEl("autoEterIfAD").textContent = "Auto-eternity only if able to auto-dilate: O" + (player.eternityBuyer.ifAD ? "N" : "FF")
-}
-
-function toggleAutoDil() {
-	getEl("dilatedeternityison").checked = !player.eternityBuyer.dilationMode	
-	updateAutobuyers()
-}
-
-function updateAutoDilValue() {
-	getEl("prioritydil").value = getEl("autoDilValue").value
-	updatePriorities()
-}
-
-function changeAutoDilateMode() {
-	if (player.eternityBuyer.dilMode == "amount") player.eternityBuyer.dilMode = "upgrades"
-	else player.eternityBuyer.dilMode = "amount"
-	getEl("autodilatemode").textContent = "Mode: " + (player.eternityBuyer.dilMode == "amount" ? "Amount of eternities" : "Upgrades")
-}
-
-function toggleSlowStop() {
-	player.eternityBuyer.slowStop = !player.eternityBuyer.slowStop
-	player.eternityBuyer.slowStopped = false
-	getEl("slowstop").textContent = "Stop auto-dilate if a little bit of TP is gained: O" + (player.eternityBuyer.slowStop ? "N" : "FF")
-}
-
-function toggleAPs() {
-	player.eternityBuyer.presets.on = !player.eternityBuyer.presets.on
-	getEl("toggleAP").textContent = player.eternityBuyer.presets.on ? "Disable" : "Enable"
-}
 
 function switchAB() {
 	var bigRip = tmp.qu.bigRip.active
@@ -593,7 +552,8 @@ function ghostifyReset(implode, gain, amount, force) {
 	doGhostifyGhostifyResetStuff(bm, force)
 
 	//After that...
-	updateSpeedruns()
+	qMs.update()
+	qMs.updateDisplay()
 	handleDisplaysOutOfQuantum()
 	handleQuantumDisplays(true)
 	resetUP()

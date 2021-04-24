@@ -53,7 +53,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		if (inQCModifier("ms")) ph.updateDisplay()
 	}
 
-	var implode = !(auto || force) && speedrunMilestonesReached < 23
+	var implode = !(auto || force) && qMs.tmp.amt < 23
 	if (implode) {
 		implosionCheck = 1
 		dev.implode()
@@ -264,7 +264,7 @@ function doQuantumProgress() {
 function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	var headstart = tmp.mod.newGamePlusVersion > 0 && !tmp.ngp3
 	var isQC = id !== undefined
-	if (implode && speedrunMilestonesReached < 1) {
+	if (implode && qMs.tmp.amt < 1) {
 		showTab("dimensions")
 		showDimTab("antimatterdimensions")
 		showChallengesTab("challenges")
@@ -309,10 +309,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 			}
 		}
 		tmp.qu.last10[0] = array
-		if (tmp.qu.best > tmp.qu.time) {
-			tmp.qu.best = tmp.qu.time
-			updateSpeedruns()
-		}
+		if (tmp.qu.best > tmp.qu.time) tmp.qu.best = tmp.qu.time
 		tmp.qu.times++
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
 		if (!inQC(6)) {
@@ -475,34 +472,23 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 					player.infmultbuyer = true
 					for (var d=0;d<8;d++) player.infDimBuyers[d] = true
 				}
-				if (speedrunMilestonesReached >= 12) unstoreTT()
+				if (qMs.tmp.amt >= 12) unstoreTT()
 			}
 			if (ph.did("ghostify")) player.ghostify.neutrinos.generationGain = player.ghostify.neutrinos.generationGain % 3 + 1
 			tmp.qu.bigRip.active = bigRip
 		}
-		if (!oheHeadstart) {
-			player.eternityBuyer.dilationMode = false
-			player.eternityBuyer.dilationPerAmount = 10
-			if (tmp.ngp3) {
-				player.eternityBuyer.dilMode = aea.dilMode
-				player.eternityBuyer.tpUpgraded = aea.tpUpgraded
-				player.eternityBuyer.slowStop = aea.slowStop
-				player.eternityBuyer.slowStopped = aea.slowStopped
-				player.eternityBuyer.presets = aea.presets
-			}
-		}
 		player.eternityBuyer.statBeforeDilation = 0
-		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&speedrunMilestonesReached<18) {
+		if ((player.autoEterMode=="replicanti"||player.autoEterMode=="peak")&&qMs.tmp.amt<18) {
 			player.autoEterMode="amount"
 			updateAutoEterMode()
 		}
-		getEl('dilationmode').style.display = speedrunMilestonesReached > 4 ? "" : "none"
-		getEl('rebuyupgauto').style.display = speedrunMilestonesReached > 6 ? "" : "none"
-		getEl('metaboostauto').style.display = speedrunMilestonesReached > 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = speedrunMilestonesReached > 22 ? "" : "none"
+		getEl('dilationmode').style.display = qMs.tmp.amt > 4 ? "" : "none"
+		getEl('rebuyupgauto').style.display = qMs.tmp.amt > 6 ? "" : "none"
+		getEl('metaboostauto').style.display = qMs.tmp.amt > 14 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt > 22 ? "" : "none"
 		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = bigRip && tmp.qu.bigRip.storedTS === undefined
-		if (bigRip ? tmp.bruActive[12] : speedrunMilestonesReached >= 14) {
+		if (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 14) {
 			for (let i = (player.exdilation != undefined ? 1 : 3); i < 7; i++) if (i != 2 || !tmp.mod.ngudpV) player.dilation.upgrades.push((i > 2 ? "ngpp" : "ngud") + i)
 			if (tmp.mod.nguspV) {
 				for (var i = 1; i < 3; i++) player.dilation.upgrades.push("ngusp" + i)
@@ -515,7 +501,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		updateMasteryStudyButtons()
 		delete tmp.qu.autoECN
 	} // bounds if tmp.ngp3
-	if (speedrunMilestonesReached < 1 && !bigRip) {
+	if (qMs.tmp.amt < 1 && !bigRip) {
 		getEl("infmultbuyer").textContent = "Autobuy IP mult: OFF"
 		getEl("togglecrunchmode").textContent = "Auto crunch mode: amount"
 		getEl("limittext").textContent = "Amount of IP to wait until reset:"
@@ -599,13 +585,13 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 	
 	if (inQC(8) && (getEl("infinitydimensions").style.display == "block" || (getEl("timedimensions").style.display == "block" && !tmp.be))) showDimTab("antimatterdimensions")
 
-	let keepECs = bigRip ? tmp.bruActive[2] : speedrunMilestonesReached >= 2
+	let keepECs = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
 	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
 
 	let keepDil = bigRip ? tmp.bruActive[10] : player.dilation.studies.includes(1)
 	if (!keepDil && getEl("dilation").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display=="block")
 
-	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && speedrunMilestonesReached >= 6
+	let keepMDs = bigRip ? tmp.bruActive[12] : keepDil && qMs.tmp.amt >= 6
 	if (!keepMDs && getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
 
 	let keepMSs = bigRip || masteryStudies.unl()
@@ -618,7 +604,7 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 		if (getEl("masterystudies").style.display == "block") showEternityTab("timestudies", getEl("eternitystore").style.display != "block")
 	}
 
-	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
+	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
 	if (tmp.quActive && !bigRip) {
 		let keepPos = keepQuantum && player.masterystudies.includes("d7")
 		let keepAnts = keepQuantum && player.masterystudies.includes("d10")
@@ -643,8 +629,8 @@ function handleDisplaysOnQuantum(bigRip, prestige) {
 function handleDisplaysOutOfQuantum(bigRip) {
 	if (!bigRip) bigRip = inBigRip()
 
-	let keepQuantum = tmp.quActive && speedrunMilestonesReached >= 16
-	let keepQCs = ph.shown("quantum") && tmp.quUnl && speedrunMilestonesReached >= 16 && player.masterystudies.includes("d8")
+	let keepQuantum = tmp.quActive && qMs.tmp.amt >= 16
+	let keepQCs = ph.shown("quantum") && tmp.quUnl && qMs.tmp.amt >= 16 && player.masterystudies.includes("d8")
 	let keepEDs = ph.shown("quantum") && keepQuantum && player.masterystudies.includes("d11")
 	let keepBE = tmp.ngp3 && (bigRip || tmp.qu.breakEternity.unlocked || ph.did("ghostify"))
 
@@ -661,7 +647,8 @@ function handleDisplaysOutOfQuantum(bigRip) {
 
 function handleQuantumDisplays(prestige) {
 	updateBankedEter()
-	updateSpeedruns()
+	qMs.update()
+	qMs.updateDisplay()
 	if (!tmp.ngp3) return
 
 	updateLastTenQuantums()
