@@ -4985,7 +4985,7 @@ function EPonEternityPassiveGain(diff){
 function ngp3DilationUpdating(){
 	let gain = getDilGain()
 	if (inNGM(2)) player.dilation.bestIP = player.infinityPoints.max(player.dilation.bestIP)
-	if (player.dilation.tachyonParticles.lt(gain) && masteryStudies.has(292)) setTachyonParticles(gain)
+	if (player.dilation.tachyonParticles.lt(gain) && qMs.tmp.amt >= 23) setTachyonParticles(gain)
 }
 
 function setTachyonParticles(x) {

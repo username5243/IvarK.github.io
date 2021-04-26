@@ -206,7 +206,8 @@ function updateColorPowers() {
 function gainQuantumEnergy() {
 	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
 	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuantumEnergyMult() - getQuantumEnergySubMult()) * 1.25
-	tmp.qu.quarkEnergy = isNaN(x) ? 0 : x
+	tmp.qu.quarkEnergy = Math.max(x, tmp.qu.quarkEnergy)
+	tmp.qu.quarkEnergy = isNaN(tmp.qu.quarkEnergy) ? 0 : tmp.qu.quarkEnergy
 	tmp.qu.bestEnergy = Math.max(tmp.qu.bestEnergy || 0, tmp.qu.quarkEnergy)
 }
 

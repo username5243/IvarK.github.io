@@ -72,8 +72,8 @@ let qMs = {
 	},
 	2: {
 		req: 2,
-		eff: () => "Unlock the autobuyer for Time Theorems and start with 100 Eternities",
-		effGot: () => "You now can automatically buy Time Theorems and start with 100 Eternities."
+		eff: () => "Unlock the autobuyer for Time Theorems and start with Eternities based on Quantum Milestones",
+		effGot: () => "You now can automatically buy Time Theorems and start with Eternities based on Quantum Milestones."
 	},
 	3: {
 		req: 3,
@@ -141,47 +141,47 @@ let qMs = {
 		effGot: () => "You have unlocked an option for auto-Eternity that automatically dilates for each interval of Eternity runs."
 	},
 	16: {
-		req: 17,
+		req: 16,
 		eff: () => "Start with " + shortenCosts(1e30) + " meta-antimatter",
 		effGot: () => "You now start with " + shortenCosts(1e30) + " meta-antimatter."
 	},
 	17: {
-		req: 20,
+		req: 17,
 		eff: () => "All Meta Dimensions are available for purchase on Quantum",
 		effGot: () => "All Meta Dimensions are now available for purchase on Quantum."
 	},
 	18: {
-		req: 22,
+		req: 18,
 		eff: () => "Unlock the autobuyer for Quantum runs",
 		effGot: () => "You can now automatically go Quantum."
 	},
 	19: {
-		req: 24,
+		req: 20,
 		eff: () => "Start with 4 Meta-Dimension Boosts",
 		effGot: () => "You now start with 4 Meta-Dimension Boosts."
 	},
 	20: {
-		req: 28,
+		req: 22,
 		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	21: {
-		req: 32,
+		req: 25,
 		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
 		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
 	22: {
-		req: 36,
-		eff: () => "???",
-		effGot: () => "???"
+		req: 28,
+		eff: () => "'2 Million Infinities' effect actives at 1s instead of 5s",
+		effGot: () => "'2 Million Infinities' effect now actives at 1s instead of 5s."
 	},
 	23: {
-		req: 40,
-		eff: () => "???",
-		effGot: () => "???"
+		req: 32,
+		eff: () => "Immediately generate TP on dilation runs.",
+		effGot: () => "You now can immediately generate TP on dilation runs."
 	},
 	24: {
-		req: 45,
+		req: 36,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	}

@@ -41,32 +41,60 @@ let POSITRONS = {
 		pos.save.on = !pos.save.on
 		quantum(false, true)
 	},
+	types: {
+		ng: {
+			pow() {
+				return 1
+			}
+		},
+		rg: {
+			pow() {
+				return 0
+			}
+		},
+		eg: {
+			pow() {
+				return 0
+			}
+		},
+		tg: {
+			pow() {
+				return 0
+			}
+		}
+	},
 	updateTmp() {
 		let data = {}
 		pos.tmp = data
 
 		if (!pos.unl()) return
 
-		data["pow_ng"] = 1
-		data["pow_rg"] = 0
-		data["pow_eg"] = 0
-		data["pow_tg"] = 0
+		let qeMax = tmp.qu.quarkEnergy / 5
+		let qeMultMax = Math.sqrt(getQuantumEnergyMult())
 
 		if (pos.on()) {
-			let qeMult = getQuantumEnergyMult()
-			let mdbs = Math.floor(player.meta.resets / 10)
+			let mdbs = Math.floor(player.meta.resets / 5)
+			let max_mdbs = Math.floor(qeMultMax * qeMultMax * 4)
 
-			data["sac_mdb"] = 0
-			data["sac_qem"] = 0
+			data.sac_mdb = Math.min(mdbs, max_mdbs)
+			data.sac_qem = Math.sqrt(data["sac_mdb"] / 4)
+			pos.save.amt = Math.pow(data.sac_mdb * 10, 2)
 		} else {
-			data["sac_mdb"] = 0
-			data["sac_qem"] = 0
+			data.sac_mdb = 0
+			data.sac_qem = 0
+			pos.save.amt = 0
+		}
+
+		let types = ["ng", "rg", "eg", "tg"]
+		for (var i = 0; i < types.length; i++) {
+			var type = types[i]
+			data["pow_" + type] = pos.types[type].pow() * pos.save.amt
 		}
 	},
 	updateTab() {
 		enB.updateOnTick("pos")
 
-		getEl("pos_formula").innerHTML = pos.save.on ? "0 MDBs + 0.00x QE multiplier -><br>" : ""
+		getEl("pos_formula").innerHTML = pos.save.on ? getFullExpansion(pos.tmp.sac_mdb) + " MDBs + " + shorten(pos.tmp.sac_qem) + "x QE multiplier -><br>" : ""
 		getEl("pos_toggle").textContent = pos.save.on ? "ON" : "OFF"
 		getEl("pos_amt").textContent = getFullExpansion(pos.save.amt)
 
