@@ -9,19 +9,16 @@ let qMs = {
 		if (!tmp.ngp3) return
 		data.points = 0
 
-		//Speedrun Milestones (Old)
-		data.amt_sr = 0
-		if (player.ghostify.milestones >= 1) data.amt_sr = 28
-		else {
-			for (var i = 1; i <= 28; i++) {
-				if (tmp.qu.best > qMs.old_reqs[i] * 10) break
-				data.amt_sr++
-			}
-		}
+		//Speedrun
+		data.amt_sr = Math.floor(Math.max(Math.log10(86400 / tmp.qu.best) / Math.log10(2) * 2 + 1, 0))
 		data.points += data.amt_sr
 
+		//Relatistic
+		data.amt_rl = 0
+		data.points += data.amt_rl
+
 		//Energetic
-		data.amt_en = Math.floor(Math.sqrt((tmp.qu.bestEnergy || 0) / 2))
+		data.amt_en = Math.floor(Math.sqrt(tmp.qu.bestEnergy || 0))
 		data.points += data.amt_en
 
 		//Milestones
@@ -49,6 +46,9 @@ let qMs = {
 	updateDisplayOnTick() {
 		getEl("qMs_sr_target").textContent = timeDisplay(tmp.qu.best)
 		getEl("qMs_sr_points").textContent = getFullExpansion(qMs.tmp.amt_sr)
+
+		getEl("qMs_rl_target").textContent = "???"
+		getEl("qMs_rl_points").textContent = getFullExpansion(qMs.tmp.amt_rl)
 
 		getEl("qMs_en_target").textContent = shorten(tmp.qu.bestEnergy)
 		getEl("qMs_en_points").textContent = getFullExpansion(qMs.tmp.amt_en)
@@ -136,52 +136,52 @@ let qMs = {
 		effGot: () => "You now can automatically buy meta-Dimension Boosts."
 	},
 	15: {
-		req: 15,
+		req: 16,
 		eff: () => "Unlock an option for auto-Eternity that automatically dilates for each interval of Eternity runs",
 		effGot: () => "You have unlocked an option for auto-Eternity that automatically dilates for each interval of Eternity runs."
 	},
 	16: {
-		req: 16,
+		req: 18,
 		eff: () => "Start with " + shortenCosts(1e30) + " meta-antimatter",
 		effGot: () => "You now start with " + shortenCosts(1e30) + " meta-antimatter."
 	},
 	17: {
-		req: 17,
+		req: 20,
 		eff: () => "All Meta Dimensions are available for purchase on Quantum",
 		effGot: () => "All Meta Dimensions are now available for purchase on Quantum."
 	},
 	18: {
-		req: 18,
+		req: 22,
 		eff: () => "Unlock the autobuyer for Quantum runs",
 		effGot: () => "You can now automatically go Quantum."
 	},
 	19: {
-		req: 20,
+		req: 24,
 		eff: () => "Start with 4 Meta-Dimension Boosts",
 		effGot: () => "You now start with 4 Meta-Dimension Boosts."
 	},
 	20: {
-		req: 22,
+		req: 27,
 		eff: () => "Gain banked infinities based on your post-crunch infinitied stat",
 		effGot: () => "Gain banked infinities based on your post-crunch infinitied stat."
 	},
 	21: {
-		req: 25,
+		req: 30,
 		eff: () => "Each milestone greatly reduces the interval of auto-dilation upgrades and MDBs",
 		effGot: () => "Each milestone now greatly reduces the interval of auto-dilation upgrades and MDBs."
 	},
 	22: {
-		req: 28,
+		req: 35,
 		eff: () => "'2 Million Infinities' effect actives at 1s instead of 5s",
 		effGot: () => "'2 Million Infinities' effect now actives at 1s instead of 5s."
 	},
 	23: {
-		req: 32,
+		req: 40,
 		eff: () => "Immediately generate TP on dilation runs.",
 		effGot: () => "You now can immediately generate TP on dilation runs."
 	},
 	24: {
-		req: 36,
+		req: 50,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	}

@@ -78,7 +78,7 @@ let POSITRONS = {
 
 			data.sac_mdb = Math.min(mdbs, max_mdbs)
 			data.sac_qem = Math.sqrt(data["sac_mdb"] / 4)
-			pos.save.amt = Math.pow(data.sac_mdb * 10, 2)
+			pos.save.amt = Math.pow(data.sac_mdb * 15, 2)
 		} else {
 			data.sac_mdb = 0
 			data.sac_qem = 0

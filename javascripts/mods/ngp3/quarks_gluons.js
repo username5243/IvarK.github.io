@@ -345,6 +345,7 @@ let enB = {
 		let data = this[type][x]
 
 		if (!this.has(type, x)) return false
+		if (!tmp.enB) return false
 		if (!tmp.enB[type + x]) return false
 		if (data.activeReq && !data.activeReq()) return false
 		if (this.mastered(type, x)) return true
