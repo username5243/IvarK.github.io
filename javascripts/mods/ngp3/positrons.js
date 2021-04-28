@@ -45,21 +45,69 @@ let POSITRONS = {
 		ng: {
 			pow() {
 				return 1
+			},
+			sacGals(pow) {
+				return pow
+			},
+			qeToGals(qe) {
+				return pow * pow * 100
+			},
+			galsToQE(gals) {
+				return Math.sqrt(gals / 100)
+			},
+			pcGain(gals) {
+				return gals
 			}
 		},
 		rg: {
 			pow() {
 				return 0
+			},
+			sacGals(pow) {
+				return pow
+			},
+			qeToGals(qe) {
+				return pow * pow * 100
+			},
+			galsToQE(gals) {
+				return Math.sqrt(gals / 100)
+			},
+			pcGain(gals) {
+				return gals
 			}
 		},
 		eg: {
 			pow() {
 				return 0
+			},
+			sacGals(pow) {
+				return pow
+			},
+			qeToGals(qe) {
+				return pow * pow * 100
+			},
+			galsToQE(gals) {
+				return Math.sqrt(gals / 100)
+			},
+			pcGain(gals) {
+				return gals
 			}
 		},
 		tg: {
 			pow() {
 				return 0
+			},
+			sacGals(pow) {
+				return pow
+			},
+			qeToGals(qe) {
+				return pow * pow * 100
+			},
+			galsToQE(gals) {
+				return Math.sqrt(gals / 100)
+			},
+			pcGain(gals) {
+				return gals
 			}
 		}
 	},
@@ -88,7 +136,12 @@ let POSITRONS = {
 		let types = ["ng", "rg", "eg", "tg"]
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
+			var save_data = pos.save.gals[type]
 			data["pow_" + type] = pos.types[type].pow() * pos.save.amt
+
+			save_data.sac = Math.min(pos.types[type].sacGals(data["pow_" + type]), pos.types[type].qeToGals(qeMax))
+			save_data.qe = pos.types[type].galsToQE(save_data.sac)
+			save_data.pc = pos.types[type].pcGain(save_data.sac)
 		}
 	},
 	updateTab() {
