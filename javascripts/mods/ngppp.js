@@ -84,14 +84,13 @@ function doAutoMetaTick(ticks) {
 	let slowSpeed = 5
 	if (qMs.tmp.amt >= 13) slowSpeed = Math.max(5 - (qMs.tmp.amt - 13 + 1), 1)
 
-	let wait = tmp.qu.metaAutobuyerSlowWait
-	wait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
-	if (tmp.qu.metaAutobuyerSlowWait >= slowSpeed) {
+	let wait = (tmp.qu.metaAutobuyerSlowWait || 0) + ticks
+	if (wait >= slowSpeed) {
 		var bulk = Math.floor(wait / slowSpeed)
 		wait = wait % slowSpeed
 		for (var d = 1; d <= 8; d++) if (player.autoEterOptions["md" + d] && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) buyMaxMetaDimension(d, bulk)
 	}
-	wait = tmp.qu.metaAutobuyerSlowWait
+	tmp.qu.metaAutobuyerSlowWait = wait
 
 	//Others
 	var bulk = ticks
