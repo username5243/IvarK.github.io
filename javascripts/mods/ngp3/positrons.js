@@ -132,6 +132,7 @@ let POSITRONS = {
 			data.sac_qem = 0
 			pos.save.amt = 0
 		}
+		pos.save.eng = 0
 
 		let types = ["ng", "rg", "eg", "tg"]
 		for (var i = 0; i < types.length; i++) {
@@ -142,6 +143,7 @@ let POSITRONS = {
 			save_data.sac = Math.min(pos.types[type].sacGals(data["pow_" + type]), pos.types[type].qeToGals(qeMax))
 			save_data.qe = pos.types[type].galsToQE(save_data.sac)
 			save_data.pc = pos.types[type].pcGain(save_data.sac)
+			pos.save.eng += save_data.pc
 		}
 	},
 	updateTab() {

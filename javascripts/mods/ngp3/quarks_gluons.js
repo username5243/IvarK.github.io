@@ -291,24 +291,23 @@ function updateGluonicBoosts() {
 	data.b = { mult: getGluonEffBuff(gluons.br), sub: getGluonEffNerf(gluons.gb) } //x -> x * [BR effect] - [GB effect]
 
 	let type = tmp.qu.entColor || "rg"
-	let enAmt = enBData.gluonEff(gluons[type])
-	let masAmt = Math.max(Math.max(
-		enBData.gluonEff(gluons.rg),
-		enBData.gluonEff(gluons.gb)),
-		enBData.gluonEff(gluons.br)
+	data.enAmt = enBData.glu.gluonEff(gluons[type])
+	data.masAmt = Math.max(Math.max(
+		enBData.glu.gluonEff(gluons.rg),
+		enBData.glu.gluonEff(gluons.gb)),
+		enBData.glu.gluonEff(gluons.br)
 	)
 
 	let data2 = tmp.enB
 	for (var t = enBData.types.length; t > 0; t--) {
 		var name = enBData.types[t - 1]
 		var typeData = enBData[name]
-		var strEff = typeData.eff()
 
 		for (var i = 1; i <= typeData.max; i++) {
 			if (!enBData.has(name, i)) break
 
 			var eff = typeData[i].eff
-			if (eff !== undefined) data2[name + i] = eff((name != "glu" ? 1 : enBData.mastered(name, i) ? masAmt : enAmt) * strEff)
+			if (eff !== undefined) data2[name + i] = eff(typeData.eff(i, data))
 		}
 	}
 }
@@ -344,10 +343,11 @@ let enB = {
 	active(type, x) {
 		let data = this[type][x]
 
+		if (tmp.enB === undefined || tmp.enB[type + x] === undefined) return false
+
 		if (!this.has(type, x)) return false
-		if (!tmp.enB) return false
-		if (!tmp.enB[type + x]) return false
 		if (data.activeReq && !data.activeReq()) return false
+
 		if (this.mastered(type, x)) return true
 
 		let gluon = tmp.qu.entColor || "rg"
@@ -358,9 +358,6 @@ let enB = {
 		return data.amt() >= data[x].masReq
 	},
 
-	gluonEff(x) {
-		return Decimal.add(x, 1).log10()
-	},
 
 	choose(x) {
 		if ((tmp.qu.entColor || "rg") == x) return
@@ -398,8 +395,14 @@ let enB = {
 			tmp.qu.entBoosts = x
 		},
 
-		eff(x) {
-			return (this.amt()) * 2 - 1 //temp
+		eff(x, data) {
+			let r = this.amt() * 2 - 1
+			r *= enB.mastered("glu", x) ? data.enAmt : data.masAmt
+
+			return r
+		},
+		gluonEff(x) {
+			return Decimal.add(x, 1).log10()
 		},
 
 		max: 10,
@@ -522,7 +525,7 @@ let enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Math.pow(x, 1.5) * 2e3 + 1
+			return 1/0 //Math.pow(x, 1.5) * 2e3 + 1
 		},
 		target() {
 			return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
@@ -546,14 +549,18 @@ let enB = {
 		1: {
 			req: 1,
 			masReq: 3,
+
+			chargeReq: 500,
 			activeReq() {
-				return pos.save.eng >= 500
+				return enB.mastered("pos", 1) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
-				return "500 Positronic Charge"
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 1) ? " (full effect)" : "")
 			},
+
 			type: "g",
 			eff(x) {
+				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos[1].chargeReq / 2)
 				return Math.sqrt(x / 1e3 + 1) - 1
 			},
 			effDisplay(x) {
@@ -563,14 +570,18 @@ let enB = {
 		2: {
 			req: 1,
 			masReq: 1/0,
+
+			chargeReq: 100,
 			activeReq() {
-				return pos.save.eng >= 100
+				return enB.mastered("pos", 2) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
-				return "100 Positronic Charge"
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 2) ? " (full effect)" : "")
 			},
+
 			type: "r",
 			eff(x) {
+				if (enB.mastered("pos", 2)) x = Math.max(x, enB.pos[2].chargeReq / 2)
 				return Math.pow(x / 500 + 1, 1.25)
 			},
 			effDisplay(x) {
@@ -580,14 +591,18 @@ let enB = {
 		3: {
 			req: 5,
 			masReq: 7,
+
+			chargeReq: 2e3,
 			activeReq() {
-				return pos.save.eng >= 2e3
+				return enB.mastered("pos", 3) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
-				return shorten(2e3) + " Positronic Charge"
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 3) ? " (full effect)" : "")
 			},
+
 			type: "b",
 			eff(x) {
+				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
 				return Math.log10(x / 2e3 + 1) / 2 + 1
 			},
 			effDisplay(x) {
@@ -597,14 +612,18 @@ let enB = {
 		4: {
 			req: 7,
 			masReq: 10,
+
+			chargeReq: 5e3,
 			activeReq() {
-				return pos.save.eng >= 5e3
+				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
-				return shorten(5e3) + " Positronic Charge"
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 4) ? " (full effect)" : "")
 			},
+
 			type: "r",
 			eff(x) {
+				if (enB.mastered("pos", 4)) x = Math.max(x, enB.pos[4].chargeReq / 2)
 				return 1 / (2 + 1 / (player.meta.resets / 10 + 1))
 			},
 			effDisplay(x) {
@@ -666,16 +685,15 @@ let enB = {
 		getEl("enB_" + type + "_next").textContent = ""
 
 		var has = true
-		var mastered = true
 
 		for (var e = 1; e <= typeData.max; e++) {
 			var active = data.active(type, e)
+			var mastered = data.mastered(type, e)
 
 			if (has && !data.has(type, e)) {
 				has = false
 				getEl("enB_" + type + "_next").textContent = "Next " + typeData.name + " Boost unlocks at " + typeData[e].req + " " + typeData.name + " Boosters."
 			}
-			if (mastered && !data.mastered(type, e)) mastered = false
 
 			var el = getEl("enB_" + type + e + "_name")
 			el.parentElement.style.display = has ? "" : "none"
