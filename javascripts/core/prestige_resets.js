@@ -348,6 +348,7 @@ function checkSecondSetOnCrunchAchievements(){
 
 function doEternityResetStuff(layer = 4) {
 	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
+	player.infinitied = 0
 	player.infMult = new Decimal(1)
 	player.infMultCost = new Decimal(10)
 	playerInfinityUpgradesOnEternity()
