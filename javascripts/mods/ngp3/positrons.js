@@ -25,8 +25,6 @@ let POSITRONS = {
 			eg: {sac: 0, qe: 0, pc: 0},
 			tg: {sac: 0, qe: 0, pc: 0}
 		}
-		data.eng = data.gals.ng.pc + data.gals.rg.pc + data.gals.eg.pc + data.gals.tg.pc
-		data.consumedQE = data.gals.ng.qe + data.gals.rg.qe + data.gals.eg.qe + data.gals.tg.qe
 
 		if (data.sacGals) delete data.sacGals
 		if (data.sacBoosts) delete data.sacBoosts
@@ -47,13 +45,13 @@ let POSITRONS = {
 				return 1
 			},
 			sacGals(pow) {
-				return pow
+				return Math.min(player.galaxies / 2, pow)
 			},
 			qeToGals(qe) {
-				return pow * pow * 100
+				return Math.floor(qe * qe * 1e4)
 			},
 			galsToQE(gals) {
-				return Math.sqrt(gals / 100)
+				return Math.sqrt(gals / 1e4)
 			},
 			pcGain(gals) {
 				return gals
@@ -67,10 +65,10 @@ let POSITRONS = {
 				return pow
 			},
 			qeToGals(qe) {
-				return pow * pow * 100
+				return Math.floor(qe * qe * 1e4)
 			},
 			galsToQE(gals) {
-				return Math.sqrt(gals / 100)
+				return Math.sqrt(gals / 1e4)
 			},
 			pcGain(gals) {
 				return gals
@@ -84,10 +82,10 @@ let POSITRONS = {
 				return pow
 			},
 			qeToGals(qe) {
-				return pow * pow * 100
+				return Math.floor(qe * 1e4)
 			},
 			galsToQE(gals) {
-				return Math.sqrt(gals / 100)
+				return gals / 1e4
 			},
 			pcGain(gals) {
 				return gals
@@ -101,10 +99,10 @@ let POSITRONS = {
 				return pow
 			},
 			qeToGals(qe) {
-				return pow * pow * 100
+				return Math.floor(qe * qe * 1e4)
 			},
 			galsToQE(gals) {
-				return Math.sqrt(gals / 100)
+				return Math.sqrt(gals / 1e4)
 			},
 			pcGain(gals) {
 				return gals
@@ -121,7 +119,7 @@ let POSITRONS = {
 		let qeMultMax = Math.sqrt(getQuantumEnergyMult())
 
 		if (pos.on()) {
-			let mdbs = Math.floor(player.meta.resets / 5)
+			let mdbs = Math.floor(player.meta.resets / 4)
 			let max_mdbs = Math.floor(qeMultMax * qeMultMax * 4)
 
 			data.sac_mdb = Math.min(mdbs, max_mdbs)
@@ -133,6 +131,7 @@ let POSITRONS = {
 			pos.save.amt = 0
 		}
 		pos.save.eng = 0
+		pos.save.consumedQE = 0
 
 		let types = ["ng", "rg", "eg", "tg"]
 		for (var i = 0; i < types.length; i++) {
@@ -143,7 +142,9 @@ let POSITRONS = {
 			save_data.sac = Math.min(pos.types[type].sacGals(data["pow_" + type]), pos.types[type].qeToGals(qeMax))
 			save_data.qe = pos.types[type].galsToQE(save_data.sac)
 			save_data.pc = pos.types[type].pcGain(save_data.sac)
+
 			pos.save.eng += save_data.pc
+			pos.save.consumedQE += save_data.qe
 		}
 	},
 	updateTab() {

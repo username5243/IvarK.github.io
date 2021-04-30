@@ -140,7 +140,6 @@ function upgradeReplicantiGalaxy() {
 	return false
 }
 
-var extraReplGalaxies = 0
 function replicantiGalaxy() {
 	var maxGal = getMaxRG()
 	if (!canGetReplicatedGalaxy()) return
@@ -198,7 +197,7 @@ function updateExtraReplMult() {
 function getTotalRGs() {
 	if (inQC(3)) return 0
 
-	return player.replicanti.galaxies + extraReplGalaxies
+	return player.replicanti.galaxies + tmp.extraRG
 }
 
 function getFullEffRGs(min) {

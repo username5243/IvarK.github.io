@@ -222,31 +222,35 @@ function getTwoDecaysBool(){
 	return true
 }
 
-function preHiggsNGp3AchieveCheck(){	
+function preHiggsNGp3AchieveCheck() {
+	//Time Studies
 	let checkEmpty = player.timestudy.studies.length < 1
-	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) {
-		if (player.masterystudies[id].split("t")[1]) checkEmpty = false
+	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) if (player.masterystudies[id].split("t")[1]) checkEmpty = false
+
+	//Tree of Decay
+	let noTree = false
+	let minUQ = getMinimumUnstableQuarks()
+	for (var u = 1; u <= 8; u++) {
+		if (getTreeUpgradeLevel(u) > 0) break
+		else noTree = true
 	}
+
+	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
 	let ableToGetRid3 = ableToGetRid2
 	let ableToGetRid4 = ableToGetRid2 && inQC(2)
 	let ableToGetRid5 = ableToGetRid4 && player.dontWant
 	let ableToGetRid6 = ableToGetRid2 && inQC(6) && inQC(8)
-	let noTree = false
-	let minUQ = getMinimumUnstableQuarks()
-	for (var u = 1; u < 9; u++) {
-		if (tmp.qu.tod.upgrades[u]) break
-		else noTree = true
-	}
-	if (player.meta.antimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
+
+	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
 	if (player.galaxies >= 900 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
-	if (player.meta.resets == 8 && player.meta.antimatter.log10() >= 1500) giveAchievement("We are not going squared.")
+	if (player.meta.resets == 8 && player.meta.bestAntimatter.log10() >= 1500) giveAchievement("We are not going squared.")
 	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
-	if (player.old && player.meta.antimatter.log10() >= 1700) giveAchievement("Old memories come true")
+	if (player.old && player.meta.bestAntimatter.log10() >= 1700) giveAchievement("Old memories come true")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
-	if (player.meta.antimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
+	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
 	if (player.money.log10() >= 7.88e13 && tmp.qu.pairedChallenges.completed == 0) giveAchievement("The truth of anti-challenged")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")

@@ -407,14 +407,14 @@ function isTreeUpgActive(upg) {
 }
 
 function getTreeUpgradeLevel(upg) {
-	return tmp.qu.tod.upgrades[upg] || 0
+	return masteryStudies.has("d12") ? (tmp.qu.tod.upgrades[upg] || 0) : 0
 }
 
 function getEffectiveTreeUpgLevel(upg){
 	return TREE_UPGRADES[upg].effLvl(getTreeUpgradeLevel(upg) * tmp.tue)
 }
 
-function getTotalNumOfToDUpgrades(){
+function getTotalNumOfToDUpgrades() {
 	let power = 0
 	for (var upg = 1; upg <= 8; upg++) power += getTreeUpgradeLevel(upg)
 	return power
@@ -699,6 +699,8 @@ function getTreeUpgradeEfficiencyText(){
 }
 
 function getTreeUpgradeEfficiency(mod) {
+	if (!masteryStudies.has("d12")) return 0
+
 	let r = 1
 	if (player.ghostify.neutrinos.boosts >= 7 && (tmp.qu.bigRip.active || hasNU(17) || mod == "br") && mod != "noNB") r += tmp.nb[7]
 	if (hasAch("ng3p62") && !tmp.qu.bigRip.active) r *= 1.1

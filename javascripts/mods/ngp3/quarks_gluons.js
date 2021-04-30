@@ -525,9 +525,11 @@ let enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return 1/0 //Math.pow(x, 1.5) * 2e3 + 1
+			if (x == 1) return 1/0 // Temp
+			return Math.pow(x, 1.5) * 2e3 + 1e3
 		},
 		target() {
+			return 1 // Temp
 			return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
 		},
 

@@ -1655,9 +1655,9 @@ function doNGp3Init2(){
 		tmp.bl = player.ghostify.bl
 		delete tmp.badm
 	}
+
 	updateActiveBigRipUpgrades()
 	updateBosonicLimits()
-	updateTemp()
         
 	if (tmp.ngp3) {
 		if (player.eternityBuyer.presets === undefined) player.eternityBuyer.presets = {on: false, autoDil: false, selected: -1, selectNext: 0, left: 1, order: []}
@@ -1680,11 +1680,11 @@ function doNGp3Init2(){
 			tmp.qu.nanofield.producingCharge = false
 		}
 		if (tmp.qu.autobuyer.peakTime === undefined) tmp.qu.autobuyer.peakTime = 0
-		if (tmp.qu.nanofield.rewards>17&&tmp.qu.tod.upgrades[1]==undefined&&!player.ghostify.reached&&!tmp.mod.ngp4V) {
-			var newMS=[]
-			for (var m=0;m<player.masterystudies.length;m++) {
-				var d=player.masterystudies[m].split("d")
-				if (d[1]!==undefined) newMS.push(player.masterystudies[m])
+		if (tmp.qu.nanofield.rewards >= 18 && tmp.qu.tod.upgrades[1] == undefined && !player.ghostify.reached && !tmp.mod.ngp4V) {
+			var newMS = []
+			for (var m = 0; m < player.masterystudies.length; m++) {
+				var d = player.masterystudies[m].split("d")
+				if (d[1] !== undefined) newMS.push(player.masterystudies[m])
 			}
 			player.masterystudies = newMS
 			tmp.qu.nanofield.rewards = 16
@@ -1705,6 +1705,7 @@ function doNGp3Init2(){
 		tmp.bl.odSpeed = Math.max(tmp.bl.odSpeed, 1)
 		if (Decimal.eq(player.ghostify.wzb.zNeReq, 0)) player.ghostify.wzb.zNeReq = 1
 		updateAutoGhosts(true)
+		updateTemp(true)
 	}
 }
 
@@ -2233,8 +2234,7 @@ function onLoad(noOffline) {
 	} else if (tmp.mod.popUpId!="STD") showNextModeMessage()
 	getEl("ghostlyNewsTicker").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?24:0)+"px"
 	getEl("ghostlyNewsTickerBlock").style.height=((player.options.secrets!==undefined?player.options.secrets.ghostlyNews:false)?16:0)+"px"
-	updateTemp()
-	updateTemp()
+	updateTemp(true)
 	updateAchievements()
 }
 

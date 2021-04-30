@@ -3357,7 +3357,7 @@ function eternity(force, auto, forceRespec, dilated) {
 
 	giveAchievement("Time is relative")
 	player.replicanti.galaxies = 0
-	extraReplGalaxies = 0
+	tmp.extraRG = 0
 	if (dilated || !hasAch("ng3p67")) resetReplicantiUpgrades()
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()

@@ -1,6 +1,7 @@
 let tmp = {
 	nrm: new Decimal(1),
 	rm: new Decimal(1),
+	extraRG: 0,
 	it: 1,
 	rg4: false,
 	inQCs: [0],
@@ -20,7 +21,7 @@ let tmp = {
 	leBonus: {}
 }
 
-function updateTemp() {
+function updateTemp(init) {
 	if (typeof player != "undefined") {
 		if (player.money) tmp.ri = player.money.gte(getLimit()) && ((player.currentChallenge != "" && player.money.gte(player.challengeTarget)) || !onPostBreak())
 		else tmp.ri = false
@@ -28,6 +29,8 @@ function updateTemp() {
 		tmp.ri = false
 		return
 	}
+
+	if (init) tmp.extraRG = 0
 
 	tmp.nrm = 1
 	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || player.replicanti.amount).max(1)
@@ -67,7 +70,7 @@ function updateTemp() {
 
 	updateExtraReplMult()
 	updateExtraReplBase()
-	extraReplGalaxies = Math.floor(extraReplBase * extraReplMulti)
+	tmp.extraRG = Math.floor(extraReplBase * extraReplMulti)
 
 	tmp.ts = {}
 	if (!isTickDisabled()) {

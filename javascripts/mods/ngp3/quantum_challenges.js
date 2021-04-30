@@ -337,7 +337,7 @@ let qcRewards = {
 }
 
 function isQCRewardActive(x) {
-	return tmp.qcRewards && tmp.qcRewards[x] && player.masterystudies.includes("d8") && QCIntensity(x)
+	return masteryStudies.has("d8") && tmp.qcRewards && tmp.qcRewards[x] && QCIntensity(x)
 }
 
 function updateQCRewardsTemp() {

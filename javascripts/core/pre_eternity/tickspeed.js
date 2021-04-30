@@ -10,6 +10,7 @@ function getTickspeedMultiplier() {
 function initialGalaxies() {
 	let g = player.galaxies
 
+	if (pos.on()) g -= pos.save.gals.ng.sac
 	if (tmp.ngC) g *= 2
 	if ((inNC(15) || player.currentChallenge == "postc1") && tmp.mod.ngmX == 3) g = 0
 
@@ -76,7 +77,7 @@ function getExtraGalaxyPower(noDil) {
 	if (hasTimeStudy(132)) tsReplEff += 0.4
 
 	let extraReplGalPower = 0
-	extraReplGalPower += replPower * tsReplEff + extraReplGalaxies // extraReplGalaxies is a constant
+	extraReplGalPower += replPower * tsReplEff + tmp.extraRG // tmp.extraRG is a constant
 
 	if (masteryStudies.has(284)) replPower = (replPower + extraReplGalPower) * replGalEff
 	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower

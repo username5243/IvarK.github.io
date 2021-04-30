@@ -141,7 +141,7 @@ var masteryStudies = {
 		},
 		301() {
 			if (hasNU(6)) return 0
-			return Math.floor(extraReplGalaxies / 4.15)
+			return Math.floor(tmp.extraRG / 4.15)
 		},
 		303() {
 			return Decimal.pow(4.7, Math.pow(Math.log10(Math.max(player.galaxies, 1)), 1.5))
@@ -183,7 +183,7 @@ var masteryStudies = {
 			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
 		},
 		371() {
-			return Math.pow(extraReplGalaxies+1,tmp.mod.newGameExpVersion?.5:.3)
+			return Math.pow(tmp.extraRG+1,tmp.mod.newGameExpVersion?.5:.3)
 		},
 		372() {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1
@@ -467,6 +467,8 @@ function getMasteryStudyCostMult(id) {
 function buyingD7Changes() {
 	showTab("quantumtab")
 	showQuantumTab("positrons")
+	getEl("positronstabbtn").style.display = ""
+
 	enB.update("pos")
 }
 
