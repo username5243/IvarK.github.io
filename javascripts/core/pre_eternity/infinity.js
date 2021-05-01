@@ -454,9 +454,9 @@ function bumpInfMult() {
 }
 
 function maxAutobuyerUpgrades() {
-	let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-	for (var i = 0; i < order.length; i++) {
-		var id = order[i]
+	let order = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	for (var i = order.length; i > 0; i--) {
+		var id = order[i - 1]
 		while (buyAutobuyer(id - 1, true)) {}
 	}
 	updateAutobuyers()

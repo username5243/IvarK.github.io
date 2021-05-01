@@ -385,7 +385,7 @@ function checkAchievement(id) {
 	if (id.split("ngm5p")[1]) return inNGM(5)
 	if (id.split("ngud")[1]) return player.exdilation != undefined
 	if (id.split("ngpp")[1]) return player.meta != undefined
-	if (ngp3) return tmp.ngpX >= (ngp3 >= 11 ? 5 : 3)
+	if (ngp3) return tmp.ngpX >= (ngp3 >= 110 ? 5 : 3)
 
 	//Vanilla check
 	let r = parseInt(id.split("r")[1])
