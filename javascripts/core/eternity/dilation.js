@@ -441,7 +441,7 @@ function buyDilationUpgrade(pos, max, isId) {
 	updateDilationUpgradeButtons()
 }
 
-function getPassiveTTGen() {
+function getTTProduction() {
 	let r = getTTGenPart(player.dilation.tachyonParticles)
 	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
@@ -486,7 +486,7 @@ function updateDilationUpgradeButtons() {
 	getEl("dil32desc").textContent = tmp.ngC ? "Replicated Condensers are 15% stronger." : "Unlock the ability to pick all the study paths from the first split."
 	getEl("dil34desc").textContent = tmp.ngC ? "Eternities, TP, & DT power up each other." : "Eternities and dilated time power up each other."
 
-	var genSpeed = getPassiveTTGen()
+	var genSpeed = getTTProduction()
 	getEl("dil41desc").textContent = "Currently: " + shortenMoney(hasAch("ng3p44") && player.timestudy.theorem / genSpeed < 3600 ? genSpeed * 10 : genSpeed)+"/s"
 
 	if (player.dilation.studies.includes(6)) {

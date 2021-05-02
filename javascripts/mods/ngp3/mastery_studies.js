@@ -610,7 +610,7 @@ function updateMasteryStudyButtons() {
 			if (div.className !== className) div.className = className
 			if (masteryStudies.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				getEl("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				if (mult) getEl("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}

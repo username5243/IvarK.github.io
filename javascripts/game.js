@@ -4991,7 +4991,7 @@ function ngp3DilationUpdating(){
 function setTachyonParticles(x) {
 	player.dilation.tachyonParticles = new Decimal(x)
 	if (!player.dilation.active) player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
-	tmp.qu.notrelative = false
+	if (tmp.ngp3) tmp.qu.notrelative = false
 	if (hasAch("ng3p18") || hasAch("ng3p37")) {
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
 		player.dilation.bestTPOverGhostifies = player.dilation.bestTPOverGhostifies.max(player.dilation.bestTP)
@@ -5023,9 +5023,9 @@ function passiveQuantumLevelStuff(diff){
 	updateQuantumWorth("quick")
 }
 
-function TTpassiveGain(diff){
+function generateTT(diff){
 	if (player.dilation.upgrades.includes(10)) {
-		var speed = getPassiveTTGen()
+		var speed = getTTProduction()
 		var div = player.timestudy.theorem / speed
 		player.timestudy.theorem += diff * speed  
 		if (div < 3600 && hasAch("ng3p44")) player.timestudy.theorem += Math.min(diff * 9, 3600 - div) * speed
@@ -5084,7 +5084,7 @@ function gameLoop(diff) {
 		passiveGPGen(diff)
 		IPonCrunchPassiveGain(diff)
 		EPonEternityPassiveGain(diff)
-		TTpassiveGain(diff)
+		generateTT(diff)
 		if (hasDilationStudy(1)) {
 			let gain = getDilTimeGainPerSecond()
 			player.dilation.dilatedTime = player.dilation.dilatedTime.plus(gain.times(diff))
