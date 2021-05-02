@@ -69,7 +69,7 @@ function maxTheorems() {
 }
 
 function updateTheoremButtons() {
-	if (player.dilation.upgrades.includes(10) && getTTProduction() <= 1e3) {
+	if (player.dilation.upgrades.includes(10) && getTTProduction() > 1e3) {
 		getEl("theoremmax").style.display = "none"
 		getEl("theoremam").style.display = "none"
 		getEl("theoremip").style.display = "none"
