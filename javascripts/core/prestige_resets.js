@@ -295,10 +295,13 @@ function resetTimeDimensions(full) {
 }
 
 function resetEternityChallenges(bigRip, ngpp) {
-	player.eternityChalls = {}
-	if (ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1)) { 
-		for (let ec = 1; ec <= (ngpp ? 12 : 14); ec++) player.eternityChalls['eterc' + ec] = 5
-	}
+	let ecUpTo = ngpp ? 12 : 14
+	let data = {}
+
+	let kept = ngpp || (bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 1)
+	if (kept) for (let ec = 1; ec <= ecUpTo; ec++) data['eterc' + ec] = player.eternityChalls['eterc' + ec]
+	player.eternityChalls = data
+
 	resetEternityChallUnlocks()
 }
 

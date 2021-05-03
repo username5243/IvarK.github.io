@@ -328,14 +328,11 @@ function exDilationUpgradeStrength(x, add = 0) {
 
 function reverseDilation () {
 	if (!canReverseDilation()) return;
-	if (player.options.exdilationconfirm) if (!confirm('Reversing dilation will make you lose all your tachyon particles, ' +
-							   'dilated time, dilation upgrades, and blackhole power, but you will gain ex-dilation ' +
-							   'that makes repeatable upgrades more powerful and reduces the severity of dilation. Are you sure you want to do this?')) return;
-	var eterConf = player.options.eternityconfirm
-	player.options.eternityconfirm = false
-	eternity(true);
-	player.options.eternityconfirm = eterConf
-	player.exdilation.unspent = player.exdilation.unspent.plus(getExDilationGain());
+	if (player.options.exdilationconfirm && !confirm('Reversing dilation will make you lose all your tachyon particles, ' +
+	   'dilated time, dilation upgrades, and blackhole power, but you will gain ex-dilation ' +
+	   'that makes repeatable upgrades more powerful and reduces the severity of dilation. Are you sure you want to do this?')) return
+
+	player.exdilation.unspent = player.exdilation.unspent.plus(getExDilationGain())
 	player.exdilation.times++;
 	player.dilation = {
 		studies: player.dilation.studies,
@@ -356,11 +353,11 @@ function reverseDilation () {
 		}
 	}
 	if (player.meta !== undefined) player.dilation.rebuyables[4] = 0
-	resetBlackhole();
-	updateDilationUpgradeButtons();
-	updateDilationUpgradeCosts();
+	resetBlackhole()
 	updateExdilation()
 	giveAchievement('Time is absolute')
+
+	eternity(true)
 }
 
 function toggleExdilaConf() {
