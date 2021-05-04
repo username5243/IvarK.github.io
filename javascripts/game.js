@@ -3733,23 +3733,16 @@ function doNGP3UnlockStuff(){
 	else if (chall[0] > chall[1]) chall = chall[1] * 10 + chall[0]
 	else chall = chall[0] * 10 + chall[1]
 	if (!tmp.qu.reached && isQuantumReached()) doQuantumUnlockStuff()
-	let MAbool = player.meta.bestAntimatter.lt(getQuantumReq())
-	let DONEbool = !tmp.qu.nonMAGoalReached.includes(chall)
-	let TIMEbool = player.quantum.time > 10
-	if (chall && player.money.gt(Decimal.pow(10, getQCGoalLog())) && MAbool && DONEbool && TIMEbool) {
-		doReachAMGoalStuff(chall)
-	}
-	if (!player.ghostify.reached && tmp.qu.bigRip.active) if (tmp.qu.bigRip.bestThisRun.gte(Decimal.pow(10, getQCGoalLog(undefined, true)))) {
-		doGhostifyUnlockStuff()
-	}
+
 	var inEasierModeCheck = !inEasierMode()
 	if (player.masterystudies && (masteryStudies.has("d14")||hasAch("ng3p51")) && !metaSave.ngp4 && !inEasierModeCheck) doNGP4UnlockStuff()
 	if (player.eternityPoints.gte("1e1200") && tmp.qu.bigRip.active && !tmp.qu.breakEternity.unlocked) doBreakEternityUnlockStuff()
 	if (pl.did()) {
 		pl.unlCheck()
-	} else {
-		if (tmp.quActive && player.money.gte(Decimal.pow(10, 6e9)) && tmp.qu.bigRip.active && !player.ghostify.ghostlyPhotons.unl) doPhotonsUnlockStuff()
-		if (canUnlockBosonicLab() && !player.ghostify.wzb.unl) doBosonsUnlockStuff()
+	} else if (tmp.quActive) {
+		if (!player.ghostify.reached && tmp.qu.bigRip.active && tmp.qu.bigRip.bestThisRun.gte(Decimal.pow(10, getQCGoalLog(undefined, true)))) doGhostifyUnlockStuff()
+		if (!player.ghostify.ghostlyPhotons.unl && tmp.qu.bigRip.active && tmp.qu.bigRip.bestThisRun.gte(Decimal.pow(10, 6e9))) doPhotonsUnlockStuff()
+		if (!player.ghostify.wzb.unl && canUnlockBosonicLab()) doBosonsUnlockStuff()
 		unlockHiggs()
 		GDs.unl()
 	}
@@ -4853,7 +4846,7 @@ function ECRewardDisplayUpdating(){
 	getEl("ec11reward").textContent = "Reward: Further reduce the tickspeed cost multiplier increase. Currently: " + player.tickSpeedMultDecrease.toFixed(2) + "x" + (tmp.ngC ? ", and galaxies are " + shorten((getECReward(11) - 1) * 100) + "% stronger (based on free tickspeed upgrades)":" ")
 	getEl("ec12reward").textContent = "Reward: Infinity Dimension cost multipliers are reduced. (x^" + getECReward(12) + ")"
 	getEl("ec13reward").textContent = "Reward: For boosting dimension boosts, everything except meta-antimatter boosts them more. (x^1 -> ^" + getECReward(13).toFixed(2) + ")"
-	getEl("ec14reward").textContent = "Reward: Slow down the base replicate interval by " + shorten(tmp.rep.ec14.interval) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14.ooms) + "x OoMs."
+	getEl("ec14reward").textContent = "Reward: Slow down the base replicate interval by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.interval : 1) + "x, but also slow down the replicanti scaling by " + shorten(tmp.rep.ec14 ? tmp.rep.ec14.ooms : 1) + "x OoMs."
 
 	getEl("ec10span").textContent = shortenMoney(ec10bonus) + "x"
 	getEl("eterc7ts").textContent = tmp.ngC ? "does nothing" : "affects all dimensions normally"
