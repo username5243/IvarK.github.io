@@ -205,6 +205,7 @@ function updateColorPowers() {
 //Gluons
 function gainQuantumEnergy() {
 	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
+
 	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuantumEnergyMult() - getQuantumEnergySubMult()) * 1.25
 	tmp.qu.quarkEnergy = Math.max(x, tmp.qu.quarkEnergy)
 	tmp.qu.quarkEnergy = isNaN(tmp.qu.quarkEnergy) ? 0 : tmp.qu.quarkEnergy
@@ -225,10 +226,11 @@ function getQuantumEnergySubMult() {
 }
 
 function updateQuarkEnergyEffects() {
-	tmp.qkEng = {}
+	let expReduction = enB.active("pos", 4) ? Math.sqrt(1 / (tmp.enB.pos4 * 3)) : 1
 
-	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.totalQE / 1.7 + 1) + 1, 2)
-	tmp.qkEng.eff2 = Math.pow(tmp.totalQE, 2) * tmp.qkEng.eff1 / 4
+	tmp.qkEng = {}
+	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.totalQE / 1.7 + 1) + 1, 2 * expReduction)
+	tmp.qkEng.eff2 = Math.pow(tmp.totalQE, 2 * expReduction) * tmp.qkEng.eff1 / 4
 }
 
 function buyQuarkMult(name) {
@@ -563,7 +565,7 @@ let enB = {
 			type: "g",
 			eff(x) {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos[1].chargeReq / 2)
-				return Math.sqrt(x / 1e3 + 1) - 1
+				return Math.pow(x / 1e3 + 1, 2/3) - 1
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -584,7 +586,7 @@ let enB = {
 			type: "r",
 			eff(x) {
 				if (enB.mastered("pos", 2)) x = Math.max(x, enB.pos[2].chargeReq / 2)
-				return Math.pow(x / 500 + 1, 1.25)
+				return Math.pow(x / 200 + 1, 1.25)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -626,7 +628,7 @@ let enB = {
 			type: "r",
 			eff(x) {
 				if (enB.mastered("pos", 4)) x = Math.max(x, enB.pos[4].chargeReq / 2)
-				return 1 / (2 + 1 / (player.meta.resets / 10 + 1))
+				return 1 / (1 + 1 / (player.meta.resets / 10 + 1) + 1 / Math.sqrt(player.meta.resets / 50 + 1))
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
