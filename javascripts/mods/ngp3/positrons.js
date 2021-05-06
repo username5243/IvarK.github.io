@@ -42,7 +42,7 @@ let POSITRONS = {
 	types: {
 		ng: {
 			pow() {
-				return 1
+				return 0.2
 			},
 			sacGals(pow) {
 				return Math.min(player.galaxies / 2, pow)

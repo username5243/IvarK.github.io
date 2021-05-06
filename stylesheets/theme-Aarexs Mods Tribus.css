@@ -7,41 +7,45 @@ body {
     font-family: 'IBM Plex Mono', monospace !important
 }
 
-button, .optionstab td div {
-	border-radius: 4px !important;
-	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25);
+button {
+	background: #000f1f !important;
+	border: 1px solid !important;
+	border-color: transparent;
+	border-radius: 3px !important;
     font-family: 'IBM Plex Mono', monospace !important
 }
 
 button:hover {
-	transform: scale(1.1);
-	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25), 0px 0px 12px white
+	transform: scale(1.1)
 }
 
 .tabbtn {
-	background: linear-gradient(#ffff7f, #bfff7f) !important;
-	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
-	color: rgba(0, 0, 0, 0.625) !important
+	border-color: transparent #7fbfff transparent #7fbfff !important;
+	box-shadow: 1px 0px 3px rgba(127, 191, 255, 0.25), -1px 0px 3px rgba(127, 191, 255, 0.25);
+	color: #bfdfff !important
 }
 
 .secondarytabbtn {
-	background: linear-gradient(#bfffff, #bfbfff) !important;
-	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
-	color: rgba(0, 0, 0, 0.625) !important
+	border-color: transparent #bfff7f transparent #bfff7f !important;
+	box-shadow: 1px 0px 3px rgba(191, 255, 127, 0.25), -1px 0px 3px rgba(191, 255, 127, 0.25);
+	color: #dfffbf !important
 }
 
 .storebtn {
-	background: linear-gradient(#ffffbf, #dfffbf) !important;
-	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
-	color: rgba(0, 0, 0, 0.625) !important
+	border-color: transparent #7fbfff transparent #7fbfff !important;
+	box-shadow: 1px 0px 3px rgba(127, 191, 255, 0.25), -1px 0px 3px rgba(127, 191, 255, 0.25);
+	color: #bfdfff !important
 }
 
-.unavailablebtn {
+.storebtn div, .storebtn b {
+	color: #bfdfff !important
+}
+
+.unavailablebtn, .timestudylocked, .eternityupbtnlocked, .newdimlocked {
 	transform: scale(1) !important;
-	background: linear-gradient(#bf7f7f, #7f7f7f) !important;
-	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
-	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25) !important;
-	color: rgba(127, 0, 0, 0.625) !important
+	border-color: transparent #7f7f7f transparent #7f7f7f !important;
+	box-shadow: 1px 0px 3px rgba(127, 127, 127, 0.25), -1px 0px 3px rgba(127, 127, 127, 0.25);
+	color: #ff0000 !important
 }
 
 .popup {
@@ -51,17 +55,78 @@ button:hover {
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
-.optionstab td div b, .popup div, .popup span, .popup b {
-	color: rgba(0, 0, 0, 0.625) !important
-}
-
-.infinitybtn {
-	background: linear-gradient(#ffff00, #ff7f00) !important;
-	border-color: rgba(255, 255, 255, 0.25) rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.25) rgba(255, 255, 255, 0.25) !important;
-	box-shadow: inset -3px -3px 3px rgba(0, 0, 0, 0.25) !important;
+.popup div, .popup span, .popup b {
 	color: rgba(0, 0, 0, 0.625) !important
 }
 
 #coinAmount {
 	color: #007fff !important
+}
+
+/* Galaxy */
+.galaxybtn, #gSacrifice.storebtn {
+	border-color: transparent #003fff !important;
+	box-shadow: 1px 0px 3px rgba(0, 63, 255, 0.25), -1px 0px 3px rgba(0, 63, 255, 0.25);
+	color: #7f9fff !important
+}
+
+/* Infinity */
+.infinitybtn, #idtabbtn button, .newdim {
+	border-color: transparent #ffbf00 transparent #ffbf00 !important;
+	box-shadow: 1px 0px 3px rgba(255, 191, 0, 0.25), -1px 0px 3px rgba(255, 191, 0, 0.25);
+	color: #ffdf7f !important
+}
+
+.infinitybtn div, .infinitybtn b {
+	color: #ffdf7f !important
+}
+
+/* Eternity */
+.eternitybtn, .eternitytabbtn, #tdtabbtn button, .timestudy, .eternityupbtn {
+	border-color: transparent #bf00ff transparent #bf00ff !important;
+	box-shadow: 1px 0px 3px rgba(191, 0, 255, 0.25), -1px 0px 3px rgba(191, 0, 255, 0.25);
+	color: #df7fff !important
+}
+
+.eternitybtn div, .eternitybtn b {
+	color: #df7fff !important
+}
+
+/* Meta */
+#mdtabbtn button {
+	border-color: transparent #00ffff transparent #00ffff !important;
+	box-shadow: 1px 0px 3px rgba(0, 255, 255, 0.25), -1px 0px 3px rgba(0, 255, 255, 0.25);
+	color: #7fffff !important
+}
+
+/* Quantum */
+.quantumbtn {
+	border-color: transparent #3fff00 !important;
+	box-shadow: 1px 0px 3px rgba(63, 255, 0, 0.25), -1px 0px 3px rgba(63, 255, 0, 0.25);
+	color: #9fff7f !important
+}
+
+/* Fixes */
+.optionstab td .storebtn {
+	background: #000f1f !important;
+	border: 1px solid !important;
+	border-color: transparent #7fbfff transparent #7fbfff !important;
+	border-radius: 3px !important;
+	box-shadow: 1px 0px 3px rgba(127, 191, 255, 0.25), -1px 0px 3px rgba(127, 191, 255, 0.25);
+	color: #bfdfff !important
+}
+
+
+.presPos1.newdimlocked, .presPos4.newdimlocked {
+	transform: scale(1) translate(50%, 0) !important;
+}
+.presPos1.newdim:hover, .presPos4.newdim:hover {
+	transform: scale(1.1) translate(50%, 0) !important;
+}
+
+.presPos3.newdimlocked, .presPos6.newdimlocked {
+	transform: scale(1) translate(-50%, 0) !important;
+}
+.presPos3.newdim:hover, .presPos6.newdim:hover {
+	transform: scale(1) translate(-50%, 0) !important;
 }

@@ -208,7 +208,7 @@ function resetDimensions() {
 }
 
 function doDimBoostResetStuff(layer = 1) {
-	if (layer >= 3 || !hasAch("r111")) setInitialMoney()
+	if (layer >= 3 || !hasAch("r111") || player.dilation.active) setInitialMoney()
 	setInitialResetPower()
 	resetDimensions()
 

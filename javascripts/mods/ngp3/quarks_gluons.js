@@ -528,11 +528,11 @@ let enB = {
 		cost(x) {
 			if (x === undefined) x = this.amt()
 			if (x == 1) return 1/0 // Temp
-			return Math.pow(x, 1.5) * 2e3 + 1e3
+			return Math.pow(x, 1.5) * 300 + 400
 		},
 		target() {
 			return 1 // Temp
-			return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
+			// return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
 		},
 
 		amt() {
@@ -565,7 +565,7 @@ let enB = {
 			type: "g",
 			eff(x) {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos[1].chargeReq / 2)
-				return Math.pow(x / 1e3 + 1, 2/3) - 1
+				return x / 2e3
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -585,8 +585,7 @@ let enB = {
 
 			type: "r",
 			eff(x) {
-				if (enB.mastered("pos", 2)) x = Math.max(x, enB.pos[2].chargeReq / 2)
-				return Math.pow(x / 200 + 1, 1.25)
+				return Math.pow(player.meta.bestAntimatter.add(1).log10() / 100 + 1, 2)
 			},
 			effDisplay(x) {
 				return shorten(x)
