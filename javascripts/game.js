@@ -32,7 +32,7 @@ function setupFooterHTML() {
 				) +
 				"<a href='http://discord.gg/7v82CAX'>TS: Discord</a> | "
 			: 
-				"<a href='http://discord.gg/8cBZbAfmCQ' target='_newtab'>Discord</a> | " +
+				"<a href='http://discord.gg/KsjcgskgTj' target='_newtab'>Discord</a> | " +
 				"<a href='http://raw.githack.com/aarextiaokhiao/IvarK.github.io/" + betaLink + "/'>Test server</a> | "
 			) + 
 			"<a href='donate.html' onclick='giveAchievement(\"A sound financial decision\")' target='_newtab'>Donate</a> | " + 
