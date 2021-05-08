@@ -208,9 +208,9 @@ function resetDimensions() {
 }
 
 function doDimBoostResetStuff(layer = 1) {
-	if (layer >= 3 || !hasAch("r111") || player.dilation.active) setInitialMoney()
+	if (!hasAch("r111")) setInitialMoney()
 	setInitialResetPower()
-	resetDimensions()
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) resetDimensions()
 
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -227,11 +227,11 @@ function doDimBoostResetStuff(layer = 1) {
 }
 
 function doGalaxyResetStuff(layer = 2) {
-	player.resets = 0
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) player.resets = 0
 	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
 	player.tdBoosts = resetTDBoosts()
 
-	doDimBoostResetStuff()
+	doDimBoostResetStuff(layer)
 }
 
 function doCrunchResetStuff(layer = 3) {
@@ -244,7 +244,7 @@ function doCrunchResetStuff(layer = 3) {
 
 	player.thisInfinityTime = 0
 
-	doGalaxyResetStuff()
+	doGalaxyResetStuff(layer)
 }
 
 function doNormalChallengeResetStuff() {
@@ -402,8 +402,10 @@ function doEternityResetStuff(layer = 4) {
 	player.dead = true
 	if (tmp.ngp3) player.dontWant = true
 
-	doCrunchResetStuff(layer)
 	resetInfDimensions(true)
+	resetTimeDimensions()
+
+	doCrunchResetStuff(layer)
 }
 
 function getReplicantsOnGhostifyData(){

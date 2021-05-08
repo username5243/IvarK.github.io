@@ -148,6 +148,7 @@ let POSITRONS = {
 		}
 	},
 	updateTab() {
+		enB.update("pos")
 		enB.updateOnTick("pos")
 
 		getEl("pos_formula").innerHTML = pos.save.on ? getFullExpansion(pos.tmp.sac_mdb) + " MDBs + " + shorten(pos.tmp.sac_qem) + "x QE multiplier -><br>" : ""

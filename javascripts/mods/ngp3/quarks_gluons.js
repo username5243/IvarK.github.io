@@ -527,12 +527,10 @@ let enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			if (x == 1) return 1/0 // Temp
-			return Math.pow(x, 1.5) * 300 + 400
+			return Math.pow(x / 2 + 1, 1.5) * 400
 		},
 		target() {
-			return 1 // Temp
-			// return Math.floor(Math.pow(Math.max((this.engAmt() - 1) / 2e3, 0), 1 / 1.5) + 1)
+			return Math.floor((Math.pow(this.engAmt() / 400, 1 / 1.5) - 1) * 2 + 1)
 		},
 
 		amt() {
@@ -552,7 +550,7 @@ let enB = {
 		max: 8,
 		1: {
 			req: 1,
-			masReq: 3,
+			masReq: 2,
 
 			chargeReq: 500,
 			activeReq() {
@@ -565,7 +563,7 @@ let enB = {
 			type: "g",
 			eff(x) {
 				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos[1].chargeReq / 2)
-				return x / 2e3
+				return x / 2e3 + Math.sqrt(x / 2e3)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -573,9 +571,9 @@ let enB = {
 		},
 		2: {
 			req: 1,
-			masReq: 1/0,
+			masReq: 5,
 
-			chargeReq: 100,
+			chargeReq: 400,
 			activeReq() {
 				return enB.mastered("pos", 2) || pos.save.eng >= this.chargeReq
 			},
@@ -592,10 +590,10 @@ let enB = {
 			}
 		},
 		3: {
-			req: 5,
-			masReq: 7,
+			req: 1,
+			masReq: 3,
 
-			chargeReq: 2e3,
+			chargeReq: 700,
 			activeReq() {
 				return enB.mastered("pos", 3) || pos.save.eng >= this.chargeReq
 			},
@@ -606,7 +604,7 @@ let enB = {
 			type: "b",
 			eff(x) {
 				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
-				return Math.log10(x / 2e3 + 1) / 2 + 1
+				return Math.log10(x / 1e3 + 1) / 2 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
@@ -823,7 +821,6 @@ function updateGluonsTabOnUpdate(mode) {
 	}
 
 	enB.update("glu")
-	enB.update("pos") //Temp
 
 	let type = tmp.qu.entColor || "rg"
 	getEl("entangle_rg").className = "gluonupgrade " + (type == "rg" ? "chosenbtn" : "rg")

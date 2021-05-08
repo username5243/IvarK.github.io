@@ -316,7 +316,6 @@ function startEternityChallenge(n) {
 	EPminpeakType = 'normal'
 	EPminpeak = new Decimal(0)
 	updateMilestones()
-	resetTimeDimensions()
 	if (getEternitied() < 20) player.autobuyers[9].bulk = 1
 	if (getEternitied() < 20) getEl("bulkDimboost").value = player.autobuyers[9].bulk
 	if (getEternitied() < 50) {

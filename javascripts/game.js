@@ -3393,7 +3393,6 @@ function eternity(force, auto, forceRespec, dilated) {
 	EPminpeakType = 'normal'
 	EPminpeak = new Decimal(0)
 	updateMilestones()
-	resetTimeDimensions()
 	getEl("eternityconf").style.display = "inline-block"
 	if (getEternitied() < 20) {
 		player.autobuyers[9].bulk = 1

@@ -159,7 +159,7 @@ function canGetReplicatedGalaxy() {
 }
 
 function canAutoReplicatedGalaxy() {
-	return (hasAch("ngpp16") && tmp.ngp3) || !hasTimeStudy(131) || tmp.ngC
+	return (hasAch("r136") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) || !hasTimeStudy(131) || tmp.ngC
 }
 
 function getMaxRG() {

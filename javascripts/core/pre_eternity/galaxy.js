@@ -10,10 +10,7 @@ function galaxyReset(bulk) {
 
 	player.galaxies += bulk
 
-	if (moreEMsUnlocked() && getEternitied() >= 1e15 && !player.dilation.active) {
-		//To resolve: 1e15 Eternities Milestone is buggy in dilation runs
-		setInitialResetPower()
-	} else doGalaxyResetStuff()
+	doGalaxyResetStuff()
 
 
 	skipResets()
