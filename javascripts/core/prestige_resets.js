@@ -210,7 +210,7 @@ function resetDimensions() {
 function doDimBoostResetStuff(layer = 1) {
 	if (!hasAch("r111")) setInitialMoney()
 	setInitialResetPower()
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) resetDimensions()
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e9) resetDimensions()
 
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)

@@ -175,6 +175,8 @@ function updateColorCharge() {
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (tmp.qu.usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
+	colorCharge.subCancel = Math.pow(colorCharge.normal.charge * 2, 1.5)
+
 	updateQuarksTabOnUpdate()
 }
 
@@ -319,7 +321,7 @@ function getGluonEffBuff(x) {
 }
 
 function getGluonEffNerf(x) {
-	return Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(283) ? 1.8 : 2)
+	return Math.max(Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(283) ? 1.8 : 2) - colorCharge.subCancel, 0)
 }
 
 let enB = {
@@ -604,7 +606,7 @@ let enB = {
 			type: "b",
 			eff(x) {
 				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
-				return Math.log10(x / 1e3 + 1) / 2 + 1
+				return Math.log10(x / 800 + 1) / 2 + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
@@ -778,7 +780,8 @@ function updateQuarksTabOnUpdate(mode) {
 	if (colorCharge.normal.charge == 0) getEl("colorCharge").innerHTML='neutral charge'
 	else {
 		var color = colorShorthands[colorCharge.normal.color]
-		getEl("colorCharge").innerHTML='<span class="'+color+'">'+color+'</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>"
+		getEl("colorCharge").innerHTML='<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>" +
+			", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel)
 	}
 
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)
