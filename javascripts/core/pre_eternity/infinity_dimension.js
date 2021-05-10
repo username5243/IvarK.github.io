@@ -363,8 +363,11 @@ function loadInfAutoBuyers() {
 var infDimPow = 1
 
 function getIDReplMult() {
-	if (masteryStudies.has(272)) return Decimal.pow(2, Math.pow(tmp.rm.log10(), 2))
-	return tmp.rm
+	let r = tmp.rm
+	let log = r.log10()
+	if (masteryStudies.has(272)) r = Decimal.pow(2, Math.pow(log, 2 - 1 / (Math.log10(log + 1) / 5 + 1))).max(r)
+
+	return r
 }
 
 function updateInfPower() {

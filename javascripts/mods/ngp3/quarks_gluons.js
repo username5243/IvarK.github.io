@@ -175,7 +175,7 @@ function updateColorCharge() {
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (tmp.qu.usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
-	colorCharge.subCancel = Math.pow(colorCharge.normal.charge * 2, 1.5)
+	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 2, 1.5) : 0
 
 	updateQuarksTabOnUpdate()
 }
@@ -327,6 +327,7 @@ function getGluonEffNerf(x) {
 let enB = {
 	buy(type) {
 		let data = this[type]
+		if (!data.unl()) return
 		if (!(data.engAmt() >= data.cost())) return
 		data.set(data.amt() + 1)
 		updateGluonicBoosts()
@@ -334,6 +335,7 @@ let enB = {
 	},
 	maxBuy(type) {
 		let data = this[type]
+		if (!data.unl()) return
 		if (!(data.engAmt() >= data.cost())) return
 		data.set(data.target())
 		updateGluonicBoosts()
@@ -723,7 +725,12 @@ let enB = {
 }
 let ENTANGLED_BOOSTS = enB
 
-function gainQKOnQuantum() {
+function gainQKOnQuantum(qkGain) {
+	if (inQC(0)) {
+		tmp.qu.quarks = tmp.qu.quarks.add(qkGain)
+		if (!tmp.ngp3 || player.ghostify.milestones < 8) tmp.qu.quarks = tmp.qu.quarks.round()
+	}
+
 	var u = tmp.qu.usedQuarks
 	var g = tmp.qu.gluons
 	var p = ["rg", "gb", "br"]
@@ -781,7 +788,7 @@ function updateQuarksTabOnUpdate(mode) {
 	else {
 		var color = colorShorthands[colorCharge.normal.color]
 		getEl("colorCharge").innerHTML='<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>" +
-			", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel)
+			hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : ""
 	}
 
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)

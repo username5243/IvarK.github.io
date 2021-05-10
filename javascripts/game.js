@@ -3832,7 +3832,10 @@ function ghostifyAutomationUpdatingPerSecond() {
 		} 
 	}
 	if (isAutoGhostActive(8)) buyMaxQuantumFood()
-	if (isAutoGhostActive(7)) enB.maxBuy("glu", )
+	if (isAutoGhostActive(7)) {
+		enB.maxBuy("glu")
+		enB.maxBuy("pos")
+	}
 }
 
 function checkGluonRounding(){

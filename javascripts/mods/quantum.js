@@ -312,20 +312,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 		if (tmp.qu.best > tmp.qu.time) tmp.qu.best = tmp.qu.time
 		tmp.qu.times++
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
-		if (!inQC(6)) {
-			tmp.qu.quarks = tmp.qu.quarks.add(qkGain)
-			if (!tmp.ngp3 || player.ghostify.milestones < 8) tmp.qu.quarks = tmp.qu.quarks.round()
-			if (tmp.ngp3 && tmp.qu.quarks.gte(Number.MAX_VALUE) && !tmp.qu.reachedInfQK) {
-				tmp.qu.reachedInfQK = true
-				if (!ph.did("ghostify")) {
-					getEl("welcome").style.display = "flex"
-					getEl("welcomeMessage").innerHTML = "Congratulations for getting " + shorten(Number.MAX_VALUE) + " quarks! You have unlocked new QoL features, like quantum autobuyer modes, assign all, and auto-assignation!"
-					getEl('autoAssign').style.display = ""
-					getEl('autoAssignRotate').style.display = ""
-				}
-				getEl('toggleautoquantummode').style.display=""
-			}
-		}
+
 		if (!inQC(4) && player.meta.resets == 0) giveAchievement("Infinity Morals")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (inQC(1/0) && inQCModifier("?1") && inQCModifier("?2")) giveAchievement("Brutually Challenging")
@@ -437,7 +424,7 @@ function quantumReset(force, auto, QCs, id, bigRip, implode = false) {
 	if (tmp.ngp3) {
 		player.dilation.times = 0
 		if (!force) {
-			gainQKOnQuantum()
+			gainQKOnQuantum(qkGain)
 
 			var qc = tmp.inQCs
 			onQCCompletion(qc, oldMoney, oldTime, dilTimes)

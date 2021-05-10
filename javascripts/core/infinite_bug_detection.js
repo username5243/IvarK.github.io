@@ -9,7 +9,6 @@ var infiniteCheck2 = false
 var infiniteSave
 
 function isInfiniteDetected() { // todo: make better infinite detection system
-	return false
 	if (infiniteDetected) return
 	if (detectInfinite()) {
 		infiniteDetected = true
