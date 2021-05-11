@@ -79,7 +79,7 @@ function getExtraGalaxyPower(noDil) {
 	let extraReplGalPower = 0
 	extraReplGalPower += replPower * tsReplEff + tmp.extraRG // tmp.extraRG is a constant
 
-	if (masteryStudies.has(284)) replPower = (replPower + extraReplGalPower) * replGalEff
+	if (masteryStudies.has(291)) replPower = (replPower + extraReplGalPower) * replGalEff
 	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
 
 	x += replPower

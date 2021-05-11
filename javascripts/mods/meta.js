@@ -64,7 +64,7 @@ function getMDGlobalMultSideA() {
 		if (isQCRewardActive(1)) ret = ret.times(tmp.qcRewards[1])
 
 		//Achievement Rewards
-		var ng3p13exp = Math.sqrt(Decimal.plus(quantumWorth, 1).log10())
+		var ng3p13exp = Math.pow(Decimal.plus(quantumWorth, 1).log10(), 0.25)
 		if (hasAch("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
 	}
 	return ret
@@ -155,9 +155,11 @@ function getMDBoostRequirement(){
 
 function metaBoost() {
 	let req = getMetaShiftRequirement()
+
+	if (!(player.meta[req.tier].bought >= req.amount)) return
+
 	let isNU1ReductionActive = hasNU(1) ? !tmp.qu.bigRip.active : false
-	if (!(player.meta[req.tier].bought>=req.amount)) return
-	if (qMs.tmp.amt >= 27 && req.tier > 7) {
+	if (qMs.tmp.amt >= 28) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()
@@ -166,10 +168,11 @@ function metaBoost() {
 
 		if (player.meta[8].bought >= getMetaShiftRequirement().amount) player.meta.resets++
 	} else player.meta.resets++
+
 	if (hasAch("ng3p72")) return
+
 	player.meta.antimatter = getMetaAntimatterStart()
 	clearMetaDimensions()
-	if (!tmp.ngp3 || !tmp.qu.bigRip.active) getEl("quantumbtn").style.display="none"
 }
 
 
@@ -312,7 +315,7 @@ function getExtraDimensionBoostPower() {
 }
 
 function getExtraDimensionBoostPowerUse() {
-	if (hasAch("ng3p71")) return player.meta.bestOverQuantums
+	//if (hasAch("ng3p71")) return player.meta.bestOverQuantums
 	return player.meta.bestAntimatter
 }
 

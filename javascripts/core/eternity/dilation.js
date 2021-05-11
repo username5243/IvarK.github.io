@@ -9,7 +9,7 @@ function hasDilationStudy(x) {
 function getDTMultPostBRU11(){
 	let gain = new Decimal(1)
 
-	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(tmp.rmPseudo.log10() / (masteryStudies.has(275) ? 10 : 1e4), 1) - 1)))
+	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(tmp.rmPseudo.log10() / (masteryStudies.has(292) ? 10 : 1e4), 1) - 1)))
 	if (hasAch("ng3p11")) gain = gain.times(3)
 	if (enB.active("glu", 4)) gain = gain.times(tmp.enB.glu4)
 	return gain

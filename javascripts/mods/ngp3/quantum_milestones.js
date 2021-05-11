@@ -64,7 +64,7 @@ let qMs = {
 		getEl("reward" + id + "disable").textContent = (id > 11 ? "10 seconds" : id > 4 ? "33.3 mins" : (id > 3 ? 4.5 : 6) + " hours") + " reward: " + (tmp.qu.disabledRewards[id] ? "OFF" : "ON")
 	},
 
-	max: 24,
+	max: 29,
 	1: {
 		req: 1,
 		eff: () => "Start with all Eternity Challenges completed and EC completions no longer respec studies",
@@ -184,5 +184,30 @@ let qMs = {
 		req: 50,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
+	},
+	25: {
+		req: 75,
+		eff: () => "You start Quantums with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter",
+		effGot: () => ""
+	},
+	26: {
+		req: 100,
+		eff: () => "Unlock the autobuyer for Entangled Boosters",
+		effGot: () => ""
+	},
+	27: {
+		req: 150,
+		eff: () => "Unlock the autobuyer for Positronic Boosters",
+		effGot: () => ""
+	},
+	28: {
+		req: 200,
+		eff: () => "Able to maximize Meta-Dimension Boosts",
+		effGot: () => ""
+	},
+	29: {
+		req: 300,
+		eff: () => "Able to purchase all time studies without blocking",
+		effGot: () => ""
 	}
 }

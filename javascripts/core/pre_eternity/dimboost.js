@@ -206,6 +206,6 @@ function getTotalDBs() {
 
 function getExtraDBs() {
 	let x = 0
-	if (isQCRewardActive(3)) x += tmp.qcRewards[3]
+	if (masteryStudies.has(301)) x += getMTSMult(301)
 	return x
 }

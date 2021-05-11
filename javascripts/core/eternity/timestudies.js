@@ -461,27 +461,13 @@ function respecTimeStudies(force) {
 		delete player.quantum.autoECN
 	}
 	if (respecMastery) {
-		var respecedMS = []
-		player.timestudy.theorem += masteryStudies.ttSpent
-		if (player.masterystudies.includes("t373")) updateColorCharge()
-		for (var id = 0; id < player.masterystudies.length; id++) {
-			var d = player.masterystudies[id].split("d")[1]
-			if (d) respecedMS.push(player.masterystudies[id])
-		}
-		if (player.masterystudies.length > respecedMS.length) {
+		let oldMS = player.masterystudies.concat()
+		masteryStudies.respec()
+
+		if (player.masterystudies.length > oldMS.length) {
 			player.quantum.wasted = false
 			gotAch = false
 		}
-		player.masterystudies = respecedMS
-
-		if (player.respecMastery) respecMasteryToggle()
-
-		if (player.eternityChallUnlocked >= 13) resetEternityChallUnlocks()
-		respecUnbuyableTimeStudies()
-		updateMasteryStudyCosts()
-		maybeShowFillAll()
-		updateMasteryStudyButtons()
-		drawMasteryTree()
 	}
 
 

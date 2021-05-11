@@ -176,7 +176,6 @@ function getRemoteScalingStart(galaxies) {
 	if (hasDilationUpg(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
-		if (masteryStudies.has(301)) n += getMTSMult(301)
 		if (enB.active("glu", 5)) n += tmp.enB.glu5
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start

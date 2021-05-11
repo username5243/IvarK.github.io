@@ -2280,6 +2280,13 @@ function setupNGP31Versions() {
 		if (!tmp.qu.pos) tmp.qu.pos = pos.setup()
 	}
 	tmp.mod.newGame3PlusVersion = 3
+
+	if (tmp.mod.ngp3Build === undefined) tmp.mod.ngp3Build = 0
+	if (tmp.mod.ngp3Build < 1 && masteryStudies.has("d7")) {
+		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
+		masteryStudies.respec(true)
+	}
+	tmp.mod.ngp3Build = 1
 }
 
 function checkNGM(imported) {

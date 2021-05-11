@@ -298,9 +298,7 @@ let qcRewards = {
 			return Math.pow(1.2 + comps * 0.2, exp)
 		},
 		3: function(comps) {
-			if (comps == 0) return 0
-			let exp = comps / 3 + 1
-			return Math.pow((tmp.rmPseudo || player.replicanti.amount).log10() / 8e4, exp) * 2e3
+			return 1
 		},
 		4: function(comps) {
 			if (comps == 0) return 1

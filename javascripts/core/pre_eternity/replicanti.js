@@ -59,7 +59,7 @@ function getReplMult(next) {
 		let base = new Decimal(replmult)
 
 		replmult = base.times(Decimal.pow(5, rg))
-		if (masteryStudies.has(285)) replmult = replmult.max(base.pow(getMTSMult(285)))
+		if (masteryStudies.has(304)) replmult = replmult.max(base.pow(getMTSMult(304)))
 	}
 	return replmult;
 }
@@ -97,7 +97,7 @@ function upgradeReplicantiInterval() {
 }
 
 function isIntervalAffordable() {
-	if (tmp.ngp3) if (masteryStudies.has(271)) return true
+	if (masteryStudies.has(281)) return true
 	return player.replicanti.interval > (hasTimeStudy(22) || player.boughtDims ? 1 : 50)
 }
 
@@ -204,7 +204,7 @@ function getFullEffRGs(min) {
 	if (inQC(3)) return 0
 
 	let x = player.replicanti.galaxies
-	if (masteryStudies.has(284)) x = getTotalRGs()
+	if (masteryStudies.has(291)) x = getTotalRGs()
 	else if (min) x = Math.min(x, player.replicanti.gal)
 
 	return x
@@ -284,10 +284,10 @@ function getReplSpeed() {
 	}
 	inc = inc + 1
 
-	if (masteryStudies.has(281)) exp += tmp.mts[281]
+	if (masteryStudies.has(282)) exp += tmp.mts[282]
 	if (tmp.quActive) exp *= colorBoosts.g
 
-	if (masteryStudies.has(282)) exp += 100
+	if (masteryStudies.has(283)) exp += 100
 
 	//if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
 	//if (hasBosonicUpg(44)) exp += tmp.blu[44]
@@ -305,7 +305,7 @@ function updateReplicantiTemp() {
 	data.chance = player.replicanti.chance
 
 	let pow = 1
-	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(273) ? 1 : 0.5)
+	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(284) ? 1 : 0.5)
 	if (pow > 1) data.chance = Decimal.pow(data.chance, pow)
 
 	data.freq = 0

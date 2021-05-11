@@ -321,7 +321,7 @@ function getGluonEffBuff(x) {
 }
 
 function getGluonEffNerf(x) {
-	return Math.max(Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(283) ? 1.8 : 2) - colorCharge.subCancel, 0)
+	return Math.max(Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(302) ? 1.8 : 2) - colorCharge.subCancel, 0)
 }
 
 let enB = {
@@ -608,7 +608,7 @@ let enB = {
 			type: "b",
 			eff(x) {
 				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
-				return Math.log10(x / 800 + 1) / 2 + 1
+				return Math.log10(x / 2e3 + 1) + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
