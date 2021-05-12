@@ -5,13 +5,13 @@ var masteryStudies = {
 			241: 1e68, 251: 2e70, 252: 2e70, 253: 2e70, 261: 1e70, 262: 1e70, 263: 1e70, 264: 1e70, 265: 1e70, 266: 1e70,
 
 			//Quantum
-			271: 1.5625e73,
-			281: 1/0, 282: 1/0, 283: 1/0, 284: 1/0,
-			291: 1/0, 292: 1/0, 293: 1/0,
+			271: 7.8125e71,
+			281: 1/0, 282: 1e73, 283: 1e73, 284: 1/0,
+			291: 1/0, 292: 1/0, 293: 1/0, 294: 1/0, 295: 1/0,
 			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
-		dil: {7: 2e75, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
+		dil: {7: 1e74, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
@@ -20,10 +20,10 @@ var masteryStudies = {
 			241: 1, 251: 2, 252: 2, 253: 2, 261: 2, 262: 2, 263: 2, 264: 2, 265: 2, 266: 2,
 
 			//Quantum
-			272: 1 / 512,
-			281: 1, 282: 1, 283: 1, 284: 1,
-			291: 1, 292: 1, 293: 1,
-			301: 1, 302: 1, 303: 1, 304: 1},
+			271: 1 / 128,
+			281: 1 / 10, 282: Math.sqrt(10), 283: Math.sqrt(10), 284: 1 / 10,
+			291: 1, 292: 1, 293: 1, 294: 1, 295: 1,
+			301: 1 / 0, 302: 1, 303: 1, 304: 1 / 0},
 		ec: {},
 		dil: {}
 	},
@@ -138,25 +138,25 @@ var masteryStudies = {
 		271() {
 			let log = tmp.rm.log10()
 			let dLog = Math.max(Math.log10(log), 0)
-			let str = dLog / 5 + 1
+			let str = Math.max(dLog / 4, 1)
 
 			return Decimal.pow(2 + 8 / str, Math.pow(log, 2 - 1 / str))
 		},
-		282() {
+		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
 			return x / Math.pow(Math.log10(x + 1) + 1, 2)
 		},
-		301() {
+		292() {
 			let exp = 5 / 3
 			return Math.pow((tmp.rmPseudo || player.replicanti.amount).log10() / 8e4, exp) * 2e3
+		},
+		295() {
+			let rg = getFullEffRGs()
+			return Math.log10(rg / 100 + 1) / 2 + 1
 		},
 		303(x) {
 			if (!x) x = getInfinitied()
 			return Decimal.add(x, 1).log10() / 5 + 1
-		},
-		304() {
-			let rg = getFullEffRGs()
-			return Math.log10(rg / 100 + 1) / 2 + 1
 		},
 
 		322() {
@@ -282,21 +282,23 @@ var masteryStudies = {
 
 		271: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 
-		281: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
-		282: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		283: "Increase the OoMs of replicate interval scaling by +100.",
-		284: "Replicate chance increases higher above 100%.",
+		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
+		282: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
+		283: "Replicate chance increases higher above 100%.",
+		284: "Increase the OoMs of replicate interval scaling by +100.",
 
 		291: "All Replicated Galaxies work evenly.",
-		292: "Some boosts from Replicantis are stronger.",
-		293: "All Replicanti boosts are based on Replicanti multiplier.",
+		292: "Replicantis generate free Dimension Boosts.",
+		293: "Some boosts from Replicantis are stronger.",
+		294: "All Replicanti boosts are based on Replicanti multiplier.",
+		295: "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
 
-		301: "Replicantis generate free Dimension Boosts.",
+		301: "Replicated Galaxies boost the effect of inactive mastered Positronic Boosts.",
 		302: "Reduce the gluon effect nerfs by ^0.9.",
 		303: "Infinitied stat boosts itself to give stronger boosts.",
-		304: "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
+		304: "Replicantis boost the effect of inactive mastered Positronic Boosts.",
 	},
-	hasStudyEffect: [251, 252, 253, 271, 282, 301, 303, 304, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 271, 281, 292, 295, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -307,17 +309,17 @@ var masteryStudies = {
 		253(x) {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
-		282(x) {
+		281(x) {
 			return "+" + shorten(x) + " OoMs"
 		},
-		301(x) {
+		292(x) {
 			return "+" + getFullExpansion(Math.floor(x))
+		},
+		295(x) {
+			return "^" + x.toFixed(3)
 		},
 		303(x) {
 			return "^" + shorten(x)
-		},
-		304(x) {
-			return "^" + x.toFixed(3)
 		},
 	},
 	ecsUpTo: 14,
@@ -331,11 +333,11 @@ var masteryStudies = {
 		//Quantum
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
-		281: [291], 282: [292], 283: [292], 284: [293],
-		291: [301], 292: [302, 303], 293: [304],
+		281: [291, 293], 282: [293], 283: [293], 284: [293, 295],
+		291: [301], 293: [292, 294, 302, 303], 295: [304],
 
 		//No more mastery studies after that
-		301: ["d8"], 302: ["d8"], 303: ["d8"], 304: ["d8"],
+		302: ["d8"], 303: ["d8"],
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {
@@ -389,7 +391,7 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.costMult = 1
+	masteryStudies.costMult = hasAch("ng3p12") ? 0.25 : 1
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {
@@ -729,7 +731,7 @@ function drawMasteryBranch(id1, id2) {
 			var x1 = start.left + (start.width / 2) + (document.documentElement.scrollLeft || document.body.scrollLeft);
 			var y1 = start.top + (start.height / 2) + (document.documentElement.scrollTop || document.body.scrollTop);
 			var mult = getMasteryStudyCostMult(id2.split("study")[1])
-			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + shortenMoney(mult) + "x)"
+			var msg = "MS" + (id2.split("study")[1] - 230) + " (" + (mult >= 1e3 ? shorten(mult) : mult.toFixed(2 - Math.floor(Math.log10(mult)))) + "x)"
 			msctx.fillStyle = 'white';
 			msctx.strokeStyle = 'black';
 			msctx.lineWidth = 3;

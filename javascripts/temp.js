@@ -66,7 +66,7 @@ function updateTemp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = player.replicanti.amount.max(masteryStudies.has(293) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = player.replicanti.amount.max(masteryStudies.has(294) ? tmp.rm.pow(1 / 0.032) : 1)
 
 	updateExtraReplMult()
 	updateExtraReplBase()

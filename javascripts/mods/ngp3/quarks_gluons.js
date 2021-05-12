@@ -138,6 +138,21 @@ function rotateAutoAssign() {
 	getEl('autoAssignRotate').textContent="Rotation: "+(tmp.qu.autoOptions.assignQKRotate>1?"Left":tmp.qu.autoOptions.assignQKRotate?"Right":"None")
 }
 
+function neutralize_quarks() {
+	if (colorCharge.normal.chargeAmt.eq(0) || !tmp.qu.quarks.gte(colorCharge.neutralize.total)) return
+
+	var sum = 0
+	var colors = ['r','g','b']
+	for (var c = 0; c < 3; c++) {
+		var color = colors[c]
+		tmp.qu.usedQuarks[color] = tmp.qu.usedQuarks[color].add(colorCharge.neutralize[color]).round()
+	}
+	tmp.qu.quarks = tmp.qu.quarks.sub(colorCharge.neutralize.total)
+
+	updateColorCharge()
+	if (player.ghostify.another > 0) player.ghostify.another--
+}
+
 //Color Charge
 colorCharge = {
 	normal: {}
@@ -150,10 +165,12 @@ colorShorthands = {
 
 function updateColorCharge() {
 	if (!tmp.ngp3) return
+	var usedQuarks = tmp.qu.usedQuarks
+
 	var colors = ['r', 'g', 'b']
 	var colorPowers = {}
 	for (var i = 0; i < 3; i++) {
-		var ret = Decimal.add(tmp.qu.usedQuarks[colors[i]], 1). log10()
+		var ret = Decimal.add(usedQuarks[colors[i]], 1). log10()
 		colorCharge[colors[i]] = player.ghostify.milestones >= 2 ? ret : 0
 		colorPowers[colors[i]] = ret
 	}
@@ -161,21 +178,28 @@ function updateColorCharge() {
 	var sorted = []
 	for (var s = 0; s < 3; s++) {
 		var search = ''
-		for (var i = 0; i < 3; i++) if (!sorted.includes(colors[i])&&(search==''||tmp.qu.usedQuarks[colors[i]].gte(tmp.qu.usedQuarks[search]))) search=colors[i]
+		for (var i = 0; i < 3; i++) if (!sorted.includes(colors[i]) && (search == '' || usedQuarks[colors[i]].gte(usedQuarks[search]))) search = colors[i]
 		sorted.push(search)
 	}
 
 	colorCharge.normal = {
 		color: sorted[0],
+		chargeAmt: Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]).round(),
 		charge: colorPowers[sorted[0]] * Decimal.div(
-			Decimal.sub(tmp.qu.usedQuarks[sorted[0]], tmp.qu.usedQuarks[sorted[1]]),
-			Decimal.add(tmp.qu.usedQuarks[sorted[0]], 1)
+			Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]),
+			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
 	}
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
-	if (tmp.qu.usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
+	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
 	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 2, 1.5) : 0
+
+	colorCharge.neutralize = {}
+	colorCharge.neutralize[sorted[0]] = new Decimal(0)
+	colorCharge.neutralize[sorted[1]] = Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]).round()
+	colorCharge.neutralize[sorted[2]] = Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[2]]).round()
+	colorCharge.neutralize.total = colorCharge.neutralize[sorted[1]].add(colorCharge.neutralize[sorted[2]]).round()
 
 	updateQuarksTabOnUpdate()
 }
@@ -195,7 +219,7 @@ colorBoosts = {
 
 function updateColorPowers() {
 	//Red
-	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 2 + 1) / 2 + 1
+	colorBoosts.r = Math.log10(tmp.qu.colorPowers.r * 15 + 1) / 3.5 + 1
 
 	//Green
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
@@ -608,7 +632,7 @@ let enB = {
 			type: "b",
 			eff(x) {
 				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
-				return Math.log10(x / 2e3 + 1) + 1
+				return Math.log10(x / 3e3 + 1) + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
@@ -784,11 +808,21 @@ function updateGluonsTab() {
 //Display: On load
 function updateQuarksTabOnUpdate(mode) {
 	var colors = ['r','g','b']
-	if (colorCharge.normal.charge == 0) getEl("colorCharge").innerHTML='neutral charge'
-	else {
+	if (colorCharge.normal.charge == 0) {
+		getEl("colorCharge").innerHTML = 'neutral charge'
+		getEl("colorChargeAmt").innerHTML = 0
+
+		getEl("neutralize_req").innerHTML = 0
+		getEl("neutralize_quarks").className = "unavailablebtn"
+	} else {
 		var color = colorShorthands[colorCharge.normal.color]
-		getEl("colorCharge").innerHTML='<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>" +
-			hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : ""
+		getEl("colorCharge").innerHTML =
+			'<span class="' + color + '">' + color + '</span> charge of <span class="'+color+'" style="font-size:35px">' + shorten(colorCharge.normal.charge * tmp.qkEng.eff1) + "</span>" +
+			(hasAch("ng3p13") ? ", which cancelling the subtraction of gluon effects by " + shorten(colorCharge.subCancel) : "")
+		getEl("colorChargeAmt").innerHTML = shortenDimensions(colorCharge.normal.chargeAmt) + " " + color + " anti-quarks"
+
+		getEl("neutralize_req").innerHTML = shortenDimensions(colorCharge.neutralize.total)
+		getEl("neutralize_quarks").className = tmp.qu.quarks.gte(colorCharge.neutralize.total) ? "storebtn" : "unavailablebtn"
 	}
 
 	getEl("redQuarks").textContent = shortenDimensions(tmp.qu.usedQuarks.r)

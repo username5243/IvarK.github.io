@@ -298,7 +298,8 @@ let qcRewards = {
 			return Math.pow(1.2 + comps * 0.2, exp)
 		},
 		3: function(comps) {
-			return 1
+			if (comps == 0) return 0.25
+			return Math.pow(2, 2 - comps)
 		},
 		4: function(comps) {
 			if (comps == 0) return 1

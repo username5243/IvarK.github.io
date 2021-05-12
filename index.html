@@ -493,23 +493,31 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy281" style='font-size:9px' onclick='buyMasteryStudy("t", 281)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy282" style='font-size:9px' onclick='buyMasteryStudy("t", 282)'></button></td>
 						<td><button class="timestudylocked" id="timestudy283" style='font-size:9px' onclick='buyMasteryStudy("t", 283)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy284" style='font-size:9px' onclick='buyMasteryStudy("t", 284)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy291" style='font-size:9px' onclick='buyMasteryStudy("t", 291)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy292" style='font-size:9px' onclick='buyMasteryStudy("t", 292)'></button></td>
 						<td><button class="timestudylocked" id="timestudy293" style='font-size:9px' onclick='buyMasteryStudy("t", 293)'></button></td>
+						<td><button class="timestudylocked" id="timestudy294" style='font-size:9px' onclick='buyMasteryStudy("t", 294)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
+						<td><button class="timestudylocked" id="timestudy295" style='font-size:9px' onclick='buyMasteryStudy("t", 295)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy302" style='font-size:9px' onclick='buyMasteryStudy("t", 302)'></button></td>
 						<td><button class="timestudylocked" id="timestudy303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
+						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy304" style='font-size:9px' onclick='buyMasteryStudy("t", 304)'></button></td>
 					</tr>
 				</table>
@@ -1500,26 +1508,29 @@
 							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Game speed: <span id="ls_game_text">1.00</span>x</b><input id="ls_game" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('game')"></div>
 						</td>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate speed: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Replicate speed: <span id="ls_rep_text">1.00</span>x</b><input id="ls_rep" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('rep')"></div>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>DT production: <span id="ls_dil_text">1.00</span>x</b><input id="ls_dil" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('dil')"></div>
 						</td>
+						<td>
+							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>TT production: <span id="ls_tt_text">1.00</span>x</b><input id="ls_tt" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tt')"></div>
+						</td>
+					</tr>
+					<tr>
 						<td>
 							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Nanospeed: <span id="ls_nf_text">1.00</span>x</b><input id="ls_nf" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('nf')"></div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Branch speed: <span id="ls_tod_text">1.00</span>x</b><input id="ls_tod" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('tod')"></div>
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Photonic Flow: <span id="ls_gph_text">1.00</span>x</b><input id="ls_gph" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('gph')"></div>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<div class="storebtn" style="color:black; width: 198px; height: 55px; font-size:130%; text-align: center;"><b>Bosonic Speed: <span id="ls_bl_text">1.00</span>x</b><input id="ls_bl" style="width: 170px;" type="range" min="0" max="60" value="30" class="slider" onchange="ls.changeOption('bl')"></div>
 						</td>
@@ -1549,7 +1560,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 22)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 23)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2241,7 +2252,7 @@
 								<div id="I don't have enough fuel!" class="achievement achievementlocked" style="background-image: url(images/105.png)"><br></div>
 							</td>
 							<td>
-								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities."><br></div>
+								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities and the Mastery Study cost multiplier is divided by 4."><br></div>
 							</td>
 							<td>
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
@@ -3440,7 +3451,7 @@
 									<br>
 									<span id="qc3cost"></span><br>
 									<span id="qc3goal"></span><br>
-									Reward: Boost something by <span id="qc3reward"></span>x.
+									Reward: Reduce the slowdown of sub-1ms replicate interval upgrades to <span id="qc3reward"></span>%.
 								</div>
 							</div>
 						</td>
@@ -4556,12 +4567,18 @@
 							<button class='storebtn' id="assort_percentage_50" style="width:50px" onclick="changeAssortPercentage(50)">50%</button>
 							<button class='storebtn' id="assort_percentage_100" style="width:50px" onclick="changeAssortPercentage(100)">100%</button>
 							<br><br>
-							<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button> <button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button> <button class='storebtn' id="autoAssign" style="width:135px" onclick='toggleAutoAssign()'>Auto: OFF</button>
+							<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
+							<button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button>
+							<button class='storebtn' id="autoAssign" style="width:135px" onclick='toggleAutoAssign()'>Auto: OFF</button>
 						</td>
 					</tr>
 					<tr>
 						<td colspan=3>
 							Your colored anti-quarks have a net <span id='colorCharge'></span>.
+							<br>
+							(net worth of <span id='colorChargeAmt'></span>)
+							<br><br>
+							<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
 						</td>
 					</tr>
 					<tr>
@@ -4595,7 +4612,7 @@
 							You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>% slower replicate interval scaling.
 						</td>
 						<td>
-							You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains.
+							You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
 						</td>
 					</tr>
 					<tr>

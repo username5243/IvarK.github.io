@@ -2282,11 +2282,11 @@ function setupNGP31Versions() {
 	tmp.mod.newGame3PlusVersion = 3
 
 	if (tmp.mod.ngp3Build === undefined) tmp.mod.ngp3Build = 0
-	if (tmp.mod.ngp3Build < 1 && masteryStudies.has("d7")) {
+	if (tmp.mod.ngp3Build < 20210511 && masteryStudies.has("d7")) {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		masteryStudies.respec(true)
 	}
-	tmp.mod.ngp3Build = 1
+	tmp.mod.ngp3Build = 20210511
 }
 
 function checkNGM(imported) {
@@ -2675,24 +2675,24 @@ function conToDeciPreEter(){
 }
 
 function conToDeciLateEter(){
-        if (player.exdilation !== undefined) {
-        player.blackhole.power = new Decimal(player.blackhole.power)
+	if (player.exdilation !== undefined) {
+		player.blackhole.power = new Decimal(player.blackhole.power)
 
-        for (var d=1;d<9;d++) {
-                var dim=player["blackholeDimension"+d]
-                if (dim!==undefined) {
-                        dim.amount = new Decimal(dim.amount)
-                        dim.cost = new Decimal(dim.cost)
-                        dim.power = new Decimal(dim.power)
-                }
-        }
+		for (var d = 1; d <= 8; d++) {
+			var dim = player["blackholeDimension"+d]
+			if (dim !== undefined) {
+				dim.amount = new Decimal(dim.amount)
+				dim.cost = new Decimal(dim.cost)
+				dim.power = new Decimal(dim.power)
+			}
+		}
 
-        player.exdilation.unspent = new Decimal(player.exdilation.unspent)
-        player.exdilation.spent[1] = new Decimal(player.exdilation.spent[1])
-        player.exdilation.spent[2] = new Decimal(player.exdilation.spent[2])
-        player.exdilation.spent[3] = new Decimal(player.exdilation.spent[3])
-        if (player.exdilation.spent[4] !== undefined) player.exdilation.spent[4] = new Decimal(player.exdilation.spent[4])
-        }
+		player.exdilation.unspent = new Decimal(player.exdilation.unspent)
+		player.exdilation.spent[1] = new Decimal(player.exdilation.spent[1])
+		player.exdilation.spent[2] = new Decimal(player.exdilation.spent[2])
+		player.exdilation.spent[3] = new Decimal(player.exdilation.spent[3])
+		if (player.exdilation.spent[4] !== undefined) player.exdilation.spent[4] = new Decimal(player.exdilation.spent[4])
+	}
 
         if (player.meta !== undefined) {
         player.meta.antimatter = new Decimal(player.meta.antimatter);

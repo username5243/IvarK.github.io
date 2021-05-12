@@ -116,14 +116,15 @@ let POSITRONS = {
 		if (!pos.unl()) return
 
 		let qeMax = tmp.qu.quarkEnergy / 5
-		let qeMultMax = Math.sqrt(getQuantumEnergyMult())
+		let qeMult = getQuantumEnergyMult()
+		let qeMultMax = qeMult / (Math.log10(qeMult * 10 + 1) + 1)
 
 		if (pos.on()) {
-			let mdbs = Math.floor(player.meta.resets / 4)
-			let max_mdbs = Math.floor(qeMultMax * qeMultMax * 4)
+			let mdbs = player.meta.resets / 4
+			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) * 4
 
-			data.sac_mdb = Math.min(mdbs, max_mdbs)
-			data.sac_qem = Math.sqrt(data["sac_mdb"] / 4)
+			data.sac_mdb = Math.floor(Math.min(mdbs, max_mdbs))
+			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb / 4) - 1.5)
 			pos.save.amt = Math.pow(data.sac_mdb * 15, 2)
 		} else {
 			data.sac_mdb = 0

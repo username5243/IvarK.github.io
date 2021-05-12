@@ -339,7 +339,7 @@ button, div.storebtn {
 }
 
 .dilationupgbought, .dilationbtn, .dilationupgrebuyable, #dilationeterupgrow .eternityupbtnbought, #buyQuantumFood.storebtn, #buyMaxQuantumFood.storebtn, #feedNormal.storebtn, #feedBaby.storebtn, #buyQuantumFoodED.storebtn, #buyMaxQuantumFoodED.storebtn, #emperordimensions table .storebtn, #greenBtn, .gluonupgrade.g {
-	background-color: #00e500 !important;
+	background-color: #00bf00 !important;
 	color: #191919 !important;
 	animation: none;
 	box-shadow: 1px 2px rgba(229,229,229,0.4);

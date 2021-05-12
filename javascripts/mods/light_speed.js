@@ -3,7 +3,7 @@ let LIGHT_SPEED = {
 		let data = tmp.mod.ls
 		return (data && data[id]) || 1
 	},
-	options: ["game", "rep", "dil", "nf", "tod", "bl"],
+	options: ["game", "rep", "dil", "tt", "nf", "tod", "gph", "bl"],
 	reqs: {
 		game() {
 			return true
@@ -13,6 +13,9 @@ let LIGHT_SPEED = {
 		},
 		dil() {
 			return hasDilationStudy(1)
+		},
+		tt() {
+			return hasDilationUpg(10)
 		},
 		nf() {
 			return tmp.ngp3 && player.masterystudies.includes("d11")

@@ -206,6 +206,6 @@ function getTotalDBs() {
 
 function getExtraDBs() {
 	let x = 0
-	if (masteryStudies.has(301)) x += getMTSMult(301)
+	if (masteryStudies.has(292)) x += getMTSMult(292)
 	return x
 }

@@ -442,11 +442,14 @@ function buyDilationUpgrade(pos, max, isId) {
 }
 
 function getTTProduction() {
-	let r = getTTGenPart(player.dilation.tachyonParticles)
+	let tp = player.dilation.tachyonParticles
+	if (ph.did("quantum")) tp = tp.times(colorBoosts.b)
+
+	let r = getTTGenPart(tp)
 	if (tmp.ngex) r *= .8
 	r /= (hasAch("ng3p51") ? 200 : 2e4)
-	if (ph.did("quantum")) r *= colorBoosts.b
-	if (tmp.ngp3) r = Math.min(r, 1e202)
+
+	r *= ls.mult("tt")
 	return r
 }
 
