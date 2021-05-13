@@ -53,7 +53,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 		if (inQCModifier("ms")) ph.updateDisplay()
 	}
 
-	var implode = !(auto || force) && qMs.tmp.amt < 23
+	var implode = !tmp.quUnl || (!(auto || force) && tmp.qu.best >= 100 && ph.did("ghostify"))
 	if (implode) {
 		implosionCheck = 1
 		dev.implode()

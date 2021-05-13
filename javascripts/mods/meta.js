@@ -172,7 +172,7 @@ function metaBoost() {
 	if (hasAch("ng3p72")) return
 
 	player.meta.antimatter = getMetaAntimatterStart()
-	clearMetaDimensions()
+	if (qMs.tmp.amt < 19) clearMetaDimensions()
 }
 
 

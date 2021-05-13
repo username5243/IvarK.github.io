@@ -1767,7 +1767,7 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12, 1e15, 1e18]
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12, 1e14, 1e16]
 	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
@@ -4971,7 +4971,7 @@ function IPonCrunchPassiveGain(diff){
 }
 
 function EPonEternityPassiveGain(diff){
-	if (moreEMsUnlocked() && getEternitied() >= 1e18) {
+	if (moreEMsUnlocked() && getEternitied() >= 1e16) {
 		player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints().times(diff / 100))
 		getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity points."
 	}

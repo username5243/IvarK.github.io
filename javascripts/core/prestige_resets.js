@@ -104,7 +104,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.postC4Tier = 0
 	player.postC3Reward = new Decimal(1)
 	player.eternityPoints = new Decimal(0)
-	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : oheHeadstart ? Math.pow(10, qMs.tmp.amt) : 0
+	player.eternities = headstart ? player.eternities : bigRip ? (tmp.bruActive[2] ? 1e5 : 0) : oheHeadstart ? Math.pow(10, qMs.tmp.amt / 2 + 1) : 0
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
@@ -177,8 +177,9 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 					(player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (player.ghostify.milestones >= 4 && !isQC) ? 1
 					: 0.5
 				)
-			: new Decimal(qMs.tmp.amt >= 5 ? 1 : 0),
-		dilatedTime: new Decimal(qMs.tmp.amt >= 22 && !inQCModifier("ad") && !bigRip ? 1e100 : 0),
+			: qMs.tmp.amt >= 5 ? Decimal.pow(3, qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0)
+			: new Decimal(0),
+		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
 		nextThreshold: new Decimal(1000),
@@ -227,7 +228,7 @@ function doDimBoostResetStuff(layer = 1) {
 }
 
 function doGalaxyResetStuff(layer = 2) {
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e15) player.resets = 0
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e14) player.resets = 0
 	if (tmp.ngmX >= 3) player.tickspeedBoosts = 0
 	player.tdBoosts = resetTDBoosts()
 

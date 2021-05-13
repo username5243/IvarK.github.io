@@ -14,7 +14,7 @@ let qMs = {
 		data.points += data.amt_sr
 
 		//Relatistic
-		data.amt_rl = 0
+		data.amt_rl = Math.floor((player.dilation.totalTachyonParticles.max(1).log10() - 80) / 5 + 1)
 		data.points += data.amt_rl
 
 		//Energetic
@@ -47,7 +47,7 @@ let qMs = {
 		getEl("qMs_sr_target").textContent = timeDisplay(tmp.qu.best)
 		getEl("qMs_sr_points").textContent = getFullExpansion(qMs.tmp.amt_sr)
 
-		getEl("qMs_rl_target").textContent = "???"
+		getEl("qMs_rl_target").textContent = shortenDimensions(player.dilation.totalTachyonParticles)
 		getEl("qMs_rl_points").textContent = getFullExpansion(qMs.tmp.amt_rl)
 
 		getEl("qMs_en_target").textContent = shorten(tmp.qu.bestEnergy)
@@ -157,8 +157,8 @@ let qMs = {
 	},
 	19: {
 		req: 24,
-		eff: () => "Start with 4 Meta-Dimension Boosts",
-		effGot: () => "You now start with 4 Meta-Dimension Boosts."
+		eff: () => "Start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions.",
+		effGot: () => "You now start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
 		req: 27,
@@ -193,21 +193,21 @@ let qMs = {
 	26: {
 		req: 100,
 		eff: () => "Unlock the autobuyer for Entangled Boosters",
-		effGot: () => ""
+		effGot: () => "You now can automatically get Entangled Boosters."
 	},
 	27: {
 		req: 150,
 		eff: () => "Unlock the autobuyer for Positronic Boosters",
-		effGot: () => ""
+		effGot: () => "You now can automatically get Positronic Boosters."
 	},
 	28: {
 		req: 200,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
-		effGot: () => ""
+		effGot: () => "You now can maximize Meta-Dimension Boosts."
 	},
 	29: {
 		req: 300,
 		eff: () => "Able to purchase all time studies without blocking",
-		effGot: () => ""
+		effGot: () => "You now can buy every single time study."
 	}
 }
