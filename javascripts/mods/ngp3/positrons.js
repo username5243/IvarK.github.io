@@ -42,7 +42,9 @@ let POSITRONS = {
 	types: {
 		ng: {
 			pow() {
-				return 0.2
+				let x = 0.2
+				if (enB.active("glu", 4)) x *= tmp.enB.glu4
+				return x
 			},
 			sacGals(pow) {
 				return Math.min(player.galaxies / 2, pow)

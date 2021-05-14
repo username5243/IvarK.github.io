@@ -18,7 +18,7 @@ let qMs = {
 		data.points += data.amt_rl
 
 		//Energetic
-		data.amt_en = Math.floor(Math.sqrt(tmp.qu.bestEnergy || 0))
+		data.amt_en = Math.floor(Math.sqrt(tmp.qu.bestEnergy || 0) * 2)
 		data.points += data.amt_en
 
 		//Milestones

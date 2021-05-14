@@ -6,7 +6,7 @@ var masteryStudies = {
 
 			//Quantum
 			271: 3.90625e71,
-			281: 1/0, 282: 2e73, 283: 2e73, 284: 1/0,
+			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
 			291: 1/0, 292: 1/0, 293: 1/0, 294: 1/0, 295: 1/0,
 			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
 		},
@@ -21,8 +21,8 @@ var masteryStudies = {
 
 			//Quantum
 			271: 1 / 128,
-			281: 1 / 10, 282: Math.sqrt(10), 283: Math.sqrt(10), 284: 1 / 10,
-			291: 1, 292: 1, 293: 1, 294: 1, 295: 1,
+			281: 2, 282: 2, 283: 2, 284: 2,
+			291: 4, 292: 1 / 2, 293: 1 / 2, 294: 1 / 2, 295: 4,
 			301: 1 / 0, 302: 1, 303: 1, 304: 1 / 0},
 		ec: {},
 		dil: {}
@@ -144,7 +144,10 @@ var masteryStudies = {
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
-			return x / Math.pow(Math.log10(x + 1) + 1, 2)
+			return x / Math.pow(Math.log10(x + 1) + 1, 2) * 4
+		},
+		284() {
+			return (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 10
 		},
 		292() {
 			let exp = 5 / 3
@@ -196,7 +199,7 @@ var masteryStudies = {
 			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
 		},
 		371() {
-			return Math.pow(tmp.extraRG+1,tmp.mod.newGameExpVersion?.5:.3)
+			return Math.pow(tmp.extraRG + 1, tmp.mod.newGameExpVersion ? .5 : .3)
 		},
 		372() {
 			return Math.sqrt(player.timeShards.add(1).log10())/20+1
@@ -285,7 +288,7 @@ var masteryStudies = {
 		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
 		282: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
 		283: "Replicate chance increases higher above 100%.",
-		284: "Increase the OoMs of replicate interval scaling by +100.",
+		284: "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
 		291: "All Replicated Galaxies work evenly.",
 		292: "Replicantis generate free Dimension Boosts.",
@@ -298,7 +301,7 @@ var masteryStudies = {
 		303: "Infinitied stat boosts itself to give stronger boosts.",
 		304: "Replicantis boost the effect of inactive mastered Positronic Boosts.",
 	},
-	hasStudyEffect: [251, 252, 253, 271, 281, 292, 295, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 271, 281, 284, 292, 295, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -310,6 +313,9 @@ var masteryStudies = {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
 		281(x) {
+			return "+" + shorten(x * getReplSpeedExpMult(true)) + " OoMs"
+		},
+		284(x) {
 			return "+" + shorten(x) + " OoMs"
 		},
 		292(x) {

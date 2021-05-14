@@ -449,7 +449,7 @@ let enB = {
 		},
 		2: {
 			req: 2,
-			masReq: 10,
+			masReq: 4,
 			type: "g",
 			eff(x) {
 				return Math.log10(x * 2 + 1) * 1.25 + 1
@@ -460,6 +460,28 @@ let enB = {
 		},
 		3: {
 			req: 3,
+			masReq: 6,
+			type: "r",
+			eff(x) {
+				return Math.sqrt(x) * 20
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		4: {
+			req: 4,
+			masReq: 12,
+			type: "b",
+			eff(x) {
+				return 0
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		5: {
+			req: 5,
 			masReq: 10,
 			type: "b",
 			eff(x) {
@@ -467,28 +489,6 @@ let enB = {
 			},
 			effDisplay(x) {
 				return formatReductionPercentage(x, 2)
-			}
-		},
-		4: {
-			req: 5,
-			masReq: 12,
-			type: "b",
-			eff(x) {
-				return Decimal.pow(2, Math.pow(player.eternityPoints.add(1).log10(), 0.25))
-			},
-			effDisplay(x) {
-				return shorten(x)
-			}
-		},
-		5: {
-			req: 7,
-			masReq: 15,
-			type: "r",
-			eff(x) {
-				return Math.sqrt(x)
-			},
-			effDisplay(x) {
-				return shorten(x)
 			}
 		},
 		6: {

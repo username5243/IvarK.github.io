@@ -286,16 +286,19 @@ function getReplSpeed() {
 	}
 	inc = inc + 1
 
-	if (masteryStudies.has(281)) exp += tmp.mts[282]
-	if (tmp.quActive) exp *= colorBoosts.g
-
-	if (masteryStudies.has(284)) exp += 100
-
-	//if (hasBosonicUpg(35)) exp += tmp.blu[35].rep
-	//if (hasBosonicUpg(44)) exp += tmp.blu[44]
-	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+	if (masteryStudies.has(281)) exp += tmp.mts[281]
+	exp *= getReplSpeedExpMult()
+	if (masteryStudies.has(284)) exp += tmp.mts[284]
 
 	return {inc: inc, exp: exp}
+}
+
+function getReplSpeedExpMult(full) {
+	let exp = 1
+	if (full && tmp.rep.ec14) exp *= tmp.rep.ec14.ooms
+	if (tmp.quActive) exp *= colorBoosts.g
+	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+	return exp
 }
 
 function updateReplicantiTemp() {
@@ -307,7 +310,7 @@ function updateReplicantiTemp() {
 	data.chance = player.replicanti.chance
 
 	let pow = 1
-	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(283) ? 1 : 0.5)
+	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(283) ? 0.75 : 0.5)
 	if (pow > 1) data.chance = Decimal.pow(data.chance, pow)
 
 	data.freq = 0

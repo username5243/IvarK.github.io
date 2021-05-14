@@ -146,7 +146,6 @@ function getDistantScalingStart() {
 	if (hasDilationUpg("ngmm11")) n += 25
 	if (tmp.ngp3) {
 		if (inBigRip() && tmp.qu.bigRip.upgrades.includes(15)) n += tmp.bru[15]
-		if (enB.active("glu", 5)) n += tmp.enB.glu5
 		if (pl.on()) n -= fNu.tmp.nerfMu
 	}
 
@@ -176,7 +175,7 @@ function getRemoteScalingStart(galaxies) {
 	if (hasDilationUpg(5) && tmp.ngC) n += 25;
 	if (tmp.ngp3) {
 		for (var t = 251; t <= 253; t++) if (masteryStudies.has(t)) n += getMTSMult(t)
-		if (enB.active("glu", 5)) n += tmp.enB.glu5
+		if (enB.active("glu", 3)) n += tmp.enB.glu3
 
 		if (isNanoEffectUsed("remote_start")) n += tmp.nf.effects.remote_start
 		if (galaxies > 1/0 && !tmp.be) n -= galaxies - 1/0 
