@@ -7,7 +7,7 @@ var masteryStudies = {
 			//Quantum
 			271: 3.90625e71,
 			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
-			291: 1/0, 292: 1/0, 293: 1/0, 294: 1/0, 295: 1/0,
+			291: 1/0, 292: 1.28e77, 293: 2.5e74, 294: 1.28e77, 295: 1/0,
 			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
@@ -21,8 +21,8 @@ var masteryStudies = {
 
 			//Quantum
 			271: 1 / 128,
-			281: 2, 282: 2, 283: 2, 284: 2,
-			291: 4, 292: 1 / 2, 293: 1 / 2, 294: 1 / 2, 295: 4,
+			281: 4, 282: 2, 283: 2, 284: 4,
+			291: 2, 292: 4, 293: 1 / 256, 294: 4, 295: 2,
 			301: 1 / 0, 302: 1, 303: 1, 304: 1 / 0},
 		ec: {},
 		dil: {}
@@ -144,14 +144,15 @@ var masteryStudies = {
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
-			return x / Math.pow(Math.log10(x + 1) + 1, 2) * 4
+			return x / Math.pow(Math.log10(x + 1) + 1, 2) * 2
 		},
 		284() {
-			return (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 10
+			return (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 20
 		},
 		292() {
-			let exp = 5 / 3
-			return Math.pow((tmp.rmPseudo || player.replicanti.amount).log10() / 8e4, exp) * 2e3
+			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
+			let exp = (5 - 2 / (Math.log10(rep + 1) / 10 + 1)) / 3
+			return Math.pow(rep / 5e5, exp) * 2e3
 		},
 		295() {
 			let rg = getFullEffRGs()
@@ -162,6 +163,7 @@ var masteryStudies = {
 			return Decimal.add(x, 1).log10() / 5 + 1
 		},
 
+		//Legacy
 		322() {
 			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
 			if (log > 110) log = Math.sqrt(log * 27.5) + 55
@@ -313,7 +315,7 @@ var masteryStudies = {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
 		281(x) {
-			return "+" + shorten(x * getReplSpeedExpMult(true)) + " OoMs"
+			return "+" + shorten(x * getReplSpeedExpMult()) + " OoMs"
 		},
 		284(x) {
 			return "+" + shorten(x) + " OoMs"
@@ -340,10 +342,9 @@ var masteryStudies = {
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
 		281: [291, 293], 282: [293], 283: [293], 284: [293, 295],
-		291: [301], 293: [292, 294, 302, 303], 295: [304],
+		291: [301], 293: [292, 294, 302, 303, "d8"], 295: [304],
 
 		//No more mastery studies after that
-		302: ["d8"], 303: ["d8"],
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {

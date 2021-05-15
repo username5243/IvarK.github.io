@@ -230,9 +230,9 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuantumEnergy() {
-	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : 1 / 3
+	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
 
-	let x = Math.pow(quantumWorth.add(1).log10(), exp) * (getQuantumEnergyMult() - getQuantumEnergySubMult()) * 1.25
+	let x = Math.pow(quantumWorth.add(1).log10(), exp) * 1.25 * (getQuantumEnergyMult() - getQuantumEnergySubMult())
 	tmp.qu.quarkEnergy = Math.max(x, tmp.qu.quarkEnergy)
 	tmp.qu.quarkEnergy = isNaN(tmp.qu.quarkEnergy) ? 0 : tmp.qu.quarkEnergy
 	tmp.qu.bestEnergy = Math.max(tmp.qu.bestEnergy || 0, tmp.qu.quarkEnergy)
@@ -409,10 +409,10 @@ let enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Math.pow(x, 1.5) + 1
+			return Math.pow(x / 3, 1.5) + 1
 		},
 		target() {
-			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) + 1)
+			return Math.floor(Math.pow(Math.max(this.engAmt() - 1, 0), 1 / 1.5) * 3 + 1)
 		},
 
 		amt() {
@@ -426,7 +426,7 @@ let enB = {
 		},
 
 		eff(x, data) {
-			let r = this.amt() * 2 - 1
+			let r = this.amt() * 2 / 3 - 1
 			r *= enB.mastered("glu", x) ? data.enAmt : data.masAmt
 
 			return r
@@ -438,7 +438,7 @@ let enB = {
 		max: 10,
 		1: {
 			req: 1,
-			masReq: 3,
+			masReq: 4,
 			type: "r",
 			eff(x) {
 				return Math.cbrt(x) * 0.75
@@ -448,8 +448,8 @@ let enB = {
 			}
 		},
 		2: {
-			req: 2,
-			masReq: 4,
+			req: 3,
+			masReq: 7,
 			type: "g",
 			eff(x) {
 				return Math.log10(x * 2 + 1) * 1.25 + 1
@@ -459,8 +459,8 @@ let enB = {
 			}
 		},
 		3: {
-			req: 3,
-			masReq: 6,
+			req: 6,
+			masReq: 8,
 			type: "r",
 			eff(x) {
 				return Math.sqrt(x) * 20
@@ -470,19 +470,21 @@ let enB = {
 			}
 		},
 		4: {
-			req: 4,
-			masReq: 12,
+			req: 7,
+			masReq: 9,
 			type: "b",
 			eff(x) {
-				return 0
+				x = Math.sqrt(x / 5 + 1)
+				if (x > 4) x = 5 - 4 / x
+				return x
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x - 1)
 			}
 		},
 		5: {
-			req: 5,
-			masReq: 10,
+			req: 9,
+			masReq: 1/0,
 			type: "b",
 			eff(x) {
 				return Math.pow(x / 3 + 1, 0.2)
@@ -492,7 +494,7 @@ let enB = {
 			}
 		},
 		6: {
-			req: 9,
+			req: 1/0,
 			masReq: 18,
 			type: "g",
 			eff(x) {
@@ -639,10 +641,10 @@ let enB = {
 			}
 		},
 		4: {
-			req: 7,
+			req: 4,
 			masReq: 10,
 
-			chargeReq: 5e3,
+			chargeReq: 1e3,
 			activeReq() {
 				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
 			},
@@ -652,8 +654,8 @@ let enB = {
 
 			type: "r",
 			eff(x) {
-				if (enB.mastered("pos", 4)) x = Math.max(x, enB.pos[4].chargeReq / 2)
-				return 1 / (1 + 1 / (player.meta.resets / 10 + 1) + 1 / Math.sqrt(player.meta.resets / 50 + 1))
+				x = player.meta.resets
+				return 1 / ((hasAch("ng3p14") ? 1 : 2) + 1 / (x / 50 + 1))
 			},
 			effDisplay(x) {
 				return x.toFixed(3)

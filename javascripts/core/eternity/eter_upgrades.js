@@ -139,7 +139,7 @@ let ETER_UPGS = {
 	},
 	15: {
 		unl: () => tmp.ngp3 && ph.did("quantum"),
-		cost: "1e10000000",
+		cost: "1e6500000",
 		desc: () => "You can buy up to 2 paths from second split."
 	},
 

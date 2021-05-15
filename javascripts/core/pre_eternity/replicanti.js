@@ -121,9 +121,10 @@ function getRGCost(offset = 0, costChange) {
 			}
 		}
 		ret = ret.times(Decimal.pow(10, increase))
-
 	}
-	if (hasTimeStudy(233) && !costChange) ret = ret.dividedBy(tmp.rmPseudo.pow(0.3))
+
+	if (hasTimeStudy(233) && !costChange) ret = ret.dividedBy(tsMults[233]())
+
 	return ret
 }
 
@@ -286,19 +287,65 @@ function getReplSpeed() {
 	}
 	inc = inc + 1
 
-	if (masteryStudies.has(281)) exp += tmp.mts[281]
-	exp *= getReplSpeedExpMult()
-	if (masteryStudies.has(284)) exp += tmp.mts[284]
-
 	return {inc: inc, exp: exp}
 }
 
-function getReplSpeedExpMult(full) {
+function getReplSpeedExpMult() {
 	let exp = 1
-	if (full && tmp.rep.ec14) exp *= tmp.rep.ec14.ooms
+
+	//Eternity
+	if (tmp.rep.ec14) exp *= tmp.rep.ec14.ooms
+
+	//Quantum
 	if (tmp.quActive) exp *= colorBoosts.g
+
+	//Ghostify
 	if (GDs.boostUnl('rep')) exp *= GDs.tmp.rep
+
 	return exp
+}
+
+function boostReplSpeedExp(exp) {
+	//Pre-Boosts
+	if (masteryStudies.has(281)) exp += tmp.mts[281]
+
+	//Boosts
+	exp *= getReplSpeedExpMult()
+
+	//Post-Boosts
+	if (masteryStudies.has(284)) exp += tmp.mts[284]
+
+	return exp
+}
+
+function updateEC14Reward() {
+	let data = tmp.rep
+	if (data.baseEst && ECComps("eterc14")) {
+		//Sub-1ms reduction -> Lower replicanti scaling
+		let pow = getECReward(14)
+		let div = data.baseEst.pow(pow)
+
+		data.ec14 = {
+			interval: div,
+			ooms: div.max(1).log10() / 2 + 1
+		}
+	} else {
+		data.ec14 = {
+			interval: new Decimal(1),
+			ooms: 1
+		}
+	}
+}
+
+function updateEC14Acceleration() {
+	let data = tmp.rep
+	if (ECComps("eterc14")) {
+		let pow = getECReward(14)
+		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
+
+		data.baseInt = data.baseInt.times(data.ec14.interval)
+		data.baseEst = data.baseEst.div(data.ec14.interval)
+	}
 }
 
 function updateReplicantiTemp() {
@@ -325,21 +372,9 @@ function updateReplicantiTemp() {
 	data.baseEst = Decimal.div(estChance, data.baseInt)
 
 	data.speeds = getReplSpeed()
-	if (data.baseEst && ECComps("eterc14")) {
-		//Sub-1ms reduction -> Lower replicanti scaling
-		let pow = getECReward(14)
-		let div = data.baseEst.pow(pow)
-
-		data.ec14 = {
-			interval: div,
-			ooms: div.log10() / 2 + 1
-		}
-		data.speeds.exp *= data.ec14.ooms
-		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
-
-		data.baseInt = data.baseInt.times(data.ec14.interval)
-		data.baseEst = data.baseEst.div(data.ec14.interval)
-	}
+	updateEC14Reward()
+	data.speeds.exp = boostReplSpeedExp(data.speeds.exp)
+	updateEC14Acceleration()
 
 	data.interval = getReplicantiFinalInterval()
 

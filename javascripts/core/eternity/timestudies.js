@@ -236,11 +236,13 @@ function canBuyStudy(name) {
 		}
 	}
 
+	if (row > 1 && qMs.tmp.amt >= 30) return hasRow(row - 1) 
 	if (tmp.ngC) {
 		if (name == 61 && total < 18) return false
 		if (name == 151 && total < 195) return false
 		if (name == 171 && total < 200) return false
 	}
+
 	switch(row) {
 
 		case 1: return true
@@ -267,16 +269,18 @@ function canBuyStudy(name) {
 			let have = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 12}).length
 			if (hasRow(row - 1)) {
 				if (ETER_UPGS.has(10)) return true
+				if (ETER_UPGS.has(15)) return have < 2
 				return have < 1
 			}
 			return false
 
 		case 7:
-			if (!hasTS(61)) return false;
-			if (player.dilation.upgrades.includes(8)) return true;
-			if (ETER_UPGS.has(10) && tmp.ngC) return true;
-			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length;
-			if (hasTS(201)) return have2 < 2;
+			if (!hasTS(61)) return false
+			if (player.dilation.upgrades.includes(8)) return true
+			if (ETER_UPGS.has(10) && tmp.ngC) return true
+
+			let have2 = player.timestudy.studies.filter(function(x) {return Math.floor(x / 10) == 7}).length
+			if (hasTS(201)) return have2 < 2
 			return have2 < 1
 
 		case 19:
@@ -713,23 +717,28 @@ var poData
 function save_preset(id) {
 	let data = getEl("preset_" + id +"_data").value
 	presets[id].preset = data != presets[id].preset ? data : getStudyTreeStr()
-	getEl("preset_" + id +"_data").value = presets[id].preset
 	localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
+	delete presets.editing
+
+	changePresetTitle(id)
 	$.notify("Preset saved", "info")
 }
 
 function load_preset(id, reset) {
-	let data = getEl("preset_" + id +"_data").value
+	let data = getEl("preset_" + id + "_data").value
 
 	if (reset || shouldRespec(data)) {
 		if (!ph.can("eternity")) return
 		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?")) return
 
+		player.respec = true
+		if (tmp.ngp3) player.respecMastery = true
 		eternity(false, true, true)
 	}
 
 	let saved = false
-	if (data != presets[id].preset) {
+	if (data != presets[id].preset && id == presets.editing) {
+		delete presets.editing
 		presets[id].preset = data
 		localStorage.setItem(btoa(presetPrefix + id), btoa(JSON.stringify(presets[id])))
 		saved = true
@@ -749,6 +758,7 @@ function delete_preset(presetId) {
 			newPresetsOrder.push(poData[id])
 			changePresetTitle(poData[id], id)
 		} else if (poData[id] == presetId) {
+			if (id == presets.editing) delete presets.editing
 			delete presets[presetId]
 			localStorage.removeItem(btoa(presetPrefix + presetId))
 			alreadyDeleted = true
@@ -774,9 +784,12 @@ function rename_preset(id) {
 function move_preset(id,offset) {
 	placement = 0
 	while (poData[placement] != id) placement++
+
 	if (offset < 0) {
 		if (placement < -offset) return
 	} else if (placement > poData.length - offset - 1) return
+	if (id == presets.editing) presets.editing += offset
+
 	var temp = poData[placement]
 	poData[placement] = poData[placement+offset]
 	poData[placement+offset] = temp
@@ -787,13 +800,14 @@ function move_preset(id,offset) {
 	localStorage.setItem(metaSaveId, btoa(JSON.stringify(metaSave)))
 }
 
-var loadedPresets=0
+var loadedPresets = 0
 function openStudyPresets() {
 	closeToolTip()
 	let saveOnERS = !(!player.boughtDims)
 	let saveOnNGP3 = player.masterystudies !== undefined
 	if (saveOnERS != onERS) {
-		getEl("presets").innerHTML=""
+		delete presets.editing
+		getEl("presets").innerHTML = ""
 		presets = {}
 		onERS = saveOnERS
 		if (onERS) presetPrefix = prefix+"ERS_ST_"
@@ -825,14 +839,23 @@ function openStudyPresets() {
 			changePresetTitle(id, loadedPresets + 1)
 			loadedPresets++
 			onLoading = false
-		} catch (_) {}
+		} catch (e) { console.error(e) }
 		occupied = false
 	}, 0)
 }
 
+function focus_preset(id) {
+	if (presets.editing) {
+		delete presets.editing
+		changePresetTitle(presets.editing, 0, false)
+	}
+	presets.editing = id
+	changePresetTitle(id, 0, true)
+}
+
 function getPresetLayout(id) {
 	return "<b id='preset_" + id + "_title'>Preset #" + (loadedPresets + 1) + "</b><br><br>" +
-		"<input id='preset_" + id +"_data' style='width: 75%'><br>" +
+		"<input id='preset_" + id +"_data' style='width: 75%' onchange='focus_preset(" + id + ")'><br>" +
 
 		"<button class='storebtn' onclick='save_preset(" + id + ")'>Save</button>" +
 		"<button class='storebtn' onclick='load_preset(" + id + ")'>Load</button>" +
@@ -845,7 +868,17 @@ function getPresetLayout(id) {
 		"</span>"
 }
 
-function changePresetTitle(id, placement) {
+function changePresetTitle(id, placement, editing) {
+	if (!placement) {
+		placement = 0
+		while (poData[placement] != id) placement++
+	}
+
+	if (editing) {
+		getEl("preset_" + id + "_title").textContent = (presets[id].title ? presets[id].title : "Preset #" + placement) + "*"
+		return
+	}
+
 	if (presets[id] === undefined) {
 		var preset = localStorage.getItem(btoa(presetPrefix + id))
 		if (preset === null) {
@@ -951,6 +984,14 @@ let tsMults = {
 	},
 	232() {
 		return Math.pow(1 + player.galaxies / 1000, 0.2)
+	},
+	233() {
+		let rep = tmp.rmPseudo || player.replicanti.amount
+
+		if (masteryStudies.has(293)) rep = rep.pow(rep.log10() / 1e5 + 1)
+		else rep = rep.pow(0.3)
+
+		return rep
 	},
 
 	//NG Condensed

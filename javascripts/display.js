@@ -718,6 +718,7 @@ function initialTimeStudyDisplay(){
 	getEl("227desc").textContent = "Currently: " + shorten(tsMults[227]()) + "x"
 	getEl("231desc").textContent = "Currently: " + shorten(tsMults[231]().pow(dbExp)) + "x power"
 	getEl("232desc").textContent = "Currently: " + formatPercentage(tsMults[232]() - 1) + "%"
+	getEl("233desc").textContent = "Currently: " + shorten(tsMults[233]()) + "x"
 
 	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost());
 }

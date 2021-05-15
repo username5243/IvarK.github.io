@@ -95,7 +95,7 @@ function doAutoMetaTick(ticks) {
 	//Others
 	var bulk = ticks
 	if (player.autoEterOptions.rebuyupg && qMs.tmp.amt >= 7) {
-		if (qMs.tmp.amt >= 24) maxAllDilUpgs()
+		if (tmp.ngp3) maxAllDilUpgs()
 		else for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 			var id = "r" + MAX_DIL_UPG_PRIORITIES[i]
 			if (isDilUpgUnlocked(id)) buyDilationUpgrade(id, false, true)

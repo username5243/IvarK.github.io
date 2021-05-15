@@ -3917,7 +3917,7 @@ setInterval(function() {
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 1000)
+}, 100)
 
 function autoPerSecond() {
 	if (isGamePaused()) return

@@ -30,7 +30,12 @@ function updateTemp(init) {
 		return
 	}
 
-	if (init) tmp.extraRG = 0
+	if (init) {
+		tmp.extraRG = 0
+		colorBoosts.r = 1
+		colorBoosts.g = 1
+		colorBoosts.b = 1
+	}
 
 	tmp.nrm = 1
 	if (hasTimeStudy(101)) tmp.nrm = (tmp.rmPseudo || player.replicanti.amount).max(1)

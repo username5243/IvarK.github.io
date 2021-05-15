@@ -347,7 +347,7 @@
 					<tr>
 						<td><button id="231" onclick="buyTimeStudy(231)">Dimension Boosts boost their own power.<span id="231desc"></span><span>Cost: 500 Time Theorems</button></td>
 						<td><button id="232" onclick="buyTimeStudy(232)">Galaxies are more effective based on your antimatter galaxies.<span id="232desc"></span><span>Cost: 500 Time Theorems</button></td>
-						<td><button id="233" onclick="buyTimeStudy(233)">Max replicanti galaxy upgrade cost is reduced based on replicanti amount.<span>Cost: 500 Time Theorems</button></td>
+						<td><button id="233" onclick="buyTimeStudy(233)">Max replicanti galaxy upgrade cost is reduced based on replicanti amount.<span id="233desc"></span><span>Cost: 500 Time Theorems</button></td>
 						<td><button id="234" onclick="buyTimeStudy(234)">Sacrifice boosts First Dimension.<span>Cost: 500 Time Theorems</button></td>
 					</tr>
 				</table>
@@ -514,16 +514,10 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy302" style='font-size:9px' onclick='buyMasteryStudy("t", 302)'></button></td>
-						<td><button class="timestudylocked" id="timestudy303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
-						<td><button class="timestudylocked" id="timestudy304" style='font-size:9px' onclick='buyMasteryStudy("t", 304)'></button></td>
-					</tr>
-				</table>
-				<table class="table" id="studytable">
-					<tr class="wideRow">
 						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
+						<td><button class="timestudylocked" id="timestudy303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
+						<td><button class="timestudylocked" id="timestudy304" style='font-size:9px' onclick='buyMasteryStudy("t", 304)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1560,7 +1554,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge - Alpha 24)</p>
+				<p id='versionDescBeta'>(Beta v0.3: Positronic Charge)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -2258,7 +2252,7 @@
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
 							</td>
 							<td>
-								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades."><br></div>
+								<div id="Work harder." class="achievement achievementlocked" style="background-image: url(images/108.png)" ach-tooltip="Unlock Time Dilation without buying Eternity Upgrades. Reward: Quantum energy gain is raised by ^1.5 before the multipliers."><br></div>
 							</td>
 							<td>
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)" ach-tooltip="Have 900 galaxies without unlocking Time Dilation. Reward: You permanently keep your banked Infinities, and bank 5% of your Eternities on Quantum."><br></div>
@@ -4655,7 +4649,7 @@
 				<td colspan=3>
 					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
 					<br>
-					<button class="storebtn" id="enB_glu_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> Quantum Energy</button>
+					<button class="storebtn" id="enB_glu_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> total Quantum Energy</button>
 					<br>
 					<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
 					<br><br>
@@ -4967,7 +4961,7 @@
 						<br>
 						<span id="enB_pos4_type"></span>
 						<br>
-						Before multipliers, Meta Dimension Boosts greatly boost the Quantum Energy formula from ^0.333 to ^<span id="enB_pos4_eff" style="font-size:35px"></span>, but also reduce the effects of quantum energy.
+						Before multipliers, Meta Dimension Boosts greatly boost the Quantum Energy formula to ^<span id="enB_pos4_eff" style="font-size:35px"></span>, but also reduce the effects of quantum energy.
 					</td>
 				<tr>
 				</tr>
