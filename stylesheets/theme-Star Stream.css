@@ -125,6 +125,7 @@ input {
 .newdimlocked,
 .milestonerewardlocked,
 .galStonerewardlocked,
+.qMs_locked,
 .eternityupbtnlocked,
 .eternityttbtnlocked,
 .lockedchallengesbtn,
@@ -149,6 +150,8 @@ input {
 .milestonereward:hover,
 .galStonerewardlocked:hover,
 .galStonereward:hover,
+.qMs_locked:hover,
+.qMs_reward:hover,
 .timestudylocked:hover,
 .eternityupbtnlocked:hover,
 .eternityttbtnlocked:hover,
@@ -722,7 +725,8 @@ strong { color: #0072e5 }
 }
 
 #quantum.storebtn,
-.quantumbtn {
+.quantumbtn,
+.qMs_reward {
     border-color: #009900 !important;
     background:linear-gradient(#003300, #00cc00) !important;
     text-shadow: 0px 0px 5px #000, 0px 0px 9px #0f0 !important;
@@ -734,8 +738,9 @@ strong { color: #0072e5 }
     animation: qtmbtntext 4s linear infinite
 }
 
-#quantum.storebtn:hover,
-.quantumbtn:hover {
+#quantum.storebtn:hover
+.quantumbtn:hover,
+.qMs_reward:hover, {
     box-shadow: inset 0px 0px 5px 2px #00ff00;
 }
 
@@ -747,6 +752,26 @@ strong { color: #0072e5 }
 {
     font-weight: 500 !important;
     color: #00ff00 !important;
+}
+
+.qMs_toggle_off {
+    background: #f77 !important;
+    border-color: #300 !important;
+	color: #300 !important
+}
+
+.qMs_toggle_on {
+    background: #7f7 !important;
+    border-color: #030 !important;
+	color: #030 !important
+}
+
+.qMs_toggle_off:hover {
+    background: #f33 !important
+}
+
+.qMs_toggle_on:hover {
+    background: #3f3 !important
 }
 
 #gatheredQuarks,

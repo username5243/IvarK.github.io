@@ -393,14 +393,30 @@ strong { color: #0072e5 }
 #metaAntimatterAmount, #metaAntimatterBest, #metaAntimatterPower, #metaAntimatterEffect {
     color: #00e5e5 !important
 }
-#quantum.storebtn, .quantumbtn, #pastquantums, #dilstudy8.dilationupg, #qctabbtn, #dilstudy9.dilationupg, #pccompletionsbtn {
+#quantum.storebtn, .quantumbtn, #pastquantums, .qMs_locked, .qMs_locked:hover, #dilstudy8.dilationupg, #qctabbtn, #dilstudy9.dilationupg, #pccompletionsbtn {
     border-color: #009900 !important
 }
-#quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, #dilstudy8.dilationupg:hover, #dilstudy8.dilationupgbought, #qctabbtn:hover, #dilstudy9.dilationupg:hover, #dilstudy9.dilationupgbought, #pccompletionsbtn:hover {
-    background-color: #009900 !important
+#quantum.storebtn:hover, .quantumbtn:hover, #pastquantums:hover, .qMs_reward, .qMs_reward:hover, #dilstudy8.dilationupg:hover, #dilstudy8.dilationupgbought, #qctabbtn:hover, #dilstudy9.dilationupg:hover, #dilstudy9.dilationupgbought, #pccompletionsbtn:hover {
+    border-color: #009900 !important;
+    background-color: #009900 !important;
+	color: #e5e5e5 !important
 }
 #progressbar.quantumProgress {
 	background-color: #009900 !important
+}
+.qMs_toggle_on {
+	border-color: #72e572 !important;
+	color: #e5e5e5 !important
+}
+.qMs_toggle_on:hover {
+	background-color: #72e572 !important
+}
+.qMs_toggle_off {
+	border-color: #e57272 !important;
+	color: #e5e5e5 !important
+}
+.qMs_toggle_off:hover {
+	background-color: #e57272 !important
 }
 .QKAmount, #gatheredQuarks, #normalReplGatherRate, #workerReplGatherRate, #babyReplGatherRate, #growupRate, #gatherRate, .empQuarks, #quarksNanofield, #quarkLoss { color: #009900 !important }
 .red { color: #e50000 }

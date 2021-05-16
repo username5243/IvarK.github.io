@@ -1682,6 +1682,44 @@ button {
     border: 1px solid #0a640a;
 }
 
+.qMs_toggle_on {
+    width: 250px;
+    height: 60px;
+    color: #003f00;
+    background: #7fff7f;
+    font-weight: bold;
+    font-family: Typewriter;
+    border: 1px solid #00bf00;
+    transition-duration: 0.2s;
+    border-radius: 4px;
+    vertical-align: top;
+    font-size: 12px;
+	cursor: pointer
+}
+
+.qMs_toggle_on:hover {
+    background: #bfffbf
+}
+
+.qMs_toggle_off {
+    width: 250px;
+    height: 60px;
+    color: #3f0000;
+    background: #ff7f7f;
+    font-weight: bold;
+    font-family: Typewriter;
+    border: 1px solid #bf0000;
+    transition-duration: 0.2s;
+    border-radius: 4px;
+    vertical-align: top;
+    font-size: 12px;
+	cursor: pointer
+}
+
+.qMs_toggle_off:hover {
+    background: #ffbfbf
+}
+
 #production {
     font-size: 12px;
 }

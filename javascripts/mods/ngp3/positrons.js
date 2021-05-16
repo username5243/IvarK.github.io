@@ -61,7 +61,9 @@ let POSITRONS = {
 		},
 		rg: {
 			pow() {
-				return 0
+				let x = 0
+				if (enB.active("pos", 5)) x = tmp.enB.pos5
+				return x
 			},
 			sacGals(pow) {
 				return pow

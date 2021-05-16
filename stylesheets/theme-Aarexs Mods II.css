@@ -393,6 +393,22 @@ button, div.storebtn {
 	background-color: #269926 !important
 }
 
+.qMs_toggle_on {
+	background-color: #72e572 !important
+}
+
+.qMs_toggle_on:hover {
+	background-color: #99e599 !important
+}
+
+.qMs_toggle_off {
+	background-color: #e57272 !important
+}
+
+.qMs_toggle_off:hover {
+	background-color: #e59999 !important
+}
+
 .QKAmount, #normalReplGatherRate, #gatherRate, #gatheredQuarks, #workerReplGatherRate, #babyReplGatherRate, .empQuarks, #quarksNanofield, #quarkLoss {
 	color: #009900 !important
 }

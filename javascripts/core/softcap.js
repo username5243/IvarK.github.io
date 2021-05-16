@@ -128,15 +128,6 @@ var softcap_data = {
 			pow: 1e5
 		},	
 	},
-	ms322_log: {
-		name: "log base 10 of mastery study 322",
-		1: {
-			func: "pow",
-			start: 500,
-			pow: 0.75,
-			derv: true
-		}
-	},
 	bru1_log: {
 		name: "log base 10 of Big Rip Upgrade 1",
 		1: {
@@ -779,7 +770,6 @@ function getSoftcapAmtFromId(id){
 		ts_reduce_log: () => Decimal.pow(tmp.tsReduce, -1).log10(),
 		ts_reduce_log_big_rip: () => Decimal.pow(tmp.tsReduce, -1).log10(),
 		ts11_log_big_rip: () => tsMults[11]().log10(),
-		ms322_log: () => masteryStudies.timeStudyEffects[322]().log10(),
 		bru1_log: () => tmp.bru[1].max(1).log10(),
 		beu3_log: () => tmp.beu[3].max(1).log10(),
 		inf_time_log: () => tmp.it.max(1).log10(),
@@ -824,7 +814,6 @@ function hasSoftcapStarted(id, num){
 		*/
 		idbase: tmp.ngp3,
 		dt_log: tmp.ngp3 && !tmp.bE50kDT,
-		ms322_log: tmp.ngp3,
 		bru1_log: tmp.ngp3 && tmp.bru && tmp.bru[1] !== undefined && tmp.quActive,
 		beu3_log: tmp.ngp3 && tmp.beu && tmp.beu[3] !== undefined && tmp.quActive,
 		bam: tmp.ngp3,
@@ -932,7 +921,6 @@ function updateSoftcapStatsTab(){
 		ts_reduce_log: "softcap_ts1",
 		ts_reduce_log_big_rip: "softcap_tsBR",
 		ts11_log_big_rip: "softcap_ts2",
-		ms322_log: "softcap_ms322",
 		bru1_log: "softcap_bru1",
 		beu3_log: "softcap_beu3",
 		inf_time_log: "softcap_it",

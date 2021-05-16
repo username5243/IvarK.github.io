@@ -409,7 +409,17 @@ function getECReward(x) {
 	if (x == 11 && pc) return Math.sqrt(Math.log10((Math.pow(c, 2) * (player.totalTickGained + (Math.max(c, 1) - 1) * 5e4)) / 1e5 + 1)/(4 - c / 2) + 1)
 	if (x == 12) return 1 - c * (m2 ? .06 : 0.008)
 	if (x == 13) return Math.sqrt(1 + c / 7.5)
-	if (x == 14) return [0, 0.1, 0.2, 0.3, 0.5, 1][c]
+	if (x == 14) {
+		if (masteryStudies.has(304)) c -= 0.5
+
+		let effs = [0, 0.1, 0.2, 0.3, 0.5, 1]
+		if (c < 0) return 0
+		if (c > 5) return 1
+
+		let cInt = Math.floor(c)
+		if (c == cInt) return effs[c]
+		return effs[cInt] * (cInt + 1 - c) + effs[cInt + 1] * (c - cInt)
+	}
 }
 
 function doCheckECCompletionStuff() {

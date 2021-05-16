@@ -22,8 +22,8 @@ var masteryStudies = {
 			//Quantum
 			271: 1 / 128,
 			281: 4, 282: 2, 283: 2, 284: 4,
-			291: 2, 292: 4, 293: 1 / 256, 294: 4, 295: 2,
-			301: 1 / 0, 302: 1, 303: 1, 304: 1 / 0},
+			291: 8, 292: 2, 293: 1 / 256, 294: 2, 295: 8,
+			301: 1 / 8, 302: 2, 303: 2, 304: 1 / 8},
 		ec: {},
 		dil: {}
 	},
@@ -114,10 +114,10 @@ var masteryStudies = {
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
 	unl() {
-		return (tmp.ngp3 && tmp.eterUnl && player.dilation.upgrades.includes("ngpp6")) || tmp.quUnl
+		return tmp.quUnl || (tmp.ngp3 && hasDilationUpg("ngpp6"))
 	},
 	has(x) {
-		return this.unl() && (player.masterystudies.includes("t" + x) || (player.masterystudies.includes(x) && x[0] == "d"))
+		return this.unl() && ((player.masterystudies.includes("t" + x) && this.studies.includes(x)) || (player.masterystudies.includes(x) && x[0] == "d"))
 	},
 	timeStudies: [],
 	timeStudyEffects: {
@@ -146,164 +146,62 @@ var masteryStudies = {
 			let x = player.dilation.dilatedTime.add(1).log10()
 			return x / Math.pow(Math.log10(x + 1) + 1, 2) * 2
 		},
+		283() {
+			let x = tmp.rep ? tmp.rep.baseChance : 0
+			return 0.7 * Math.pow(x / 1e9 + 1, 0.2)
+		},
 		284() {
 			return (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 20
 		},
 		292() {
 			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
-			let exp = (5 - 2 / (Math.log10(rep + 1) / 10 + 1)) / 3
-			return Math.pow(rep / 5e5, exp) * 2e3
+			let exp = (4 - 1 / (Math.log10(rep + 1) / 10 + 1)) / 3
+			return Math.pow(rep / 3e5, exp) * 3e3
 		},
 		295() {
 			let rg = getFullEffRGs()
 			return Math.log10(rg / 100 + 1) / 2 + 1
 		},
+		301() {
+			let rg = player.replicanti.galaxies * 0.25
+			return Decimal.pow(10, rg * Math.log10(rg / 1e3 + 10) * 0.002)
+		},
 		303(x) {
 			if (!x) x = getInfinitied()
 			return Decimal.add(x, 1).log10() / 5 + 1
-		},
-
-		//Legacy
-		322() {
-			let log = Math.sqrt(Math.max(3 - getTickspeed().log10(), 0)) / 2e4
-			if (log > 110) log = Math.sqrt(log * 27.5) + 55
-			if (log > 1e3 && tmp.mod.ngudpV !== undefined) log = Math.pow(7 + Math.log10(log), 3)
-			if (tmp.mod.newGameExpVersion) log += Math.pow(Math.log10(log + 10), 4) - 1
-
-			log = softcap(log, "ms322_log")
-			//these are also required very much--more DT is more tickspeed is more DT
-			return Decimal.pow(10, log)
-		},
-		332() {
-			return Math.max(player.galaxies, 1)
-		},
-		341() {
-			if (!tmp.quActive) return new Decimal(1)
-			var exp = Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())
-			if (exp > 150) exp = 150 * Math.pow(exp / 150, .5)
-			if (exp > 200) exp = 200 * Math.pow(exp / 200, .5)
-			return Decimal.pow(tmp.newNGP3E ? 3 : 2, exp)
-		},
-		344() {
-			if (!tmp.quActive) return 1
-			var ret = Math.pow(tmp.qu.replicants.quarks.div(1e7).add(1).log10(), tmp.newNGP3E ? 0.3 : 0.25) * 0.17 + 1
-			if (ret > 3) ret = 1 + Math.log2(ret + 1)
-			if (ret > 4) ret = 3 + Math.log10(ret + 6)
-			return ret
-		},
-		351() { //maybe use softcap.js
-			let log = player.timeShards.max(1).log10()*14e-7
-			if (log > 1e4) log = Math.pow(log / 1e4, 0.75) * 1e4
-			if (log > 2e4) log = 2 * Math.pow(Math.log10(5 * log) + 5 ,4)
-			return Decimal.pow(tmp.newNGP3E ? 12 : 10, log)
-		},
-		361() {
-			return player.dilation.tachyonParticles.max(1).pow(0.01824033924212366)
-		},
-		371() {
-			return Math.pow(tmp.extraRG + 1, tmp.mod.newGameExpVersion ? .5 : .3)
-		},
-		372() {
-			return Math.sqrt(player.timeShards.add(1).log10())/20+1
-		},
-		373() {
-			return Math.pow(player.galaxies + 1, 0.55)
-		},
-		381() {
-			return Decimal.min(tmp.tsReduce, 1).log10() / -135 + 1
-		},
-		382() {
-			return player.eightAmount.max(1).pow(Math.PI)
-		},
-		383() {
-			if (!tmp.quActive) return new Decimal(1)
-			var blueExp = 4/21
-			if (tmp.newNGP3E) blueExp = 1/5
-			var bluePortion = Math.pow(getCPLog("b"), blueExp)
-
-			var MAportion = Math.sqrt(player.meta.antimatter.add(10).log10())
-			var exp = MAportion * bluePortion * Math.log10(2)
-
-			if (exp > 1000) exp = Math.pow(exp / 1000, .6) * 1000
-			if (exp > 2000) exp = Math.pow(exp / 2000, .4) * 2000
-
-			return Decimal.pow(10, exp)
-		},
-		391() {
-			return player.meta.antimatter.max(1).pow(8e-4)
-		},
-		392() {
-			if (!tmp.quActive) return new Decimal(1)
-			return Decimal.pow(tmp.newNGP3E ? 1.7 : 1.6, Math.sqrt(tmp.qu.replicants.quarks.add(1).log10())).plus(1)
-		},
-		393() {
-			if (!tmp.twr || !tmp.quActive) return new Decimal(1)
-			return Decimal.pow(4e5, Math.sqrt(tmp.twr.add(1).log10()))
-		},
-		401() {
-			if (!tmp.quActive) return new Decimal(1)
-			let log = tmp.qu.replicants.quarks.div(1e28).add(1).log10()*0.2
-			if (log > 5) log = Math.log10(log * 2) * 5
-			return Decimal.pow(tmp.newNGP3E ? 12 : 10, log)
-		},
-		411() {
-			if (!tmp.tra || !tmp.quActive) return new Decimal(1)
-			var exp = tmp.tra.div(1e24).add(1).pow(0.2).log10()
-			if (tmp.newNGP3E) exp += Math.pow((exp + 9) * 3, .2) * Math.log10(exp + 1)
-			return Decimal.pow(10, exp)
-		},
-		421() {
-			let ret = Math.pow(Math.max(-getTickspeed().log10() / 1e13 - 0.75, 1), 4)
-			if (ret > 100) ret = Math.sqrt(ret * 100)
-			return ret
-		},
-		431() {
-			var gals = player.dilation.freeGalaxies + tmp.eg431
-			if (gals >= 1e6) gals = Math.pow(gals * 1e3, 2/3)
-
-			var effectBase = Math.max(gals / 1e4, 1)
-			if (effectBase > 10 && tmp.newNGP3E) effectBase *= Math.log10(effectBase)
-
-			var effectExp = Math.max(gals / 1e4 + Math.log10(gals) / 2, 1)
-			if (effectExp > 10 && tmp.newNGP3E) effectExp *= Math.log10(effectExp)
-
-			var eff = Decimal.pow(effectBase, effectExp)
-			if (tmp.newNGP3E) eff = eff.times(eff.plus(9).log10())
-
-			return eff
 		}
 	},
 	timeStudyDescs: {
-		241: "The IP mult multiplies IP gain by 2.1x per upgrade.",
-		251: "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
-		252: "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
-		253: "Remote galaxy scaling starts 2 galaxies later per 7 total Replicated Galaxies.",
-		261: "Dimension Boost cost scales by 0.5 less.",
-		262: "The power of meta-antimatter effect is increased by ^0.5.",
-		263: "Tachyonic Galaxies are 25% stronger.",
-		264: "You gain 5x more Tachyon Particles.",
-		265: "Replicate chance upgrades can go over 100%.",
-		266: "Reduce the post-400 max replicated galaxy cost scaling.",
+		241: () => "The IP mult multiplies IP gain by 2.1x per upgrade.",
+		251: () => "Remote galaxy scaling starts later based on Meta-Dimension Boosts.",
+		252: () => "Remote galaxy scaling starts 1 galaxy later per 9 Tachyonic Galaxies.",
+		253: () => "Remote galaxy scaling starts 2 galaxies later per 7 total Replicated Galaxies.",
+		261: () => "Dimension Boost cost scales by 0.5 less.",
+		262: () => "The power of meta-antimatter effect is increased by ^0.5.",
+		263: () => "Tachyonic Galaxies are 25% stronger.",
+		264: () => "You gain 5x more Tachyon Particles.",
+		265: () => "Replicate chance upgrades can go over 100%.",
+		266: () => "Reduce the post-400 max replicated galaxy cost scaling.",
 
-		271: "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
+		271: () => "Replicantis boost Infinity Dimensions at a greatly stronger rate.",
 
-		281: "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
-		282: "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
-		283: "Replicate chance increases higher above 100%.",
-		284: "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
+		281: () => "Before boosts, dilated time adds the OoMs of replicate interval scaling.",
+		282: () => "You can buy sub-1ms interval upgrades, but the cost starts to scale faster.",
+		283: () => "Replicate chance gradually increases higher above 100%.",
+		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
-		291: "All Replicated Galaxies work evenly.",
-		292: "Replicantis generate free Dimension Boosts.",
-		293: "Some boosts from Replicantis are stronger.",
-		294: "All Replicanti boosts are based on Replicanti multiplier.",
-		295: "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
+		291: () => "All Replicated Galaxies work evenly.",
+		292: () => "Replicantis generate free Dimension Boosts.",
+		293: () => "Some boosts from Replicantis are stronger.",
+		294: () => "All Replicanti boosts are based on Replicanti multiplier.",
+		295: () => "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
 
-		301: "Replicated Galaxies boost the effect of inactive mastered Positronic Boosts.",
-		302: "Reduce the gluon effect nerfs by ^0.9.",
-		303: "Infinitied stat boosts itself to give stronger boosts.",
-		304: "Replicantis boost the effect of inactive mastered Positronic Boosts.",
+		301: () => "Perform a Eternity reset, but 25% of your normal RGs speed up Replicantis instead.",
+		302: () => "Reduce the gluon effect nerfs by ^0.9.",
+		303: () => "Infinitied stat boosts itself to give stronger boosts.",
+		304: () => "Perform a Eternity reset for a +25% boost to extra RGs, but disable Time Study 131.",
 	},
-	hasStudyEffect: [251, 252, 253, 271, 281, 284, 292, 295, 303, 322, 332, 341, 344, 351, 361, 371, 372, 373, 381, 382, 383, 391, 392, 393, 401, 411, 421, 431],
+	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 292, 295, 301, 303],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -316,6 +214,9 @@ var masteryStudies = {
 		},
 		281(x) {
 			return "+" + shorten(x * getReplSpeedExpMult()) + " OoMs"
+		},
+		283(x) {
+			return "^x^0.5 -> ^x^" + shorten(x)
 		},
 		284(x) {
 			return "+" + shorten(x) + " OoMs"

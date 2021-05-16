@@ -108,7 +108,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.eternitiesBank = tmp.ngp3 ? nA(player.eternitiesBank, bankedEterGain) : undefined
 	player.thisEternity = 0
 	player.bestEternity = headstart ? player.bestEternity : 9999999999
-	if (qMs.tmp.amt < 3 || (bigRip && !tmp.bruActive[12])) player.eternityUpgrades = []
+	if (!qMs.isOn(3) || (bigRip && !tmp.bruActive[12])) player.eternityUpgrades = []
 	player.epmult = new Decimal(1)
 	player.epmultCost = new Decimal(500)
 	resetInfDimensions(true)
@@ -168,7 +168,8 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	player.dilation = {
 		studies:
 			bigRip ? (tmp.bruActive[12] ? [1, 2, 3, 4, 5, 6] : tmp.bruActive[10] ? [1] : []) :
-			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : qMs.tmp.amt >= 5 ? [1] : [],
+			!qMs.isOn(5) ? [] :
+			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
 		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
 			(!isQC || !QCs.includes(3)) &&

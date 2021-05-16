@@ -165,7 +165,7 @@ function canAutoReplicatedGalaxy() {
 
 function getMaxRG() {
 	let ret = player.replicanti.gal
-	if (hasTimeStudy(131)) ret += Math.floor(ret * 0.5)
+	if (hasTimeStudy(131) && !masteryStudies.has(304)) ret += Math.floor(ret * 0.5)
 	return ret
 }
 
@@ -192,6 +192,7 @@ function updateExtraReplMult() {
 		if (inQC(2) || inQC(3)) x = 0
 		if (enB.active("glu", 2)) x *= tmp.enB.glu2
 	}
+	if (masteryStudies.has(304)) x *= 1.25
 	extraReplMulti = x
 }
 
@@ -205,6 +206,7 @@ function getFullEffRGs(min) {
 	if (inQC(3)) return 0
 
 	let x = player.replicanti.galaxies
+	if (masteryStudies.has(301)) x *= 0.75
 	if (masteryStudies.has(291)) x = getTotalRGs()
 	else if (min) x = Math.min(x, player.replicanti.gal)
 
@@ -233,8 +235,8 @@ function getReplicantiBaseInterval(speed) {
 
 	speed = new Decimal(speed)
 	if (enB.active("glu", 8)) {
-		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9))
-		speed = Decimal.pow(0.9, Math.pow(lvls, tmp.enB.glu8)).times(1e3)
+		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9)) + 1
+		speed = Decimal.pow(0.9, Math.pow(lvls, tmp.enB.glu8) - 1).times(1e3)
 	}
 
 	if (speed.lt(1)) speed = speed.pow(isQCRewardActive(3) ? tmp.qcRewards[3] : 0.25)
@@ -243,19 +245,21 @@ function getReplicantiBaseInterval(speed) {
 
 function getReplicantiIntervalMult() {
 	let interval = 1
-	if (tmp.mod.ngexV) interval *= .8
-	if (hasTimeStudy(62)) interval /= tsMults[62]()
-	if (player.replicanti.amount.gt(Number.MAX_VALUE)||hasTimeStudy(133)) interval *= 10
-	if (hasTimeStudy(213)) interval /= tsMults[213]()
-	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
-	if (isBigRipUpgradeActive(4)) interval /= 10
 	if (tmp.ngC) interval /= 20
+	if (tmp.mod.ngexV) interval *= .8
+
+	if (hasTimeStudy(62)) interval /= tsMults[62]()
+	if (hasTimeStudy(213)) interval /= tsMults[213]()
+	if (isBigRipUpgradeActive(4)) interval /= 10
+
+	if (player.replicanti.amount.gt(Number.MAX_VALUE) || hasTimeStudy(133)) interval *= 10
+	if (player.replicanti.amount.lt(Number.MAX_VALUE) && hasAch("r134")) interval /= 2
 
 	interval = new Decimal(interval)
 	if (player.exdilation != undefined) interval = interval.div(getBlackholePowerEffect().pow(1/3))
 	if (player.dilation.upgrades.includes('ngpp1') && tmp.mod.nguspV && !tmp.mod.nguepV) interval = interval.div(player.dilation.dilatedTime.max(1).pow(0.05))
 	if (player.dilation.upgrades.includes("ngmm9")) interval = interval.div(getDil72Mult())
-	if (masteryStudies.has(332)) interval = interval.div(getMTSMult(332))
+	if (masteryStudies.has(301)) interval = interval.div(getMTSMult(301))
 	if (tmp.ngC && ngC.tmp) interval = interval.div(ngC.tmp.rep.eff1)
 	return interval
 }
@@ -354,14 +358,16 @@ function updateReplicantiTemp() {
 
 	data.ln = player.replicanti.amount.ln()
 
-	data.chance = player.replicanti.chance
+	data.baseChance = Math.round(player.replicanti.chance * 100)
+	if (enB.active("glu", 8)) data.baseChance = Math.pow(data.baseChance, 1.25)
 
 	let pow = 1
-	if (data.chance > 1) pow = Math.pow(data.chance, masteryStudies.has(283) ? 0.75 : 0.5)
-	if (pow > 1) data.chance = Decimal.pow(data.chance, pow)
+	if (data.baseChance > 1) pow = Decimal.pow(data.baseChance / 100, masteryStudies.has(283) ? getMTSMult(283, "update") : 0.5)
+	if (pow > 1) data.chance = Decimal.pow(data.baseChance / 100, pow.toNumber())
+	else data.chance = data.baseChance / 100
 
 	data.freq = 0
-	if (Decimal.gte(data.chance, "1e9999998")) data.freq = Decimal.times(Math.log10(player.replicanti.chance + 1), pow / Math.log10(2))
+	if (Decimal.gte(data.chance, "1e9999998")) data.freq = Decimal.times(Math.log10(data.baseChance / 100 + 1) / Math.log10(2), pow)
 
 	let estChance = data.freq ? data.freq.times(Math.log10(2) / Math.log10(Math.E) * 1e3) : Decimal.add(data.chance, 1).log(Math.E) * 1e3
 

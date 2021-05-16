@@ -505,7 +505,7 @@ let enB = {
 			}
 		},
 		7: {
-			req: 12,
+			req: 1/0,
 			masReq: 21,
 			type: "r",
 			eff(x) {
@@ -516,7 +516,7 @@ let enB = {
 			}
 		},
 		8: {
-			req: 15,
+			req: 1/0,
 			masReq: 24,
 			type: "b",
 			eff(x) {
@@ -527,7 +527,7 @@ let enB = {
 			}
 		},
 		9: {
-			req: 18,
+			req: 1/0,
 			masReq: 27,
 			type: "g",
 			eff(x) {
@@ -538,7 +538,7 @@ let enB = {
 			}
 		},
 		10: {
-			req: 21,
+			req: 1/0,
 			masReq: 30,
 			type: "g",
 			eff(x) {
@@ -662,18 +662,18 @@ let enB = {
 			}
 		},
 		5: {
-			req: 9,
+			req: 1/0,
 			masReq: 1/0,
 			type: "r",
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x)
 			}
 		},
 		6: {
-			req: 11,
+			req: 1/0,
 			masReq: 1/0,
 			type: "r",
 			eff(x) {
@@ -684,7 +684,7 @@ let enB = {
 			}
 		},
 		7: {
-			req: 13,
+			req: 1/0,
 			masReq: 1/0,
 			type: "r",
 			eff(x) {
@@ -695,7 +695,7 @@ let enB = {
 			}
 		},
 		8: {
-			req: 15,
+			req: 1/0,
 			masReq: 1/0,
 			type: "r",
 			eff(x) {

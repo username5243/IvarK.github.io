@@ -1953,10 +1953,10 @@ function setTSDisplay(){
 }
 
 function updateNGp3DisplayStuff(){
-	for (var i=0;i<masteryStudies.timeStudies.length;i++) {
-		var t=masteryStudies.timeStudies[i]
-		var d=masteryStudies.timeStudyDescs[t]
-		getEl("ts"+t+"Desc").innerHTML=(typeof(d)=="function"?d():d)||"Unknown desc."
+	for (var i = 0; i < masteryStudies.timeStudies.length; i++) {
+		var t = masteryStudies.timeStudies[i]
+		var d = masteryStudies.timeStudyDescs[t]
+		getEl("ts" + t + "Desc").innerHTML = (typeof(d)=="function" ? d() : d) || "Unknown desc."
 	}
 	updateMasteryStudyCosts()
 	getEl('rebuyupgauto').textContent="Rebuyable upgrade auto: O"+(player.autoEterOptions.rebuyupg?"N":"FF")

@@ -28,7 +28,9 @@ let qMs = {
 	updateDisplay() {
 		for (var i = 1; i <= qMs.max; i++) {
 			getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
-			getEl("qMs_reward_" + i).className = "qMs_" + (qMs.tmp.amt >= i ? "reward" : "locked")
+			getEl("qMs_reward_" + i).className = qMs.tmp.amt < i ? "qMs_locked" :
+				!this[i].disablable ? "qMs_reward" :
+				"qMs_toggle_" + (!tmp.qu.disabledRewards[i] ? "on" : "off")
 			getEl("qMs_reward_" + i).textContent = qMs[i].eff()
 		}
 
@@ -56,12 +58,14 @@ let qMs = {
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
 	isOn(id) {
-		if (!tmp.ngp3) return false
 		return qMs.tmp.amt >= id && !tmp.qu.disabledRewards[id]
 	},
 	toggle(id) {
-		tmp.qu.disabledRewards[id] = !tmp.qu.disabledRewards[id]
-		getEl("reward" + id + "disable").textContent = (id > 11 ? "10 seconds" : id > 4 ? "33.3 mins" : (id > 3 ? 4.5 : 6) + " hours") + " reward: " + (tmp.qu.disabledRewards[id] ? "OFF" : "ON")
+		if (!this[id].disablable) return
+
+		let on = !tmp.qu.disabledRewards[id]
+		tmp.qu.disabledRewards[id] = on
+		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
 	max: 29,
@@ -77,6 +81,7 @@ let qMs = {
 	},
 	3: {
 		req: 3,
+		disablable: true,
 		eff: () => "Keep all your Eternity Upgrades and Time Studies",
 		effGot: () => "You now can keep all your Eternity Upgrades and Time Studies."
 	},
@@ -87,6 +92,7 @@ let qMs = {
 	},
 	5: {
 		req: 5,
+		disablable: true,
 		eff: () => "Start with Time Dilation unlocked & 1 TP and each time you buy '3x TP' upgrade, your TP amount is increased by 3x",
 		effGot: () => "You now start with Time Dilation unlocked & 1 TP and each time you buy '3x TP' upgrade, your TP amount is increased by 3x."
 	},
