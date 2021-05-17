@@ -2313,13 +2313,13 @@ function load_game(noOffline, init) {
 	savePlacement=1
 	while (metaSave.saveOrder[savePlacement - 1] != metaSave.current) savePlacement++
 	if (break_infinity_js == null) {
-		if (tmp.mod) break_infinity_js=tmp.mod.breakInfinity
+		if (tmp.mod) break_infinity_js = tmp.mod.breakInfinity
 		if (break_infinity_js) Decimal = Decimal_BI
 		initCost = [null, new Decimal(10), new Decimal(1e2), new Decimal(1e4), new Decimal(1e6), new Decimal(1e9), new Decimal(1e13), new Decimal(1e18), new Decimal(1e24)]
 		costMults = [null, new Decimal(1e3), new Decimal(1e4), new Decimal(1e5), new Decimal(1e6), new Decimal(1e8), new Decimal(1e10), new Decimal(1e12), new Decimal(1e15)]
-		loadICData()
 		setUnlocks = [Decimal.pow(Number.MAX_VALUE, 2.9)]
 	}
+	loadICData()
 	if (infiniteCheck) exportInfiniteSave()
 	if (infiniteCheck || infiniteCheck2) {
 		updateNewPlayer("reset")

@@ -10,11 +10,11 @@ let qMs = {
 		data.points = 0
 
 		//Speedrun
-		data.amt_sr = Math.floor(Math.max(Math.log10(86400 / tmp.qu.best) / Math.log10(2) * 2 + 1, 0))
+		data.amt_sr = Math.max(Math.floor(Math.log10(86400 / tmp.qu.best) / Math.log10(2) * 2 + 1), 0)
 		data.points += data.amt_sr
 
 		//Relatistic
-		data.amt_rl = Math.floor((player.dilation.totalTachyonParticles.max(1).log10() - 80) / 5 + 1)
+		data.amt_rl = Math.max(Math.floor((player.dilation.totalTachyonParticles.max(1).log10() - 80) / 5 + 1), 0)
 		data.points += data.amt_rl
 
 		//Energetic

@@ -426,7 +426,7 @@ let enB = {
 		},
 
 		eff(x, data) {
-			let r = this.amt() * 2 / 3 - 1
+			let r = Math.max(this.amt() * 2 / 3 - 1, 1)
 			r *= enB.mastered("glu", x) ? data.enAmt : data.masAmt
 
 			return r
