@@ -90,7 +90,7 @@ var masteryStudies = {
 			return "2.75 quantum energy"
 		},
 		d8() {
-			return "SOON IN BETA V0.4"
+			return "SOON IN BETA V0.4 (Tommorow)"
 		},
 		d9() {
 			return "Complete Quantum Challenge 8"
@@ -510,6 +510,7 @@ function buyMasteryStudy(type, id, quick=false) {
 			showTab("challenges")
 			showChallengesTab("eternitychallenges")
 		} else if (type == "d") {
+			if (id == 8) qMs.updateDisplay()
 			updateUnlockedMasteryStudies()
 			updateSpentableMasteryStudies()
 		}

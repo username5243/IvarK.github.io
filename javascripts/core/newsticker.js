@@ -305,9 +305,9 @@ amNewsArray = [
 ["Can an antimatter can can a can of antimatter can all full of antimatter food that can destroy a can made out of antiantimatter?", true, "am92"],
 ["If Aarexese in Aarexese is English, then is English in Aarexese Aarexese?", true, "am93"],
 ["Aarexify is coming in an update after the next one.", true, "am94"],
-["Wait, there's a co-developer?", 'player.masterystudies !== undefined', "am95"],
-["???", false, "am96"],
-["???", false, "am97"],
+["Wait, there's a co-developer?", 'tmp.ngp3', "am95"],
+["I will not develop any news tickers at the time of writing, sorry everyone!", true, "am96"],
+["Aarex being online doesen't necessarily mean he will look at your suggestions.", true, "am97"],
 ["In the next update, dilation will delete all of your EP.", 'player.masterystudies !== undefined', "am98"],
 ["If you start a new game of NG+3, does that make it NGNG+3?", 'player.masterystudies !== undefined', "am99"],
 ["Electrons are now gone. We are finally seeing Positrons for good.", '(player.masterystudies !== undefined ? player.masterystudies.includes("d7") : false)', "am100"],
@@ -424,7 +424,13 @@ amNewsArray = [
 ["Pfft, screw Gravity Dimensions! *slide whistle effect*", "GDs.unlocked()", "am211"],
 ["NG-5 is being worked on! Now with 100% less matter.", "inNGM(4)", "am212"],
 ["The Anti-Grind Research Lab is currently looking for another exploit. The estimated amount of time will be about 7 months. Why can’t they just play the game normally? Nobody knows.", true, "am213"],
-["'I will not let players exploit the game!' ~ Aarex", true, "am214"]
+["'I will not let players exploit the game!' ~ Aarex", true, "am214"],
+["How come NG++ and NG+++ add content, while NG+4 is simply a boost?", "tmp.ngpX >= 4", "am215"],
+["You know, scientifically a big crunch would result in much more antimatter than a big rip.",  "hasAch('ng3p51')", "am216"],
+["I will not develop any news tickers at the time of writing, sorry everyone!", true, "am217"],
+["New layers coming out! Tetrify, Pentify, Sexify, Septify, Nonify and finally Decify. Also scamify. Wait, what do you mean i should rename that third one to hexify instead?", true, "am218"],
+["Why is there a big crunch and a big rip although a heat death would be more likely to happen?", "hasAch('ng3p51')", "am219"],
+["Thousands of people in protest as Aarex adds scamify for 1 minute.", true, "am220"],
 /*NEXT ID: am216*/
 ];}
 

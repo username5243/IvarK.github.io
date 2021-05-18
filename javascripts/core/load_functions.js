@@ -2286,7 +2286,7 @@ function setupNGP31Versions() {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		masteryStudies.respec(true)
 	}
-	tmp.mod.ngp3Build = 20210511
+	tmp.mod.ngp3Build = 20210517
 }
 
 function checkNGM(imported) {

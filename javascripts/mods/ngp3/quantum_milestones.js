@@ -1,7 +1,16 @@
 //New: v3.0 / Old: v1.79
 let qMs = {
 	tmp: {},
-	old_reqs: [null, 43200, 32400, 21600, 16200, 10800, 7200, 3600, 3200, 2800, 2400, 2000, 1600, 1200, 800, 400, 300, 240, 210, 180, 150, 120, 90, 60, 30, 20, 15, 10, 5],
+	types: ["sr", "rl", "en", "ch"],
+	displayFuncs: {
+		sr: timeDisplay,
+		rl: shortenDimensions,
+		en: shorten,
+		ch: getFullExpansion,
+	},
+	unlockReqs: {
+		ch: () => masteryStudies.has("d8")
+	},
 	update() {
 		let data = {}
 		qMs.tmp = data
@@ -10,22 +19,38 @@ let qMs = {
 		data.points = 0
 
 		//Speedrun
-		data.amt_sr = Math.max(Math.floor(Math.log10(86400 / tmp.qu.best) / Math.log10(2) * 2 + 1), 0)
+		data.targ_sr = tmp.qu.best
+		data.amt_sr = Math.max(Math.floor(Math.log10(86400 / data.targ_sr) / Math.log10(2) * 2 + 1), 0)
 		data.points += data.amt_sr
 
 		//Relatistic
-		data.amt_rl = Math.max(Math.floor((player.dilation.totalTachyonParticles.max(1).log10() - 80) / 5 + 1), 0)
+		data.targ_rl = player.dilation.totalTachyonParticles
+		data.amt_rl = Math.max(Math.floor((data.targ_rl.max(1).log10() - 80) / 5 + 1), 0)
 		data.points += data.amt_rl
 
 		//Energetic
-		data.amt_en = Math.floor(Math.sqrt(tmp.qu.bestEnergy || 0) * 2)
+		data.targ_en = tmp.qu.bestEnergy
+		data.amt_en = Math.floor(Math.sqrt(data.targ_en || 0) * 2)
 		data.points += data.amt_en
+
+		//Challenging
+		data.targ_ch = 0
+		data.amt_ch = 0
+		data.points += data.amt_ch
 
 		//Milestones
 		data.amt = 0
 		for (var i = 1; i <= qMs.max; i++) if (data.points >= qMs[i].req) data.amt++
 	},
 	updateDisplay() {
+		let types = qMs.types
+		for (var i = 0; i < types.length; i++) {
+			var type = types[i]
+			var shown = qMs.unlockReqs[type] ? qMs.unlockReqs[type]() : true
+
+			getEl("qMs_" + type+ "_cell").style.display = shown ? "" : "none"
+		}
+
 		for (var i = 1; i <= qMs.max; i++) {
 			getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
 			getEl("qMs_reward_" + i).className = qMs.tmp.amt < i ? "qMs_locked" :
@@ -46,14 +71,17 @@ let qMs = {
 		}
 	},
 	updateDisplayOnTick() {
-		getEl("qMs_sr_target").textContent = timeDisplay(tmp.qu.best)
-		getEl("qMs_sr_points").textContent = getFullExpansion(qMs.tmp.amt_sr)
+		let types = qMs.types
 
-		getEl("qMs_rl_target").textContent = shortenDimensions(player.dilation.totalTachyonParticles)
-		getEl("qMs_rl_points").textContent = getFullExpansion(qMs.tmp.amt_rl)
+		for (var i = 0; i < types.length; i++) {
+			var type = types[i]
+			var shown = qMs.unlockReqs[type] ? qMs.unlockReqs[type]() : true
 
-		getEl("qMs_en_target").textContent = shorten(tmp.qu.bestEnergy)
-		getEl("qMs_en_points").textContent = getFullExpansion(qMs.tmp.amt_en)
+			if (shown) {
+				getEl("qMs_" + type+ "_target").textContent = qMs.displayFuncs[type](qMs.tmp["targ_" + type])
+				getEl("qMs_" + type+ "_points").textContent = getFullExpansion(qMs.tmp["amt_" + type])
+			}
+		}
 
 		getEl("qMs_points").textContent = getFullExpansion(qMs.tmp.points)
 	},
