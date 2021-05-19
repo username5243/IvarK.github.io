@@ -48,7 +48,7 @@ function nanofieldResetOnQuantum(){
 	tmp.qu.nanofield.powerThreshold = new Decimal(50)
 }
 
-function doQuantumResetStuff(bigRip, isQC, QCs){
+function doQuantumResetStuff(bigRip, isQC, qcData){
 	var headstart = !tmp.ngp3
 	var oheHeadstart = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
 	var keepABnICs = oheHeadstart || bigRip || hasAch("ng3p51")
@@ -171,15 +171,9 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 			!qMs.isOn(5) ? [] :
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
-		tachyonParticles: (bigRip ? hasAch("ng3p37") && tmp.bruActive[11] : hasAch("ng3p71")) &&
-			(!isQC || !QCs.includes(3)) &&
-			!inQCModifier("ad") ?
-				player.dilation.bestTP.pow(
-					(player.ghostify.milestones >= 16 && (!bigRip || hasAch("ng3p71"))) || (player.ghostify.milestones >= 4 && !isQC) ? 1
-					: 0.5
-				)
-			: qMs.tmp.amt >= 5 ? Decimal.pow(3, qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0)
-			: new Decimal(0),
+		tachyonParticles: 
+			qMs.tmp.amt >= 5 ? Decimal.pow(3, qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0) :
+			new Decimal(0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
 		bestTPOverGhostifies: player.dilation.bestTPOverGhostifies,
@@ -196,7 +190,7 @@ function doQuantumResetStuff(bigRip, isQC, QCs){
 	}
 	resetNGUdData(true)
 	doMetaDimensionsReset(bigRip, headstart, isQC)
-	player.old = tmp.ngp3 ? inQC(0) : undefined
+	player.old = tmp.ngp3 ? !QCs.inAny() : undefined
 	player.dontWant = tmp.ngp3 || undefined
 	if (tmp.ngp3) resetMasteryStudies(bigRip)
 }
@@ -523,27 +517,13 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 			br: new Decimal(0)
 		},
 		pos: pos.setup(),
+		qc: QCs.setup(),
 		multPower: {
 			rg: 0,
 			gb: 0,
 			br: 0,
 			total: 0
 		},
-		challenge: [],
-		challenges: bm ? tmp.qu.challenges : {},
-		nonMAGoalReached: tmp.qu.nonMAGoalReached,
-		challengeRecords: {},
-		pairedChallenges: {
-			order: bm ? tmp.qu.pairedChallenges.order : {},
-			current: 0,
-			completed: bm ? 4 : 0,
-			completions: tmp.qu.pairedChallenges.completions,
-			fastest: tmp.qu.pairedChallenges.fastest,
-			pc68best: tmp.qu.pairedChallenges.pc68best,
-			respec: false
-		},
-		qcsNoDil: tmp.qu.qcsNoDil,
-		qcsMods: tmp.qu.qcsMods,
 		replicants: getReplicantsOnGhostifyData(),
 		emperorDimensions: {},
 		nanofield: {
@@ -793,7 +773,6 @@ function doEternityGhostifyResetStuff(implode, bm){
 
 function doQuantumGhostifyResetStuff(implode, bm){
 	tmp.qu.quarkEnergy = new Decimal(0)
-	tmp.qu.qcsMods.current = []
 	tmp.qu.replicants.amount = new Decimal(0)
 	tmp.qu.replicants.requirement = new Decimal("1e3000000")
 	tmp.qu.replicants.quarks = new Decimal(0)
@@ -835,6 +814,8 @@ function doQuantumGhostifyResetStuff(implode, bm){
 	updateGluonsTabOnUpdate("prestige")
 	updateQuantumWorth("quick")
 	updateBankedEter()
+	QCs.updateTmp()
+	QCs.updateDisp()
 	updateReplicants("prestige")
 	updateNanoRewardTemp()
 	updateTODStuff()

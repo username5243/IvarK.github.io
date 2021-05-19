@@ -225,7 +225,6 @@ function getTwoDecaysBool(){
 function preHiggsNGp3AchieveCheck() {
 	//Time Studies
 	let checkEmpty = player.timestudy.studies.length < 1
-	if (tmp.ngp3) for (id = 0; id < player.masterystudies.length; id++) if (player.masterystudies[id].split("t")[1]) checkEmpty = false
 
 	//Tree of Decay
 	let noTree = false
@@ -238,20 +237,18 @@ function preHiggsNGp3AchieveCheck() {
 	//Able to get "Rid of you"
 	let ableToGetRid2 = checkEmpty && player.dilation.active
 	let ableToGetRid3 = ableToGetRid2
-	let ableToGetRid4 = ableToGetRid2 && inQC(2)
+	let ableToGetRid4 = ableToGetRid2 && QCs.in(2)
 	let ableToGetRid5 = ableToGetRid4 && player.dontWant
-	let ableToGetRid6 = ableToGetRid2 && inQC(6) && inQC(8)
+	let ableToGetRid6 = ableToGetRid2 && QCs.in(6) && QCs.in(8)
 
 	if (player.meta.bestAntimatter.gte(Number.MAX_VALUE)) giveAchievement("I don't have enough fuel!")
 	if (player.galaxies >= 900 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
-	if (player.meta.resets == 8 && player.meta.bestAntimatter.log10() >= 1500) giveAchievement("We are not going squared.")
+	if (player.money.gte(Number.MAX_VALUE) && QCs.in(1)) giveAchievement("Infinity Morals")
 	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
-	if (player.old && player.meta.bestAntimatter.log10() >= 1700) giveAchievement("Old memories come true")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")
-	if (player.money.log10() >= 7.88e13 && tmp.qu.pairedChallenges.completed == 0) giveAchievement("The truth of anti-challenged")
 	if (player.money.log10() >= 6.2e11 && player.currentEternityChall == "eterc11") giveAchievement("I can’t get my multipliers higher!")
 	if (player.replicanti.amount.log10() >= 1/0 && player.dilation.tachyonParticles.eq(0)) giveAchievement("No dilation means no production.")
 	if (player.infinityPoints.gte(Decimal.pow(Number.MAX_VALUE, 1000)) && ableToGetRid5) giveAchievement("I don't want you to live anymore.")
@@ -262,7 +259,7 @@ function preHiggsNGp3AchieveCheck() {
 			else if (player.money.log10() >= 1.6e12 && d == 8) giveAchievement("ERROR 404: DIMENSIONS NOT FOUND")
 		}
 	}
-	if (player.money.log10() >= 8e6 && inQC(6) && inQC(8)) giveAchievement("Impossible expectations")
+	if (player.money.log10() >= 8e6 && QCs.in(6) && QCs.in(8)) giveAchievement("Impossible expectations")
 	if (player.timestudy.theorem >= 1.1e7 && tmp.qu.wasted) giveAchievement("Studies are wasted")
 	if (tmp.qu.replicants.requirement.gte("1e12500000")) giveAchievement("Stop blocking me!")
 	if (player.infinityPoints.gte(Decimal.pow(10, 2.75e5)) && ableToGetRid6) giveAchievement("Are you currently dying?")
@@ -272,7 +269,7 @@ function preHiggsNGp3AchieveCheck() {
 		let ableToGetRid7 = ableToGetRid2 && player.epmult.eq(1)
 		let ableToGetRid8 = ableToGetRid7 && !tmp.qu.breakEternity.did
 		let ableToGetRid9 = ableToGetRid8 && noTree
-		let ableToGetRid10 = ableToGetRid9 && inQCModifier("ad")
+		let ableToGetRid10 = ableToGetRid9
 		if (player.currentEternityChall == "eterc7" && player.galaxies == 1 && player.money.log10() >= 8e7) giveAchievement("Time Immunity")
 		if (!player.timestudy.studies.includes(11) && player.timeShards.log10() >= 215) giveAchievement("You're not really smart.")
 		if (ableToGetRid7 && player.infinityPoints.log10() >= 3.5e5) giveAchievement("And so your life?")
@@ -289,11 +286,8 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.options.secrets && player.options.secrets.ghostlyNews && !player.options.newsHidden) giveAchievement("Two tickers")
 	if (tmp.qu.breakEternity.did) giveAchievement("Time Breaker")
 	if (masteryStudies.bought >= 48) giveAchievement("The Theory of Ultimate Studies")
-	if (ranking >= 165) giveAchievement("Pulling an All-Nighter")
-	if (ranking >= 190) giveAchievement("Not-so-very-challenging") 
-	if (tmp.pcc.normal >= 24) giveAchievement("The Challenging Day")
 	if (tmp.qu.best <= 200) giveAchievement("And the winner is...")
-	if (qMs.tmp.amt >= 24) giveAchievement("Special Relativity")
+	if (qMs.tmp.amt >= 21) giveAchievement("Special Relativity")
 	if (tmp.qu.best <= 10) giveAchievement("Quantum doesn't take so long")
 	if (player.masterystudies.includes("d13")) giveAchievement("Do protons decay?")
 	if (getTotalRadioactiveDecays() >= 10) giveAchievement("Radioactive Decaying to the max!")
@@ -313,10 +307,8 @@ function atHiggsAchCheck(){
 
 function atGravDimsAchCheck(){
 	if (GDs.unlocked()) giveAchievement("The Power of Relativity")
-	if (tmp.pcc.normal >= 35) giveAchievement("The Forbidden Challenge")
 	if (player.ghostify.ghostParticles.plus(1).log10() >= 5e3) giveAchievement("Einstein's Ghost")
 	if (tmp.qu.nanofield.rewards >= 250) giveAchievement("Gigafield")
-	if (ranking >= 242.4) giveAchievement("X-Ranked")
 	if (tmp.qu.bigRip.bestThisRun.plus(1).log10() >= Math.sqrt(2) * 1e12) giveAchievement("Do you even how to?")
 	// Brutally Challenging is on quantum_challenges.js
 	if (player.ghostify.time <= 100 && player.money.plus(1).log10() >= 1/0) giveAchievement("Auto-Ghost Speedrunning")

@@ -95,7 +95,6 @@
 		<div id="chall13Mult"></div>
 		<div id="c14Resets"></div>
 		<div id="ec12Mult"></div>
-		<div id="qc2Gals"></div>
 		<div>
 			<p>You have <span id="coinAmount" onclick="onAntimatterClick()" style="font-size:25px; color: black">0</span> antimatter.</p>
 		</div>
@@ -1554,7 +1553,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.302: Positronic Charge)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 1)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -1562,13 +1561,11 @@
 			<div id='statstabs'>
 				<br>
 				<td><button class="secondarytabbtn" onclick="showStatsTab('stats')">Statistics</button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('softcaps')" id="softcapsbtn" style="display:none">Softcaps</button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('challengetimes')" id="challengetimesbtn" style="display:none" >Challenge records</button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('infchallengetimes')" id="infchallengesbtn" style="display:none"><span style='font-size:10px'>Infinity Challenge records</span></button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('eterchallengetimes')" id="eterchallengesbtn" style="display:none"><span style='font-size:10px'>Eternity Challenge records</span></button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('qctimes')" id="qcsbtn" style="display:none"><span style='font-size:10px'>Quantum Challenge records</span></button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('pccompletions')" id="pccompletionsbtn" style="display:none"><span style='font-size:9px'>Paired Challenge completions</span></button><td>
-				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs" style="display:none">Past Infinities</button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('softcaps')" id="softcapsbtn">Softcaps</button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('challengetimes')" id="challengetimesbtn" >Challenge records</button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('infchallengetimes')" id="infchallengesbtn"><span style='font-size:10px'>Infinity Challenge records</span></button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('eterchallengetimes')" id="eterchallengesbtn"><span style='font-size:10px'>Eternity Challenge records</span></button><td>
+				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttenruns')" id="pastinfs">Past Infinities</button><td>
 				<td><button class="secondarytabbtn" onclick="showStatsTab('lastteneternities')" id="pasteternities" >Past Eternities</button><td>
 				<td><button class="secondarytabbtn" onclick="showStatsTab('lasttenquantums')" id="pastquantums" >Past Quantums</button><td>
 				<td><button class="secondarytabbtn aarexmodsghostifybtn" onclick="showStatsTab('lasttenghostifies')" id="pastghostifies" >Past Ghostifies</button><td>
@@ -1728,30 +1725,6 @@
 				<br>
 				<div id="eterchallengetimesum"></div>
 			</div>
-			<div id="qctimes" class="statstab" >
-				<br>
-				<div id="qctime1"></div>
-				<div id="qctime2"></div>
-				<div id="qctime3"></div>
-				<div id="qctime4"></div>
-				<div id="qctime5"></div>
-				<div id="qctime6"></div>
-				<div id="qctime7"></div>
-				<div id="qctime8"></div>
-				<br>
-				<div id="qctimesum"></div>
-			</div>
-			<div id="pccompletions" class="statstab" >
-				<br>
-				Lowest PC # done w/ every combination of PCs:
-				<table id="pccompletionstable"></table>
-				<span id="bpc68"></span><br>
-				<span id="upcc"></span><br>
-				<span id="udcc"></span><br>
-				<span id="pcEff"></span><br><br>
-				<div id="modifiersStats"></div><br>
-				Ranking: <span id="pccranking"></span> / <span id="pccrankingMax"></span>
-			</div>
 			<div id="lasttenruns" class="statstab">
 				<div id="run1"></div>
 				<div id="run2"></div>
@@ -1823,7 +1796,6 @@
 			</table>
 			<div id="normalachievements" class="achtab">
 				<div id="achmultlabel" style="font-size: 140%"></div>
-				<div id="metaAchMultLabel" style="font-size: 140%"></div>
 				<div id="bWtAchMultLabel" style="font-size: 140%"></div>
 				<table id="achievementtable" style="margin: auto">
 					<tr id="achRow1">
@@ -2257,7 +2229,7 @@
 								<div id="No more tax fraud!" class="achievement achievementlocked" style="background-image: url(images/109.png)" ach-tooltip="Have 900 galaxies without unlocking Time Dilation. Reward: You permanently keep your banked Infinities, and bank 5% of your Eternities on Quantum."><br></div>
 							</td>
 							<td>
-								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)" ach-tooltip="Quantum in under 20 seconds."><br></div>
+								<div id="And the winner is..." class="achievement achievementlocked" style="background-image: url(images/110.png)" ach-tooltip="Quantum in under 20 seconds. Reward: The first mastery study has no requirement."><br></div>
 							</td>
 							<td>
 								<div id="Old age" class="achievement achievementlocked" style="background-image: url(images/111.png)"><br></div>
@@ -2268,7 +2240,7 @@
 						</tr>
 						<tr id="achRowng3p2">
 							<td>
-								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)"><br></div>
+								<div id="Special Relativity" class="achievement achievementlocked" style="background-image: url(images/113.png)" ach-tooltip="Get the first 21 Quantum Milestones. Reward: 1st Meta Dimensions are stronger based on your best meta antimatter."><br></div>
 							</td>
 							<td>
 								<div id="We are not going squared." class="achievement achievementlocked" style="background-image: url(images/114.png)"><br></div>
@@ -2283,7 +2255,7 @@
 								<div id="Twice in a row" class="achievement achievementlocked" style="background-image: url(images/117.png)" ach-tooltip="Complete Paired Challenge 4. Reward: Unlock the '# of dilated' mode for the Quantum autobuyer."><br></div>
 							</td>
 							<td>
-								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)"><br></div>
+								<div id="Infinity Morals" class="achievement achievementlocked" style="background-image: url(images/118.png)" ach-tooltip="Reach Infinity in Quantum Challenge 1. Reward: Meta Dimension Boosts boost itself at a greatly reduced rate."><br></div>
 							</td>
 							<td>
 								<div id="Intergalactic" class="achievement achievementlocked" style="background-image: url(images/119.png)" ach-tooltip="Reach 4,000,000 Eighth Dimensions without any replicated or Tachyonic Galaxies. Reward: Eighth Dimensions are stronger based on your normal galaxies."><br></div>
@@ -3403,145 +3375,8 @@
 				</table>
 			</div>
 			<div id="quantumchallenges" class="challengeTab">
-				<div>If you are in a Quantum Challenge or have completed a Quantum Challenge the RG4 toggle will disappear and RG4 will be on.</div>
-				<table class="table" style="margin: 0 auto">
-					<tr>
-						<td>
-							<div class="quantumchallengediv" id="qc1div">
-								<span>There are only Meta Dimensions, but First Meta Dimensions produce antimatter instead.</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc1" class="challengesbtn" onclick="quantum(false, true, 1)">Start</button>
-									<br>
-									<span id="qc1cost"></span><br>
-									<span id="qc1goal"></span><br>
-									Reward: Dimension Boosts boost Meta Dimensions by <span id="qc1reward"></span>x
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc2div">
-								<span>You have a limit of 2,000 total galaxies. There are no extra replicated galaxies and Tachyon Particles are resetted. (WIP)</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc2" class="challengesbtn" onclick="quantum(false, true, 2)">Start</button>
-									<br>
-									<span id="qc2cost"></span><br>
-									<span id="qc2goal"></span><br>
-									Reward: Gain more Tachyonic Galaxies for each threshold. Currently: <span id="qc2reward"></span>%
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc3div">
-								<span>Replicated Galaxies are replaced with Replicanti Self-Boosts. (Coming soon)</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc3" class="challengesbtn" onclick="quantum(false, true, 3)">Start</button>
-									<br>
-									<span id="qc3cost"></span><br>
-									<span id="qc3goal"></span><br>
-									Reward: Reduce the slowdown of sub-1ms replicate interval upgrades to <span id="qc3reward"></span>%.
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="quantumchallengediv" id="qc4div">
-								<span>Automatic Big Crunch Challenge is applied to Meta Dimensions, but some boosts work. (WIP)</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc4" class="challengesbtn" onclick="quantum(false, true, 4)">Start</button>
-									<br>
-									<span id="qc4cost"></span><br>
-									<span id="qc4goal"></span><br>
-									Reward: All even Meta Dimensions boost all odd Meta Dimensions. Currently: <span id="qc4reward"></span>x
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc5div">
-								<span>Dimension Supersonic scaling starts instantly, and grows much faster. Replicanti Galaxy cost and Tachyonic Galaxy threshold also grow much faster. Multiplier per ten dimensions is 1x.</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc5" class="challengesbtn" onclick="quantum(false, true, 5)">Start</button>
-									<br>
-									<span id="qc5cost"></span><br>
-									<span id="qc5goal"></span><br>
-									Reward: Dimension Boosts boost the multiplier per ten Dimensions. Currently: <span id="qc5reward"></span>x
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc6div">
-								<span>IC2, IC6, IC7 and IC8 are applied to Normal, Infinity, and Time Dimensions, and IC3 is applied to Normal Dimensions. Matter cannot surpass antimatter or you fail the challenge. You can't gain dimension boosts, but the multiplier per-10 Meta Dimensions is slightly stronger.</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc6" class="challengesbtn" onclick="quantum(false, true, 6)">Start</button>
-									<br>
-									<span id="qc6cost"></span><br>
-									<span id="qc6goal"></span><br>
-									Reward: Your achievement bonus boosts Meta Dimensions. Currently: <span id="qc6reward"></span>x
-								</div>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<div class="quantumchallengediv" id="qc7div">
-								<span id="qc7desc"></span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc7" class="challengesbtn" onclick="quantum(false, true, 7)">Start</button>
-									<br>
-									<span id="qc7cost"></span><br>
-									<span id="qc7goal"></span><br>
-									Reward: The free tickspeed upgrade threshold increases slower. Currently: <span id="qc7reward"></span>% slower
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc8div">
-								<span>Infinity and Time Dimensions are disabled, and Meta-Dimension Boosts have no effect.</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc8" class="challengesbtn" onclick="quantum(false, true, 8)">Start</button>
-									<br>
-									<span id="qc8cost"></span><br>
-									<span id="qc8goal"></span><br>
-									Reward: You gain extra Replicated Galaxies faster after 100. Currently: <span id="qc8reward"></span>x faster
-								</div>
-							</div>
-						</td>
-						<td>
-							<div class="quantumchallengediv" id="qc9div">
-								<span>Only Replicantis can boost Time Dimensions, meta-antimatter doesn't boost Dimension Boosts, and only Infinite Time can increase Intergalactic multiplier.</span>
-								<br>
-								<br>
-								<div class="outer">
-									<button id="qc9" class="challengesbtn" onclick="quantum(false, true, 9)">Start</button>
-									<br>
-									<span id="qc9cost"></span><br>
-									<span id="qc9goal"></span><br>
-									Reward: Replicantis increases the Gravity Energy gain. (Boosted by # of unique PC completions)<br>
-									Currently: +<span id="qc9reward"></span>x
-								</div>
-							</div>
-						</td>
-						<td>
-							<!-- There's no Quantum Challenge 10. There's no 5th pair.-->
-						</td>
-					</tr>
-				</table>
+				<table class="table" id="qcs_div" style="margin: 0 auto"></table>
+				<!--
 				<div id="autoCS">
 					<b style="font-size: 25px">Auto-Challenge Sweeper Ghost</b><br>
 					This ghost will sweep all possible Paired Challenge combinations in Paired Challenge 1!<br>
@@ -3554,7 +3389,7 @@
 				<div id="pairedchallenges">
 					<b style="font-size: 35px">Paired Challenges</b><br>
 					<button class="storebtn" onclick="respecTogglePC()" id="respecPC" style="width:150px; height: 40px; font-size: 10px; border-width: 1px; margin: auto">Respec paired challenges on next quantum</button>
-				<table class="table" id="pairedchallenges" style="margin: 0 auto"> 
+				<table class="table" id="pairedchallenges"> 
 					<tr> 
 						<td> 
 							<div class="quantumchallengediv"> 
@@ -3621,6 +3456,7 @@
 					</tr> 
 				</table> 
 				</div>
+				-->
 				<div id="bigrip">
 					<b style="font-size: 35px">Big Rip</b><br>
 					To big rip the universe, you need to assign a PC with QC6 & 8 first.<br>
@@ -5943,7 +5779,7 @@
 		<div id="theorembuybackground"></div>
 		<p id="timetheorems" style="position: fixed;">You have 0 Time Theorems.</p>
 	</div>
-	<div id="progress" style="display:none">
+	<div id="progress">
 		<div id="progressbar"><span id="progresspercent" ach-tooltip="Percentage until Infinity">0%</span></div>
 	</div>
 	<div id="ghostifyani">

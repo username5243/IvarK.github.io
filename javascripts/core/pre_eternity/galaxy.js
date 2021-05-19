@@ -39,7 +39,7 @@ getEl("secondSoftReset").onclick = function() {
 	let bool2 = player.currentChallenge != "postc1"
 	let bool3 = player.currentChallenge != "postc5" || player.tickspeedBoosts == undefined
 	let bool4 = player.currentChallenge != "postc7"
-	let bool5 = (player.currentEternityChall == "eterc6" || inQC(6)) && !tmp.be
+	let bool5 = (player.currentEternityChall == "eterc6") && !tmp.be
 	var bool = bool1 && bool2  && bool3 && bool4 && !bool5 && !tmp.ri && !cantReset()
 	if (getAmount(inNC(4) || inNGM(5) ? 6 : 8) >= getGalaxyRequirement() && bool) {
 		if ((getEternitied() >= 7 || player.autobuyers[10].bulkBought) && !shiftDown && (!inNC(14) || !(tmp.mod.ngmX > 3))) maxBuyGalaxies(true);
@@ -185,6 +185,6 @@ function getRemoteScalingStart(galaxies) {
 
 function maxBuyGalaxies(manual) {
 	let max = (manual || (!player.autobuyers[10].priority && tmp.ngp3)) ? 1/0 : player.autobuyers[10].priority
-	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7" || inQC(6)) && !tmp.be) return
+	if ((inNC(11) || player.currentEternityChall == "eterc6" || player.currentChallenge == "postc1" || (player.currentChallenge == "postc5" && inNGM(3)) || player.currentChallenge == "postc7") && !tmp.be) return
 	if (max > player.galaxies) galaxyReset(doBulkSpent(getAmount(inNC(4) || inNGM(5) ? 6 : 8), getGalaxyRequirement, 0, true).toBuy) //Offset function
 }

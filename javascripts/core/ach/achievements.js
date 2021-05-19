@@ -472,7 +472,7 @@ function giveAchievement(name, noUpdate) {
 	}
 	if (name == "Bright as the Anti-Sun" && !tmp.bl.upgrades.includes(32)) tmp.bl.upgrades.push(32)
 	if (name == "... references to EC8?") updateTODStuff()
-	if (name == "Not-so-very-challenging") updateQuantumChallenges()
+	if (name == "Not-so-very-challenging") QCs.updateDisp()
 
 	if (!noUpdate) {
 		if (name == "A sound financial decision") localStorage.setItem(btoa("dsAM_asfd"),"")
@@ -633,15 +633,6 @@ function achMultLabelUpdate() {
 	if (hasAch("r75")) labels.push("Infinity")
 	if (player.eternityUpgrades.includes(4)) labels.push("Time")
 	return wordizeList(labels)
-}
-
-function metaAchMultLabelUpdate() {
-	if (!isQCRewardActive(6)) {
-		getEl("metaAchMultLabel").style.display = "none"
-		return
-	}
-	getEl("metaAchMultLabel").style.display = ""
-	getEl("metaAchMultLabel").textContent = "Achievement multiplier to Meta Dimensions: " + shorten(tmp.qcRewards[6]) + "x"
 }
 
 function bWtAchMultLabelUpdate() {

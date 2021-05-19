@@ -2,14 +2,13 @@
 
 function startChallenge(name) {
 	if (name == "postc3" && isIC3Trapped()) return
-	if ((name == "postc2" || name == "postc6" || name == "postc7" || name == "postc8") && inQC(6)) return
 	if (name.includes("post")) {
 		if (player.postChallUnlocked < checkICID(name)) return
 		var target = getGoal(name)
 	} else var target = new Decimal(Number.MAX_VALUE)
 	if (player.options.challConf && name != "") if (!confirm("You will start over with just your Infinity upgrades, and achievements. You need to reach " + (name.includes("post") ? "a set goal" : "infinity") + " with special conditions. The 4th Infinity upgrade column doesn't work on challenges.")) return
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
-	if (name == "postc1" && player.currentEternityChall != "" && inQC(4) && inQC(6)) giveAchievement("The Ultimate Challenge")
+	if (name == "postc1" && player.currentEternityChall != "" && QCs.in(4) && QCs.in(6)) giveAchievement("The Ultimate Challenge")
 	
 	doNormalChallengeResetStuff()
 	player.currentChallenge = name
@@ -112,12 +111,10 @@ function updateNCVisuals() {
 
 	if (inNC(6, 2) || inNC(9) || inNC(12) || ((inNC(5) || inNC(14) || chall == "postc4" || chall == "postc5") && tmp.ngmX < 3) || chall == "postc1" || chall == "postc6" || chall == "postc8") getEl("quickReset").style.display = "inline-block"
 	else getEl("quickReset").style.display = "none"
-
-	getEl("qc2Gals").style.display = inQC(2) ? "block" : ""
 }
 
 function inMatterChallenge() {
-	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || inQC(6) || pl.on()
+	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || pl.on()
 }
 
 var worstChallengeTime = 1
@@ -169,15 +166,6 @@ function updateChallenges() {
 	}
 
 	getEl("challenge7").parentElement.parentElement.style.display = player.infinitied < 1 && player.eternities < 1 && !ph.did("quantum") ? "none" : ""
-	if (inQC(4)) {
-		getEl("challenge7").className = "onchallengebtn";
-		getEl("challenge7").textContent = "Trapped in"
-	}
-
-	if (inQC(6)) for (i = 2; i <= 8; i++) if (i == 2 || i >= 6) {
-		getEl("postc"+i).className = "onchallengebtn";
-		getEl("postc"+i).textContent = "Trapped in"
-	}
 
 	if (isIC3Trapped()) {
 		getEl("postc3").className = "onchallengebtn";

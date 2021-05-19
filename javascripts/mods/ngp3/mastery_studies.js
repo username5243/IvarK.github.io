@@ -11,7 +11,7 @@ var masteryStudies = {
 			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
-		dil: {7: 1e74, 8: 2e83, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
+		dil: {7: 1e74, 8: 5e75, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
@@ -49,7 +49,7 @@ var masteryStudies = {
 	},
 	unlockReqConditions: {
 		241() {
-			return player.dilation.dilatedTime.gte(1e100)
+			return hasAch("ng3p16") || player.dilation.dilatedTime.gte(1e100)
 		},
 		272() {
 			return masteryStudies.bought >= 10
@@ -58,13 +58,13 @@ var masteryStudies = {
 			return tmp.qu.quarkEnergy >= 2.75
 		},
 		d8() {
-			return false
+			return enB.pos.engAmt() >= 1700
 		},
 		d9() {
-			return QCIntensity(8) >= 1
+			return false
 		},
 		d10() {
-			return tmp.qu.pairedChallenges.completed == 4
+			return false
 		},
 		d11() {
 			return tmp.eds[1].perm >= 10
@@ -81,7 +81,7 @@ var masteryStudies = {
 	},
 	unlockReqDisplays: {
 		241() {
-			return shorten(1e100) + " dilated time"
+			return hasAch("ng3p16") ? undefined : shorten(1e100) + " dilated time"
 		},
 		272() {
 			return "10 bought mastery studies"
@@ -90,10 +90,10 @@ var masteryStudies = {
 			return "2.75 quantum energy"
 		},
 		d8() {
-			return "SOON IN BETA V0.4 (Tommorow)"
+			return shorten(1700) + " positronic charge"
 		},
 		d9() {
-			return "Complete Quantum Challenge 8"
+			return "COMING IN BETA V0.5"
 		},
 		d10() {
 			return "Complete Paired Challenge 4"
@@ -299,7 +299,7 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.costMult = hasAch("ng3p12") ? 0.25 : 1
+	masteryStudies.costMult = QCs.in(1) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {
@@ -437,8 +437,11 @@ function buyingD7Changes() {
 }
 
 function buyingDilStudyForQC() {
-	teleportToQCs()
-	updateQuantumChallenges()
+	getEl("qctabbtn").style.display = ""
+
+	QCs.tp()
+	QCs.updateTmp()
+	QCs.updateDisp()
 }
 
 function buyingDilStudyReplicant() {
@@ -522,7 +525,6 @@ function buyMasteryStudy(type, id, quick=false) {
 
 function canBuyMasteryStudy(type, id) {
 	if (type == 't') {
-		if (inQCModifier("sm") && masteryStudies.bought >= 20) return false
 		if (player.timestudy.theorem < masteryStudies.costs.time[id] || player.masterystudies.includes('t' + id) || player.eternityChallUnlocked > 12 || !masteryStudies.timeStudies.includes(id)) return false
 		if (masteryStudies.latestBoughtRow > Math.floor(id / 10)) return false
 		if (!masteryStudies.spentable.includes(id)) return false

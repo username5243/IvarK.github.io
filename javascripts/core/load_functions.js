@@ -644,21 +644,7 @@ function doNGP3NewPlayerStuff(){
         tmp.qu.disabledRewards = {}
         tmp.qu.metaAutobuyerWait = 0
         tmp.qu.multPower = {rg:0,gb:0,br:0,total:0}
-        tmp.qu.challenge = []
-        tmp.qu.challenges = {}
         tmp.qu.nonMAGoalReached = []
-        tmp.qu.challengeRecords = {}
-        tmp.qu.pairedChallenges = {
-                order: {},
-                current: 0,
-                completed: 0,
-                completions: {},
-                fastest: {},
-                pc68best: 0,
-                respec: false
-        }
-        tmp.qu.qcsNoDil = {}
-        tmp.qu.qcsMods = {current:[]}
         player.dilation.bestTP = 0
         player.old = false
         tmp.qu.autoOptions = {}
@@ -987,14 +973,6 @@ function doNGp3v15tov199(){
 }
 
 function doNGp3v199tov19995(){
-        if (tmp.mod.newGame3PlusVersion < 1.997) {
-                tmp.qu.pairedChallenges = {
-                        order: {},
-                        current: 0,
-                        completed: 0,
-                        respec: false
-                }
-        }
         if (tmp.mod.newGame3PlusVersion < 1.9975&&!tmp.qu.challenge) tmp.qu.challenge=[]
         if (tmp.mod.newGame3PlusVersion < 1.9979) {
                 player.dilation.bestTP=hasAch("ng3p18")?player.dilation.tachyonParticles:new Decimal(0)
@@ -1036,10 +1014,6 @@ function doNGp3v199tov19995(){
                 updateRespecButtons()
                 delete player.respecOptions
         }
-        if (tmp.mod.newGame3PlusVersion < 1.998621) {
-                if (tmp.inQCs.length<2) tmp.qu.pairedChallenges.current=0
-                if (tmp.qu.pairedChallenges.completed>4) tmp.qu.pairedChallenges.completed=0
-        }
         if (tmp.mod.newGame3PlusVersion < 1.9987) player.eternitiesBank=0
         if (tmp.mod.newGame3PlusVersion < 1.99871) {
                 tmp.qu.replicants.limit=Math.min(tmp.qu.replicants.limit,10)
@@ -1051,15 +1025,6 @@ function doNGp3v199tov19995(){
                 tmp.qu.quantumFood=0
                 tmp.qu.quantumFoodCost=1e46*Math.pow(5,Math.round(new Decimal(tmp.qu.replicants.workers).toNumber()*3+new Decimal(tmp.qu.replicants.workerProgress).toNumber()))
         }
-        if (tmp.mod.newGame3PlusVersion < 1.99873) {
-                tmp.qu.pairedChallenges.completions = {}
-                for (c=1;c<=tmp.qu.pairedChallenges.completed;c++) {
-                        var c1 = tmp.qu.pairedChallenges.order[c][0]
-                        var c2 = tmp.qu.pairedChallenges.order[c][1]
-                        tmp.qu.pairedChallenges.completions[Math.min(c1, c2) * 10 + Math.max(c1, c2)] = c
-                }
-        }
-
         if (player.masterystudies ? tmp.mod.newGame3PlusVersion < 1.999 || (tmp.qu.emperorDimensions ? tmp.qu.emperorDimensions[1] == undefined : false) : false) { 
                 var oldLength=player.masterystudies.length
                 var newMS=[]
@@ -1152,9 +1117,6 @@ function doNGp3v19995tov21(){
                 player.eternityBuyer.ifAD = false
                 tmp.qu.reached = tmp.qu.times > 0
                 tmp.qu.nonMAGoalReached = {}
-                tmp.qu.pairedChallenges.fastest = {}
-                tmp.qu.qcsNoDil = {}
-                tmp.qu.pairedChallenges.pc68best = 0
                 tmp.qu.bigRip = {
                         active: false,
                         conf: true,
@@ -1667,10 +1629,7 @@ function doNGp3Init2(){
 		getEl("workerReplWhat").textContent = player.ghostify.neutrinos.upgrades.includes(2) ? "babies" : "eggons"
 		updateQuantumWorth()
 		if (tmp.qu.autoOptions === undefined) tmp.qu.autoOptions = {}
-		if (tmp.qu.nonMAGoalReached === undefined || !tmp.qu.nonMAGoalReached.length) tmp.qu.nonMAGoalReached = []
-		if (tmp.qu.qcsMods === undefined) tmp.qu.qcsMods = {current:[]}
-		if (tmp.qu.challengeRecords === undefined) tmp.qu.challengeRecords = {}
-		if (tmp.qu.pairedChallenges.completions === undefined) tmp.qu.pairedChallenges.completions = {}
+		QCs.updateDisp()
 		if (tmp.qu["10ofield"] !== undefined) {
 			tmp.qu.nanofield = tmp.qu["10ofield"]
 			delete tmp.qu["10ofield"]
@@ -1963,7 +1922,6 @@ function updateNGp3DisplayStuff(){
 	getEl('dilUpgsauto').textContent="Auto-buy dilation upgrades: O"+(player.autoEterOptions.dilUpgs?"N":"FF")
 	getEl('metaboostauto').textContent="Meta-boost auto: O"+(player.autoEterOptions.metaboost?"N":"FF")
 	getEl('priorityquantum').value=formatValue("Scientific", new Decimal(tmp.qu.autobuyer.limit), 2, 0)
-	getEl("respecPC").className=tmp.qu.pairedChallenges.respec?"quantumbtn":"storebtn"
 	getEl("produceQuarkCharge").innerHTML="S" + (tmp.qu.nanofield.producingCharge ? "top" : "tart") + " production of preon charge." + (tmp.qu.nanofield.producingCharge ? "" : "<br>(You will not get preons when you do this.)")
 	getEl("ratio_r").value = tmp.qu.assignAllRatios.r
 	getEl("ratio_g").value = tmp.qu.assignAllRatios.g
@@ -1978,7 +1936,7 @@ function updateNGp3DisplayStuff(){
 	getEl("odSlider").value=Math.round((tmp.bl.odSpeed-1)/4*50)
 	for (var g=1;g<=br.limit;g++) getEl("typeToExtract"+g).className=tmp.bl.typeToExtract==g?"chosenbtn":"storebtn"
 
-	handleDisplaysOnQuantum()
+	handleDispAndTmpOnQuantum()
 	updateBraveMilestones()
 	updateNeutrinoBoosts()
 	updateNeutrinoUpgradeUnlocks(5, 12)
@@ -2118,7 +2076,6 @@ function onLoad(noOffline) {
 	performedTS = false
 	updateVersionsONLOAD()
 	transformSaveToDecimal()
-	updateInQCs()
 	doNGp3Init2()
 	for (s = 0; s < (player.boughtDims ? 4 : 3); s++) toggleCrunchMode(true)
 	updateAutoEterMode()
@@ -2144,7 +2101,7 @@ function onLoad(noOffline) {
 	}
 	updateGalaxyTabs()
 	if (tmp.ngp3) updateNGp3DisplayStuff()
-	handleDisplaysOutOfQuantum()
+	handleDispAndTmpOutOfQuantum()
 	hideDimensions()
 	updateChallenges()
 	updateNCVisuals()
@@ -2162,7 +2119,7 @@ function onLoad(noOffline) {
 	updateEterChallengeTimes()
 	updateDilationUpgradeCosts()
 	updateExdilation()
-	handleDisplaysOnQuantum()
+	handleDispAndTmpOnQuantum()
 	updateBankedEter()
 	maybeShowFillAll()
 	updateNanoRewardTemp()
@@ -2286,7 +2243,16 @@ function setupNGP31Versions() {
 		alert("Your mastery studies has been respecced due to the rework of Positronic-era studies.")
 		masteryStudies.respec(true)
 	}
-	tmp.mod.ngp3Build = 20210517
+	if (tmp.mod.ngp3Build < 20210517) {
+		delete tmp.qu.challenge
+		delete tmp.qu.challenges
+		delete tmp.qu.challengeRecords
+		delete tmp.qu.pairedChallenges
+		delete tmp.qu.qcDataMods
+		delete tmp.qu.qcDataNoDil
+		delete tmp.qu.nonMAGoalReached
+	}
+	tmp.mod.ngp3Build = 20210518
 }
 
 function checkNGM(imported) {
@@ -2817,13 +2783,13 @@ function conToDeciMS(){
 		}
 	}
 	pos.compile()
+	QCs.compile()
 }
 
 function conToDeciGhostify(){
 	if (player.ghostify) {
 		player.dilation.bestTPOverGhostifies = Decimal.max(player.dilation.bestTPOverGhostifies, player.dilation.bestTP)
 		player.meta.bestOverGhostifies = Decimal.max(player.meta.bestOverGhostifies, player.meta.bestOverQuantums)
-		tmp.qu.pairedChallenges.pc68best = new Decimal(tmp.qu.pairedChallenges.pc68best)
 		tmp.qu.bigRip.bestThisRun = new Decimal(tmp.qu.bigRip.bestThisRun)
 		tmp.qu.bigRip.totalAntimatter = new Decimal(tmp.qu.bigRip.totalAntimatter)
 		tmp.qu.bigRip.spaceShards = new Decimal(tmp.qu.bigRip.spaceShards)

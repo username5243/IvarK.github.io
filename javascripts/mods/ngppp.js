@@ -434,7 +434,7 @@ function getAMforGHPGain(){
 
 function getGHPGain() {
 	if (!ph.did("ghostify")) return new Decimal(1)
-	let log = getAMforGHPGain() / getQCGoalLog([6, 8], "ghp_gain") - 1
+	let log = 0 //getAMforGHPGain() / QCs.getGoalMA([6, 8], "ghp_gain") - 1
 	if (hasAch("ng3p58")) { 
 		//the square part of the formula maxes at e10, and gets weaker after ~e60 total
 		let x = Math.min(7, log / 2) + Math.min(3, log / 2)
@@ -452,7 +452,6 @@ function getGHPBaseMult() {
 function getGHPMult() {
 	let x = getGHPBaseMult()
 	if (hasAch("ng3p93")) x = x.times(500)
-	if (hasAch("ng3p83")) x = x.times(ranking + 1)
 	if (hasAch("ng3p97")) x = x.times(Decimal.pow(player.ghostify.times + 1, 1/3))
 	return x
 }
@@ -535,14 +534,12 @@ function ghostifyReset(implode, gain, amount, force) {
 	if (bm >= 16) giveAchievement("I rather oppose the theory of everything")
 
 	if (player.eternityPoints.e>=22e4&&player.ghostify.under) giveAchievement("Underchallenged")
-	if (player.eternityPoints.e>=375e3&&inQCModifier("ad")) giveAchievement("Overchallenged")
 	if (player.ghostify.best<=6) giveAchievement("Running through Big Rips")
 
 	player.ghostify.time = 0
 	doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU)
 	
 	tmp.qu = player.quantum
-	updateInQCs()
 	ph.updateActive()
 	doPreInfinityGhostifyResetStuff()
 	doInfinityGhostifyResetStuff(implode, bm)
@@ -553,7 +550,7 @@ function ghostifyReset(implode, gain, amount, force) {
 	//After that...
 	qMs.update()
 	qMs.updateDisplay()
-	handleDisplaysOutOfQuantum()
+	handleDispAndTmpOutOfQuantum()
 	handleQuantumDisplays(true)
 	resetUP()
 }
@@ -713,8 +710,6 @@ function updateAutoGhosts(load) {
 			getEl("nextAutomatorGhost").parentElement.style.visibility="visible"
 			getEl("nextAutomatorGhost").textContent=autoGhostRequirements[data.ghosts-3].toFixed(2)
 		}
-
-		AUTO_QC.compile()
 	}
 	powerConsumed=0
 	for (var ghost = 1; ghost <= MAX_AUTO_GHOSTS; ghost++) {
@@ -815,76 +810,6 @@ function rotateAutoUnstable() {
 }
 
 const MAX_AUTO_GHOSTS = 25
-
-let AUTO_QC = {
-	compile() {
-		this.auto = player.ghostify.automatorGhosts[22]
-
-		let data = this.auto
-		if (data.sweep === undefined) {
-			data.time = 3
-			data.sweep = []
-			data.on = false
-		}
-	},
-	on() {
-		if (!isAutoGhostsSafe) {
-			$.notify("Please reduce your usage of Automator Ghosts before continuing!")
-			return
-		}
-		if (AUTO_QC.auto.on) return
-
-		this.next()
-	},
-	next() {
-		if (!this.auto.sweep.length) this.auto.sweep = [0, 1]
-		while (true) {
-			let data = this.auto.sweep
-			data[0]++
-			if (!QCIntensity(data[1]) || data[0] == data[1]) {
-				data[1]++
-				data[0] = 0
-				if (data[1] > 9) {
-					this.off()
-					return
-				}
-			} else if (this.check(data[0], data[1])) {
-				this.start(data[0], data[1])
-				return
-			}
-		}
-	},
-	start(c1, c2) {
-		tmp.inQCs = [0]
-		this.auto.on = true
-
-		respecPCs()
-		tmp.qu.pairedChallenges.order[1] = [c1, c2]
-
-		$.notify("Trying to complete QCs " + c1 + " and " + c2 + " in PC1...", "info")
-		quantum(false, true, 1, true)
-	},
-	check(c1, c2) {
-		let qcMods = qcm.on
-		let pcId = c1 * 10 + c2
-		for (let m = 0; m < qcMods.length; m++) {
-			let data = tmp.qu.qcsMods[qcMods[m]]
-			if (!data || data["pc" + pcId] != 1) return true
-		}
-		if (qcMods.length) return false
-		return tmp.qu.pairedChallenges.completions[pcId] != 1
-	},	
-	off() {
-		this.auto.sweep = []
-		if (this.auto.on){
-			this.auto.on = false
-			setPCsForBigRip()
-			quantum(false, true)
-		}
-		$.notify("Auto-Challenge Sweeper Ghost has done sweeping all possible PC1 combinations!", "success")
-		updateAutoGhosts()
-	}
-}
 
 //v2.1
 function startEC10() {

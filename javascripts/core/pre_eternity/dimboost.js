@@ -5,7 +5,7 @@ function getDimensionBoostPower(next, focusOn) {
 	if (!inNGM(2)) {
 		if (player.infinityUpgrades.includes("resetMult")) ret = 2.5
 		if (player.challenges.includes("postc7")) ret = 4
-		if (player.currentChallenge == "postc7" || inQC(6) || hasTimeStudy(81)) ret = 10
+		if (player.currentChallenge == "postc7" || hasTimeStudy(81)) ret = 10
 	}
 	if (player.boughtDims) ret += player.timestudy.ers_studies[4] + (next ? 1 : 0)
 	if (hasGalUpg(23) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || inNGM(4)) && player.currentChallenge != "postcngm3_4") ret *= galMults.u23()
@@ -15,12 +15,12 @@ function getDimensionBoostPower(next, focusOn) {
 	if (hasTimeStudy(83)) ret = tsMults[83]().times(ret);
 	if (hasTimeStudy(231)) ret = tsMults[231]().times(ret)
 	if (inNGM(2)) {
-		if (player.currentChallenge == "postc7" || inQC(6) || hasTimeStudy(81)) ret = Decimal.pow(ret, 3)
+		if (player.currentChallenge == "postc7" || hasTimeStudy(81)) ret = Decimal.pow(ret, 3)
 		else if (player.challenges.includes("postc7")) ret = Decimal.pow(ret, 2)
 	}
 	if (hasTS(152) && tmp.ngC) ret = Decimal.mul(ret, tsMults[152]())
 	if (ECComps("eterc13") > 0) ret = Decimal.pow(ret, getECReward(13))
-	if (hasDilationStudy(6) && !inQC(7)) ret = getExtraDimensionBoostPower().times(ret)
+	if (hasDilationStudy(6)) ret = getExtraDimensionBoostPower().times(ret)
 
 	if (player.currentEternityChall == "eterc13") ret = Decimal.pow(10, Math.sqrt(ret.log10() * (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies)))
 
@@ -86,7 +86,6 @@ function setInitialResetPower() {
 
 function maxBuyDimBoosts(manual) {
 	let tier = player.pSac != undefined ? 6 : 8
-	if (inQC(6)) return
 	let maxamount = Math.min(getAmount(getShiftRequirement(0).tier), (player.galaxies >= player.overXGalaxies || manual) ? 1/0 : player.autobuyers[9].priority)
 	
 	if (player.autobuyers[9].priority >= getAmount(tier) || player.galaxies >= player.overXGalaxies || manual) {
@@ -153,11 +152,10 @@ function getDimboostCostIncrease () {
 }
 
 function getSupersonicStart() {
-	return inQC(5) ? 0 : 1/0
+	return 1/0
 }
 
 function getSupersonicMultIncrease() {
-	if (inQC(5)) return 20
 	let r = 4
 	if (hasTS(194) && tmp.ngC) r = 2
 	if (masteryStudies.has(331)) r = 1
@@ -165,7 +163,6 @@ function getSupersonicMultIncrease() {
 }
 
 getEl("softReset").onclick = function () {
-	if (inQC(6)) return
 	if (cantReset()) return
 	var req = getShiftRequirement(0)
 	if (tmp.ri || getAmount(req.tier) < req.amount) return;

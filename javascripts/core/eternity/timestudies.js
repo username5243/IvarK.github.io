@@ -102,7 +102,6 @@ function updateTheoremButtons() {
 }
 
 function buyTimeStudy(name, quickBuy) {
-	if (inQCModifier("sm")) return
 	var cost = studyCosts[name]
 	if (player.boughtDims) {
 		if (player.timestudy.theorem < player.timestudy.ers_studies[name] + 1) return
@@ -487,10 +486,7 @@ function respecUnbuyableTimeStudies() {
 
 	for (var t = 0; t < all.length; t++) {
 		var id = all[t]
-		if (hasTS(id)) {
-			if (inQCModifier("sm")) player.timestudy.theorem += studyCosts[id]
-			else respecedTS.push(id)
-		}
+		if (hasTS(id)) respecedTS.push(id)
 	}
 	player.timestudy.studies = respecedTS
 }
@@ -964,8 +960,6 @@ let tsMults = {
 		let x = Math.floor(tmp.rmPseudo.e / 1e3)
 
 		let softcapEff = 2
-		if (isQCRewardActive(8)) softcapEff *= tmp.qcRewards[8]
-
 		let scLater = enB.active("glu", 10) ? tmp.enB.glu10 : 0
 		if (x > 100 + scLater) x = Math.sqrt((x - scLater) * 100) + scLater
 		return Math.floor(x)

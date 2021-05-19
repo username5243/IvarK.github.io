@@ -25,13 +25,14 @@ let Prestiges = {
 			return ngSg.can()
 		},
 		quantum() {
-			return player.money.log10() >= getQCGoalLog() &&
-				Decimal.gte(
+			return Decimal.gte(
 					getQuantumReqSource(), 
 					getQuantumReq(undefined, tmp.ngp3 && tmp.qu.bigRip.active)
 				)
-				&& (!tmp.ngp3 || ECComps("eterc14"))
-				&& quarkGain().gt(0)
+				&& (!tmp.ngp3 || (
+					QCs.inAny() ? QCs.getGoal() :
+					ECComps("eterc14") && quarkGain().gt(0)
+				))
 		},
 		ghostify() {
 			return tmp.qu.bigRip.active ? this.quantum() : false //hasNU(16) || pl.on()
@@ -90,7 +91,7 @@ let Prestiges = {
 		},
 		quantum() {
 			if (player.meta) {
-				if (!inAnyQC()) quantum(false, false, 0)
+				if (!QCs.inAny()) quantum(false, false, 0)
 				else quantum()
 			}
 		},
@@ -221,7 +222,7 @@ let Prestiges = {
 
 			getEl(d[0]).style.display = prestigeShown ? "" : "none"
 			getEl(d[1]).style.display = tabShown ? "" : "none"
-			getEl(d[2]).style.display = tabShown && !isEmptiness && (p != "quantum" || !inQCModifier("ms")) ? "" : "none"
+			getEl(d[2]).style.display = tabShown && !isEmptiness ? "" : "none"
 
 			getEl(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
 			getEl(d[1]).className = "presCurrency" + ph.tmp.shown
@@ -235,7 +236,7 @@ let Prestiges = {
 
 		//Quantum (after Neutrino Upgrade 16)
 		let bigRipAndQuantum = !hasNU(16) && !pl.on()
-		if (!bigRipAndQuantum && inQC(0)) getEl("quantumbtn").style.display = "none"
+		if (!bigRipAndQuantum && !QCs.inAny()) getEl("quantumbtn").style.display = "none"
 
 		//Big Rip
 		var canBigRip = canQuickBigRip() && (ph.shown("quantum") || bigRipAndQuantum)
@@ -253,10 +254,10 @@ let Prestiges = {
 		}
 	},
 	updateActive() {
-		tmp.eterUnl = ph.did("eternity") && !pl.on() //&& !inQCModifier("tb")
+		tmp.eterUnl = ph.did("eternity") && !pl.on() //&& !QCs.inModifier("tb")
 
 		tmp.quUnl = tmp.ngp3 && ph.did("quantum") && !pl.on()
-		tmp.quActive = tmp.quUnl && !inQCModifier("ms")
+		tmp.quActive = tmp.quUnl
 	},
 	onPrestige(layer) {
 		if (ph.tmp[layer].did) return
@@ -277,13 +278,18 @@ let Prestiges = {
 		if (tmp.mod.layerHidden[layer]) delete tmp.mod.layerHidden[layer]
 		else tmp.mod.layerHidden[layer] = true
 
-		if (layer == "eternity" && !tmp.mod.layerHidden.eternity) {
-			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
-			if (getEl("eternitychallenges").style.display == "block") showChallengeTab("normalchallenges")
-		}
-		if (layer == "quantum") handleDisplaysOutOfQuantum()
-
 		getEl("hide" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+
+		if (!tmp.mod.layerHidden[layer]) return
+		if (layer == "infinity") {
+			if (getEl("infinitydimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (getEl("breakchallenges").style.display == "block") showChallengesTab("normalchallenges")
+		}
+		if (layer == "eternity") {
+			if (getEl("timedimensions").style.display == "block" || getEl("metadimensions").style.display == "block") showDimTab("antimatterdimensions")
+			if (getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
+		}
+		if (layer == "quantum") handleDispAndTmpOutOfQuantum()
 	}
 }
 

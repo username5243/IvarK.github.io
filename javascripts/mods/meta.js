@@ -32,52 +32,24 @@ function getMDMultiplier(tier) {
 	ret = ret.times(Decimal.pow(getMetaBoostPower(), Math.max(Math.max(player.meta.resets - (pos.on() ? pos.tmp.sac_mdb : 0), 0) + 1 - tier, 0)))
 	ret = ret.times(tmp.mdGlobalMult) //Global multiplier of all Meta Dimensions
 
-	//QC Rewards:
-	if (isQCRewardActive(4) && tier % 2 > 0) ret = ret.times(tmp.qcRewards[4])
-
 	//Achievements:
-	if (tier == 8 && hasAch("ng3p22")) ret = ret.times(1 + Math.pow(player.meta[1].amount.plus(1).log10() / 10, 2))
-	if (tier == 1 && hasAch("ng3p31")) ret = ret.times(player.meta.antimatter.plus(1).pow(.001))
+	if (tier == 1 && hasAch("ng3p21")) ret = ret.times(player.meta.bestAntimatter.max(1).log10() / 5 + 1)
 	if (tier <= 3 && hasAch("ng3p17")) ret = ret.times(Decimal.pow(1.001, Math.pow(player.totalmoney.plus(10).log10(), 0.25)))
 
 	//Dilation Upgrades:
 	if (hasDilationUpg("ngmm8")) ret = ret.pow(getDil71Mult())
 
-	//Quantum Challenges:
-	if (inQC(4)) {
-		if (tier == 2) ret = ret.pow(1.3)
-		else if (tier == 4) ret = ret.pow(1.5)
-	}
 	return ret
 }
 
 function getMDGlobalMult() {
-	if (inQC(4)) return tmp.mdGMSideA.max(tmp.mdGMSideB)
-	return tmp.mdGMSideA.times(tmp.mdGMSideB)
-}
-
-function getMDGlobalMultSideA() {
 	let ret = getDilationMDMultiplier()
 	if (hasDilationUpg("ngpp3")) ret = ret.times(getDil14Bonus())
+	if (hasAch("ngpp12")) ret = ret.times(1.1)
 	if (tmp.ngp3) {
-		//QC Rewards
-		if (isQCRewardActive(1)) ret = ret.times(tmp.qcRewards[1])
-
 		//Achievement Rewards
 		var ng3p13exp = Math.pow(Decimal.plus(quantumWorth, 1).log10(), 0.25)
 		if (hasAch("ng3p13")) ret = ret.times(Decimal.pow(8, ng3p13exp))
-	}
-	return ret
-}
-
-function getMDGlobalMultSideB() {
-	let ret = new Decimal(1)
-	if (hasAch("ngpp12")) ret = ret.times(1.1)
-	if (tmp.ngp3) {
-		//QC Rewards
-		if (isQCRewardActive(6)) ret = ret.times(tmp.qcRewards[6])
-
-		//Achievement Rewards
 		if (hasAch("ng3p57")) ret = ret.times(1 + player.timeShards.plus(1).log10())
 	}
 	return ret
@@ -91,7 +63,6 @@ function getPerTenMetaPower() {
 }
 
 function getMetaBoostPower() {
-	if (inQC(8)) return 1
 	let r = 2
 	if (hasDilationUpg("ngpp4")) r = getDil15Bonus()
 	if (hasAch("ngpp14") && !tmp.ngp3) r *= 1.01
@@ -103,7 +74,7 @@ function getMetaBoostPower() {
 }
 
 function getMDDescription(tier) {
-	if (tier > Math.min(7, player.meta.resets + 3) - (inQC(4) ? 1 : 0)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
+	if (tier == Math.min(8, player.meta.resets + 4)) return getFullExpansion(player.meta[tier].bought) + ' (' + dimMetaBought(tier) + ')';
 	else {
 		let a = shortenDimensions(player.meta[tier].amount)
 		if (player.meta.bestOverGhostifies.log10() > 1e4) return a
@@ -113,7 +84,7 @@ function getMDDescription(tier) {
 }
 
 function getMDRateOfChange(tier) {
-	let toGain = getMDProduction(tier + (inQC(4) ? 2 : 1));
+	let toGain = getMDProduction(tier + 1);
 
 	var current = player.meta[tier].amount.max(1);
 	if (tmp.mod.logRateChange) {
@@ -300,11 +271,11 @@ getEl("metaSoftReset").onclick = function () {
 
 function getMDProduction(tier) {
 	let ret = player.meta[tier].amount.floor()
+	if (tier < 8 && hasAch("ng3p22")) ret = ret.add(player.meta[1].amount.floor().pow(1 / 8))
 	return ret.times(getMDMultiplier(tier));
 }
 
 function getExtraDimensionBoostPower() {
-	if (inQC(7) || inQC(9)) return new Decimal(1)
 	let r = getExtraDimensionBoostPowerUse()
 	r = Decimal.pow(r, getMADimBoostPowerExp(r)).max(1)
 	if (tmp.mod.nguspV) {
@@ -348,11 +319,9 @@ function updateOverallMetaDimensionsStuff(){
 	getEl("bestAntimatterQuantum").textContent = player.masterystudies && ph.did("quantum") ? "Your best" + (ph.did("ghostify") ? "" : "-ever") + " meta-antimatter" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shortenMoney(player.meta.bestOverQuantums) + "." : ""
 	setAndMaybeShow("bestMAOverGhostifies", ph.did("ghostify"), '"Your best-ever meta-antimatter was " + shortenMoney(player.meta.bestOverGhostifies) + "."')
 
-	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2 && !inQC(7)) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
+	getEl("bestAntimatterTranslation").innerHTML = (tmp.ngp3 && tmp.mod.nguspV === undefined && tmp.qu.nanofield.rewards >= 2) ? ', which is raised to the power of <span id="metaAntimatterPower" style="font-size:35px; color: black">'+formatValue(player.options.notation, getMADimBoostPowerExp(getExtraDimensionBoostPowerUse()), 2, 1)+'</span>, and then t' : "which is t"
 	getEl("metaAntimatterEffect").textContent = shortenMoney(getExtraDimensionBoostPower())
 	getEl("metaAntimatterPerSec").textContent = 'You are getting ' + shortenDimensions(getMDProduction(1)) + ' meta-antimatter per second.'
-
-	getEl("qc4Mults").textContent = inQC(4) ? "Side A: " + shorten(tmp.mdGMSideA) + "x" + (tmp.mdGMSideA.gte(tmp.mdGMSideB) ? " (used)" : "") + ", Side B: " + shorten(tmp.mdGMSideB) + "x" + (tmp.mdGMSideB.gte(tmp.mdGMSideA) ? " (used)" : "") : ""
 }
 
 function updateMetaDimensions () {
@@ -386,7 +355,8 @@ function updateMetaDimensions () {
 	var reqGotten = isQuantumReached()
 	var newClassName = reqGotten ? (bigRipped && player.options.theme == "Aarex's Modifications" ? "" : "storebtn ") + (bigRipped ? "aarexmodsghostifybtn" : "") : 'unavailablebtn'
 	var message = 'Lose all your previous progress, but '
-	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter ' + (!inQC(0) ? "and " + shortenCosts(Decimal.pow(10, getQCGoalLog())) + " antimatter" : tmp.ngp3 ? "and an EC14 completion" : "")
+	getEl("quantumResetLabel").textContent = (bigRipped ? 'Ghostify' : 'Quantum') + ': requires ' + shorten(req) + (tmp.ngp3 ? " best" : "") + ' meta-antimatter'
+		+ (QCs.inAny() ? QCs.getGoalDisp() : tmp.ngp3 ? " and an EC14 completion" : "")
 	if (reqGotten && bigRipped && ph.did("ghostify")) {
 		var GS = getGHPGain()
 		message += "gain " + shortenDimensions(GS) + " Ghost Particle" + (GS.lt(2) ? "" : "s")

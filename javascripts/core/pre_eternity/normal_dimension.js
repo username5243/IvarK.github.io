@@ -101,8 +101,8 @@ function getAfterDefaultDilationLayerAchBonus(tier){
 	if (hasAch("r65") && player.currentChallenge != "" && player.thisInfinityTime < 1800) mult = mult.times(Math.max(2400 / (player.thisInfinityTime + 600), 1))
 	if (hasAch("r91") && player.thisInfinityTime < 50) mult = mult.times(Math.max(301 - player.thisInfinityTime * 6, 1))
 	if (hasAch("r92") && player.thisInfinityTime < 600) mult = mult.times(Math.max(101 - player.thisInfinityTime / 6, 1));
-	if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
-	if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
+	if (player.currentChallenge == "postc6") mult = mult.dividedBy(player.matter.max(1))
+	if (player.currentChallenge == "postc8") mult = mult.times(player.postC8Mult)
 	if (hasGalUpg(12) && hasGalUpg(42) && tmp.mod.ngmX >= 4) mult = mult.times(galMults.u12())
 	if (hasGalUpg(45) && tmp.mod.ngmX >= 4) {
 		var e = hasGalUpg(46) ? galMults["u46"]() : 1
@@ -200,8 +200,8 @@ function getDimensionFinalMultiplier(tier) {
 
 	if (isADSCRunning() || (inNGM(2) && player.currentChallenge === "postc1")) mult = mult.times(productAllTotalBought());
 	else {
-		if (player.currentChallenge == "postc6" || inQC(6)) mult = mult.dividedBy(player.matter.max(1))
-		if (player.currentChallenge == "postc8" || inQC(6)) mult = mult.times(player.postC8Mult)
+		if (player.currentChallenge == "postc6") mult = mult.dividedBy(player.matter.max(1))
+		if (player.currentChallenge == "postc8") mult = mult.times(player.postC8Mult)
 	}
 
 	if (player.currentChallenge == "postc4" && player.postC4Tier != tier && player.tickspeedBoosts == undefined) mult = mult.pow(0.25)
@@ -289,6 +289,7 @@ function multiplyPC5Costs(cost, tier) {
 	
 function canBuyDimension(tier) {
 	if (tmp.ri) return false
+	if (QCs.in(1)) return false
 	if (tier > getMaxUnlockableDimensions()) return false
 	if (tier > 1 && getAmount(tier - 1) == 0 && getEternitied() < 30) return false
 
@@ -317,10 +318,7 @@ function getMPTPreInfBase() {
 }
 	
 function getMPTBase(focusOn) {
-	if (((inQC(5) || inQC(7)) && focusOn != "linear") || (((inNC(13) && player.tickspeedBoosts == undefined) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1") && inNGM(2))) {
-		if (player.masterystudies) if (masteryStudies.has("t321")) return new Decimal("1e430")
-		return 1
-	}
+	if (inNGM(2) && ((inNC(13) && inNGM(3)) || player.currentChallenge == "postc1" || player.currentChallenge == "postcngm3_1")) return 1
 	let ret = getMPTPreInfBase()
 	if (player.infinityUpgrades.includes("dimMult")) ret *= infUpg12Pow()
 	if (hasAch("r58")) {
@@ -333,10 +331,7 @@ function getMPTBase(focusOn) {
 	ret += getECReward(3)
 	if (inNGM(2)) if (hasGalUpg(33) && ((!inNC(14) && player.currentChallenge != "postcngm3_3") || player.tickspeedBoosts == undefined || tmp.mod.ngmX > 3) && player.currentChallenge != "postcngm3_4") ret *= galMults.u33();
 	if (focusOn == "no-QC5") return ret
-	if (tmp.ngp3) {
-		if (isQCRewardActive(5)) ret += tmp.qcRewards[5]
-		if (isNanoEffectUsed("per_10_power")) ret += tmp.nf.effects.per_10_power
-	}
+	if (isNanoEffectUsed("per_10_power")) ret += tmp.nf.effects.per_10_power
 	return ret
 }
 
@@ -414,7 +409,7 @@ function getMaxUnlockableDimensions() {
 
 function getMaxGeneralDimensions() {
 	return Math.min(
-		inQC(1) ? 0 : player.currentEternityChall == "eterc3" ? 4 : 8
+		player.currentEternityChall == "eterc3" ? 4 : 8
 		, getMaxUnlockableDimensions()
 	)
 }
@@ -428,7 +423,6 @@ function getMaxDimensionsOutsideOfChallenges() {
 }
 
 function getDimensionCostMultiplierIncrease() {
-	if (inQC(7)) return Number.MAX_VALUE
 	let ret = player.dimensionMultDecrease
 	if (inNGM(4)) ret = Math.pow(ret, 1.25)
 	if (player.currentChallenge === 'postcngmm_2') {

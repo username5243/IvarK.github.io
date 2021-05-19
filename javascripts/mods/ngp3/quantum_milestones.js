@@ -9,7 +9,7 @@ let qMs = {
 		ch: getFullExpansion,
 	},
 	unlockReqs: {
-		ch: () => masteryStudies.has("d8")
+		ch: () => QCs.unl()
 	},
 	update() {
 		let data = {}

@@ -19,7 +19,6 @@ function updateQuantumWorth(mode) {
 			while (player.ghostify.automatorGhosts.ghosts<MAX_AUTO_GHOSTS&&player.ghostify.automatorGhosts.power>=autoGhostRequirements[player.ghostify.automatorGhosts.ghosts-3]) {
 				player.ghostify.automatorGhosts.ghosts++
 				getEl("autoGhost"+player.ghostify.automatorGhosts.ghosts).style.visibility="visible"
-				if (player.ghostify.automatorGhosts.ghosts == 22) getEl("autoCS").style.display = ""
 				if (player.ghostify.automatorGhosts.ghosts == MAX_AUTO_GHOSTS) getEl("nextAutomatorGhost").parentElement.style.display="none"
 				else {
 					getEl("automatorGhostsAmount").textContent=player.ghostify.automatorGhosts.ghosts
@@ -752,7 +751,7 @@ let enB = {
 let ENTANGLED_BOOSTS = enB
 
 function gainQKOnQuantum(qkGain) {
-	if (inQC(0)) {
+	if (!QCs.inAny()) {
 		tmp.qu.quarks = tmp.qu.quarks.add(qkGain)
 		if (!tmp.ngp3 || player.ghostify.milestones < 8) tmp.qu.quarks = tmp.qu.quarks.round()
 	}

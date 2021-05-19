@@ -4,7 +4,6 @@ let tmp = {
 	extraRG: 0,
 	it: 1,
 	rg4: false,
-	inQCs: [0],
 	pct: "",
 	ns: 1,
 	bru: {},
@@ -47,12 +46,9 @@ function updateTemp(init) {
 	updateNGP3TempStuff()
 
 	tmp.sacPow = calcTotalSacrificeBoost()
-	updateQCRewardsTemp()
 
 	if (player.meta !== undefined) {
 		//Update global multiplier of all Meta Dimensions
-		tmp.mdGMSideA = getMDGlobalMultSideA()
-		tmp.mdGMSideB = getMDGlobalMultSideB()
 		tmp.mdGlobalMult = getMDGlobalMult()
 	}
 	tmp.mptb = getMPTBase()
@@ -215,10 +211,6 @@ function updateInfiniteTimeTemp() {
 
 function updateIntergalacticTemp() {
 	if (!tmp.ngp3) return
-	if (inQC(9)) {
-		tmp.ig = new Decimal(1)
-		return
-	}
 
 	let x = Math.max(player.galaxies, 1)
 	if (isLEBoostUnlocked(3) && !inBigRip()) x *= tmp.leBonus[3]
@@ -334,6 +326,9 @@ function updateNGP3TempStuff() {
 			tmp.tra = getTotalReplicants()
 		}
 
+		QCs.updateTmpOnTick()
+
+		//Positrons
 		tmp.totalQE = tmp.qu.quarkEnergy
 		if (pos.unl()) tmp.totalQE -= pos.save.consumedQE || 0
 

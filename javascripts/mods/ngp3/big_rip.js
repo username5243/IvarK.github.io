@@ -1,32 +1,13 @@
 function bigRip(auto) {
-	if (!tmp.quActive || !player.masterystudies.includes("d14") || !inQC(0)) return
-	if (player.ghostify.milestones > 1) {
-		setPCsForBigRip()
-		quantum(auto, true, 4, true, true, true)
-	} else {
-		for (var p = 1; p < 5; p++) {
-			var pcData = tmp.qu.pairedChallenges.order[p]
-			if (pcData) {
-				var pc1 = Math.min(pcData[0], pcData[1])
-				var pc2 = Math.max(pcData[0], pcData[1])
-				if (pc1 == 6 && pc2 == 8) {
-					if (p - 1 > tmp.qu.pairedChallenges.completed) return
-					quantum(auto, true, p, true, true)
-				}
-			}
-		}
-	}
+	return false
 }
 
 function inBigRip() {
-	return tmp.quUnl && tmp.qu.bigRip.active
+	return false
 }
 
 function setPCsForBigRip() {
-	let pcOrder = [null, 1, 2, 3, 4, 5, 7, 6, 8]
-	for (var c = 1; c <= 9; c++) if (QCIntensity(c)) tmp.qu.challenges[c] = c > 8 ? 1 : 2
-	for (let p = 1; p <= 4; p++) tmp.qu.pairedChallenges.order[p] = [pcOrder[p * 2 - 1], pcOrder[p * 2]]
-	tmp.qu.pairedChallenges.completed = 4
+	return
 }
 
 function toggleBigRipConf() {
@@ -145,10 +126,8 @@ function tweakBigRip(id, reset) {
 			epcost: new Decimal(1),
 			studies: []
 		}
-		if (!inQCModifier("ad")) {
-			player.dilation.tachyonParticles = player.dilation.tachyonParticles.max(player.dilation.bestTP.sqrt())
-			player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.max(player.dilation.bestTP.sqrt())
-		}
+		player.dilation.tachyonParticles = player.dilation.tachyonParticles.max(player.dilation.bestTP.sqrt())
+		player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.max(player.dilation.bestTP.sqrt())
 	}
 }
 

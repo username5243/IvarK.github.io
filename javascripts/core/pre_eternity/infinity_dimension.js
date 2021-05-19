@@ -9,6 +9,8 @@ function getInfinityDimensionMultiplier(tier){
 }
 
 function maxAllID() {
+	if (QCs.in(1)) return
+
 	if (inNGM(5)) maxAllIDswithAM()
 	for (let t = 1; t <= 8; t++) {
 		let dim = player["infinityDimension"+t]
@@ -81,7 +83,6 @@ function updateInfinityDimensions() {
 }
 
 function infDimensionProduction(tier) {
-	if (inQC(1) || inQC(8)) return new Decimal(0)
 	if (tier == 9) return getTimeDimensionProduction(1).pow(ECComps("eterc7") * 0.2).max(1).minus(1)
 	let dim = player["infinityDimension" + tier]
 	let ret = dim.amount
@@ -167,8 +168,6 @@ function infDimensionPower(tier) {
   	if (ECComps("eterc9") !== 0) ec9 = getECReward(9)
   	if (player.galacticSacrifice === undefined) mult = mult.times(ec9)
 
-  	if (inQC(6)) mult = mult.times(player.postC8Mult).dividedBy(player.matter.max(1))
-
   	mult = dilates(mult, 2)
   	if (replUnl && inNGM(2)) mult = mult.times(getIDReplMult())
   	if (inNGM(2)) mult = mult.times(ec9)
@@ -200,7 +199,7 @@ function resetInfDimensions(full = (inNGM(5))) {
 }
 
 function resetInfDimUnlocked() {
-	let value = player != undefined && getEternitied() >= 25 && hasAch("ng3p21")
+	let value = player != undefined && getEternitied() >= 25
 	let data = []
 	for (let d = 1; d <= 8; d++) data.push(value)
 	if (player != undefined && inNGM(5)) data[0] = true
@@ -243,6 +242,8 @@ function getInfBuy10Mult(tier) {
 }
 
 function buyManyInfinityDimension(tier, auto) {
+	if (QCs.in(1)) return
+
   	if (player.pSac !== undefined) buyIDwithAM(tier, auto)
   	if (player.eterc8ids <= 0 && player.currentEternityChall == "eterc8") return false
   	let dim = player["infinityDimension" + tier]
@@ -259,11 +260,12 @@ function buyManyInfinityDimension(tier, auto) {
 	if (player.pSac != undefined) player.chall2Pow = 0
 	if (player.currentEternityChall == "eterc8") player.eterc8ids -= 1
 	getEl("eterc8ids").textContent = "You have " + player.eterc8ids + " purchases left."
-	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	return true
 }
 
 function buyMaxInfDims(tier, auto) {
+	if (QCs.in(1)) return
+
 	if (tmp.ngC) ngC.condense.ids.max(tier)
 
 	if (player.currentEternityChall == "eterc8") return

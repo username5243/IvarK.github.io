@@ -216,7 +216,6 @@ function resetTickspeed() {
 }
 
 function getTickSpeedCostMultiplierIncrease() {
-	if (inQC(7)) return Number.MAX_VALUE
 	let ret = player.tickSpeedMultDecrease;
 	let exp = .9 - .02 * ECComps("eterc11")
 	if (player.currentChallenge === 'postcngmm_2') ret = Math.pow(ret, .5)

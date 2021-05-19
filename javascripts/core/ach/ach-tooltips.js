@@ -329,25 +329,23 @@ function setR15Tooltip() {
 	//ACHIEVEMENT ROW 15
 	notenough.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter. Reward: You produce dilated time 3x faster and gain more Tachyon particles based on your Replicated Galaxies.")
 	old.setAttribute('ach-tooltip', "Reach " + shortenCosts(getOldAgeRequirement()) + " antimatter. Reward: Get a multiplier to first 3 Meta Dimensions based on total antimatter.") 
-	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies.")
+	rid.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e400000")) + " IP while dilated, without having time studies. (not including mastery studies)")
 }
 
 function setR16Tooltip() {
-	// Row 16 (ng3p2) (5/8)
-	let special = getEl("Special Relativity")
+	// Row 16 (ng3p2) (4/8)
+	//ng3p21/////
 	let squared = getEl("We are not going squared.")
 	//ng3p23/////
 	let memories = getEl("Old memories come true")
 	//ng3p25/////
-	let morals = getEl("Infinity Morals")
+	//ng3p26/////
 	//ng3p27/////
 	let seriously = getEl("Seriously, I already got rid of you.")
 
 	//ACHIEVEMENT ROW 16
-	special.setAttribute('ach-tooltip', "Get all 24 Quantum Milestones. Reward: Start with all Infinity Dimensions unlocked if you have at least 25 eternities.")
-	memories.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e1700")) + " MA without ever buying 5th-8th Normal Dimensions or having more than 4 Dimension Boosts in this quantum. Reward: The 4 RG upgrade is stronger based on your Meta-Dimension Boosts.")
-	squared.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e1500"))+" MA with exactly 8 Meta-Dimension Boosts. Reward: Get a multiplier to the 8th Meta Dimension based on your 1st Meta Dimension.")
-	morals.setAttribute('ach-tooltip', "Quantum without any Meta-Dimension Boosts. Reward: Meta-Dimension Boosts boost itself at a reduced rate.")
+	memories.setAttribute('ach-tooltip', "Reach " + shorten(Number.MAX_VALUE) + " meta-antimatter without having at least " + shorten(Number.MAX_VALUE) + " of 5th - 8th Dimensions for every type. (Not implemented)")
+	squared.setAttribute('ach-tooltip', "Quantum with at most "+shorten(Number.MAX_VALUE)+" best meta-antimatter. Reward: 1st Meta Dimensions generate the rest of Meta Dimensions except 8th Meta Dimensions, at a reduced rate.")
 	seriously.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e354000")) + " IP without having time studies, while dilated and running QC2. Reward: The Eternity Points boost to Quark gain is 1% stronger.")
 }
 
@@ -363,7 +361,7 @@ function setR17Tooltip() {
 	let dontWant = getEl("I don't want you to live anymore.")
 
 	//ACHIEVEMENT ROW 17
-	internal.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e333")) + " MA without having 2nd Meta Dimensions and Meta-Dimension Boosts. Reward: 1st Meta Dimensions are stronger based on meta antimatter.")
+	internal.setAttribute('ach-tooltip', "Reach " + shortenCosts(new Decimal("1e333")) + " MA without having 2nd Meta Dimensions and Meta-Dimension Boosts.")
 	truth.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 7.88e13)) + " antimatter without having completed any paired challenges.")
 	cantGet.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 6.2e11)) + " antimatter in Eternity Challenge 11.")
 	noDil.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 1/0)) + " replicanti without having Tachyon Particles. Reward: You start Quantums with the square root of your best TP as your Tachyon particle amount.")

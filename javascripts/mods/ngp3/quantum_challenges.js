@@ -1,497 +1,263 @@
-var quantumChallenges = {
-	costs: [null, 16750, 19100, 21500,  24050,  25900,  28900, 31300, 33600, 0],
-	goalLogs: [null, 1/0, 1/0, 1/0, 1/0, 1.344e10, 5.61e8, 6.254e10, 2.925e10, 8e16]
-}
-
-var assigned
-var pcFocus = 0
-function updateQuantumChallenges() {
-	if (getEl("qctabbtn").style == "none") return
-
-	assigned = []
-	var assignedNums = {}
-	getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
-	getEl("autoCS").style.display = player.ghostify.automatorGhosts.ghosts >= 22 ? "" : "none"
-	getEl("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
-	getEl("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
-	for (var pc = 1; pc <= 4; pc++) {
-		var subChalls = tmp.qu.pairedChallenges.order[pc]
-		if (subChalls) for (var sc = 0; sc < 2; sc++) {
-			var subChall = subChalls[sc]
-			if (subChall) {
-				assigned.push(subChall)
-				assignedNums[subChall] = pc
-			}
+let QCs = {
+	setup() {
+		QCs.save = {
+			in: [],
+			comps: 0,
+			best: {}
 		}
-		if (player.masterystudies.includes("d9")) {
-			var property = "pc" + pc
-			var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
-			var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
-			getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
-			getEl(property+"cost").textContent = "Cost: Still none. ;/"
-			getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, getQCGoalLog(subChalls))) : "???") + " antimatter"
-			getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
-			getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
-
-			var sc1t = Math.min(sc1, sc2)
-			var sc2t = Math.max(sc1, sc2)
-			if (player.masterystudies.includes("d14")) {
-				getEl(property + "br").style.display = ""
-				getEl(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : tmp.qu.bigRip.active ? "Big Ripped" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
-				getEl(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : tmp.qu.bigRip.active ? "onchallengebtn" : tmp.qu.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
-			} else getEl(property + "br").style.display = "none"
-		}
-	}
-	if (player.masterystudies.includes("d14")) {
-		var max = getMaxBigRipUpgrades()
-		getEl("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
-		for (var u = 18; u <= 20; u++) getEl("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
-		for (var u = 1; u <= max; u++) {
-			getEl("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
-			getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
-		}
-	}
-	for (var qc = 1; qc <= 9; qc++) {
-		var property = "qc" + qc
-		var unl = isQCUnlocked(qc)
-		var done = QCIntensity(qc) >= 1
-		getEl(property + "div").style.display = unl ? "inline-block" : "none"
-		if (!unl) continue
-
-		getEl(property).textContent = ((!assigned.includes(qc) && pcFocus) ? (done ? "Choose" : "Not completed") : inQC(qc) ? "Running" : done ? (assigned.includes(qc) ? "Assigned" : "Completed") : "Start") + (assigned.includes(qc) ? " (PC" + assignedNums[qc] + ")" : "")
-		getEl(property).className = (!assigned.includes(qc) && pcFocus) ? (done ? "challengesbtn" : "lockedchallengesbtn") : inQC(qc) ? "onchallengebtn" : done ? "completedchallengesbtn" : "challengesbtn"
-		getEl(property + "cost").textContent = "Cost: None"
-		getEl(property + "goal").textContent = "Goal: " + shortenCosts(Decimal.pow(10, getQCGoalLog([qc]))) + " antimatter"
-	}
-	updateQCDisplaysSpecifics()
-}
-
-function updateQCDisplaysSpecifics() {
-	getEl("qc2reward").textContent = Math.round(tmp.qcRewards[2] * 100 - 100)
-	getEl("qc7desc").textContent = "Dimension and Tickspeed cost multiplier increases are " + shorten(Number.MAX_VALUE) + "x. Multiplier per ten Dimensions and meta-Antimatter boost to Dimension Boosts are disabled."
-	getEl("qc7reward").textContent = (100 - tmp.qcRewards[7] * 100).toFixed(2)
-	getEl("qc8reward").textContent = tmp.qcRewards[8]
-}
-
-function teleportToQCs() {
-	if (!tmp.quUnl) return
-	showTab("challenges")
-	showChallengesTab("quantumchallenges")
-}
-
-function isQCUnlocked(x) {
-	if (x == 1) return player.masterystudies.includes("d8")
-	if (x == 9) return GDs.unlocked()
-	return QCIntensity(x - 1) >= 1
-}
-
-function inQC(num) {
-	return tmp.inQCs.includes(num)
-}
-
-function inAnyQC() {
-	return tmp.inQCs.length >= 1
-}
-
-function updateInQCs() {
-	tmp.inQCs = [0]
-	if (tmp.qu !== undefined && tmp.qu.challenge !== undefined) {
-		data = tmp.qu.challenge
-		if (typeof(data) == "number") data = [data]
-		else if (data.length == 0) data = [0]
-		tmp.inQCs = data
-	}
-}
-
-function getQCGoalLog(QCs, bigRip) {
-	if (player.masterystudies == undefined) return 0
-	let mods = tmp.qu.qcsMods.current
-	let mult = 1
-	let c1 = 0
-	let c2 = 0
-	if (QCs == undefined) {
-		let data = tmp.inQCs
-		if (data[0]) c1 = data[0]
-		if (data[1]) c2 = data[1]
-	} else {
-		c1 = QCs[0] || 0
-		c2 = QCs[1] || 0
-		if (bigRip != "ghp_gain") mods = qcm.on
-	}
-	let cs = [c1, c2]
-	
-	if (testHarderNGp3) if (cs.includes(0) && !cs.includes(6)) mult *= 1.5 
-	/*
-	Ok Ive been told that QCs are stupid easy once you unlock them 
-	so im thinking we just multiply their goals (this is not tested at all)
-	feel free to never uncomment this :) but i think it might be a good idea for balance
-	*/
-	if (!bigRip) {
-		if (hasAch("ng3p96")) mult *= 0.95
-		if (hasAch("ng3p107")) mult *= 0.8
-		if (bu62.active("nf")) mult /= tmp.blu[62]
-	}
-	if (bigRip != "ghp_gain") {
-		if (mods.includes("ms")) mult *= 6e3
-		//if (mods.includes("tb")) mult *= 100
-	}
-	if (c1 == 0) return quantumChallenges.goalLogs[c2] * mult
-	if (c2 == 0) return quantumChallenges.goalLogs[c1] * mult
-
-	mult *= mult //for both challenges
-	if (cs.includes(1) && cs.includes(3)) mult *= 1.6
-	if (cs.includes(2) && cs.includes(6)) mult *= 1.7
-	if (cs.includes(3) && cs.includes(7)) mult *= 2.68
-	if (cs.includes(3) && cs.includes(6)) mult *= 3
-	return quantumChallenges.goalLogs[c1] * quantumChallenges.goalLogs[c2] / 1e11 * mult
-}
-
-function onQCCompletion(qcs, am, time, dilTimes) {
-	let intensity = qcs.length
-	let qc1 = qcs[0]
-	let qc2 = qcs[1]
-	if (intensity == 2) {
-		let qc1st = Math.min(qc1, qc2)
-		let qc2st = Math.max(qc1, qc2)
-		if (qc1st == qc2st) {
-			console.warn("There is an issue, you have assigned a QC twice (QC" + qc1st + ")")
-			intensity = 1
-		} else {
-			let pcid = qc1st * 10 + qc2st
-			if (tmp.qu.pairedChallenges.current > tmp.qu.pairedChallenges.completed) {
-				tmp.qu.challenges[qc1] = 2
-				tmp.qu.challenges[qc2] = 2
-				tmp.qu.pairedChallenges.completed = tmp.qu.pairedChallenges.current
-				if (pcid == 68 && tmp.qu.pairedChallenges.current == 1 && am.e >= 1.65e9) giveAchievement("Back to Challenge One")
-				if (tmp.qu.pairedChallenges.current == 4) giveAchievement("Twice in a row")
-			}
-			tmp.qu.pairedChallenges.completions[pcid] = Math.min(tmp.qu.pairedChallenges.current, tmp.qu.pairedChallenges.completions[pcid] || 4)
-			if (dilTimes == 0) {
-				if (tmp.qu.qcsNoDil["pc" + pcid] === undefined) tmp.qu.qcsNoDil["pc" + pcid] = tmp.qu.pairedChallenges.current
-				else tmp.qu.qcsNoDil["pc" + pcid] = Math.min(tmp.qu.pairedChallenges.current,tmp.qu.qcsNoDil["pc" + pcid])
-			}
-			for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("pc" + pcid, tmp.qu.pairedChallenges.current, tmp.preQCMods[m])
-			if (tmp.qu.pairedChallenges.fastest[pcid] === undefined) tmp.qu.pairedChallenges.fastest[pcid] = time
-			else tmp.qu.pairedChallenges.fastest[pcid] = tmp.qu.pairedChallenges.fastest[pcid] = Math.min(tmp.qu.pairedChallenges.fastest[pcid], time)
-			if (tmp.preQCMods.length >= 3) giveAchievement("Brutally Challenging")
-		}
-	}
-	if (intensity == 1) {
-		if (!tmp.qu.challenges[qc1]) tmp.qu.challenges[qc1] = 1
-		if (tmp.qu.challengeRecords[qc1] == undefined) tmp.qu.challengeRecords[qc1] = time
-		else tmp.qu.challengeRecords[qc1] = Math.min(tmp.qu.challengeRecords[qc1], time)
-		if (dilTimes == 0) tmp.qu.qcsNoDil["qc" + qc1] = 1
-		for (let m = 0; m < tmp.preQCMods.length; m++) recordModifiedQC("qc" + qc1, 1, tmp.preQCMods[m])
-	}
-}
-
-function QCIntensity(num) {
-	if (tmp.ngp3 && tmp.qu !== undefined && tmp.qu.challenges !== undefined) return tmp.qu.challenges[num] || 0
-	return 0
-}
-
-function updateQCTimes() {
-	getEl("qcsbtn").style.display = "none"
-	if (!tmp.ngp3) return
-	var temp = 0
-	var tempcounter = 0
-	for (var i = 1; i < 9; i++) {
-		setAndMaybeShow("qctime" + i, tmp.qu.challengeRecords[i], '"Quantum Challenge ' + i + ' time record: "+timeDisplayShort(tmp.qu.challengeRecords[' + i + '], false, 3)')
-		if (tmp.qu.challengeRecords[i]) {
-			temp+=tmp.qu.challengeRecords[i]
-			tempcounter++
-		}
-	}
-	if (tempcounter > 0) getEl("qcsbtn").style.display = "inline-block"
-	setAndMaybeShow("qctimesum", tempcounter > 1, '"The sum of your completed Quantum Challenge time records is "+timeDisplayShort(' + temp + ', false, 3)')
-}
-
-function respecPCs() {
-	let data = tmp.qu.pairedChallenges
-
-	data.order = {}
-	data.completed = 0
-	data.respec = false
-	for (qc = 1; qc <= 9; qc++) if (QCIntensity(qc)) tmp.qu.challenges[qc] = 1
-
-	getEl("respecPC").className = "storebtn"
-}
-
-var ranking = 0
-function updatePCCompletions() {
-	var shownormal = false
-	getEl("pccompletionsbtn").style.display = "none"
-	if (!tmp.ngp3) return
-
-	var r = 0
-	tmp.pcc = {} // PC Completion counters
-	for (var c1 = 2; c1 <= 9; c1++) for (var c2 = 1; c2 < c1; c2++) {
-		var rankingPart = 0
-		if (tmp.qu.pairedChallenges.completions[c2 * 10 + c1]) {
-			rankingPart = 5 - tmp.qu.pairedChallenges.completions[c2 * 10 + c1]
-			tmp.pcc.normal = (tmp.pcc.normal || 0) + 1
-			if (c1 == 9) tmp.pcc.c9 = (tmp.pcc.c9 || 0) + 1
-		} else if (c2 * 10 + c1 == 68 && ghostified) {
-			rankingPart = 0.5
-			tmp.pcc.normal = (tmp.pcc.normal || 0) + 1
-		}
-		if (tmp.qu.qcsNoDil["pc" + (c2 * 10 + c1)]) {
-			rankingPart += 5 - tmp.qu.qcsNoDil["pc" + ( c2 * 10 + c1)]
-			tmp.pcc.noDil = (tmp.pcc.noDil || 0) + 1
-		}
-		for (var m = 0; m < qcm.modifiers.length; m++) {
-			var id = qcm.modifiers[m]
-			var data = tmp.qu.qcsMods[id]
-			if (data && data["pc" + (c2 * 10 + c1)]) {
-				rankingPart += 5 - data["pc" + (c2 * 10 + c1)]
-				tmp.pcc[id] = (tmp.pcc[id] || 0) + 1
-				shownormal = true
-			}
-		}
-		r += Math.sqrt(rankingPart)
-	}
-	r *= 100 / 56
-
-	tmp.pce = {} // PC Completion effects
-	for (var m = 0; m < qcm.modifiers.length; m++) {
-		let mod = qcm.modifiers[m]
-		if (tmp.pcc[mod] && qcm.rewards[mod]) tmp.pce[mod] = qcm.rewards[mod].eff(tmp.pcc[mod])
-	}
-
-	if (r) getEl("pccompletionsbtn").style.display = "inline-block"
-	getEl("pccranking").textContent = r.toFixed(1)
-	getEl("pccrankingMax").textContent = (Math.sqrt(4 * (2 + qcm.modifiers.length)) * 36 * 100 / 56).toFixed(1)
-	updatePCTable()
-	for (var m = 0; m < qcm.modifiers.length; m++) {
-		var id = qcm.modifiers[m]
-		var shownormal = tmp.qu.qcsMods[id] !== undefined || shownormal
-		getEl("qcms_" + id).style.display = tmp.qu.qcsMods[id] !== undefined ? "" : "none"
-	}
-	getEl("qcms_normal").style.display = shownormal ? "" : "none"
-	if (r >= 75) {
-		getEl("modifiersdiv").style.display = ""
-		for (var m = 0; m < qcm.modifiers.length; m++) {
-			var id = qcm.modifiers[m]
-			if (r >= qcm.reqs[id] || !qcm.reqs[id]) {
-				getEl("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
-				getEl("qcm_" + id).setAttribute('ach-tooltip', (qcm.descs[id] || "???") + (tmp.pce[id] ? " (PC Reward: " + qcm.rewards[id].desc(tmp.pce[id]) + ")" : ""))
-			} else {
-				getEl("qcm_" + id).className = "unavailablebtn"
-				getEl("qcm_" + id).setAttribute('ach-tooltip', 'Get ' + qcm.reqs[id] + ' Paired Challenges ranking to unlock this modifier. Ranking: ' + ranking.toFixed(1))
-			}
-		}
-	} else getEl("modifiersdiv").style.display = "none"
-	
-	ranking = r // its global
-}
-
-let qcRewards = {
-	effects: {
-		1: function(comps) {
-			if (comps == 0) return 1
-			let exp = comps / 4 + 0.25
-			return Decimal.pow(10, Math.pow(getTotalDBs() / 1e5, exp) / 5)
-		},
-		2: function(comps) {
-			if (comps == 0) return 1
-			let exp = tmp.newNGP3E ? 1.25 : 1
-			return Math.pow(1.2 + comps * 0.2, exp)
-		},
-		3: function(comps) {
-			if (comps == 0) return 0.25
-			return Math.pow(2, 2 - comps)
-		},
-		4: function(comps) {
-			if (comps == 0) return 1
-			let mult = player.meta[2].amount.times(player.meta[4].amount).times(player.meta[6].amount).times(player.meta[8].amount).max(1)
-			if (comps <= 1) return Decimal.pow(10 * comps, Math.sqrt(mult.log10()) / 10)
-			return mult.pow(comps / 150)
-		},
-		5: function(comps) {
-			if (comps == 0) return 0
-			return Math.log10(1 + getTotalDBs()) * comps
-		},
-		6: function(comps) {
-			if (comps == 0) return 1
-			let exp = comps * 2 - 1
-			return player.achPow.pow(exp)
-		},
-		7: function(comps) {
-			if (comps == 0) return 1
-			return Math.pow(0.975, comps)
-		},
-		8: function(comps) {
-			if (comps == 0) return 1
-			return comps + 2
-		},
-		9: function(comps) {
-			let compEff = Math.sqrt(
-				(((tmp.pcc && tmp.pcc.c9) || 0) + 1) *
-				comps
-			)
-			let x = player.replicanti.amount.log10()
-			return Math.sqrt(x / 1e10) * compEff
-		}
-	}
-}
-
-function isQCRewardActive(x) {
-	return masteryStudies.has("d8") && tmp.qcRewards && tmp.qcRewards[x] && QCIntensity(x)
-}
-
-function updateQCRewardsTemp() {
-	tmp.qcRewards = {}
-	if (!tmp.quUnl) return
-	for (var c = 1; c <= 9; c++) tmp.qcRewards[c] = qcRewards.effects[c](QCIntensity(c))
-}
-
-function getQCCost(QCs) {
-	if (hasAch("ng3p55")) return 0
-
-	let x = quantumChallenges.costs[QCs[0]]
-	if (QCs[1]) x += quantumChallenges.costs[QCs[1]]
-	if (tmp.newNGP3E) return Math.floor(Math.pow(x, .999))
-	return x
-}
-
-function showQCModifierStats(id) {
-	tmp.pct = id
-	updatePCTable()
-}
-
-function updatePCTable() {
-	var data = tmp.qu.qcsMods[tmp.pct]
-	for (r = 1; r <= 9; r++) for (c = 1; c <= 9; c++) {
-		if (r != c) {
-			var divid = "pc" + (r * 10 + c)
-			var pcid = r * 10 + c
-			if (r > c) pcid = c * 10 + r
-			if (tmp.pct == "") {
-				var comp = tmp.qu.pairedChallenges.completions[pcid]
-				if (comp !== undefined) {
-					getEl(divid).textContent = "PC" + comp
-					getEl(divid).className = (tmp.qu.qcsNoDil["pc" + pcid] ? "nd" : "pc" + comp) + "completed"
-					var achTooltip = 'Fastest time: ' + (tmp.qu.pairedChallenges.fastest[pcid] ? timeDisplayShort(tmp.qu.pairedChallenges.fastest[pcid]) : "N/A")
-					if (tmp.qu.qcsNoDil["pc" + pcid]) achTooltip += ", No dilation: PC" + tmp.qu.qcsNoDil["pc" + pcid]
-					getEl(divid).setAttribute('ach-tooltip', achTooltip)
-					if (divid=="pc38") giveAchievement("Hardly marked")
-					if (divid=="pc68") giveAchievement("Big Rip isn't enough")
-				} else if (pcid == 68 && ph.did("ghostify")) {
-					getEl(divid).textContent = "BR"
-					getEl(divid).className = "brCompleted"
-					getEl(divid).removeAttribute('ach-tooltip')
-					getEl(divid).setAttribute('ach-tooltip', 'Fastest time from start of Ghostify: ' + timeDisplayShort(player.ghostify.best))
-				} else {
-					getEl(divid).textContent = ""
-					getEl(divid).className = ""
-					getEl(divid).removeAttribute('ach-tooltip')
-				}
-			} else if (data&&data["pc" + pcid]) {
-				var comp = data["pc" + pcid]
-				getEl(divid).textContent = "PC" + comp
-				getEl(divid).className = "pc" + comp + "completed"
-				getEl(divid).removeAttribute('ach-tooltip')
-			} else {
-				getEl(divid).textContent = ""
-				getEl(divid).className = ""
-				getEl(divid).removeAttribute('ach-tooltip')
-			}
-		} else { // r == c
-			var divid = "qcC" + r
-			if ((tmp.pct == "" && QCIntensity(r)) || (data && data["qc" + r])) {
-				getEl(divid).textContent = "QC"+r
-				if (tmp.qu.qcsNoDil["qc" + r] && tmp.pct == "") {
-					getEl(divid).className = "ndcompleted"
-					getEl(divid).setAttribute('ach-tooltip', "No dilation achieved!")
-				} else {
-					getEl(divid).className = "pc1completed"
-					getEl(divid).removeAttribute('ach-tooltip')
-				}
-			} else {
-				getEl(divid).textContent = ""
-				getEl(divid).className = ""
-				getEl(divid).removeAttribute('ach-tooltip')
-			}
-		}
-	}
-	updateBestPC68Display()
-	getEl("upcc").textContent = (qcm.names[tmp.pct] || "Unique PC completions") + ": " + (tmp.pcc[tmp.pct || "normal"] || 0) + " / 36"
-	getEl("udcc").textContent = tmp.pct == "" ?  "No dilation: " + (tmp.pcc.noDil || 0) + " / 36" : ""
-	getEl("pcEff").textContent = tmp.pce[tmp.pct] ? "Effect: " + qcm.rewards[tmp.pct].desc(tmp.pce[tmp.pct]) : ""
-}
-
-function updateBestPC68Display() {
-	getEl("bpc68").textContent = tmp.pct == "" ? "Best PC w/ QC6 & 8: " + shortenMoney(tmp.qu.pairedChallenges.pc68best) : ""
-}
-
-var qcm = {
-	modifiers: ["ad", "sm", "ms"],
-	names: {
-		ad: "Anti-Dilation",
-		sm: "Supermastery",
-		ms: "Macroscopic",
-		//tb: "Time Barrier"
+		return QCs.save
 	},
-	reqs: {
-		ad: 100,
-		sm: 165,
-		ms: 200,
-		//tb: 220
+	compile() {
+		QCs.save = {}
+		if (tmp.ngp3 && tmp.qu !== undefined) {
+			QCs.save = tmp.qu.qc
+			if (QCs.save === undefined) tmp.qu.qc = this.setup()
+		}
+		QCs.updateTmp()
 	},
-	descs: {
-		ad: "You always have no Tachyon particles. You can dilate time, but you can't gain Tachyon particles.",
-		sm: "You can't have normal Time Studies, and can't have more than 20 normal Mastery Studies.",
-		ms: "All Quantum features are disabled except Speedrun Milestones. Also, all QC goals are raised to the power of 6,000. Good luck! :)",
-		//tb: "All Eternity features are disabled. All QC goals are raised to the power of 100. >:)"
-	},
-	rewards: {
-		ms: {
-			eff(x) {
-				return {
-					eds: Math.pow(x / 300 + 1, 2),
-					ol: 1 - x / 36, 
-					ap: Math.sqrt(player.ghostify.hb.higgs * x / 20),
-				}
-			},
-			desc(x) {
-				return "Boost all Emperor Dimensions by " + (x.eds * 100 - 100).toFixed(2) + "% per 8th Emperor Dimension, reduce the logarithmic softcap of orange Light effect by " + (100 - 100 * x.ol).toFixed(1) + "%, and Higgs Bosons make Anti-Preonitus wakes up " + x.ap.toFixed(1) + " later."
+	data: {
+		max: 8,
+		1: {
+			unl: () => true,
+			desc: () => "There are only Meta Dimensions, but they also produce antimatter. Also, all meta-antimatter boosts are based on meta-antimatter effect. Finally, Mastery Studies are extremely cheaper.",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "Replicantis, meta-antimatter, and dilated time have gradually stronger boosts to each other.",
+			rewardEff(str) {
+				return Math.sqrt(player.replicanti.amount.max(1).log10()) * player.dilation.dilatedTime.max(1).log10() * player.meta.bestAntimatter.max(1).log10()
 			}
 		},
+		2: {
+			unl: () => true,
+			desc: () => "There is a product which divides Meta Dimensions based on Dimension Boosts and Galaxies. You can't also set the limit of the autobuyer of Dimension Boosts.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "The Positron conversion formula is better.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		3: {
+			unl: () => true,
+			desc: () => "Replicated Galaxies are replaced with Replicated Boosts.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "You can keep Replicated Boosts, but the requirements and limits are much higher.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		4: {
+			unl: () => true,
+			desc: () => "Positronic Boosters are replaced with another set of boosts, but mastering doesn't work.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "Quantum Energy boosts the efficiency for non-activated mastered boosts.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		5: {
+			unl: () => true,
+			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "Antimatter Galaxies share TS232 to other galaxies.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		6: {
+			unl: () => true,
+			desc: () => "Replicantis divide Dimensions instead, but each Replicated Galaxy divides the amount instead.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "25% of extra Replicated Galaxies contribute to the Positrons formula before Quantum Energy multiplier is cancelled.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		7: {
+			unl: () => true,
+			desc: () => "You can gain Tachyon Particles up to 5 dilation runs. Mastery Studies are reset.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "The 4th repeatable dilation upgrade uses a weaker cost scaling.",
+			rewardEff(str) {
+				return str
+			}
+		},
+		8: {
+			unl: () => true,
+			desc: () => "QC5, but you can't change the exclusion.",
+			goal: () => true,
+			goalDisp: () => "???",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "You gain more Tachyonic Galaxies.",
+			rewardEff(str) {
+				return str
+			}
+		},
+	},
+	tmp: {},
+
+	updateTmp() {
+		let data = { unl: [], in: [], rewards: {} }
+		QCs.tmp = data
+
+		if (!QCs.unl()) return
+		for (let x = 1; x <= QCs.data.max; x++) {
+			if (QCs.data[x].unl()) {
+				if (QCs.save.in.includes(x)) data.in.push(x)
+				data.unl.push(x)
+				if (!QCs.done(x)) break
+			}
+		}
+
+		QCs.updateTmpOnTick()
+	},
+	updateTmpOnTick() {
+		if (!QCs.unl()) return
+		
+		let data = QCs.tmp
+		for (let x = 1; x <= QCs.data.max; x++) {
+			if (data.unl.includes(x)) {
+				data.rewards[x] = QCs.data[x].rewardEff(1)
+			}
+		}
+	},
+
+	unl() {
+		return tmp.quActive && masteryStudies.has("d8") && QCs.save !== undefined
+	},
+	in(x) {
+		return QCs.tmp.in.includes(x)
+	},
+	inAny() {
+		return QCs.tmp.in.length >= 1
+	},
+	done(x) {
+		return QCs.save.comps >= x
+	},
+	isRewardOn(x) {
+		return QCs.unl() && QCs.done(x) && QCs.tmp.rewards
+	},
+	getGoal() {
+		return QCs.in.length >= 2 ? true : QCs.data[QCs.tmp.in[0]].goal()
+	},
+	getGoalDisp() {
+		return QCs.in.length >= 2 ? "" : " and " + QCs.data[QCs.tmp.in[0]].goalDisp()
+	},
+	getGoalMA() {
+		return QCs.data[QCs.tmp.in[0]].goalMA
+	},
+
+	tp() {
+		showTab("challenges")
+		showChallengesTab("quantumchallenges")
+	},
+	start(x) {
+		quantum(false, true, x)
+	},
+
+	setupDiv() {
+		if (QCs.divInserted) return
+
+		let html = ""
+		for (let x = 1; x <= QCs.data.max; x++) html += (x % 2 == 1 ? "<tr>" : "") + QCs.divTemp(x) + ((x + 1) % 2 == 1 ? "</tr>" : "")
+		getEl("qcs_div").innerHTML = html
+
+		QCs.divInserted = true
+	},
+	divTemp: (x) =>
+		'<td><div class="quantumchallengediv" id="qc_' + x + '_div">' +
+		'<span id="qc_' + x + '_desc"></span><br><br>' +
+		'<div class="outer"><button id="qc_' + x + '_btn" class="challengesbtn" onclick="QCs.start(' + x + ')">Start</button><br>' +
+		'Goal: <span id="qc_' + x + '_goal"></span><br>' +
+		'Reward: <span id="qc_' + x + '_reward"></span>' +
+		'</div></div></td>',
+	divInserted: false,
+
+	updateDisp() {
+		//Quantum Challenges
+		let unl = QCs.divInserted && QCs.unl()
+		if (!unl) return
+
+		for (let qc = 1; qc <= QCs.data.max; qc++) {
+			var cUnl = QCs.tmp.unl.includes(qc)
+
+			getEl("qc_" + qc + "_div").style.display = cUnl ? "" : "none"
+			if (cUnl) {
+				getEl("qc_" + qc + "_desc").textContent = QCs.data[qc].desc()
+				getEl("qc_" + qc + "_goal").textContent = shorten(QCs.data[qc].goalMA) + " meta-antimatter and " + QCs.data[qc].goalDisp()
+				getEl("qc_" + qc + "_btn").textContent = QCs.in(qc) ? "Running" : QCs.done(qc) ? "Completed" : "Start"
+				getEl("qc_" + qc + "_btn").className = QCs.in(qc) ? "onchallengebtn" : QCs.done(qc) ? "completedchallengesbtn" : "challengesbtn"
+			}
+		}
+
+		//Paired Challenges
 		/*
-		tb: {
-			eff(x) {
-				return Math.pow(tmp.pcc.tb / 15 + 1, 2)
-			},
-			desc(x) {
-				return "Strengthen Infinite Time reward by " + (x * 100 - 100).toFixed(2) + "%."
+		assigned = []
+		var assignedNums = {}
+		getEl("pairedchallenges").style.display = player.masterystudies.includes("d9") ? "" : "none"
+		getEl("respecPC").style.display = player.masterystudies.includes("d9") ? "" : "none"
+		for (var pc = 1; pc <= 4; pc++) {
+			var subChalls = tmp.qu.pairedChallenges.order[pc]
+			if (subChalls) for (var sc = 0; sc < 2; sc++) {
+				var subChall = subChalls[sc]
+				if (subChall) {
+					assigned.push(subChall)
+					assignedNums[subChall] = pc
+				}
+			}
+			if (player.masterystudies.includes("d9")) {
+				var property = "pc" + pc
+				var sc1 = tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc][0] : 0
+				var sc2 = (sc1 ? tmp.qu.pairedChallenges.order[pc].length > 1 : false) ? tmp.qu.pairedChallenges.order[pc][1] : 0
+				getEl(property+"desc").textContent = "Paired Challenge "+pc+": Both Quantum Challenge " + (sc1 ? sc1 : "?") + " and " + (sc2 ? sc2 : "?") + " are applied."
+				getEl(property+"cost").textContent = "Cost: Still none. ;/"
+				getEl(property+"goal").textContent = "Goal: " + (sc2 ? shortenCosts(Decimal.pow(10, QCs.getGoalMA(subChalls))) : "???") + " antimatter"
+				getEl(property).textContent = pcFocus == pc ? "Cancel" : (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "Assign" : tmp.qu.pairedChallenges.current == pc ? "Running" : tmp.qu.pairedChallenges.completed >= pc ? "Completed" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Start"
+				getEl(property).className = pcFocus == pc || (tmp.qu.pairedChallenges.order[pc] ? tmp.qu.pairedChallenges.order[pc].length < 2 : true) ? "challengesbtn" : tmp.qu.pairedChallenges.completed >= pc ? "completedchallengesbtn" : tmp.qu.pairedChallenges.completed + 1 <pc ? "lockedchallengesbtn" : tmp.qu.pairedChallenges.current == pc ? "onchallengebtn" : "challengesbtn"
+
+				var sc1t = Math.min(sc1, sc2)
+				var sc2t = Math.max(sc1, sc2)
+				if (player.masterystudies.includes("d14")) {
+					getEl(property + "br").style.display = ""
+					getEl(property + "br").textContent = sc1t != 6 || sc2t != 8 ? "QC6 & 8" : tmp.qu.bigRip.active ? "Big Ripped" : tmp.qu.pairedChallenges.completed + 1 < pc ? "Locked" : "Big Rip"
+					getEl(property + "br").className = sc1t != 6 || sc2t != 8 ? "lockedchallengesbtn" : tmp.qu.bigRip.active ? "onchallengebtn" : tmp.qu.pairedChallenges.completed + 1 < pc ? "lockedchallengesbtn" : "bigripbtn"
+				} else getEl(property + "br").style.display = "none"
 			}
 		}
 		*/
+
+		//Big Rip
+		getEl("bigrip").style.display = player.masterystudies.includes("d14") ? "" : "none"
+		if (masteryStudies.has("d14")) {
+			var max = getMaxBigRipUpgrades()
+			getEl("spaceShards").textContent = shortenDimensions(tmp.qu.bigRip.spaceShards)
+			for (var u = 18; u <= 20; u++) getEl("bigripupg" + u).parentElement.style.display = u > max ? "none" : ""
+			for (var u = 1; u <= max; u++) {
+				getEl("bigripupg" + u).className = tmp.qu.bigRip.upgrades.includes(u) ? "gluonupgradebought bigrip" + (isBigRipUpgradeActive(u, true) ? "" : "off") : tmp.qu.bigRip.spaceShards.lt(bigRipUpgCosts[u]) ? "gluonupgrade unavailablebtn" : "gluonupgrade bigrip"
+				getEl("bigripupg" + u + "cost").textContent = shortenDimensions(new Decimal(bigRipUpgCosts[u]))
+			}
+		}
 	},
-	on: []
-}
+	updateDispOnTick() {
+		if (!QCs.divInserted) return
 
-function toggleQCModifier(id) {
-	if (!(ranking >= qcm.reqs[id]) && qcm.reqs[id]) return
-	if (qcm.on.includes(id)) {
-		let data = []
-		for (var m = 0; m < qcm.on.length; m++) if (qcm.on[m] != id) data.push(qcm.on[m])
-		qcm.on = data
-	} else qcm.on.push(id)
-	getEl("qcm_" + id).className = qcm.on.includes(id) ? "chosenbtn" : "storebtn"
-	updateQuantumChallenges()
-}
-
-function inQCModifier(id) {
-	if (!tmp.quUnl) return
-	return tmp.qu.qcsMods.current.includes(id)
-}
-
-function recordModifiedQC(id, num, mod) {
-	var data = tmp.qu.qcsMods[mod]
-	if (data === undefined) {
-		data = {}
-		tmp.qu.qcsMods[mod] = data
+		for (let qc = 1; qc <= QCs.data.max; qc++) {
+			if (QCs.tmp.unl.includes(qc)) getEl("qc_" + qc + "_reward").textContent = QCs.data[qc].rewardDesc(QCs.tmp.rewards[qc])
+		}
+	},
+	updateBest() {
+		//Rework coming soon
 	}
-	data[id] = Math.min(num, data[id] || 4)
 }

@@ -75,7 +75,6 @@ function getRepToTDExp() {
 
 function getTimeDimensionPower(tier) {
 	if (player.currentEternityChall == "eterc11") return new Decimal(1)
-	if (inQC(9)) return tmp.rm.pow(getRepToTDExp())
 	if (tmp.be) return getBreakEternityTDMult(tier)
 	let dim = player["timeDimension" + tier]
 	let ret = dim.power.pow(player.boughtDims ? 1 : 2)
@@ -97,7 +96,6 @@ function getTimeDimensionPower(tier) {
 	if (hasAch("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
 	if (hasGalUpg(43)) ret = ret.times(galMults.u43())
 	if (!hasDilationUpg("ngmm2") && hasDilationUpg(5) && !tmp.ngC && player.replicanti.amount.gt(1)) ret = ret.times(tmp.rm.pow(getRepToTDExp()))
-	if (inQC(6)) ret = ret.times(player.postC8Mult).dividedBy(player.matter.max(1))
 
 	ret = dilates(ret, 2)
 	if (inNGM(2)) ret = ret.times(ret2)
@@ -113,7 +111,7 @@ function getTimeDimensionPower(tier) {
 }
 
 function getTimeDimensionProduction(tier) {
-  	if (player.currentEternityChall == "eterc1" || player.currentEternityChall == "eterc10" || inQC(1) || (!tmp.be && inQC(8))) return new Decimal(0)
+  	if (player.currentEternityChall == "eterc1" || player.currentEternityChall == "eterc10") return new Decimal(0)
   	let dim = player["timeDimension" + tier]
   	if (player.currentEternityChall == "eterc11") return dim.amount
   	let ret = dim.amount
@@ -131,6 +129,7 @@ function getIC3EffFromFreeUpgs() {
 }
 
 function isTDUnlocked(t) {
+	if (QCs.in(1)) return false
 	if (t > 8) return false
 	if (inNGM(4)) {
 		if (haveSixDimensions() && t > 6) return false
@@ -315,7 +314,6 @@ function buyTimeDimension(tier) {
 	getOrSubResourceTD(tier, dim.cost)
 	dim.amount = dim.amount.plus(1);
 	dim.bought += 1
-	if (inQC(6)) player.postC8Mult = new Decimal(1)
 	if (inNGM(4)) {
 		dim.cost = dim.cost.times(TIME_DIM_COSTS[tier].mult())
 		if (inNC(2) || player.currentChallenge == "postc1" || player.pSac !== undefined) player.chall2Pow = 0
@@ -373,7 +371,6 @@ function buyMaxTimeDimension(tier, bulk) {
 	} else {
 		dim.cost = timeDimCost(tier, dim.bought)
 		dim.power = dim.power.times(Decimal.pow(player.boughtDims ? 3 : 2, toBuy))
-		if (inQC(6)) player.postC8Mult = new Decimal(1)
 		updateEternityUpgrades()
 	}
 	if (tier === 6 && inNGM(5)) giveAchievement("Out of luck")

@@ -547,7 +547,7 @@ function eternityUpgradesDisplay(){
 function uponDilationDisplay(){
 	let gain = getDilGain()
 	let msg = "Disable dilation"
-	if (player.infinityPoints.lt(Number.MAX_VALUE)||inQCModifier("ad")) {}
+	if (player.infinityPoints.lt(Number.MAX_VALUE)) {}
 	else if (player.dilation.totalTachyonParticles.gt(gain)) msg += ".<br>" + tmp.ngC ? "<br>Get more antimatter to gain more Tachyon Particles" : ("Reach " + shortenMoney(getReqForTPGain()) + " antimatter to gain more Tachyon particles")
 	else msg += " for " + shortenMoney(gain.sub(player.dilation.totalTachyonParticles)) + " Tachyon particles"
 	getEl("enabledilation").innerHTML = msg + "."

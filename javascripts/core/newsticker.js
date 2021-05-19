@@ -225,7 +225,7 @@ amNewsArray = [
 ["Is there meta-infinity?", '(player.meta ? player.meta.bestAntimatter.gte(Number.MAX_VALUE) : false)', "am10"],
 ["NG+3-- was confirmed", 'player.masterystudies', "am11"],
 ["You wanted a prestige layer, so here you go.", 'inNGM(2) && player.eternities > (tmp.mod.newGameMinusVersion?-20:0)', "am12"],
-["You are being challenged in a challenge while in another challenge. Challenge-ception.", "player.currentChallenge != '' && player.currentEternityChall != '' && !inQC(0)", "am13"],
+["You are being challenged in a challenge while in another challenge. Challenge-ception.", "player.currentChallenge != '' && player.currentEternityChall != '' && QCs.inAny()", "am13"],
 ["New updates are coming in a day, not 5 hours. Sorry, jokers!", true, "am14"],
 ["Whale complained that matter and antimatter are balanced and the universe would not be existed.", true, "am15"],
 ["Congratulations for beating Quantum! Now you need to big rip the universe to progress! >:)", "player.totalmoney.gte(Decimal.pow(10, 32e14))", "am16"],

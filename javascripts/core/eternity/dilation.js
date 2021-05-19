@@ -136,7 +136,7 @@ function getTotalTachyonParticleGain(){
 }
 
 function getDilGain() {
-	if (inQCModifier("ad") || player.money.lt(10)) return new Decimal(0)
+	if (player.money.lt(10)) return new Decimal(0)
 	let log = Math.log10(player.money.log10() / 400) * getDilExp() + getDilPower().log10()
 	let gain = Decimal.pow(10, log)
 
@@ -185,7 +185,7 @@ function dilates(x, m) {
 	let e = 1
 	let y = x
 	let a = false
-	if (player.dilation.active && m != 2 && (m != "meta" || !hasAch("ng3p63") || !inQC(0))) {
+	if (player.dilation.active && m != 2 && (m != "meta" || !hasAch("ng3p63") || QCs.inAny())) {
 		e *= dilationPowerStrength()
 		if (tmp.mod.newGameMult) e = 0.9 + Math.min((player.dilation.dilatedTime.add(1).log10()) / 1000, 0.05)
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && !tmp.mod.nguspV) e += exDilationBenefit() * (1-e)
@@ -535,7 +535,7 @@ function canBuyGalaxyThresholdUpg() {
 }
 
 function getFreeGalaxyThresholdIncrease() {
-	let thresholdMult = inQC(5) ? Math.pow(10, 2.8) : 1.35
+	let thresholdMult = 1.35
 
 	let dil2 = getDilUpgPower(2)
 	if (dil2 > 0) thresholdMult += 3.65 * Math.pow(0.8, dil2)
@@ -565,7 +565,6 @@ function getFreeGalaxyGainMult() {
 	let galaxyMult = hasDilationUpg(4) ? 2 : 1
 	if (hasDilationUpg("ngmm1")) galaxyMult *= 2
 	if (tmp.mod.ngudpV && !tmp.mod.nguepV) galaxyMult /= 1.5
-	if (isQCRewardActive(2)) galaxyMult *= tmp.qcRewards[2]
 	if (isNanoEffectUsed("dil_gal_gain")) galaxyMult *= tmp.nf.effects.dil_gal_gain
 	let exp = tmp.newNGP3E ? 1.1 : 1
 	return Math.pow(galaxyMult, exp)
