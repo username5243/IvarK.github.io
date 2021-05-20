@@ -43,26 +43,26 @@ let POSITRONS = {
 		ng: {
 			pow() {
 				let x = 0.2
-				if (enB.active("glu", 4)) x *= tmp.enB.glu4
+				if (enB.active("glu", 4) && pos.on()) x *= enB.tmp.glu4
 				return x
 			},
 			sacGals(pow) {
-				return Math.min(player.galaxies / 2, pow)
+				return Math.min(player.galaxies / 4, pow)
 			},
 			qeToGals(qe) {
-				return Math.floor(qe * qe * 1e4)
+				return (Math.log10(qe + 1) / Math.log10(2)) * 5e3
 			},
 			galsToQE(gals) {
-				return Math.sqrt(gals / 1e4)
+				return Math.pow(2, gals / 5e3) - 1
 			},
 			pcGain(gals) {
-				return gals
+				return gals * Math.pow(2, Math.sqrt(gals / 5e3 + 1) - 1)
 			}
 		},
 		rg: {
 			pow() {
 				let x = 0
-				if (enB.active("pos", 5)) x = tmp.enB.pos5
+				if (enB.active("pos", 5)) x = enB.tmp.pos5
 				return x
 			},
 			sacGals(pow) {
@@ -172,7 +172,7 @@ let POSITRONS = {
 			getEl("pos_char_" + type).textContent = shorten(typeData.pc)
 		}
 	
-		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / tmp.enB.pos3).toFixed(Math.floor(3 + Math.log10(tmp.enB.pos3)))
+		if (enB.has("pos", 3)) getEl("enB_pos3_exp").textContent = "^" + (1 / enB.tmp.pos3).toFixed(Math.floor(3 + Math.log10(enB.tmp.pos3)))
 	}
 }
 let pos = POSITRONS

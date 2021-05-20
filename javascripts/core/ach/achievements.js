@@ -356,7 +356,9 @@ function clearOldAchieves(){
     var achieveKey;
     var values = Object.keys(allAchievements).map(function(e) { return allAchievements[e] });
     for (var i = 0; i < player.achievements.length; i++) {
-        if (values.indexOf(player.achievements[i]) !== -1 ) {  // does index[i] exist in allAchievements as a value?
+        if (player.achievements[i] === null) {
+			toRemove.push(i)
+		} else if (values.indexOf(player.achievements[i]) !== -1 ) {  // does index[i] exist in allAchievements as a value?
             toRemove.push(i); // mark it for removal
             achieveKey = Object.keys(allAchievements).find(function(key){ return allAchievements[key] === player.achievements[i];});
             if (!hasAch(achieveKey)) { // check if new key already exists as well

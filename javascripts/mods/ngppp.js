@@ -61,7 +61,7 @@ function updateQuantumTabs() {
 function toggleAutoTT() {
 	if (qMs.tmp.amt < 2) maxTheorems()
 	else player.autoEterOptions.tt = !player.autoEterOptions.tt
-	getEl("theoremmax").innerHTML = qMs.tmp.amt > 2 ? ("Auto max: "+(player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
+	getEl("theoremmax").innerHTML = qMs.tmp.amt >= 2 ? ("Auto max: " + (player.autoEterOptions.tt ? "ON" : "OFF")) : "Buy max Theorems"
 }
 
 //v1.8

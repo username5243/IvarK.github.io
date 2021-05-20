@@ -186,7 +186,7 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (enB.active("glu", 2)) x *= tmp.enB.glu2
+	if (enB.active("glu", 2)) x *= enB.tmp.glu2
 	if (masteryStudies.has(304)) x *= 1.25
 	extraReplMulti = x
 }
@@ -197,7 +197,6 @@ function getTotalRGs() {
 
 function getFullEffRGs(min) {
 	let x = player.replicanti.galaxies
-	if (masteryStudies.has(301)) x *= 0.75
 	if (masteryStudies.has(291)) x = getTotalRGs()
 	else if (min) x = Math.min(x, player.replicanti.gal)
 
@@ -208,10 +207,7 @@ function getReplGalaxyEff() {
 	let x = 1
 	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2)/10
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
-	if (tmp.ngp3) {
-		if (masteryStudies.has(344)) x *= getMTSMult(344)
-		if (hasBosonicUpg(34)) x *= tmp.blu[34]
-	}
+	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
 }
@@ -227,7 +223,7 @@ function getReplicantiBaseInterval(speed) {
 	speed = new Decimal(speed)
 	if (enB.active("glu", 8)) {
 		let lvls = Math.round(Decimal.div(speed, 1e3).log(0.9)) + 1
-		speed = Decimal.pow(0.9, Math.pow(lvls, tmp.enB.glu8) - 1).times(1e3)
+		speed = Decimal.pow(0.9, Math.pow(lvls, enB.tmp.glu8) - 1).times(1e3)
 	}
 
 	if (speed.lt(1)) speed = speed.pow(0.25)

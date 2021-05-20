@@ -40,7 +40,7 @@ function getQuantumReq() {
 	let exp = 1
 	if (tmp.ngp3) {
 		exp = 1.2
-		if (enB.active("pos", 3)) exp /= tmp.enB.pos3
+		if (enB.active("pos", 3)) exp /= enB.tmp.pos3
 	}
 	return Decimal.pow(Number.MAX_VALUE, exp)
 }
@@ -74,6 +74,7 @@ function getQKAchBonusLog() {
 	if (hasAch("ng3p53")) log += player.quantum.bigRip.spaceShards.plus(1).log10()
 	if (hasAch("ng3p65")) log += getTotalRadioactiveDecays()
 	if (hasAch("ng3p85")) log += Math.pow(player.ghostify.ghostlyPhotons.enpowerments, 2)
+	if (hasAch("ng3p93")) log += Math.log10(500)
 	return log
 }
 
@@ -95,15 +96,8 @@ function quarkGain() {
 	log = Math.pow(log + 1, logBoostExp) - 1
 
 	log += getQKAchBonusLog()
-	log += getQuarkMult().log10()
 
 	return Decimal.pow(10, log).floor()
-}
-
-function getQuarkMult() {
-	x = new Decimal(1)
-	if (hasAch("ng3p93")) x = x.times(500)
-	return x
 }
 
 function toggleQuantumConf() {
@@ -255,7 +249,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 		if (tmp.qu.best > tmp.qu.time) tmp.qu.best = tmp.qu.time
 		tmp.qu.times++
 
-		if (player.meta.antimatter.lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
+		if (player.meta.bestAntimatter.lte(Number.MAX_VALUE)) giveAchievement("We are not going squared.")
 		if (player.dilation.rebuyables[1] + player.dilation.rebuyables[2] + player.dilation.rebuyables[3] + player.dilation.rebuyables[4] < 1 && player.dilation.upgrades.length < 1) giveAchievement("Never make paradoxes!")
 		if (tmp.qu.times >= 1e4) giveAchievement("Prestige No-lifer")
 
@@ -407,10 +401,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			player.autoEterMode="amount"
 			updateAutoEterMode()
 		}
-		getEl('dilationmode').style.display = qMs.tmp.amt > 4 ? "" : "none"
-		getEl('rebuyupgauto').style.display = qMs.tmp.amt > 6 ? "" : "none"
-		getEl('metaboostauto').style.display = qMs.tmp.amt > 14 ? "" : "none"
-		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt > 22 ? "" : "none"
 		if (!bigRip || tmp.bruActive[12]) player.dilation.upgrades.push(10)
 		else tmp.qu.wasted = bigRip && tmp.qu.bigRip.storedTS === undefined
 		if (bigRip ? tmp.bruActive[12] : qMs.tmp.amt >= 14) {

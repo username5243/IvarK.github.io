@@ -11,7 +11,7 @@ var masteryStudies = {
 			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
-		dil: {7: 1e74, 8: 5e75, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
+		dil: {7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
 	},
 	costs: {
 		time: {},
@@ -21,7 +21,7 @@ var masteryStudies = {
 
 			//Quantum
 			271: 1 / 128,
-			281: 4, 282: 2, 283: 2, 284: 4,
+			281: 5, 282: 2, 283: 2, 284: 5,
 			291: 8, 292: 2, 293: 1 / 256, 294: 2, 295: 8,
 			301: 1 / 8, 302: 2, 303: 2, 304: 1 / 8},
 		ec: {},
@@ -58,7 +58,7 @@ var masteryStudies = {
 			return tmp.qu.quarkEnergy >= 2.75
 		},
 		d8() {
-			return enB.pos.engAmt() >= 1700
+			return enB.pos.engAmt() >= 1800
 		},
 		d9() {
 			return false
@@ -90,7 +90,7 @@ var masteryStudies = {
 			return "2.75 quantum energy"
 		},
 		d8() {
-			return shorten(1700) + " positronic charge"
+			return shorten(1800) + " positronic charge"
 		},
 		d9() {
 			return "COMING IN BETA V0.5"

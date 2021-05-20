@@ -229,19 +229,28 @@ function updateColorPowers() {
 
 //Gluons
 function gainQuantumEnergy() {
-	let exp = enB.active("pos", 4) ? tmp.enB.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
+	let x = (getQEQuarksPortion() + getQEGluonsPortion()) * (getQuantumEnergyMult() - getQuantumEnergySubMult())
 
-	let x = Math.pow(quantumWorth.add(1).log10(), exp) * 1.25 * (getQuantumEnergyMult() - getQuantumEnergySubMult())
 	tmp.qu.quarkEnergy = Math.max(x, tmp.qu.quarkEnergy)
 	tmp.qu.quarkEnergy = isNaN(tmp.qu.quarkEnergy) ? 0 : tmp.qu.quarkEnergy
 	tmp.qu.bestEnergy = Math.max(tmp.qu.bestEnergy || 0, tmp.qu.quarkEnergy)
 }
 
+function getQEQuarksPortion() {
+	let exp = enB.active("pos", 4) ? enB.tmp.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
+	return Math.pow(quantumWorth.add(1).log10(), exp) * 1.25
+}
+
+function getQEGluonsPortion() {
+	let exp = enB.active("pos", 4) ? enB.tmp.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
+	return Math.pow(tmp.qu.gluons[tmp.qu.entColor || "rg"].add(1).log10(), exp) * 0.25
+}
+
 function getQuantumEnergyMult() {
 	let x = 1
 	if (dev.boosts.tmp[1]) x += dev.boosts.tmp[1]
-	if (enB.active("glu", 1)) x += tmp.enB.glu1
-	if (enB.active("pos", 1)) x += tmp.enB.pos1
+	if (enB.active("glu", 1)) x += enB.tmp.glu1
+	if (enB.active("pos", 1)) x += enB.tmp.pos1
 	return x
 }
 
@@ -251,7 +260,7 @@ function getQuantumEnergySubMult() {
 }
 
 function updateQuarkEnergyEffects() {
-	let expReduction = enB.active("pos", 4) ? Math.sqrt(1 / (tmp.enB.pos4 * 3)) : 1
+	let expReduction = enB.active("pos", 4) ? Math.sqrt(1 / (enB.tmp.pos4 * 3)) : 1
 
 	tmp.qkEng = {}
 	tmp.qkEng.eff1 = Math.pow(Math.log10(tmp.totalQE / 1.7 + 1) + 1, 2 * expReduction)
@@ -307,7 +316,6 @@ function maxQuarkMult() {
 
 function updateGluonicBoosts() {
 	tmp.glB = {}
-	tmp.enB = {}
 
 	let data = tmp.glB
 	let enBData = enB
@@ -319,24 +327,9 @@ function updateGluonicBoosts() {
 
 	let type = tmp.qu.entColor || "rg"
 	data.enAmt = enBData.glu.gluonEff(gluons[type])
-	data.masAmt = Math.max(Math.max(
-		enBData.glu.gluonEff(gluons.rg),
-		enBData.glu.gluonEff(gluons.gb)),
-		enBData.glu.gluonEff(gluons.br)
-	)
+	data.masAmt = enBData.glu.gluonEff(gluons.rg.add(gluons.gb).add(gluons.br))
 
-	let data2 = tmp.enB
-	for (var t = enBData.types.length; t > 0; t--) {
-		var name = enBData.types[t - 1]
-		var typeData = enBData[name]
-
-		for (var i = 1; i <= typeData.max; i++) {
-			if (!enBData.has(name, i)) break
-
-			var eff = typeData[i].eff
-			if (eff !== undefined) data2[name + i] = eff(typeData.eff(i, data))
-		}
-	}
+	enB.updateTmp()
 }
 
 function getGluonEffBuff(x) {
@@ -372,7 +365,7 @@ let enB = {
 	active(type, x) {
 		let data = this[type][x]
 
-		if (tmp.enB === undefined || tmp.enB[type + x] === undefined) return false
+		if (enB.tmp === undefined || enB.tmp[type + x] === undefined) return false
 
 		if (!this.has(type, x)) return false
 		if (data.activeReq && !data.activeReq()) return false
@@ -387,7 +380,6 @@ let enB = {
 		return data.amt() >= data[x].masReq
 	},
 
-
 	choose(x) {
 		if ((tmp.qu.entColor || "rg") == x) return
 		if (!tmp.qu.entBoosts || tmp.qu.gluons.rg.max(tmp.qu.gluons.gb).max(tmp.qu.gluons.br).eq(0)) {
@@ -399,7 +391,30 @@ let enB = {
 		quantum(false, true)
 	},
 
+	tmp: {
+	},
+	updateTmp() {
+		let data = {}
+		enB.tmp = data
+	
+		for (var x = 0; x < enB.priorities.length; x++) {
+			var boost = enB.priorities[x]
+			var type = boost[0]
+			var num = boost[1]
+
+			if (enB.has(type, num)) {
+				var eff = enB[type][num].eff
+				if (eff !== undefined) data[type + num] = eff(enB[type].eff(num))
+			}
+		}
+	},
+
 	types: ["glu", "pos"],
+	priorities: [
+		["glu", 4],
+		["pos", 1], ["pos", 2], ["pos", 3], ["pos", 4], ["pos", 5], ["pos", 6], ["pos", 7], ["pos", 8], ["pos", 9], ["pos", 10],
+		["glu", 1], ["glu", 2], ["glu", 3], ["glu", 5], ["glu", 6], ["glu", 7], ["glu", 8], ["glu", 9], ["glu", 10],
+	],
 	glu: {
 		name: "Entangled",
 		unl() {
@@ -418,15 +433,15 @@ let enB = {
 			return tmp.qu.entBoosts || 0
 		},
 		engAmt() {
-			return tmp.qu.quarkEnergy
+			return tmp.qu.bestEnergy
 		},
 		set(x) {
 			tmp.qu.entBoosts = x
 		},
 
-		eff(x, data) {
+		eff(x) {
 			let r = Math.max(this.amt() * 2 / 3 - 1, 1)
-			r *= enB.mastered("glu", x) ? data.enAmt : data.masAmt
+			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
 
 			return r
 		},
@@ -451,7 +466,7 @@ let enB = {
 			masReq: 7,
 			type: "g",
 			eff(x) {
-				return Math.log10(x * 2 + 1) * 1.25 + 1
+				return Math.log10(x * 2 + 1) * 1.5 + 1
 			},
 			effDisplay(x) {
 				return x.toFixed(3)
@@ -470,19 +485,24 @@ let enB = {
 		},
 		4: {
 			req: 7,
-			masReq: 9,
+			masReq: 10,
 			type: "b",
 			eff(x) {
-				x = Math.sqrt(x / 5 + 1)
-				if (x > 4) x = 5 - 4 / x
-				return x
+				if (pos.on()) {
+					x = Math.sqrt(x / 5 + 1)
+					if (x > 4) x = 5 - 4 / x
+					return x
+				} else {
+					return Math.sqrt(x) * 100
+				}
 			},
 			effDisplay(x) {
-				return formatPercentage(x - 1)
+				return pos.on() ? "Positrons on: Increase the power of Dimensional Positronic Charge by <span style='font-size:25px'>" + formatPercentage(x - 1) + "</span>%."
+				: "Positrons off: Strengthen all effects for mastered Positronic Boosts by +<span style='font-size:25px'>" + shorten(x) + "</span> charge."
 			}
 		},
 		5: {
-			req: 9,
+			req: 10,
 			masReq: 1/0,
 			type: "b",
 			eff(x) {
@@ -556,10 +576,10 @@ let enB = {
 
 		cost(x) {
 			if (x === undefined) x = this.amt()
-			return Math.pow(x / 2 + 1, 1.5) * 400
+			return Math.pow(x / 2 + 1, 1.5) * 200
 		},
 		target() {
-			return Math.floor((Math.pow(this.engAmt() / 400, 1 / 1.5) - 1) * 2 + 1)
+			return Math.floor((Math.pow(this.engAmt() / 200, 1 / 1.5) - 1) * 2 + 1)
 		},
 
 		amt() {
@@ -572,16 +592,21 @@ let enB = {
 			pos.save.boosts = x
 		},
 
-		eff(x) {
-			return this.engAmt()
+		eff() {
+			return this.engAmt() * 2
+		},
+		masEff(x) {
+			x /= 2
+			if (enB.active("glu", 4) && !pos.on()) x += enB.tmp.glu4
+			return x
 		},
 
-		max: 8,
+		max: 10,
 		1: {
 			req: 1,
 			masReq: 2,
 
-			chargeReq: 500,
+			chargeReq: 250,
 			activeReq() {
 				return enB.mastered("pos", 1) || pos.save.eng >= this.chargeReq
 			},
@@ -591,8 +616,10 @@ let enB = {
 
 			type: "g",
 			eff(x) {
-				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos[1].chargeReq / 2)
-				return x / 2e3 + Math.sqrt(x / 2e3)
+				if (enB.mastered("pos", 1)) x = Math.max(x, enB.pos.masEff(enB.pos[1].chargeReq))
+				let cof = Math.max(x / 1e4, 1)
+
+				return Math.pow(x / 2e3, 2 - 1 / cof) / Math.log10(cof + 10) + Math.pow(x / 2e3, 0.5 / cof)
 			},
 			effDisplay(x) {
 				return shorten(x)
@@ -602,7 +629,7 @@ let enB = {
 			req: 1,
 			masReq: 5,
 
-			chargeReq: 400,
+			chargeReq: 200,
 			activeReq() {
 				return enB.mastered("pos", 2) || pos.save.eng >= this.chargeReq
 			},
@@ -622,7 +649,7 @@ let enB = {
 			req: 1,
 			masReq: 3,
 
-			chargeReq: 700,
+			chargeReq: 350,
 			activeReq() {
 				return enB.mastered("pos", 3) || pos.save.eng >= this.chargeReq
 			},
@@ -632,8 +659,8 @@ let enB = {
 
 			type: "b",
 			eff(x) {
-				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos[3].chargeReq / 2)
-				return Math.log10(x / 3e3 + 1) + 1
+				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos.masEff(enB.pos[3].chargeReq))
+				return Math.log10(x / 4e3 + 1) + 1
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
@@ -643,7 +670,7 @@ let enB = {
 			req: 4,
 			masReq: 10,
 
-			chargeReq: 1e3,
+			chargeReq: 500,
 			activeReq() {
 				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
 			},
@@ -651,7 +678,7 @@ let enB = {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 4) ? " (full effect)" : "")
 			},
 
-			type: "r",
+			type: "g",
 			eff(x) {
 				x = player.meta.resets
 				return 1 / ((hasAch("ng3p14") ? 1 : 2) + 1 / (x / 50 + 1))
@@ -703,6 +730,28 @@ let enB = {
 			effDisplay(x) {
 				return shorten(x)
 			}
+		},
+		9: {
+			req: 1/0,
+			masReq: 1/0,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
+		},
+		10: {
+			req: 1/0,
+			masReq: 1/0,
+			type: "r",
+			eff(x) {
+				return 1
+			},
+			effDisplay(x) {
+				return shorten(x)
+			}
 		}
 	},
 
@@ -744,7 +793,7 @@ let enB = {
 
 		for (var i = 1; i <= data.max; i++) {
 			if (!this.has(type, i)) break
-			if (tmp.enB[type + i] !== undefined) getEl("enB_" + type + i + "_eff").textContent = data[i].effDisplay(tmp.enB[type + i])
+			if (enB.tmp[type + i] !== undefined) getEl("enB_" + type + i + "_eff").innerHTML = data[i].effDisplay(enB.tmp[type + i])
 		}
 	}
 }
@@ -843,9 +892,9 @@ function updateQuarksTabOnUpdate(mode) {
 	for (var p = 0; p < 3; p++) {
 		var pair = (["rg", "gb", "br"])[p]
 		var diff = uq[pair[0]].min(uq[pair[1]])
-		getEl(pair + "gain").textContent = shortenDimensions(diff)
-		getEl(pair + "prev").textContent = shortenDimensions(uq[pair[0]])
-		getEl(pair + "next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
+		getEl(pair + "_gain").textContent = shortenDimensions(diff)
+		getEl(pair + "_prev").textContent = shortenDimensions(uq[pair[0]])
+		getEl(pair + "_next").textContent = shortenDimensions(uq[pair[0]].sub(diff).round())
 	}
 	getEl("assignAllButton").className = canAssign ? "storebtn" : "unavailablebtn"
 	if (masteryStudies.has("d13")) {
@@ -867,10 +916,15 @@ function updateGluonsTabOnUpdate(mode) {
 
 	enB.update("glu")
 
-	let type = tmp.qu.entColor || "rg"
-	getEl("entangle_rg").className = "gluonupgrade " + (type == "rg" ? "chosenbtn" : "rg")
-	getEl("entangle_gb").className = "gluonupgrade " + (type == "gb" ? "chosenbtn" : "gb")
-	getEl("entangle_br").className = "gluonupgrade " + (type == "br" ? "chosenbtn" : "br")
+	let typeUsed = tmp.qu.entColor || "rg"
+	let types = ["rg", "gb", "br"]
+	for (var i = 0; i < types.length; i++) {
+		var type = types[i]
+		getEl("entangle_" + type).className = "gluonupgrade " + (typeUsed == type ? "chosenbtn" : "rg")
+		getEl("entangle_" + type + "_bonus").textContent = ""
+	}
+
+	getEl("entangle_" + typeUsed + "_bonus").textContent = "Entangled Bonus: +" + shorten(getQEGluonsPortion() * (getQuantumEnergyMult() - getQuantumEnergySubMult())) + " quantum energy"
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"
 }

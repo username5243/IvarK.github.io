@@ -748,30 +748,25 @@ strong { color: #0072e5 }
     background-color: #0f0 !important
 }
 
-.QKAmount
-{
+.QKAmount {
     font-weight: 500 !important;
     color: #00ff00 !important;
 }
 
 .qMs_toggle_off {
-    background: #f77 !important;
-    border-color: #300 !important;
-	color: #300 !important
+    border-color: #f77 !important
 }
 
 .qMs_toggle_on {
-    background: #7f7 !important;
-    border-color: #030 !important;
-	color: #030 !important
+    border-color: #7f7 !important
 }
 
 .qMs_toggle_off:hover {
-    background: #f33 !important
+    background: #f77 !important
 }
 
 .qMs_toggle_on:hover {
-    background: #3f3 !important
+    background: #7f7 !important
 }
 
 #gatheredQuarks,
@@ -795,6 +790,7 @@ strong { color: #0072e5 }
 }
 
 .green,
+#enB_glu_amt,
 #quarkTranslation,
 #quarkCharge,
 #quarkChargeRate {
@@ -1096,7 +1092,7 @@ strong { color: #0072e5 }
     color: #e57200
 }
 
-.yellow {
+.yellow, #enB_pos_eng, #enB_pos_amt {
     color: #e5e500
 }
 

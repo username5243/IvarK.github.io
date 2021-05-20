@@ -242,7 +242,7 @@ function formatValue(notation, value, places, placesUnder1000, noInf) {
         }
         if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
             if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
-            places = Math.min(places, 12 - Math.floor(Math.log10(power)))
+            places = Math.min(places, 11 - Math.floor(Math.log10(power)))
             if (places >= 0) {
 				matissa = matissa.toFixed(places)
                 if (matissa >= 10) {

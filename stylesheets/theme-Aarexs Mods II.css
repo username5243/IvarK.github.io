@@ -417,7 +417,7 @@ button, div.storebtn {
 	color: #e50000 !important
 }
 
-.green, #gbRepl, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
+.green, #gbRepl, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
 	color: #00e500 !important
 }
 
@@ -647,7 +647,7 @@ button, div.storebtn {
 	color: #e57200
 }
 
-.yellow, #hbUnspent, #bosonicFactorEffect {
+.yellow, #enB_pos_eng, #enB_pos_amt, #hbUnspent, #bosonicFactorEffect {
 	color: #e5e500
 }
 

@@ -114,6 +114,18 @@ let Prestiges = {
 		ghostify: "ghostify",
 		planck: "plTab"
 	},
+	hotkeys: {
+		paradox: "p",
+		accelerate: "a",
+		galaxy: "g",
+		infinity: "c",
+		eternity: "e",
+		interreality: "i",
+		singularity: "s",
+		quantum: "q",
+		ghostify: "g",
+		planck: "p"
+	},
 	can(id) {
 		return ph.tmp[id] && ph.reqs[id]()
 	},
@@ -184,6 +196,9 @@ let Prestiges = {
 	},
 	tmp: {},
 	reset() {
+		getEl("layerDispOptions").style.display = "none"
+		getEl("resetDispOptions").style.display = "none"
+
 		var did = false
 		ph.tmp = { layers: 0 }
 		for (var x = ph.order.length; x > 0; x--) {
@@ -195,8 +210,8 @@ let Prestiges = {
 					ph.tmp.lastDid = p
 				}
 				if (did) ph.onPrestige(p)
-				else getEl("hide" + p).style.display = "none"
-			} else getEl("hide" + p).style.display = "none"
+				else getEl("hide_" + p).style.display = "none"
+			} else getEl("hide_" + p).style.display = "none"
 		}
 
 		ph.updateActive()
@@ -263,14 +278,16 @@ let Prestiges = {
 		if (ph.tmp[layer].did) return
 		ph.tmp[layer].did = true
 		ph.tmp.layers++
-		getEl("hide" + layer).style.display = ""
-		getEl("hide" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("layerDispOptions").style.display = ""
+		getEl("resetDispOptions").style.display = ""
+		getEl("hide_" + layer).style.display = ""
+		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 	},
 	setupHTML(layer) {
 		var html = ""
 		for (var x = 0; x < ph.order.length; x++) {
 			var p = ph.order[x]
-			html += '<button id="hide' + p + '" onclick="ph.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
+			html += '<button id="hide_' + p + '" onclick="ph.hideOption(\'' + p + '\')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px"></button> '
 		}
 		getEl("hideLayers").innerHTML = html
 	},
@@ -278,7 +295,7 @@ let Prestiges = {
 		if (tmp.mod.layerHidden[layer]) delete tmp.mod.layerHidden[layer]
 		else tmp.mod.layerHidden[layer] = true
 
-		getEl("hide" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
+		getEl("hide_" + layer).innerHTML = (tmp.mod.layerHidden[layer] ? "Show" : "Hide") + " " + layer
 
 		if (!tmp.mod.layerHidden[layer]) return
 		if (layer == "infinity") {

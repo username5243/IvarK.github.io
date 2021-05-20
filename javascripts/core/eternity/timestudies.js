@@ -69,7 +69,7 @@ function maxTheorems() {
 }
 
 function updateTheoremButtons() {
-	if (player.dilation.upgrades.includes(10) && getTTProduction() > 1e3) {
+	if (hasDilationUpg(10) && getTTProduction() > 1e3) {
 		getEl("theoremmax").style.display = "none"
 		getEl("theoremam").style.display = "none"
 		getEl("theoremip").style.display = "none"
@@ -720,10 +720,18 @@ function save_preset(id) {
 	$.notify("Preset saved", "info")
 }
 
-function load_preset(id, reset) {
+function toggle_preset_reset(load) {
+	if (!load) {
+		tmp.mod.presetReset = !tmp.mod.presetReset
+		getEl("toggle_preset_reset").style.display = tmp.ngp3 ? "" : "none"
+	}
+	getEl("toggle_preset_reset").textContent = "Force Eternity: " + (tmp.mod.presetReset ? "ON" : "OFF")
+}
+
+function load_preset(id) {
 	let data = getEl("preset_" + id + "_data").value
 
-	if (reset || shouldRespec(data)) {
+	if (tmp.mod.presetReset) {
 		if (!ph.can("eternity")) return
 		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?")) return
 
@@ -960,7 +968,7 @@ let tsMults = {
 		let x = Math.floor(tmp.rmPseudo.e / 1e3)
 
 		let softcapEff = 2
-		let scLater = enB.active("glu", 10) ? tmp.enB.glu10 : 0
+		let scLater = enB.active("glu", 10) ? enB.tmp.glu10 : 0
 		if (x > 100 + scLater) x = Math.sqrt((x - scLater) * 100) + scLater
 		return Math.floor(x)
 	},

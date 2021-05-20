@@ -1464,8 +1464,8 @@
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Alternate Tab Grouping: OFF</button></div></td>
 					</tr>
 					<tr>
-						<td><div><button onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
-						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div></td>
+						<td><div><button id="layerDispOptions" onclick="showOptions('layervisibilitymenu')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Show/hide layers</button></div></td>
+						<td><div><button id="resetDispOptions" onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Reset Displays: Top</button></div></td>
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Gameplay Tabs: Combined</button></div></td>
 						<td><div><button onclick="alert('Coming soon...')" class="storebtn" style="color:black; width: 200px; height: 55px; font-size: 15px">Tab Menu: OFF</button></div></td>
 					</tr>
@@ -4371,6 +4371,8 @@
 			<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
 			<br>
 			You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy. (<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
+			<br>
+			(based on quarks and entangled gluons)
 			<span id="quarkEnergySub"></span>
 			<br>
 			<table class="table" align="center" style="margin: auto">
@@ -4458,35 +4460,41 @@
 						<br>
 						which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.
 						<br>
-						(+<span id='rggain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rgprev'></span> to <span id='rgnext'>0</span>.)
+						(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
 						<br><br>
 						<button id="entangle_rg" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Boost Entangled Boosts</button>
+						<br>
+						<span id="entangle_rg_bonus"></span>
 					</td>
 					<td>
-						You have <span id="gb" style="font-size:35px">0</span> red-green anti-gluons,
+						You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
 						<br>
 						which multiply the red power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf">0.00</span>.
 						<br>
-						(+<span id='gbgain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gbprev'></span> to <span id='gbnext'>0</span>.)
+						(+<span id='gb_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
 						<br><br>
 						<button id="entangle_gb" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Boost Entangled Boosts</button>
+						<br>
+						<span id="entangle_gb_bonus"></span>
 					</td>
 					<td>
-						You have <span id="br" style="font-size:35px">0</span> red-green anti-gluons,
+						You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
 						<br>
 						which multiply the red power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf">0.00</span>.
 						<br>
-						(+<span id='brgain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='brprev'></span> to <span id='brnext'>0</span>.)
+						(+<span id='br_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
 						<br><br>
 						<button id="entangle_br" style="width: 240px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Boost Entangled Boosts</button>
+						<br>
+						<span id="entangle_br_bonus"></span>
 					</td>
 				</tr>
 				<td colspan=3>
 					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
 					<br>
-					<button class="storebtn" id="enB_glu_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> total Quantum Energy</button>
+					<button class="storebtn" id="enB_glu_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> best Quantum Energy</button>
 					<br>
-					<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
+					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
 					<br><br>
 					<span id="enB_glu_next"></span>
 					<br>
@@ -4521,7 +4529,7 @@
 						<br>
 						<span id="enB_glu4_type"></span>
 						<br>
-						Increase the power of Dimensional Positronic Charge by <span id="enB_glu4_eff" style="font-size:25px"></span>%.
+						<span id="enB_glu4_eff"></span>
 					</td>
 					<td id="enB_glu5">
 						<b id="enB_glu5_name" style="font-size: 25px"></b>
@@ -4614,7 +4622,7 @@
 					</tr>
 					<tr>
 						<td><button class="qMs_locked" id="qMs_reward_1" onclick="qMs.toggle(1)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_2" onclick="qMs.toggle(2)"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_2" onclick="qMs.toggle(2)" style="font-size: 11px"></button></td>
 						<td><button class="qMs_locked" id="qMs_reward_3" onclick="qMs.toggle(3)"></button></td>
 						<td><button class="qMs_locked" id="qMs_reward_4" onclick="qMs.toggle(4)"></button></td>
 					</tr>
@@ -4644,7 +4652,7 @@
 						<td><button class="qMs_locked" id="qMs_reward_9" onclick="qMs.toggle(9)"></button></td>
 						<td><button class="qMs_locked" id="qMs_reward_10" onclick="qMs.toggle(10)"></button></td>
 						<td><button class="qMs_locked" id="qMs_reward_11" onclick="qMs.toggle(11)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_12" onclick="qMs.toggle(12)" style="font-size: 11px"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_12" onclick="qMs.toggle(12)" style="font-size: 10px"></button></td>
 					</tr>
 
 					<!-- NEXT ROW -->
@@ -4732,9 +4740,9 @@
 						<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
 					</td>
 					<td colspan=2>
-						<button class="storebtn" id="enB_pos_buy" style="width: 300px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
+						<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
 						<br>
-						<button class='storebtn' style="width: 300px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
+						<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
 					</td>
 				</tr>
 				<tr>
@@ -4837,6 +4845,26 @@
 						<span id="enB_pos8_type"></span>
 						<br>
 						Boost something by <span id="enB_pos8_eff" style="font-size:35px"></span>x.
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2></td>
+					<td id="enB_pos9" colspan=2>
+						<b id="enB_pos9_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos9_type"></span>
+						<br>
+						Boost something by <span id="enB_pos9_eff" style="font-size:35px"></span>x.
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2></td>
+					<td id="enB_pos10" colspan=2>
+						<b id="enB_pos10_name" style="font-size: 25px"></b>
+						<br>
+						<span id="enB_pos10_type"></span>
+						<br>
+						Boost something by <span id="enB_pos10_eff" style="font-size:35px"></span>x.
 					</td>
 				</tr>
 			</table></div>
@@ -5648,8 +5676,8 @@
 		<button class="closebtn storebtn" onclick="closeToolTip()">&times;</button>
 		<button class="storebtn" style="font-size: 15px" onclick="new_preset()" style="display: inline">New preset</button>
 		<button class="storebtn" style="font-size: 15px" onclick="new_preset(true)" style="display: inline">Import</button>
+		<button class="storebtn" id="toggle_preset_reset" style="width: 240px; font-size: 15px" onclick="toggle_preset_reset()" style="display: inline">Force Eternity: ON</button>
 		<div style="height: 270px; overflow-y: auto">
-			For now, you need to Eternity for each preset load. I am implementing a system that loading a preset only performs a Eternity reset if it has conflicts to your current study tree.
 			<table id='presets'>
 			</table>
 		</div>

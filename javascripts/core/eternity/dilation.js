@@ -379,7 +379,7 @@ function getRebuyableDilUpgCost(id) {
 	} else if (id >= 3) {
 		if (player.meta != undefined && amount >= costGroup[2]) {
 			let costSS = Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2) / 4)
-			if (id == 3 && enB.active("glu", 5)) costSS = costSS.pow(1 / tmp.enB.glu5)
+			if (id == 3 && enB.active("glu", 5)) costSS = costSS.pow(1 / enB.tmp.glu5)
 			return cost.times(costSS)
 		}
 		if (player.exdilation != undefined && !tmp.mod.ngudpV && cost.gt(1e30)) cost = cost.div(1e30).pow(cost.log(1e30)).times(1e30)

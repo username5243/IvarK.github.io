@@ -1,15 +1,33 @@
 //New: v3.0 / Old: v1.79
 let qMs = {
 	tmp: {},
-	types: ["sr", "rl", "en", "ch"],
-	displayFuncs: {
-		sr: timeDisplay,
-		rl: shortenDimensions,
-		en: shorten,
-		ch: getFullExpansion,
-	},
-	unlockReqs: {
-		ch: () => QCs.unl()
+	data: {
+		types: ["sr", "rl", "en", "ch"],
+		sr: {
+			name: "Speedrun",
+			targ: () => tmp.qu.best,
+			targDisp: timeDisplay,
+			gain: (x) => Math.log10(86400 / x) / Math.log10(2) * 2 + 1
+		},
+		rl: {
+			name: "Relativistic",
+			targ: () => new Decimal(player.dilation.bestTP || 0),
+			targDisp: shorten,
+			gain: (x) => (x.max(1).log10() - 80) / 5 + 1
+		},
+		en: {
+			name: "Enegretic",
+			targ: () => tmp.qu.bestEnergy || 0,
+			targDisp: shorten,
+			gain: (x) => Math.sqrt(x) * 2
+		},
+		ch: {
+			name: "Challenging",
+			unl: () => QCs.unl(),
+			targ: () => 0,
+			targDisp: getFullExpansion,
+			gain: (x) => 0
+		}
 	},
 	update() {
 		let data = {}
@@ -18,37 +36,30 @@ let qMs = {
 		if (!tmp.ngp3) return
 		data.points = 0
 
-		//Speedrun
-		data.targ_sr = tmp.qu.best
-		data.amt_sr = Math.max(Math.floor(Math.log10(86400 / data.targ_sr) / Math.log10(2) * 2 + 1), 0)
-		data.points += data.amt_sr
+		//Milestone Points
+		let types = qMs.data.types
+		for (var i = 0; i < types.length; i++) {
+			var type = types[i]
+			var typeData = qMs.data[type]
+			var unl = typeData.unl ? typeData.unl() : true
 
-		//Relatistic
-		data.targ_rl = player.dilation.totalTachyonParticles
-		data.amt_rl = Math.max(Math.floor((data.targ_rl.max(1).log10() - 80) / 5 + 1), 0)
-		data.points += data.amt_rl
-
-		//Energetic
-		data.targ_en = tmp.qu.bestEnergy
-		data.amt_en = Math.floor(Math.sqrt(data.targ_en || 0) * 2)
-		data.points += data.amt_en
-
-		//Challenging
-		data.targ_ch = 0
-		data.amt_ch = 0
-		data.points += data.amt_ch
+			data["targ_" + type] = typeData.targ()
+			data["amt_" + type] = Math.max(Math.floor(typeData.gain(data["targ_" + type])), 0)
+			data.points += data["amt_" + type]
+		}
 
 		//Milestones
 		data.amt = 0
 		for (var i = 1; i <= qMs.max; i++) if (data.points >= qMs[i].req) data.amt++
 	},
 	updateDisplay() {
-		let types = qMs.types
+		let types = qMs.data.types
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
-			var shown = qMs.unlockReqs[type] ? qMs.unlockReqs[type]() : true
+			var typeData = qMs.data[type]
+			var unl = typeData.unl ? typeData.unl() : true
 
-			getEl("qMs_" + type+ "_cell").style.display = shown ? "" : "none"
+			getEl("qMs_" + type + "_cell").style.display = unl ? "" : "none"
 		}
 
 		for (var i = 1; i <= qMs.max; i++) {
@@ -59,7 +70,12 @@ let qMs = {
 			getEl("qMs_reward_" + i).textContent = qMs[i].eff()
 		}
 
-		if (qMs.tmp.amt >= 26) getEl('rebuyupgmax').style.display = "none"
+		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "" : "none"
+		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 7 ? "" : "none"
+		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
+		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
+		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 26 ? "" : "none"
+
 		if (qMs.tmp.amt >= 28) {
 			var removeMaxAll = false
 			for (var d = 1; d < 9; d++) {
@@ -71,15 +87,15 @@ let qMs = {
 		}
 	},
 	updateDisplayOnTick() {
-		let types = qMs.types
-
+		let types = qMs.data.types
 		for (var i = 0; i < types.length; i++) {
 			var type = types[i]
-			var shown = qMs.unlockReqs[type] ? qMs.unlockReqs[type]() : true
+			var typeData = qMs.data[type]
+			var unl = typeData.unl ? typeData.unl() : true
 
-			if (shown) {
-				getEl("qMs_" + type+ "_target").textContent = qMs.displayFuncs[type](qMs.tmp["targ_" + type])
-				getEl("qMs_" + type+ "_points").textContent = getFullExpansion(qMs.tmp["amt_" + type])
+			if (unl) {
+				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
+				getEl("qMs_" + type + "_points").textContent = getFullExpansion(qMs.tmp["amt_" + type])
 			}
 		}
 
@@ -191,7 +207,7 @@ let qMs = {
 	},
 	19: {
 		req: 24,
-		eff: () => "Start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions.",
+		eff: () => "Start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions",
 		effGot: () => "You now start with 4 Meta-Dimension Boosts and Meta-Dimension Boosts no longer reset Meta Dimensions anymore."
 	},
 	20: {
@@ -211,7 +227,7 @@ let qMs = {
 	},
 	23: {
 		req: 40,
-		eff: () => "Immediately generate TP on dilation runs.",
+		eff: () => "Immediately generate TP on dilation runs",
 		effGot: () => "You now can immediately generate TP on dilation runs."
 	},
 	24: {
@@ -221,17 +237,17 @@ let qMs = {
 	},
 	25: {
 		req: 75,
-		eff: () => "You start Quantums with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter",
-		effGot: () => ""
+		eff: () => "Start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter (not implemented)",
+		effGot: () => "You now start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter"
 	},
 	26: {
 		req: 100,
-		eff: () => "Unlock the autobuyer for Entangled Boosters",
+		eff: () => "Unlock the autobuyer for Entangled Boosters (not implemented)",
 		effGot: () => "You now can automatically get Entangled Boosters."
 	},
 	27: {
 		req: 150,
-		eff: () => "Unlock the autobuyer for Positronic Boosters",
+		eff: () => "Unlock the autobuyer for Positronic Boosters (not implemented)",
 		effGot: () => "You now can automatically get Positronic Boosters."
 	},
 	28: {

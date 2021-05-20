@@ -24,6 +24,7 @@ function setupFooterHTML() {
 	var html = "<table id='footer' style='display: table !important'><tr><td><div style='text-align: center'>" + 
 			"<a href='howto.html' target='_newtab'>How to play</a> | " + 
 			"<a href='about.html' target='_newtab'>About</a> | " +  
+			"<a href='http://ng-plus-plus-plus.fandom.com' target='_newtab'>Wiki</a> | " +  
 			(betaId != "" ?
 				(
 					betaId != correctBetaId ?
@@ -3839,7 +3840,7 @@ setInterval(function() {
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 1000)
+}, 100)
 
 function autoPerSecond() {
 	if (isGamePaused()) return
@@ -4280,6 +4281,9 @@ function replicantOverallUpdating(diff){
 
 function quantumOverallUpdating(diff){
 	if (tmp.quActive) {
+		//Quantum Energy
+		gainQuantumEnergy()
+
 		//Color Powers
 		var colorShorthands=["r","g","b"]
 		for (var c = 0; c < 3; c++) tmp.qu.colorPowers[colorShorthands[c]] = getColorPowerQuantity(colorShorthands[c])
@@ -4888,9 +4892,10 @@ function setTachyonParticles(x) {
 	player.dilation.tachyonParticles = new Decimal(x)
 	if (!player.dilation.active) player.dilation.totalTachyonParticles = player.dilation.tachyonParticles
 	if (tmp.ngp3) tmp.qu.notrelative = false
-	if (hasAch("ng3p18") || hasAch("ng3p37")) {
+	if (tmp.quUnl) {
 		player.dilation.bestTP = Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles)
 		player.dilation.bestTPOverGhostifies = player.dilation.bestTPOverGhostifies.max(player.dilation.bestTP)
+
 		getEl('bestTP').textContent = "Your best" + (ph.did("ghostify") ? "" : " ever")+" Tachyon particles" + (ph.did("ghostify") ? " in this Ghostify" : "") + " was " + shorten(player.dilation.bestTP) + "."
 		setAndMaybeShow('bestTPOverGhostifies', ph.did("ghostify"), '"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
 	}

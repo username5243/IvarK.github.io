@@ -79,6 +79,7 @@ function getExtraGalaxyPower(noDil) {
 	let extraReplGalPower = 0
 	extraReplGalPower += replPower * tsReplEff + tmp.extraRG // tmp.extraRG is a constant
 
+	if (masteryStudies.has(301)) replPower *= 0.75
 	if (masteryStudies.has(291)) replPower = (replPower + extraReplGalPower) * replGalEff
 	else replPower += Math.min(replPower, player.replicanti.gal) * (replGalEff - 1) + extraReplGalPower
 
@@ -88,7 +89,7 @@ function getExtraGalaxyPower(noDil) {
 	let dilGalEff = 1
 	if (hasDilationStudy(1) && !noDil) {
 		dilGalEff = getBaseDilGalaxyEff()
-		if (enB.active("glu", 7)) dilGalEff *= (replGalEff - 1) * tmp.enB.glu7 + 1
+		if (enB.active("glu", 7)) dilGalEff *= (replGalEff - 1) * enB.tmp.glu7 + 1
 
 		x += Math.floor(player.dilation.freeGalaxies) * dilGalEff
 	}

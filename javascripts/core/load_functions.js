@@ -2114,6 +2114,7 @@ function onLoad(noOffline) {
 	updateEternityUpgrades()
 	updateTheoremButtons()
 	updateTimeStudyButtons()
+	toggle_preset_reset(true)
 	updateRespecButtons()
 	updateEternityChallenges()
 	updateEterChallengeTimes()
@@ -2133,11 +2134,6 @@ function onLoad(noOffline) {
 	poData=metaSave["presetsOrder"+(player.boughtDims?"_ers":"")]
 	setAndMaybeShow('bestTP',hasAch("ng3p18") || hasAch("ng3p37"),'"Your best"+(ph.did("ghostify") ? "" : " ever")+" Tachyon particles"+(ph.did("ghostify") ? " in this Ghostify" : "")+" was "+shorten(player.dilation.bestTP)+"."')
 	setAndMaybeShow('bestTPOverGhostifies',(hasAch("ng3p18") || hasAch("ng3p37")) && ph.did("ghostify"),'"Your best-ever Tachyon particles was "+shorten(player.dilation.bestTPOverGhostifies)+"."')
-	getEl('dilationmode').style.display = qMs.tmp.amt >= 15 ? "" : "none"
-	getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
-	getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 11 ? "" : "none"
-	getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
-	getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
 	getEl('autoDisableQuantum').style.display=hasAch("ng3p66")?"":"none"
 	getEl("quarksAnimBtn").style.display=ph.did("quantum")&&player.masterystudies?"inline-block":"none"
 	getEl("quarksAnimBtn").textContent="Quarks: O"+(player.options.animations.quarks?"N":"FF")
@@ -2252,7 +2248,10 @@ function setupNGP31Versions() {
 		delete tmp.qu.qcDataNoDil
 		delete tmp.qu.nonMAGoalReached
 	}
-	tmp.mod.ngp3Build = 20210518
+	if (tmp.mod.ngp3Build < 20210519) {
+		tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
+	}
+	tmp.mod.ngp3Build = 20210519
 }
 
 function checkNGM(imported) {

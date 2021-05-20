@@ -337,7 +337,7 @@ function getMPTBase(focusOn) {
 
 function getMPTExp(focusOn) {
 	let x = 1
-	if (enB.active("pos", 2)) x *= tmp.enB.pos2
+	if (enB.active("pos", 2)) x *= enB.tmp.pos2
 	return x
 }
 	

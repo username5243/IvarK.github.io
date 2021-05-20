@@ -63,7 +63,7 @@ function doAutoEterTick() {
 			feedBlackholeMax()
 		}
 	}
-	if (player.autoEterOptions.tt && !player.dilation.upgrades.includes(10) && qMs.tmp.amt >= 2) maxTheorems()
+	if (player.autoEterOptions.tt && !(hasDilationUpg(10) && getTTProduction() > 1e3)) maxTheorems()
 }
 
 var apLoaded = false
