@@ -3492,7 +3492,7 @@ function setAndMaybeShow(elementName, condition, contents) {
 	}
 }
 
-function runAutoSave(){
+function runAutoSave() {
 	if (!player) return
 	if (!tmp.mod) return
 	if (tmp.mod.autoSave) {
@@ -3840,7 +3840,7 @@ setInterval(function() {
 	//Rounding errors
 	if (!tmp.ngp3 || !ph.did("quantum")) if (player.infinityPoints.lt(100)) player.infinityPoints = player.infinityPoints.round()
 	checkGluonRounding()
-}, 100)
+}, 1000)
 
 function autoPerSecond() {
 	if (isGamePaused()) return

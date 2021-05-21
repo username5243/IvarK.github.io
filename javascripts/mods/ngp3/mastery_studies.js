@@ -58,7 +58,7 @@ var masteryStudies = {
 			return tmp.qu.quarkEnergy >= 2.75
 		},
 		d8() {
-			return enB.pos.engAmt() >= 1800
+			return enB.pos.engAmt() >= 900
 		},
 		d9() {
 			return false
@@ -90,7 +90,7 @@ var masteryStudies = {
 			return "2.75 quantum energy"
 		},
 		d8() {
-			return shorten(1800) + " positronic charge"
+			return shorten(900) + " positronic charge"
 		},
 		d9() {
 			return "COMING IN BETA V0.5"
