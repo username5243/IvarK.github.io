@@ -417,7 +417,7 @@ button, div.storebtn {
 	color: #e50000 !important
 }
 
-.green, #gbRepl, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
+.green, #gbRepl, #quarkEnergy, #bestQE, #enB_glu_amt, #quarkTranslation, #gbEDs, #quarkCharge, #quarkChargeRate {
 	color: #00e500 !important
 }
 
@@ -486,7 +486,7 @@ button, div.storebtn {
     background-color: #4c4c4c !important
 }
 
-#quarkEnergy, #quarkEnergy2, #quarkEnergyEffect1, #quarkEnergyEffect2, #quarkEnergyMult, #quantumFoodAmount, #workerProgress, #growupProgress, #quantumFoodAmountED, #preonEnergy, #quarkEnergyRate, #quarkPower, #quarkPowerThreshold, #rewards, #rewards_AP {
+#preonEnergy, #quarkEnergy2, #quarkEnergyEffect1, #quarkEnergyEffect2, #quarkEnergyMult, #quantumFoodAmount, #workerProgress, #growupProgress, #quantumFoodAmountED, #preonEnergy, #quarkEnergyRate, #quarkPower, #quarkPowerThreshold, #rewards, #rewards_AP {
 	color: #39e539 !important
 }
 

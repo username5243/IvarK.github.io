@@ -49,8 +49,9 @@ var quantumTabs = {
 
 function updateQuantumTabs() {
 	getEl("quarkEnergy").textContent = shorten(tmp.totalQE)
+	getEl("bestQE").textContent = shorten(tmp.qu.bestEnergy)
 	getEl("quarkEnergyMult").textContent = shorten(getQuantumEnergyMult() - getQuantumEnergySubMult())
-	getEl("quarkEnergySub").innerHTML = pos.unl() ? "<br>(" + shorten(pos.save.consumedQE) + " QE and " + shorten(getQuantumEnergySubMult()) + "x were converted)" : ""
+	getEl("quarkEnergySub").textContent = pos.unl() ? "(Positrons turned " + shorten(pos.save.consumedQE) + " Quantum Energy and " + shorten(getQuantumEnergySubMult()) + "x for boosts.)" : ""
 
 	for (var i = 0; i < quantumTabs.tabIds.length; i++) {
 		var id = quantumTabs.tabIds[i]

@@ -790,6 +790,8 @@ strong { color: #0072e5 }
 }
 
 .green,
+#quarkEnergy,
+#bestQE,
 #enB_glu_amt,
 #quarkTranslation,
 #quarkCharge,
@@ -910,7 +912,7 @@ strong { color: #0072e5 }
     text-shadow: none
 }
 
-#quarkEnergy,
+#preonEnergy,
 #quarkEnergyRate,
 #quarkPowerThreshold {
     color: #72e500 !important;

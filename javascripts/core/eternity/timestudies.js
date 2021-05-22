@@ -733,7 +733,6 @@ function load_preset(id) {
 
 	if (tmp.mod.presetReset) {
 		if (!ph.can("eternity")) return
-		if (!confirm("This requires an eternity reset and respec your studies. Are you sure?")) return
 
 		player.respec = true
 		if (tmp.ngp3) player.respecMastery = true
