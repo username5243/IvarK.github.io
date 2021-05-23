@@ -431,7 +431,8 @@ amNewsArray = [
 ["New layers coming out! Tetrify, Pentify, Sexify, Septify, Nonify and finally Decify. Also scamify. Wait, what do you mean i should rename that third one to hexify instead?", true, "am218"],
 ["Why is there a big crunch and a big rip although a heat death would be more likely to happen?", "hasAch('ng3p51')", "am219"],
 ["Thousands of people in protest as Aarex adds scamify for 1 minute.", true, "am220"],
-/*NEXT ID: am216*/
+["We live in not just a universe and a multiverse, but ONE MEGAVERSE.", true, "am221"],
+/*NEXT ID: am222*/
 ];}
 
 document.addEventListener("visibilitychange", function() {if (!document.hidden) {scrollNextMessage();}}, false);
