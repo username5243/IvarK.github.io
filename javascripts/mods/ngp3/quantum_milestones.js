@@ -7,26 +7,30 @@ let qMs = {
 			name: "Speedrun",
 			targ: () => tmp.qu.best,
 			targDisp: timeDisplay,
-			gain: (x) => Math.log10(86400 / x) / Math.log10(2) * 2 + 1
+			gain: (x) => Math.log10(86400 / x) / Math.log10(2) * 2 + 1,
+			nextAt: (x) => Math.pow(2, (1 - x) / 2) * 86400
 		},
 		rl: {
 			name: "Relativistic",
 			targ: () => new Decimal(player.dilation.bestTP || 0),
 			targDisp: shorten,
-			gain: (x) => (x.max(1).log10() - 80) / 5 + 1
+			gain: (x) => (x.max(1).log10() - 80) / 5 + 1,
+			nextAt: (x) => Decimal.pow(10, (x - 1) * 5 + 80)
 		},
 		en: {
 			name: "Enegretic",
 			targ: () => tmp.qu.bestEnergy || 0,
 			targDisp: shorten,
-			gain: (x) => Math.sqrt(x) * 2
+			gain: (x) => Math.sqrt(x) * 2,
+			nextAt: (x) => Math.pow(x / 2, 2)
 		},
 		ch: {
 			name: "Challenging",
 			unl: () => QCs.unl(),
 			targ: () => 0,
 			targDisp: getFullExpansion,
-			gain: (x) => 0
+			gain: (x) => 0,
+			nextAt: (x) => 1/0
 		}
 	},
 	update() {
@@ -96,6 +100,7 @@ let qMs = {
 			if (unl) {
 				getEl("qMs_" + type + "_target").textContent = typeData.targDisp(qMs.tmp["targ_" + type])
 				getEl("qMs_" + type + "_points").textContent = getFullExpansion(qMs.tmp["amt_" + type])
+				getEl("qMs_" + type + "_next").textContent = typeData.targDisp(typeData.nextAt(qMs.tmp["amt_" + type] + 1))
 			}
 		}
 

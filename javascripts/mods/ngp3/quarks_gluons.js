@@ -920,11 +920,14 @@ function updateGluonsTabOnUpdate(mode) {
 	let types = ["rg", "gb", "br"]
 	for (var i = 0; i < types.length; i++) {
 		var type = types[i]
-		getEl("entangle_" + type).className = "gluonupgrade " + (typeUsed == type ? "chosenbtn" : "rg")
+		getEl("entangle_" + type).className = "gluonupgrade " + type
+		getEl("entangle_" + type + "_pos").className = "gluonupgrade " + type
 		getEl("entangle_" + type + "_bonus").textContent = ""
 	}
 
-	getEl("entangle_" + typeUsed + "_bonus").textContent = "Entangled Bonus: +" + shorten(getQEGluonsPortion() * (getQuantumEnergyMult() - getQuantumEnergySubMult())) + " quantum energy"
+	getEl("entangle_" + typeUsed).className = "gluonupgrade chosenbtn"
+	getEl("entangle_" + typeUsed + "_pos").className = "gluonupgrade  chosenbtn"
+	getEl("entangle_" + typeUsed + "_bonus").textContent = "Entanglement Bonus: +" + shorten(getQEGluonsPortion() * (getQuantumEnergyMult() - getQuantumEnergySubMult())) + " quantum energy"
 
 	getEl("masterNote").style.display = enB.mastered("glu", 1) ? "" : "none"
 }
