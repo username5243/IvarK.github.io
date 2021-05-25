@@ -289,7 +289,7 @@ function multiplyPC5Costs(cost, tier) {
 	
 function canBuyDimension(tier) {
 	if (tmp.ri) return false
-	if (QCs.in(1)) return false
+	if (QCs.in(3)) return false
 	if (tier > getMaxUnlockableDimensions()) return false
 	if (tier > 1 && getAmount(tier - 1) == 0 && getEternitied() < 30) return false
 

@@ -115,7 +115,6 @@ function toggleAllMetaDims() {
 	}
 
 	for (dim = 1; dim <= 8; dim++) player.autoEterOptions["md" + dim] = turnOn
-	getEl("metaMaxAllDiv").style.display = turnOn && qMs.tmp.amt >= 28 ? "none" : ""
 }
 
 //v1.997
@@ -174,37 +173,51 @@ function fillAll() {
 
 //v1.99872
 function maxAllDilUpgs() {
+	let dt = player.dilation.dilatedTime.min("1e100000")
 	let update
 	for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
-		var id = "r" + MAX_DIL_UPG_PRIORITIES[i]
+		var num = MAX_DIL_UPG_PRIORITIES[i]
 		if (isDilUpgUnlocked(id)) {
-			if (id == "r1") {	
+			if (num == 1) {	
 				var cost = Decimal.pow(10, player.dilation.rebuyables[1] + 5)
-				if (player.dilation.dilatedTime.gte(cost)) {
-					var toBuy = Math.floor(player.dilation.dilatedTime.div(cost).times(9).add(1).log10())
+				if (dt.gte(cost)) {
+					var toBuy = Math.floor(dt.div(cost).times(9).add(1).log10())
 					var toSpend = Decimal.pow(10, toBuy).sub(1).div(9).times(cost)
-					player.dilation.dilatedTime = player.dilation.dilatedTime.sub(player.dilation.dilatedTime.min(cost))
+					dt = dt.sub(dt.min(cost))
 					player.dilation.rebuyables[1] += toBuy
 					update = true
 				}
-			} else if (id == "r2") {
+			} else if (num == 2) {
 				if (canBuyGalaxyThresholdUpg()) {
 					if (tmp.ngp3) {
 						var cost = Decimal.pow(10, player.dilation.rebuyables[2] * 2 + 6)
-						if (player.dilation.dilatedTime.gte(cost)) {
-							var toBuy = Math.floor(player.dilation.dilatedTime.div(cost).times(99).add(1).log(100))
+						if (dt.gte(cost)) {
+							var toBuy = Math.floor(dt.div(cost).times(99).add(1).log(100))
 							var toSpend = Decimal.pow(100,toBuy).sub(1).div(99).times(cost)
-							player.dilation.dilatedTime = player.dilation.dilatedTime.sub(player.dilation.dilatedTime.min(cost))
+							dt = dt.sub(dt.min(cost))
 							player.dilation.rebuyables[2] += toBuy
 							resetDilationGalaxies()
-							update=true
+							update = true
 						}
-					} else if (buyDilationUpgrade("r2", true, true)) update = true
+					} else {
+						player.dilation.dilatedTime = dt
+						if (buyDilationUpgrade("r2", true, true)) update = true
+					}
 				}
-			} else while (buyDilationUpgrade(id, true, true)) update = true
+			} else {
+				let data = doBulkSpent(dt, (x) => getRebuyableDilUpgCost(num, x), player.dilation.rebuyables[num] || 0)
+
+				if (data.toBuy > 0) {
+					dt = data.res
+					player.dilation.rebuyables[num] = (player.dilation.rebuyables[num] || 0) + data.toBuy
+					update = true
+				}
+			}
 		}
 	}
 	if (update) {
+		player.dilation.dilatedTime = dt
+
 		updateDilationUpgradeCosts()
 		updateDilationUpgradeButtons()
 	}

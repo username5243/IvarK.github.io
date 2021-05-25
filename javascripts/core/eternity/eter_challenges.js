@@ -277,7 +277,6 @@ function startEternityChallenge(n) {
 		player.dilation.active = false
 		if (tmp.ngp3 && ph.did("quantum")) updateColorCharge()
 	}
-	if (qMs.tmp.amt < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor() : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	tmp.extraRG = 0
 	resetReplicantiUpgrades()

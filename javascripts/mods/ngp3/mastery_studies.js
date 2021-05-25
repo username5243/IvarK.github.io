@@ -7,8 +7,8 @@ var masteryStudies = {
 			//Quantum
 			271: 3.90625e71,
 			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
-			291: 1/0, 292: 1.28e77, 293: 2.5e74, 294: 1.28e77, 295: 1/0,
-			301: 1/0, 302: 1/0, 303: 1/0, 304: 1/0,
+			292: 1.28e77, 293: 2.5e74, 294: 1.28e77,
+			302: 1/0, 303: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
 		dil: {7: 1e74, 8: 3e76, 9: 1e85, 10: 1e87, 11: 1e90, 12: 1e92, 13: 1e95, 14: 1e97}
@@ -22,8 +22,8 @@ var masteryStudies = {
 			//Quantum
 			271: 1 / 128,
 			281: 5, 282: 2, 283: 2, 284: 5,
-			291: 8, 292: 2, 293: 1 / 256, 294: 2, 295: 8,
-			301: 1 / 8, 302: 2, 303: 2, 304: 1 / 8},
+			292: 8, 293: 1 / 256, 294: 8,
+			302: 1 / 2, 303: 1 / 2},
 		ec: {},
 		dil: {}
 	},
@@ -144,14 +144,20 @@ var masteryStudies = {
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
-			return x / Math.pow(Math.log10(x + 1) + 1, 2) * 2
+			x = x / Math.pow(Math.log10(x + 1) + 1, 2) * 2
+
+			if (enB.active("pos", 7)) x += enB.tmp.pos7
+			return x
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
 			return 0.7 * Math.pow(x / 1e9 + 1, 0.2)
 		},
 		284() {
-			return (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 20
+			let x = (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 20
+
+			if (enB.active("pos", 7)) x += enB.tmp.pos7
+			return x
 		},
 		292() {
 			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
@@ -242,8 +248,8 @@ var masteryStudies = {
 		//Quantum
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
-		281: [291, 293], 282: [293], 283: [293], 284: [293, 295],
-		291: [301], 293: [292, 294, 302, 303, "d8"], 295: [304],
+		281: [293], 282: [293], 283: [293], 284: [293],
+		292: [302], 293: [292, 294, "d8"], 294: [303],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
@@ -299,7 +305,7 @@ function convertMasteryStudyIdToDisplay(x) {
 function updateMasteryStudyCosts() {
 	var oldBought = masteryStudies.bought
 	masteryStudies.latestBoughtRow = 0
-	masteryStudies.costMult = QCs.in(1) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
+	masteryStudies.costMult = QCs.in(3) ? 1e-32 : hasAch("ng3p12") ? 0.25 : 1
 	masteryStudies.bought = 0
 	masteryStudies.ttSpent = 0
 	for (id = 0; id<player.masterystudies.length; id++) {

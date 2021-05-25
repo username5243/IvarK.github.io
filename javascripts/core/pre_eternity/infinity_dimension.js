@@ -9,7 +9,7 @@ function getInfinityDimensionMultiplier(tier){
 }
 
 function maxAllID() {
-	if (QCs.in(1)) return
+	if (QCs.in(3)) return
 
 	if (inNGM(5)) maxAllIDswithAM()
 	for (let t = 1; t <= 8; t++) {
@@ -242,7 +242,7 @@ function getInfBuy10Mult(tier) {
 }
 
 function buyManyInfinityDimension(tier, auto) {
-	if (QCs.in(1)) return
+	if (QCs.in(3)) return
 
   	if (player.pSac !== undefined) buyIDwithAM(tier, auto)
   	if (player.eterc8ids <= 0 && player.currentEternityChall == "eterc8") return false
@@ -264,7 +264,7 @@ function buyManyInfinityDimension(tier, auto) {
 }
 
 function buyMaxInfDims(tier, auto) {
-	if (QCs.in(1)) return
+	if (QCs.in(3)) return
 
 	if (tmp.ngC) ngC.condense.ids.max(tier)
 

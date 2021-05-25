@@ -129,7 +129,7 @@ function getIC3EffFromFreeUpgs() {
 }
 
 function isTDUnlocked(t) {
-	if (QCs.in(1)) return false
+	if (QCs.in(3)) return false
 	if (t > 8) return false
 	if (inNGM(4)) {
 		if (haveSixDimensions() && t > 6) return false

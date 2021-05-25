@@ -119,7 +119,7 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 	player.challengeTarget = 0
 	player.autoSacrifice = keepABnICs || hasAch("r133") ? player.autoSacrifice : 1
 	player.replicanti = {
-		amount: new Decimal(oheHeadstart ? 1 : 0),
+		amount: qMs.tmp.amt >= 25 ? player.replicanti.amount.pow(0.95).floor() : new Decimal(oheHeadstart ? 1 : 0),
 		unl: oheHeadstart,
 		chance: 0.01,
 		chanceCost: new Decimal(inNGM(2) ? 1e90 : 1e150),
@@ -382,7 +382,7 @@ function doEternityResetStuff(layer = 4) {
 		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
 	}
 
-	if (qMs.tmp.amt < 24) player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
 	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0

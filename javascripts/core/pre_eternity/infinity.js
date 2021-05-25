@@ -222,7 +222,7 @@ function doAfterResetCrunchStuff(g11MultShown){
 	updateSingularity()
 	updateDimTechs()
 	if (player.replicanti.unl && !hasAch("r95")) player.replicanti.amount = new Decimal(1)
-	if (!tmp.ngC && qMs.tmp.amt < 28 && !hasAch("ng3p67")) player.replicanti.galaxies = (hasTS(33)) ? Math.floor(player.replicanti.galaxies / 2) : 0
+	if (!tmp.ngC && !hasAch("ng3p67")) player.replicanti.galaxies = hasTS(33) ? Math.floor(player.replicanti.galaxies / 2) : 0
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDsOnNGM4()

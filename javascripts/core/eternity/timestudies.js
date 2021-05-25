@@ -235,7 +235,7 @@ function canBuyStudy(name) {
 		}
 	}
 
-	if (row > 1 && qMs.tmp.amt >= 30) return hasRow(row - 1) 
+	if (row > 1 && qMs.tmp.amt >= 32) return hasRow(row - 1) 
 	if (tmp.ngC) {
 		if (name == 61 && total < 18) return false
 		if (name == 151 && total < 195) return false
@@ -967,8 +967,7 @@ let tsMults = {
 		let x = Math.floor(tmp.rmPseudo.e / 1e3)
 
 		let softcapEff = 2
-		let scLater = enB.active("glu", 10) ? enB.tmp.glu10 : 0
-		if (x > 100 + scLater) x = Math.sqrt((x - scLater) * 100) + scLater
+		if (x > 100) x = Math.sqrt(x * 100)
 		return Math.floor(x)
 	},
 	226() {

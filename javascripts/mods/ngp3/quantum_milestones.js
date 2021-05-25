@@ -78,17 +78,7 @@ let qMs = {
 		getEl('rebuyupgauto').style.display = qMs.tmp.amt >= 7 ? "" : "none"
 		getEl('metaboostauto').style.display = qMs.tmp.amt >= 14 ? "" : "none"
 		getEl("autoBuyerQuantum").style.display = qMs.tmp.amt >= 18 ? "" : "none"
-		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 26 ? "" : "none"
-
-		if (qMs.tmp.amt >= 28) {
-			var removeMaxAll = false
-			for (var d = 1; d < 9; d++) {
-				if (player.autoEterOptions["md" + d]) {
-					if (d > 7) removeMaxAll = true
-				} else break
-			}
-			getEl("metaMaxAllDiv").style.display = removeMaxAll ? "none" : ""
-		}
+		getEl('rebuyupgmax').style.display = qMs.tmp.amt < 24 ? "" : "none"
 	},
 	updateDisplayOnTick() {
 		let types = qMs.data.types
@@ -117,7 +107,7 @@ let qMs = {
 		getEl("qMs_reward_" + id).className = "qMs_toggle_" + (!on ? "on" : "off")
 	},
 
-	max: 29,
+	max: 32,
 	1: {
 		req: 1,
 		eff: () => "Start with all Eternity Challenges completed and EC completions no longer respec studies",
@@ -237,30 +227,46 @@ let qMs = {
 	},
 	24: {
 		req: 50,
+		disablable: true,
 		eff: () => "Auto-dilation upgrades maximize all repeatable dilation upgrades",
 		effGot: () => "Auto-dilation upgrades now can maximize all repeatable dilation upgrades."
 	},
 	25: {
+		req: 60,
+		eff: () => "Each Quantum reduces Replicantis by ^0.95.",
+		effGot: () => "Each following Quantum run now reduces Replicantis by ^0.95."
+	},
+	26: {
 		req: 75,
 		eff: () => "Start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter (not implemented)",
 		effGot: () => "You now start with one dilation worth of TP at " + shorten(Number.MAX_VALUE) + " antimatter"
 	},
-	26: {
+	27: {
+		req: 85,
+		eff: () => "All Infinity-related autobuyers fire for each tick",
+		effGot: () => "All Infinity-related autobuyers now fire for each tick",
+	},
+	28: {
 		req: 100,
 		eff: () => "Unlock the autobuyer for Entangled Boosters (not implemented)",
 		effGot: () => "You now can automatically get Entangled Boosters."
 	},
-	27: {
+	29: {
 		req: 150,
 		eff: () => "Unlock the autobuyer for Positronic Boosters (not implemented)",
 		effGot: () => "You now can automatically get Positronic Boosters."
 	},
-	28: {
+	30: {
 		req: 200,
 		eff: () => "Able to maximize Meta-Dimension Boosts",
 		effGot: () => "You now can maximize Meta-Dimension Boosts."
 	},
-	29: {
+	31: {
+		req: 250,
+		eff: () => "???",
+		effGot: () => "???",
+	},
+	32: {
 		req: 300,
 		eff: () => "Able to purchase all time studies without blocking",
 		effGot: () => "You now can buy every single time study."

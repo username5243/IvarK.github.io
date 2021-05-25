@@ -769,7 +769,8 @@ function formatPercentage(x, digits = 1) {
 	return getFullExpansion(Math.round(x.toNumber()))
 }
 
-function formatReductionPercentage(x, digits = 1) {
+function formatReductionPercentage(x, digits = 1, maxDigits) {
 	digits += Math.floor(Math.log10(x))
+	if (maxDigits) digits = Math.min(digits, maxDigits)
 	return (100 - 100 / x).toFixed(digits)
 }

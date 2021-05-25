@@ -222,6 +222,7 @@ function updateColorPowers() {
 
 	//Green
 	colorBoosts.g = Math.log10(tmp.qu.colorPowers.g * 3 + 1) * 2 + 1
+	if (enB.active("pos", 7)) colorBoosts.g += enB.tmp.pos7
 
 	//Blue
 	colorBoosts.b = Math.pow(Math.max(tmp.qu.colorPowers.b * 1.5 + 1, 1), 2)
@@ -509,62 +510,88 @@ let enB = {
 				return Math.pow(x / 3 + 1, 0.2)
 			},
 			effDisplay(x) {
-				return formatReductionPercentage(x, 2)
+				return formatReductionPercentage(x, 2, 3)
 			}
 		},
 		6: {
-			req: 1/0,
-			masReq: 18,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
 			type: "g",
 			eff(x) {
-				return (Math.log10(x + 1) + 1) / 4
+				return Math.pow(Math.log2(x + 1) / 2 + 1, 2)
 			},
 			effDisplay(x) {
 				return shorten(x)
 			}
 		},
 		7: {
-			req: 1/0,
-			masReq: 21,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
 			type: "r",
 			eff(x) {
-				return Math.min(Math.cbrt(x + 1) - 1, 1)
+				let exp = 1
+				return Math.pow(getReplGalaxyEff(), exp)
 			},
 			effDisplay(x) {
-				return formatPercentage(x)
+				return formatPercentage(x - 1)
 			}
 		},
 		8: {
-			req: 1/0,
-			masReq: 24,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
 			type: "b",
 			eff(x) {
-				return 1.25
+				return 1.25 - 0.25 / Math.sqrt(x / 100 + 1)
 			},
 			effDisplay(x) {
-				return "x^" + shorten(x)
+				return "x^" + x.toFixed(3)
 			}
 		},
 		9: {
-			req: 1/0,
-			masReq: 27,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
 			type: "g",
 			eff(x) {
-				return Math.pow(2 - 1 / Math.pow(x + 1, 0.1), 2)
+				return Math.sqrt(9 - 8 / (Math.log2(x + 1) + 1))
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return x.toFixed(3)
 			}
 		},
 		10: {
-			req: 1/0,
-			masReq: 30,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
 			type: "g",
 			eff(x) {
-				return Math.log10(x + 1) * 100
+				return Math.floor(Math.pow(x, 0.1))
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return getFullExpansion(x)
 			}
 		}
 	},
@@ -660,7 +687,9 @@ let enB = {
 			type: "b",
 			eff(x) {
 				if (enB.mastered("pos", 3)) x = Math.max(x, enB.pos.masEff(enB.pos[3].chargeReq))
-				return Math.log10(x / 4e3 + 1) + 1
+				x = Math.log10(x / 4e3 + 1) + 1
+				if (x > 2) x = 3 - 2 / x
+				return x
 			},
 			effDisplay(x) {
 				return shorten(Decimal.pow(Number.MAX_VALUE, 1.2 / x))
@@ -670,6 +699,11 @@ let enB = {
 			req: 4,
 			masReq: 10,
 
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
 			chargeReq: 500,
 			activeReq() {
 				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
@@ -677,6 +711,7 @@ let enB = {
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 4) ? " (full effect)" : "")
 			},
+			*/
 
 			type: "g",
 			eff(x) {
@@ -688,8 +723,23 @@ let enB = {
 			}
 		},
 		5: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1e5,
+			activeReq() {
+				return enB.mastered("pos", 5) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 5) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
 				return 0
@@ -699,58 +749,135 @@ let enB = {
 			}
 		},
 		6: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1e5,
+			activeReq() {
+				return enB.mastered("pos", 6) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 6) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
-				return 1
+				let exp = 1 - 1 / Math.sqrt(Math.log2(x + 1) / 2 + 1)
+				return Math.pow(getReplGalaxyEff(), exp)
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x - 1)
 			}
 		},
 		7: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1e5,
+			activeReq() {
+				return enB.mastered("pos", 7) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 7) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.log10(x / 1e3 + 1) / 5 + 1
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x - 1)
 			}
 		},
 		8: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1e5,
+			activeReq() {
+				return enB.mastered("pos", 8) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 8) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
-				return 1
+				let exp = 1
+				return Math.pow(tsMults[232](), exp)
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return formatPercentage(x - 1)
 			}
 		},
 		9: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1e5,
+			activeReq() {
+				return enB.mastered("pos", 9) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 9) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
-				return 1
+				return 0
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return x.toFixed(3)
 			}
 		},
 		10: {
-			req: 1/0,
-			masReq: 1/0,
+			req: 15,
+			masReq: 15,
+
+			//Temp
+			activeReq: () => false,
+			activeDispReq: () => "(disabled due to not checking its balancing)",
+
+			/*
+			chargeReq: 1/0,
+			activeReq() {
+				return enB.mastered("pos", 10) || pos.save.eng >= this.chargeReq
+			},
+			activeDispReq() {
+				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 10) ? " (full effect)" : "")
+			},
+			*/
+
 			type: "r",
 			eff(x) {
-				return 1
+				return Math.sqrt(1 / (Math.log2(x) / 2 + 1))
 			},
 			effDisplay(x) {
-				return shorten(x)
+				return x.toFixed(3)
 			}
 		}
 	},
@@ -825,7 +952,7 @@ function updateQuarksTab(tab) {
 	getEl("bluePower").textContent = shorten(tmp.qu.colorPowers.b)
 
 	getEl("redTranslation").textContent = formatPercentage(colorBoosts.r - 1)
-	getEl("greenTranslation").textContent = formatReductionPercentage(colorBoosts.g)
+	getEl("greenTranslation").textContent = shorten(colorBoosts.g)
 	getEl("blueTranslation").textContent = shorten(colorBoosts.b)
 
 	getEl("quarkEnergyEffect1").textContent = formatPercentage(tmp.qkEng.eff1 - 1)

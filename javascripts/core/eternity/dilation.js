@@ -356,7 +356,10 @@ function isDilUpgUnlocked(id) {
 
 function getDilUpgCost(id) {
 	id = toString(id)
-	if (id[0] == "r") return getRebuyableDilUpgCost(id[1])
+	if (id[0] == "r") {
+		let cost = getRebuyableDilUpgCost(id[1])
+		return cost.gte("1e100000") ? new Decimal(1/0) : cost
+	}
 	let cost = DIL_UPG_COSTS[id]
 	let ngpp = id.split("ngpp")[1]
 	if (ngpp) {
@@ -369,16 +372,21 @@ function getDilUpgCost(id) {
 	return cost
 }
 
-function getRebuyableDilUpgCost(id) {
+function getRebuyableDilUpgCost(id, lvl) {
+	if (!lvl) lvl = player.dilation.rebuyables[id] || 0
+
 	let costGroup = DIL_UPG_COSTS["r"+id]
-	let amount = player.dilation.rebuyables[id] || 0
-	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], amount))
+	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], lvl))
+
 	if (tmp.mod.nguspV) {
 		if (id >= 4) cost = cost.times(1e7)
 		if (id >= 3 && cost.gte(1e25)) cost = Decimal.pow(10, Math.pow(cost.log10() / 2.5 - 5, 2))
 	} else if (id >= 3) {
-		if (player.meta != undefined && amount >= costGroup[2]) {
-			let costSS = Decimal.pow(costGroup[1], (amount - costGroup[2] + 1) * (amount - costGroup[2] + 2) / 4)
+		if (player.meta != undefined && lvl >= costGroup[2]) {
+			let exp = 2
+			if (id == 4 && QCs.isRewardOn(7)) exp = QCs.tmp.rewards[7]
+
+			let costSS = Decimal.pow(costGroup[1], (lvl - costGroup[2] + 1) * Math.pow(lvl - costGroup[2] + 2, exp - 1) / 4)
 			if (id == 3 && enB.active("glu", 5)) costSS = costSS.pow(1 / enB.tmp.glu5)
 			return cost.times(costSS)
 		}
@@ -396,9 +404,6 @@ function buyDilationUpgrade(pos, max, isId) {
 	let rebuyable = toString(id)[0] == "r"
 	if (rebuyable) {
 		// Rebuyable
-		if (cost.gt("1e100000")) return
-		if (id[1] == 2 && !canBuyGalaxyThresholdUpg()) return
-
 		player.dilation.dilatedTime = player.dilation.dilatedTime.sub(cost)
 		player.dilation.rebuyables[id[1]] = (player.dilation.rebuyables[id[1]] || 0) + 1
 		
@@ -406,11 +411,7 @@ function buyDilationUpgrade(pos, max, isId) {
 			if (!tmp.ngp3) player.dilation.dilatedTime = new Decimal(0)
 			resetDilationGalaxies()
 		}
-		if (id[1] == 3) {
-			player.eternityBuyer.tpUpgraded = true
-			if (hasAch("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
-		}
-		if (id[1] == 4) player.eternityBuyer.tpUpgraded = true
+		if (id[1] == 3 && hasAch("ng3p13")) setTachyonParticles(player.dilation.tachyonParticles.times(getDil3Power()))
 	} else {
 		// Not rebuyable
 		if (hasDilationUpg(id)) return
@@ -536,10 +537,11 @@ function canBuyGalaxyThresholdUpg() {
 
 function getFreeGalaxyThresholdIncrease() {
 	let thresholdMult = 1.35
+	if (QCs.isRewardOn(8)) thresholdMult = QCs.tmp.rewards[8]
 
 	let dil2 = getDilUpgPower(2)
-	if (dil2 > 0) thresholdMult += 3.65 * Math.pow(0.8, dil2)
-	else thresholdMult += 3.65
+	if (dil2 > 0) thresholdMult += (5 - thresholdMult) * Math.pow(0.8, dil2)
+	else thresholdMult = 5
 
 	if (tmp.ngp3 && dil2 > 30) thresholdMult = Math.pow(thresholdMult, 1 / Math.sqrt(Math.log10(dil2 / 3)))
 
@@ -559,6 +561,8 @@ function gainDilationGalaxies() {
 
 	player.dilation.freeGalaxies = gained * galaxyMult
 	player.dilation.nextThreshold = Decimal.pow(thresholdMult, gained).times(thresholdStart)
+
+	if (baseGain > oldGals && QCs.isRewardOn(2)) replicantiIncrease((baseGain - oldGals) * QCs.tmp.rewards[2] * 10)
 }
 
 function getFreeGalaxyGainMult() {
@@ -583,6 +587,7 @@ function resetDilationGalaxies() {
 function getBaseDilGalaxyEff() {
 	let x = 1
 	if (masteryStudies.has(263)) x *= 1.25
+	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x

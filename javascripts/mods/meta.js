@@ -130,7 +130,7 @@ function metaBoost() {
 	if (!(player.meta[req.tier].bought >= req.amount)) return
 
 	let isNU1ReductionActive = hasNU(1) ? !tmp.qu.bigRip.active : false
-	if (qMs.tmp.amt >= 28) {
+	if (qMs.tmp.amt >= 30) {
 		if (isNU1ReductionActive && player.meta.resets < 110) {
 			player.meta.resets = Math.min(player.meta.resets + Math.floor((player.meta[8].bought - req.amount) / (req.mult + 1)) + 1, 110)
 			req = getMetaShiftRequirement()
@@ -244,16 +244,6 @@ for (let i = 1; i <= 8; i++) {
 	getEl("meta" + i).onclick = function () {
 		if (moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) player.autoEterOptions["md" + i] = !player.autoEterOptions["md" + i]
 		else metaBuyOneDimension(i)
-
-		if (qMs.tmp.amt >= 28) {
-			var removeMaxAll = false
-			for (var d = 1; d <= 8; d++) {
-				if (player.autoEterOptions["md" + d]) {
-					if (d == 8) removeMaxAll = true
-				} else break
-			}
-			getEl("metaMaxAllDiv").style.display = removeMaxAll ? "none" : ""
-		}
 	}
 	getEl("metaMax" + i).onclick = function () {
 		if (shiftDown && moreEMsUnlocked() && (ph.did("quantum") || getEternitied() >= 1e12)) metaBuyOneDimension(i)

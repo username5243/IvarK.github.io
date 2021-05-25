@@ -245,7 +245,7 @@ function preHiggsNGp3AchieveCheck() {
 	if (player.galaxies >= 900 && !player.dilation.studies.includes(1)) giveAchievement("No more tax fraud!")
 	if (player.money.gte(getOldAgeRequirement())) giveAchievement("Old age")
 	if (player.infinityPoints.log10() >= 4e5 && ableToGetRid3) giveAchievement("I already got rid of you...")
-	if (player.money.gte(Number.MAX_VALUE) && QCs.in(1)) giveAchievement("Infinity Morals")
+	if (player.money.gte(Number.MAX_VALUE) && QCs.in(3)) giveAchievement("Infinity Morals")
 	if (player.eightBought >= 4e6 && (getTotalRGs() + player.dilation.freeGalaxies) < 1) giveAchievement("Intergalactic")
 	if (player.infinityPoints.log10() >= 3.54e5 && ableToGetRid4) giveAchievement("Seriously, I already got rid of you.")
 	if (player.meta.bestAntimatter.log10() >= 333 && player.meta[2].amount.eq(0) && player.meta.resets == 0) giveAchievement("ERROR 500: INTERNAL DIMENSION ERROR")

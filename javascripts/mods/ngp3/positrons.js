@@ -39,6 +39,9 @@ let POSITRONS = {
 		pos.save.on = !pos.save.on
 		quantum(false, true)
 	},
+	maxSacMult() {
+		return QCs.isRewardOn(4) ? QCs.tmp.rewards[4] : 0.25
+	},
 	types: {
 		ng: {
 			pow() {
@@ -47,7 +50,7 @@ let POSITRONS = {
 				return x
 			},
 			sacGals(pow) {
-				return Math.min(player.galaxies / 4, pow)
+				return Math.min(player.galaxies * pos.maxSacMult(), pow)
 			},
 			qeToGals(qe) {
 				return (Math.log10(qe + 1) / Math.log10(2)) * 5e3
@@ -66,7 +69,7 @@ let POSITRONS = {
 				return x
 			},
 			sacGals(pow) {
-				return pow
+				return Math.min(player.replicanti.galaxies * pos.maxSacMult(), pow)
 			},
 			qeToGals(qe) {
 				return Math.floor(qe * qe * 1e4)
@@ -83,7 +86,7 @@ let POSITRONS = {
 				return 0
 			},
 			sacGals(pow) {
-				return pow
+				return 1
 			},
 			qeToGals(qe) {
 				return Math.floor(qe * 1e4)
@@ -100,7 +103,7 @@ let POSITRONS = {
 				return 0
 			},
 			sacGals(pow) {
-				return pow
+				return Math.min(player.dilation.freeGalaxies * pos.maxSacMult(), pow)
 			},
 			qeToGals(qe) {
 				return Math.floor(qe * qe * 1e4)
@@ -124,11 +127,14 @@ let POSITRONS = {
 		let qeMultMax = qeMult / (Math.log10(qeMult * 10 + 1) + 1)
 
 		if (pos.on()) {
-			let mdbs = player.meta.resets / 4
-			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) * 4
+			let mdbDiv = 0.25
+			if (QCs.isRewardOn(5)) mdbDiv = QCs.tmp.rewards[5]
+
+			let mdbs = player.meta.resets * mdbDiv
+			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) / mdbDiv
 
 			data.sac_mdb = Math.floor(Math.min(mdbs, max_mdbs))
-			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb / 4) - 1.5)
+			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb * mdbDiv) - 1.5)
 			pos.save.amt = Math.pow(data.sac_mdb * 15, 2)
 		} else {
 			data.sac_mdb = 0

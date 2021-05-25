@@ -492,31 +492,23 @@
 				<table class="table" id="studytable">
 					<tr>
 						<td><button class="timestudylocked" id="timestudy281" style='font-size:9px' onclick='buyMasteryStudy("t", 281)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy282" style='font-size:9px' onclick='buyMasteryStudy("t", 282)'></button></td>
 						<td><button class="timestudylocked" id="timestudy283" style='font-size:9px' onclick='buyMasteryStudy("t", 283)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy284" style='font-size:9px' onclick='buyMasteryStudy("t", 284)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy291" style='font-size:9px' onclick='buyMasteryStudy("t", 291)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
 						<td><button class="timestudylocked" id="timestudy292" style='font-size:9px' onclick='buyMasteryStudy("t", 292)'></button></td>
 						<td><button class="timestudylocked" id="timestudy293" style='font-size:9px' onclick='buyMasteryStudy("t", 293)'></button></td>
 						<td><button class="timestudylocked" id="timestudy294" style='font-size:9px' onclick='buyMasteryStudy("t", 294)'></button></td>
-						<td><button class="timestudylocked" style="visibility: hidden"></button></td>
-						<td><button class="timestudylocked" id="timestudy295" style='font-size:9px' onclick='buyMasteryStudy("t", 295)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="timestudy301" style='font-size:9px' onclick='buyMasteryStudy("t", 301)'></button></td>
 						<td><button class="timestudylocked" id="timestudy302" style='font-size:9px' onclick='buyMasteryStudy("t", 302)'></button></td>
 						<td><button class="timestudylocked" id="dilstudy8" onclick='buyMasteryStudy("d", 8)'>Unlock Quantum Challenges<br><span id="ds8Cost"></span><span id="ds8Req"></span></button></td>
 						<td><button class="timestudylocked" id="timestudy303" style='font-size:9px' onclick='buyMasteryStudy("t", 303)'></button></td>
-						<td><button class="timestudylocked" id="timestudy304" style='font-size:9px' onclick='buyMasteryStudy("t", 304)'></button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1553,7 +1545,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 1.03)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 2)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4439,7 +4431,7 @@
 							You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
 						</td>
 						<td>
-							You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>% slower replicate interval scaling.
+							You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
 						</td>
 						<td>
 							You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
@@ -4581,7 +4573,7 @@
 						<br>
 						<span id="enB_glu10_type"></span>
 						<br>
-						Time study 225 softcap starts <span id="enB_glu10_eff" style="font-size:35px"></span> later.
+						Protect <span id="enB_glu10_eff" style="font-size:35px"></span> for each galaxy type from converting into Positrons.
 					</td>
 					<td></td>
 					<td></td>
@@ -4724,9 +4716,15 @@
 					<!-- NEXT ROW -->
 					<tr>
 						<td class="milestoneText" id="qMs_req_29"></td>
+						<td class="milestoneText" id="qMs_req_30"></td>
+						<td class="milestoneText" id="qMs_req_31"></td>
+						<td class="milestoneText" id="qMs_req_32"></td>
 					</tr>
 					<tr>
 						<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_31" onclick="qMs.toggle(31)"></button></td>
+						<td><button class="qMs_locked" id="qMs_reward_32" onclick="qMs.toggle(32)"></button></td>
 					</tr>
 				</table>
 			</div>
@@ -4842,7 +4840,7 @@
 						<br>
 						<span id="enB_pos6_type"></span>
 						<br>
-						Boost something by <span id="enB_pos6_eff" style="font-size:35px"></span>x.
+						Add every multiplier to replicate interval scalings by +<span id="enB_pos6_eff" style="font-size:35px"></span>x. (also dependent on themselves)
 					</td>
 				<tr>
 				</tr>
@@ -4852,7 +4850,7 @@
 						<br>
 						<span id="enB_pos7_type"></span>
 						<br>
-						Boost something by <span id="enB_pos7_eff" style="font-size:35px"></span>x.
+						All galaxies are <span id="enB_pos7_eff" style="font-size:35px"></span>% stronger in Quantum Challenges.
 					</td>
 				<tr>
 				</tr>
@@ -4862,7 +4860,7 @@
 						<br>
 						<span id="enB_pos8_type"></span>
 						<br>
-						Boost something by <span id="enB_pos8_eff" style="font-size:35px"></span>x.
+						Partially share TS232 power to all galaxies by +<span id="enB_pos8_eff" style="font-size:35px"></span>%.
 					</td>
 				</tr>
 				<tr>
@@ -4872,7 +4870,7 @@
 						<br>
 						<span id="enB_pos9_type"></span>
 						<br>
-						Boost something by <span id="enB_pos9_eff" style="font-size:35px"></span>x.
+						The slowdown effect of Replicated Boosts starts <span id="enB_pos9_eff" style="font-size:35px"></span> later.
 					</td>
 				</tr>
 				<tr>
@@ -4882,7 +4880,7 @@
 						<br>
 						<span id="enB_pos10_type"></span>
 						<br>
-						Boost something by <span id="enB_pos10_eff" style="font-size:35px"></span>x.
+						Reduce the goal of all Paired Challenges to ^<span id="enB_pos10_eff" style="font-size:35px"></span>.
 					</td>
 				</tr>
 			</table></div>

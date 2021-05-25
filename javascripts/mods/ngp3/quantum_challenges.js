@@ -19,7 +19,29 @@ let QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "There are only Meta Dimensions, but they also produce antimatter. Also, all meta-antimatter boosts are based on meta-antimatter effect. Finally, Mastery Studies are extremely cheaper.",
+			desc: () => "Replicated Galaxies are replaced with Replicated Boosts.",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "You can keep Replicated Boosts, but the requirements and limits are much higher.",
+			rewardEff(str) {
+				return 1
+			}
+		},
+		2: {
+			unl: () => true,
+			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
+			goalMA: new Decimal(1),
+			rewardDesc: (x) => "Tachyonic Galaxies timelapse Replicantis by " + timeDisplay(x * 10) + " each.",
+			rewardEff(str) {
+				return 0.1
+			}
+		},
+		3: {
+			unl: () => true,
+			desc: () => "There are only Meta Dimensions, but they also produce antimatter. Mastery Studies are extremely cheaper.",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
@@ -28,57 +50,35 @@ let QCs = {
 				return Math.sqrt(player.replicanti.amount.max(1).log10()) * player.dilation.dilatedTime.max(1).log10() * player.meta.bestAntimatter.max(1).log10()
 			}
 		},
-		2: {
-			unl: () => true,
-			desc: () => "There is a product which divides Meta Dimensions based on Dimension Boosts and Galaxies. You can't also set the limit of the autobuyer of Dimension Boosts.",
-			goal: () => true,
-			goalDisp: () => "???",
-			goalMA: new Decimal(1),
-			rewardDesc: (x) => "The Positron conversion formula is better.",
-			rewardEff(str) {
-				return str
-			}
-		},
-		3: {
-			unl: () => true,
-			desc: () => "Replicated Galaxies are replaced with Replicated Boosts.",
-			goal: () => true,
-			goalDisp: () => "???",
-			goalMA: new Decimal(1),
-			rewardDesc: (x) => "You can keep Replicated Boosts, but the requirements and limits are much higher.",
-			rewardEff(str) {
-				return str
-			}
-		},
 		4: {
 			unl: () => true,
-			desc: () => "Positronic Boosters are replaced with another set of boosts, but mastering doesn't work.",
-			goal: () => true,
-			goalDisp: () => "???",
+			desc: () => "All Quantum effects never work except Positronic Boosters, but replaced.",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Quantum Energy boosts the efficiency for non-activated mastered boosts.",
+			rewardDesc: (x) => "Entangled Boosters increase the maximum percentage of sacrificed galaxies. Currently: " + formatPercentage(x) + "%",
 			rewardEff(str) {
-				return str
+				return 0.25
 			}
 		},
 		5: {
 			unl: () => true,
-			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
-			goal: () => true,
-			goalDisp: () => "???",
+			desc: () => "There is a product which divides Meta Dimensions based on Dimension Boosts and Galaxies. You can't also set the limit of the autobuyer of Dimension Boosts.",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Antimatter Galaxies share TS232 to other galaxies.",
+			rewardDesc: (x) => "The Positron conversion formula is better. Currently: +" + formatPercentage(x - 1) + "%",
 			rewardEff(str) {
-				return str
+				return 1
 			}
 		},
 		6: {
 			unl: () => true,
 			desc: () => "Replicantis divide Dimensions instead, but each Replicated Galaxy divides the amount instead.",
-			goal: () => true,
-			goalDisp: () => "???",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "25% of extra Replicated Galaxies contribute to the Positrons formula before Quantum Energy multiplier is cancelled.",
+			rewardDesc: (x) => "Extra Replicated Galaxies contribute to Positrons for QEM replacement.",
 			rewardEff(str) {
 				return str
 			}
@@ -86,23 +86,23 @@ let QCs = {
 		7: {
 			unl: () => true,
 			desc: () => "You can gain Tachyon Particles up to 5 dilation runs. Mastery Studies are reset.",
-			goal: () => true,
-			goalDisp: () => "???",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "The 4th repeatable dilation upgrade uses a weaker cost scaling.",
+			rewardDesc: (x) => "Weaken the cost superscaling for 4th repeatable dilation upgrade. Currently: ^2 -> ^" + x.toFixed(3),
 			rewardEff(str) {
-				return str
+				return 1.25
 			}
 		},
 		8: {
 			unl: () => true,
 			desc: () => "QC5, but you can't change the exclusion.",
-			goal: () => true,
-			goalDisp: () => "???",
+			goal: () => false,
+			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "You gain more Tachyonic Galaxies.",
+			rewardDesc: (x) => "Reduce the slowdown point for 2nd repeatable dilation upgrade. Currently: 1.35 -> " + x.toFixed(4),
 			rewardEff(str) {
-				return str
+				return 1.35
 			}
 		},
 	},
@@ -144,10 +144,10 @@ let QCs = {
 		return QCs.tmp.in.length >= 1
 	},
 	done(x) {
-		return QCs.save.comps >= x
+		return QCs.unl() && QCs.save.comps >= x
 	},
 	isRewardOn(x) {
-		return QCs.unl() && QCs.done(x) && QCs.tmp.rewards
+		return QCs.done(x) && QCs.tmp.rewards[x]
 	},
 	getGoal() {
 		return QCs.in.length >= 2 ? true : QCs.data[QCs.tmp.in[0]].goal()

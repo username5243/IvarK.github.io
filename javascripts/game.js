@@ -3423,7 +3423,7 @@ function gainEternitiedStat() {
 function gainBankedInf() {
 	let ret = 0 
 	let numerator = player.infinitied
-	if (qMs.tmp.amt > 27 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
+	if (qMs.tmp.amt >= 20 || hasAch("ng3p73")) numerator = nA(getInfinitiedGain(), player.infinitied)
 	let frac = 0.05
 	if (hasTimeStudy(191)) ret = nM(numerator, frac)
 	if (hasAch("r131")) ret = nA(nM(numerator, frac), ret)
@@ -3964,7 +3964,7 @@ function requiredInfinityUpdating(diff){
 	if (tmp.ri) return
 	if (player.infinityUpgradesRespecced != undefined) infinityRespeccedDMUpdating(diff)
 
-	if (!QCs.in(1)) {
+	if (!QCs.in(3)) {
 		let steps = getDimensionSteps()
 		let dims = getMaxGeneralDimensions()
 		for (let tier = dims - steps; tier >= 1; tier--) {
@@ -3974,7 +3974,7 @@ function requiredInfinityUpdating(diff){
 		if (tmp.ngp3 && player.firstAmount.gt(0)) player.dontWant = false
 	}
 
-	var amProd = QCs.in(1) ? getMDProduction(1) : getDimensionProductionPerSecond(1)
+	var amProd = QCs.in(3) ? getMDProduction(1) : getDimensionProductionPerSecond(1)
 	amProd = amProd.times(diff)
 	player.money = player.money.plus(amProd)
 	player.totalmoney = player.totalmoney.plus(amProd)
@@ -4315,7 +4315,7 @@ function infinityTimeMetaBlackHoleDimUpdating(diff){
 	var max = inNGM(5) ? 6 : 8
 
 	for (let tier = 1 ; tier <= max; tier++) {
-		if (!QCs.in(1)) {
+		if (!QCs.in(3)) {
 			// Infinity
 			if (tier <= max - step) player["infinityDimension" + tier].amount = player["infinityDimension"+tier].amount.plus(infDimensionProduction(tier + step).times(diff / 10))
 
@@ -4344,7 +4344,7 @@ function dimensionPageTabsUpdating(){
 }
 
 function otherDimsUpdating(diff) {
-	if (QCs.in(1)) return
+	if (QCs.in(3)) return
 
 	//Infinity Dimensions
 	let infProd = infDimensionProduction(1)
@@ -5320,7 +5320,7 @@ function dimBoostABTick(){
 
 var timer = 0
 function autoBuyerTick() {
-	if (tmp.quUnl && qMs.tmp.amt >= 23 && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
+	if (tmp.quUnl && tmp.qu.autobuyer.enabled && !inBigRip()) autoQuantumABTick()
 	
 	if (getEternitied() >= 100 && isEterBuyerOn()) autoEternityABTick()
 
@@ -5698,16 +5698,7 @@ window.addEventListener('keydown', function(event) {
 		break;
 
 		case 77: // M
-			if (ndAutobuyersUsed<9||!player.challenges.includes("postc8")) getEl("maxall").onclick()
-			if (hasDilationStudy(6)) {
-				var maxmeta=true
-				for (d = 1; d < 9; d++) {
-					if (player.autoEterOptions["meta" + d]) {
-						if (d > 7 && qMs.tmp.amt < 28) maxmeta = false
-					} else break
-				}
-				if (maxmeta) getEl("metaMaxAll").onclick()
-			}
+			if (ndAutobuyersUsed <= 8 || !player.challenges.includes("postc8")) getEl("maxall").onclick()
 		break;
 
 		case 80: // P, reset at latest layer

@@ -320,7 +320,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	QCs.updateTmp()
 	QCs.updateDisp()
 
-	if (QCs.in(1)) {
+	if (QCs.in(3)) {
 		player.respec = false
 		player.respecMastery = true
 		respecTimeStudies()
@@ -430,7 +430,6 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	// last few updates
 	setInitialResetPower()
 	resetUP()
-	if (oheHeadstart) player.replicanti.amount = new Decimal(1)
 	player.replicanti.galaxies = 0
 	updateRespecButtons()
 	if (hasAch("r36")) player.tickspeed = player.tickspeed.times(0.98);

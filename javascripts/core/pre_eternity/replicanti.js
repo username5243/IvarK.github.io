@@ -162,6 +162,8 @@ function canAutoReplicatedGalaxy() {
 }
 
 function getMaxRG() {
+	if (QCs.in(1)) return 0
+
 	let ret = player.replicanti.gal
 	if (hasTimeStudy(131) && !masteryStudies.has(304)) ret += Math.floor(ret * 0.5)
 	return ret
@@ -186,8 +188,11 @@ function updateExtraReplBase() {
 var extraReplMulti = 1
 function updateExtraReplMult() {
 	let x = 1
-	if (enB.active("glu", 2)) x *= enB.tmp.glu2
-	if (masteryStudies.has(304)) x *= 1.25
+	if (QCs.in(1)) x = 0
+	else if (tmp.ngp3) {
+		if (enB.active("glu", 2)) x *= enB.tmp.glu2
+		if (masteryStudies.has(304)) x *= 1.25
+	}
 	extraReplMulti = x
 }
 
@@ -196,6 +201,8 @@ function getTotalRGs() {
 }
 
 function getFullEffRGs(min) {
+	if (QCs.in(1)) return 0
+
 	let x = player.replicanti.galaxies
 	if (masteryStudies.has(291)) x = getTotalRGs()
 	else if (min) x = Math.min(x, player.replicanti.gal)
@@ -205,8 +212,11 @@ function getFullEffRGs(min) {
 
 function getReplGalaxyEff() {
 	let x = 1
-	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2)/10
+
+	if (player.boughtDims) x = Math.log10(player.replicanti.limit.log(2)) / Math.log10(2) / 10
 	else if (ECComps("eterc8") > 0) x = getECReward(8)
+
+	if (enB.active("pos", 8)) x *= enB.tmp.pos8
 	if (hasBosonicUpg(34)) x *= tmp.blu[34]
 
 	return x
@@ -320,6 +330,7 @@ function updateEC14Reward() {
 			interval: div,
 			ooms: div.max(1).log10() / 2 + 1
 		}
+		if (enB.active("pos", 7)) data.ec14.ooms += enB.tmp.pos7
 	} else {
 		data.ec14 = {
 			interval: new Decimal(1),
