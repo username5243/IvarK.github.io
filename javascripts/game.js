@@ -762,7 +762,7 @@ function doNGPlusOneNewPlayer(){
 	player.challenges = challengesCompletedOnEternity()
 	player.replicanti.unl = true
 	player.replicanti.amount = new Decimal(1)
-	for (ec = 1; ec < 13; ec++) player.eternityChalls['eterc' + ec] = 5
+	for (ec = 1; ec <= 12; ec++) player.eternityChalls['eterc' + ec] = 5
 	player.eternityChalls.eterc1 = 1
 	player.eternityChalls.eterc4 = 1
 	player.eternityChalls.eterc10 = 1
@@ -1120,7 +1120,7 @@ function doInfinityRespeccedNewPlayer(){
 
 function doNGPlusFourPlayer(){
 	player.eternities = 1e13
-	for (var c = 13; c < 15; c++) player.eternityChalls["eterc" + c] = 5
+	for (var c = 13; c <= masteryStudies.ecsUpTo; c++) player.eternityChalls["eterc" + c] = 5
 	player.dilation.studies = [1, 2, 3, 4, 5, 6]
 	player.dilation.dilatedTime = 1e100
 	for (var u = 4; u < 11; u++) player.dilation.upgrades.push(u)
@@ -3142,7 +3142,7 @@ function updateHotkeys() {
 		if (inNGM(4)) html += ", N to Time Dimension Boost"
 		html += ", G to " + (ph.did("galaxy") ? "Galactic Sacrifice" : "buy a Galaxy")
 	}
-	html += ", C to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
+	html += ", C / I to Crunch, A to toggle autobuyers, R to buy Replicanti Galaxies, E to Eternity"
 	if (hasAch("r136")) html += ", D to Dilate Time"
 	if (hasAch("ngpp11")) html += ", shift+D to Meta-Dimension Boost"
 	if (player.meta) html += ",<br>Q to Quantum"
@@ -4434,10 +4434,12 @@ function nextICUnlockUpdating(){
 
 	let newChallsUnlocked = false
 	while (player.money.gte(nextUnlock) && nextUnlock) {
-		player.postChallUnlocked++
-		if (getEternitied() >= 7) player.challenges.push(order[player.postChallUnlocked])
+		var name = order[player.postChallUnlocked]
 
-		nextUnlock = getNextAt(order[player.postChallUnlocked])
+		player.postChallUnlocked++
+		if (name && getEternitied() >= 7) player.challenges.push(name)
+
+		nextUnlock = getNextAt(name)
 		newChallsUnlocked = true
 	}
 
@@ -5693,12 +5695,17 @@ window.addEventListener('keydown', function(event) {
 			setAchieveTooltip()
 		break
 
+		case 73: // I
+			ph.onHotkey("infinity")
+		break;
+
 		case 76: // N
 			if (inNGM(4)) buyMaxTDB()
 		break;
 
 		case 77: // M
 			if (ndAutobuyersUsed <= 8 || !player.challenges.includes("postc8")) getEl("maxall").onclick()
+			if (hasDilationStudy(6)) getEl("metaMaxAll").onclick()
 		break;
 
 		case 80: // P, reset at latest layer

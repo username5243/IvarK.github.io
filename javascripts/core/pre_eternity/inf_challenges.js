@@ -257,7 +257,10 @@ function resetIC1Reward() {
 	if (!player.challenges.includes("postc1")) return
 
 	let ics = 0
-	for (var i = 0; i < player.challenges.length; i++) if (player.challenges[i].split("postc")[1]) ics++
+	for (var i = 0; i < player.challenges.length; i++) {
+		var name = player.challenges[i]
+		if (name && name.split("postc")[1]) ics++
+	}
 	infDimPow = Math.pow(inNGM(2) ? 2 : 1.3, ics)
 }
 

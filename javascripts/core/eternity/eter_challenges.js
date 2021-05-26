@@ -98,7 +98,7 @@ function unlockEChall(idx) {
 		getEl("eterc"+player.eternityChallUnlocked+"div").style.display = "inline-block"
 		if (!justImported) showTab("challenges")
 		if (!justImported) showChallengesTab("eternitychallenges")
-		if (idx !== 13 && idx !== 14) {
+		if (idx < 13) {
 			updateTimeStudyButtons(true)
 			player.etercreq = idx
 		}
@@ -229,7 +229,7 @@ function getECGoal(x) {
 function updateEternityChallenges() {
 	tmp.ec=0
 	var locked = true
-	for (ec=1;ec<15;ec++) {
+	for (ec=1;ec<=14;ec++) {
 		var property = "eterc"+ec 
 		var ecdata = player.eternityChalls[property]
 		if (ecdata) {
@@ -442,6 +442,7 @@ function doCheckECCompletionStuff() {
 			if (ecNum > 12) {
 				getEl("ec" + ecNum + "Req").style.display = "block"
 				masteryStudies.ecReqsStored[ecNum] = masteryStudies.ecReqs[ecNum]()
+				updateMasteryStudyTextDisplay()
 			}
 			player.etercreq = 0
 			resetEternityChallUnlocks()

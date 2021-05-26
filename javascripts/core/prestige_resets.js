@@ -728,7 +728,7 @@ function doTOUSOnGhostify(bm){
 		player.timestudy.studies=[]
 		player.masterystudies=[]
 		for (var t = 0; t < all.length; t++) player.timestudy.studies.push(all[t])
-		for (var c = 1; c <= 14; c++) player.eternityChalls["eterc" + c] = 5
+		for (var c = 1; c <= masteryStudies.ecsUpTo; c++) player.eternityChalls["eterc" + c] = 5
 		for (var t = 0; t < masteryStudies.timeStudies.length; t++) player.masterystudies.push("t" + masteryStudies.timeStudies[t])
 		for (var d = 1; d < 7; d++) player.dilation.studies.push(d)
 		for (var d = 7; d < 15; d++) player.masterystudies.push("d" + d)

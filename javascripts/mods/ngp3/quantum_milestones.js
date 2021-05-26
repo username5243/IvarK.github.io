@@ -54,7 +54,10 @@ let qMs = {
 
 		//Milestones
 		data.amt = 0
-		for (var i = 1; i <= qMs.max; i++) if (data.points >= qMs[i].req) data.amt++
+		for (var i = 1; i <= qMs.max; i++) {
+			if (data.points >= qMs[i].req) data.amt++
+			else delete tmp.qu.disabledRewards[i]
+		}
 	},
 	updateDisplay() {
 		let types = qMs.data.types
@@ -101,6 +104,7 @@ let qMs = {
 	},
 	toggle(id) {
 		if (!this[id].disablable) return
+		if (qMs.tmp.amt < id) return
 
 		let on = !tmp.qu.disabledRewards[id]
 		tmp.qu.disabledRewards[id] = on

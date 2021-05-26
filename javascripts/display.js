@@ -163,9 +163,9 @@ function bestEternityDisplay(){
 		getEl("eternityStatistics").style.display = ""
 		if (player.bestEternity >= 9999999999) {
 			getEl("besteternity").textContent = ""
-		} else getEl("besteternity").textContent = "Your fastest Eternity is in "+timeDisplay(player.bestEternity)+"."
+		} else getEl("besteternity").textContent = "Your fastest Eternity is in " + timeDisplay(player.bestEternity) + "."
 		getEl("thiseternity").textContent = "You have spent " + timeDisplay(player.thisEternity) + " in this Eternity."
-		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(player.eternities) + " time" + (player.eternities == 1 ? "" : "s") + (ph.did("quantum") ? " this Quantum." : ".")
+		getEl("eternitied").textContent = "You have Eternitied " + getFullExpansion(Decimal.floor(player.eternities).toNumber()) + " time" + (player.eternities == 1 ? "" : "s") + (ph.did("quantum") ? " this Quantum." : ".")
 	} else getEl("eternityStatistics").style.display = "none"
 }
 
@@ -835,7 +835,7 @@ function primaryStatsDisplayResetLayers(){
 }
 
 function ECCompletionsDisplay(){
-	for (let x = 1; x <= 14; x++) getEl("eterc" + x + "completed").textContent = "Completed " + ECComps("eterc" + x) + " times."
+	for (let x = 1; x <= masteryStudies.ecsUpTo; x++) getEl("eterc" + x + "completed").textContent = "Completed " + ECComps("eterc" + x) + " times."
 }
 
 function ECchallengePortionDisplay(){

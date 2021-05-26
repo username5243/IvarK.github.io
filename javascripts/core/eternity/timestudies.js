@@ -473,7 +473,6 @@ function respecTimeStudies(force) {
 		}
 	}
 
-
 	drawStudyTree()
 	if (gotAch) giveAchievement("You do know how these work, right?")
 	doInitInfMultStuff()
