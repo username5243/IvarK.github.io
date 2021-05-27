@@ -25,23 +25,26 @@ function replicantiIncrease(diff) {
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
+	if (player.replicanti.amount.eq(QCs.tmp.qc1.maxLimit) && QCs.data[1].boost()) QCs.save.qc1.max++
 	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
 }
 
 function getReplicantiLimit(cap = false) {
-	if (player.boughtDims) return player.replicanti.limit
-	if (tmp.ngC && cap) {
-		let lim = new Decimal(Number.MAX_VALUE);
-		if (hasTS(52)) lim = lim.pow(tsMults[52]())
-		if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
-		if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
-		return lim;
+	let lim = player.boughtDims ? player.replicanti.limit : new Decimal(Number.MAX_VALUE)
+	if (isReplicantiLimitBroken()) lim = new Decimal(1/0)
+	else if (cap) {
+		if (tmp.ngC) {
+			if (hasTS(52)) lim = lim.pow(tsMults[52]())
+			if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
+			if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
+			return lim
+		}
 	}
-	return Number.MAX_VALUE
+	return lim
 }
 
 function isReplicantiLimitBroken() {
-	return hasTimeStudy(192)
+	return hasTimeStudy(192) && !tmp.ngC
 }
 
 function getReplMult(next) {
@@ -414,7 +417,7 @@ function notContinuousReplicantiUpdating() {
 				player.replicanti.amount = temp.times(counter).plus(player.replicanti.amount)
 				counter = 0
 			} else player.replicanti.amount = player.replicanti.amount.times(2)
-			if (!hasTimeStudy(192) || tmp.ngC) player.replicanti.amount = player.replicanti.amount.min(getReplicantiLimit(true))
+			player.replicanti.amount = player.replicanti.amount.min(getReplicantiLimit(true))
 		}
 		replicantiTicks -= interval
 	}

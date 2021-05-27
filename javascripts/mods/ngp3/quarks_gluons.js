@@ -620,7 +620,7 @@ let enB = {
 		},
 
 		eff() {
-			return this.engAmt() * 2
+			return this.engAmt() * 1.8
 		},
 		masEff(x) {
 			x /= 2

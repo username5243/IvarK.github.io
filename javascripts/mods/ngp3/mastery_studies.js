@@ -144,7 +144,7 @@ var masteryStudies = {
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
-			x = x / Math.pow(Math.log10(x + 1) + 1, 2) * 2
+			x /= Math.pow(Math.log10(x + 1) + 1, 2) * 2
 
 			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x

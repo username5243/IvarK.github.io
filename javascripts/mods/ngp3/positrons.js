@@ -127,14 +127,14 @@ let POSITRONS = {
 		let qeMultMax = qeMult / (Math.log10(qeMult * 10 + 1) + 1)
 
 		if (pos.on()) {
-			let mdbDiv = 0.25
-			if (QCs.isRewardOn(5)) mdbDiv = QCs.tmp.rewards[5]
+			let mdbMult = 0.25
+			if (QCs.isRewardOn(5)) mdbMult = QCs.tmp.rewards[5]
 
-			let mdbs = player.meta.resets * mdbDiv
-			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) / mdbDiv
+			let mdbs = player.meta.resets * mdbMult
+			let max_mdbs = Math.pow(Math.log2(qeMultMax) + 1.5, 2) / mdbMult
 
 			data.sac_mdb = Math.floor(Math.min(mdbs, max_mdbs))
-			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb * mdbDiv) - 1.5)
+			data.sac_qem = Math.pow(2, Math.sqrt(data.sac_mdb / 4) - 1.5)
 			pos.save.amt = Math.pow(data.sac_mdb * 15, 2)
 		} else {
 			data.sac_mdb = 0

@@ -631,7 +631,8 @@ function replicantiDisplay() {
 	if (player.replicanti.unl) {
 		let replGalOver = getMaxRG() - player.replicanti.gal
 		let chance = tmp.rep.chance
-		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (tmp.ngC ? (" / ") + shortenDimensions(getReplicantiLimit()) : "")
+		let limit = getReplicantiLimit(true)
+		getEl("replicantiamount").textContent = shortenDimensions(player.replicanti.amount) + (limit.lt(1/0) ? (" / ") + shortenDimensions(limit) : "")
 		getEl("replicantimult").textContent = shorten(getIDReplMult())
 		
 		let chanceDisplayEnding = (isChanceAffordable() && player.infinityPoints.lt(Decimal.pow(10, 1e10)) ? "<br>+1% Cost: " + shortenCosts(player.replicanti.chanceCost) + " IP" : "")
@@ -675,6 +676,11 @@ function replicantiDisplay() {
 		getEl("replicantireset").style.height = (hasAch("ngpp16") && (!hasAch("ng3p67")) ? 90 : 70) + "px"
 		getEl("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
 		if (tmp.ngC) ngC.condense.rep.update()
+
+		if (QCs.tmp.qc1) {
+			getEl("replicantiBoost").innerHTML = "Do a Eternity reset for a boost.<br>Requirement: " + shortenCosts(QCs.tmp.qc1.req) + "<br>" + QCs.save.qc1.boosts + " / 10 boosts gained"
+			getEl("replicantireset").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
+		}
 	} else {
 		let cost = getReplUnlCost()
 		getEl("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: " + shortenCosts(cost) + " IP"

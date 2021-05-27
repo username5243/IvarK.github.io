@@ -13,7 +13,18 @@ let QCs = {
 			QCs.save = tmp.qu.qc
 			if (QCs.save === undefined) tmp.qu.qc = this.setup()
 		}
+		if (QCs.save.qc1 === undefined) QCs.reset()
 		QCs.updateTmp()
+	},
+	reset() {
+		QCs.save.qc1 = {boosts: 0, max: 0}
+		QCs.save.qc2 = [0, 0]
+		QCs.save.qc3 = undefined
+		QCs.save.qc4 = undefined
+		QCs.save.qc5 = undefined
+		QCs.save.qc6 = new Decimal(1) //Best-in-this-quantum replicantis
+		QCs.save.qc7 = 0
+		QCs.save.qc8 = undefined //Same as QC5
 	},
 	data: {
 		max: 8,
@@ -26,6 +37,33 @@ let QCs = {
 			rewardDesc: (x) => "You can keep Replicated Boosts, but the requirements and limits are much higher.",
 			rewardEff(str) {
 				return 1
+			},
+
+			updateTmp() {
+				delete QCs.tmp.qc1
+				if (!QCs.in(1) && !QCs.done(1)) return
+
+				let boosts = QCs.save.qc1.boosts
+				let maxBoosts = QCs.save.qc1.max
+
+				QCs.tmp.qc1 = {
+					req: new Decimal("1e10000000"),
+					maxLimit: new Decimal("1e1000000000"),
+
+					expSpeed: Math.max(1 / (boosts / 10 + 1), 0.5),
+					expMult: Math.min(boosts / 10 + 1, 2),
+					slowdown: Math.pow(2, boosts),
+					maxBonus: maxBoosts / 10 + Math.max(boosts - 10, 0) / 10,
+				}
+			},
+
+			can: () => player.replicanti.amount.gte(QCs.tmp.qc1.req) && ph.can("eternity") && QCs.save.qc1.boosts < 10,
+			boost() {
+				if (!QCs.data[1].can()) return false
+
+				eternity(true)
+				QCs.save.qc1.boosts++
+				return true
 			}
 		},
 		2: {
@@ -74,7 +112,7 @@ let QCs = {
 		},
 		6: {
 			unl: () => true,
-			desc: () => "Replicantis divide Dimensions instead, but each Replicated Galaxy divides the amount instead.",
+			desc: () => "The effect of Replicantis is inversedly exponential.",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
@@ -131,6 +169,7 @@ let QCs = {
 			if (data.unl.includes(x)) {
 				data.rewards[x] = QCs.data[x].rewardEff(1)
 			}
+			if (QCs.data[x].updateTmp) QCs.data[x].updateTmp()
 		}
 	},
 
@@ -201,6 +240,9 @@ let QCs = {
 				getEl("qc_" + qc + "_btn").className = QCs.in(qc) ? "onchallengebtn" : QCs.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
+
+		//In Quantum Challenges
+		getEl("replicantiBoost").style.display = QCs.tmp.qc1 ? "" : "none"
 
 		//Paired Challenges
 		/*

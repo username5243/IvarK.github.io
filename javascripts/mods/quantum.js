@@ -317,6 +317,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 	}
 	QCs.save.in = isQC ? data : []
 
+	QCs.reset()
 	QCs.updateTmp()
 	QCs.updateDisp()
 
