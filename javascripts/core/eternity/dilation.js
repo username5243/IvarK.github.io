@@ -3,6 +3,7 @@ function hasDilationUpg(x) {
 }
 
 function hasDilationStudy(x) {
+	if (x > 6) return masteryStudies.has("d" + x)
 	return tmp.eterUnl && player.dilation.studies.includes(x)
 }
 

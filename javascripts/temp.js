@@ -68,6 +68,7 @@ function updateTemp(init) {
 
 	tmp.rm = getReplMult()
 	tmp.rmPseudo = player.replicanti.amount.max(masteryStudies.has(294) ? tmp.rm.pow(1 / 0.032) : 1)
+	if (QCs.tmp.qc1) tmp.rmPseudo = Decimal.pow(10, Math.pow(tmp.rmPseudo.log10() * 0.032, QCs.tmp.qc1.effExp) / 0.032 * QCs.tmp.qc1.effMult)
 
 	updateExtraReplMult()
 	updateExtraReplBase()

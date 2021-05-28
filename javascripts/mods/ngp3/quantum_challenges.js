@@ -47,22 +47,34 @@ let QCs = {
 				let maxBoosts = QCs.save.qc1.max
 
 				QCs.tmp.qc1 = {
-					req: new Decimal("1e10000000"),
-					maxLimit: new Decimal("1e1000000000"),
+					req: new Decimal(1/0),
+					limit: new Decimal(1/0),
 
-					expSpeed: Math.max(1 / (boosts / 10 + 1), 0.5),
-					expMult: Math.min(boosts / 10 + 1, 2),
-					slowdown: Math.pow(2, boosts),
-					maxBonus: maxBoosts / 10 + Math.max(boosts - 10, 0) / 10,
+					speedMult: Math.pow(2, boosts),
+					speedExp: 1 / Math.min(1 + boosts / 10, 2),
+
+					effMult: 1, //Math.max(boosts / 20 - 0.5, 0) + maxBoosts / 40 + 1,
+					effExp: 1, //Math.min(1 + boosts / 10, 2),
 				}
 			},
+			updateSpeed() {
+				if (!QCs.tmp.qc1) return
 
-			can: () => player.replicanti.amount.gte(QCs.tmp.qc1.req) && ph.can("eternity") && QCs.save.qc1.boosts < 10,
+				let data = tmp.rep
+				let exp2 = 1 / Math.log2(data.speeds.inc)
+				data.speeds.exp = Math.pow(data.speeds.exp * exp2, QCs.tmp.qc1.speedExp) / exp2
+
+				data.baseEst = data.baseEst.times(QCs.tmp.qc1.speedMult)
+				data.baseInt = data.baseInt.div(QCs.tmp.qc1.speedMult)
+			},
+
+			can: () => QCs.tmp.qc1 && ph.can("eternity") && player.replicanti.amount.gte(QCs.tmp.qc1.req) && QCs.save.qc1.boosts < 10,
 			boost() {
 				if (!QCs.data[1].can()) return false
 
-				eternity(true)
 				QCs.save.qc1.boosts++
+				player.replicanti.amount = new Decimal(1)
+				eternity(true)
 				return true
 			}
 		},

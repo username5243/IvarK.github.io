@@ -7,7 +7,7 @@ var masteryStudies = {
 			//Quantum
 			271: 3.90625e71,
 			281: 2e74, 282: 2e73, 283: 2e73, 284: 2e74,
-			292: 1.28e77, 293: 2.5e74, 294: 1.28e77,
+			291: 1/0, 292: 4e74, 293: 2e74, 294: 4e74, 295: 1/0,
 			302: 1/0, 303: 1/0,
 		},
 		ec: {13: 1e71, 14: 1e71},
@@ -21,9 +21,9 @@ var masteryStudies = {
 
 			//Quantum
 			271: 1 / 128,
-			281: 5, 282: 2, 283: 2, 284: 5,
-			292: 8, 293: 1 / 256, 294: 8,
-			302: 1 / 2, 303: 1 / 2},
+			281: 5, 282: 3, 283: 3, 284: 5,
+			291: 1 / 2, 292: 12, 293: 1, 294: 12, 295: 1 / 2,
+			302: 1 / 3, 303: 1 / 3},
 		ec: {},
 		dil: {}
 	},
@@ -144,20 +144,23 @@ var masteryStudies = {
 		},
 		281() {
 			let x = player.dilation.dilatedTime.add(1).log10()
-			x /= Math.pow(Math.log10(x + 1) + 1, 2) * 2
+			x /= Math.pow(Math.log10(x + 1) + 1, 2) * 8 / 5
 
 			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x
 		},
 		283() {
 			let x = tmp.rep ? tmp.rep.baseChance : 0
-			return 0.7 * Math.pow(x / 1e9 + 1, 0.2)
+			return 0.7 * Math.pow(x / 1.5e9 + 1, 0.2)
 		},
 		284() {
-			let x = (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 20
+			let x = (player.galaxies + getTotalRGs() + player.dilation.freeGalaxies) / 25
 
 			if (enB.active("pos", 7)) x += enB.tmp.pos7
 			return x
+		},
+		291() {
+			return 0
 		},
 		292() {
 			let rep = (tmp.rmPseudo || player.replicanti.amount).log10()
@@ -166,11 +169,10 @@ var masteryStudies = {
 		},
 		295() {
 			let rg = getFullEffRGs()
-			return Math.log10(rg / 100 + 1) / 2 + 1
+			return Math.log10(rg / 1e3 + 1) * Math.log10(Math.log10(tmp.qu.colorPowers.g + 1) + 1) / 5 + 1
 		},
-		301() {
-			let rg = player.replicanti.galaxies * 0.25
-			return Decimal.pow(10, rg * Math.log10(rg / 1e3 + 10) * 0.002)
+		302() {
+			return 0
 		},
 		303(x) {
 			if (!x) x = getInfinitied()
@@ -196,18 +198,16 @@ var masteryStudies = {
 		283: () => "Replicate chance gradually increases higher above 100%.",
 		284: () => "After boosts, total galaxies increase the OoMs of replicate interval scaling.",
 
-		291: () => "All Replicated Galaxies work evenly.",
+		291: () => "Red power makes Replicated Galaxies more evenly.",
 		292: () => "Replicantis generate free Dimension Boosts.",
 		293: () => "Some boosts from Replicantis are stronger.",
 		294: () => "All Replicanti boosts are based on Replicanti multiplier.",
-		295: () => "Replicated Galaxies give a greatly strong boost to Replicanti multiplier.",
+		295: () => "Green power makes Replicated Galaxies raise Replicanti multiplier instead.",
 
-		301: () => "Perform a Eternity reset, but 25% of your normal RGs speed up Replicantis instead.",
-		302: () => "Reduce the gluon effect nerfs by ^0.9.",
-		303: () => "Infinitied stat boosts itself to give stronger boosts.",
-		304: () => "Perform a Eternity reset for a +25% boost to extra RGs, but disable Time Study 131.",
+		302: () => "Color charge makes Replicanti multiplier more useful to Replicanti boosts.",
+		303: () => "Blue power boosts Tachyon Particles even more."
 	},
-	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 292, 295, 301, 303],
+	hasStudyEffect: [251, 252, 253, 271, 281, 283, 284, 291, 292, 295, 302, 303],
 	studyEffectDisplays: {
 		251(x) {
 			return "+" + getFullExpansion(Math.floor(x))
@@ -227,11 +227,17 @@ var masteryStudies = {
 		284(x) {
 			return "+" + shorten(x) + " OoMs"
 		},
+		291(x) {
+			return formatPercentage(x) + "% even"
+		},
 		292(x) {
 			return "+" + getFullExpansion(Math.floor(x))
 		},
 		295(x) {
 			return "^" + x.toFixed(3)
+		},
+		302(x) {
+			return formatPercentage(x) + "% more multiplier-like"
 		},
 		303(x) {
 			return "^" + shorten(x)
@@ -249,13 +255,25 @@ var masteryStudies = {
 		ec13: ["d7"], ec14: ["d7"], d7: [271],
 		271: [281, 282, 283, 284],
 		281: [293], 282: [293], 283: [293], 284: [293],
-		292: [302], 293: [292, 294, "d8"], 294: [303],
+		292: [291, 302], 293: [292, 294, "d8"], 294: [295, 303],
 
 		//No more mastery studies after that
 		d8: ["d9"], d9: ["d10"], d10: ["d11"], d11: ["d12"], d12: ["d13"], d13: ["d14"]},
 	allUnlocks: {
 		d7() {
-			return true //ph.did("quantum")
+			return ph.did("quantum")
+		},
+		r27() {
+			return pos.unl()
+		},
+		291() {
+			return QCs.unl()
+		},
+		295() {
+			return QCs.unl()
+		},
+		r30() {
+			return QCs.unl()
 		}
 	},
 	unlocked: [],
@@ -388,13 +406,19 @@ function updateUnlockedMasteryStudies() {
 		var divid = convertMasteryStudyIdToDisplay(id)
 		if (Math.floor(id / 10) > rowNum) {
 			rowNum = Math.floor(id / 10)
-			if (masteryStudies.allUnlocks["r"+rowNum] && !masteryStudies.allUnlocks["r"+rowNum]()) unl = false
+			if (masteryStudies.allUnlocks["r" + rowNum] && !masteryStudies.allUnlocks["r" + rowNum]()) unl = false
 			getEl(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
 			if (unl) masteryStudies.unlocked.push("r"+rowNum)
-		} else if (divid[0] == "d") getEl(divid).parentElement.parentElement.parentElement.parentElement.style = unl ? "" : "display: none !important"
-		if (masteryStudies.allUnlocks[id]&&!masteryStudies.allUnlocks[id]()) unl = false
-		getEl(divid).style.visibility = unl ? "" : "hidden"
-		if (unl) masteryStudies.unlocked.push(id)
+		}
+		if (masteryStudies.allUnlocks[id] && !masteryStudies.allUnlocks[id]()) unl = false
+
+		var localUnl = unl
+		if (id[0] == "d") {
+			localUnl = (hasDilationStudy(parseInt(id.split("d")[1]) - 1) || hasDilationStudy(id)) && (ph.did("ghostify") || !masteryStudies.allUnlocks[id] || masteryStudies.allUnlocks[id]())
+			if (localUnl) getEl(divid).parentElement.parentElement.parentElement.parentElement.style = ""
+		}
+		if (localUnl) masteryStudies.unlocked.push(id)
+		getEl(divid).style.visibility = localUnl ? "" : "hidden"
 	}
 }
 
@@ -537,7 +561,7 @@ function canBuyMasteryStudy(type, id) {
 		if (masteryStudies.unlockReqConditions[id] && !masteryStudies.unlockReqConditions[id]()) return false
 	} else if (type == 'd') {
 		if (player.timestudy.theorem < masteryStudies.costs.dil[id] || player.masterystudies.includes('d' + id)) return false
-		if (!ph.did("ghostidy") && !(masteryStudies.unlockReqConditions["d" + id] && masteryStudies.unlockReqConditions["d" + id]())) return false
+		if (!ph.did("ghostify") && !(masteryStudies.unlockReqConditions["d" + id] && masteryStudies.unlockReqConditions["d" + id]())) return false
 		if (!masteryStudies.spentable.includes("d" + id)) return false
 	} else {
 		if (player.timestudy.theorem < masteryStudies.costs.ec[id] || player.eternityChallUnlocked) return false
@@ -564,7 +588,7 @@ function updateMasteryStudyButtons() {
 			if (div.className !== className) div.className = className
 			if (masteryStudies.hasStudyEffect.includes(name)) {
 				var mult = getMTSMult(name)
-				if (mult) getEl("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
+				getEl("ts" + name + "Current").textContent = (masteryStudies.studyEffectDisplays[name] !== undefined ? masteryStudies.studyEffectDisplays[name](mult) : shorten(mult) + "x")
 			}
 		}
 	}

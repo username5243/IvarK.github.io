@@ -17,29 +17,38 @@ function unlockReplicantis() {
 
 function replicantiIncrease(diff) {
 	if (!player.replicanti.unl || player.currentEternityChall == "eterc14") return
-	if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
-	else notContinuousReplicantiUpdating()
+
+	let lim = getReplicantiLimit(true)
+	if (player.replicanti.amount.lt(lim)) {
+		if (diff > 5 || tmp.rep.chance > 1 || tmp.rep.interval < 50 || tmp.rep.est.gt(50) || isReplicantiLimitBroken()) continuousReplicantiUpdating(diff)
+		else notContinuousReplicantiUpdating()
+	}
 	if (player.replicanti.amount.gt(0)) replicantiTicks += diff
+	player.replicanti.amount = player.replicanti.amount.min(lim)
 
 	let auto = player.replicanti.galaxybuyer
 	if (auto && tmp.ngC) ngC.condense.rep.buy()
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
-	if (player.replicanti.amount.eq(QCs.tmp.qc1.maxLimit) && QCs.data[1].boost()) QCs.save.qc1.max++
 	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
+	if (QCs.data[1].boost() && player.replicanti.amount.eq(lim)) QCs.save.qc1.max++
 }
 
 function getReplicantiLimit(cap = false) {
 	let lim = player.boughtDims ? player.replicanti.limit : new Decimal(Number.MAX_VALUE)
-	if (isReplicantiLimitBroken()) lim = new Decimal(1/0)
-	else if (cap) {
-		if (tmp.ngC) {
+	let limBroke = isReplicantiLimitBroken()
+
+	if (cap) {
+		if (limBroke) lim = new Decimal(1/0)
+		else if (tmp.ngC) {
 			if (hasTS(52)) lim = lim.pow(tsMults[52]())
 			if (hasTS(192)) lim = lim.times(player.timeShards.plus(1))
-			if (player.dilation.upgrades.includes("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
+			if (hasDilationUpg("ngp3c4")) lim = lim.times(player.dilation.dilatedTime.plus(1).pow(2500))
 			return lim
 		}
 	}
+	if (QCs.tmp.qc1) lim = lim.min(QCs.tmp.qc1.limit)
+
 	return lim
 }
 
@@ -381,6 +390,7 @@ function updateReplicantiTemp() {
 	data.speeds = getReplSpeed()
 	updateEC14Reward()
 	data.speeds.exp = boostReplSpeedExp(data.speeds.exp)
+	QCs.data[1].updateSpeed()
 	updateEC14Acceleration()
 
 	data.interval = getReplicantiFinalInterval()
@@ -430,6 +440,6 @@ function continuousReplicantiUpdating(diff){
 		else ln += tmp.rep.est.times(diff * Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp / 10).add(1).log(Math.E) / (Math.log10(tmp.rep.speeds.inc) / tmp.rep.speeds.exp)
 
 		player.replicanti.amount = Decimal.pow(Math.E, ln)
-	} else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + (diff * tmp.rep.est / 10)).min(getReplicantiLimit(true))
+	} else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + (diff * tmp.rep.est / 10))
 	replicantiTicks = 0
 }

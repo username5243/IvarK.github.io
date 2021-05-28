@@ -3300,23 +3300,27 @@ function eternity(force, auto, forceRespec, dilated) {
 	updateBankedEter()
 
 	doEternityResetStuff()
-		
-	if (inNGM(2) && getEternitied() <= 1) player.autobuyers[12] = 13
-	if (inNGM(3) && getEternitied() <= 1) player.autobuyers[13] = 14
+	doAfterEternityResetStuff()
 
+	if (player.eternities <= 1) {
+		showTab("dimensions")
+		showDimTab("timedimensions")
+		loadAutoBuyerSettings()
+	}
 	if (player.respec || player.respecMastery || forceRespec) respecTimeStudies(forceRespec)
+	doAutoEterTick()
+	if (tmp.ngp3) updateBreakEternity()
+}
 
-	player.dilation.active = false
-
-	giveAchievement("Time is relative")
-	player.replicanti.galaxies = 0
-	tmp.extraRG = 0
-	if (dilated || !hasAch("ng3p67")) resetReplicantiUpgrades()
+function doAfterEternityResetStuff() {
 	player.tdBoosts = resetTDBoosts()
 	resetPSac()
 	resetTDsOnNGM4()
 	reduceDimCosts()
+	if (player.dbPower) player.dbPower = new Decimal(1)
 	setInitialResetPower()
+	GPminpeak = new Decimal(0)
+	IPminpeak = new Decimal(0)
 	if (getInfinitied() >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1")
 	var autobuyers = document.getElementsByClassName('autoBuyerDiv')
 	if (getEternitied() < 2) {
@@ -3327,26 +3331,31 @@ function eternity(force, auto, forceRespec, dilated) {
 		getEl("buyerBtnTickSpeed").style.display = "inline-block"
 		getEl("buyerBtnSac").style.display = "inline-block"
 	}
+	if (inNGM(2) && getEternitied() <= 1) player.autobuyers[12] = 13
+	if (inNGM(3) && getEternitied() <= 1) player.autobuyers[13] = 14
+	if (inNGM(4) && getEternitied() <= 1) player.autobuyers[14] = 15
 	updateAutobuyers();
 	setInitialMoney()
-	if (hasAch("r85")) player.infMult = player.infMult.times(4);
-	if (hasAch("r93")) player.infMult = player.infMult.times(4);
-	resetInfDimensions(true);
-	updateChallenges();
+	if (hasAch("r85")) player.infMult = player.infMult.times(4)
+	if (hasAch("r93")) player.infMult = player.infMult.times(4)
+	resetInfDimensions(true)
+	updateChallenges()
 	updateNCVisuals()
-	updateEterChallengeTimes()
 	updateLastTenRuns()
-	updateLastTenEternities()
-	if (!hasAch("r133")) {
-		var infchalls = Array.from(document.getElementsByClassName('infchallengediv'))
-		for (var i = 0; i < infchalls.length; i++) infchalls[i].style.display = "none"
+
+	if (getEternitied() > 0) {
+		getEl("infmultbuyer").style.display = "inline-block"
+		getEl("infmultbuyer").textContent = "Autobuy IP mult O" + (player.infMultBuyer ? "N" : "FF")
 	}
-	GPminpeak = new Decimal(0)
-	IPminpeak = new Decimal(0)
-	EPminpeakType = 'normal'
-	EPminpeak = new Decimal(0)
-	updateMilestones()
-	getEl("eternityconf").style.display = "inline-block"
+	hideMaxIDButton()
+	getEl("eternitybtn").style.display = "none"
+	updateEternityUpgrades()
+	getEl("totaltickgained").textContent = "You've gained "+getFullExpansion(player.totalTickGained)+" tickspeed upgrades."
+	hideDimensions()
+	tmp.tickUpdate = true;
+	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+	Marathon2 = 0
+
 	if (getEternitied() < 20) {
 		player.autobuyers[9].bulk = 1
 		getEl("bulkDimboost").value = player.autobuyers[9].bulk
@@ -3358,31 +3367,22 @@ function eternity(force, auto, forceRespec, dilated) {
 		getEl("replicantidiv").style.display = "inline-block"
 		getEl("replicantiunlock").style.display = "none"
 	}
+	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
+	if (dilated || !hasAch("ng3p67")) resetReplicantiUpgrades()
+	player.replicanti.galaxies = 0
+	tmp.extraRG = 0
 	if (getEternitied() > 2 && player.replicanti.galaxybuyer === undefined) player.replicanti.galaxybuyer = false
-	var IPshortened = shortenDimensions(player.infinityPoints)
-	getEl("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">" + IPshortened + "</span> Infinity points."
-	getEl("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">" + IPshortened + "</span> Infinity points."
-	if (getEternitied() > 0 && oldStat < 1) {
-		getEl("infmultbuyer").style.display = "inline-block"
-		getEl("infmultbuyer").textContent = "Autobuy IP mult O" + (player.infMultBuyer ? "N" : "FF")
-	}
-	hideMaxIDButton()
-	getEl("eternitybtn").style.display = "none"
-	updateEternityUpgrades()
-	getEl("totaltickgained").textContent = "You've gained "+getFullExpansion(player.totalTickGained)+" tickspeed upgrades."
-	hideDimensions()
-	tmp.tickUpdate = true;
-	getEl("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
-	updateEternityChallenges()
-	if (player.eternities <= 1) {
-		showTab("dimensions")
-		showDimTab("timedimensions")
-		loadAutoBuyerSettings()
-	}
-	Marathon2 = 0;
-	if (moreEMsUnlocked() && getEternitied() >= 1e9) player.dbPower = new Decimal(1)
-	doAutoEterTick()
-	if (tmp.ngp3) updateBreakEternity()
+	updateReplicantiTemp()
+
+	EPminpeakType = 'normal'
+	EPminpeak = new Decimal(0)
+
+	giveAchievement("Time is relative")
+	getEl("eternityconf").style.display = "inline-block"
+	updateMilestones()
+	updateLastTenEternities()
+	updateEterChallengeTimes()
+	player.dilation.active = false
 }
 
 function resetReplicantiUpgrades() {
