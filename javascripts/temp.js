@@ -67,7 +67,7 @@ function updateTemp(init) {
 	if (tmp.ngC) ngC.updateTmp()
 
 	tmp.rm = getReplMult()
-	tmp.rmPseudo = player.replicanti.amount.max(masteryStudies.has(294) ? tmp.rm.pow(1 / 0.032) : 1)
+	tmp.rmPseudo = QCs.data[1].convert(player.replicanti.amount).max(masteryStudies.has(294) ? tmp.rm.pow(1 / 0.032) : 1)
 	if (QCs.tmp.qc1) tmp.rmPseudo = Decimal.pow(10, Math.pow(tmp.rmPseudo.log10() * 0.032, QCs.tmp.qc1.effExp) / 0.032 * QCs.tmp.qc1.effMult)
 
 	updateExtraReplMult()

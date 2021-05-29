@@ -680,6 +680,7 @@ function replicantiDisplay() {
 		if (QCs.tmp.qc1) {
 			getEl("replicantiBoost").innerHTML = "Do a Eternity reset for a boost.<br>Requirement: " + shortenCosts(QCs.tmp.qc1.req) + "<br>" + QCs.save.qc1.boosts + " / 10 boosts gained"
 			getEl("replicantiBoost").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
+			getEl("replicantiBoost").style.height = (hasAch("ngpp16") && (!hasAch("ng3p67")) ? 90 : 70) + "px"
 		}
 	} else {
 		let cost = getReplUnlCost()

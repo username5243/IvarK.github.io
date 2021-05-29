@@ -31,7 +31,10 @@ function replicantiIncrease(diff) {
 	if (auto && canGetReplicatedGalaxy() && (canAutoReplicatedGalaxy() || player.currentEternityChall == "eterc14")) replicantiGalaxy()
 
 	if (tmp.ngp3 && player.masterystudies.includes("d10") && tmp.qu.autoOptions.replicantiReset && player.replicanti.amount.gt(tmp.qu.replicants.requirement)) replicantReset(true)
-	if (QCs.data[1].boost() && player.replicanti.amount.eq(lim)) QCs.save.qc1.max++
+	if (QCs.data[1].can() && player.replicanti.amount.eq(lim)) {
+		QCs.save.qc1.max++
+		QCs.data[1].boost()
+	}
 }
 
 function getReplicantiLimit(cap = false) {
@@ -57,6 +60,7 @@ function isReplicantiLimitBroken() {
 }
 
 function getReplMult(next) {
+	let repl = QCs.data[1].convert(player.replicanti.amount)
 	let exp = 2
 	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
 	if (player.boughtDims) {
@@ -64,8 +68,8 @@ function getReplMult(next) {
 		if (hasAch('r108')) exp *= 1.09;
 	}
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
-	let replmult = Decimal.max(player.replicanti.amount.log(2), 1).pow(exp)
-	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
+	let replmult = Decimal.max(repl.log(2), 1).pow(exp)
+	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
 	if (hasTimeStudy(102)) {
 		let rg = getFullEffRGs()
 		let base = new Decimal(replmult)

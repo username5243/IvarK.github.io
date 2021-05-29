@@ -47,13 +47,13 @@ let QCs = {
 				let maxBoosts = QCs.save.qc1.max
 
 				QCs.tmp.qc1 = {
-					req: new Decimal(1/0),
-					limit: new Decimal(1/0),
+					req: new Decimal("1e500000"),
+					limit: new Decimal("1e2000000"),
 
-					speedMult: Math.pow(2, boosts),
+					speedMult: QCs.in(1) ? 1 : Math.pow(2, boosts),
 					speedExp: 1 / Math.min(1 + boosts / 10, 2),
 
-					effMult: 1, //Math.max(boosts / 20 - 0.5, 0) + maxBoosts / 40 + 1,
+					effMult: Math.max(boosts / 20 - 0.5, 0) + maxBoosts / 40 + 1,
 					effExp: 1, //Math.min(1 + boosts / 10, 2),
 				}
 			},
@@ -66,6 +66,12 @@ let QCs = {
 
 				data.baseEst = data.baseEst.times(QCs.tmp.qc1.speedMult)
 				data.baseInt = data.baseInt.div(QCs.tmp.qc1.speedMult)
+			},
+			convert(x) {
+				if (!QCs.tmp.qc1) return x
+				let div = Math.log10(Number.MAX_VALUE) * Math.log2(1.01)
+				x = Decimal.pow(10, Math.pow(x.log10() / div, QCs.tmp.qc1.effExp) * div * QCs.tmp.qc1.effMult)
+				return x
 			},
 
 			can: () => QCs.tmp.qc1 && ph.can("eternity") && player.replicanti.amount.gte(QCs.tmp.qc1.req) && QCs.save.qc1.boosts < 10,
