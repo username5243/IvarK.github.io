@@ -359,7 +359,7 @@ function getDilUpgCost(id) {
 	id = toString(id)
 	if (id[0] == "r") {
 		let cost = getRebuyableDilUpgCost(id[1])
-		return cost.gte("1e100000") ? new Decimal(1/0) : cost
+		return cost.gte("1e10000000") ? new Decimal(1/0) : cost
 	}
 	let cost = DIL_UPG_COSTS[id]
 	let ngpp = id.split("ngpp")[1]
@@ -563,7 +563,7 @@ function gainDilationGalaxies() {
 	player.dilation.freeGalaxies = gained * galaxyMult
 	player.dilation.nextThreshold = Decimal.pow(thresholdMult, gained).times(thresholdStart)
 
-	if (baseGain > oldGals && QCs.isRewardOn(2)) replicantiIncrease((baseGain - oldGals) * QCs.tmp.rewards[2] * 10)
+	if (baseGain > oldGals && QCs.isRewardOn(4)) replicantiIncrease((baseGain - oldGals) * QCs.tmp.rewards[4] * 10)
 }
 
 function getFreeGalaxyGainMult() {

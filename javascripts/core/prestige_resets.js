@@ -172,7 +172,7 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 			qMs.tmp.amt >= 9 ? [1, 2, 3, 4, 5, 6] : qMs.tmp.amt >= 6 ? [1, 2, 3, 4, 5] : [1],
 		active: false,
 		tachyonParticles: 
-			qMs.tmp.amt >= 5 ? Decimal.pow(3, qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0) :
+			qMs.tmp.amt >= 5 ? Decimal.pow(3, !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0) :
 			new Decimal(0),
 		dilatedTime: new Decimal(0),
 		bestTP: Decimal.max(player.dilation.bestTP || 0, player.dilation.tachyonParticles),
@@ -184,8 +184,8 @@ function doQuantumResetStuff(bigRip, isQC, qcData){
 		rebuyables: {
 			1: 0,
 			2: 0,
-			3: qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0,
-			4: qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
+			3: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[3] : 0,
+			4: !isQC && qMs.tmp.amt >= 8 ? player.dilation.rebuyables[4] : 0,
 		}
 	}
 	resetNGUdData(true)
@@ -566,7 +566,6 @@ function getQuantumOnGhostifyData(bm, nBRU, nBEU){
 function doGhostifyResetStuff(implode, gain, amount, force, bulk, nBRU, nBEU){
 	var bm = player.ghostify.milestones
 	player.galacticSacrifice = resetGalacticSacrifice()
-	player.money = onQuantumAM()
 	resetNormalDimensions()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.totalBoughtDims = resetTotalBought()

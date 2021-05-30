@@ -184,7 +184,7 @@ function updateColorCharge() {
 	colorCharge.normal = {
 		color: sorted[0],
 		chargeAmt: Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]).round(),
-		charge: colorPowers[sorted[0]] * Decimal.div(
+		charge: QCs.in(2) ? 0 : colorPowers[sorted[0]] * Decimal.div(
 			Decimal.sub(usedQuarks[sorted[0]], usedQuarks[sorted[1]]),
 			Decimal.add(usedQuarks[sorted[0]], 1)
 		)
@@ -192,7 +192,7 @@ function updateColorCharge() {
 	if (player.ghostify.milestones <= 2) colorCharge[sorted[0]] = colorCharge.normal.charge
 	if (usedQuarks[sorted[0]] > 0 && colorCharge.normal.charge == 0) giveAchievement("Hadronization")
 
-	colorCharge.subCancel = hasAch("ng3p13") ? Math.pow(colorCharge.normal.charge * 2, 1.5) : 0
+	colorCharge.subCancel = hasAch("ng3p13") && !QCs.in(2) ? Math.pow(colorCharge.normal.charge * 2, 1.5) : 0
 
 	colorCharge.neutralize = {}
 	colorCharge.neutralize[sorted[0]] = new Decimal(0)
@@ -204,6 +204,8 @@ function updateColorCharge() {
 }
 
 function getColorPowerQuantity(color) {
+	if (QCs.in(2)) return 0
+
 	let ret = colorCharge[color] * tmp.glB[color].mult
 	if (tmp.qkEng) ret = ret * tmp.qkEng.eff1 + tmp.qkEng.eff2
 	if (tmp.glB) ret = ret - tmp.glB[color].sub
@@ -238,16 +240,19 @@ function gainQuantumEnergy() {
 }
 
 function getQEQuarksPortion() {
+	if (QCs.in(2)) return 0
 	let exp = enB.active("pos", 4) ? enB.tmp.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
 	return Math.pow(quantumWorth.add(1).log10(), exp) * 1.25
 }
 
 function getQEGluonsPortion() {
+	if (QCs.in(2)) return 0
 	let exp = enB.active("pos", 4) ? enB.tmp.pos4 : hasAch("ng3p14") ? 0.5 : 1 / 3
 	return Math.pow(tmp.qu.gluons[tmp.qu.entColor || "rg"].add(1).log10(), exp) * 0.25
 }
 
 function getQuantumEnergyMult() {
+	if (QCs.in(2)) return 0
 	let x = 1
 	if (dev.boosts.tmp[1]) x += dev.boosts.tmp[1]
 	if (enB.active("glu", 1)) x += enB.tmp.glu1
@@ -334,10 +339,12 @@ function updateGluonicBoosts() {
 }
 
 function getGluonEffBuff(x) {
+	if (QCs.in(2)) return 0
 	return Math.log10(Decimal.add(x, 1).log10() * 5 + 1) + 1
 }
 
 function getGluonEffNerf(x) {
+	if (QCs.in(2)) return 0
 	return Math.max(Math.pow(Decimal.add(x, 1).log10(), masteryStudies.has(302) ? 1.8 : 2) - colorCharge.subCancel, 0)
 }
 
@@ -441,12 +448,14 @@ let enB = {
 		},
 
 		eff(x) {
+			if (QCs.in(2)) return 0
+
 			let r = Math.max(this.amt() * 2 / 3 - 1, 1)
 			r *= tmp.glB[enB.mastered("glu", x) ? "masAmt" : "enAmt"]
-
 			return r
 		},
 		gluonEff(x) {
+			if (QCs.in(2)) return 0
 			return Decimal.add(x, 1).log10()
 		},
 
@@ -455,6 +464,8 @@ let enB = {
 			req: 1,
 			masReq: 4,
 			type: "r",
+			activeReq: () => !QCs.in(2),
+
 			eff(x) {
 				return Math.cbrt(x) * 0.75
 			},
@@ -466,6 +477,8 @@ let enB = {
 			req: 3,
 			masReq: 7,
 			type: "g",
+			activeReq: () => !QCs.in(2),
+
 			eff(x) {
 				return Math.log10(x * 2 + 1) * 1.5 + 1
 			},
@@ -477,6 +490,8 @@ let enB = {
 			req: 6,
 			masReq: 8,
 			type: "r",
+			activeReq: () => !QCs.in(2),
+
 			eff(x) {
 				return Math.sqrt(x) * 20
 			},
@@ -488,6 +503,8 @@ let enB = {
 			req: 7,
 			masReq: 10,
 			type: "b",
+			activeReq: () => !QCs.in(2),
+
 			eff(x) {
 				if (pos.on()) {
 					x = Math.sqrt(x / 5 + 1)
@@ -503,9 +520,11 @@ let enB = {
 			}
 		},
 		5: {
-			req: 10,
+			req: 11,
 			masReq: 1/0,
 			type: "b",
+			activeReq: () => !QCs.in(2),
+
 			eff(x) {
 				return Math.pow(x / 3 + 1, 0.2)
 			},
@@ -620,6 +639,7 @@ let enB = {
 		},
 
 		eff() {
+			if (QCs.in(2)) return 0
 			return this.engAmt() * 1.8
 		},
 		masEff(x) {
@@ -635,6 +655,7 @@ let enB = {
 
 			chargeReq: 250,
 			activeReq() {
+				if (QCs.in(2)) return false
 				return enB.mastered("pos", 1) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
@@ -658,6 +679,7 @@ let enB = {
 
 			chargeReq: 200,
 			activeReq() {
+				if (QCs.in(2)) return false
 				return enB.mastered("pos", 2) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
@@ -678,6 +700,7 @@ let enB = {
 
 			chargeReq: 350,
 			activeReq() {
+				if (QCs.in(2)) return false
 				return enB.mastered("pos", 3) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
@@ -700,18 +723,14 @@ let enB = {
 			masReq: 10,
 
 			//Temp
-			activeReq: () => false,
-			activeDispReq: () => "(disabled due to not checking its balancing)",
-
-			/*
-			chargeReq: 500,
+			chargeReq: 750,
 			activeReq() {
+				if (QCs.in(2)) return false
 				return enB.mastered("pos", 4) || pos.save.eng >= this.chargeReq
 			},
 			activeDispReq() {
 				return shorten(this.chargeReq) + " Positronic Charge" + (enB.mastered("pos", 4) ? " (full effect)" : "")
 			},
-			*/
 
 			type: "g",
 			eff(x) {

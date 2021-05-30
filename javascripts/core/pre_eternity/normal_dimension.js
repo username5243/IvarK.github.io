@@ -622,7 +622,7 @@ function getInfBoostInput() {
 function getInfEffExp(x) {
 	let exp = 1
 	if (hasTS(31)) exp *= 4
-	if (masteryStudies.has(303)) exp *= getMTSMult(303)
+	if (enB.active("pos", 6)) exp *= enB.tmp.pos6
 	return exp
 }
 

@@ -673,14 +673,16 @@ function replicantiDisplay() {
 		getEl("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && isIntervalAffordable()) ? "storebtn" : "unavailablebtn"
 		getEl("replicantimax").className = (player.infinityPoints.gte(getRGCost())) ? "storebtn" : "unavailablebtn"
 		getEl("replicantireset").className = (canGetReplicatedGalaxy()) ? "storebtn" : "unavailablebtn"
-		getEl("replicantireset").style.height = (hasAch("ngpp16") && (!hasAch("ng3p67")) ? 90 : 70) + "px"
 		getEl("replDesc").textContent = tmp.ngC ? "multiplier to IP gain (after softcaps) & all Normal Dimensions" : "multiplier on all infinity dimensions"
 		if (tmp.ngC) ngC.condense.rep.update()
 
 		if (QCs.tmp.qc1) {
-			getEl("replicantiBoost").innerHTML = "Do a Eternity reset for a boost.<br>Requirement: " + shortenCosts(QCs.tmp.qc1.req) + "<br>" + QCs.save.qc1.boosts + " / 10 boosts gained"
-			getEl("replicantiBoost").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
-			getEl("replicantiBoost").style.height = (hasAch("ngpp16") && (!hasAch("ng3p67")) ? 90 : 70) + "px"
+			getEl("repCompress").innerHTML = "Do a Eternity reset to compress.<br>Requirement: " + shortenCosts(QCs.tmp.qc1.req) + "<br>" + QCs.save.qc1.boosts + " / 20 Compressors" + (QCs.save.qc1.max ? "<br>(" + QCs.save.qc1.max + " max boosts)" : "")
+			getEl("repCompress").className = QCs.data[1].can() ? "storebtn" : "unavailablebtn"
+		}
+		if (QCs.tmp.qc5) {
+			getEl("repExpand").innerHTML = "Do a Eternity reset to expand.<br>Requirement: < " + shortenCosts(QCs.tmp.qc5.req) + "<br>" + QCs.save.qc5 + " Expanders"
+			getEl("repExpand").className = QCs.data[5].can() ? "storebtn" : "unavailablebtn"
 		}
 	} else {
 		let cost = getReplUnlCost()
@@ -824,15 +826,20 @@ function setAchsDisplay(toggle) {
 	getEl("showAchs").textContent = (tmp.mod.hideAchs ? "Show" : "Hide") + " achievements"
 }
 
-function primaryStatsDisplayResetLayers(){
-	if (!ph.shown("eternity")) getEl("pasteternities").style.display = "none"
-	else getEl("pasteternities").style.display = "inline-block"
-	if (ph.shown("quantum")) getEl("pastquantums").style.display = "inline-block"
-	else getEl("pastquantums").style.display = "none"
-	if (ph.shown("ghostify")) getEl("pastghostifies").style.display = "inline-block"
-	else getEl("pastghostifies").style.display = "none"
-	getEl("pastinfs").style.display = ph.shown("infinity") ? "" : "none"
-	var showStats = (ph.shown("infinity") && player.challenges.length >= 2) || ph.shown("eternity") || ph.shown("quantum") || ph.shown("ghostify") ? "" : "none"
+function primaryStatsDisplayResetLayers() {
+	let showStats = false
+	let statsIds = {
+		infinity: "pastinfs",
+		eternity: "pasteternities",
+		quantum: "pastquantums",
+		ghostify: "pastghostifies"
+	}
+	for (var i in statsIds) {
+		var shown = ph.shown(i)
+		showStats = showStats || shown
+		getEl(statsIds[i]).style.display = shown ? "" : "none"
+	}
+
 	getEl("brfilter").style.display = showStats
 	getEl("statstabs").style.display = showStats
 

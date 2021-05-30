@@ -155,6 +155,8 @@ function updateActiveBigRipUpgrades() {
 }
 
 function isBigRipUpgradeActive(id, bigRipped) {
+	return false //Game-breaking
+
 	if (!tmp.quActive) return false
 	if (bigRipped === undefined ? !tmp.qu.bigRip.active : !bigRipped) return false
 	return tmp.bruActive[id]

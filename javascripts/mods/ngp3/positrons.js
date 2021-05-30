@@ -40,7 +40,7 @@ let POSITRONS = {
 		quantum(false, true)
 	},
 	maxSacMult() {
-		return QCs.isRewardOn(4) ? QCs.tmp.rewards[4] : 0.25
+		return QCs.isRewardOn(2) ? QCs.tmp.rewards[2] : 0.25
 	},
 	types: {
 		ng: {
@@ -65,7 +65,7 @@ let POSITRONS = {
 		rg: {
 			pow() {
 				let x = 0
-				if (enB.active("pos", 5)) x = enB.tmp.pos5
+				if (enB.active("glu", 6)) x = enB.tmp.glu6
 				return x
 			},
 			sacGals(pow) {

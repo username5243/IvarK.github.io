@@ -226,8 +226,8 @@ let qMs = {
 	},
 	23: {
 		req: 40,
-		eff: () => "Immediately generate TP on dilation runs",
-		effGot: () => "You now can immediately generate TP on dilation runs."
+		eff: () => "All Infinity-related autobuyers fire for each tick",
+		effGot: () => "All Infinity-related autobuyers now fire for each tick"
 	},
 	24: {
 		req: 50,
@@ -247,8 +247,8 @@ let qMs = {
 	},
 	27: {
 		req: 85,
-		eff: () => "All Infinity-related autobuyers fire for each tick",
-		effGot: () => "All Infinity-related autobuyers now fire for each tick",
+		eff: () => "???",
+		effGot: () => "???"
 	},
 	28: {
 		req: 100,

@@ -121,6 +121,7 @@
 			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn paradoxbtn" onclick='showTab("paradox")'>Paradox</button>
 			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")' class="tabbtn galaxybtn">Galaxy</button>
 			<button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('infinity')">Infinity</button>
+			<button id="repMajorBtn" style="font-family: Typewriter; font-size: 20px" class="infinitybtn" onclick="showTab('repMajor')">Replicantis</button>
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
@@ -1547,7 +1548,7 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 5)</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 6)</p>
 			</p>
 			<div class="footer bottom"></div>
 		</div>
@@ -4266,8 +4267,9 @@
 				<br><br><br>
 				<p id="replicantiapprox"></p>
 				<br>
-				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 70px; font-size: 12px"></button>
-				<button class="storebtn" id="replicantiBoost" onclick="QCs.data[1].boost()" style="width: 200px; height: 70px; font-size: 12px"></button>
+				<button class="storebtn" id="replicantireset" onclick="replicantiGalaxy()" style="width: 200px; height: 90px; font-size: 12px"></button>
+				<button class="storebtn" id="repCompress" onclick="QCs.data[1].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
+				<button class="storebtn" id="repExpand" onclick="QCs.data[5].boost()" style="width: 200px; height: 90px; font-size: 12px"></button>
 				<br>
 				<button class="storebtn" id="replicantiresettoggle" onclick="replicantiGalaxyAutoToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Auto galaxy OFF</button><br>
 				<button class="storebtn" id="replicantibulkmodetoggle" onclick="replicantiGalaxyBulkModeToggle()" style="width: 200px; height: 25px; font-size: 12px; display: none">Galaxy bulk mode: single</button>
@@ -4360,659 +4362,660 @@
 			</div>
 			<div class="footer bottom"></div>
 		</div>
-		</div>
-		<div class='tab' id='quantumtab'>
-			<br>
-			<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
-			<br>
-			You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy (based on quarks and entangled gluons), with a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
-			<br>
-			<span id="quarkEnergySub"></span>
-			<br>
-			<table class="table" align="center" style="margin: auto">
+	</div>
+	<div class='tab' id='repMajor'></div>
+	<div class='tab' id='quantumtab'>
+		<br>
+		<div>Your quantum worth (sum of anti-quarks, colored anti-quarks, and anti-gluons) is currently <b class="QKAmount" id="quantumWorth1">0</b>.</div>
+		<br>
+		You have <span id="quarkEnergy" style="font-size:35px">0.0</span> quantum energy (based on quarks and entangled gluons), with a best-ever of <span id="bestQE" style="font-size:15px">0.0</span> energy. (<span id="quarkEnergyMult" style="font-size: 25px">0.0</span>x)
+		<br>
+		<span id="quarkEnergySub"></span>
+		<br>
+		<table class="table" align="center" style="margin: auto">
+			<tr>
+				<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
+				<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
+				<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
+				<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
+				<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
+				<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
+				<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
+			</tr>
+		</table>
+		<div class='quantumtab' id='uquarks'>
+			<canvas id="quarkCanvas"></canvas>
+			<table class='qTable'><tr>
 				<tr>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('uquarks')">Anti-Quarks</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('gluons')">Anti-Gluonic Boosts</button></td>
-					<td id='positronstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('positrons')">Positrons</button></td>
-					<td id='replicantstabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('replicants')">Duplicants</button></td>
-					<td id='nanofieldtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('nanofield')">Nanofield</button></td>
-					<td id='todtabbtn'><button class="secondarytabbtn" onclick="showQuantumTab('tod')">Tree of Decay</button></td>
-					<td><button class="secondarytabbtn" onclick="showQuantumTab('speedruns')">Milestones</button></td>
+					<td colspan=3>
+						You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks<br>
+						<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
+						<button class='storebtn' id="assort_percentage_10" style="width:50px" onclick="changeAssortPercentage(10)">10%</button>
+						<button class='storebtn' id="assort_percentage_25" style="width:50px" onclick="changeAssortPercentage(25)">25%</button>
+						<button class='storebtn' id="assort_percentage_50" style="width:50px" onclick="changeAssortPercentage(50)">50%</button>
+						<button class='storebtn' id="assort_percentage_100" style="width:50px" onclick="changeAssortPercentage(100)">100%</button>
+						<br><br>
+						<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
+						<button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button>
+						<button class='storebtn' id="autoAssign" style="width:135px" onclick='toggleAutoAssign()'>Auto: OFF</button>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=3>
+						Your colored anti-quarks have a net <span id='colorCharge'></span>.
+						<br>
+						(net worth of <span id='colorChargeAmt'></span>)
+						<br><br>
+						<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="red">
+						You have <span class="red" id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
+						<br>
+						<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
+						<br><br>
+						Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
+					</td>
+					<td class="green">
+						You have <span class="green" id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
+						<br>
+						<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
+						<br><br>
+						Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
+					</td>
+					<td class="blue">
+						You have <span class="blue" id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
+						<br>
+						<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
+						<br><br>
+						Ratio: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
+					</td>
+					<td>
+						You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
+					</td>
+					<td>
+						You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
+					</td>
+				</tr>
+				<tr>
+					<td colspan=3>
+						Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
+					</td>
 				</tr>
 			</table>
-			<div class='quantumtab' id='uquarks'>
-				<canvas id="quarkCanvas"></canvas>
-				<table class='qTable'><tr>
-					<tr>
-						<td colspan=3>
-							You will get <span id="assort_amount"></span> colored anti-quarks when you assort anti-quarks<br>
-							<input id="assort_percentage" type="number" min=1 max=100 onchange="changeAssortPercentage()">%
-							<button class='storebtn' id="assort_percentage_10" style="width:50px" onclick="changeAssortPercentage(10)">10%</button>
-							<button class='storebtn' id="assort_percentage_25" style="width:50px" onclick="changeAssortPercentage(25)">25%</button>
-							<button class='storebtn' id="assort_percentage_50" style="width:50px" onclick="changeAssortPercentage(50)">50%</button>
-							<button class='storebtn' id="assort_percentage_100" style="width:50px" onclick="changeAssortPercentage(100)">100%</button>
-							<br><br>
-							<button class='storebtn' id="assignAllButton" style="width:135px" onclick='assignAll()'>Distribute</button>
-							<button class='storebtn' id="autoAssignRotate" style="width:135px" onclick='rotateAutoAssign()'>Rotation: None</button>
-							<button class='storebtn' id="autoAssign" style="width:135px" onclick='toggleAutoAssign()'>Auto: OFF</button>
-						</td>
-					</tr>
-					<tr>
-						<td colspan=3>
-							Your colored anti-quarks have a net <span id='colorCharge'></span>.
-							<br>
-							(net worth of <span id='colorChargeAmt'></span>)
-							<br><br>
-							<button class='storebtn' id="neutralize_quarks" style="width: 360px" onclick='neutralize_quarks()'>Neutralize (requires <span id="neutralize_req"></span> anti-quarks)</button>
-						</td>
-					</tr>
-					<tr>
-						<td class="red">
-							You have <span class="red" id="redQuarks" style="font-size:35px">0</span> red anti-quarks.
-							<br>
-							<button class='storebtn' id='redAssort' onclick='assignQuark("r")'>Assort</button>
-							<br><br>
-							Ratio: <input id="ratio_r" type="number" min=0 onchange="changeRatio('r')"></input>
-						</td>
-						<td class="green">
-							You have <span class="green" id="greenQuarks" style="font-size:35px">0</span> green anti-quarks.
-							<br>
-							<button class='storebtn' id='greenAssort' onclick='assignQuark("g")'>Assort</button>
-							<br><br>
-							Ratio: <input id="ratio_g" type="number" min=0 onchange="changeRatio('g')"></input>
-						</td>
-						<td class="blue">
-							You have <span class="blue" id="blueQuarks" style="font-size:35px">0</span> blue anti-quarks.
-							<br>
-							<button class='storebtn' id='blueAssort' onclick='assignQuark("b")'>Assort</button>
-							<br><br>
-							Ratio: <input id="ratio_b" type="number" min=0 onchange="changeRatio('b')"></input>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							You have <span class="red" id="redPower" style="font-size:35px">0.0</span> red power. Translated to +<span class="red" id="redTranslation" style="font-size:35px"></span>% stronger galaxies.
-						</td>
-						<td>
-							You have <span class="green" id="greenPower" style="font-size:35px">0.0</span> green power. Translated to <span class="green" id="greenTranslation" style="font-size:35px"></span>x slower replicate interval scaling.
-						</td>
-						<td>
-							You have <span class="blue" id="bluePower" style="font-size:35px">0.0</span> blue power. Translated to <span class="blue" id="blueTranslation" style="font-size:35px"></span>x more Tachyon Particles and passive TT gains. (before softcaps)
-						</td>
-					</tr>
-					<tr>
-						<td colspan=3>
-							Your quantum energy is giving a +<span id="quarkEnergyEffect1" style="font-size:35px">0.0</span>% more color powers and +<span id="quarkEnergyEffect2" style="font-size:35px">0.0</span> total extra color powers.
-						</td>
-					</tr>
-				</table>
-			</div>
-			<div class='quantumtab' id='gluons'><table class="qTable">
-				<tr>
-					<td>
-						You have <span id="rg" style="font-size:35px">0</span> red-green anti-gluons,
-						<br>
-						which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.
-						<br>
-						(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
-						<br><br>
-						<button id="entangle_rg" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluons to activate some boosts</button>
-						<br>
-						<span id="entangle_rg_bonus"></span>
-					</td>
-					<td>
-						You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
-						<br>
-						which multiply the red power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf">0.00</span>.
-						<br>
-						(+<span id='gb_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
-						<br><br>
-						<button id="entangle_gb" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluons to activate some boosts</button>
-						<br>
-						<span id="entangle_gb_bonus"></span>
-					</td>
-					<td>
-						You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
-						<br>
-						which multiply the red power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf">0.00</span>.
-						<br>
-						(+<span id='br_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
-						<br><br>
-						<button id="entangle_br" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluons to activate some boosts</button>
-						<br>
-						<span id="entangle_br_bonus"></span>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=3>
-						You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
-						<br>
-						<button class="storebtn" id="enB_glu_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> best Quantum Energy</button>
-						<br>
-						<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
-					</td>
-				</tr>
-				<tr>
-					<td colspan=3>
-						Some Entangled Boosts only work on and based on which kind you choose.
-						<br>
-						<span id="masterNote">However, mastered boosts are based on total gluons and always activated instead!</span>
-						<br><br>
-						<span id="enB_glu_next"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="enB_glu1">
-						<b id="enB_glu1_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu1_type"></span>
-						<br>
-						Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:25px"></span>x.
-					</td>
-					<td id="enB_glu2">
-						<b id="enB_glu2_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu2_type"></span>
-						<br>
-						Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:25px"></span>x.
-					</td>
-					<td id="enB_glu3">
-						<b id="enB_glu3_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu3_type"></span>
-						<br>
-						Remote Antimatter Galaxy scaling starts <span id="enB_glu3_eff" style="font-size:25px"></span> later.
-					</td>
-				</tr>
-				<tr>
-					<td id="enB_glu4">
-						<b id="enB_glu4_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu4_type"></span>
-						<br>
-						<span id="enB_glu4_eff"></span>
-					</td>
-					<td id="enB_glu5">
-						<b id="enB_glu5_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu5_type"></span>
-						<br>
-						The cost superscaling of 3x TP upgrade is <span id="enB_glu5_eff" style="font-size:25px"></span>% slower.
-					</td>
-					<td id="enB_glu6">
-						<b id="enB_glu6_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu6_type"></span>
-						<br>
-						Replicated Galaxies contribute to Positrons, with <span id="enB_glu6_eff" style="font-size:35px"></span>% power.
-					</td>
-				</tr>
-				<tr>
-					<td id="enB_glu7">
-						<b id="enB_glu7_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu7_type"></span>
-						<br>
-						Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:25px"></span>%)
-					</td>
-					<td id="enB_glu8">
-						<b id="enB_glu8_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu8_type"></span>
-						<br>
-						Replicanti upgrades greatly boost themselves expect Replicated Galaxies.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:25px"></span>)
-					</td>
-					<td id="enB_glu9">
-						<b id="enB_glu9_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu9_type"></span>
-						<br>
-						Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:25px"></span>.
-					</td>
-				</tr>
-				<tr>
-					<td id="enB_glu10">
-						<b id="enB_glu10_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_glu10_type"></span>
-						<br>
-						Protect <span id="enB_glu10_eff" style="font-size:35px"></span> for each galaxy type from converting into Positrons.
-					</td>
-					<td></td>
-					<td></td>
-				</tr>
-			</table></div>
-			<div id="speedruns" class="quantumtab">
-				<table class="qTable_4col">
-					<tr>
-						<td id="qMs_sr_cell">
-							<b style="font-size: 25px">Speedrun</b><br>
-							Your best quantum time is <span id="qMs_sr_target" style="font-size: 15px">0 seconds</span>,<br>
-							which giving you <span id="qMs_sr_points" style="font-size: 25px">0</span> Milestone Points.<br>
-							(Next Milestone Point is at <span id="qMs_sr_next">0</span> best quantum)
-						</td>
-						<td id="qMs_rl_cell">
-							<b style="font-size: 25px">Relativistic</b><br>
-							You got a best of <span id="qMs_rl_target" style="font-size: 15px">0</span> Tachyon Particles,<br>
-							which giving you <span id="qMs_rl_points" style="font-size: 25px">0</span> Milestone Points.<br>
-							(Next Milestone Point is at <span id="qMs_rl_next">0</span> best Tachyon Particles)
-						</td>
-						<td id="qMs_en_cell">
-							<b style="font-size: 25px">Energetic</b><br>
-							Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>,<br>
-							which giving you <span id="qMs_en_points" style="font-size: 25px">0</span> Milestone Points.<br>
-							(Next Milestone Point is at <span id="qMs_en_next">0</span> best quantum energy)
-						</td>
-						<td id="qMs_ch_cell">
-							<b style="font-size: 25px">Challenging</b><br>
-							You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges,<br>
-							which giving you <span id="qMs_ch_points" style="font-size: 25px">0</span> Milestone Points.<br>
-							(Next Milestone Point is at <span id="qMs_ch_next">0</span> paired challenge completions)
-						</td>
-					</tr>
-					<tr>
-						<td class="green" colspan=4>
-							You have got a total of <span id="qMs_points" style="font-size: 35px">0</span> Milestone Points!
-						</td>
-					</tr>
-				</table>
-				<br>
-				<table class="table" align="center" style="margin: auto" id="qMs_rewards">
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_1"></td>
-						<td class="milestoneText" id="qMs_req_2"></td>
-						<td class="milestoneText" id="qMs_req_3"></td>
-						<td class="milestoneText" id="qMs_req_4"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_1" onclick="qMs.toggle(1)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_2" onclick="qMs.toggle(2)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_3" onclick="qMs.toggle(3)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_4" onclick="qMs.toggle(4)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_5"></td>
-						<td class="milestoneText" id="qMs_req_6"></td>
-						<td class="milestoneText" id="qMs_req_7"></td>
-						<td class="milestoneText" id="qMs_req_8"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_5" onclick="qMs.toggle(5)" style="font-size: 10px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_6" onclick="qMs.toggle(6)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_7" onclick="qMs.toggle(7)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_8" onclick="qMs.toggle(8)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_9"></td>
-						<td class="milestoneText" id="qMs_req_10"></td>
-						<td class="milestoneText" id="qMs_req_11"></td>
-						<td class="milestoneText" id="qMs_req_12"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_9" onclick="qMs.toggle(9)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_10" onclick="qMs.toggle(10)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_11" onclick="qMs.toggle(11)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_12" onclick="qMs.toggle(12)" style="font-size: 10px"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_13"></td>
-						<td class="milestoneText" id="qMs_req_14"></td>
-						<td class="milestoneText" id="qMs_req_15"></td>
-						<td class="milestoneText" id="qMs_req_16"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_13" onclick="qMs.toggle(13)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_14" onclick="qMs.toggle(14)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_15" onclick="qMs.toggle(15)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_16" onclick="qMs.toggle(16)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_17"></td>
-						<td class="milestoneText" id="qMs_req_18"></td>
-						<td class="milestoneText" id="qMs_req_19"></td>
-						<td class="milestoneText" id="qMs_req_20"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_17" onclick="qMs.toggle(17)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_18" onclick="qMs.toggle(18)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_19" onclick="qMs.toggle(19)" style="font-size: 11px"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_20" onclick="qMs.toggle(20)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_21"></td>
-						<td class="milestoneText" id="qMs_req_22"></td>
-						<td class="milestoneText" id="qMs_req_23"></td>
-						<td class="milestoneText" id="qMs_req_24"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_21" onclick="qMs.toggle(21)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_22" onclick="qMs.toggle(22)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_23" onclick="qMs.toggle(23)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_24" onclick="qMs.toggle(24)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_25"></td>
-						<td class="milestoneText" id="qMs_req_26"></td>
-						<td class="milestoneText" id="qMs_req_27"></td>
-						<td class="milestoneText" id="qMs_req_28"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_28" onclick="qMs.toggle(28)"></button></td>
-					</tr>
-
-					<!-- NEXT ROW -->
-					<tr>
-						<td class="milestoneText" id="qMs_req_29"></td>
-						<td class="milestoneText" id="qMs_req_30"></td>
-						<td class="milestoneText" id="qMs_req_31"></td>
-						<td class="milestoneText" id="qMs_req_32"></td>
-					</tr>
-					<tr>
-						<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_31" onclick="qMs.toggle(31)"></button></td>
-						<td><button class="qMs_locked" id="qMs_reward_32" onclick="qMs.toggle(32)"></button></td>
-					</tr>
-				</table>
-			</div>
-			<div class='quantumtab' id='positrons'><table class="qTable_4col">
-				<tr>
-					<td class="yellow" colspan=2>
-						<span id="pos_formula"></span>
-						<span id="pos_amt" style="font-size:25px">0</span> Positrons
-					</td>
-					<td>
-						<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
-					</td>
-					<td>
-						<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
-						<br>
-						<span id="enB_pos_next"></span>
-					</td>
-				</tr>
-				<tr>
-					<td class="yellow" colspan=2>
-						<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
-						<br><br>
-						If Positrons are on, then Meta-Dimension Boosts and Quantum Energy multiplier are sacrificed for Positrons...
-						<br>
-						which allow Galaxies and Quantum Energy to be sacrificed for Positronic Charge!
-					</td>
-					<td colspan=2>
-						<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
-						<br>
-						<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
-						<br><br>
-						<button id="entangle_rg_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluon kind</button>
-						<button id="entangle_gb_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluon kind</button>
-						<button id="entangle_br_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluon kind</button>
-					</td>
-				</tr>
-				<tr>
-					<td class="dark_yellow">
-						<b style="font-size: 25px">Dimensional</b> (<span id="pos_pow_ng">0.00</span> Power)
-						<br>
-						<span id="pos_gals_ng">0.00</span> Antimatter Galaxies + <span id="pos_eng_ng">0.00</span> Energy -><br>
-						<span id="pos_char_ng" style="font-size: 15px">0.00</span> Charge
-					</td>
-					<td class="dark_yellow">
-						<b style="font-size: 25px">Replicanti</b> (<span id="pos_pow_rg">0.00</span> Power)
-						<br>
-						<span id="pos_gals_rg">0.00</span> Replicated Galaxies + <span id="pos_eng_rg">0.00</span> Energy -><br>
-						<span id="pos_char_rg" style="font-size: 15px">0.00</span> Charge
-					</td>
-					<td id="enB_pos1" colspan=2>
-						<b id="enB_pos1_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos1_type"></span>
-						<br>
-						Increase the quantum energy multiplier by +<span id="enB_pos1_eff" style="font-size:35px"></span>x.
-					</td>
-				<tr>
-				</tr>
-					<td class="dark_yellow">
-						<b style="font-size: 25px">Extragalactic</b> (<span id="pos_pow_eg">0.00</span> Power)
-						<br>
-						<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
-						<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
-					</td>
-					<td class="dark_yellow">
-						<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
-						<br>
-						<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
-						<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
-					</td>
-					<td id="enB_pos2" colspan=2>
-						<b id="enB_pos2_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos2_type"></span>
-						<br>
-						Best meta-antimatter raises the power per ten normal Dimensions by ^<span id="enB_pos2_eff" style="font-size:35px"></span>.
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos3" colspan=2>
-						<b id="enB_pos3_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos3_type"></span>
-						<br>
-						Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos4" colspan=2>
-						<b id="enB_pos4_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos4_type"></span>
-						<br>
-						Before multipliers, Meta Dimension Boosts greatly boost the Quantum Energy formula to ^<span id="enB_pos4_eff" style="font-size:35px"></span>, but also reduce the effects of quantum energy.
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos5" colspan=2>
-						<b id="enB_pos5_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos5_type"></span>
-						<br>
-						Base replicate chance is <span id="enB_pos5_eff" style="font-size:35px"></span>% higher.
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos6" colspan=2>
-						<b id="enB_pos6_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos6_type"></span>
-						<br>
-						Infinitied stat boosts itself for stronger boosts, by ^<span id="enB_pos6_eff" style="font-size:35px"></span>.
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos7" colspan=2>
-						<b id="enB_pos7_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos7_type"></span>
-						<br>
-						All galaxies are <span id="enB_pos7_eff" style="font-size:35px"></span>% stronger in Quantum Challenges.
-					</td>
-				<tr>
-				</tr>
-					<td colspan=2></td>
-					<td id="enB_pos8" colspan=2>
-						<b id="enB_pos8_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos8_type"></span>
-						<br>
-						Partially share TS232 power to all galaxies by +<span id="enB_pos8_eff" style="font-size:35px"></span>%.
-					</td>
-				</tr>
-				<tr>
-					<td colspan=2></td>
-					<td id="enB_pos9" colspan=2>
-						<b id="enB_pos9_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos9_type"></span>
-						<br>
-						The slowdown effect of Replicated Boosts starts <span id="enB_pos9_eff" style="font-size:35px"></span> later.
-					</td>
-				</tr>
-				<tr>
-					<td colspan=2></td>
-					<td id="enB_pos10" colspan=2>
-						<b id="enB_pos10_name" style="font-size: 25px"></b>
-						<br>
-						<span id="enB_pos10_type"></span>
-						<br>
-						Reduce the goal of all Paired Challenges to ^<span id="enB_pos10_eff" style="font-size:35px"></span>.
-					</td>
-				</tr>
-			</table></div>
-			<div class='quantumtab' id='replicants'>
-				You have <span id="replicantiAmount2">1</span> replicantis.<br>
-				You have <span class="rqC" id="rgRepl">1</span> red-green, <span class="gqC" id="gbRepl">1</span> green-blue, and <span class="bqC" id="brRepl">1</span> blue-red gluons.<br>
-				<table class='qTable'><tr><td>
-					You have <span id="replicantAmount" style="font-size:35px">0</span> normal duplicants.<br>
-					They are gathering <span id="normalReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
-					<button class="storebtn" id="replicantReset" style="width: 220px; height: 60px; font-size: 11px" onclick='replicantReset()'></button><br><button class="storebtn" id="autoReset" style="width: 220px" onclick='toggleAutoReset()'></button>
-				</td><td>
-					You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker duplicants.<br>
-					They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>.<br>
-					Feed your normal duplicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
-					<button class='storebtn' id='feedNormal' style='width: 280px' onclick="feedReplicant(1)">Feed one with quantum food</button><br>
-					<button id='breakLimit' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
-					<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button>
-				</td><td>
-					You have <span id="babyReplAmount" style="font-size:35px">0</span> baby duplicants.<br>
-					They are gathering <span id="babyReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
-					They will become normal duplicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
-				</td></tr><tr><td>
-					You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span>
-				</td><td>
-					You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
-					<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()' style="width: 210px"></button><br>
-					<button class='storebtn' id='buyMaxQuantumFood' onclick='buyMaxQuantumFood()' style="width: 210px">Max buy quantum food</button>
-				</td><td id="eggonsCell">
-					You have <span id="eggonAmount" style="font-size:35px">0</span> eggons. <span id="hatchProgress" style="font-size:15px">0.0%</span><br>
-					<button class='storebtn' id='reduceHatchSpeed' style='width: 240px; height: 80px' onclick='reduceHatchSpeed()'></button><br>
-					<button class='storebtn' id='maxReduceHatchSpeed' onclick='maxReduceHatchSpeed()' style="width: 240px">Max reduce the hatch speed</button>
-				</td></tr></table>
-			</div>
-			<div class='quantumtab' id='nanofield'>
-				<table id='nftabs' align="center" style="margin: auto">
-					<tr>
-						<td><button class="secondarytabbtn" onclick="showNFTab('nanoverse')">The Nanoverse</button></td>
-						<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')">Antipretus' Lair</button></td>
-					</tr>
-				</table>
-				<div class='nftab' id='nanoverse'>
-					You have <span id="quarksNanofield"></span> preons.<br>
-					<span id="ns"></span>
-					<table class="qTable"><tr><td>
-						You have <span id="preonEnergy" style="font-size:35px"></span> preon energy.<br>
-						You have <span id="quarkPower" style="font-size:35px"></span> preon power. Next at <span id="quarkPowerThreshold" style="font-size:35px"></span> preon energy.<br>
-						You are getting <span id="quarkEnergyRate"></span> preon energy per second if your preon anti-energy didn't reach its limit.
-					</td><td>
-						You have <span id="quarkCharge" style="font-size:35px"></span> preon charge.<br>
-						<button class="storebtn" id="produceQuarkCharge" onclick="startProduceQuarkCharge()"></button><br>
-						You are getting <span id="quarkChargeRate"></span> preon charge per second, but losing <span id="quarkLoss"></span> preons per second.
-					</td><td>
-						You have <span id="quarkAntienergy" style="font-size:35px"></span> preon anti-energy. At <span id="quarkChargeProductionCap" style="font-size:35px"></span>, your preon charge will stop producing energy and anti-energy.<br>
-						You are getting <span id="quarkAntienergyRate"></span> preon anti-energy per second.
-					</td></tr></table>
-					You have <span id="rewards" style="font-size:35px"></span> <span id="nfRewardScaling"></span>.
-					<table class="table" align=center style="margin: auto" id="nfRewards"></table>
-					<br><br>
-				</div>
-				<div class='nftab' id='antipreon'>
-					You have <span id="rewards_AP" style="font-size:35px"></span> Nanorewards.
-					<br><br>
-					<div id="apgInfo">
-						<b style="font-size: 35px">Welcome to my lair, ghosts!</b>
-						<br>
-						~ <span style="font-size: 25px"> Antipretus</span>, the Ghost Overseer of Antifield
-						<br><br>
-						<span id="sleepy">
-							<b style="font-size: 25px">Antipretus is sleepy...</b>
-							<br>
-							The scientists from Bosonic Lab know that he will take control of Nanoverse when he see a lot of Nanorewards from you.
-							<br><br>
-							<b class="warning">Don't get <span id="rewards_wake" style="font-size: 35px">104</span> rewards or else!</b>
-						</span>
-						<span id="woke">
-							<b class="warning" style="font-size: 35px">Antipretus has woken up and took control of your Nanoverse!</b>
-							<br><br>
-							<b style="font-size: 25px">The following effects are now applied!</b>
-							<br>
-							Each time you get 1 preon power:<br>
-							- You will lose preons faster when you start generating charge.<br>
-							- 1.41x slower charge production.<br>
-							- 1.41x faster anti-energy production.
-							<br><br>
-							Additionally, the power of Nanorewards have been softcapped!
-							<br><br>
-							However, the scientists decide to give you a slight quality of life boost. Your current reward gets 0.5 free tiers.
-							<br><br>
-							<b style="font-size: 35px">Good luck! :)</b>
-						</span>
-					</div>
-				</div>
-			</div>
-			<div class='quantumtab' id='tod'>
-				<span id="todspeed"></span>
-				<table class="qTable"><tr id="todRow"></tr></table>
-				<button class="storebtn" onclick="unstableAll()" style="width: 210px">Gain all unstable quarks</button>
-				<table class="table" align="center" style="margin: auto">
-					<tr>
-						<td><button id="redBtn" class="secondarytabbtn" onclick="showBranchTab('red')">Red Branch Upgrades</button></td>
-						<td><button id="greenBtn" class="secondarytabbtn" onclick="showBranchTab('green')">Green Branch Upgrades</button></td>
-						<td><button id="blueBtn" class="secondarytabbtn" onclick="showBranchTab('blue')">Blue Branch Upgrades</button></td>
-						<td><button class="secondarytabbtn" onclick="showBranchTab('upgrades')">Tree Upgrades</button></td>
-					</tr>
-				</table>
-				<div class="branchtab" id="redBranch"></div>
-				<div class="branchtab" id="greenBranch"></div>
-				<div class="branchtab" id="blueBranch"></div>
-				<div class="branchtab" id="upgradesBranch">
-					<span id="treeUpgradeEff"></span>
-					<table class="table" align="center" style="margin: auto"><tr>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)' style='font-size:9px'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)' style='font-size:9px'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)' style='font-size:9px'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span>x<br><span id="treeupg4cost"></span></button></td>
-					</tr><tr>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>???<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
-						<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
-					</tr></table>
-					<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
-				</div>
-				<br>
-				<br>
-				<br>
-			</div>
-			<div class="footer bottom"></div>
 		</div>
+		<div class='quantumtab' id='gluons'><table class="qTable">
+			<tr>
+				<td>
+					You have <span id="rg" style="font-size:35px">0</span> red-green anti-gluons,
+					<br>
+					which multiply the red power by <span class="red" id="rPowerBuff">1.00</span>x, but subtract the green power by -<span class="green" id="gPowerNerf">0.00</span>.
+					<br>
+					(+<span id='rg_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='rg_prev'></span> to <span id='rg_next'>0</span>.)
+					<br><br>
+					<button id="entangle_rg" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluons to activate some boosts</button>
+					<br>
+					<span id="entangle_rg_bonus"></span>
+				</td>
+				<td>
+					You have <span id="gb" style="font-size:35px">0</span> green-blue anti-gluons,
+					<br>
+					which multiply the red power by <span class="green" id="gPowerBuff">1.00</span>x, but subtract the green power by -<span class="blue" id="bPowerNerf">0.00</span>.
+					<br>
+					(+<span id='gb_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='gb_prev'></span> to <span id='gb_next'>0</span>.)
+					<br><br>
+					<button id="entangle_gb" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluons to activate some boosts</button>
+					<br>
+					<span id="entangle_gb_bonus"></span>
+				</td>
+				<td>
+					You have <span id="br" style="font-size:35px">0</span> blue-red anti-gluons,
+					<br>
+					which multiply the red power by <span class="blue" id="bPowerBuff">1.00</span>x, but subtract the green power by -<span class="red" id="rPowerNerf">0.00</span>.
+					<br>
+					(+<span id='br_gain'>0</span> on next quantum, but reduce your red anti-quarks from <span id='br_prev'></span> to <span id='br_next'>0</span>.)
+					<br><br>
+					<button id="entangle_br" style="width: 180px; height: 36px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluons to activate some boosts</button>
+					<br>
+					<span id="entangle_br_bonus"></span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=3>
+					You have <span id="enB_glu_amt" style="font-size:35px">0</span> Entangled Boosters.
+					<br>
+					<button class="storebtn" id="enB_glu_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('glu')">+1: Requires <span id="enB_glu_cost">1</span> best Quantum Energy</button>
+					<br>
+					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('glu')">Max buy Entangled Boosters</button>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=3>
+					Some Entangled Boosts only work on and based on which kind you choose.
+					<br>
+					<span id="masterNote">However, mastered boosts are based on total gluons and always activated instead!</span>
+					<br><br>
+					<span id="enB_glu_next"></span>
+				</td>
+			</tr>
+			<tr>
+				<td id="enB_glu1">
+					<b id="enB_glu1_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu1_type"></span>
+					<br>
+					Increase the quantum energy multiplier by +<span id="enB_glu1_eff" style="font-size:25px"></span>x.
+				</td>
+				<td id="enB_glu2">
+					<b id="enB_glu2_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu2_type"></span>
+					<br>
+					Increase extra replicated galaxies by <span id="enB_glu2_eff" style="font-size:25px"></span>x.
+				</td>
+				<td id="enB_glu3">
+					<b id="enB_glu3_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu3_type"></span>
+					<br>
+					Remote Antimatter Galaxy scaling starts <span id="enB_glu3_eff" style="font-size:25px"></span> later.
+				</td>
+			</tr>
+			<tr>
+				<td id="enB_glu4">
+					<b id="enB_glu4_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu4_type"></span>
+					<br>
+					<span id="enB_glu4_eff"></span>
+				</td>
+				<td id="enB_glu5">
+					<b id="enB_glu5_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu5_type"></span>
+					<br>
+					The cost superscaling of 3x TP upgrade is <span id="enB_glu5_eff" style="font-size:25px"></span>% slower.
+				</td>
+				<td id="enB_glu6">
+					<b id="enB_glu6_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu6_type"></span>
+					<br>
+					Replicated Galaxies contribute to Positrons, with <span id="enB_glu6_eff" style="font-size:35px"></span>% power.
+				</td>
+			</tr>
+			<tr>
+				<td id="enB_glu7">
+					<b id="enB_glu7_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu7_type"></span>
+					<br>
+					Tachyonic Galaxies share the partial strength of Replicated Galaxies. (by <span id="enB_glu7_eff" style="font-size:25px"></span>%)
+				</td>
+				<td id="enB_glu8">
+					<b id="enB_glu8_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu8_type"></span>
+					<br>
+					Replicanti upgrades greatly boost themselves expect Replicated Galaxies.<br>(x levels -> <span id="enB_glu8_eff" style="font-size:25px"></span>)
+				</td>
+				<td id="enB_glu9">
+					<b id="enB_glu9_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu9_type"></span>
+					<br>
+					Infinite Time reward is raised to the power of ^<span id="enB_glu9_eff" style="font-size:25px"></span>.
+				</td>
+			</tr>
+			<tr>
+				<td id="enB_glu10">
+					<b id="enB_glu10_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_glu10_type"></span>
+					<br>
+					Protect <span id="enB_glu10_eff" style="font-size:35px"></span> for each galaxy type from converting into Positrons.
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+		</table></div>
+		<div id="speedruns" class="quantumtab">
+			<table class="qTable_4col">
+				<tr>
+					<td id="qMs_sr_cell">
+						<b style="font-size: 25px">Speedrun</b><br>
+						Your best quantum time is <span id="qMs_sr_target" style="font-size: 15px">0 seconds</span>,<br>
+						which giving you <span id="qMs_sr_points" style="font-size: 25px">0</span> Milestone Points.<br>
+						(Next Milestone Point is at <span id="qMs_sr_next">0</span> best quantum)
+					</td>
+					<td id="qMs_rl_cell">
+						<b style="font-size: 25px">Relativistic</b><br>
+						You got a best of <span id="qMs_rl_target" style="font-size: 15px">0</span> Tachyon Particles,<br>
+						which giving you <span id="qMs_rl_points" style="font-size: 25px">0</span> Milestone Points.<br>
+						(Next Milestone Point is at <span id="qMs_rl_next">0</span> best Tachyon Particles)
+					</td>
+					<td id="qMs_en_cell">
+						<b style="font-size: 25px">Energetic</b><br>
+						Your best quantum energy is <span id="qMs_en_target" style="font-size: 15px">0</span>,<br>
+						which giving you <span id="qMs_en_points" style="font-size: 25px">0</span> Milestone Points.<br>
+						(Next Milestone Point is at <span id="qMs_en_next">0</span> best quantum energy)
+					</td>
+					<td id="qMs_ch_cell">
+						<b style="font-size: 25px">Challenging</b><br>
+						You have completed a total of <span id="qMs_ch_target" style="font-size: 15px">0</span> unique paired challenges,<br>
+						which giving you <span id="qMs_ch_points" style="font-size: 25px">0</span> Milestone Points.<br>
+						(Next Milestone Point is at <span id="qMs_ch_next">0</span> paired challenge completions)
+					</td>
+				</tr>
+				<tr>
+					<td class="green" colspan=4>
+						You have got a total of <span id="qMs_points" style="font-size: 35px">0</span> Milestone Points!
+					</td>
+				</tr>
+			</table>
+			<br>
+			<table class="table" align="center" style="margin: auto" id="qMs_rewards">
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_1"></td>
+					<td class="milestoneText" id="qMs_req_2"></td>
+					<td class="milestoneText" id="qMs_req_3"></td>
+					<td class="milestoneText" id="qMs_req_4"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_1" onclick="qMs.toggle(1)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_2" onclick="qMs.toggle(2)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_3" onclick="qMs.toggle(3)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_4" onclick="qMs.toggle(4)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_5"></td>
+					<td class="milestoneText" id="qMs_req_6"></td>
+					<td class="milestoneText" id="qMs_req_7"></td>
+					<td class="milestoneText" id="qMs_req_8"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_5" onclick="qMs.toggle(5)" style="font-size: 10px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_6" onclick="qMs.toggle(6)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_7" onclick="qMs.toggle(7)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_8" onclick="qMs.toggle(8)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_9"></td>
+					<td class="milestoneText" id="qMs_req_10"></td>
+					<td class="milestoneText" id="qMs_req_11"></td>
+					<td class="milestoneText" id="qMs_req_12"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_9" onclick="qMs.toggle(9)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_10" onclick="qMs.toggle(10)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_11" onclick="qMs.toggle(11)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_12" onclick="qMs.toggle(12)" style="font-size: 10px"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_13"></td>
+					<td class="milestoneText" id="qMs_req_14"></td>
+					<td class="milestoneText" id="qMs_req_15"></td>
+					<td class="milestoneText" id="qMs_req_16"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_13" onclick="qMs.toggle(13)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_14" onclick="qMs.toggle(14)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_15" onclick="qMs.toggle(15)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_16" onclick="qMs.toggle(16)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_17"></td>
+					<td class="milestoneText" id="qMs_req_18"></td>
+					<td class="milestoneText" id="qMs_req_19"></td>
+					<td class="milestoneText" id="qMs_req_20"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_17" onclick="qMs.toggle(17)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_18" onclick="qMs.toggle(18)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_19" onclick="qMs.toggle(19)" style="font-size: 11px"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_20" onclick="qMs.toggle(20)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_21"></td>
+					<td class="milestoneText" id="qMs_req_22"></td>
+					<td class="milestoneText" id="qMs_req_23"></td>
+					<td class="milestoneText" id="qMs_req_24"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_21" onclick="qMs.toggle(21)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_22" onclick="qMs.toggle(22)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_23" onclick="qMs.toggle(23)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_24" onclick="qMs.toggle(24)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_25"></td>
+					<td class="milestoneText" id="qMs_req_26"></td>
+					<td class="milestoneText" id="qMs_req_27"></td>
+					<td class="milestoneText" id="qMs_req_28"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_25" onclick="qMs.toggle(25)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_26" onclick="qMs.toggle(26)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_27" onclick="qMs.toggle(27)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_28" onclick="qMs.toggle(28)"></button></td>
+				</tr>
+
+				<!-- NEXT ROW -->
+				<tr>
+					<td class="milestoneText" id="qMs_req_29"></td>
+					<td class="milestoneText" id="qMs_req_30"></td>
+					<td class="milestoneText" id="qMs_req_31"></td>
+					<td class="milestoneText" id="qMs_req_32"></td>
+				</tr>
+				<tr>
+					<td><button class="qMs_locked" id="qMs_reward_29" onclick="qMs.toggle(29)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_30" onclick="qMs.toggle(30)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_31" onclick="qMs.toggle(31)"></button></td>
+					<td><button class="qMs_locked" id="qMs_reward_32" onclick="qMs.toggle(32)"></button></td>
+				</tr>
+			</table>
+		</div>
+		<div class='quantumtab' id='positrons'><table class="qTable_4col">
+			<tr>
+				<td class="yellow" colspan=2>
+					<span id="pos_formula"></span>
+					<span id="pos_amt" style="font-size:25px">0</span> Positrons
+				</td>
+				<td>
+					<span id="enB_pos_eng" style="font-size:25px">0.0</span> Positronic Charge
+				</td>
+				<td>
+					<span id="enB_pos_amt" style="font-size:25px">0</span> Positronic Boosters
+					<br>
+					<span id="enB_pos_next"></span>
+				</td>
+			</tr>
+			<tr>
+				<td class="yellow" colspan=2>
+					<button class="storebtn" id="pos_toggle" onclick="pos.toggle()"></button>
+					<br><br>
+					If Positrons are on, then Meta-Dimension Boosts and Quantum Energy multiplier are sacrificed for Positrons...
+					<br>
+					which allow Galaxies and Quantum Energy to be sacrificed for Positronic Charge!
+				</td>
+				<td colspan=2>
+					<button class="storebtn" id="enB_pos_buy" style="width: 360px" onclick="ENTANGLED_BOOSTS.buy('pos')">+1: Requires <span id="enB_pos_cost">1</span> charge</button>
+					<br>
+					<button class='storebtn' style="width: 360px" onclick="ENTANGLED_BOOSTS.maxBuy('pos')">Max buy Positronic Boosters</button>
+					<br><br>
+					<button id="entangle_rg_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('rg')">Use RG gluon kind</button>
+					<button id="entangle_gb_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('gb')">Use GB gluon kind</button>
+					<button id="entangle_br_pos" style="width: 150px; height: 24px" onclick="ENTANGLED_BOOSTS.choose('br')">Use BR gluon kind</button>
+				</td>
+			</tr>
+			<tr>
+				<td class="dark_yellow">
+					<b style="font-size: 25px">Dimensional</b> (<span id="pos_pow_ng">0.00</span> Power)
+					<br>
+					<span id="pos_gals_ng">0.00</span> Antimatter Galaxies + <span id="pos_eng_ng">0.00</span> Energy -><br>
+					<span id="pos_char_ng" style="font-size: 15px">0.00</span> Charge
+				</td>
+				<td class="dark_yellow">
+					<b style="font-size: 25px">Replicanti</b> (<span id="pos_pow_rg">0.00</span> Power)
+					<br>
+					<span id="pos_gals_rg">0.00</span> Replicated Galaxies + <span id="pos_eng_rg">0.00</span> Energy -><br>
+					<span id="pos_char_rg" style="font-size: 15px">0.00</span> Charge
+				</td>
+				<td id="enB_pos1" colspan=2>
+					<b id="enB_pos1_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos1_type"></span>
+					<br>
+					Increase the quantum energy multiplier by +<span id="enB_pos1_eff" style="font-size:35px"></span>x.
+				</td>
+			<tr>
+			</tr>
+				<td class="dark_yellow">
+					<b style="font-size: 25px">Extragalactic</b> (<span id="pos_pow_eg">0.00</span> Power)
+					<br>
+					<span id="pos_gals_eg">0.00</span> Extra RGs + <span id="pos_eng_eg">0.00</span> Energy -><br>
+					<span id="pos_char_eg" style="font-size: 15px">0.00</span> Charge
+				</td>
+				<td class="dark_yellow">
+					<b style="font-size: 25px">Tachyonic</b> (<span id="pos_pow_tg">0.00</span> Power)
+					<br>
+					<span id="pos_gals_tg">0.00</span> Tachyonic Galaxies + <span id="pos_eng_tg">0.00</span> Energy -><br>
+					<span id="pos_char_tg" style="font-size: 15px">0.00</span> Charge
+				</td>
+				<td id="enB_pos2" colspan=2>
+					<b id="enB_pos2_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos2_type"></span>
+					<br>
+					Best meta-antimatter raises the power per ten normal Dimensions by ^<span id="enB_pos2_eff" style="font-size:35px"></span>.
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos3" colspan=2>
+					<b id="enB_pos3_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos3_type"></span>
+					<br>
+					Quantum requirement is reduced to <span id="enB_pos3_eff" style="font-size:35px"></span>. (<span id="enB_pos3_exp" style="font-size:25px"></span>)
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos4" colspan=2>
+					<b id="enB_pos4_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos4_type"></span>
+					<br>
+					Before multipliers, Meta Dimension Boosts greatly boost the Quantum Energy formula to ^<span id="enB_pos4_eff" style="font-size:35px"></span>, but also reduce the effects of quantum energy.
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos5" colspan=2>
+					<b id="enB_pos5_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos5_type"></span>
+					<br>
+					Base replicate chance is <span id="enB_pos5_eff" style="font-size:35px"></span>% higher.
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos6" colspan=2>
+					<b id="enB_pos6_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos6_type"></span>
+					<br>
+					Infinitied stat boosts itself for stronger boosts, by ^<span id="enB_pos6_eff" style="font-size:35px"></span>.
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos7" colspan=2>
+					<b id="enB_pos7_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos7_type"></span>
+					<br>
+					All galaxies are <span id="enB_pos7_eff" style="font-size:35px"></span>% stronger in Quantum Challenges.
+				</td>
+			<tr>
+			</tr>
+				<td colspan=2></td>
+				<td id="enB_pos8" colspan=2>
+					<b id="enB_pos8_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos8_type"></span>
+					<br>
+					Partially share TS232 power to all galaxies by +<span id="enB_pos8_eff" style="font-size:35px"></span>%.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2></td>
+				<td id="enB_pos9" colspan=2>
+					<b id="enB_pos9_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos9_type"></span>
+					<br>
+					The slowdown effect of Replicated Boosts starts <span id="enB_pos9_eff" style="font-size:35px"></span> later.
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2></td>
+				<td id="enB_pos10" colspan=2>
+					<b id="enB_pos10_name" style="font-size: 25px"></b>
+					<br>
+					<span id="enB_pos10_type"></span>
+					<br>
+					Reduce the goal of all Paired Challenges to ^<span id="enB_pos10_eff" style="font-size:35px"></span>.
+				</td>
+			</tr>
+		</table></div>
+		<div class='quantumtab' id='replicants'>
+			You have <span id="replicantiAmount2">1</span> replicantis.<br>
+			You have <span class="rqC" id="rgRepl">1</span> red-green, <span class="gqC" id="gbRepl">1</span> green-blue, and <span class="bqC" id="brRepl">1</span> blue-red gluons.<br>
+			<table class='qTable'><tr><td>
+				You have <span id="replicantAmount" style="font-size:35px">0</span> normal duplicants.<br>
+				They are gathering <span id="normalReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
+				<button class="storebtn" id="replicantReset" style="width: 220px; height: 60px; font-size: 11px" onclick='replicantReset()'></button><br><button class="storebtn" id="autoReset" style="width: 220px" onclick='toggleAutoReset()'></button>
+			</td><td>
+				You have <span id="workerReplAmount" style="font-size:35px">0</span> total worker duplicants.<br>
+				They are gathering <span id="workerReplGatherRate" style="font-size:25px">0</span> preons per second and producing <span id="eggonRate" style="font-size:25px">0</span> <span id="workerReplWhat">eggons</span> per <span id="eggonRateTimeframe">minute</span>.<br>
+				Feed your normal duplicant to become a worker. <span id="workerProgress" style="font-size:15px">0.0%</span><br>
+				<button class='storebtn' id='feedNormal' style='width: 280px' onclick="feedReplicant(1)">Feed one with quantum food</button><br>
+				<button id='breakLimit' class='storebtn' style='width: 280px; height: 60px' onclick='breakLimit()'></button><br>
+				<button class='storebtn' style='width: 280px' onclick='maxBuyLimit()'>Max limit upgrades</button>
+			</td><td>
+				You have <span id="babyReplAmount" style="font-size:35px">0</span> baby duplicants.<br>
+				They are gathering <span id="babyReplGatherRate" style="font-size:25px">0</span> preons per second.<br>
+				They will become normal duplicants at <span id="growupRate" style="font-size:15px"></span> per <span id="growupRateUnit"></span>. <span id="growupProgress" style="font-size:15px">0.0%</span>.<br>
+			</td></tr><tr><td>
+				You have <span id="gatheredQuarks" style="font-size:35px">0</span> preons. <span id="gatherRate" style="font-size:25px">+0/s</span>
+			</td><td>
+				You have <span id="quantumFoodAmount" style="font-size:35px">0</span> quantum food.<br>
+				<button class='gluonupgrade storebtn' id='buyQuantumFood' onclick='buyQuantumFood()' style="width: 210px"></button><br>
+				<button class='storebtn' id='buyMaxQuantumFood' onclick='buyMaxQuantumFood()' style="width: 210px">Max buy quantum food</button>
+			</td><td id="eggonsCell">
+				You have <span id="eggonAmount" style="font-size:35px">0</span> eggons. <span id="hatchProgress" style="font-size:15px">0.0%</span><br>
+				<button class='storebtn' id='reduceHatchSpeed' style='width: 240px; height: 80px' onclick='reduceHatchSpeed()'></button><br>
+				<button class='storebtn' id='maxReduceHatchSpeed' onclick='maxReduceHatchSpeed()' style="width: 240px">Max reduce the hatch speed</button>
+			</td></tr></table>
+		</div>
+		<div class='quantumtab' id='nanofield'>
+			<table id='nftabs' align="center" style="margin: auto">
+				<tr>
+					<td><button class="secondarytabbtn" onclick="showNFTab('nanoverse')">The Nanoverse</button></td>
+					<td><button class="secondarytabbtn" onclick="showNFTab('antipreon')">Antipretus' Lair</button></td>
+				</tr>
+			</table>
+			<div class='nftab' id='nanoverse'>
+				You have <span id="quarksNanofield"></span> preons.<br>
+				<span id="ns"></span>
+				<table class="qTable"><tr><td>
+					You have <span id="preonEnergy" style="font-size:35px"></span> preon energy.<br>
+					You have <span id="quarkPower" style="font-size:35px"></span> preon power. Next at <span id="quarkPowerThreshold" style="font-size:35px"></span> preon energy.<br>
+					You are getting <span id="quarkEnergyRate"></span> preon energy per second if your preon anti-energy didn't reach its limit.
+				</td><td>
+					You have <span id="quarkCharge" style="font-size:35px"></span> preon charge.<br>
+					<button class="storebtn" id="produceQuarkCharge" onclick="startProduceQuarkCharge()"></button><br>
+					You are getting <span id="quarkChargeRate"></span> preon charge per second, but losing <span id="quarkLoss"></span> preons per second.
+				</td><td>
+					You have <span id="quarkAntienergy" style="font-size:35px"></span> preon anti-energy. At <span id="quarkChargeProductionCap" style="font-size:35px"></span>, your preon charge will stop producing energy and anti-energy.<br>
+					You are getting <span id="quarkAntienergyRate"></span> preon anti-energy per second.
+				</td></tr></table>
+				You have <span id="rewards" style="font-size:35px"></span> <span id="nfRewardScaling"></span>.
+				<table class="table" align=center style="margin: auto" id="nfRewards"></table>
+				<br><br>
+			</div>
+			<div class='nftab' id='antipreon'>
+				You have <span id="rewards_AP" style="font-size:35px"></span> Nanorewards.
+				<br><br>
+				<div id="apgInfo">
+					<b style="font-size: 35px">Welcome to my lair, ghosts!</b>
+					<br>
+					~ <span style="font-size: 25px"> Antipretus</span>, the Ghost Overseer of Antifield
+					<br><br>
+					<span id="sleepy">
+						<b style="font-size: 25px">Antipretus is sleepy...</b>
+						<br>
+						The scientists from Bosonic Lab know that he will take control of Nanoverse when he see a lot of Nanorewards from you.
+						<br><br>
+						<b class="warning">Don't get <span id="rewards_wake" style="font-size: 35px">104</span> rewards or else!</b>
+					</span>
+					<span id="woke">
+						<b class="warning" style="font-size: 35px">Antipretus has woken up and took control of your Nanoverse!</b>
+						<br><br>
+						<b style="font-size: 25px">The following effects are now applied!</b>
+						<br>
+						Each time you get 1 preon power:<br>
+						- You will lose preons faster when you start generating charge.<br>
+						- 1.41x slower charge production.<br>
+						- 1.41x faster anti-energy production.
+						<br><br>
+						Additionally, the power of Nanorewards have been softcapped!
+						<br><br>
+						However, the scientists decide to give you a slight quality of life boost. Your current reward gets 0.5 free tiers.
+						<br><br>
+						<b style="font-size: 35px">Good luck! :)</b>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class='quantumtab' id='tod'>
+			<span id="todspeed"></span>
+			<table class="qTable"><tr id="todRow"></tr></table>
+			<button class="storebtn" onclick="unstableAll()" style="width: 210px">Gain all unstable quarks</button>
+			<table class="table" align="center" style="margin: auto">
+				<tr>
+					<td><button id="redBtn" class="secondarytabbtn" onclick="showBranchTab('red')">Red Branch Upgrades</button></td>
+					<td><button id="greenBtn" class="secondarytabbtn" onclick="showBranchTab('green')">Green Branch Upgrades</button></td>
+					<td><button id="blueBtn" class="secondarytabbtn" onclick="showBranchTab('blue')">Blue Branch Upgrades</button></td>
+					<td><button class="secondarytabbtn" onclick="showBranchTab('upgrades')">Tree Upgrades</button></td>
+				</tr>
+			</table>
+			<div class="branchtab" id="redBranch"></div>
+			<div class="branchtab" id="greenBranch"></div>
+			<div class="branchtab" id="blueBranch"></div>
+			<div class="branchtab" id="upgradesBranch">
+				<span id="treeUpgradeEff"></span>
+				<table class="table" align="center" style="margin: auto"><tr>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg1' onclick='buyTreeUpg(1)' style='font-size:9px'>Meta Dimension Boosts are cheaper.<br><span id='treeupg1lvl'>?</span><br>Currently: -<span id='treeupg1current'>?</span><br><span id="treeupg1cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg2' onclick='buyTreeUpg(2)' style='font-size:9px'>The TP gain formula exponent is increased.<br><span id='treeupg2lvl'>?</span><br>Currently: <span id='treeupg2current'>?</span><br><span id="treeupg2cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg3' onclick='buyTreeUpg(3)' style='font-size:9px'>All branches are faster based on how many Tree upgrades have been bought.<br><span id='treeupg3lvl'>?</span><br>Currently: <span id='treeupg3current'>?</span>x<br><span id="treeupg3cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg4' onclick='buyTreeUpg(4)' style='font-size:9px'>???<br><span id='treeupg4lvl'>?</span><br>Currently: <span id='treeupg4current'>?</span>x<br><span id="treeupg4cost"></span></button></td>
+				</tr><tr>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg5' onclick='buyTreeUpg(5)' style='font-size:9px'>All branches are faster based on your best-ever meta-antimatter.<br><span id='treeupg5lvl'>?</span><br>Currently: <span id='treeupg5current'>?</span>x<br><span id="treeupg5cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg6' onclick='buyTreeUpg(6)' style='font-size:9px'>Emperor Dimensions produce faster.<br><span id='treeupg6lvl'>?</span><br>Currently: <span id='treeupg6current'>?</span>x<br><span id="treeupg6cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg7' onclick='buyTreeUpg(7)' style='font-size:9px'>???<br><span id='treeupg7lvl'>?</span><br>Currently: <span id='treeupg7current'>?</span>x<br><span id="treeupg7cost"></span></button></td>
+					<td><button class='gluonupgrade unavailablebtn' id='treeupg8' onclick='buyTreeUpg(8)' style='font-size:9px'>???<br><span id='treeupg8lvl'>?</span><br>Currently: <span id='treeupg8current'>?</span>x<br><span id="treeupg8cost"></span></button></td>
+				</tr></table>
+				<button class="storebtn" onclick="maxTreeUpg()" style="width: 190px">Max all upgrades</button>
+			</div>
+			<br>
+			<br>
+			<br>
+		</div>
+		<div class="footer bottom"></div>
+	</div>
 		<div class='tab' id='ghostify'>
 			<table class="table" align="center" style="margin: auto">
 				<tr>

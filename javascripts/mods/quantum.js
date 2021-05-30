@@ -8,7 +8,7 @@ function quantum(auto, force, qc, isPC, bigRip, quick) {
 	var data
 	if (qc) {
 		if (!QCs.done(1) || player.options.challConf || tmp.mod.quantumConf) {
-			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. Are you sure you want to take this challenge down?")) return
+			if (!confirm("This performs a forced Quantum reset, but you will be brought into a real challenge. All rebuyables will also be resetted. Are you sure you want to take this challenge down?")) return
 		}
 		mode = "qc"
 		data = [qc]
@@ -353,8 +353,7 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 			bought: 1
 		}
 	}
-		
-	player.money = onQuantumAM()
+
 	doInitInfMultStuff()
 	if (inNGM(2) && !keepABnICs) player.autobuyers[12] = 13
 	if (player.tickspeedBoosts !== undefined && !keepABnICs) player.autobuyers[13] = 14

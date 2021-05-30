@@ -15,13 +15,14 @@ let QCs = {
 		}
 		if (QCs.save.qc1 === undefined) QCs.reset()
 		QCs.updateTmp()
+		QCs.updateDisp()
 	},
 	reset() {
 		QCs.save.qc1 = {boosts: 0, max: 0}
 		QCs.save.qc2 = [0, 0]
 		QCs.save.qc3 = undefined
 		QCs.save.qc4 = undefined
-		QCs.save.qc5 = undefined
+		QCs.save.qc5 = 0
 		QCs.save.qc6 = new Decimal(1) //Best-in-this-quantum replicantis
 		QCs.save.qc7 = 0
 		QCs.save.qc8 = undefined //Same as QC5
@@ -30,13 +31,13 @@ let QCs = {
 		max: 8,
 		1: {
 			unl: () => true,
-			desc: () => "Replicated Galaxies are replaced with Replicated Boosts.",
-			goal: () => false,
-			goalDisp: () => "(not balanced yet)",
-			goalMA: new Decimal(1),
-			rewardDesc: (x) => "You can keep Replicated Boosts, but the requirements and limits are much higher.",
+			desc: () => "Replicated Galaxies are replaced with Replicanti Compressors, which compress Replicantis for a boost.",
+			goal: () => QCs.save.qc1 >= 5,
+			goalDisp: () => "5 Replicated Compressors",
+			goalMA: new Decimal("1e355"),
+			rewardDesc: (x) => "You can keep Replicated Compressors.",
 			rewardEff(str) {
-				return 1
+				return 0.1
 			},
 
 			updateTmp() {
@@ -46,53 +47,57 @@ let QCs = {
 				let boosts = QCs.save.qc1.boosts
 				let maxBoosts = QCs.save.qc1.max
 
-				QCs.tmp.qc1 = {
+				let data = {
 					req: new Decimal("1e500000"),
-					limit: new Decimal("1e2000000"),
+					limit: new Decimal("1e10000000"),
 
-					speedMult: QCs.in(1) ? 1 : Math.pow(2, boosts),
-					speedExp: 1 / Math.min(1 + boosts / 10, 2),
+					speedMult: Decimal.pow(2, -boosts / 4),
+					scalingMult: 1 / Math.max(boosts / 20, 1),
+					scalingExp: 1 / Math.min(1 + boosts / 20, 2),
 
-					effMult: Math.max(boosts / 20 - 0.5, 0) + maxBoosts / 40 + 1,
-					effExp: 1, //Math.min(1 + boosts / 10, 2),
+					effMult: 1 + (Math.max(boosts - 20, 0) + maxBoosts) / 40,
+					effExp: Math.min(1 + boosts / 20, 2)
 				}
-			},
-			updateSpeed() {
-				if (!QCs.tmp.qc1) return
+				QCs.tmp.qc1 = data
 
-				let data = tmp.rep
-				let exp2 = 1 / Math.log2(data.speeds.inc)
-				data.speeds.exp = Math.pow(data.speeds.exp * exp2, QCs.tmp.qc1.speedExp) / exp2
+				if (QCs.in(1)) {
+					data.req = data.req.pow(0.01)
+					data.limit = data.limit.pow(0.02)
+					data.speedMult = data.speedMult.times(0.01)
+				}
 
-				data.baseEst = data.baseEst.times(QCs.tmp.qc1.speedMult)
-				data.baseInt = data.baseInt.div(QCs.tmp.qc1.speedMult)
+				let qc5 = QCs.tmp.qc5
+				if (qc5) {
+					data.limit = data.limit.pow(qc5.mult)
+					data.speedMult = data.speedMult.pow(1 / qc5.mult)
+				}
 			},
 			convert(x) {
 				if (!QCs.tmp.qc1) return x
-				let div = Math.log10(Number.MAX_VALUE) * Math.log2(1.01)
-				x = Decimal.pow(10, Math.pow(x.log10() / div, QCs.tmp.qc1.effExp) * div * QCs.tmp.qc1.effMult)
+				let div = Math.log10(Number.MAX_VALUE) / Math.log10(1.01)
+				x = Decimal.pow(10, Math.pow(x.log10() / div, QCs.tmp.qc1.effExp) * div * QCs.tmp.qc1.effMult).max(x)
 				return x
 			},
 
-			can: () => QCs.tmp.qc1 && ph.can("eternity") && player.replicanti.amount.gte(QCs.tmp.qc1.req) && QCs.save.qc1.boosts < 10,
+			can: () => QCs.tmp.qc1 && ph.can("eternity") && player.replicanti.amount.gte(QCs.tmp.qc1.req) && QCs.save.qc1.boosts < 20,
 			boost() {
 				if (!QCs.data[1].can()) return false
 
 				QCs.save.qc1.boosts++
-				player.replicanti.amount = new Decimal(1)
+				player.replicanti.amount = Decimal.pow(10, Math.pow(player.replicanti.amount.log10(), 0.9))
 				eternity(true)
 				return true
 			}
 		},
 		2: {
 			unl: () => true,
-			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
+			desc: () => "All Quantum effects never work except Positronic Boosters, but replaced.",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Tachyonic Galaxies timelapse Replicantis by " + timeDisplay(x * 10) + " each.",
+			rewardDesc: (x) => "Entangled Boosters increase the maximum percentage of sacrificed galaxies. Currently: " + formatPercentage(x) + "%",
 			rewardEff(str) {
-				return 0.1
+				return 0.25
 			}
 		},
 		3: {
@@ -108,29 +113,50 @@ let QCs = {
 		},
 		4: {
 			unl: () => true,
-			desc: () => "All Quantum effects never work except Positronic Boosters, but replaced.",
+			desc: () => "You must exclude one type of galaxy for non-dilation and dilation runs. Changing the exclusion requires a forced Eternity reset.",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "Entangled Boosters increase the maximum percentage of sacrificed galaxies. Currently: " + formatPercentage(x) + "%",
+			rewardDesc: (x) => "Tachyonic Galaxies timelapse Replicantis by " + timeDisplay(x * 10) + " each.",
 			rewardEff(str) {
-				return 0.25
+				return 0.1
 			}
 		},
 		5: {
 			unl: () => true,
-			desc: () => "There is a product which divides Meta Dimensions based on Dimension Boosts and Galaxies. You can't also set the limit of the autobuyer of Dimension Boosts.",
+			desc: () => "Replicantis are extremely nerfed, but there's Replicanti Expanders which expand your Replicantis for a boost.",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
-			rewardDesc: (x) => "The Positron conversion formula is better. Currently: +" + formatPercentage(x - 1) + "%",
+			rewardDesc: (x) => "You can keep Replicanti Expanders, with a great bonus to Positron formula. Currently: +" + formatPercentage(x - 1) + "%",
 			rewardEff(str) {
 				return 1
+			},
+
+			updateTmp() {
+				delete QCs.tmp.qc5
+				if (!QCs.in(5) && !QCs.done(5)) return
+
+				QCs.tmp.qc5 = {
+					req: new Decimal(1),
+					mult: QCs.save.qc5 / 4 + 1
+				}
+				QCs.tmp.qc5.req = QCs.tmp.qc5.req.pow(Math.sqrt(QCs.tmp.qc5.mult))
+			},
+
+			can: () => QCs.tmp.qc5 && ph.can("eternity") && player.replicanti.amount.gt(1) && player.replicanti.amount.lt(QCs.tmp.qc5.req),
+			boost() {
+				if (!QCs.data[5].can()) return false
+
+				QCs.save.qc5++
+				player.replicanti.amount = player.replicanti.amount.pow(1.25)
+				eternity(true)
+				return true
 			}
 		},
 		6: {
 			unl: () => true,
-			desc: () => "The effect of Replicantis is inversedly exponential.",
+			desc: () => "The effect of Replicantis is inversedly exponential. (based on best replicanti amount)",
 			goal: () => false,
 			goalDisp: () => "(not balanced yet)",
 			goalMA: new Decimal(1),
@@ -183,7 +209,7 @@ let QCs = {
 		if (!QCs.unl()) return
 		
 		let data = QCs.tmp
-		for (let x = 1; x <= QCs.data.max; x++) {
+		for (let x = QCs.data.max; x; x--) {
 			if (data.unl.includes(x)) {
 				data.rewards[x] = QCs.data[x].rewardEff(1)
 			}
@@ -243,6 +269,10 @@ let QCs = {
 	divInserted: false,
 
 	updateDisp() {
+		//In Quantum Challenges
+		getEl("repCompress").style.display = QCs.tmp.qc1 ? "" : "none"
+		getEl("repExpand").style.display = QCs.tmp.qc5 ? "" : "none"
+
 		//Quantum Challenges
 		let unl = QCs.divInserted && QCs.unl()
 		if (!unl) return
@@ -258,9 +288,6 @@ let QCs = {
 				getEl("qc_" + qc + "_btn").className = QCs.in(qc) ? "onchallengebtn" : QCs.done(qc) ? "completedchallengesbtn" : "challengesbtn"
 			}
 		}
-
-		//In Quantum Challenges
-		getEl("replicantiBoost").style.display = QCs.tmp.qc1 ? "" : "none"
 
 		//Paired Challenges
 		/*

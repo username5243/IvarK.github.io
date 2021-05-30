@@ -1629,7 +1629,6 @@ function doNGp3Init2(){
 		getEl("workerReplWhat").textContent = player.ghostify.neutrinos.upgrades.includes(2) ? "babies" : "eggons"
 		updateQuantumWorth()
 		if (tmp.qu.autoOptions === undefined) tmp.qu.autoOptions = {}
-		QCs.updateDisp()
 		if (tmp.qu["10ofield"] !== undefined) {
 			tmp.qu.nanofield = tmp.qu["10ofield"]
 			delete tmp.qu["10ofield"]
@@ -1892,7 +1891,6 @@ function setOtherChallDisplay(){
 }
 
 function setReplDisplay() {
-	getEl("replicantitabbtn").style.display=player.infinityUpgradesRespecced?"none":""
 	getEl("replDesc").textContent = tmp.ngC ? "IP gain & all Normal Dimensions (after softcaps)" : "all Infinity Dimensions"
 	getEl("replicantiresettoggle").textContent="Auto galaxy "+(player.replicanti.galaxybuyer?"ON":"OFF")+(!canAutoReplicatedGalaxy()?" (disabled)":"")
 }
@@ -2248,10 +2246,9 @@ function setupNGP31Versions() {
 		delete tmp.qu.qcDataNoDil
 		delete tmp.qu.nonMAGoalReached
 	}
-	if (tmp.mod.ngp3Build < 20210519) {
-		tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
-	}
-	tmp.mod.ngp3Build = 20210519
+	if (tmp.mod.ngp3Build < 20210519) tmp.qu.quarkEnergy = tmp.qu.bestEnergy || 0
+	if (tmp.mod.ngp3Build < 20210529) QCs.save.qc5 = 0
+	tmp.mod.ngp3Build = 20210529
 }
 
 function checkNGM(imported) {

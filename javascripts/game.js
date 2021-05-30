@@ -1717,6 +1717,7 @@ function playerInfinityUpgradesOnEternity() {
 
 //MORE DISPLAY STUFF
 function updateInfCosts() {
+	if (getEl("repMajor").style.display == "block") replicantiDisplay()
 	if (getEl("replicantis").style.display == "block" && getEl("infinity").style.display == "block") replicantiDisplay()
 	if (getEl("timestudies").style.display == "block" && getEl("eternitystore").style.display == "block") mainTimeStudyDisplay()
 	if (getEl("ers_timestudies").style.display == "block" && getEl("eternitystore").style.display == "block") updateERSTTDesc()
@@ -2566,7 +2567,7 @@ function sacrifice(auto = false) {
 	} else {
 		player.chall11Pow = player.chall11Pow.times(sacGain)
 		if (!hasAch("r118")) resetDimensions();
-		player.money = new Decimal(100)
+		setInitialMoney()
 	}
 	tmp.sacPow = tmp.sacPow.times(sacGain)
 }
@@ -3826,6 +3827,7 @@ setInterval(function() {
 	moveAutoTabs()
 	updateChallTabDisplay()
 	updateOrderGoals()
+	handleReplTabs()
 	bankedInfinityDisplay()
 	qMs.update()
 	notifyQuantumMilestones()
@@ -3845,8 +3847,10 @@ setInterval(function() {
 function autoPerSecond() {
 	if (isGamePaused()) return
 
-	replicantiShopABRun()
-	runIDBuyersTick()
+	if (qMs.tmp.amt < 23) {
+		replicantiShopABRun()
+		runIDBuyersTick()
+	}
 	doAutoEterTick()
 	dilationStuffABTick()
 	updateNGpp17Reward()
@@ -3886,6 +3890,8 @@ function updateEPminpeak(diff, type) {
 }
 
 function checkMatter(diff){
+	var newMatter = player.matter.times(Decimal.pow(tmp.mv, diff * 10))
+
 	if (player.matter.pow(20).gt(player.money) && player.currentChallenge == "postc7") quickReset()
 	else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) && !haveET) {
 		if (player.pSac!=undefined) player.pSac.lostResets++

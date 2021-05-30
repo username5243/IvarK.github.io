@@ -60,7 +60,6 @@ function isReplicantiLimitBroken() {
 }
 
 function getReplMult(next) {
-	let repl = QCs.data[1].convert(player.replicanti.amount)
 	let exp = 2
 	if (inNGM(2)) exp = Math.max(2, Math.pow(player.galaxies, .4))
 	if (player.boughtDims) {
@@ -68,6 +67,8 @@ function getReplMult(next) {
 		if (hasAch('r108')) exp *= 1.09;
 	}
 	if (tmp.ngC && ngC.tmp) exp *= ngC.tmp.rep.eff2 * 2.5
+
+	let repl = QCs.data[1].convert(player.replicanti.amount)
 	let replmult = Decimal.max(repl.log(2), 1).pow(exp)
 	if (hasTimeStudy(21) && !tmp.ngC) replmult = replmult.plus(repl.pow(0.032))
 	if (hasTimeStudy(102)) {
@@ -77,7 +78,7 @@ function getReplMult(next) {
 		replmult = base.times(Decimal.pow(5, rg))
 		if (masteryStudies.has(295)) replmult = replmult.max(base.pow(getMTSMult(295)))
 	}
-	return replmult;
+	return replmult
 }
 
 function upgradeReplicantiChance() {
@@ -332,6 +333,9 @@ function boostReplSpeedExp(exp) {
 	//Post-Boosts
 	if (masteryStudies.has(284)) exp += tmp.mts[284]
 
+	//QC1: Scaling Reduction
+	if (QCs.tmp.qc1) exp = Math.pow(exp, QCs.tmp.qc1.scalingExp) * QCs.tmp.qc1.scalingMult
+
 	return exp
 }
 
@@ -355,15 +359,20 @@ function updateEC14Reward() {
 	}
 }
 
-function updateEC14Acceleration() {
+function boostReplicateInterval() {
+	let x = new Decimal(1)
 	let data = tmp.rep
+
 	if (ECComps("eterc14")) {
 		let pow = getECReward(14)
 		data.ec14.interval = data.ec14.interval.div(Math.pow(data.speeds.exp / Math.log10(data.speeds.inc), pow))
 
-		data.baseInt = data.baseInt.times(data.ec14.interval)
-		data.baseEst = data.baseEst.div(data.ec14.interval)
+		x = x.div(data.ec14.interval)
 	}
+	if (QCs.tmp.qc1) x = x.times(QCs.tmp.qc1.speedMult)
+
+	data.baseInt = data.baseInt.div(x)
+	data.baseEst = data.baseEst.times(x)
 }
 
 function updateReplicantiTemp() {
@@ -373,6 +382,7 @@ function updateReplicantiTemp() {
 	data.ln = player.replicanti.amount.ln()
 
 	data.baseChance = Math.round(player.replicanti.chance * 100)
+	if (enB.active("pos", 5)) data.baseChance *= enB.tmp.pos5
 	if (enB.active("glu", 8)) data.baseChance = Math.pow(data.baseChance, 1.25)
 
 	let pow = 1
@@ -394,8 +404,7 @@ function updateReplicantiTemp() {
 	data.speeds = getReplSpeed()
 	updateEC14Reward()
 	data.speeds.exp = boostReplSpeedExp(data.speeds.exp)
-	QCs.data[1].updateSpeed()
-	updateEC14Acceleration()
+	boostReplicateInterval()
 
 	data.interval = getReplicantiFinalInterval()
 
@@ -446,4 +455,20 @@ function continuousReplicantiUpdating(diff){
 		player.replicanti.amount = Decimal.pow(Math.E, ln)
 	} else player.replicanti.amount = Decimal.pow(Math.E, tmp.rep.ln + (diff * tmp.rep.est / 10))
 	replicantiTicks = 0
+}
+
+function handleReplTabs() {
+	let major = QCs.tmp.qc1 !== undefined
+
+	if (major != (tmp.repMajor || false)) {
+		getEl("repMajorBtn").style.display = major ? "" : "none"
+		getEl("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""
+
+		if (major && getEl("replicantis").style.display == "block") showInfTab("preinf")
+
+		getEl("replicantis").className = major ? "" : "inftab"
+		getEl("replicantis").style.display = major || getEl("repMajor").style.display == "block" ? "" : "none"
+		getEl(major ? "repMajor" : "infinity").appendChild(getEl("replicantis"))
+	}
+	tmp.repMajor = major
 }

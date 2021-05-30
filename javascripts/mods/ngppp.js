@@ -78,6 +78,11 @@ function preQuantumAutoNGP3(diff) {
 		doAutoMetaTick(Math.floor(tmp.qu.metaAutobuyerWait / tickPerDiff))
 		tmp.qu.metaAutobuyerWait = tmp.qu.metaAutobuyerWait % tickPerDiff
 	}
+
+	if (qMs.tmp.amt >= 23) {
+		replicantiShopABRun()
+		runIDBuyersTick()
+	}
 }
 
 function doAutoMetaTick(ticks) {
@@ -173,7 +178,7 @@ function fillAll() {
 
 //v1.99872
 function maxAllDilUpgs() {
-	let dt = player.dilation.dilatedTime.min("1e100000")
+	let dt = player.dilation.dilatedTime.min("1e10000000")
 	let update
 	for (var i = 0; i < MAX_DIL_UPG_PRIORITIES.length; i++) {
 		var num = MAX_DIL_UPG_PRIORITIES[i]
