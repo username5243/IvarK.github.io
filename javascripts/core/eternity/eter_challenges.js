@@ -249,8 +249,8 @@ function updateEternityChallenges() {
 		getEl(property).className=onchallenge?"onchallengebtn":"challengesbtn"
 	}
 	getEl("eterctabbtn").parentElement.style.display = ph.shown("eternity") && !locked ? "" : "none"
-	getEl("autoEC").style.display = tmp.ngp3 && !ph.did("quantum") ? "inline-block" : "none"
-	if (ph.did("quantum")&&tmp.ngp3) getEl("autoEC").className=tmp.qu.autoEC?"timestudybought":"storebtn"
+	getEl("autoEC").style.display = ph.did("quantum") ? "inline-block" : "none"
+	if (tmp.quUnl) getEl("autoEC").className = tmp.qu.autoEC ? "timestudybought" : "storebtn"
 }
 
 function startEternityChallenge(n) {
@@ -264,14 +264,12 @@ function startEternityChallenge(n) {
 	if (player.tickspeedBoosts != undefined) player.tickspeedBoosts = 0
 	if (hasAch("r104")) player.infinityPoints = new Decimal(2e25);
 	else player.infinityPoints = new Decimal(0);
-	
-	doEternityResetStuff()
-	doAfterEternityResetStuff()
 
 	player.eternityChallGoal = getECGoal("eterc" + n)
 	player.currentEternityChall = "eterc" + n
-	player.galacticSacrifice = resetGalacticSacrifice(true)
-	updateEternityChallenges()
+
+	doEternityResetStuff(4, n)
+	doAfterEternityResetStuff(n)
 }
 
 function isEC12Active() {

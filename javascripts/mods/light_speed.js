@@ -12,10 +12,10 @@ let LIGHT_SPEED = {
 			return player.replicanti.unl || ph.did("eternity")
 		},
 		dil() {
-			return hasDilationStudy(1)
+			return hasDilationStudy(1) || ph.did("quantum")
 		},
 		tt() {
-			return hasDilationUpg(10)
+			return hasDilationUpg(10) || ph.did("quantum")
 		},
 		nf() {
 			return tmp.ngp3 && player.masterystudies.includes("d11")

@@ -124,9 +124,10 @@ function buyTimeStudy(name, quickBuy) {
 
 function buyDilationStudy(name, cost) {
 	if (player.timestudy.theorem >= cost && !player.dilation.studies.includes(name) && (player.dilation.studies.includes(name - 1) || name < 2)) {
-		if (name < 2) {
+		if (name == 1) {
 			if (ECComps("eterc11") + ECComps("eterc12") < 10 || getTotalTT(player) < getDilationTotalTTReq()) return
 			showEternityTab("dilation")
+			ls.reset()
 			if (player.eternityUpgrades.length < 1) giveAchievement("Work harder.")
 			if (player.blackhole != undefined) updateEternityUpgrades()
 		} else if (name > 5) {
@@ -337,6 +338,17 @@ let studyCosts = { // vanilla study costs
 	202: 200,	203: 200
 }
 
+let dsStudyCosts = {
+	1: () => tmp.ngC ? 3e3 : tmp.ngp3 ? 4e3 : 5e3,
+	2: () => 1e5,
+	3: () => 1e6,
+	4: () => 1e7,
+	5: () => 1e8,
+
+	// Meta
+	6: () => getMetaUnlCost()
+}
+
 function setupTimeStudies() {
 	let before = [... all]
 	let after = [... vanillaStudies]
@@ -372,14 +384,20 @@ function updateTimeStudyButtons(changed, forceupdate = false) {
 	}
 	for (let i = 0; i < all.length; i++) {
 		let id = all[i]
-		if (!player.timestudy.studies.includes(id)) updateTimeStudyClass(id, canBuyStudy(id) && player.timestudy.theorem >= studyCosts[id] ? "" : "locked")
+		if (!hasTimeStudy(id)) updateTimeStudyClass(id, canBuyStudy(id) && player.timestudy.theorem >= studyCosts[id] ? "" : "locked")
 	}
 
-	for (let i = 1; i < 7; i++) {
-		if (player.dilation.studies.includes(i)) getEl("dilstudy"+i).className = "dilationupgbought"
-		else if (player.timestudy.theorem >= ([null, 5e3, 1e6, 1e7, 1e8, 1e9, 1e24])[i] && (player.dilation.studies.includes(i - 1) || (i < 2 && ECComps("eterc11") > 4 && ECComps("eterc12") > 4 && getTotalTT(player) >= 13e3))) getEl("dilstudy" + i).className = "dilationupg"
+	for (let i = 1; i <= 6; i++) {
+		if (hasDilationStudy(i)) getEl("dilstudy" + i).className = "dilationupgbought"
+		else if (player.timestudy.theorem >= dsStudyCosts[i]() && (i == 1 ? ph.did("quantum") ||
+			//Dilation Upgrade 1
+			ECComps("eterc11") >= 5 &&
+			ECComps("eterc12") >= 5 &&
+			(tmp.ngp3 || getTotalTT() >= getDilationTotalTTReq())
+		: hasDilationStudy(i - 1))) getEl("dilstudy" + i).className = "dilationupg"
 		else getEl("dilstudy" + i).className = "timestudylocked"
 	}
+
 	getEl("dilstudy6").style.display = player.meta ? "" : "none"
 	getEl("masteryportal").style.display = player.masterystudies ? "" : "none"
 	if (tmp.ngp3) {
@@ -454,6 +472,7 @@ function respecTimeStudies(force) {
 			player.timestudy.studies = bru7activated ? [192] : []
 		}
 
+		updateTimeStudyButtons(true, true)
 		if (player.respec) respecToggle()
 		if (player.eternityChallUnlocked <= 12) resetEternityChallUnlocks()
 	}

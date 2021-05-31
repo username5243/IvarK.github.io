@@ -121,7 +121,7 @@
 			<button id="paradoxbtn" style="font-family: Typewriter; font-size: 20px; display: none" class="tabbtn paradoxbtn" onclick='showTab("paradox")'>Paradox</button>
 			<button id="galaxybtn" style="font-family: Typewriter; font-size: 20px; display: none" onclick='showTab("galaxy")' class="tabbtn galaxybtn">Galaxy</button>
 			<button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('infinity')">Infinity</button>
-			<button id="repMajorBtn" style="font-family: Typewriter; font-size: 20px" class="infinitybtn" onclick="showTab('repMajor')">Replicantis</button>
+			<button id="repMajorBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn" onclick="showTab('repMajor')">Replicantis</button>
 			<button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn" onclick="showTab('eternitystore')">Eternity</button>
 			<button id="irTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interrealitybtn" onclick='showTab("irTab")'>Interreality</button>
 			<button id="sgTabBtn" style="font-family: Typewriter; font-size: 20px; display: none" class="singularitybtn" onclick='showTab("sgTab")'>Singularity</button>
@@ -359,24 +359,24 @@
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1, (tmp.ngC?3e3:5e3))">Unlock Time Dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy1" onclick="buyDilationStudy(1)">Unlock Time Dilation<span>Requirement: 5 Eternity Challenge 11 and 12 completions<span>Cost: 5000 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy2" onclick="buyDilationStudy(2, 1e6)">Unlock the 5th Time Dimension<span>Cost: 1,000,000 Time Theorems</button></td>
-						<td><button class="timestudylocked" id="dilstudy3" onclick="buyDilationStudy(3, 1e7)">Unlock the 6th Time Dimension<span>Cost: 10,000,000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy2" onclick="buyDilationStudy(2)">Unlock the 5th Time Dimension<span>Cost: 1,000,000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy3" onclick="buyDilationStudy(3)">Unlock the 6th Time Dimension<span>Cost: 10,000,000 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy4" onclick="buyDilationStudy(4, 1e8)">Unlock the 7th Time Dimension<span>Cost: 100,000,000 Time Theorems</button></td>
-						<td><button class="timestudylocked" id="dilstudy5" onclick="buyDilationStudy(5, 1e9)">Unlock the 8th Time Dimension<span>Cost: 1,000,000,000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy4" onclick="buyDilationStudy(4)">Unlock the 7th Time Dimension<span>Cost: 100,000,000 Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy5" onclick="buyDilationStudy(5)">Unlock the 8th Time Dimension<span>Cost: 1,000,000,000 Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
 					<tr>
-						<td><button class="timestudylocked" id="dilstudy6" onclick="buyDilationStudy(6, getMetaUnlCost())">Unlock Meta Dimensions<span>Cost: <span id="metaCost" style="display: inline;">1e24</span> Time Theorems</button></td>
+						<td><button class="timestudylocked" id="dilstudy6" onclick="buyDilationStudy(6)">Unlock Meta Dimensions<span>Cost: <span id="metaCost" style="display: inline;">1e24</span> Time Theorems</button></td>
 					</tr>
 				</table>
 				<table class="table" id="studytable">
@@ -1537,7 +1537,7 @@
 			</div>
 			<p id='hotkeysDesc'></p>
 			<br>
-			<p id='versionDesc'>
+			<span id='versionDesc'>
 				<b id='modVersionDesc' style="font-size: 18px">You are playing New Game Plus 3.</b>
 				<br>
 				<p id='modVersionDescUpdate'>(Update v3.0: Quantum Refluncation)</p>
@@ -1548,8 +1548,8 @@
 				<br>
 				<b class="warning">THIS UPDATE IS CURRENTLY IN BETA, ANYTHING CAN BREAK</b>
 				<br>
-				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 6)</p>
-			</p>
+				<p id='versionDescBeta'>(Beta v0.4: Mutant Challenges - Alpha 7)</p>
+			</span>
 			<div class="footer bottom"></div>
 		</div>
 		<div id="statistics" class="tab" align="center" style="color: black; font-size: 12px; font-family: Typewriter; margin: 0 auto">
@@ -2136,7 +2136,7 @@
 								<div id="No ethical consumption" class="achievement achievementlocked" style="background-image: url(images/89.png)" ach-tooltip="Get 5 billion banked infinities. Reward: You permanently bank 5% of your Infinities when you Eternity."><br></div>
 							</td>
 							<td>
-								<div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)" ach-tooltip="Have 540 galaxies without having any Replicated Galaxies."><br></div>
+								<div id="Unique snowflakes" class="achievement achievementlocked" style="background-image: url(images/90.png)"><br></div>
 							</td>
 							<td>
 								<div id="I never liked this infinity stuff anyway" class="achievement achievementlocked" style="background-image: url(images/91.png)" ach-tooltip="Reach 1e140,000 IP without buying IDs or IP multipliers."><br></div>
@@ -2212,7 +2212,7 @@
 								<div id="I don't have enough fuel!" class="achievement achievementlocked" style="background-image: url(images/105.png)"><br></div>
 							</td>
 							<td>
-								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities and the Mastery Study cost multiplier is divided by 4."><br></div>
+								<div id="Sub-atomic" class="achievement achievementlocked" style="background-image: url(images/106.png)" ach-tooltip="Go quantum. Reward: You gain 100x more Infinities and Eternities, the Mastery Study cost multiplier is divided by 4, and dilation requires nothing."><br></div>
 							</td>
 							<td>
 								<div id="Hadronization" class="achievement achievementlocked" style="background-image: url(images/107.png)" ach-tooltip="Have colored quarks, but have no color charge. Reward: Quantum Worth boosts all Meta Dimensions."><br></div>
@@ -2412,7 +2412,7 @@
 								<div id="The Deep Challenge" class="achievement achievementlocked" style="background-image: url(images/173.png)"></div>
 							</td>
 							<td>
-								<div id="I give up." class="achievement achievementlocked" style="background-image: url(images/174.png)"></div>
+								<div id="I give up." class="achievement achievementlocked" style="background-image: url(images/174.png)" ach-tooltip="???"></div>
 							</td>
 						</tr>
 						<tr id="achRowng3p9">
@@ -2647,6 +2647,7 @@
 					<td><button id="qctabbtn" class="secondarytabbtn" onclick="showChallengesTab('quantumchallenges')">Quantum Challenges</button></td>
 				</tr>
 			</table>
+			<div id="inchall"></div>
 			<div id="nextchall"></div>
 			<div id="normalchallenges" class="challengeTab">
 				<table class="table" style="margin: 0 auto">
@@ -5682,13 +5683,16 @@
 			<button class="storebtn longbtn" id='ezBtn' style="font-size: 15px" onclick="toggle_mod('ez')" style="display: inline" ach-tooltip="Makes this game faster by removing some timewalls.">Barrier-Easing: OFF</button>
 			<br><br>
 			<b>Buffed Mods</b><br>
-			<button class="storebtn longbtn" id='ngmuBtn' style="font-size: 15px" onclick="toggle_mod('ngmu')" style="display: inline">NG*: OFF</button>
-			<button class="storebtn longbtn" id='arrowsBtn' style="font-size: 15px" onclick="toggle_mod('arrows')" style="display: inline">NG↑: Linear (↑⁰)</button>
-			<button class="storebtn longbtn" id='ngumuBtn' style="font-size: 15px" onclick="toggle_mod('ngumu')" style="display: inline">NGUd*': OFF</button>
-			<button class="storebtn longbtn" id='nguepBtn' style="font-size: 15px" onclick="toggle_mod('nguep')" style="display: inline">NGUd↑': Linear' (↑⁰')</button>
+			<button class="storebtn longbtn" id='ngmuBtn' style="font-size: 15px" onclick="toggle_mod('ngmu')" style="display: inline" ach-tooltip="A spinoff to NG^, which is slower than NG^, but faster than NG=.">NG*: OFF</button>
+			<button class="storebtn longbtn" id='arrowsBtn' style="font-size: 15px" onclick="toggle_mod('arrows')" style="display: inline" ach-tooltip="A original mod that starts buffed mods.">NG↑: Linear (↑⁰)</button>
+			<button class="storebtn longbtn" id='ngumuBtn' style="font-size: 15px" onclick="toggle_mod('ngumu')" style="display: inline" ach-tooltip="A mod which buffs some boosts to NG Update Prime.">NGUd*': OFF</button>
+			<button class="storebtn longbtn" id='nguepBtn' style="font-size: 15px" onclick="toggle_mod('nguep')" style="display: inline" ach-tooltip="A mod which greatly buffs some boosts to NG Update Prime.">NGUd↑': Linear' (↑⁰')</button>
 			<br><br>
 			<b>Respecced Mods</b><br>
-			<button class="storebtn longbtn" id='rsBtn' style="font-size: 15px" onclick="toggle_mod('rs')" style="display: inline">Respecced: NONE</button>
+			<button class="storebtn longbtn" id='rsBtn' style="font-size: 15px" onclick="toggle_mod('rs')" style="display: inline">Respecced: OFF</button>
+			<!--
+			<button class="storebtn longbtn" id='usBtn' style="font-size: 15px" onclick="toggle_mod('us')" style="display: inline" ach-tooltip="A mod which rewrites almost all mechanics from base game.">Upsided: OFF</button>
+			-->
 			<br><br>
 			<b>Timewally Mods</b><br>
 			<button class="storebtn longbtn" id='ngmBtn' style="font-size: 15px" onclick="toggle_mod('ngm')" style="display: inline">NG-: OFF</button>

@@ -12,6 +12,7 @@ function unlockReplicantis() {
 		player.replicanti.unl = true
 		player.replicanti.amount = new Decimal(1)
 		player.infinityPoints = player.infinityPoints.minus(cost)
+		ls.reset()
 	}
 }
 
@@ -461,7 +462,6 @@ function handleReplTabs() {
 	let major = QCs.tmp.qc1 !== undefined
 
 	if (major != (tmp.repMajor || false)) {
-		getEl("repMajorBtn").style.display = major ? "" : "none"
 		getEl("replicantitabbtn").style.display = major || player.infinityUpgradesRespecced ? "none" : ""
 
 		if (major && getEl("replicantis").style.display == "block") showInfTab("preinf")
@@ -470,5 +470,6 @@ function handleReplTabs() {
 		getEl("replicantis").style.display = major || getEl("repMajor").style.display == "block" ? "" : "none"
 		getEl(major ? "repMajor" : "infinity").appendChild(getEl("replicantis"))
 	}
+	getEl("repMajorBtn").style.display = major && !isEmptiness ? "" : "none"
 	tmp.repMajor = major
 }

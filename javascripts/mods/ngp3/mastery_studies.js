@@ -114,10 +114,10 @@ var masteryStudies = {
 	types: {t: "time", ec: "ec", d: "dil"},
 	studies: [],
 	unl() {
-		return tmp.quUnl || (tmp.ngp3 && hasDilationUpg("ngpp6"))
+		return ph.did("quantum") || (tmp.ngp3 && hasDilationUpg("ngpp6"))
 	},
 	has(x) {
-		return this.unl() && ((player.masterystudies.includes("t" + x) && this.studies.includes(x)) || (player.masterystudies.includes(x) && x[0] == "d"))
+		return this.unl() && masteryStudies.unlocked.includes(x) && (player.masterystudies.includes("t" + x) || player.masterystudies.includes(x))
 	},
 	timeStudies: [],
 	timeStudyEffects: {
@@ -414,7 +414,7 @@ function updateUnlockedMasteryStudies() {
 
 		var localUnl = unl
 		if (id[0] == "d") {
-			localUnl = (hasDilationStudy(parseInt(id.split("d")[1]) - 1) || hasDilationStudy(id)) && (ph.did("ghostify") || !masteryStudies.allUnlocks[id] || masteryStudies.allUnlocks[id]())
+			localUnl = (id.split("d")[1] <= 7 || hasDilationStudy(parseInt(id.split("d")[1]) - 1) || hasDilationStudy(id)) && (ph.did("ghostify") || !masteryStudies.allUnlocks[id] || masteryStudies.allUnlocks[id]())
 			if (localUnl) getEl(divid).parentElement.parentElement.parentElement.parentElement.style = ""
 		}
 		if (localUnl) masteryStudies.unlocked.push(id)
@@ -728,7 +728,3 @@ function recordUpDown(x) {
 	upDown.times++
 	if (upDown.times>=200) giveAchievement("Up and Down and Up and Down...")
 }
-
-
-
-

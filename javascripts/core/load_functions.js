@@ -257,7 +257,7 @@ function setTD1to4IfUndefined(){
 }
 
 function setABIfUndefined(){
-        if (player.autoIP === undefined) player.autoIP = new Decimal(0)
+    if (player.autoIP === undefined) player.autoIP = new Decimal(0)
 	if (player.autoTime === undefined) player.autoTime = 1e300;
 	if (player.matter === null) player.matter = new Decimal(0)
 	for (var i = 0; i < 12; i++) {
@@ -1865,6 +1865,8 @@ function setInfChallengeDisplay(){
 		order.push("postcngc_2")
 	}
 	getEl("icngc_row").style.display = tmp.ngC ? "" : "none"
+
+	identifyICs()
 }
 
 function setOtherChallDisplay(){

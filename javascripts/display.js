@@ -729,7 +729,7 @@ function initialTimeStudyDisplay(){
 	getEl("232desc").textContent = "Currently: " + formatPercentage(tsMults[232]() - 1) + "%"
 	getEl("233desc").textContent = "Currently: " + shorten(tsMults[233]()) + "x"
 
-	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost());
+	getEl("metaCost").textContent = shortenCosts(getMetaUnlCost())
 }
 
 function eternityChallengeUnlockDisplay(){
@@ -762,7 +762,10 @@ function eternityChallengeUnlockDisplay(){
 function mainTimeStudyDisplay(){
 	initialTimeStudyDisplay()
 	eternityChallengeUnlockDisplay()
-	getEl("dilstudy1").innerHTML = "Unlock time dilation" + (player.dilation.studies.includes(1) ? "" : "<span>Requirement: 5 EC11 and EC12 completions and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")+"<span>Cost: " + getFullExpansion(5e3) + " Time Theorems"
+	getEl("dilstudy1").innerHTML = "Unlock time dilation" +
+		(player.dilation.studies.includes(1) || ph.did("quantum") ? "" :
+		"<span>Requirement: 5 EC11 and EC12 completions" + (tmp.ngp3 ? "" : " and " + getFullExpansion(getDilationTotalTTReq()) + " total theorems")) +
+		"<span>Cost: " + getFullExpansion(dsStudyCosts[1]()) + " Time Theorems"
 }
 
 function ABTypeDisplay(){
@@ -927,14 +930,14 @@ function showAutoTab(tabName) {
 
 function moveAutoTabs() {
 	let autoUnl = ph.did(tmp.ngmX >= 4 ? "galaxy" : "infinity")
-	let autoShown = autoUnl && tmp.mod.showAuto
+	let autoShown = autoUnl && tmp.mod.showAuto && !isEmptiness
 
 	getEl("showAuto").style.display = autoUnl ? "" : "none"
 	getEl("showAuto").textContent = (tmp.mod.showAuto ? "Hide" : "Show") + " general automation tab"
 
 	getEl("automationbtn").style.display = autoShown ? "" : "none"
 
-	moveAutoTab("autobuyers", "ab", "autobuyersbtn", "inf", autoShown, "preinf")
+	moveAutoTab("autobuyers", "ab", "autobuyersbtn", "inf", autoShown || tmp.ngmX >= 4, "preinf")
 
 	moveAutoTab("automaticghosts", "ag", "agtabbtn", "ghostify", autoShown, "neutrinos")
 	getEl("agbtn_pos_no_auto").style.display = autoShown ? "none" : ""

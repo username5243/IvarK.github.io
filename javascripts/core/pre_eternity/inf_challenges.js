@@ -1,5 +1,4 @@
-// INFINITY AND NORMAL CHALLENGES
-
+// NORMAL CHALLENGES
 function startChallenge(name) {
 	if (name == "postc3" && isIC3Trapped()) return
 	if (name.includes("post")) {
@@ -113,6 +112,49 @@ function updateNCVisuals() {
 	else getEl("quickReset").style.display = "none"
 }
 
+let NC_NAMES = {
+	challenge1: "",
+	challenge2: "Second Dimension Autobuyer",
+	challenge3: "Third Dimension Autobuyer",
+	challenge4: "Automated Dimension Boosts",
+	challenge5: "Tickspeed Autobuyer",
+	challenge6: "Fifth Dimension Autobuyer",
+	challenge7: "Automated Galaxies Autobuyer",
+	challenge8: "Fourth Dimension Autobuyer",
+	challenge9: "Seventh Dimension Autobuyer",
+	challenge10: "Sixth Dimension Autobuyer",
+	challenge11: "Eighth Dimension Autobuyer",
+	challenge12: "Automated Big Crunches",
+	challenge13: "Automated Dimensional Sacrifice",
+	challenge14: "Automated Galactic Sacrifice",
+	challenge15: "Automated Tickspeed Boosts",
+	challenge16: "Automated Time Dimension Boosts",
+}
+let NC_IDS = {
+	challenge1: 1,
+	challenge2: 2,
+	challenge3: 3,
+	challenge4: 10,
+	challenge5: 9,
+	challenge6: 5,
+	challenge7: 11,
+	challenge8: 4,
+	challenge9: 7,
+	challenge10: 6,
+	challenge11: 8,
+	challenge12: 12,
+	challenge13: 13,
+	challenge14: 14,
+	challenge15: 15,
+	challenge16: 16,
+}
+function getNCName(x) {
+	let ic = x.split("postc")
+	if (ic[1]) return "Infinity Challenge " + IC_LOOKUP[x]
+
+	return NC_NAMES[x] + " Challenge"
+}
+
 function inMatterChallenge() {
 	return inNC(12) || player.currentChallenge == "postc1" || player.currentChallenge == "postc6" || pl.on()
 }
@@ -176,8 +218,52 @@ function updateChallenges() {
 	for (c = 0; c < order.length; c++) getEl(order[c]).parentElement.parentElement.style.display = player.postChallUnlocked >= c+1 ? "" : "none"
 
 	resetIC1Reward()
+	updateInChallenges()
 }
 
+function updateInChallenges() {
+	let array = []
+	if (inNGM(4) && player.galacticSacrifice.chall > 0) array.push(NC_NAMES["challenge" + player.galacticSacrifice.challenge])
+	if (player.currentChallenge != "") array.push(getNCName(player.currentChallenge))
+	if (player.currentEternityChall != "") array.push("Eternity Challenge " + player.eternityChallUnlocked)
+	if (QCs.inAny()) array.push("Quantum Challenge " + QCs.save.in[0])
+
+	setAndMaybeShow("inchall", array.length > 0, () => "You are currently in " + wordizeList(array))
+}
+
+var infchallengeTimes = 999999999
+function updateChallengeTimes() {
+	//Normal Challenges
+	var counter = 0
+	var totalTime = 0
+	for (let c = 2; c <= getTotalNormalChallenges(); c++) {
+		var completed = player.challenges.includes("challenge" + c) && player.challengeTimes[c - 2] < 60 * 60 * 24 * 31 * 10
+		if (completed) {
+			counter++
+			totalTime += player.challengeTimes[c - 2]
+		}
+		setAndMaybeShow("challengetime" + NC_IDS["challenge" + c], completed, () => getNCName("challenge" + c) + ": " + timeDisplayShort(player.challengeTimes[c - 2], false, 3))
+	}
+
+	setAndMaybeShow("challengetimesum", counter >= 2, () => "Sum: " + timeDisplayShort(totalTime, false, 3) + ".")
+	getEl("challengetimesbtn").style.display = counter > 0 ? "inline-block" : "none"
+
+	//Infinity Challenges
+	var temp=0
+	var tempcounter=0
+	for (var i=0;i<14;i++) {
+		setAndMaybeShow("infchallengetime"+(i+1),player.infchallengeTimes[i]<600*60*24*31,'"Infinity Challenge '+(i+1)+' time record: "+timeDisplayShort(player.infchallengeTimes['+i+'], false, 3)')
+		if (player.infchallengeTimes[i]<600*60*24*31) {
+			temp+=player.infchallengeTimes[i]
+			tempcounter++
+		}
+	}
+	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"The sum of your completed Infinity Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
+	getEl("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
+	updateWorstChallengeBonus();
+}
+
+// INFINITY CHALLENGES
 function getNextAt(chall) {
 	let ret = nextAt[chall]
 	if (inNGM(2)) {
@@ -221,35 +307,7 @@ function getGoal(chall) {
 }
 
 function checkICID(name) {
-	if (inNGM(2)) {
-		var split = name.split("postcngm3_")
-		if (split[1] != undefined) return parseInt(split[1]) + 2
-
-		var split = name.split("postcngmm_")
-		if (split[1] != undefined) {
-			var num = parseInt(split[1])
-			if (player.tickspeedBoosts != undefined && num > 2) return 5
-			return num
-		}
-
-		var split = name.split("postcngc_")
-		if (split[1] != undefined) {
-			var num = parseInt(split[1])
-			var offset = player.tickspeedBoosts != undefined ? 13 : inNGM(2) ? 11 : 8
-			return num + offset
-		}
-
-		var split=name.split("postc")
-		if (split[1] != undefined) {
-			var num = parseInt(split[1])
-			var offset = player.tickspeedBoosts == undefined ? 3 : 5
-			if (num > 2) offset--
-			return num + offset
-		}
-	} else {
-		var split = name.split("postc")
-		if (split[1] != undefined) return parseInt(split[1])
-	}
+	return IC_LOOKUP[name]
 }
 
 function resetIC1Reward() {
@@ -264,38 +322,9 @@ function resetIC1Reward() {
 	infDimPow = Math.pow(inNGM(2) ? 2 : 1.3, ics)
 }
 
-// todo: Fix Normal Challenge IDs!
-var challNames = [null, null, "Second Dimension Autobuyer Challenge", "Third Dimension Autobuyer Challenge", "Fourth Dimension Autobuyer Challenge", "Fifth Dimension Autobuyer Challenge", "Sixth Dimension Autobuyer Challenge", "Seventh Dimension Autobuyer Challenge", "Eighth Dimension Autobuyer Challenge", "Tickspeed Autobuyer Challenge", "Automated Dimension Boosts Challenge", "Automated Galaxies Challenge", "Automated Big Crunches Challenge", "Automated Dimensional Sacrifice Challenge", "Automated Galactic Sacrifice Challenge", "Automated Tickspeed Boosts Challenge", "Automated Time Dimension Boosts Challenge"]
-var challOrder = [null, 1, 2, 3, 8, 6, 10, 9, 11, 5, 4, 12, 7, 13, 14, 15, 16]
-var infchallengeTimes = 999999999
-function updateChallengeTimes() {
-	for (c=2;c<17;c++) setAndMaybeShow("challengetime"+c,player.challengeTimes[challOrder[c]-2]<600*60*24*31,'"'+challNames[c]+' time record: "+timeDisplayShort(player.challengeTimes['+(challOrder[c]-2)+'], false, 3)')
-	var temp=0
-	var tempcounter=0
-	for (var i=0;i<player.challengeTimes.length;i++) if (player.challenges.includes("challenge"+(i+2))&&player.challengeTimes[i]<600*60*24*31) {
-		temp+=player.challengeTimes[i]
-		tempcounter++
-	}
-	setAndMaybeShow("challengetimesum",tempcounter>1,'"The sum of your completed Normal Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
-	getEl("challengetimesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
-
-	var temp=0
-	var tempcounter=0
-	for (var i=0;i<14;i++) {
-		setAndMaybeShow("infchallengetime"+(i+1),player.infchallengeTimes[i]<600*60*24*31,'"Infinity Challenge '+(i+1)+' time record: "+timeDisplayShort(player.infchallengeTimes['+i+'], false, 3)')
-		if (player.infchallengeTimes[i]<600*60*24*31) {
-			temp+=player.infchallengeTimes[i]
-			tempcounter++
-		}
-	}
-	setAndMaybeShow("infchallengetimesum",tempcounter>1,'"The sum of your completed Infinity Challenge time records is " + timeDisplayShort(' + temp + ', false, 3) + "."')
-	getEl("infchallengesbtn").style.display = tempcounter>0 ? "inline-block" : "none"
-	updateWorstChallengeBonus();
-}
-
-
 var nextAt = {}
 var goals = {}
+var order = []
 
 function loadICData() {
 	nextAt = {
@@ -342,6 +371,13 @@ function loadICData() {
 		postcngc_1: new Decimal("1e10525"),					
 		postcngc_2: new Decimal("1e27225"),
 	}
+	order = []
+}
+
+let IC_LOOKUP = {}
+function identifyICs() {
+	IC_LOOKUP = {}
+	for (var x = 0; x < order.length; x++) IC_LOOKUP[order[x]] = x + 1
 }
 
 //Infinity Challenge 3

@@ -291,6 +291,7 @@ function canBuyDimension(tier) {
 	if (tmp.ri) return false
 	if (QCs.in(3)) return false
 	if (tier > getMaxUnlockableDimensions()) return false
+	if (player.sacrificed.gt(0)) return true
 	if (tier > 1 && getAmount(tier - 1) == 0 && getEternitied() < 30) return false
 
 	return true
@@ -614,8 +615,8 @@ function dimMults() {
 	return Decimal.pow(Decimal.times(inf, 0.2).add(1), exp)
 }
 
-function getInfBoostInput() {
-	var inf = getInfinitied()
+function getInfBoostInput(inf) {
+	if (!inf) inf = getInfinitied()
 	return Decimal.pow(inf, getInfEffExp(inf))
 }
 

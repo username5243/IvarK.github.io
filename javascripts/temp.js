@@ -273,7 +273,8 @@ function updateMatterSpeed(){
 	let exp = 1
 	if (GDs.boostUnl('mf')) exp *= GDs.tmp.mf * fNu.radioactivityToMatter() / fNu.tmp.nerfOmega
 
-	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100 + player.money.log10() / 1000
+	tmp.mv = 1.03 + player.resets / 200 + player.galaxies / 100
+	if (inNGM(4)) tmp.mv += player.money.log10() / 1000
 	if (exp != 1) tmp.mv = Decimal.pow(tmp.mv, exp)
 }
 

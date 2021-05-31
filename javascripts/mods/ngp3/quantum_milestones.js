@@ -60,21 +60,23 @@ let qMs = {
 		}
 	},
 	updateDisplay() {
-		let types = qMs.data.types
-		for (var i = 0; i < types.length; i++) {
-			var type = types[i]
-			var typeData = qMs.data[type]
-			var unl = typeData.unl ? typeData.unl() : true
+		if (tmp.quUnl) {
+			let types = qMs.data.types
+			for (var i = 0; i < types.length; i++) {
+				var type = types[i]
+				var typeData = qMs.data[type]
+				var unl = typeData.unl ? typeData.unl() : true
 
-			getEl("qMs_" + type + "_cell").style.display = unl ? "" : "none"
-		}
+				getEl("qMs_" + type + "_cell").style.display = unl ? "" : "none"
+			}
 
-		for (var i = 1; i <= qMs.max; i++) {
-			getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
-			getEl("qMs_reward_" + i).className = qMs.tmp.amt < i ? "qMs_locked" :
-				!this[i].disablable ? "qMs_reward" :
-				"qMs_toggle_" + (!tmp.qu.disabledRewards[i] ? "on" : "off")
-			getEl("qMs_reward_" + i).textContent = qMs[i].eff()
+			for (var i = 1; i <= qMs.max; i++) {
+				getEl("qMs_req_" + i).textContent = "Milestone Point #" + getFullExpansion(qMs[i].req)
+				getEl("qMs_reward_" + i).className = qMs.tmp.amt < i ? "qMs_locked" :
+					!this[i].disablable ? "qMs_reward" :
+					"qMs_toggle_" + (!tmp.qu.disabledRewards[i] ? "on" : "off")
+				getEl("qMs_reward_" + i).textContent = qMs[i].eff()
+			}
 		}
 
 		getEl('dilationmode').style.display = qMs.tmp.amt >= 4 ? "" : "none"

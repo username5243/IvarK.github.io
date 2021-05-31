@@ -369,6 +369,6 @@ function getDil15Bonus() {
 }
 
 function getMetaUnlCost() {
-	if (tmp.mod.nguspV) return 1e21
+	if (tmp.ngp3) return 1e20
 	return 1e24
 }

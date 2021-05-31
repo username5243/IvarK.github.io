@@ -235,12 +235,18 @@ function setR12Tooltip() {
 	let layer = getEl("But I wanted another prestige layer...")
 	let fkoff = getEl("What do I have to do to get rid of you")
 
+	//Setup rewards
+	let layerReward = []
+	if (inNGM(2)) layerReward.push("Galaxies boost Galaxy points even more")
+	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) layerReward.push("you passively generate 1% of IP per second")
+	layerReward = wordizeList(layerReward, true)
+
 	//ACHIEVEMENT ROW 12
 	infiniteIP.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e30008"))+" IP." + (player.galacticSacrifice == undefined || player.tickspeedBoosts != undefined ? "" : " Reward: Your total galaxies boost Galaxy points gain."))
 	fiveMore.setAttribute('ach-tooltip', "Complete 50 unique Eternity Challenge tiers." + (inNGM(2) ? " Reward: Divide Infinity Dimension costs based on the multiplier of g11." : ""))
 	newI.setAttribute('ach-tooltip', "Eternity in under 200 milliseconds." + (inNGM(2) ? " Reward: The Eighth Normal Dimension to Galaxy points gain is buffed, and boost g13 based on your fastest Eternity time in Eternity Challenges." : "")) 
 	eatass.setAttribute('ach-tooltip', "Reach "+shortenCosts(1e100)+" IP without any Infinities or First Normal Dimensions. Reward: Gain an IP multiplier based on time spent in this Infinity.")
-	layer.setAttribute('ach-tooltip', "Reach "+shortenMoney(Number.MAX_VALUE)+" EP." + (inNGM(2) ? " Reward: The Galaxy boost to Galaxy points gain is buffed." : "")) 
+	layer.setAttribute('ach-tooltip', "Reach "+shortenMoney(Number.MAX_VALUE)+" EP." + (layerReward != "" ? " Reward: " + layerReward + "." : "")) 
 	fkoff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Gain a multiplier to Time Dimensions based on the amount of bought Time Studies.")
 	minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus Replicated Galaxies than normal galaxies. Reward: Getting a Replicanti Galaxy divides your replicanti by " + shortenMoney(Number.MAX_VALUE) + " instead of resetting them to 1.")
 }
@@ -248,7 +254,7 @@ function setR12Tooltip() {
 function setR13Tooltip() {
 	// Row 13 (5/8)
 	//r131/////
-	//r132/////
+	let unique = getEl("Unique snowflakes")
 	let infstuff = getEl("I never liked this infinity stuff anyway")
 	let when = getEl("When will it be enough?")
 	let potato3 = getEl("Faster than a potato^286078")
@@ -264,10 +270,11 @@ function setR13Tooltip() {
 
 	let thisisReward = [] // for the achievement "This is what I have to do to get rid of you."
 	if (inNGM(2)) thisisReward.push("g23 is more effective based on your best IP in dilation")
-	if (tmp.ngp3) thisisReward.push("you produce dilated time " + (tmp.newNGP3E ? 3 : 2) + "x faster")
+	if (tmp.ngp3 || tmp.mod.newGamePlusVersion) thisisReward.push("you produce dilated time " + (tmp.newNGP3E ? 3 : 2) + "x faster")
 	thisisReward = wordizeList(thisisReward, true)
 
 	//ACHIEVEMENT ROW 13
+	unique.setAttribute('ach-tooltip', "Have 540 galaxies without having any Replicated Galaxies." + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? " Reward: Your infinitied stat boosts Eternitied, but not banked infinities." : ""))
 	potato3.setAttribute('ach-tooltip', "Get more than "+shortenCosts(new Decimal("1e8296262"))+" ticks per second." + (potato3Reward != "" ? " Reward: " + potato3Reward + "." : ""))
 	infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed" + (player.meta ? ", and your Infinity gain is multiplied by dilated time^(1/4)." : "."))
 	when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal(tmp.ngex?"1e15000":"1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under " + shortenMoney(Number.MAX_VALUE) + " replicanti" + (tmp.ngp3 || tmp.mod.newGamePlusVersion ? " and you can always buy max RGs." : "."))
@@ -474,14 +481,13 @@ function setR22Tooltip() {
 	let ee = getEl("Everlasting Eternities")
 	let btco = getEl("Back to Challenge One")
 	let tdc = getEl("The Deep Challenge")
-	let igu = getEl("I give up.")
+	//ng3p88/////
 
 	//ACHIEVEMENT ROW 22
 	ee.setAttribute('ach-tooltip', "Get " + shorten(Number.MAX_VALUE) + " eternities. Reward: Boost quark gain by 10 per Light Empowerment squared.")
 	oc.setAttribute('ach-tooltip', "Become a ghost with at least " + shortenCosts(Decimal.pow(10, 3.75e5)) + " EP while Big Ripped with the Anti-Dilation modifier. Reward: Remove the Further Nanofield scaling.")
 	btco.setAttribute('ach-tooltip', "Complete Paired Challenge 1 after getting " + shortenCosts(Decimal.pow(10, 1.65e9)) + " antimatter in Quantum Challenges 6 and 8. Reward: Ghostifies only makes you lose 25% of your radiocative decays.")
 	tdc.setAttribute('ach-tooltip', "Complete Eternity Challenge 11 with " + shortenCosts(Decimal.pow(10, 15500)) + " IP in a Paired Challenge with the Quantum Challenges 6 and 8 combination and the Anti-Dilation modifier. Reward: Remove the quadratic cost scaling and the level softcap of fifth Tree of Decay upgrade and make it based on best meta-antimatter over Ghostifies, instead of over quantums.")
-	igu.setAttribute('ach-tooltip', "Reach " + shortenCosts(Decimal.pow(10, 2.25e4)) + " IP while dilated and Big Ripped with Anti-Dilation modifier and without having studies, EP mult upgrades, Tree Upgrades, and Break Eternity within this Ghostify. Reward: Always gain 1% of your Infintiy Points on Crunch per second, even if you do not have Time Study 181.")
 	isnotenough.setAttribute('ach-tooltip', "Complete a Paired Challenge with Quantum Challenges 6 and 8 combinations. Reward: Remove the hardcap reduction of 'And so your life?'.")
 }
 

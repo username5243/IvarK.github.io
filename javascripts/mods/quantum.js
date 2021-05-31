@@ -494,8 +494,11 @@ function quantumReset(force, auto, data, mode, bigRip, implode = false) {
 }
 
 function handleDispAndTmpOnQuantum(bigRip, prestige) {
-	if (!tmp.ngp3) return
 	if (!bigRip) bigRip = inBigRip()
+	handleDispAndTmpOutOfQuantum(bigRip)
+	handleQuantumDisplays(prestige)
+
+	if (!tmp.ngp3) return
 
 	let keepECs = bigRip ? tmp.bruActive[2] : qMs.tmp.amt >= 2
 	if (!keepECs && getEl("eternitychallenges").style.display == "block") showChallengesTab("normalchallenges")
@@ -533,9 +536,6 @@ function handleDispAndTmpOnQuantum(bigRip, prestige) {
 		if (!keepNf && getEl("nanofield").style.display == "block") showQuantumTab("uquarks")
 		if (!keepToD && getEl("tod").style.display == "block") showQuantumTab("uquarks")
 	}
-
-	handleDispAndTmpOutOfQuantum(bigRip)
-	handleQuantumDisplays(prestige)
 }
 
 function handleDispAndTmpOutOfQuantum(bigRip) {

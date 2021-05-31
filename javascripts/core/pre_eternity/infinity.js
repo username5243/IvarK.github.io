@@ -125,11 +125,7 @@ function updateLastTenRuns() {
 			var tempstring = "(" + shorten(ippm) + " IP/min)"
 			if (ippm<1) tempstring = "(" + shorten(ippm * 60) + " IP/hour)"
 			var msg = "The infinity " + (i == 0 ? '1 infinity' : (i + 1) + ' infinities') + " ago took " + timeDisplayShort(player.lastTenRuns[i][0], false, 3)
-			if (player.lastTenRuns[i][2]) {
-				var split=player.lastTenRuns[i][2].split("challenge")
-				if (split[1]==undefined) msg += " in Infinity Challenge " + checkICID(player.lastTenRuns[i][2])
-				else msg += " in " + challNames[parseInt(split[1])]
-			}
+			if (player.lastTenRuns[i][2]) msg += " in " + getNCName(player.lastTenRuns[i][2])
 			msg += " and gave " + shortenDimensions(player.lastTenRuns[i][1]) +" IP. "+ tempstring
 			getEl("run"+(i+1)).textContent = msg
 			tempTime = tempTime.plus(player.lastTenRuns[i][0])

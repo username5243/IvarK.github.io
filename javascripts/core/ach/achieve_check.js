@@ -276,7 +276,6 @@ function preHiggsNGp3AchieveCheck() {
 		if (tmp.qu.breakEternity.eternalMatter.gte(9.999999e99)) giveAchievement("This achievement doesn't exist 4")
 		if (ableToGetRid8 && player.infinityPoints.log10() >= 9.4e5) giveAchievement("Please answer me why you are dying.")
 		if (ableToGetRid9 && player.infinityPoints.log10() >= 1.8e6) giveAchievement("Aren't you already dead?")
-		if (ableToGetRid10 && player.infinityPoints.log10() >= 2.25e4) giveAchievement("I give up.")
 		if (player.matter.log10() >= 5000) giveAchievement("Really?")
 	}
 	if (tmp.qu.bigRip.spaceShards.log10() >= 33 && !tmp.qu.breakEternity.did) giveAchievement("Finite Time")

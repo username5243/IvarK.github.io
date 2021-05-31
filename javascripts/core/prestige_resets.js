@@ -206,7 +206,7 @@ function resetDimensions() {
 function doDimBoostResetStuff(layer = 1) {
 	if (!hasAch("r111")) setInitialMoney()
 	setInitialResetPower()
-	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e9) resetDimensions()
+	if (layer >= 3 || !moreEMsUnlocked() || getEternitied() < 1e6) resetDimensions()
 
 	player.totalBoughtDims = resetTotalBought()
 	player.sacrificed = new Decimal(0)
@@ -230,12 +230,12 @@ function doGalaxyResetStuff(layer = 2) {
 	doDimBoostResetStuff(layer)
 }
 
-function doCrunchResetStuff(layer = 3) {
+function doCrunchResetStuff(layer = 3, chall) {
 	player.totalBoughtDims = resetTotalBought()
 	player.tickBoughtThisInf = resetTickBoughtThisInf()
 	player.galaxies = 0
 
-	if (tmp.ngmX >= 2) player.galacticSacrifice = newGalacticDataOnInfinity(layer >= 3)
+	if (tmp.ngmX >= 2) player.galacticSacrifice = newGalacticDataOnInfinity(layer, chall)
 	if (tmp.ngmX >= 5) resetPSac()
 
 	player.thisInfinityTime = 0
@@ -345,7 +345,7 @@ function checkSecondSetOnCrunchAchievements(){
 	if (player.challenges.length >= getTotalNormalChallenges() + order.length + 1) giveAchievement("Anti-antichallenged")
 }
 
-function doEternityResetStuff(layer = 4) {
+function doEternityResetStuff(layer = 4, chall) {
 	player.infinityPoints = new Decimal(hasAch("r104") ? 2e25 : 0)
 	player.infinitied = 0
 	player.infMult = new Decimal(1)
@@ -382,15 +382,15 @@ function doEternityResetStuff(layer = 4) {
 		player.dimPowerIncreaseCost = getEternitied() >= 20 ? player.dimPowerIncreaseCost : 1e3
 	}
 
-	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e11 ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
-	if (player.currentEternityChall == "eterc14") player.replicanti.amount = new Decimal(1)
+	player.replicanti.amount = moreEMsUnlocked() && getEternitied() >= 1e10 && player.currentEternityChall != "eterc14" ? player.replicanti.amount.div("1e1000").floor().max(1) : new Decimal(getEternitied() >= 50 ? 1 : 0)
+	tmp.rm = new Decimal(1)
+	tmp.rmPseudo = new Decimal(1)
+
 	player.replicanti.unl = getEternitied() >= 50
 	player.replicanti.galaxies = 0
 	player.replicanti.galaxybuyer = (getEternitied() > 2) ? player.replicanti.galaxybuyer : undefined
 	if (tmp.ngp3) player.peakSpent = 0
 
-	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
-	player.currentEternityChall = ""
 	player.eterc8ids = 50
 	player.eterc8repl = 40
 
@@ -401,7 +401,7 @@ function doEternityResetStuff(layer = 4) {
 	resetInfDimensions(true)
 	resetTimeDimensions()
 
-	doCrunchResetStuff(layer)
+	doCrunchResetStuff(layer, chall)
 }
 
 function getReplicantsOnGhostifyData(){

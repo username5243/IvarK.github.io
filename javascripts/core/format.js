@@ -18,13 +18,13 @@ function letter(power, str) {
 function getAbbreviation(e) {
 	const prefixes = [
 		['', 'U', 'D', 'T', 'Qa', 'Qt', 'Sx', 'Sp', 'O', 'N'],
-                ['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
-                ['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']]
-        const prefixes2 = ['', 'MI', 'MC', 'NA']
+				['', 'Dc', 'Vg', 'Tg', 'Qd', 'Qi', 'Se', 'St', 'Og', 'Nn'],
+				['', 'Ce', 'Dn', 'Tc', 'Qe', 'Qu', 'Sc', 'Si', 'Oe', 'Ne']]
+		const prefixes2 = ['', 'MI', 'MC', 'NA']
 	var result = ''
-    e = Math.floor(e / 3) - 1;
+	e = Math.floor(e / 3) - 1;
 	e2 = 0
-        while (e > 0) {		
+		while (e > 0) {		
 		var partE = e % 1000
 		if (partE > 0) {
 			if (partE == 1 && e2 > 0) var prefix = ""
@@ -59,7 +59,7 @@ function getShortAbbreviation(e) {
 	var log = Math.floor(Math.log10(id))
 	var step = Math.max(Math.floor(log / 3 - 3),0)
 	id = Math.round(id / Math.pow(10, Math.max(log - 9, 0))) * Math.pow(10, Math.max(log - 9, 0) % 3)
-        while (id > 0) {		
+		while (id > 0) {		
 		var partE = id % 1000
 		if (partE > 0) {
 			if (partE == 1 && step > 0) var prefix = ""
@@ -152,272 +152,272 @@ function getTimeAbbreviation(seconds) {
 
 const inflog = Math.log10(Number.MAX_VALUE)
 function formatValue(notation, value, places, placesUnder1000, noInf) {
-    if (notation === "Same notation") notation = player.options.notation
-    if (notation === 'Iroha' && (onPostBreak() || Decimal.lt(value, getLimit()) || noInf)) return iroha(value, 5)
-    if (Decimal.eq(value, 1/0)) return "Infinite"
-    if ((onPostBreak() || Decimal.lt(value, getLimit()) || noInf) && (Decimal.gte(value,1000))) {
-        if (notation === "AF2019") {
-            var log = Decimal.log10(value)
-            var digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !"
-            var translated = [10, 51, 53, 44, 47, 62, 15, 50, 50, 47, 54, 63]
-            var result = ""
-            for (var c = 0; c < 12; c++) result += digits[Math.floor(translated[c] + Math.max(Math.log10(Number.MAX_VALUE) * (c + 1) - log * (c + 2), 0)) % 64]
-            return result
-        }
-        if (notation === "Hexadecimal" || notation === "Base-64") {
-            var base = notation === "Hexadecimal" ? 16 : 64
-            value = Decimal.pow(value, 1 / Math.log10(base))
-            var mantissa = Math.pow(value.m, Math.log10(base))
-            var power = value.e
-            if (mantissa > base - Math.pow(base, -2) / 2) {
-                mantissa = 1
-                power++
-            }
-            var digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/"
-            mantissa = digits[Math.floor(mantissa)].toString() + '.' + digits[Math.floor(mantissa * base) % base].toString() + digits[Math.floor(mantissa * Math.pow(base, 2)) % base].toString()
-            if (power > 100000 && !(player.options.commas === "Commas")) return mantissa + "e" + formatValue(player.options.commas, power, 3, 3)
-            else {
-                if (power >= Math.pow(base, 12)) return mantissa + "e" + formatValue(player.options.notation, power, 3, 3)
-                var digit = 0
-                var result = ''
-                var temp = power
-                while (power > 0) {
-                    result = digits[power % base].toString() + (temp > 1e5 && digit > 0 && digit % 3 < 1 ? ',' : '') + result
-                    power = Math.floor(power / base)
-                    digit++
-                }
-                return mantissa + "e" + result;
-            }
-        }
-        if (notation === "Spazzy") {
-            value = new Decimal(value)
-            var log = value.log10()
-            var sin = Math.sin(log)
-            var cos = Math.cos(log)
-            var result
-            if (sin < 0) result = "|-" + formatValue(player.options.spazzy.subNotation, value.times(-sin), 2, 2)
-            else result = "|" + formatValue(player.options.spazzy.subNotation, value.times(sin), 2, 2)
-            if (cos < 0) result += "-" + formatValue(player.options.spazzy.subNotation, value.times(-cos), 2, 2)+"i|"
-            else result += "+" + formatValue(player.options.spazzy.subNotation, value.times(cos), 2, 2)+"i|"
-            return result
-        }
-        if (notation === "AF5LN") {
-            value = new Decimal(value)
-            var progress = Math.round(Math.log10(value.add(1).log10() + 1)/Math.log10(Number.MAX_VALUE) * 11881375)
-            var uppercased = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-            var result = ""
-            for (l = 0; l < 5; l++) {
-                var pos = Math.floor(progress / Math.pow(26, l)) % 26
-                result = uppercased.slice(pos, pos + 1) + result
-            }
-            return result
-        }
-        if (notation === "Hyperscientific") {
-            value = new Decimal(value)
-            var e
-            var f
-            if (value.gt("1e10000000000")) {
-                e = Math.log10(Math.log10(value.log10()))
-                f = 3
-            } else if (value.gt(1e10)) {
-                e = Math.log10(value.log10())
-                f = 2
-            } else {
-                e = value.log10()
-                f = 1
-            }
-            e = e.toFixed(2 + f)
-            if (e == 10) {
-                e = (1).toFixed(3 + f)
-                f++
-            }
-            return e + "F" + f
-        }
-        if (value instanceof Decimal) {
+	if (notation === "Same notation") notation = player.options.notation
+	if (notation === 'Iroha' && (onPostBreak() || Decimal.lt(value, getLimit()) || noInf)) return iroha(value, 5)
+	if (Decimal.eq(value, 1/0)) return "Infinite"
+	if ((onPostBreak() || Decimal.lt(value, getLimit()) || noInf) && (Decimal.gte(value,1000))) {
+		if (notation === "AF2019") {
+			var log = Decimal.log10(value)
+			var digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz !"
+			var translated = [10, 51, 53, 44, 47, 62, 15, 50, 50, 47, 54, 63]
+			var result = ""
+			for (var c = 0; c < 12; c++) result += digits[Math.floor(translated[c] + Math.max(Math.log10(Number.MAX_VALUE) * (c + 1) - log * (c + 2), 0)) % 64]
+			return result
+		}
+		if (notation === "Hexadecimal" || notation === "Base-64") {
+			var base = notation === "Hexadecimal" ? 16 : 64
+			value = Decimal.pow(value, 1 / Math.log10(base))
+			var mantissa = Math.pow(value.m, Math.log10(base))
+			var power = value.e
+			if (mantissa > base - Math.pow(base, -2) / 2) {
+				mantissa = 1
+				power++
+			}
+			var digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/"
+			mantissa = digits[Math.floor(mantissa)].toString() + '.' + digits[Math.floor(mantissa * base) % base].toString() + digits[Math.floor(mantissa * Math.pow(base, 2)) % base].toString()
+			if (power > 100000 && !(player.options.commas === "Commas")) return mantissa + "e" + formatValue(player.options.commas, power, 3, 3)
+			else {
+				if (power >= Math.pow(base, 12)) return mantissa + "e" + formatValue(player.options.notation, power, 3, 3)
+				var digit = 0
+				var result = ''
+				var temp = power
+				while (power > 0) {
+					result = digits[power % base].toString() + (temp > 1e5 && digit > 0 && digit % 3 < 1 ? ',' : '') + result
+					power = Math.floor(power / base)
+					digit++
+				}
+				return mantissa + "e" + result;
+			}
+		}
+		if (notation === "Spazzy") {
+			value = new Decimal(value)
+			var log = value.log10()
+			var sin = Math.sin(log)
+			var cos = Math.cos(log)
+			var result
+			if (sin < 0) result = "|-" + formatValue(player.options.spazzy.subNotation, value.times(-sin), 2, 2)
+			else result = "|" + formatValue(player.options.spazzy.subNotation, value.times(sin), 2, 2)
+			if (cos < 0) result += "-" + formatValue(player.options.spazzy.subNotation, value.times(-cos), 2, 2)+"i|"
+			else result += "+" + formatValue(player.options.spazzy.subNotation, value.times(cos), 2, 2)+"i|"
+			return result
+		}
+		if (notation === "AF5LN") {
+			value = new Decimal(value)
+			var progress = Math.round(Math.log10(value.add(1).log10() + 1)/Math.log10(Number.MAX_VALUE) * 11881375)
+			var uppercased = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			var result = ""
+			for (l = 0; l < 5; l++) {
+				var pos = Math.floor(progress / Math.pow(26, l)) % 26
+				result = uppercased.slice(pos, pos + 1) + result
+			}
+			return result
+		}
+		if (notation === "Hyperscientific") {
+			value = new Decimal(value)
+			var e
+			var f
+			if (value.gt("1e10000000000")) {
+				e = Math.log10(Math.log10(value.log10()))
+				f = 3
+			} else if (value.gt(1e10)) {
+				e = Math.log10(value.log10())
+				f = 2
+			} else {
+				e = value.log10()
+				f = 1
+			}
+			e = e.toFixed(2 + f)
+			if (e == 10) {
+				e = (1).toFixed(3 + f)
+				f++
+			}
+			return e + "F" + f
+		}
+		if (value instanceof Decimal) {
 			var power = value.e
 			var matissa = value.mantissa
-        } else {
-            var power = Math.floor(Math.log10(value))
-            var matissa = value / Math.pow(10, power)
-        }
-        if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
-            if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
-            places = Math.min(places, 11 - Math.floor(Math.log10(power)))
-            if (places >= 0) {
+		} else {
+			var power = Math.floor(Math.log10(value))
+			var matissa = value / Math.pow(10, power)
+		}
+		if ((notation === "Mixed scientific" && power >= 33) || notation === "Scientific") {
+			if (player.options.scientific !== undefined && player.options.scientific.significantDigits !== undefined) places = player.options.scientific.significantDigits - 1
+			places = Math.min(places, 9 - Math.floor(Math.log10(power)) - 1)
+			if (places >= 0) {
 				matissa = matissa.toFixed(places)
-                if (matissa >= 10) {
-                    matissa = (1).toFixed(places);
-                    power++;
-                }
-            } else matissa = ""
-            if (power > 100000) {
-                if (player.options.commas != "Commas") return matissa + "e" + formatValue(player.options.commas, power, 3, 3)
-                if (power >= 1e12 && player.options.commas == "Commas") return matissa + "e" + formatValue("Standard", power, 3, 3)
-                return matissa + "e" + getFullExpansion(power);
-            }
-            return matissa + "e" + power;
-        }
-        if (notation === "Psi") {
-            return formatPsi(matissa, power)
-        }
-        if (notation === "Greek" || notation === "Morse code" || notation === "Symbols" || notation === "Lines" || notation === "Simplified Written") {
-            places = Math.min(places, 14 - Math.floor(Math.log10(power)))
-            if (places < 1) matissa = 0
-            else if (matissa >= 10 - Math.pow(10, -places) / 2) {
-                matissa = Math.pow(10,places)
-                power -= places + 1
-            } else {
-                matissa = Math.round(matissa * Math.pow(10, places))
-                power -= places
-            }
-            if (power > 1e5 && player.options.commas !== "Commas") power = formatValue(player.options.commas, power, 3, 3)
-            else power = convTo(notation, power)
-            if (notation == "Simplified Written") return "(" + power + ") " + convTo(notation, matissa)
-            return convTo(notation, matissa) + (notation == "Symbols" ? '-' : "e") + power
-        }
-        if (notation === "Infinity") {
-            const inflog = Math.log10(Number.MAX_VALUE)
-            const pow = Decimal.log10(value)
-            var reduced = pow / inflog
-            if (reduced < 1000) var infPlaces = 4
-            else var infPlaces = 3
-            if (player.options.commas === "Commas") {
-                if (reduced>=1e12) return formatValue("Standard", reduced, 3, 3) + "∞"
+				if (matissa >= 10) {
+					matissa = (1).toFixed(places);
+					power++;
+				}
+			} else matissa = ""
+			if (power > 100000) {
+				if (player.options.commas != "Commas") power = formatValue(player.options.commas, power, 3, 3)
+				else if (power < 1e9) power = getFullExpansion(power)
+				else power = formatValue("Standard", power, 3, 3)
+			}
+			return matissa + "e" + power;
+		}
+		if (notation === "Psi") {
+			return formatPsi(matissa, power)
+		}
+		if (notation === "Greek" || notation === "Morse code" || notation === "Symbols" || notation === "Lines" || notation === "Simplified Written") {
+			places = Math.min(places, 8 - Math.floor(Math.log10(power)))
+			if (places < 1) matissa = 0
+			else if (matissa >= 10 - Math.pow(10, -places) / 2) {
+				matissa = Math.pow(10,places)
+				power -= places + 1
+			} else {
+				matissa = Math.round(matissa * Math.pow(10, places))
+				power -= places
+			}
+			if (power > 1e5 && player.options.commas !== "Commas") power = formatValue(player.options.commas, power, 3, 3)
+			else power = convTo(notation, power)
+			if (notation == "Simplified Written") return "(" + power + ") " + convTo(notation, matissa)
+			return convTo(notation, matissa) + (notation == "Symbols" ? '-' : "e") + power
+		}
+		if (notation === "Infinity") {
+			const inflog = Math.log10(Number.MAX_VALUE)
+			const pow = Decimal.log10(value)
+			var reduced = pow / inflog
+			if (reduced < 1000) var infPlaces = 4
+			else var infPlaces = 3
+			if (player.options.commas === "Commas") {
+				if (reduced>=1e12) return formatValue("Standard", reduced, 3, 3) + "∞"
 				var splits=reduced.toFixed(Math.max(infPlaces, places)).split(".")
 				return splits[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + splits[1] + "∞"
-            } else {
-                if (reduced>=1e5) return formatValue(player.options.commas, reduced, 3, 3) + "∞"
-                return reduced.toFixed(Math.max(infPlaces, places))+"∞"
-            }
-        }
-        if (notation === "Game percentages") {
-            return (Math.log10(Decimal.log10(value)) / Math.log10(3.5e8) * 100).toFixed(4) + '%'
-        }
-        if (notation === "Engineering" || notation === "Mixed engineering") pow = power - (power % 3)
-        else pow = power
-        if (pow > 100000) {
-            if (player.options.commas !== "Commas") pow = formatValue(player.options.commas, pow, 3, 3)
-            else if (pow >= 1e12) pow = formatValue("Standard", pow, 3, 3)
-            else pow = getFullExpansion(pow);
-        }
+			} else {
+				if (reduced>=1e5) return formatValue(player.options.commas, reduced, 3, 3) + "∞"
+				return reduced.toFixed(Math.max(infPlaces, places))+"∞"
+			}
+		}
+		if (notation === "Game percentages") {
+			return (Math.log10(Decimal.log10(value)) / Math.log10(3.5e8) * 100).toFixed(4) + '%'
+		}
+		if (notation === "Engineering" || notation === "Mixed engineering") pow = power - (power % 3)
+		else pow = power
+		if (pow > 100000) {
+			if (player.options.commas !== "Commas") pow = formatValue(player.options.commas, pow, 3, 3)
+			else if (pow >= 1e12) pow = formatValue("Standard", pow, 3, 3)
+			else pow = getFullExpansion(pow);
+		}
 
-        if (notation === "Logarithm" || notation === 'Iroha' || (notation === "Mixed logarithm" && power > 32)) {
-            var base = Math.max(player.options.logarithm.base, 1.01)
-            var prefix
-            if (base == 10) {
-                power = Decimal.log10(value)
-                prefix = "e"
-            } else {
-                power = new Decimal(value).log(base)
-                if (base >= 1e15) var prefix = formatValue("Scientific", base, 2, 0)
-                else if (base >= 1e3) var prefix = formatValue("Standard", base, 2, 0)
-                else prefix = base
-                prefix += "^"
-            }
-            if (power > 100000) {
-                if (player.options.commas === "Logarithm") {
-                    if (base == 10) return "ee" + Math.log10(power).toFixed(3)
-                    return prefix + prefix + (Math.log10(power) / Math.log(base)).toFixed(3)
-                }
-                else if (player.options.commas !== "Commas") return prefix + formatValue(player.options.commas, power, 3, 3)
-                else if (power >= 1e12) return prefix + formatValue("Standard", power, 3, 3)
-                else return prefix + power.toFixed(places).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            return prefix + power.toFixed(places)
-        }
+		if (notation === "Logarithm" || notation === 'Iroha' || (notation === "Mixed logarithm" && power > 32)) {
+			var base = Math.max(player.options.logarithm.base, 1.01)
+			var prefix
+			if (base == 10) {
+				power = Decimal.log10(value)
+				prefix = "e"
+			} else {
+				power = new Decimal(value).log(base)
+				if (base >= 1e15) var prefix = formatValue("Scientific", base, 2, 0)
+				else if (base >= 1e3) var prefix = formatValue("Standard", base, 2, 0)
+				else prefix = base
+				prefix += "^"
+			}
+			if (power > 100000) {
+				if (player.options.commas === "Logarithm") {
+					if (base == 10) return "ee" + Math.log10(power).toFixed(3)
+					return prefix + prefix + (Math.log10(power) / Math.log(base)).toFixed(3)
+				}
+				else if (player.options.commas !== "Commas") return prefix + formatValue(player.options.commas, power, 3, 3)
+				else if (power >= 1e12) return prefix + formatValue("Standard", power, 3, 3)
+				else return prefix + power.toFixed(places).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+			}
+			return prefix + power.toFixed(places)
+		}
 
-        if (notation === "Brackets") {
-          var table = [")", "[", "{", "]", "(", "}"];
-          var log6 = Math.LN10 / Math.log(6) * Decimal.log10(value);
-          if (log6 >= 1e12) return "e" + formatValue("Brackets", log6)
-          var wholePartOfLog = Math.floor(log6);
-          var decimalPartOfLog = log6 - wholePartOfLog;
-          //Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
-          var decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
-          var string = "";
-          while (wholePartOfLog >= 6) {
-            var remainder = wholePartOfLog % 6;
-            wholePartOfLog -= remainder;
-            wholePartOfLog /= 6;
-            string = table[remainder] + string;
-          }
-          string = "e" + table[wholePartOfLog] + string + ".";
-          string += table[Math.floor(decimalPartTimes36 / 6)];
-          string += table[decimalPartTimes36 % 6];
-          return string;
-        }
-        if (notation == "Tetration") {
-          var base = player.options.tetration.base
-          var count = -1;
-          if (base >= 1e15) var prefix = formatValue("Scientific", base, 2, 0)
-          else if (base >= 1e3) var prefix = formatValue("Standard", base, 2, 0)
-          else var prefix = base
-          while (value > 1) {
-            value = new Decimal(value).log(base)
-            count++;
-          }
-          return prefix + "⇈" + (value + count).toFixed(Math.max(places, 0, Math.min(count-1, 4)));
-        }
+		if (notation === "Brackets") {
+		  var table = [")", "[", "{", "]", "(", "}"];
+		  var log6 = Math.LN10 / Math.log(6) * Decimal.log10(value);
+		  if (log6 >= 1e12) return "e" + formatValue("Brackets", log6)
+		  var wholePartOfLog = Math.floor(log6);
+		  var decimalPartOfLog = log6 - wholePartOfLog;
+		  //Easier to convert a number between 0-35 to base 6 than messing with fractions and shit
+		  var decimalPartTimes36 = Math.floor(decimalPartOfLog * 36);
+		  var string = "";
+		  while (wholePartOfLog >= 6) {
+			var remainder = wholePartOfLog % 6;
+			wholePartOfLog -= remainder;
+			wholePartOfLog /= 6;
+			string = table[remainder] + string;
+		  }
+		  string = "e" + table[wholePartOfLog] + string + ".";
+		  string += table[Math.floor(decimalPartTimes36 / 6)];
+		  string += table[decimalPartTimes36 % 6];
+		  return string;
+		}
+		if (notation == "Tetration") {
+		  var base = player.options.tetration.base
+		  var count = -1;
+		  if (base >= 1e15) var prefix = formatValue("Scientific", base, 2, 0)
+		  else if (base >= 1e3) var prefix = formatValue("Standard", base, 2, 0)
+		  else var prefix = base
+		  while (value > 1) {
+			value = new Decimal(value).log(base)
+			count++;
+		  }
+		  return prefix + "⇈" + (value + count).toFixed(Math.max(places, 0, Math.min(count-1, 4)));
+		}
 
-        if (notation === "AAS") {
-            if (power >= 3e9 + 3) return getAASAbbreviation(power / 3 - 1)
-            matissa = (matissa * Math.pow(10, power % 3)).toFixed(Math.max(places-power % 3, 0))
-            if (parseFloat(matissa) == 1e3) {
-                matissa = (1).toFixed(places)
-                power += 3
-            }
-            return matissa + getAASAbbreviation(Math.floor(power / 3) - 1)
-        }
-        if (notation === "Time") {
-            if (power >= 3e9 + 3) return getTimeAbbreviation(power / 3)
-            matissa = (matissa * Math.pow(10, power % 3)).toFixed(Math.max(places - power % 3, 0))
-            if (parseFloat(matissa) == 1e3) {
-                matissa = (1).toFixed(places)
-                power += 3
-            }
-            return matissa + " " + getTimeAbbreviation(Math.floor(power / 3))
-        }
-        if (matissa >= 1000) {
-            matissa /= 1000;
-            power++;
-        }
-        places = Math.min(places, 14 - Math.floor(Math.log10(power)))
-        if (places >= 0) {
-            matissa = (matissa * Decimal.pow(10, power % 3)).toFixed(places)
-            if (matissa >= 1e3) {
-                power += 3
-                places = Math.min(places, 14 - Math.floor(Math.log10(power)))
-                matissa = (1).toFixed(places)
-            }
-        }
-        if (places < 0) matissa = ""
+		if (notation === "AAS") {
+			if (power >= 3e9 + 3) return getAASAbbreviation(power / 3 - 1)
+			matissa = (matissa * Math.pow(10, power % 3)).toFixed(Math.max(places-power % 3, 0))
+			if (parseFloat(matissa) == 1e3) {
+				matissa = (1).toFixed(places)
+				power += 3
+			}
+			return matissa + getAASAbbreviation(Math.floor(power / 3) - 1)
+		}
+		if (notation === "Time") {
+			if (power >= 3e9 + 3) return getTimeAbbreviation(power / 3)
+			matissa = (matissa * Math.pow(10, power % 3)).toFixed(Math.max(places - power % 3, 0))
+			if (parseFloat(matissa) == 1e3) {
+				matissa = (1).toFixed(places)
+				power += 3
+			}
+			return matissa + " " + getTimeAbbreviation(Math.floor(power / 3))
+		}
+		if (matissa >= 1000) {
+			matissa /= 1000;
+			power++;
+		}
+		places = Math.min(places, 14 - Math.floor(Math.log10(power)))
+		if (places >= 0) {
+			matissa = (matissa * Decimal.pow(10, power % 3)).toFixed(places)
+			if (matissa >= 1e3) {
+				power += 3
+				places = Math.min(places, 14 - Math.floor(Math.log10(power)))
+				matissa = (1).toFixed(places)
+			}
+		}
+		if (places < 0) matissa = ""
 
-        if (notation === "Standard" || notation === "Mixed scientific" || notation === "Mixed logarithm") {
-            if (power <= 303) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-            else if (power > 3e11 + 2) return getShortAbbreviation(power) + "s";
-            else return matissa + " " + getAbbreviation(power);
-        } else if (notation === "Mixed engineering") {
-            if (power <= 33) return matissa + " " + FormatList[(power - (power % 3)) / 3];
-            else return (matissa + "e" + pow);
-        } else if (notation === "Engineering") {
-            return (matissa + "e" + pow);
-        } else if (notation === "Letters") {
-            return matissa + letter(power, 'abcdefghijklmnopqrstuvwxyz');
-        } else if (notation === "Emojis") {
-            return matissa + letter(power, ['😠', '🎂', '🎄', '💀', '🍆', '🐱', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡'])
-        } else if (notation === "Country Codes") {
-            return matissa + letter(power, [" GR", " IL", " TR", " NZ", " HK", " SG", " DK", " NO", " AT", " MX", " ID", " RU", " SE", " BE", " BR", " NL", " TW", " CH", " ES", " IN", " KR", " AU", " CA", " IT", " FR", " DE", " UK", " JP", " CN", " US"])
-        }
+		if (notation === "Standard" || notation === "Mixed scientific" || notation === "Mixed logarithm") {
+			if (power <= 303) return matissa + " " + FormatList[(power - (power % 3)) / 3];
+			else if (power > 3e11 + 2) return getShortAbbreviation(power) + "s";
+			else return matissa + " " + getAbbreviation(power);
+		} else if (notation === "Mixed engineering") {
+			if (power <= 33) return matissa + " " + FormatList[(power - (power % 3)) / 3];
+			else return (matissa + "e" + pow);
+		} else if (notation === "Engineering") {
+			return (matissa + "e" + pow);
+		} else if (notation === "Letters") {
+			return matissa + letter(power, 'abcdefghijklmnopqrstuvwxyz');
+		} else if (notation === "Emojis") {
+			return matissa + letter(power, ['😠', '🎂', '🎄', '💀', '🍆', '🐱', '🌈', '💯', '🍦', '🎃', '💋', '😂', '🌙', '⛔', '🐙', '💩', '❓', '☢', '🙈', '👍', '☂', '✌', '⚠', '❌', '😋', '⚡'])
+		} else if (notation === "Country Codes") {
+			return matissa + letter(power, [" GR", " IL", " TR", " NZ", " HK", " SG", " DK", " NO", " AT", " MX", " ID", " RU", " SE", " BE", " BR", " NL", " TW", " CH", " ES", " IN", " KR", " AU", " CA", " IT", " FR", " DE", " UK", " JP", " CN", " US"])
+		}
 
-        else {
-            if (power > 100000  && player.options.commas === "Commas") power = power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            return "1337 H4CK3R"
-        }
-    } else if (value !== undefined && Decimal.lt(value, 1000)) {
-        return (value).toFixed(placesUnder1000);
-    } else {
-        return "Infinite";
-    }
+		else {
+			if (power > 100000  && player.options.commas === "Commas") power = power.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+			return "1337 H4CK3R"
+		}
+	} else if (value !== undefined && Decimal.lt(value, 1000)) {
+		return (value).toFixed(placesUnder1000);
+	} else {
+		return "Infinite";
+	}
 }
 
 function formatPsi(mantissa,power){
@@ -664,9 +664,9 @@ function getFullExpansion(num) {
 	if (num === null) return "NaN"
 	if (isNaN(num)) return "NaN"
 	if (!break_infinity_js && typeof(num) != "number") if (isNaN(num.logarithm)) return "NaN"
-	if (num > 1e12) return shorten(num)
+	if (num >= 1e9) return shorten(num)
 	if (FORMAT_INTS_DIFFERENTLY.includes(player.options.notation)) return convTo(player.options.notation, num)
-	return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+	return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
 shorten = function (money) {

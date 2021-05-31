@@ -697,44 +697,60 @@ function updateNewPlayer(mode) {
 		}
 	}
 	tmp.mod = player.aarexModifications
-	if (modesChosen.ngp) doNGPlusOneNewPlayer()
-	if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
-	if (modesChosen.ngpp === 2) doNGPlusThreeNewPlayer()
-	if (modesChosen.ngp === 2) doNGPlusFourPlayer()
 
-	if (modesChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
-	if (modesChosen.ngm === 2) ngmR.setup()
-	if (modesChosen.ngmm) {
-		tmp.ngmX = modesChosen.ngmm + 1
-		tmp.mod.ngmX = tmp.ngmX
-		doNGMinusTwoNewPlayer()
+	if (mode == "reset" || mode == "new") {
+		// NG+x
+		if (modesChosen.ngp) doNGPlusOneNewPlayer()
+		if (modesChosen.ngpp) doNGPlusTwoNewPlayer()
+		if (modesChosen.ngpp === 2) doNGPlusThreeNewPlayer()
+		if (modesChosen.ngp === 2) doNGPlusFourPlayer()
+		if (modesChosen.ngp >= 3) convertToNGP5(true)
 
-		if (tmp.ngmX >= 3) doNGMinusThreeNewPlayer()
-		if (tmp.ngmX >= 5) doNGMinusFivePlayer()
-		if (tmp.ngmX >= 4) doNGMinusFourPlayer()
+		// NG-x
+		if (modesChosen.ngm === 1) tmp.mod.newGameMinusVersion = 2.2
+		if (modesChosen.ngm === 2) ngmR.setup()
+		if (modesChosen.ngmm) {
+			tmp.ngmX = modesChosen.ngmm + 1
+			tmp.mod.ngmX = tmp.ngmX
+			doNGMinusTwoNewPlayer()
+
+			if (tmp.ngmX >= 3) doNGMinusThreeNewPlayer()
+			if (tmp.ngmX >= 5) doNGMinusFivePlayer()
+			if (tmp.ngmX >= 4) doNGMinusFourPlayer()
+		}
+
+		// NG Update
+		if (modesChosen.ngud) doNGUDNewPlayer()
+		if (modesChosen.ngud == 2) tmp.mod.ngudpV = 1.12
+		if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
+
+		// NG Multiplied
+		if (modesChosen.ngmu) doNGMultipliedPlayer()
+		if (modesChosen.ngumu) tmp.mod.ngumuV = 1.03
+
+		// NG Exponential
+		if (modesChosen.arrows) doNGEXPNewPlayer()
+		if (modesChosen.nguep) tmp.mod.nguepV = 1.03
+
+		// Difficulties
+		if (modesChosen.ez) tmp.mod.ez = 1
+		if (modesChosen.ngex) tmp.mod.ngexV = 0.1
+
+		// Respecced
+		if (modesChosen.rs == 1) doInfinityRespeccedNewPlayer()
+		if (modesChosen.rs == 2) doEternityRespeccedNewPlayer()
+
+		// Alternate
+		if (modesChosen.ngc) ngC.setup()
+
+		// Others
+		if (modesChosen.aau) {
+			tmp.mod.aau = 1
+			tmp.mod.hideAchs = true
+			dev.giveAllAchievements(true)
+		}
+		if (modesChosen.ls) tmp.mod.ls = {}
 	}
-
-	if (modesChosen.rs == 1) doEternityRespeccedNewPlayer()
-	if (modesChosen.arrows) doNGEXPNewPlayer()
-	if (modesChosen.ngud) doNGUDNewPlayer()
-	if (modesChosen.rs == 2) doInfinityRespeccedNewPlayer()
-	if (modesChosen.ngp > 2) convertToNGP5(true)
-	if (modesChosen.ngud == 2) tmp.mod.ngudpV = 1.12
-	if (modesChosen.ngud == 3) doNGUDSemiprimePlayer()
-	if (modesChosen.nguep) tmp.mod.nguepV = 1.03
-	if (modesChosen.ngmu) doNGMultipliedPlayer()
-	if (modesChosen.ngumu) tmp.mod.ngumuV = 1.03
-	if (modesChosen.ngpp == 3) tmp.mod.ngp3lV = 1
-	if (modesChosen.ngex) tmp.mod.ngexV = 0.1
-	if (modesChosen.ngc) ngC.setup()
-
-	if (modesChosen.ez) tmp.mod.ez = 1
-	if (modesChosen.aau) {
-		tmp.mod.aau = 1
-		tmp.mod.hideAchs = true
-		dev.giveAllAchievements(true)
-	}
-	if (modesChosen.ls) tmp.mod.ls = {}
 
 	player.infDimensionsUnlocked = resetInfDimUnlocked()
 }
@@ -767,7 +783,8 @@ function doNGPlusOneNewPlayer(){
 	player.eternityChalls.eterc4 = 1
 	player.eternityChalls.eterc10 = 1
 	player.dilation.studies = [1]
-	tmp.mod.newGamePlusVersion = 2
+	player.dilation.rebuyables[3] = 2
+	tmp.mod.newGamePlusVersion = 3
 }
 
 /* Currently does not work when initializing, please fix
@@ -1058,6 +1075,7 @@ function doNGPlusThreeNewPlayer(){
 	for (var g = 1; g < br.limits[maxBLLvl]; g++) player.ghostify.bl.glyphs.push(0)
 	player.options.animations.ghostify = true
 	tmp.mod.ghostifyConf = true
+	tmp.ngp3 = true
 }
 
 function doEternityRespeccedNewPlayer(){
@@ -1726,7 +1744,7 @@ function updateInfCosts() {
 function updateMilestones() {
 	var eters = getEternitied()
 	var moreUnlocked = moreEMsUnlocked()
-	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e9, 1e10, 1e11, 1e12, 1e14, 1e16]
+	var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100, 1e6, 1e8, 1e10, 1e12, 1e14, 1e16]
 	for (i = 0; i < (moreUnlocked ? 30 : 24); i++) {
 		var name = "reward" + i;
 		if (i >= 24) getEl("milestone" + i).textContent = shortenMoney(milestoneRequirements[i]) + " Eternities:"
@@ -1956,7 +1974,8 @@ var modFullNames = {
 	ls: "Light Speed",
 	ngc: "NG Condensed",
 	ez: "Barrier-Easing",
-	ngm5rg: "NG- Regulated"
+	ngm5rg: "NG-5 Regulated",
+	us: "Upsided"
 }
 var modSubNames = {
 	ngm: ["OFF", "ON", "NG- Remade"],
@@ -1964,20 +1983,25 @@ var modSubNames = {
 	ngpp: ["OFF", "ON", "NG+++"],
 	arrows: ["Linear (↑⁰)", "Exponential (↑)"/*, "Tetrational (↑↑)"*/],
 	ngmm: ["OFF", "ON", "NG---", "NG-4", "NG-5"/*, "NG-6"*/],
-	rs: ["NONE", "Eternity", "Infinity"],
+	rs: ["OFF", "Infinity 💀", "Eternity 💀", /*"Dilation"*/], //Dilation won't be rewritten. >:)
 	ngud: ["OFF", "ON", "Prime (')", "Semiprime (S')"/*, "Semiprime.1 (S'.1)"*/],
-	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/]/*,
-	ngmu: ["OFF", "ON", "NG**", "NG***"], // probably delete?
-	ngumu: ["OFF", "ON", "NGUd**'", "NGUd***'"], // probably delete?
-	ngex: ["OFF", "ON", "DEATH MODE 💀"]*/ // modes that aren't even made yet
+	nguep: ["Linear' (↑⁰')", "Exponential' (↑')"/*, "Tetrational' (↑↑')"*/],
+	ngmu: ["OFF", "ON", /*"NG**", "NG***"*/], //NG** won't be made.
+	ngumu: ["OFF", "ON", /*"NGUd**'", "NGUd***'"*/], //Same goes to NGUd**'.
+	ngex: ["OFF", "ON", "DEATH MODE 💀"] // modes that aren't even made yet
 }
 function toggle_mod(id) {
-	if (id == "ngm5rg") {
+	if (id == "rs" && !modes.rs) {
+		if (!confirm("WARNING! Most Respecced mods are extremely broken and will be fixed in a far future! Are you sure to proceed?"))
+		return
+	}
+	if (id == "ngm5rg" || id == "us") {
 		alert("Coming soon...")
 		return
 	}
 
 	hasSubMod = Object.keys(modSubNames).includes(id)
+
 	// Change submod
 	var subMode = ((modes[id] || 0) + 1) % ((hasSubMod && modSubNames[id].length) || 2)
 	if (id == "ngp" && subMode == 2 && !metaSave.ngp4) subMode = 0
@@ -1985,12 +2009,13 @@ function toggle_mod(id) {
 	else if (id == "ngpp" && subMode == 3 && modes.ngex) subMode = 0
 	else if (id == "arrows" && subMode == 2 && modes.rs) subMode = 0
 	modes[id] = subMode
+
 	// Update displays
-	getEl(id+"Btn").textContent=`${modFullNames[id]}: ${hasSubMod?modSubNames[id][subMode] : subMode ? "ON" : "OFF"}`
-	if (id=="ngex"&&subMode) {
-		modes.ngp=0
-		modes.aau=0
-		modes.ls=0
+	getEl(id + "Btn").textContent = `${modFullNames[id]}: ${hasSubMod?modSubNames[id][subMode] : subMode ? "ON" : "OFF"}`
+	if (id == "ngex" && subMode) {
+		modes.ngp = 0
+		modes.aau = 0
+		modes.ls = 0
 		getEl("ngpBtn").textContent = "NG+: OFF"
 		getEl("aauBtn").textContent = "AAU: OFF"
 		getEl("lsBtn").textContent = "Light Speed: OFF"
@@ -1999,9 +2024,9 @@ function toggle_mod(id) {
 		modes.ngex=0
 		getEl("ngexBtn").textContent = "Expert Mode: OFF"
 	}*/
-	if ((id=="ngpp"||id=="ngud")&&subMode) {
-		if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
-		modes.rs=0
+	if ((id == "ngpp" || id=="ngud") && subMode && (modes.rs != 0 && modes.rs != 3)) {
+		//if (!modes.ngp && !modes.ngex) toggle_mod("ngp")
+		modes.rs = 0
 		getEl("rsBtn").textContent = "Respecced: NONE"
 	}
 	if (
@@ -2014,54 +2039,57 @@ function toggle_mod(id) {
 		getEl("ngpBtn").textContent = "NG+: ON"
 	}
 	if (subMode && (
-		(id=="ngud"&&((subMode>=2&&!modes.ngpp)||modes.ngpp==1)) ||
-		(id=="ngp"&&subMode>=2) ||
-		(id=="ngex"&&modes.ngpp==1&&metaSave.ngp3ex)
+		(id=="ngud" && ((subMode >= 2 && !modes.ngpp) || modes.ngpp == 1)) ||
+		(id=="ngp" && subMode >= 2) ||
+		(id=="ngex" && modes.ngpp == 1 && metaSave.ngp3ex)
 	)) {
-		modes.ngpp=2
+		modes.ngpp = 2
 		getEl("ngppBtn").textContent = "NG++: NG+++"
 	}
 	if (id=="ngex"&&!metaSave.ngp3ex&&subMode) {
-		modes.ngpp=0
+		modes.ngpp = 0
 		getEl("ngppBtn").textContent = "NG++: OFF"
 	}
-	if (id=="rs"&&subMode) {
-		modes.ngpp=0
+	if (id=="rs" && subMode) {
+		modes.ngpp = 0
 		getEl("ngppBtn").textContent = "NG++: OFF"
 	}
 
-	if (id=="rs"&&subMode) {
-		modes.ngud=0
+	if (id=="rs" && subMode) {
+		modes.ngud = 0
 		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
-	if (id=="ngp"&&subMode>2) {
-		modes.ngud=0
+	if (id=="ngp" && subMode>2) {
+		modes.ngud = 0
 		getEl("ngudBtn").textContent = "NGUd: OFF"
 	}
-	if (((id=="ngpp"||id=="ngud")&&!subMode)||((id=="rs"||(id=="ngex"&&!metaSave.ngp3ex))&&subMode)||(id=="ngp"&&subMode>2)) {
-		if (modes.ngud>1) {
-			modes.ngud=1
+	if (((id=="ngpp" || id=="ngud") && !subMode) || ((id == "rs" || (id == "ngex" && !metaSave.ngp3ex)) && subMode) || (id == "ngp" && subMode >= 1)) {
+		if (modes.ngud > 1) {
+			modes.ngud = 1
 			getEl("ngudBtn").textContent = "NGUd: ON"
 		}
-		if (id=="rs"&&modes.arrows>1) {
+		if (id == "rs" && modes.arrows > 1) {
 			modes.arrows=1
 			getEl("arrowsBtn").textContent = "NG↑: Exponential (↑)"
 		}
-		modes.nguep=0
-		modes.ngumu=0
+		modes.nguep = 0
+		modes.ngumu = 0
 		getEl("nguepBtn").textContent = "NGUd↑': Linear' (↑⁰')"
 		getEl("ngumuBtn").textContent = "NGUd*': OFF"
 	}
-	if ((id=="ngumu"||id=="nguep")&&!(modes.ngud>1)&&subMode) {
+	if ((id == "ngumu" || id == "nguep") && !(modes.ngud>1) && subMode) {
 		modes.ngud=1
 		toggle_mod("ngud")
 	}
 
-	var ngp3ex = modes.ngex&& modes.ngpp
+	/*
+	var ngp3ex = modes.ngex && modes.ngpp
 	if (modes.ngp3ex != ngp3ex) {
 		if (ngp3ex) $.notify("A space crystal begins to collide with reality...")
 		modes.ngp3ex = ngp3ex
 	}
+	*/
+
 	/* 
 	this function is a MESS someone needs to clean it up
 	Also, id=NGC should force NG+++ and not NG+, 
@@ -3300,6 +3328,9 @@ function eternity(force, auto, forceRespec, dilated) {
 	player.eternities = nA(player.eternities, gainEternitiedStat())
 	updateBankedEter()
 
+	player.eternityChallGoal = new Decimal(Number.MAX_VALUE)
+	player.currentEternityChall = ""
+
 	doEternityResetStuff()
 	doAfterEternityResetStuff()
 
@@ -3382,12 +3413,13 @@ function doAfterEternityResetStuff() {
 	getEl("eternityconf").style.display = "inline-block"
 	updateMilestones()
 	updateLastTenEternities()
+	updateEternityChallenges()
 	updateEterChallengeTimes()
 	player.dilation.active = false
 }
 
 function resetReplicantiUpgrades() {
-	let keepPartial = moreEMsUnlocked() && getEternitied() >= 1e10
+	let keepPartial = moreEMsUnlocked() && getEternitied() >= 9
 	player.replicanti.chance = keepPartial ? Math.min(player.replicanti.chance, 1) : 0.01
 	player.replicanti.interval = keepPartial ? Math.max(player.replicanti.interval, hasTimeStudy(22) ? 1 : 50) : 1000
 	player.replicanti.gal = 0
@@ -3413,6 +3445,7 @@ function gainEternitiedStat() {
 	}
 	if (hasTS(34) && tmp.ngC) ret = nM(ret, 10)
 	if (hasTS(35) && tmp.ngC) ret = nM(ret, tsMults[35]())
+	if (hasAch("r132") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) ret = nM(ret, getInfBoostInput(player.infinitied).add(1).log10() / 5 + 1)
 	if (hasAch("ng3p12")) ret = nM(ret, 100)
 	let exp = getEternitiesAndDTBoostExp()
 	if (exp > 0) ret = nM(player.dilation.dilatedTime.max(1).pow(exp), ret)
@@ -3484,8 +3517,12 @@ var order
 
 function setAndMaybeShow(elementName, condition, contents) {
 	var elem = getEl(elementName)
+	var type = typeof(contents)
 	if (condition) {
-		elem.innerHTML = eval(contents)
+		elem.innerHTML =
+			type == "string" ? eval(contents) :
+			type == "function" ? contents() :
+			contents
 		elem.style.display = ""
 	} else {
 		elem.innerHTML = ""
@@ -3675,12 +3712,6 @@ function doNGP3UnlockStuff(){
 
 function updateResetTierButtons(){
 	ph.updateDisplay()
-
-	var haveBlock = ph.tmp.shown >= 3
-
-	getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 19) + "px" : "19px"
-	getEl("quantumBlock").style.display = haveBlock ? "" : "none"
-	getEl("quantumBlock").style.height = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 12) + "px" : "120px"
 
 	if (ph.did("ghostify")) {
 		getEl("GHPAmount").textContent = shortenDimensions(player.ghostify.ghostParticles)
@@ -3890,17 +3921,16 @@ function updateEPminpeak(diff, type) {
 }
 
 function checkMatter(diff){
-	var newMatter = player.matter.times(Decimal.pow(tmp.mv, diff * 10))
+	let pow = 0
+	if (inNC(12) || player.currentChallenge == "postc1") pow = 1
+	if (player.currentChallenge == "postc7") pow = 20
 
-	if (player.matter.pow(20).gt(player.money) && player.currentChallenge == "postc7") quickReset()
-	else if (player.matter.gt(player.money) && (inNC(12) || player.currentChallenge == "postc1" || player.pSac !== undefined) && !haveET) {
-		if (player.pSac!=undefined) player.pSac.lostResets++
-		if (player.pSac!=undefined && !player.resets) pSacReset(true, undefined, pxGain)
-		else quickReset()
-	}
+	if (isNaN(player.matter.e)) player.matter = new Decimal(0)
+	if (pow > 0 && getAmount(1) > 0) player.matter = player.matter.max(1).times(Decimal.pow(tmp.mv, diff))
+	if (player.matter.pow(pow).gt(player.money)) quickReset()
 }
 
-function passiveIPupdating(diff){
+function passiveIPupdating(diff) {
 	if (player.infinityUpgrades.includes("passiveGen")) player.partInfinityPoint += diff / player.bestInfinityTime * 10
 	else player.partInfinityPoint = 0
 	if (player.bestInfinityTime == 9999999999) player.partInfinityPoint = 0
@@ -4411,8 +4441,7 @@ function bigCrunchButtonUpdating(){
 	getEl("postInfinityButton").style.display = 'none'
 	if (tmp.ri) {
 		getEl("bigcrunch").style.display = 'inline-block';
-		if ((player.currentChallenge == "" || player.options.retryChallenge) && (player.bestInfinityTime <= 600 || player.break)) {}
-		else {
+		if (player.bestInfinityTime > 600 || player.currentChallenge != "" || (inNGM(4) && player.galacticSacrifice.chall > 0)) {
 			isEmptiness = true
 			showTab('emptiness')
 			ph.updateDisplay()
@@ -4462,7 +4491,7 @@ function nextICUnlockUpdating(){
 }
 
 function passiveIPperMUpdating(diff){
-	player.infinityPoints = player.infinityPoints.plus(bestRunIppm.times(player.offlineProd/100).times(diff/60))
+	player.infinityPoints = player.infinityPoints.plus(bestRunIppm.times(player.offlineProd / 100).times(diff / 60))
 }
 
 function giveBlackHolePowerUpdating(diff){
@@ -4617,11 +4646,14 @@ function isEmptinessDisplayChanges(){
 		getEl("dimensionsbtn").style.display = "none";
 		getEl("optionsbtn").style.display = "none";
 		getEl("statisticsbtn").style.display = "none";
+		getEl("automationbtn").style.display = "none";
+		getEl("repMajorBtn").style.display = "none";
 		getEl("achievementsbtn").style.display = "none";
 		getEl("tickSpeed").style.visibility = "hidden";
 		getEl("tickSpeedMax").style.visibility = "hidden";
 		getEl("tickLabel").style.visibility = "hidden";
 		getEl("tickSpeedAmount").style.visibility = "hidden";
+		updateTickspeed()
 	} else {
 		getEl("dimensionsbtn").style.display = "inline-block";
 		getEl("optionsbtn").style.display = "inline-block";
@@ -4878,9 +4910,8 @@ function galSacBtnUpdating() {
 }
 
 function IPonCrunchPassiveGain(diff){
-	if (hasTimeStudy(181) || hasAch("ng3p88")) {
-		player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
-	}
+	if (hasTimeStudy(181)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
+	if (hasAch("r127") && (tmp.ngp3 || tmp.mod.newGamePlusVersion)) player.infinityPoints = player.infinityPoints.plus(gainedInfinityPoints().times(diff / 100))
 }
 
 function EPonEternityPassiveGain(diff){
@@ -4976,7 +5007,7 @@ function gameLoop(diff) {
 
 	if (!isGamePaused()) {
 		incrementParadoxUpdating(diff)
-		checkMatter(diff)
+		checkMatter(diff * 10)
 		passiveIPupdating(diff)
 		passiveInfinitiesUpdating(diff)
 		requiredInfinityUpdating(diff)

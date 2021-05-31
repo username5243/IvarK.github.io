@@ -7,11 +7,9 @@ function hasDilationStudy(x) {
 	return tmp.eterUnl && player.dilation.studies.includes(x)
 }
 
-function getDTMultPostBRU11(){
+function getDTMultPostBRU11() {
 	let gain = new Decimal(1)
 
-	if (hasAch("r137")) gain = gain.times(Decimal.pow(1.75, Math.sqrt(Math.max(tmp.rmPseudo.log10() / (masteryStudies.has(293) ? 1e4 : 1e4), 1) - 1)))
-	if (hasAch("ng3p11")) gain = gain.times(3)
 	return gain
 
 	/*
@@ -34,13 +32,16 @@ function getBaseDTProduction() {
 
 	if (hasDilationUpg('ngpp6')) gain = gain.times(getDil17Bonus())
 	if (hasDilationUpg('ngusp3')) gain = gain.times(getD22Bonus())
-	if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 
+	//Achievements
+	if (hasAch("r137") && (tmp.mod.newGamePlusVersion || tmp.ngp3)) gain = gain.times(Decimal.pow(tmp.newNGP3E ? 2.25 : 1.75, Math.sqrt(tmp.rmPseudo.max(1).log10() / (masteryStudies.has(293) ? 9e3 : 1e4) + 1)))
+
+	//NG+3
 	if (tmp.ngp3) {
 		if (hasAch("r138")) gain = gain.times(tmp.newNGP3E ? 3 : 2)
 		if (hasAch("ngpp13")) gain = gain.times(2)
-
-		if (!isBigRipUpgradeActive(11)) gain = gain.times(getDTMultPostBRU11())
+		if (hasAch("ng3p11")) gain = gain.times(3)
+		if (hasBosonicUpg(15)) gain = gain.times(tmp.blu[15].dt)
 	}
 	return gain
 }
@@ -234,17 +235,19 @@ const DIL_UPG_COSTS = {
 	r3: [1e7, 20, 72],
 	r4: [1e8, 1e4, 24],
 	r6: [5e6, 50, 1],
-	4: 5e6,
-	5: 1e9,
-	6: 5e7,
-	7: 2e12,
-	8: 1e10,
-	9: 1e11,
-	10: 1e15,
+	u4: 5e6,
+	u5: 1e9,
+	u6: 5e7,
+	u7: 2e12,
+	u8: 1e10,
+	u9: 1e11,
+	u10: 1e15,
 	ngud1: 1e20,
 	ngud2: 1e25,
 	ngpp1: 1e20,
+	ngpp1_p3: 1e14,
 	ngpp2: 1e25,
+	ngpp2_p3: 1e16,
 	ngpp3: 1e50,
 	ngpp4: 1e60,
 	ngpp5: 1e80,
@@ -356,17 +359,19 @@ function isDilUpgUnlocked(id) {
 }
 
 function getDilUpgCost(id) {
-	id = toString(id)
-	if (id[0] == "r") {
+	if (id + 0 === id) id = "u" + toString(id)
+	else if (id[0] == "r") {
 		let cost = getRebuyableDilUpgCost(id[1])
 		return cost.gte("1e10000000") ? new Decimal(1/0) : cost
 	}
+
 	let cost = DIL_UPG_COSTS[id]
 	let ngpp = id.split("ngpp")[1]
 	if (ngpp) {
 		ngpp = parseInt(ngpp)
 		if (ngpp >= 3 && tmp.mod.nguspV !== undefined) cost = DIL_UPG_COSTS[id + "_usp"]
 	}
+	if (tmp.ngp3) cost = DIL_UPG_COSTS[id + "_p3"] || cost
 	if (tmp.ngC && ngpp) {
 		if (ngpp < 3) cost = DIL_UPG_COSTS[id + "_c"]
 	}
@@ -376,13 +381,14 @@ function getDilUpgCost(id) {
 function getRebuyableDilUpgCost(id, lvl) {
 	if (!lvl) lvl = player.dilation.rebuyables[id] || 0
 
-	let costGroup = DIL_UPG_COSTS["r"+id]
+	let costGroup = DIL_UPG_COSTS["r" + id]
 	let cost = new Decimal(costGroup[0]).times(Decimal.pow(costGroup[1], lvl))
 
 	if (tmp.mod.nguspV) {
 		if (id >= 4) cost = cost.times(1e7)
 		if (id >= 3 && cost.gte(1e25)) cost = Decimal.pow(10, Math.pow(cost.log10() / 2.5 - 5, 2))
 	} else if (id >= 3) {
+		if (id == 4 && tmp.ngp3) cost = cost.div(Math.pow(Math.max(10 - lvl, 1), 2))
 		if (player.meta != undefined && lvl >= costGroup[2]) {
 			let exp = 2
 			if (id == 4 && QCs.isRewardOn(7)) exp = QCs.tmp.rewards[7]
@@ -421,13 +427,17 @@ function buyDilationUpgrade(pos, max, isId) {
 		player.dilation.upgrades.push(id)
 		if (tmp.mod.nguspV !== undefined && !player.dilation.autoUpgrades.includes(id)) player.dilation.autoUpgrades.push(id)
 		if (id == 4 || id == "ngmm1") player.dilation.freeGalaxies *= 2 // Double the current galaxies
-		if (id == 10 && tmp.ngp3) tmp.qu.wasted = false
+		if (id == 10) {
+			tmp.qu.wasted = false
+			if (tmp.ngp3) tmp.qu.wasted = false
+			ls.reset()
+		}
 		if (id == "ngpp3" && tmp.ngp3 && !tmp.ngC) {
 			updateMilestones()
 			if (getEternitied() >= 1e9) player.dbPower = new Decimal(getDimensionBoostPower())
 		}
 		if (id == "ngpp6" && tmp.ngp3) {
-			getEl("masterystudyunlock").style.display=""
+			getEl("masterystudyunlock").style.display = ""
 			getEl("respecMastery").style.display = "block"
 			getEl("respecMastery2").style.display = "block"
 			if (!quantumed) {
@@ -444,7 +454,7 @@ function buyDilationUpgrade(pos, max, isId) {
 
 function getTTProduction() {
 	let tp = player.dilation.tachyonParticles
-	if (ph.did("quantum")) tp = tp.times(colorBoosts.b)
+	if (tmp.quUnl) tp = tp.times(colorBoosts.b)
 
 	let r = getTTGenPart(tp)
 	if (tmp.ngex) r *= .8
@@ -517,7 +527,8 @@ function updateDilationUpgradeCost(pos, id) {
 	if (id == "r2" && !canBuyGalaxyThresholdUpg()) getEl("dil" + pos + "cost").textContent = "Maxed out"
 	else {
 		let r = getDilUpgCost(id)
-		if (id == "r3") r = formatValue(player.options.notation, getRebuyableDilUpgCost(3), 1, 1)
+		if (id == "r4" && tmp.ngp3) r = shorten(r)
+		else if (id == "r3") r = formatValue(player.options.notation, getRebuyableDilUpgCost(3), 1, 1)
 		else r = shortenCosts(r)
 		getEl("dil" + pos + "cost").textContent = "Cost: " + r + " dilated time"
 	}

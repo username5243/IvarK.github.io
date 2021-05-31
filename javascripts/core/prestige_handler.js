@@ -72,7 +72,7 @@ let Prestiges = {
 			pSac()
 		},
 		accelerate() {
-			//Coming soon...
+			alert("Coming soon...")
 		},
 		galaxy() {
 			galacticSacrifice()
@@ -84,10 +84,10 @@ let Prestiges = {
 			getEl("eternitybtn").onclick()
 		},
 		interreality() {
-			//Coming soon...
+			alert("Coming soon...")
 		},
 		singularity() {
-			//Coming soon...
+			alert("Coming soon...")
 		},
 		quantum() {
 			if (player.meta) {
@@ -134,7 +134,7 @@ let Prestiges = {
 			return player.pSac.times >= 1
 		},
 		accelerate() {
-			return false
+			return true
 		},
 		galaxy() {
 			return player.galacticSacrifice.times >= 1
@@ -146,7 +146,7 @@ let Prestiges = {
 			return player.eternities >= 1
 		},
 		interreality() {
-			return false
+			return true
 		},
 		singularity() {
 			return ngSg.save.times >= 1
@@ -225,9 +225,11 @@ let Prestiges = {
 			var tabShown = false
 			var shown = false
 
-			if (ph.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
-			if (ph.shown(p)) tabShown = true
-			if (prestigeShown || tabShown) shown = true
+			if (!isEmptiness) {
+				if (ph.can(p) && !tmp.mod.layerHidden[p]) prestigeShown = true
+				if (ph.shown(p)) tabShown = true
+				if (prestigeShown || tabShown) shown = true
+			}
 
 			if (ph.tmp[p] !== undefined) {
 				if (shown) ph.tmp.shown++
@@ -237,11 +239,17 @@ let Prestiges = {
 
 			getEl(d[0]).style.display = prestigeShown ? "" : "none"
 			getEl(d[1]).style.display = tabShown ? "" : "none"
-			getEl(d[2]).style.display = tabShown && !isEmptiness ? "" : "none"
+			getEl(d[2]).style.display = tabShown ? "" : "none"
 
 			getEl(d[0]).className = "presBtn presPos" + ph.tmp.shown + " " + p + "btn"
 			getEl(d[1]).className = "presCurrency" + ph.tmp.shown
 		}
+
+		//Blockages
+		var haveBlock = ph.tmp.shown >= 3
+		getEl("bigcrunch").parentElement.style.top = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 19) + "px" : "19px"
+		getEl("quantumBlock").style.display = haveBlock ? "" : "none"
+		getEl("quantumBlock").style.height = haveBlock ? (Math.floor(ph.tmp.shown / 3) * 120 + 12) + "px" : "120px"
 
 		//Infinity Dimension unlocks
 		if (player.break && !player.infDimensionsUnlocked[7] && getEternitied() < 25) {

@@ -184,8 +184,14 @@ function resetGalacticSacrifice(eternity) {
 	} : undefined
 }
 
-function newGalacticDataOnInfinity(eternity) {
-	if (inNGM(2) && (eternity ? getEternitied() >= 7 : hasAch(inNGM(3) ? "r36" : "r33"))) {
+function newGalacticDataOnInfinity(layer, chall) {
+	if (!inNGM(2)) return
+
+	let kept = false
+	if (layer == 3) kept = hasAch(inNGM(3) ? "r36" : "r33")
+	if (layer == 4) kept = getEternitied() >= 7
+
+	if (kept) {
 		var data = player.galacticSacrifice
 		data.galaxyPoints = player.tickspeedBoosts == undefined ? (eternity ? data.galaxyPoints : data.galaxyPoints.add(getGSAmount())) : new Decimal(0)
 		if (player.tickspeedBoosts != undefined) data.times = 0

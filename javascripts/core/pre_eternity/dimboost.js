@@ -37,7 +37,7 @@ function softReset(bulk, tier = 1) {
 
 	if (inNC(14) && player.tickspeedBoosts == undefined) player.tickBoughtThisInf.pastResets.push({resets: player.resets, bought: player.tickBoughtThisInf.current})
 
-	if (moreEMsUnlocked() && getEternitied() >= 1e9 && tier == 1) {
+	if (moreEMsUnlocked() && getEternitied() >= 1e6 && tier == 1) {
 		skipResets()
 		if (!pl.on()) player.matter = new Decimal(0)
 		player.postC8Mult = new Decimal(1)
@@ -66,7 +66,7 @@ function softReset(bulk, tier = 1) {
 
 function setInitialMoney() {
 	var x = 10
-	if (player.challenges.includes("challenge1")) x = 100
+	if (hasAch("r21")) x = 100
 	if (inNGM(4)) x = 200
 	if (hasAch("ngm5p12")) x = 250
 	if (hasAch("r37")) x = 1000

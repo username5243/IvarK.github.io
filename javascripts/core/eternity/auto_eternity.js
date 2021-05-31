@@ -18,7 +18,7 @@ function updateAutoEterMode() {
 	} else if (player.autoEterMode == "exponent") {
 		modeText = "eternitied^X"
 		modeCond = "Wait until your gain reaches ^x of total eternities: "
-	} else if (player.autoEterMode == "amount") {
+	} else if (player.autoEterMode === undefined || player.autoEterMode == "amount") {
 		modeText = "amount"
 		modeCond = "Amount of EP to wait until reset:"
 	} else {
